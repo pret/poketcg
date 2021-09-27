@@ -5255,7 +5255,7 @@ Unknown_127fb: ; 127fb (4:67fb)
 	db BOOSTER_ENERGY_LIGHTNING_FIRE
 
 DebugCredits: ; 12800 (4:6800)
-	farcall Credits_1d6ad
+	farcall PlayCreditsSequence
 	scf
 	ret
 
@@ -5337,7 +5337,7 @@ Func_12871: ; 12871 (4:6871)
 	ldh [hSCY], a
 	ldh [hWX], a
 	ldh [hWY], a
-	call Set_WD_off
+	call SetWDOff
 	ret
 
 Func_1288c: ; 1288c (4:688c)

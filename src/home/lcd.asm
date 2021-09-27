@@ -76,7 +76,7 @@ Set_WD_on:
 	ret
 
 ; set Window Display off
-Set_WD_off:
+SetWDOff:
 	ld a, [wLCDC]
 	and LCDC_WINOFF
 	ld [wLCDC], a

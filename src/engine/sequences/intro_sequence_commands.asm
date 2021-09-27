@@ -1,4 +1,4 @@
-ExecuteOpeningSequenceCmd: ; 1d408 (7:5408)
+ExecuteIntroSequenceCmd: ; 1d408 (7:5408)
 	ld a, [wSequenceDelay]
 	or a
 	jr z, .call_function
@@ -25,22 +25,22 @@ ExecuteOpeningSequenceCmd: ; 1d408 (7:5408)
 	ld l, e
 	ld h, d
 	call CallHL2
-	jr c, ExecuteOpeningSequenceCmd
+	jr c, ExecuteIntroSequenceCmd
 	ret
 
-AdvanceOpeningSequenceCmdPtrBy2: ; 1d42e (7:542e)
+AdvanceIntroSequenceCmdPtrBy2: ; 1d42e (7:542e)
 	ld a, 2
-	jr AdvanceOpeningSequenceCmdPtr
+	jr AdvanceIntroSequenceCmdPtr
 
-AdvanceOpeningSequenceCmdPtrBy3: ; 1d432 (7:5432)
+AdvanceIntroSequenceCmdPtrBy3: ; 1d432 (7:5432)
 	ld a, 3
-	jr AdvanceOpeningSequenceCmdPtr
+	jr AdvanceIntroSequenceCmdPtr
 
-AdvanceOpeningSequenceCmdPtrBy4: ; 1d436 (7:5436)
+AdvanceIntroSequenceCmdPtrBy4: ; 1d436 (7:5436)
 	ld a, 4
 ;	fallthrough
 
-AdvanceOpeningSequenceCmdPtr: ; 1d438 (7:5438)
+AdvanceIntroSequenceCmdPtr: ; 1d438 (7:5438)
 	push hl
 	ld hl, wSequenceCmdPtr
 	add [hl]
@@ -51,7 +51,7 @@ AdvanceOpeningSequenceCmdPtr: ; 1d438 (7:5438)
 	pop hl
 	ret
 
-OpeningSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
+IntroSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
 	ld c, $7
 	ld de, wTitleScreenSprites
 .loop
@@ -63,7 +63,7 @@ OpeningSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
 	inc de
 	dec c
 	jr nz, .loop
-	call AdvanceOpeningSequenceCmdPtrBy2
+	call AdvanceIntroSequenceCmdPtrBy2
 	scf
 	ret
 
@@ -71,14 +71,14 @@ OpeningSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
 	or a
 	ret
 
-OpeningSequenceCmd_Wait: ; 1d460 (7:5460)
+IntroSequenceCmd_Wait: ; 1d460 (7:5460)
 	ld a, c
 	ld [wSequenceDelay], a
-	call AdvanceOpeningSequenceCmdPtrBy3
+	call AdvanceIntroSequenceCmdPtrBy3
 	scf
 	ret
 
-OpeningSequenceCmd_SetOrbsAnimations: ; 1d469 (7:5469)
+IntroSequenceCmd_SetOrbsAnimations: ; 1d469 (7:5469)
 	ld l, c
 	ld h, b
 
@@ -97,11 +97,11 @@ OpeningSequenceCmd_SetOrbsAnimations: ; 1d469 (7:5469)
 	dec c
 	jr nz, .loop
 
-	call AdvanceOpeningSequenceCmdPtrBy4
+	call AdvanceIntroSequenceCmdPtrBy4
 	scf
 	ret
 
-OpeningSequenceCmd_SetOrbsCoordinates: ; 1d486 (7:5486)
+IntroSequenceCmd_SetOrbsCoordinates: ; 1d486 (7:5486)
 	ld l, c
 	ld h, b
 
@@ -131,7 +131,7 @@ OpeningSequenceCmd_SetOrbsCoordinates: ; 1d486 (7:5486)
 	dec c
 	jr nz, .loop
 
-	call AdvanceOpeningSequenceCmdPtrBy4
+	call AdvanceIntroSequenceCmdPtrBy4
 	scf
 	ret
 
@@ -230,18 +230,18 @@ OpeningOrbCoordinates_InTitleScreen: ; 1d50b (7:550b)
 	db 144,  28 ; PSYCHIC
 	db  72,  76 ; FIGHTING
 
-OpeningSequenceCmd_PlayTitleScreenMusic: ; 1d519 (7:5519)
+IntroSequenceCmd_PlayTitleScreenMusic: ; 1d519 (7:5519)
 	ld a, MUSIC_TITLESCREEN
 	call PlaySong
-	call AdvanceOpeningSequenceCmdPtrBy2
+	call AdvanceIntroSequenceCmdPtrBy2
 	scf
 	ret
 
-OpeningSequenceCmd_WaitSFX: ; 1d523 (7:5523)
+IntroSequenceCmd_WaitSFX: ; 1d523 (7:5523)
 	call AssertSFXFinished
 	or a
 	jr nz, .no_carry
-	call AdvanceOpeningSequenceCmdPtrBy2
+	call AdvanceIntroSequenceCmdPtrBy2
 	scf
 	ret
 
@@ -249,39 +249,39 @@ OpeningSequenceCmd_WaitSFX: ; 1d523 (7:5523)
 	or a
 	ret
 
-OpeningSequenceCmd_PlaySFX: ; 1d530 (7:5530)
+IntroSequenceCmd_PlaySFX: ; 1d530 (7:5530)
 	ld a, c
 	call PlaySFX
-	call AdvanceOpeningSequenceCmdPtrBy3
+	call AdvanceIntroSequenceCmdPtrBy3
 	scf
 	ret
 
-OpeningSequenceCmd_FadeIn: ; 1d539 (7:5539)
+IntroSequenceCmd_FadeIn: ; 1d539 (7:5539)
 	ld a, TRUE
-	ld [wOpeningSequencePalsNeedUpdate], a
-	call AdvanceOpeningSequenceCmdPtrBy2
+	ld [wIntroSequencePalsNeedUpdate], a
+	call AdvanceIntroSequenceCmdPtrBy2
 	scf
 	ret
 
-OpeningSequenceCmd_FadeOut: ; 1d543 (7:5543)
+IntroSequenceCmd_FadeOut: ; 1d543 (7:5543)
 	farcall Func_10d50
 	ld a, TRUE
-	ld [wOpeningSequencePalsNeedUpdate], a
-	call AdvanceOpeningSequenceCmdPtrBy2
+	ld [wIntroSequencePalsNeedUpdate], a
+	call AdvanceIntroSequenceCmdPtrBy2
 	scf
 	ret
 
-OpeningSequenceCmd_LoadCharizardScene: ; 1d551 (7:5551)
+IntroSequenceCmd_LoadCharizardScene: ; 1d551 (7:5551)
 	lb bc, 6, 3
 	ld a, SCENE_CHARIZARD_INTRO
 	jr LoadOpeningSceneAndUpdateSGBBorder
 
-OpeningSequenceCmd_LoadScytherScene: ; 1d558 (7:5558)
+IntroSequenceCmd_LoadScytherScene: ; 1d558 (7:5558)
 	lb bc, 6, 3
 	ld a, SCENE_SCYTHER_INTRO
 	jr LoadOpeningSceneAndUpdateSGBBorder
 
-OpeningSequenceCmd_LoadAerodactylScene: ; 1d55f (7:555f)
+IntroSequenceCmd_LoadAerodactylScene: ; 1d55f (7:555f)
 	lb bc, 6, 3
 	ld a, SCENE_AERODACTYL_INTRO
 ;	fallthrough
@@ -295,11 +295,11 @@ LoadOpeningSceneAndUpdateSGBBorder: ; 1d564 (7:5564)
 	scf
 	ret
 
-OpeningSequenceCmd_LoadTitleScreenScene: ; 1d575 (7:5575)
+IntroSequenceCmd_LoadTitleScreenScene: ; 1d575 (7:5575)
 	lb bc, 0, 0
 	ld a, SCENE_TITLE_SCREEN
 	call LoadOpeningScene
-	call OpeningSequenceEmptyFunc
+	call IntroSequenceEmptyFunc
 	scf
 	ret
 
@@ -316,10 +316,77 @@ LoadOpeningScene: ; 1d582 (7:5582)
 	farcall Func_10d17
 
 	xor a
-	ld [wOpeningSequencePalsNeedUpdate], a
-	call AdvanceOpeningSequenceCmdPtrBy2
+	ld [wIntroSequencePalsNeedUpdate], a
+	call AdvanceIntroSequenceCmdPtrBy2
 	call EnableLCD
 	ret
 
-OpeningSequenceEmptyFunc: ; 1d59c (7:559c)
+IntroSequenceEmptyFunc: ; 1d59c (7:559c)
+	ret
+
+INCLUDE "data/sequences/intro.asm"
+
+; once every 63 frames randomly choose an orb sprite
+; to animate, i.e. circle around the screen
+AnimateRandomTitleScreenOrb:
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	call z, .UpdateSpriteAttributes
+	ld a, [wd635]
+	and 63
+	ret nz ; don't pick an orb now
+
+.pick_orb
+	ld a, $7
+	call Random
+	ld c, a
+	ld b, $00
+	ld hl, wTitleScreenSprites
+	add hl, bc
+	ld a, [hl]
+	ld [wWhichSprite], a
+	farcall GetSpriteAnimCounter
+	cp $ff
+	jr nz, .pick_orb
+
+	ld c, SPRITE_ANIM_ATTRIBUTES
+	call GetSpriteAnimBufferProperty
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .set_coords
+	set SPRITE_ANIM_FLAG_UNSKIPPABLE, [hl]
+
+.set_coords
+	inc hl
+	ld a, 248
+	ld [hli], a ; SPRITE_ANIM_COORD_X
+	ld a, 14
+	ld [hl], a ; SPRITE_ANIM_COORD_Y
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ld a, SPRITE_ANIM_215
+	jr nz, .start_anim
+	ld a, SPRITE_ANIM_216
+.start_anim
+	farcall StartSpriteAnimation
+	ret
+
+.UpdateSpriteAttributes
+	ld c, $7
+	ld de, wTitleScreenSprites
+.loop_orbs
+	push bc
+	ld a, [de]
+	ld [wWhichSprite], a
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
+	ld a, [hld]
+	cp 152
+	jr nz, .skip
+	res SPRITE_ANIM_FLAG_UNSKIPPABLE, [hl]
+.skip
+	pop bc
+	inc de
+	dec c
+	jr nz, .loop_orbs
 	ret

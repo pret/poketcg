@@ -46,7 +46,7 @@ ROMX $05
 ROMX $06
 	"Menus 2"
 	"Effect Commands"
-	"Animations Engine"
+	"Animation Commands"
 	"IR Communications Core"
 	"Sprite Animations VBlank"
 	"Starter Deck"
@@ -58,6 +58,10 @@ ROMX $06
 	"Auto Deck Machines"
 ROMX $07
 	"Bank 7"
+	"Duel Animations"
+	"Start Menu"
+	"Intro Sequence"
+	"Unused Copyright"
 	"Credits Sequence"
 	"Booster Packs"
 ROMX $08

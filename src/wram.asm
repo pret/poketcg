@@ -3113,7 +3113,7 @@ wTitleScreenSprites:: ; d629
 	ds $1
 
 ; pointer to commands used by opening and credits sequence
-; (see OpeningSequence and CreditsSequence)
+; (see IntroSequence and CreditsSequence)
 wSequenceCmdPtr:: ; d631
 	ds $2
 
@@ -3123,7 +3123,7 @@ wSequenceCmdPtr:: ; d631
 wSequenceDelay:: ; d633
 	ds $1
 
-wOpeningSequencePalsNeedUpdate:: ; d634
+wIntroSequencePalsNeedUpdate:: ; d634
 	ds $1
 
 wd635:: ; d635

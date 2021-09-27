@@ -40,8 +40,8 @@ INCLUDE "engine/menus/unknown.asm"
 SECTION "Effect Commands", ROMX
 INCLUDE "engine/duel/effect_commands.asm"
 
-SECTION "Animations Engine", ROMX
-INCLUDE "engine/duel/animations.asm"
+SECTION "Animation Commands", ROMX
+INCLUDE "engine/duel/animations/commands.asm"
 
 SECTION "IR Communications Core", ROMX
 INCLUDE "engine/link/ir_core.asm"
@@ -76,9 +76,25 @@ INCLUDE "engine/auto_deck_machines.asm"
 SECTION "Bank 7", ROMX
 INCLUDE "engine/bank07.asm"
 
+SECTION "Duel Animations", ROMX
+INCLUDE "engine/duel/animations/core.asm"
+INCLUDE "engine/duel/animations/screen_effects.asm"
+INCLUDE "data/duel/animations/duel_animations.asm"
+
+SECTION "Start Menu", ROMX
+INCLUDE "engine/menus/start.asm"
+
+SECTION "Intro Sequence", ROMX
+INCLUDE "engine/intro.asm"
+INCLUDE "engine/sequences/intro_sequence_commands.asm"
+
+SECTION "Unused Copyright", ROMX
+INCLUDE "engine/unused_copyright.asm"
+
 SECTION "Credits Sequence", ROMX
+INCLUDE "engine/credits.asm"
 INCLUDE "engine/sequences/credits_sequence_commands.asm"
-INCLUDE "data/sequences/credits_sequence.asm"
+INCLUDE "data/sequences/credits.asm"
 
 SECTION "Booster Packs", ROMX
 INCLUDE "engine/booster_packs.asm"

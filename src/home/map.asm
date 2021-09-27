@@ -141,7 +141,7 @@ GameEvent_ContinueDuel:
 	ret
 
 GameEvent_Credits:
-	farcall Credits_1d6ad
+	farcall PlayCreditsSequence
 	or a
 	ret
 

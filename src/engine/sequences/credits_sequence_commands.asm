@@ -310,7 +310,7 @@ CreditsSequenceCmd_FadeOut: ; 1d9ee (7:59ee)
 	call EnableLCD
 	call DoFrameIfLCDEnabled
 	call DisableLCD
-	call Set_WD_off
+	call SetWDOff
 	jp AdvanceCreditsSequenceCmdPtrBy2
 
 CreditsSequenceCmd_DrawRectangle: ; 1da04 (7:5a04)

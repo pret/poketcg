@@ -1,24 +1,24 @@
-Func_1c000: ; 1c000 (7:4000)
-	jp Set_WD_off
+JumpSetWDOff:
+	jp SetWDOff
 
-; unreferenced debug function
+; debug function
 ; prints player's coordinates by pressing B
 ; and draws palettes by pressing A
-Func_1c003: ; 1c003 (7:4003)
+Func_1c003: ; unreferenced
 	ld a, [wCurMap]
 	or a
-	jr z, Func_1c000
+	jr z, JumpSetWDOff
 	ld a, [wOverworldMode]
 	cp OWMODE_START_SCRIPT
-	jr nc, Func_1c000
+	jr nc, JumpSetWDOff
 
 	ldh a, [hKeysHeld]
 	ld b, a
 	and A_BUTTON | B_BUTTON
 	cp b
-	jr nz, Func_1c000
+	jr nz, JumpSetWDOff
 	and B_BUTTON
-	jr z, Func_1c000
+	jr z, JumpSetWDOff
 
 	ld bc, $20
 	ld a, [wPlayerXCoord]
@@ -49,7 +49,7 @@ Func_1c003: ; 1c003 (7:4003)
 	call Set_WD_on
 	ret
 
-Func_1c056: ; 1c056 (7:4056)
+Func_1c056:
 	push hl
 	push bc
 	push de
@@ -100,7 +100,7 @@ Func_1c056: ; 1c056 (7:4056)
 INCLUDE "data/warps.asm"
 
 ; loads data from the map header of wCurMap
-LoadMapHeader: ; 1c33b (7:433b)
+LoadMapHeader:
 	push hl
 	push bc
 	push de
@@ -143,7 +143,7 @@ LoadMapHeader: ; 1c33b (7:433b)
 
 INCLUDE "data/map_headers.asm"
 
-ClearNPCs: ; 1c440 (7:4440)
+ClearNPCs:
 	push hl
 	push bc
 	ld hl, wLoadedNPCs
@@ -159,7 +159,7 @@ ClearNPCs: ; 1c440 (7:4440)
 	pop hl
 	ret
 
-GetNPCDirection: ; 1c455 (7:4455)
+GetNPCDirection:
 	push hl
 	ld a, [wLoadedNPCTempIndex]
 	ld l, LOADED_NPC_DIRECTION
@@ -171,7 +171,7 @@ GetNPCDirection: ; 1c455 (7:4455)
 ; sets new position to active NPC
 ; and updates its tile permissions
 ; bc = new coords
-SetNPCPosition: ; 1c461 (7:4461)
+SetNPCPosition:
 	push hl
 	push bc
 	call UpdateNPCsTilePermission
@@ -186,7 +186,7 @@ SetNPCPosition: ; 1c461 (7:4461)
 	pop hl
 	ret
 
-GetNPCPosition: ; 1c477 (7:4477)
+GetNPCPosition:
 	push hl
 	ld a, [wLoadedNPCTempIndex]
 	ld l, LOADED_NPC_COORD_X
@@ -198,7 +198,7 @@ GetNPCPosition: ; 1c477 (7:4477)
 	ret
 
 ; Loads NPC Sprite Data
-LoadNPC: ; 1c485 (7:4485)
+LoadNPC:
 	push hl
 	push bc
 	push de
@@ -265,7 +265,7 @@ LoadNPC: ; 1c485 (7:4485)
 	ret
 
 ; returns carry if input NPC ID in register a is Ronald
-CheckIfNPCIsRonald: ; 1c4fa (7:44fa)
+CheckIfNPCIsRonald:
 	cp NPC_RONALD1
 	jr z, .set_carry
 	cp NPC_RONALD2
@@ -278,7 +278,7 @@ CheckIfNPCIsRonald: ; 1c4fa (7:44fa)
 	scf
 	ret
 
-UnloadNPC: ; 1c50a (7:450a)
+UnloadNPC:
 	push hl
 	call UpdateNPCsTilePermission
 	ld a, [wLoadedNPCTempIndex]
@@ -303,7 +303,7 @@ UnloadNPC: ; 1c50a (7:450a)
 	pop hl
 	ret
 
-Func_1c52e: ; 1c52e (7:452e)
+Func_1c52e:
 	push hl
 	push af
 	ld a, [wLoadedNPCTempIndex]
@@ -315,7 +315,7 @@ Func_1c52e: ; 1c52e (7:452e)
 	pop hl
 	ret
 
-Func_1c53f: ; 1c53f (7:453f)
+Func_1c53f:
 	push hl
 	push bc
 	ld a, [wLoadedNPCTempIndex]
@@ -332,7 +332,7 @@ Func_1c53f: ; 1c53f (7:453f)
 	pop hl
 	ret
 
-Func_1c557: ; 1c557 (7:4557)
+Func_1c557:
 	push bc
 	ld c, a
 	ld a, [wLoadedNPCTempIndex]
@@ -357,7 +357,7 @@ Func_1c557: ; 1c557 (7:4557)
 	ret
 
 ; a = NPC animation
-SetNPCAnimation: ; 1c57b (7:457b)
+SetNPCAnimation:
 	push hl
 	push bc
 	push af
@@ -371,7 +371,7 @@ SetNPCAnimation: ; 1c57b (7:457b)
 	pop hl
 	ret
 
-UpdateNPCAnimation: ; 1c58e (7:458e)
+UpdateNPCAnimation:
 	push hl
 	push bc
 	ld a, [wWhichSprite]
@@ -404,7 +404,7 @@ UpdateNPCAnimation: ; 1c58e (7:458e)
 ; give it a random initial value
 ; this makes it so that all NPCs are out of phase
 ; when they are loaded into a map
-ApplyRandomCountToNPCAnim: ; 1c5b9 (7:45b9)
+ApplyRandomCountToNPCAnim:
 	push hl
 	push bc
 	ld a, [wWhichSprite]
@@ -438,7 +438,7 @@ ApplyRandomCountToNPCAnim: ; 1c5b9 (7:45b9)
 
 ; sets the loaded NPC's direction
 ; to the direction that is in LOADED_NPC_DIRECTION_BACKUP
-Func_1c5e9: ; 1c5e9 (7:45e9)
+Func_1c5e9:
 	push hl
 	push bc
 	ld a, [wLoadedNPCTempIndex]
@@ -454,7 +454,7 @@ Func_1c5e9: ; 1c5e9 (7:45e9)
 	ret
 
 ; a = new direction
-SetNPCDirection: ; 1c5ff (7:45ff)
+SetNPCDirection:
 	push hl
 	push af
 	ld a, [wLoadedNPCTempIndex]
@@ -466,7 +466,7 @@ SetNPCDirection: ; 1c5ff (7:45ff)
 	pop hl
 	ret
 
-HandleAllNPCMovement: ; 1c610 (7:4610)
+HandleAllNPCMovement:
 	push hl
 	push bc
 	push de
@@ -527,7 +527,7 @@ HandleAllNPCMovement: ; 1c610 (7:4610)
 	pop hl
 	ret
 
-UpdateNPCSpritePosition: ; 1c665 (7:4665)
+UpdateNPCSpritePosition:
 	push hl
 	push bc
 	push de
@@ -623,7 +623,7 @@ UpdateNPCSpritePosition: ; 1c665 (7:4665)
 
 ; ands wIsAnNPCMoving with the current
 ; NPC's NPC_FLAG_MOVING_F
-UpdateIsAnNPCMovingFlag: ; 1c6d3 (7:46d3)
+UpdateIsAnNPCMovingFlag:
 	push hl
 	push bc
 	ld bc, LOADED_NPC_FLAGS
@@ -635,7 +635,7 @@ UpdateIsAnNPCMovingFlag: ; 1c6d3 (7:46d3)
 	pop hl
 	ret
 
-SetNPCsTilePermission: ; 1c6e3 (7:46e3)
+SetNPCsTilePermission:
 	push hl
 	push bc
 	ld a, [wLoadedNPCTempIndex]
@@ -650,7 +650,7 @@ SetNPCsTilePermission: ; 1c6e3 (7:46e3)
 	pop hl
 	ret
 
-SetAllNPCTilePermissions: ; 1c6f8 (7:46f8)
+SetAllNPCTilePermissions:
 	push hl
 	push bc
 	push de
@@ -675,7 +675,7 @@ SetAllNPCTilePermissions: ; 1c6f8 (7:46f8)
 	pop hl
 	ret
 
-UpdateNPCsTilePermission: ; 1c719 (7:4719)
+UpdateNPCsTilePermission:
 	push hl
 	push bc
 	ld a, [wLoadedNPCTempIndex]
@@ -691,7 +691,7 @@ UpdateNPCsTilePermission: ; 1c719 (7:4719)
 	ret
 
 ; Find NPC at coords b (x) c (y)
-FindNPCAtLocation: ; 1c72e (7:472e)
+FindNPCAtLocation:
 	push hl
 	push bc
 	push de
@@ -742,7 +742,7 @@ FindNPCAtLocation: ; 1c72e (7:472e)
 
 ; Probably needs a new name. Loads data for NPC that the next Script is for
 ; Sets direction, Loads Image data for it, loads name, and more
-SetNewScriptNPC: ; 1c768 (7:4768)
+SetNewScriptNPC:
 	push hl
 	ld a, [wLoadedNPCTempIndex]
 	ld l, LOADED_NPC_DIRECTION
@@ -760,7 +760,7 @@ SetNewScriptNPC: ; 1c768 (7:4768)
 	pop hl
 	ret
 
-StartNPCMovement: ; 1c78d (7:478d)
+StartNPCMovement:
 	push hl
 ; set NPC as moving
 	ld a, [wLoadedNPCTempIndex]
@@ -825,7 +825,7 @@ StartNPCMovement: ; 1c78d (7:478d)
 	ret
 
 ; returns nz if there is an NPC currently moving
-CheckIsAnNPCMoving: ; 1c7de (7:47de)
+CheckIsAnNPCMoving:
 	ld a, [wIsAnNPCMoving]
 	and NPC_FLAG_MOVING
 	ret
@@ -833,7 +833,7 @@ CheckIsAnNPCMoving: ; 1c7de (7:47de)
 ; while the NPC is moving, increment its movement step by 1
 ; once it reaches a value greater than 16, update
 ; its tile permission and its position and start next movement
-UpdateNPCMovementStep: ; 1c7e4 (7:47e4)
+UpdateNPCMovementStep:
 	push hl
 	push bc
 	push de
@@ -861,7 +861,7 @@ UpdateNPCMovementStep: ; 1c7e4 (7:47e4)
 	pop hl
 	ret
 
-UpdateNPCPosition: ; 1c80d (7:480d)
+UpdateNPCPosition:
 	push hl
 	push bc
 	ld a, [wLoadedNPCTempIndex]
@@ -888,7 +888,7 @@ UpdateNPCPosition: ; 1c80d (7:480d)
 	pop hl
 	ret
 
-ClearMasterBeatenList: ; 1c82e (7:482e)
+ClearMasterBeatenList:
 	push hl
 	push bc
 	ld c, $a
@@ -904,7 +904,7 @@ ClearMasterBeatenList: ; 1c82e (7:482e)
 
 ; writes Master in register a to
 ; first empty slot in wMastersBeatenList
-AddMasterBeatenToList: ; 1c83d (7:483d)
+AddMasterBeatenToList:
 	push hl
 	push bc
 	ld b, a
@@ -933,7 +933,7 @@ AddMasterBeatenToList: ; 1c83d (7:483d)
 
 ; iterates all masters and attempts to
 ; add each of them to wMastersBeatenList
-AddAllMastersToMastersBeatenList: ; 1c858 (7:4858)
+AddAllMastersToMastersBeatenList:
 	ld a, $01
 .loop
 	push af
@@ -944,13 +944,13 @@ AddAllMastersToMastersBeatenList: ; 1c858 (7:4858)
 	jr c, .loop
 	ret
 
-Func_1c865: ; 1c865 (7:4865)
+Func_1c865:
 	ret
 
-; unreferenced debug function
+; debug function
 ; adjusts hSCX and hSCY by using the arrow keys
 ; pressing B makes it scroll faster
-Func_1c866: ; 1c866 (7:4866)
+Func_1c866: ; unreferenced
 	ldh a, [hKeysHeld]
 	and B_BUTTON
 	call nz, .asm_1c86d ; executes following part twice
@@ -982,9 +982,8 @@ Func_1c866: ; 1c866 (7:4866)
 	ldh [hSCY], a
 	ret
 
-; unreferenced
 ; sets some flags on a given sprite
-Func_1c890: ; 1c890 (7:4890)
+Func_1c890: ; unreferenced
 	ld a, [wVBlankCounter]
 	and %111111
 	ret nz
@@ -1011,1776 +1010,4 @@ Func_1c890: ; 1c890 (7:4890)
 .asm_1c8b9
 	set SPRITE_ANIM_FLAG_SPEED, [hl]
 .asm_1c8bb
-	ret
-
-Func_1c8bc: ; 1c8bc (7:48bc)
-	push hl
-	push bc
-	call Set_OBJ_8x8
-	ld a, LOW(Func_3ba2)
-	ld [wDoFrameFunction], a
-	ld a, HIGH(Func_3ba2)
-	ld [wDoFrameFunction + 1], a
-	ld a, $ff
-	ld hl, wAnimationQueue
-	ld c, ANIMATION_QUEUE_LENGTH
-.fill_queue
-	ld [hli], a
-	dec c
-	jr nz, .fill_queue
-	ld [wd42a], a
-	ld [wd4c0], a
-	xor a
-	ld [wDuelAnimBufferCurPos], a
-	ld [wDuelAnimBufferSize], a
-	ld [wd4b3], a
-	call DefaultScreenAnimationUpdate
-	call Func_3ca0
-	pop bc
-	pop hl
-	ret
-
-PlayLoadedDuelAnimation: ; 1c8ef (7:48ef)
-	ld a, [wDoFrameFunction + 0]
-	cp LOW(Func_3ba2)
-	jr nz, .error
-	ld a, [wDoFrameFunction + 1]
-	cp HIGH(Func_3ba2)
-	jr z, .okay
-.error
-	debug_nop
-	ret
-
-.okay
-	ld a, [wTempAnimation]
-	ld [wd4bf], a
-	cp DUEL_SPECIAL_ANIMS
-	jp nc, Func_1cb5e
-
-	push hl
-	push bc
-	push de
-	call GetAnimationData
-; hl: pointer
-
-	ld a, [wAnimationsDisabled]
-	or a
-	jr z, .check_to_play_sfx
-	; animations are disabled
-	push hl
-	ld bc, ANIM_SPRITE_ANIM_FLAGS
-	add hl, bc
-	ld a, [hl]
-	; if flag is set, play animation anyway
-	and (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE)
-	pop hl
-	jr z, .return
-
-.check_to_play_sfx
-	push hl
-	ld bc, ANIM_SOUND_FX_ID
-	add hl, bc
-	ld a, [hl]
-	pop hl
-	or a
-	jr z, .calc_addr
-	call PlaySFX
-
-.calc_addr
-; this data field is always $00,
-; so this calculation is unnecessary
-; seems like there was supposed to be
-; more than 1 function to handle animation
-	push hl
-	ld bc, ANIM_HANDLER_FUNCTION
-	add hl, bc
-	ld a, [hl]
-	rlca
-	add LOW(.address) ; $48
-	ld l, a ; LO
-	ld a, HIGH(.address) ; $49
-	adc 0
-	ld h, a ; HI
-; hl: pointer
-	ld a, [hli]
-	ld b, [hl]
-	ld c, a
-	pop hl
-
-	call CallBC
-.return
-	pop de
-	pop bc
-	pop hl
-	ret
-
-.address
-	dw .handler_func
-
-.handler_func ; 1c94a (7:494a)
-; if any of ANIM_SPRITE_ID, ANIM_PALETTE_ID and ANIM_SPRITE_ANIM_ID
-; are 0, then return
-	ld e, l
-	ld d, h
-	ld c, ANIM_SPRITE_ANIM_ID + 1
-.loop
-	ld a, [de]
-	or a
-	jr z, .return_with_carry
-	inc de
-	dec c
-	jr nz, .loop
-
-	ld a, [hli] ; ANIM_SPRITE_ID
-	farcall CreateSpriteAndAnimBufferEntry
-	ld a, [wWhichSprite]
-	ld [wAnimationQueue], a ; push an animation to the queue
-
-	xor a
-	ld [wVRAMTileOffset], a
-	ld [wd4cb], a
-
-	ld a, [hli] ; ANIM_PALETTE_ID
-	farcall LoadPaletteData
-	ld a, [hli] ; ANIM_SPRITE_ANIM_ID
-
-	push af
-	ld a, [hli] ; ANIM_SPRITE_ANIM_FLAGS
-	ld [wAnimFlags], a
-	call LoadAnimCoordsAndFlags
-	pop af
-
-	farcall StartNewSpriteAnimation
-	or a
-	jr .done
-
-.return_with_carry
-	scf
-.done
-	ret
-
-; loads the correct coordinates/flags for
-; sprite animation in wAnimationQueue
-LoadAnimCoordsAndFlags: ; 1c980 (7:4980)
-	push hl
-	push bc
-	ld a, [wAnimationQueue]
-	ld c, SPRITE_ANIM_ATTRIBUTES
-	call GetSpriteAnimBufferProperty_SpriteInA
-	call GetAnimCoordsAndFlags
-
-	push af
-	and (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_5)
-	or [hl]
-	ld [hli], a
-	ld a, b
-	ld [hli], a ; SPRITE_ANIM_COORD_X
-	ld [hl], c ; SPRITE_ANIM_COORD_Y
-	pop af
-
-	ld bc, SPRITE_ANIM_FLAGS - SPRITE_ANIM_COORD_Y
-	add hl, bc
-	ld c, a ; useless
-	and (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT)
-	or [hl]
-	ld [hl], a
-	pop bc
-	pop hl
-	ret
-
-; outputs x and y coordinates for the sprite animation
-; taking into account who the turn duelist is.
-; also returns in a the allowed animation flags of
-; the configuration that is selected.
-; output:
-; a = anim flags
-; b = x coordinate
-; c = y coordinate
-GetAnimCoordsAndFlags: ; 1c9a2 (7:49a2)
-	push hl
-	ld c, 0
-	ld a, [wAnimFlags]
-	and (1 << SPRITE_ANIM_FLAG_SPEED)
-	jr nz, .calc_addr
-
-	ld a, [wDuelAnimationScreen]
-	add a ; 2 * [wDuelAnimationScreen]
-	ld c, a
-	add a ; 4 * [wDuelAnimationScreen]
-	add c ; 6 * [wDuelAnimationScreen]
-	add a ; 12 * [wDuelAnimationScreen]
-	ld c, a
-
-	ld a, [wDuelAnimDuelistSide]
-	cp PLAYER_TURN
-	jr z, .player_side
-; opponent side
-	ld a, 6
-	add c
-	ld c, a
-.player_side
-	ld a, [wDuelAnimLocationParam]
-	add c ; a = [wDuelAnimLocationParam] + c
-	ld c, a
-	ld b, 0
-	ld hl, AnimationCoordinatesIndex
-	add hl, bc
-	ld c, [hl]
-
-.calc_addr
-	ld a, c
-	add a ; a = c * 2
-	add c ; a = c * 3
-	ld c, a
-	ld b, 0
-	ld hl, AnimationCoordinates
-	add hl, bc
-	ld b, [hl] ; x coord
-	inc hl
-	ld c, [hl] ; y coord
-	inc hl
-	ld a, [wAnimFlags]
-	and [hl] ; flags
-	pop hl
-	ret
-
-AnimationCoordinatesIndex:
-; animations in the Duel Main Scene
-	db $01, $01, $01, $01, $01, $01 ; player
-	db $02, $02, $02, $02, $02, $02 ; opponent
-
-; animations in the Player's Play Area, for each Play Area Pokemon
-	db $03, $04, $05, $06, $07, $08 ; player
-	db $03, $04, $05, $06, $07, $08 ; opponent
-
-; animations in the Opponent's Play Area, for each Play Area Pokemon
-	db $09, $0a, $0b, $0c, $0d, $0e ; player
-	db $09, $0a, $0b, $0c, $0d, $0e ; opponent
-
-anim_coords: MACRO
-	db \1
-	db \2
-	db \3
-ENDM
-
-AnimationCoordinates:
-; x coord, y coord, animation flags
-	anim_coords 88,  88, (1 << SPRITE_ANIM_FLAG_3)
-
-; animations in the Duel Main Scene
-	anim_coords 40,  80, $00
-	anim_coords 136, 48, (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_5) | (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT)
-
-; animations in the Player's Play Area, for each Play Area Pokemon
-	anim_coords 88,  72, $00
-	anim_coords 24,  96, $00
-	anim_coords 56,  96, $00
-	anim_coords 88,  96, $00
-	anim_coords 120, 96, $00
-	anim_coords 152, 96, $00
-
-; animations in the Opponent's Play Area, for each Play Area Pokemon
-	anim_coords 88,  80, $00
-	anim_coords 152, 40, $00
-	anim_coords 120, 40, $00
-	anim_coords 88,  40, $00
-	anim_coords 56,  40, $00
-	anim_coords 24,  40, $00
-
-; appends to end of wDuelAnimBuffer
-; the current duel animation
-LoadDuelAnimationToBuffer: ; 1ca31 (7:4a31)
-	push hl
-	push bc
-	ld a, [wDuelAnimBufferCurPos]
-	ld b, a
-	ld hl, wDuelAnimBufferSize
-	ld a, [hl]
-	ld c, a
-	add DUEL_ANIM_STRUCT_SIZE
-	and %01111111
-	cp b
-	jp z, .skip
-	ld [hl], a
-
-	ld b, $00
-	ld hl, wDuelAnimBuffer
-	add hl, bc
-	ld a, [wTempAnimation]
-	ld [hli], a
-	ld a, [wDuelAnimationScreen]
-	ld [hli], a
-	ld a, [wDuelAnimDuelistSide]
-	ld [hli], a
-	ld a, [wDuelAnimLocationParam]
-	ld [hli], a
-	ld a, [wDuelAnimDamage]
-	ld [hli], a
-	ld a, [wDuelAnimDamage + 1]
-	ld [hli], a
-	ld a, [wd4b3]
-	ld [hli], a
-	ld a, [wDuelAnimReturnBank]
-	ld [hl], a
-
-.skip
-	pop bc
-	pop hl
-	ret
-
-; loads the animations from wDuelAnimBuffer
-; in ascending order, starting at wDuelAnimBufferCurPos
-PlayBufferedDuelAnimations: ; 1ca6e (7:4a6e)
-	push hl
-	push bc
-.next_duel_anim
-	ld a, [wDuelAnimBufferSize]
-	ld b, a
-	ld a, [wDuelAnimBufferCurPos]
-	cp b
-	jr z, .skip
-
-	ld c, a
-	add DUEL_ANIM_STRUCT_SIZE
-	and %01111111
-	ld [wDuelAnimBufferCurPos], a
-
-	ld b, $00
-	ld hl, wDuelAnimBuffer
-	add hl, bc
-	ld a, [hli]
-	ld [wTempAnimation], a
-	ld a, [hli]
-	ld [wDuelAnimationScreen], a
-	ld a, [hli]
-	ld [wDuelAnimDuelistSide], a
-	ld a, [hli]
-	ld [wDuelAnimLocationParam], a
-	ld a, [hli]
-	ld [wDuelAnimDamage], a
-	ld a, [hli]
-	ld [wDuelAnimDamage + 1], a
-	ld a, [hli]
-	ld [wd4b3], a
-	ld a, [hl]
-	ld [wDuelAnimReturnBank], a
-
-	call PlayLoadedDuelAnimation
-	call CheckAnyAnimationPlaying
-	jr nc, .next_duel_anim
-
-.skip
-	pop bc
-	pop hl
-	ret
-
-; gets data from Animations for anim ID in a
-; outputs the pointer to the data in hl
-GetAnimationData: ; 1cab3 (7:4ab3)
-	push bc
-	ld a, [wTempAnimation]
-	ld l, a
-	ld h, 0
-	add hl, hl ; hl = anim * 2
-	ld b, h
-	ld c, l
-	add hl, hl ; hl = anim * 4
-	add hl, bc ; hl = anim * 6
-	ld bc, Animations
-	add hl, bc
-	pop bc
-	ret
-
-Func_1cac5: ; 1cac5 (7:4ac5)
-	ld a, [wd42a]
-	cp $ff
-	jr nz, .asm_1cb03
-
-	ld a, [wd4c0]
-	or a
-	jr z, .asm_1cafb
-	cp $80
-	jr z, .asm_1cb11
-	ld hl, wAnimationQueue
-	ld c, ANIMATION_QUEUE_LENGTH
-.loop_queue
-	push af
-	push bc
-	ld a, [hl]
-	cp $ff
-	jr z, .next
-	ld [wWhichSprite], a
-	farcall GetSpriteAnimCounter
-	cp $ff
-	jr nz, .next
-	farcall DisableCurSpriteAnim
-	ld a, $ff
-	ld [hl], a
-
-.next
-	pop bc
-	pop af
-	and [hl]
-	inc hl
-	dec c
-	jr nz, .loop_queue
-
-.asm_1cafb
-	cp $ff
-	jr nz, .skip_play_anims
-	call PlayBufferedDuelAnimations
-.skip_play_anims
-	ret
-
-.asm_1cb03
-	ld hl, wScreenAnimUpdatePtr
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	call CallHL2
-	ld a, [wd42a]
-	jr .asm_1cafb
-
-.asm_1cb11
-	ld a, $ff
-	ld [wd4c0], a
-	jr .asm_1cafb
-
-Func_1cb18: ; 1cb18 (7:4b18)
-	push hl
-	push bc
-	push de
-
-	; if Func_3ba2 is not set as
-	; wDoFrameFunction, quit and set carry
-	ld a, [wDoFrameFunction]
-	cp LOW(Func_3ba2)
-	jr nz, .carry
-	ld a, [wDoFrameFunction + 1]
-	cp HIGH(Func_3ba2)
-	jr nz, .carry
-
-	ld a, $ff
-	ld [wd4c0], a
-	ld a, [wd42a]
-	cp $ff
-	call nz, DoScreenAnimationUpdate
-
-; clear all queued animations
-; and disable their sprite anims
-	ld hl, wAnimationQueue
-	ld c, ANIMATION_QUEUE_LENGTH
-.loop_queue
-	push bc
-	ld a, [hl]
-	cp $ff
-	jr z, .next_queued
-	ld [wWhichSprite], a
-	farcall DisableCurSpriteAnim
-	ld a, $ff
-	ld [hl], a
-.next_queued
-	pop bc
-	inc hl
-	dec c
-	jr nz, .loop_queue
-
-	xor a
-	ld [wDuelAnimBufferCurPos], a
-	ld [wDuelAnimBufferSize], a
-.done
-	pop de
-	pop bc
-	pop hl
-	ret
-.carry
-	scf
-	jr .done
-
-Func_1cb5e: ; 1cb5e (7:4b5e)
-	cp $96
-	jp nc, Func_1ce03
-	cp $8c
-	jp nz, InitScreenAnimation
-	jr .asm_1cb6a ; redundant
-.asm_1cb6a
-	ld a, [wDuelAnimDamage + 1]
-	cp $03
-	jr nz, .asm_1cb76
-	ld a, [wDuelAnimDamage]
-	cp $e8
-.asm_1cb76
-	ret nc
-
-	xor a
-	ld [wd4b8], a
-	ld [wVRAMTileOffset], a
-	ld [wd4cb], a
-
-	ld a, PALETTE_37
-	farcall LoadPaletteData
-	call Func_1cba6
-
-	ld hl, wd4b3
-	bit 0, [hl]
-	call nz, Func_1cc3e
-
-	ld a, $12
-	ld [wd4b8], a
-	bit 1, [hl]
-	call nz, Func_1cc4e
-
-	bit 2, [hl]
-	call nz, Func_1cc66
-
-	xor a
-	ld [wd4b3], a
-	ret
-
-Func_1cba6: ; 1cba6 (7:4ba6)
-	call Func_1cc03
-	xor a
-	ld [wd4b7], a
-
-	ld hl, wd4b4
-	ld de, wAnimationQueue + 1
-.asm_1cbb3
-	push hl
-	push de
-	ld a, [hl]
-	or a
-	jr z, .asm_1cbbc
-	call Func_1cbcc
-
-.asm_1cbbc
-	pop de
-	pop hl
-	inc hl
-	inc de
-	ld a, [wd4b7]
-	inc a
-	ld [wd4b7], a
-	cp $03
-	jr c, .asm_1cbb3
-	ret
-
-Func_1cbcc: ; 1cbcc (7:4bcc)
-	push af
-	ld a, SPRITE_DUEL_4
-	farcall CreateSpriteAndAnimBufferEntry
-	ld a, [wWhichSprite]
-	ld [de], a
-	ld a, (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE)
-	ld [wAnimFlags], a
-	ld c, SPRITE_ANIM_COORD_X
-	call GetSpriteAnimBufferProperty
-	call GetAnimCoordsAndFlags
-
-	ld a, [wd4b7]
-	add LOW(Unknown_1cbfd)
-	ld e, a
-	ld a, HIGH(Unknown_1cbfd)
-	adc 0
-	ld d, a
-	ld a, [de]
-	add b
-
-	ld [hli], a ; SPRITE_ANIM_COORD_X
-	ld [hl], c ; SPRITE_ANIM_COORD_Y
-
-	ld a, [wd4b8]
-	ld c, a
-	pop af
-	farcall Func_12ac9
-	ret
-
-Unknown_1cbfd: ; 1cbfd (7:4bfd)
-	db -$10, -$8, $0, $8, -$8, -$10
-
-Func_1cc03: ; 1cc03 (7:4c03)
-	ld a, [wDuelAnimDamage]
-	ld l, a
-	ld a, [wDuelAnimDamage + 1]
-	ld h, a
-
-	ld de, wd4b4
-	ld bc, -100
-	call .Func_1cc2f
-	ld bc, -10
-	call .Func_1cc2f
-
-	ld a, l
-	add $4f
-	ld [de], a
-	ld hl, wd4b4
-	ld c, 2
-.asm_1cc23
-	ld a, [hl]
-	cp $4f
-	jr nz, .asm_1cc2e
-	ld [hl], $00
-	inc hl
-	dec c
-	jr nz, .asm_1cc23
-.asm_1cc2e
-	ret
-
-.Func_1cc2f
-	ld a, $4e
-.loop
-	inc a
-	add hl, bc
-	jr c, .loop
-
-	ld [de], a
-	inc de
-	ld a, l
-	sub c
-	ld l, a
-	ld a, h
-	sbc b
-	ld h, a
-	ret
-
-Func_1cc3e: ; 1cc3e (7:4c3e)
-	push hl
-	ld a, $03
-	ld [wd4b7], a
-	ld de, wAnimationQueue + 4
-	ld a, SPRITE_ANIM_91
-	call Func_1cbcc
-	pop hl
-	ret
-
-Func_1cc4e: ; 1cc4e (7:4c4e)
-	push hl
-	ld a, $04
-	ld [wd4b7], a
-	ld de, wAnimationQueue + 5
-	ld a, SPRITE_ANIM_90
-	call Func_1cbcc
-	ld a, [wd4b8]
-	add $12
-	ld [wd4b8], a
-	pop hl
-	ret
-
-Func_1cc66: ; 1cc66 (7:4c66)
-	push hl
-	ld a, $05
-	ld [wd4b7], a
-	ld de, wAnimationQueue + 6
-	ld a, SPRITE_ANIM_89
-	call Func_1cbcc
-	pop hl
-	ret
-
-; initializes a screen animation from wTempAnimation
-; loads a function pointer for updating a frame
-; and initializes the duration of the animation.
-InitScreenAnimation: ; 1cc76 (7:4c76)
-	ld a, [wAnimationsDisabled]
-	or a
-	jr nz, .skip
-	ld a, [wTempAnimation]
-	ld [wd42a], a
-	sub DUEL_SCREEN_ANIMS
-	add a
-	add a
-	ld c, a
-	ld b, $00
-	ld hl, Data_1cc9f
-	add hl, bc
-	ld a, [hli]
-	ld [wScreenAnimUpdatePtr], a
-	ld c, a
-	ld a, [hli]
-	ld [wScreenAnimUpdatePtr + 1], a
-	ld b, a
-	ld a, [hl]
-	ld [wScreenAnimDuration], a
-	call CallBC
-.skip
-	ret
-
-; for the following animations, these functions
-; are run with the corresponding duration.
-; this duration decides different effects,
-; depending on which function runs
-; and is decreased by one each time.
-; when it is down to 0, the animation is done.
-
-screen_effect: MACRO
-	dw \1 ; function pointer
-	db \2 ; duration
-	db $00 ; padding
-ENDM
-
-Data_1cc9f: ; 1cc9f (7:4c9f)
-; function pointer, duration
-	screen_effect ShakeScreenX_Small, 24 ; DUEL_ANIM_SMALL_SHAKE_X
-	screen_effect ShakeScreenX_Big,   32 ; DUEL_ANIM_BIG_SHAKE_X
-	screen_effect ShakeScreenY_Small, 24 ; DUEL_ANIM_SMALL_SHAKE_Y
-	screen_effect ShakeScreenY_Big,   32 ; DUEL_ANIM_BIG_SHAKE_Y
-	screen_effect WhiteFlashScreen,    8 ; DUEL_ANIM_FLASH
-	screen_effect DistortScreen,      63 ; DUEL_ANIM_DISTORT
-
-; checks if screen animation duration is over
-; and if so, loads the default update function
-LoadDefaultScreenAnimationUpdateWhenFinished: ; 1ccb7 (7:4cb7)
-	ld a, [wScreenAnimDuration]
-	or a
-	ret nz
-	; fallthrough
-
-; function called for the screen animation update when it is over
-DefaultScreenAnimationUpdate: ; 1ccbc (7:4cbc)
-	ld a, $ff
-	ld [wd42a], a
-	call DisableInt_LYCoincidence
-	xor a
-	ldh [hSCX], a
-	ldh [rSCX], a
-	ldh [hSCY], a
-	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(DefaultScreenAnimationUpdate)
-	inc hl
-	ld [hl], HIGH(DefaultScreenAnimationUpdate)
-	ret
-
-; runs the screen update function set in wScreenAnimUpdatePtr
-DoScreenAnimationUpdate: ; 1ccd4 (7:4cd4)
-	ld a, 1
-	ld [wScreenAnimDuration], a
-	ld hl, wScreenAnimUpdatePtr
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	call CallHL2
-	jr DefaultScreenAnimationUpdate
-
-ShakeScreenX_Small: ; 1cce4 (7:4ce4)
-	ld hl, SmallShakeOffsets
-	jr ShakeScreenX
-
-ShakeScreenX_Big: ; 1cce9 (7:4ce9)
-	ld hl, BigShakeOffsets
-	jr ShakeScreenX
-
-ShakeScreenX: ; 1ccee (7:4cee)
-	ld a, l
-	ld [wd4bc], a
-	ld a, h
-	ld [wd4bc + 1], a
-
-	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.update)
-	inc hl
-	ld [hl], HIGH(.update)
-	ret
-
-.update
-	call DecrementScreenAnimDuration
-	call UpdateShakeOffset
-	jp nc, LoadDefaultScreenAnimationUpdateWhenFinished
-	ldh a, [hSCX]
-	add [hl]
-	ldh [hSCX], a
-	jp LoadDefaultScreenAnimationUpdateWhenFinished
-
-ShakeScreenY_Small: ; 1cd10 (7:4d10)
-	ld hl, SmallShakeOffsets
-	jr ShakeScreenY
-
-ShakeScreenY_Big: ; 1cd15 (7:4d15)
-	ld hl, BigShakeOffsets
-	jr ShakeScreenY
-
-ShakeScreenY: ; 1cd1a (7:4d1a)
-	ld a, l
-	ld [wd4bc], a
-	ld a, h
-	ld [wd4bc + 1], a
-	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.update)
-	inc hl
-	ld [hl], HIGH(.update)
-	ret
-
-.update
-	call DecrementScreenAnimDuration
-	call UpdateShakeOffset
-	jp nc, LoadDefaultScreenAnimationUpdateWhenFinished
-	ldh a, [hSCY]
-	add [hl]
-	ldh [hSCY], a
-	jp LoadDefaultScreenAnimationUpdateWhenFinished
-
-; get the displacement of the current frame
-; depending on the value of wScreenAnimDuration
-; returns carry if displacement was updated
-UpdateShakeOffset: ; 1cd3c (7:4d3c)
-	ld hl, wd4bc
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	ld a, [wScreenAnimDuration]
-	cp [hl]
-	ret nc
-	inc hl
-	push hl
-	inc hl
-	ld a, l
-	ld [wd4bc], a
-	ld a, h
-	ld [wd4bc + 1], a
-	pop hl
-	scf
-	ret
-
-SmallShakeOffsets: ; 1cd55 (7:4d55)
-	db 21,  2
-	db 17, -2
-	db 13,  2
-	db  9, -2
-	db  5,  1
-	db  1, -1
-
-BigShakeOffsets: ; 1cd61 (7:4d61)
-	db 29,  4
-	db 25, -4
-	db 21,  4
-	db 17, -4
-	db 13,  3
-	db  9, -3
-	db  5,  2
-	db  1, -2
-
-DecrementScreenAnimDuration: ; 1cd71 (7:4d71)
-	ld hl, wScreenAnimDuration
-	dec [hl]
-	ret
-
-WhiteFlashScreen: ; 1cd76 (7:4d76)
-	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.update)
-	inc hl
-	ld [hl], HIGH(.update)
-	ld a, [wBGP]
-	ld [wd4bc], a
-	; backup the current background pals
-	ld hl, wBackgroundPalettesCGB
-	ld de, wTempBackgroundPalettesCGB
-	ld bc, 8 palettes
-	call CopyDataHLtoDE_SaveRegisters
-	ld de, PALRGB_WHITE
-	ld hl, wBackgroundPalettesCGB
-	ld bc, (8 palettes) / 2
-	call FillMemoryWithDE
-	xor a
-	call SetBGP
-	call FlushAllPalettes
-
-.update
-	call DecrementScreenAnimDuration
-	ld a, [wScreenAnimDuration]
-	or a
-	ret nz
-	; retrieve the previous background pals
-	ld hl, wTempBackgroundPalettesCGB
-	ld de, wBackgroundPalettesCGB
-	ld bc, 8 palettes
-	call CopyDataHLtoDE_SaveRegisters
-	ld a, [wd4bc]
-	call SetBGP
-	call FlushAllPalettes
-	jp DefaultScreenAnimationUpdate
-
-DistortScreen: ; 1cdc3 (7:4dc3)
-	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.update)
-	inc hl
-	ld [hl], HIGH(.update)
-	xor a
-	ld [wApplyBGScroll], a
-	ld hl, wLCDCFunctionTrampoline + 1
-	ld [hl], LOW(ApplyBackgroundScroll)
-	inc hl
-	ld [hl], HIGH(ApplyBackgroundScroll)
-	ld a, 1
-	ld [wBGScrollMod], a
-	call EnableInt_LYCoincidence
-
-.update
-	ld a, [wScreenAnimDuration]
-	srl a
-	srl a
-	srl a
-	and %00000111
-	ld c, a
-	ld b, $00
-	ld hl, .BGScrollModData
-	add hl, bc
-	ld a, [hl]
-	ld [wBGScrollMod], a
-	call DecrementScreenAnimDuration
-	jp LoadDefaultScreenAnimationUpdateWhenFinished
-
-; each value is applied for 8 "ticks" of wScreenAnimDuration
-; starting from the last and running backwards
-.BGScrollModData
-	db 4, 3, 2, 1, 1, 1, 1, 2
-
-Func_1ce03: ; 1ce03 (7:4e03)
-	cp DUEL_ANIM_158
-	jr z, .asm_1ce17
-	sub $96
-	add a
-	ld c, a
-	ld b, $00
-	ld hl, .pointer_table
-	add hl, bc
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp Func_3bb5
-
-.asm_1ce17
-	ld a, [wDuelAnimDamage]
-	ld l, a
-	ld a, [wDuelAnimDamage + 1]
-	ld h, a
-	jp Func_3bb5
-
-.pointer_table
-	dw Func_190f4         ; DUEL_ANIM_150
-	dw PrintDamageText    ; DUEL_ANIM_PRINT_DAMAGE
-	dw UpdateMainSceneHUD ; DUEL_ANIM_UPDATE_HUD
-	dw Func_191a3         ; DUEL_ANIM_153
-	dw Func_191a3         ; DUEL_ANIM_154
-	dw Func_191a3         ; DUEL_ANIM_155
-	dw Func_191a3         ; DUEL_ANIM_156
-	dw Func_191a3         ; DUEL_ANIM_157
-
-INCLUDE "data/duel/animations/duel_animations.asm"
-
-; plays the Opening sequence, and handles player selection
-; in the Title Screen and Start Menu
-HandleTitleScreen: ; 1d078 (7:5078)
-; if last selected item in Start Menu is 0 (Card Pop!)
-; then skip straight to the Start Menu
-; this makes it so that returning from Card Pop!
-; doesn't play the Opening sequence
-	ld a, [wLastSelectedStartMenuItem]
-	or a
-	jr z, .start_menu
-
-.play_opening
-	ld a, MUSIC_STOP
-	call PlaySong
-	call Func_3ca0
-	call PlayOpeningSequence
-	call LoadTitleScreenSprites
-
-	xor a
-	ld [wd635], a
-	ld a, $3c
-	ld [wTitleScreenIgnoreInputCounter], a
-.loop
-	call DoFrameIfLCDEnabled
-	call UpdateRNGSources
-	call AnimateRandomTitleScreenOrb
-	ld hl, wd635
-	inc [hl]
-	call AssertSongFinished
-	or a
-	jr nz, .song_playing
-	; reset back to the opening sequence
-	farcall Func_10ab4
-	jr .play_opening
-
-.song_playing
-	; should we ignore user input?
-	ld hl, wTitleScreenIgnoreInputCounter
-	ld a, [hl]
-	or a
-	jr z, .check_keys
-	; ignore input, decrement the counter
-	dec [hl]
-	jr .loop
-
-.check_keys
-	ldh a, [hKeysPressed]
-	and A_BUTTON | START
-	jr z, .loop
-	ld a, SFX_02
-	call PlaySFX
-	farcall Func_10ab4
-
-.start_menu
-	call CheckIfHasSaveData
-	call HandleStartMenu
-
-; new game
-	ld a, [wStartMenuChoice]
-	cp START_MENU_NEW_GAME
-	jr nz, .continue_from_diary
-	call DeleteSaveDataForNewGame
-	jr c, HandleTitleScreen
-	jr .card_pop
-.continue_from_diary
-	ld a, [wStartMenuChoice]
-	cp START_MENU_CONTINUE_FROM_DIARY
-	jr nz, .card_pop
-	call AskToContinueFromDiaryWithDuelData
-	jr c, HandleTitleScreen
-.card_pop
-	ld a, [wStartMenuChoice]
-	cp START_MENU_CARD_POP
-	jr nz, .continue_duel
-	call ShowCardPopCGBDisclaimer
-	jr c, HandleTitleScreen
-.continue_duel
-	call ResetDoFrameFunction
-	call Func_3ca0
-	ret
-
-; updates wHasSaveData and wHasDuelSaveData
-; depending on whether the save data is valid or not
-CheckIfHasSaveData: ; 1d0fa (7:50fa)
-	farcall ValidateBackupGeneralSaveData
-	ld a, TRUE
-	jr c, .no_error
-	ld a, FALSE
-.no_error
-	ld [wHasSaveData], a
-	cp $00 ; or a
-	jr z, .write_has_duel_data
-	bank1call ValidateSavedNonLinkDuelData
-	ld a, TRUE
-	jr nc, .write_has_duel_data
-	ld a, FALSE
-.write_has_duel_data
-	ld [wHasDuelSaveData], a
-	farcall ValidateBackupGeneralSaveData
-	ret
-
-; handles printing the Start Menu
-; and getting player input and choice
-HandleStartMenu: ; 1d11c (7:511c)
-	ld a, MUSIC_PC_MAIN_MENU
-	call PlaySong
-	call DisableLCD
-	farcall Func_10000
-	lb de, $30, $8f
-	call SetupText
-	call Func_3ca0
-	xor a
-	ld [wLineSeparation], a
-	call .DrawPlayerPortrait
-	call .SetStartMenuParams
-
-	ld a, $ff
-	ld [wTitleScreenIgnoreInputCounter], a
-	ld a, [wLastSelectedStartMenuItem]
-	cp $4
-	jr c, .init_menu
-	ld a, [wHasSaveData]
-	or a
-	jr z, .init_menu
-	ld a, 1 ; start at second menu option
-.init_menu
-	ld hl, wStartMenuParams
-	farcall InitAndPrintPauseMenu
-	farcall FlashWhiteScreen
-
-.wait_input
-	call DoFrameIfLCDEnabled
-	call UpdateRNGSources
-	call HandleMenuInput
-	push af
-	call PrintStartMenuDescriptionText
-	pop af
-	jr nc, .wait_input
-	ldh a, [hCurMenuItem]
-	cp e
-	jr nz, .wait_input
-
-	ld [wLastSelectedStartMenuItem], a
-	ld a, [wHasSaveData]
-	or a
-	jr nz, .no_adjustment
-	; New Game is 3rd option
-	; but when there's no save data,
-	; it's the 1st in menu list, so adjust it
-	inc e
-	inc e
-.no_adjustment
-	ld a, e
-	ld [wStartMenuChoice], a
-	ret
-
-.SetStartMenuParams
-	ld hl, .StartMenuParams
-	ld de, wStartMenuParams
-	ld bc, .StartMenuParamsEnd - .StartMenuParams
-	call CopyDataHLtoDE
-
-	ld e, 0
-	ld a, [wHasSaveData]
-	or a
-	jr z, .get_text_id ; New Game
-	inc e
-	ld a, 2
-	call .AddItems
-	ld a, [wHasDuelSaveData]
-	or a
-	jr z, .get_text_id ; Continue From Diary
-	inc e
-	ld a, 1
-	call .AddItems
-	; Continue Duel
-
-.get_text_id
-	sla e
-	ld d, $00
-	ld hl, .StartMenuTextIDs
-	add hl, de
-	; set text ID as Start Menu param
-	ld a, [hli]
-	ld [wStartMenuParams + 6], a
-	ld a, [hl]
-	ld [wStartMenuParams + 7], a
-	ret
-
-; adds c items to start menu list
-; this means adding 2 units per item to the text box height
-; and adding to the number of items
-.AddItems
-	push bc
-	ld c, a
-	; number of items in menu
-	ld a, [wStartMenuParams + 12]
-	add c
-	ld [wStartMenuParams + 12], a
-	; height of text box
-	sla c
-	ld a, [wStartMenuParams + 3]
-	add c
-	ld [wStartMenuParams + 3], a
-	pop bc
-	ret
-
-.StartMenuParams
-	db  0, 0 ; start menu coords
-	db 14, 4 ; start menu text box dimensions
-
-	db  2, 2 ; text alignment for InitTextPrinting
-	tx NewGameText
-	db $ff
-
-	db 1, 2 ; cursor x, cursor y
-	db 2 ; y displacement between items
-	db 1 ; number of items
-	db SYM_CURSOR_R ; cursor tile number
-	db SYM_SPACE ; tile behind cursor
-	dw NULL ; function pointer if non-0
-.StartMenuParamsEnd
-
-.StartMenuTextIDs
-	tx NewGameText
-	tx CardPopContinueDiaryNewGameText
-	tx CardPopContinueDiaryNewGameContinueDuelText
-
-.DrawPlayerPortrait
-	lb bc, 14, 1
-	farcall $4, DrawPlayerPortrait
-	ret
-
-; prints the description for the current selected item
-; in the Start Menu in the text box
-PrintStartMenuDescriptionText: ; 1d1e9 (7:51e9)
-	push hl
-	push bc
-	push de
-	; don't print if it's already showing
-	ld a, [wCurMenuItem]
-	ld e, a
-	ld a, [wCurHighlightedStartMenuItem]
-	cp e
-	jr z, .skip
-	ld a, [wHasSaveData]
-	or a
-	jr nz, .has_data
-	; New Game option is 3rd element
-	; in function table, so add 2
-	inc e
-	inc e
-.has_data
-
-	ld a, e
-	push af
-	lb de, 0, 10
-	lb bc, 20, 8
-	call DrawRegularTextBox
-	pop af
-	ld hl, .StartMenuDescriptionFunctionTable
-	call JumpToFunctionInTable
-.skip
-	ld a, [wCurMenuItem]
-	ld [wCurHighlightedStartMenuItem], a
-	pop de
-	pop bc
-	pop hl
-	ret
-
-.StartMenuDescriptionFunctionTable
-	dw .CardPop
-	dw .ContinueFromDiary
-	dw .NewGame
-	dw .ContinueDuel
-
-.CardPop
-	lb de, 1, 12
-	call InitTextPrinting
-	ldtx hl, WhenYouCardPopWithFriendText
-	call PrintTextNoDelay
-	ret
-
-.ContinueDuel
-	lb de, 1, 12
-	call InitTextPrinting
-	ldtx hl, TheGameWillContinueFromThePointInTheDuelText
-	call PrintTextNoDelay
-	ret
-
-.NewGame
-	lb de, 1, 12
-	call InitTextPrinting
-	ldtx hl, StartANewGameText
-	call PrintTextNoDelay
-	ret
-
-.ContinueFromDiary
-	; get OW map name
-	ld a, [wCurOverworldMap]
-	add a
-	ld c, a
-	ld b, $00
-	ld hl, OverworldMapNames
-	add hl, bc
-	ld a, [hli]
-	ld [wTxRam2 + 0], a
-	ld a, [hl]
-	ld [wTxRam2 + 1], a
-
-	; get medal count
-	ld a, [wMedalCount]
-	ld [wTxRam3 + 0], a
-	xor a
-	ld [wTxRam3 + 1], a
-
-	; print text
-	lb de, 1, 10
-	call InitTextPrinting
-	ldtx hl, ContinueFromDiarySummaryText
-	call PrintTextNoDelay
-
-	ld a, [wTotalNumCardsCollected]
-	ld d, a
-	ld a, [wTotalNumCardsToCollect]
-	ld e, a
-	ld bc, $90e
-	farcall Func_1024f
-	ld bc, $a10
-	farcall Func_101df
-	ret
-
-; asks the player whether it's okay to delete
-; the save data in order to create a new one
-; if player answers "yes", delete it
-DeleteSaveDataForNewGame: ; 1d289 (7:5289)
-; exit if there no save data
-	ld a, [wHasSaveData]
-	or a
-	ret z
-
-	call DisableLCD
-	farcall Func_10000
-	call Func_3ca0
-	farcall FlashWhiteScreen
-	call DoFrameIfLCDEnabled
-	ldtx hl, SavedDataAlreadyExistsText
-	call PrintScrollableText_NoTextBoxLabel
-	ldtx hl, OKToDeleteTheDataText
-	call YesOrNoMenuWithText
-	ret c ; quit if chose "no"
-	farcall InvalidateSaveData
-	ldtx hl, AllDataWasDeletedText
-	call PrintScrollableText_NoTextBoxLabel
-	or a
-	ret
-
-; asks the player if the game should resume
-; from diary even though there is Duel save data
-; returns carry if "no" was selected
-AskToContinueFromDiaryWithDuelData: ; 1d2b8 (7:52b8)
-; return if there's no duel save data
-	ld a, [wHasDuelSaveData]
-	or a
-	ret z
-
-	call DisableLCD
-	farcall Func_10000
-	call Func_3ca0
-	farcall FlashWhiteScreen
-	call DoFrameIfLCDEnabled
-	ldtx hl, DataExistsWhenPowerWasTurnedOFFDuringDuelText
-	call PrintScrollableText_NoTextBoxLabel
-	ldtx hl, ContinueFromDiaryText
-	call YesOrNoMenuWithText
-	ret c
-	or a
-	ret
-
-; shows disclaimer for Card Pop!
-; in case player is not playing in CGB
-; return carry if disclaimer was shown
-ShowCardPopCGBDisclaimer: ; 1d2dd (7:52dd)
-; return if playing in CGB
-	ld a, [wConsole]
-	cp CONSOLE_CGB
-	ret z
-
-	lb de, 0, 10
-	lb bc, 20, 8
-	call DrawRegularTextBox
-	lb de, 1,12
-	call InitTextPrinting
-	ldtx hl, YouCanAccessCardPopOnlyWithGameBoyColorsText
-	call PrintTextNoDelay
-	lb bc, SYM_CURSOR_D, SYM_BOX_BOTTOM
-	lb de, 18, 17
-	call SetCursorParametersForTextBox
-	call WaitForButtonAorB
-	scf
-	ret
-
-DrawPlayerPortraitAndPrintNewGameText: ; 1d306 (7:5306)
-	call DisableLCD
-	farcall Func_10a9b
-	farcall Func_10000
-	call Func_3ca0
-	ld hl, HandleAllSpriteAnimations
-	call SetDoFrameFunction
-	lb bc, 7, 3
-	farcall $4, DrawPlayerPortrait
-	farcall Func_10af9
-	call DoFrameIfLCDEnabled
-	ldtx hl, IsCrazyAboutPokemonAndPokemonCardCollectingText
-	call PrintScrollableText_NoTextBoxLabel
-	call ResetDoFrameFunction
-	call Func_3ca0
-	ret
-
-PlayOpeningSequence: ; 1d335 (7:5335)
-	call DisableLCD
-	farcall Func_10a9b
-	farcall Func_10000
-	call Func_3ca0
-	ld hl, HandleAllSpriteAnimations
-	call SetDoFrameFunction
-	call LoadTitleScreenSprites
-
-	ld a, LOW(OpeningSequence)
-	ld [wSequenceCmdPtr + 0], a
-	ld a, HIGH(OpeningSequence)
-	ld [wSequenceCmdPtr + 1], a
-
-	xor a
-	ld [wd317], a
-	ld [wOpeningSequencePalsNeedUpdate], a
-	ld [wSequenceDelay], a
-	farcall FlashWhiteScreen
-
-.loop_cmds
-	call DoFrameIfLCDEnabled
-	call UpdateRNGSources
-	ldh a, [hKeysPressed]
-	and A_BUTTON | START
-	jr nz, .jump_to_title_screen
-	ld a, [wOpeningSequencePalsNeedUpdate]
-	or a
-	jr z, .no_pal_update
-	farcall Func_10d74
-.no_pal_update
-	call ExecuteOpeningSequenceCmd
-	ld a, [wSequenceDelay]
-	cp $ff
-	jr nz, .loop_cmds
-	jr .asm_1d39f
-
-.jump_to_title_screen
-	call AssertSongFinished
-	or a
-	jr nz, .asm_1d39f
-	call DisableLCD
-	ld a, MUSIC_TITLESCREEN
-	call PlaySong
-	lb bc, 0, 0
-	ld a, SCENE_TITLE_SCREEN
-	call LoadScene
-	call OpeningSequenceEmptyFunc
-.asm_1d39f
-	call Func_3ca0
-	call .ShowPressStart
-	call EnableLCD
-	ret
-
-.ShowPressStart
-	ld a, SPRITE_PRESS_START
-	farcall CreateSpriteAndAnimBufferEntry
-	ld c, SPRITE_ANIM_COORD_X
-	call GetSpriteAnimBufferProperty
-	ld a, 48
-	ld [hli], a ; x
-	ld a, 112
-	ld [hl], a ; y
-	ld c, SPRITE_ANIM_190
-	ld a, [wConsole]
-	cp CONSOLE_CGB
-	jr nz, .asm_1d3c5
-	ld c, SPRITE_ANIM_191
-.asm_1d3c5
-	ld a, c
-	ld bc, 60
-	farcall Func_12ac9
-	ret
-
-LoadTitleScreenSprites: ; 1d3ce (7:53ce)
-	xor a
-	ld [wd4ca], a
-	ld [wd4cb], a
-	ld a, PALETTE_30
-	farcall LoadPaletteData
-
-	ld bc, 0
-	ld de, wTitleScreenSprites
-.loop_load_sprites
-	push bc
-	push de
-	ld hl, .TitleScreenSpriteList
-	add hl, bc
-	ld a, [hl]
-	farcall CreateSpriteAndAnimBufferEntry
-	ld a, [wWhichSprite]
-	ld [de], a
-	call GetFirstSpriteAnimBufferProperty
-	inc hl
-	ld a, [hl] ; SPRITE_ANIM_ATTRIBUTES
-	or c
-	ld [hl], a
-	pop de
-	pop bc
-	inc de
-	inc c
-	ld a, c
-	cp $7
-	jr c, .loop_load_sprites
-	ret
-
-.TitleScreenSpriteList
-	db SPRITE_GRASS
-	db SPRITE_FIRE
-	db SPRITE_WATER
-	db SPRITE_COLORLESS
-	db SPRITE_LIGHTNING
-	db SPRITE_PSYCHIC
-	db SPRITE_FIGHTING
-
-; TODO place in main.asm when possible
-INCLUDE "engine/sequences/opening_sequence_commands.asm"
-INCLUDE "data/sequences/opening_sequence.asm"
-
-; once every 63 frames randomly choose an orb sprite
-; to animate, i.e. circle around the screen
-AnimateRandomTitleScreenOrb: ; 1d614 (7:5614)
-	ld a, [wConsole]
-	cp CONSOLE_CGB
-	call z, .UpdateSpriteAttributes
-	ld a, [wd635]
-	and 63
-	ret nz ; don't pick an orb now
-
-.pick_orb
-	ld a, $7
-	call Random
-	ld c, a
-	ld b, $00
-	ld hl, wTitleScreenSprites
-	add hl, bc
-	ld a, [hl]
-	ld [wWhichSprite], a
-	farcall GetSpriteAnimCounter
-	cp $ff
-	jr nz, .pick_orb
-
-	ld c, SPRITE_ANIM_ATTRIBUTES
-	call GetSpriteAnimBufferProperty
-	ld a, [wConsole]
-	cp CONSOLE_CGB
-	jr nz, .set_coords
-	set SPRITE_ANIM_FLAG_UNSKIPPABLE, [hl]
-
-.set_coords
-	inc hl
-	ld a, 248
-	ld [hli], a ; SPRITE_ANIM_COORD_X
-	ld a, 14
-	ld [hl], a ; SPRITE_ANIM_COORD_Y
-	ld a, [wConsole]
-	cp CONSOLE_CGB
-	ld a, SPRITE_ANIM_215
-	jr nz, .start_anim
-	ld a, SPRITE_ANIM_216
-.start_anim
-	farcall StartSpriteAnimation
-	ret
-
-.UpdateSpriteAttributes
-	ld c, $7
-	ld de, wTitleScreenSprites
-.loop_orbs
-	push bc
-	ld a, [de]
-	ld [wWhichSprite], a
-	ld c, SPRITE_ANIM_COORD_X
-	call GetSpriteAnimBufferProperty
-	ld a, [hld]
-	cp 152
-	jr nz, .skip
-	res SPRITE_ANIM_FLAG_UNSKIPPABLE, [hl]
-.skip
-	pop bc
-	inc de
-	dec c
-	jr nz, .loop_orbs
-	ret
-
-; unreferenced
-; shows Copyright information for 300 frames
-; or until Start button is pressed
-Func_1d67b: ; 1d67b (7:567b)
-	call DisableLCD
-	farcall Func_10a9b
-	farcall Func_10000
-	ld bc, $0
-	ld a, SCENE_COPYRIGHT
-	call LoadScene
-	farcall Func_10af9
-	ld bc, 300
-.loop_frame
-	push bc
-	call DoFrameIfLCDEnabled
-	call UpdateRNGSources
-	pop bc
-	ldh a, [hKeysPressed]
-	and START
-	jr nz, .exit
-	dec bc
-	ld a, b
-	or c
-	jr nz, .loop_frame
-.exit
-	farcall Func_10ab4
-	ret
-
-Credits_1d6ad: ; 1d6ad (7:56ad)
-	ld a, MUSIC_STOP
-	call PlaySong
-	call Func_1d705
-	call AddAllMastersToMastersBeatenList
-	xor a
-	ld [wOWMapEvents + 1], a
-	ld a, MUSIC_CREDITS
-	call PlaySong
-	farcall FlashWhiteScreen
-	call SetCreditsSequenceCmdPtr
-.asm_1d6c8
-	call DoFrameIfLCDEnabled
-	call Func_1d765
-	call ExecuteCreditsSequenceCmd
-	ld a, [wSequenceDelay]
-	cp $ff
-	jr nz, .asm_1d6c8
-	call WaitForSongToFinish
-	ld a, $8
-	farcall Func_12863
-	ld a, MUSIC_STOP
-	call PlaySong
-	farcall Func_10ab4
-	call Func_3ca4
-	call Set_WD_off
-	call Func_1d758
-	call EnableLCD
-	call DoFrameIfLCDEnabled
-	call DisableLCD
-	ld hl, wLCDC
-	set 1, [hl]
-	call ResetDoFrameFunction
-	ret
-
-Func_1d705: ; 1d705 (7:5705)
-	call DisableLCD
-	farcall Func_10a9b
-	call Func_3ca0
-	farcall Func_10000
-	call Func_1d7ee
-	ld hl, Func_3e31
-	call SetDoFrameFunction
-	call .Func_1d720 ; can be fallthrough
-	ret
-
-.Func_1d720
-	ld a, $91
-	ld [wd647], a
-	ld [wd649], a
-	ld a, $01
-	ld [wd648], a
-	ld [wd64a], a
-	call Func_1d765
-	call Set_WD_on
-	call .Func_1d73a ; can bee fallthrough
-	ret
-
-.Func_1d73a
-	push hl
-	di
-	xor a
-	ld [wd657], a
-	ld hl, wLCDCFunctionTrampoline + 1
-	ld [hl], LOW(Func_3e44)
-	inc hl
-	ld [hl], HIGH(Func_3e44)
-	ei
-
-	ld hl, rSTAT
-	set STAT_LYC, [hl]
-	xor a
-	ldh [rLYC], a
-	ld hl, rIE
-	set INT_LCD_STAT, [hl]
-	pop hl
-	ret
-
-Func_1d758: ; 1d758 (7:5758)
-	push hl
-	ld hl, rSTAT
-	res STAT_LYC, [hl]
-	ld hl, rIE
-	res INT_LCD_STAT, [hl]
-	pop hl
-	ret
-
-Func_1d765: ; 1d765 (7:5765)
-	push hl
-	push bc
-	push de
-	xor a
-	ldh [hWY], a
-
-	ld hl, wd659
-	ld de, wd65f
-	ld a, [wd648]
-	or a
-	jr nz, .asm_1d785
-	ld a, $a7
-	ldh [hWX], a
-	ld [hli], a
-	push hl
-	ld hl, wLCDC
-	set 1, [hl]
-	pop hl
-	jr .asm_1d7e2
-
-.asm_1d785
-	ld a, [wd647]
-	or a
-	jr z, .asm_1d79e
-	dec a
-	ld [de], a
-	inc de
-	ld a, $a7
-	ldh [hWX], a
-	ld [hli], a
-	push hl
-	ld hl, wLCDC
-	set 1, [hl]
-	pop hl
-	ld a, $07
-	jr .asm_1d7a9
-
-.asm_1d79e
-	ld a, $07
-	ldh [hWX], a
-	push hl
-	ld hl, wLCDC
-	res 1, [hl]
-	pop hl
-.asm_1d7a9
-	ld [hli], a
-	ld a, [wd647]
-	dec a
-	ld c, a
-	ld a, [wd648]
-	add c
-	ld c, a
-	ld a, [wd649]
-	dec a
-	cp c
-	jr c, .asm_1d7d4
-	jr z, .asm_1d7d4
-	ld a, c
-	ld [de], a
-	inc de
-	push af
-	ld a, $a7
-	ld [hli], a
-	pop bc
-	ld a, [wd64a]
-	or a
-	jr z, .asm_1d7e2
-	ld a, [wd649]
-	dec a
-	ld [de], a
-	inc de
-	ld a, $07
-	ld [hli], a
-
-.asm_1d7d4
-	ld a, [wd649]
-	dec a
-	ld c, a
-	ld a, [wd64a]
-	add c
-	ld [de], a
-	inc de
-	ld a, $a7
-	ld [hli], a
-.asm_1d7e2
-	ld a, $ff
-	ld [de], a
-	ld a, $01
-	ld [wd665], a
-	pop de
-	pop bc
-	pop hl
-	ret
-
-Func_1d7ee: ; 1d7ee (7:57ee)
-	xor a
-	lb de, 0, 32
-	lb bc, 20, 18
-	lb hl, 0, 0
-	call FillRectangle
 	ret
