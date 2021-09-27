@@ -1,11 +1,11 @@
 InitAIDuelVars: ; 15636 (5:5636)
-	ld a, $10
-	ld hl, wcda5
+	ld a, wAIDuelVarsEnd - wAIDuelVars
+	ld hl, wAIDuelVars
 	call ClearMemory_Bank5
 	ld a, 5
 	ld [wAIPokedexCounter], a
 	ld a, $ff
-	ld [wcda5], a
+	ld [wAIPeekedPrizes], a
 	ret
 
 ; initializes some variables and sets value of wAIBarrierFlagCounter.

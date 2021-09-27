@@ -158,11 +158,11 @@ Func_3b31:
 	ld a, BANK(Func_1cb18)
 	call BankswitchROM
 	call Func_1cb18
-	jr c, .asm_3b45
+	jr c, .skip_clear_frame_func
 	xor a
-	ld [wDoFrameFunction], a
+	ld [wDoFrameFunction + 0], a
 	ld [wDoFrameFunction + 1], a
-.asm_3b45
+.skip_clear_frame_func
 	call ZeroObjectPositions
 	ld a, 1
 	ld [wVBlankOAMCopyToggle], a

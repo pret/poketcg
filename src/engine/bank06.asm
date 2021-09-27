@@ -1048,8 +1048,7 @@ Func_18661: ; 18661 (6:4661)
 	ld a, SYM_CURSOR_R
 	jr .draw_tile
 
-; (6:46f7)
-INCLUDE "data/effect_commands.asm"
+INCLUDE "data/duel/effect_commands.asm"
 
 ; reads the animation commands from PointerTable_AttackAnimation
 ; of attack in wLoadedAttackAnimation and plays them
@@ -1404,7 +1403,7 @@ UpdateMainSceneHUD: ; 19199 (6:5199)
 Func_191a3: ; 191a3 (6:51a3)
 	ret
 
-INCLUDE "data/attack_animations.asm"
+INCLUDE "data/duel/animations/attack_animations.asm"
 
 ; if carry flag is set, only delays
 ; if carry not set:
@@ -1990,7 +1989,7 @@ Func_1991f: ; 1991f (6:591f)
 	add $02
 	push hl
 	ld hl, sDeck1Name
-	call Func_199e0
+	call CopyDeckNameAndCards
 	pop hl
 	call SwapTurn
 	ld a, [hli]
@@ -2026,12 +2025,16 @@ Func_1991f: ; 1991f (6:591f)
 .data
 	db $03, $04, $05, $06, $07, $08
 
-Func_1996e: ; 1996e (6:596e)
+; clears saved data (card Collection/saved decks/Card Pop! data/etc)
+; then adds the starter decks as saved decks
+; marks all cards in Collection as not owned
+InitSaveData: ; 1996e (6:596e)
+; clear card and deck save data
 	call EnableSRAM
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	ld hl, sCardCollection
-	ld bc, $1607
+	ld hl, sCardAndDeckSaveData
+	ld bc, sCardAndDeckSaveDataEnd - sCardAndDeckSaveData
 .loop_clear
 	xor a
 	ld [hli], a
@@ -2040,16 +2043,18 @@ Func_1996e: ; 1996e (6:596e)
 	or b
 	jr nz, .loop_clear
 
+; add the starter decks
 	ld a, CHARMANDER_AND_FRIENDS_DECK
 	ld hl, sSavedDeck1
-	call Func_199e0
+	call CopyDeckNameAndCards
 	ld a, SQUIRTLE_AND_FRIENDS_DECK
 	ld hl, sSavedDeck2
-	call Func_199e0
+	call CopyDeckNameAndCards
 	ld a, BULBASAUR_AND_FRIENDS_DECK
 	ld hl, sSavedDeck3
-	call Func_199e0
+	call CopyDeckNameAndCards
 
+; marks all cards in Collection to not owned
 	call EnableSRAM
 	ld hl, sCardCollection
 	ld a, CARD_NOT_OWNED
@@ -2061,9 +2066,10 @@ Func_1996e: ; 1996e (6:596e)
 	ld hl, sCurrentDuel
 	xor a
 	ld [hli], a
-	ld [hli], a
+	ld [hli], a ; sCurrentDuelChecksum
 	ld [hl], a
 
+; clears Card Pop! names
 	ld hl, sCardPopNameList
 	ld c, CARDPOP_NAME_LIST_MAX_ELEMS
 .loop_card_pop_names
@@ -2073,59 +2079,66 @@ Func_1996e: ; 1996e (6:596e)
 	dec c
 	jr nz, .loop_card_pop_names
 
+; saved configuration options
 	ld a, 2
 	ld [sPrinterContrastLevel], a
 	ld a, $2
 	ld [sTextSpeed], a
 	ld [wTextSpeed], a
+
+; miscellaneous data
 	xor a
 	ld [sAnimationsDisabled], a
 	ld [sSkipDelayAllowed], a
 	ld [s0a004], a
 	ld [sTotalCardPopsDone], a
 	ld [sReceivedLegendaryCards], a
-	farcall Func_8cf9
+	farcall InitPromotionalCardAndDeckCounterSaveData
 	call DisableSRAM
 	ret
 
-Func_199e0: ; 199e0 (6:59e0)
+; input:
+;    a = Deck ID
+;    hl = destination to copy
+CopyDeckNameAndCards: ; 199e0 (6:59e0)
 	push de
 	push bc
 	push hl
 	call LoadDeck
-	jr c, .asm_19a0e
-	call Func_19a12
+	jr c, .done
+	call .CopyDeckName
 	pop hl
 	call EnableSRAM
 	push hl
 	ld de, wDefaultText
-.asm_199f3
+.loop_write_name
 	ld a, [de]
 	inc de
 	ld [hli], a
 	or a
-	jr nz, .asm_199f3
+	jr nz, .loop_write_name
 	pop hl
+
 	push hl
-	ld de, $0018
+	ld de, DECK_NAME_SIZE
 	add hl, de
 	ld de, wPlayerDeck
-	ld c, $3c
-.asm_19a04
+	ld c, DECK_SIZE
+.loop_write_cards
 	ld a, [de]
 	inc de
 	ld [hli], a
 	dec c
-	jr nz, .asm_19a04
+	jr nz, .loop_write_cards
 	call DisableSRAM
 	or a
-.asm_19a0e
+.done
 	pop hl
 	pop bc
 	pop de
 	ret
 
-Func_19a12: ; 19a12 (6:5a12)
+.CopyDeckName
 	ld hl, wDeckName
 	ld a, [hli]
 	ld h, [hl]

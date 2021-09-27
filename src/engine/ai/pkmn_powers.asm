@@ -727,7 +727,7 @@ HandleAIPeek: ; 224e6 (8:64e6)
 .check_ai_prizes
 	ld a, DUELVARS_PRIZES
 	call GetTurnDuelistVariable
-	ld hl, wcda5
+	ld hl, wAIPeekedPrizes
 	and [hl]
 	ld [hl], a
 	or a

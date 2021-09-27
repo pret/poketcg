@@ -1429,13 +1429,13 @@ FightingGfx:: ; a8e12 (2a:4e12)
 	INCBIN "gfx/titlescreen/energies/fighting.2bpp"
 
 SECTION "Anims 1", ROMX
-	INCLUDE "data/anims1.asm"
+	INCLUDE "data/duel/animations/anims1.asm"
 
 SECTION "Anims 2", ROMX
-	INCLUDE "data/anims2.asm"
+	INCLUDE "data/duel/animations/anims2.asm"
 
 SECTION "Anims 3", ROMX
-	INCLUDE "data/anims3.asm"
+	INCLUDE "data/duel/animations/anims3.asm"
 
 Palette31:: ; b3feb (2c:7feb)
 	db 1, %11010010
@@ -1456,7 +1456,7 @@ Palette119:: ; b3ff6 (2c:7ff6)
 	rgb  0,  0,  8
 
 SECTION "Anims 4", ROMX
-	INCLUDE "data/anims4.asm"
+	INCLUDE "data/duel/animations/anims4.asm"
 
 SECTION "Palettes1", ROMX
 	INCLUDE "data/palettes1.asm"
