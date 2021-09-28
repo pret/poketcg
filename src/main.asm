@@ -113,8 +113,8 @@ INCLUDE "data/decks.asm"
 SECTION "Cards", ROMX
 INCLUDE "data/cards.asm"
 
-SECTION "Bank 1C", ROMX
-INCLUDE "engine/bank1c.asm"
+SECTION "SGB", ROMX
+INCLUDE "engine/sgb.asm"
 
 SECTION "Bank 20", ROMX
 INCLUDE "engine/bank20.asm"

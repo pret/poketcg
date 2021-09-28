@@ -98,7 +98,7 @@ ROMX $18
 ROMX $19
 	"Text 13"
 ROMX $1c
-	"Bank 1C"
+	"SGB"
 ROMX $1d
 	"Gfx 1"
 ROMX $1e

@@ -1,4 +1,4 @@
-SetMainSGBBorder: ; 70000 (1c:4000)
+SetMainSGBBorder:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; exit if not SGB
@@ -13,7 +13,7 @@ SetMainSGBBorder: ; 70000 (1c:4000)
 	call SetSGBBorder
 	ret
 
-SetIntroSGBBorder: ; 70018 (1c:4018)
+SetIntroSGBBorder:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; exit if not SGB
@@ -21,13 +21,13 @@ SetIntroSGBBorder: ; 70018 (1c:4018)
 	call SetSGBBorder
 	ret
 
-AtrcEnPacket_Disable: ; 70024 (1c:4024)
+AtrcEnPacket_Disable:
 	sgb ATRC_EN, 1 ; sgb_command, length
 	db 1
 	ds $0e
 
 ; disable Controller Set-up Screen
-IconEnPacket: ; 70034 (1c:4034)
+IconEnPacket:
 	sgb ICON_EN, 3 ; sgb_command, length
 	db $01
 	ds $0e
@@ -37,7 +37,7 @@ IconEnPacket: ; 70034 (1c:4034)
 ; $1 = medals (gold)
 ; $2 = medals (blue)
 ; $3 = debug
-SetSGBBorder: ; 70044 (1c:4044)
+SetSGBBorder:
 	push hl
 	push bc
 	add a ; *2
@@ -62,7 +62,7 @@ SetSGBBorder: ; 70044 (1c:4044)
 
 ; forces SGB border intro
 ; unreferenced?
-Func_7006f: ; 7006f (1c:406f)
+Func_7006f:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; exit if not SGB
@@ -72,7 +72,7 @@ Func_7006f: ; 7006f (1c:406f)
 	call Func_701c0
 	ret
 
-DecompressAndSendSGBBorder: ; 70082 (1c:4082)
+DecompressAndSendSGBBorder:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; exit if not SGB
@@ -99,7 +99,7 @@ DecompressAndSendSGBBorder: ; 70082 (1c:4082)
 	pop hl
 	ret
 
-Func_700a3: ; 700a3 (1c:40a3)
+Func_700a3:
 	push hl
 	push bc
 	push de
@@ -139,20 +139,20 @@ Func_700a3: ; 700a3 (1c:40a3)
 	ret
 
 ; CHR_TRN: tiles $00-$7F, BG (border) tiles (from SNES $000-$FFF)
-ChrTrnPacket_BGTiles1: ; 700de (1c:40de)
+ChrTrnPacket_BGTiles1:
 	sgb CHR_TRN, 1 ; sgb_command, length
 	db 0
 	ds $0e
 
 ; CHR_TRN: tiles $80-$FF, BG (border) tiles (from SNES $000-$FFF)
-ChrTrnPacket_BGTiles2: ; 700ee (1c:40ee)
+ChrTrnPacket_BGTiles2:
 	sgb CHR_TRN, 1 ; sgb_command, length
 	db 1
 	ds $0e
 
 ; de = pals
 ; hl = map
-SetMainSGBBorderPalsAndMap: ; 700fe (1c:40fe)
+SetMainSGBBorderPalsAndMap:
 	push hl
 	push bc
 	push de
@@ -179,11 +179,11 @@ SetMainSGBBorderPalsAndMap: ; 700fe (1c:40fe)
 	ret
 
 ; PCT_TRN: read tile map & palette data into VRAM (from SNES $000-$87F)
-PctTrnPacket: ; 70126 (1c:4126)
+PctTrnPacket:
 	sgb PCT_TRN, 1 ; sgb_command, length
 	ds $0f
 
-Func_70136: ; 70136 (1c:4136)
+Func_70136:
 	push hl
 	push bc
 	push de
@@ -218,7 +218,7 @@ Func_70136: ; 70136 (1c:4136)
 	pop hl
 	ret
 
-SendSGBBorder: ; 70177 (1c:4177)
+SendSGBBorder:
 	push hl
 	push bc
 	push de
@@ -242,18 +242,18 @@ SendSGBBorder: ; 70177 (1c:4177)
 	ret
 
 ; MASK_EN on
-MaskEnPacket_Freeze_Bank1c: ; 701a0 (1c:41a0)
+MaskEnPacket_Freeze_Bank1c:
 	sgb MASK_EN, 1 ; sgb_command, length
 	db MASK_EN_FREEZE_SCREEN
 	ds $0e
 
 ; MASK_EN off
-MaskEnPacket_Cancel_Bank1c: ; 701b0 (1c:41b0)
+MaskEnPacket_Cancel_Bank1c:
 	sgb MASK_EN, 1 ; sgb_command, length
 	db MASK_EN_CANCEL_MASK
 	ds $0e
 
-Func_701c0: ; 701c0 (1c:41c0)
+Func_701c0:
 	push hl
 	push bc
 	call DisableLCD
@@ -280,7 +280,7 @@ Func_701c0: ; 701c0 (1c:41c0)
 	ret
 
 ; decompresses data pointed by hl to de
-DecompressSGBData: ; 701e9 (1c:41e9)
+DecompressSGBData:
 	ld a, [hli]
 	ld c, a
 	ld a, [hli]
@@ -300,7 +300,7 @@ DecompressSGBData: ; 701e9 (1c:41e9)
 
 ; fills a 20x13 rectangle in v0BGMap0
 ; with values ascending bytes starting at $80
-PrepareBGMapForSendingSGBBorder: ; 701fe (1c:41fe)
+PrepareBGMapForSendingSGBBorder:
 	ld hl, v0BGMap0
 	ld de, $000c
 	ld a, $80
@@ -319,7 +319,7 @@ PrepareBGMapForSendingSGBBorder: ; 701fe (1c:41fe)
 
 ; iterates all the medals obtained by the player
 ; and fills the corresponding medal slot in the SGB border
-FillSGBBorderMedalSlots: ; 70214 (1c:4214)
+FillSGBBorderMedalSlots:
 ; exit if not SGBData_BorderMedals5
 	ld a, l
 	cp LOW(SGBData_BorderMedals5)
@@ -463,7 +463,7 @@ ENDM
 
 ; decompresses palette data depending on wCurMapSGBPals
 ; then sends it as SGB packet
-SetSGB2AndSGB3MapPalette: ; 7036a (1c:436a)
+SetSGB2AndSGB3MapPalette:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; return if not SGB
@@ -520,7 +520,7 @@ SetSGB2AndSGB3MapPalette: ; 7036a (1c:436a)
 	dw SGBData_MapPals9  ; MAP_SGB_PALS_9
 	dw SGBData_MapPals10 ; MAP_SGB_PALS_10
 
-Func_703cb: ; 703cb (1c:43cb)
+Func_703cb:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
@@ -548,7 +548,7 @@ Func_703cb: ; 703cb (1c:43cb)
 	pop hl
 	ret
 
-DecompressSGBPalette: ; 70403 (1c:4403)
+DecompressSGBPalette:
 	push hl
 	push bc
 	push de
@@ -570,7 +570,7 @@ DecompressSGBPalette: ; 70403 (1c:4403)
 	ret
 
 ; sends an SGB packet related with palettes
-Func_7041d: ; 7041d (1c:441d)
+Func_7041d:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; exit if not SGB
@@ -653,7 +653,7 @@ Func_7041d: ; 7041d (1c:441d)
 ; d = block width
 ; e = block height
 ; l = %00xxyyzz, palette number for: outside block, block border, inside block
-Func_70498: ; 70498 (1c:4498)
+Func_70498:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
@@ -693,7 +693,7 @@ Func_70498: ; 70498 (1c:4498)
 ; set color 0 to default white rgb(28, 28, 24)
 ; input:
 ; hl = pointer to start of SGB packet
-Func_704c7: ; 704c7 (1c:44c7)
+Func_704c7:
 	push af
 	push hl
 	inc hl
@@ -705,318 +705,318 @@ Func_704c7: ; 704c7 (1c:44c7)
 	pop af
 	ret
 
-SGBData_BorderDebug4: ; 704d3 (1c:44d3)
+SGBData_BorderDebug4:
 	dw $800 ; length
 	INCBIN "data/sgb_data/border_debug_4.bin"
 
-SGBData_BorderIntro4: ; 706dd (1c:46dd)
+SGBData_BorderIntro4:
 	dw $800 ; length
 	INCBIN "data/sgb_data/border_intro_4.bin"
 
-SGBData_BorderMedals5: ; 709dc (1c:49dc)
+SGBData_BorderMedals5:
 	dw $800 ; length
 	INCBIN "data/sgb_data/border_medals_5.bin"
 
-SGBBorderDebugGfxPointers: ; 70b96 (1c:4b96)
+SGBBorderDebugGfxPointers:
 	dw SGBData_BorderDebug1
 	dw SGBData_BorderDebug2
 
-SGBData_BorderDebug1: ; 70b9a (1c:45b9a)
+SGBData_BorderDebug1:
 	dw $1000 ; length
 	INCBIN "data/sgb_data/border_debug_1.bin"
 
-SGBData_BorderDebug2: ; 71359 (1c:5359)
+SGBData_BorderDebug2:
 	dw $a0 ; length
 	INCBIN "data/sgb_data/border_debug_2.bin"
 
-SGBBorderIntroGfxPointers: ; 713a9 (1c:53a9)
+SGBBorderIntroGfxPointers:
 	dw SGBData_BorderIntro1
 	dw SGBData_BorderIntro2
 
-SGBData_BorderIntro1: ; 713ad (1c:53ad)
+SGBData_BorderIntro1:
 	dw $1000 ; length
 	INCBIN "data/sgb_data/border_intro_1.bin"
 
-SGBData_BorderIntro2: ; 71ec0 (1c:5ec0)
+SGBData_BorderIntro2:
 	dw $4e0 ; length
 	INCBIN "data/sgb_data/border_intro_2.bin"
 
-SGBBorderMedalsGfxPointers: ; 72273 (1c:6273)
+SGBBorderMedalsGfxPointers:
 	dw SGBData_BorderMedals1
 	dw SGBData_BorderMedals2
 
-SGBData_BorderMedals1: ; 72277 (1c:5277)
+SGBData_BorderMedals1:
 	dw $1000 ; length
 	INCBIN "data/sgb_data/border_medals_1.bin"
 
-SGBData_BorderMedals2: ; 72fe4 (1c:5fe4)
+SGBData_BorderMedals2:
 	dw $100 ; length
 	INCBIN "data/sgb_data/border_medals_2.bin"
 
-SGBData_BorderDebug3: ; 730de (1c:70de)
+SGBData_BorderDebug3:
 	dw $60 ; length
 	INCBIN "data/sgb_data/border_debug_3.bin"
 
-SGBData_BorderIntro3: ; 73146 (1c:7146)
+SGBData_BorderIntro3:
 	dw $60 ; length
 	INCBIN "data/sgb_data/border_intro_3.bin"
 
-SGBData_BorderMedals3: ; 7319a (1c:719a)
+SGBData_BorderMedals3:
 	dw $60 ; length
 	INCBIN "data/sgb_data/border_medals_3.bin"
 
-SGBData_BorderMedals4: ; 731e5 (1c:71e5)
+SGBData_BorderMedals4:
 	dw $60 ; length
 	INCBIN "data/sgb_data/border_medals_4.bin"
 
-SGBData_MapPals1: ; 7322f (1c:722f)
+SGBData_MapPals1:
 	dw $20 ; length
 	INCBIN "data/sgb_data/map_pals_1.bin"
 
-SGBData_MapPals2: ; 73253 (1c:7253)
+SGBData_MapPals2:
 	dw $20 ; length
 	INCBIN "data/sgb_data/map_pals_2.bin"
 
-SGBData_MapPals3: ; 73277 (1c:7277)
+SGBData_MapPals3:
 	dw $20 ; length
 	INCBIN "data/sgb_data/map_pals_3.bin"
 
-SGBData_MapPals4: ; 7329a (1c:729a)
+SGBData_MapPals4:
 	dw $20 ; length
 	INCBIN "data/sgb_data/map_pals_4.bin"
 
-SGBData_MapPals5: ; 732bd (1c:72bd)
+SGBData_MapPals5:
 	dw $20 ; length
 	INCBIN "data/sgb_data/map_pals_5.bin"
 
-SGBData_MapPals6: ; 732e0 (1c:72e0)
+SGBData_MapPals6:
 	dw $20 ; length
 	INCBIN "data/sgb_data/map_pals_6.bin"
 
-SGBData_MapPals7: ; 73304 (1c:7304)
+SGBData_MapPals7:
 	dw $20 ; length
 	INCBIN "data/sgb_data/map_pals_7.bin"
 
-SGBData_MapPals8: ; 73328 (1c:7328)
+SGBData_MapPals8:
 	dw $20 ; length
 	INCBIN "data/sgb_data/map_pals_8.bin"
 
-SGBData_MapPals9: ; 7334b (1c:734b)
+SGBData_MapPals9:
 	dw $20 ; length
 	INCBIN "data/sgb_data/map_pals_9.bin"
 
-SGBData_MapPals10: ; 7336f (1c:736f)
+SGBData_MapPals10:
 	dw $20 ; length
 	INCBIN "data/sgb_data/map_pals_10.bin"
 
-SGBData_CharizardIntro: ; 73393 (1c:7393)
+SGBData_CharizardIntro:
 	dw $20 ; length
 	INCBIN "data/sgb_data/charizard_intro_pals.bin"
 
-SGBData_ScytherIntro: ; 733b8 (1c:73b8)
+SGBData_ScytherIntro:
 	dw $20 ; length
 	INCBIN "data/sgb_data/scyther_intro_pals.bin"
 
-SGBData_AerodactylIntro: ; 733dd (1c:73dd)
+SGBData_AerodactylIntro:
 	dw $20 ; length
 	INCBIN "data/sgb_data/aerodactyl_intro_pals.bin"
 
-SGBData_ColosseumBooster: ; 73402 (1c:7402)
+SGBData_ColosseumBooster:
 	dw $20 ; length
 	INCBIN "data/sgb_data/colosseum_booster_pals.bin"
 
-SGBData_EvolutionBooster: ; 73427 (1c:7427)
+SGBData_EvolutionBooster:
 	dw $20 ; length
 	INCBIN "data/sgb_data/evolution_booster_pals.bin"
 
-SGBData_MysteryBooster: ; 7344c (1c:744c)
+SGBData_MysteryBooster:
 	dw $20 ; length
 	INCBIN "data/sgb_data/mystery_booster_pals.bin"
 
-SGBData_LaboratoryBooster: ; 73471 (1c:7471)
+SGBData_LaboratoryBooster:
 	dw $20 ; length
 	INCBIN "data/sgb_data/laboratory_booster_pals.bin"
 
-SGBData_PlayerPortraitPals: ; 73496 (1c:7496)
+SGBData_PlayerPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/player_pals.bin"
 
-SGBData_LinkOpponentPortraitPals: ; 734bb (1c:74bb)
+SGBData_LinkOpponentPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/link_opponent_pals.bin"
 
-SGBData_RonaldPortraitPals: ; 734e0 (1c:74e0)
+SGBData_RonaldPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/ronald_pals.bin"
 
-SGBData_SamPortraitPals: ; 73505 (1c:7505)
+SGBData_SamPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/sam_pals.bin"
 
-SGBData_ImakuniPortraitPals: ; 7352a (1c:752a)
+SGBData_ImakuniPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/imakuni_pals.bin"
 
-SGBData_NikkiPortraitPals: ; 7354f (1c:754f)
+SGBData_NikkiPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/nikki_pals.bin"
 
-SGBData_RickPortraitPals: ; 73574 (1c:7574)
+SGBData_RickPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/rick_pals.bin"
 
-SGBData_KenPortraitPals: ; 73599 (1c:7599)
+SGBData_KenPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/ken_pals.bin"
 
-SGBData_AmyPortraitPals: ; 735be (1c:75be)
+SGBData_AmyPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/amy_pals.bin"
 
-SGBData_IsaacPortraitPals: ; 735e3 (1c:75e3)
+SGBData_IsaacPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/isaac_pals.bin"
 
-SGBData_MitchPortraitPals: ; 73608 (1c:7608)
+SGBData_MitchPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/mitch_pals.bin"
 
-SGBData_GenePortraitPals: ; 7362d (1c:762d)
+SGBData_GenePortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/gene_pals.bin"
 
-SGBData_MurrayPortraitPals: ; 73652 (1c:7652)
+SGBData_MurrayPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/murray_pals.bin"
 
-SGBData_CourtneyPortraitPals: ; 73677 (1c:7677)
+SGBData_CourtneyPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/courtney_pals.bin"
 
-SGBData_StevePortraitPals: ; 7369c (1c:769c)
+SGBData_StevePortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/steve_pals.bin"
 
-SGBData_JackPortraitPals: ; 736c1 (1c:76c1)
+SGBData_JackPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/jack_pals.bin"
 
-SGBData_RodPortraitPals: ; 736e6 (1c:76e6)
+SGBData_RodPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/rod_pals.bin"
 
-SGBData_JosephPortraitPals: ; 7370b (1c:770b)
+SGBData_JosephPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/joseph_pals.bin"
 
-SGBData_DavidPortraitPals: ; 73730 (1c:7730)
+SGBData_DavidPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/david_pals.bin"
 
-SGBData_ErikPortraitPals: ; 73755 (1c:7755)
+SGBData_ErikPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/erik_pals.bin"
 
-SGBData_JohnPortraitPals: ; 7377a (1c:777a)
+SGBData_JohnPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/john_pals.bin"
 
-SGBData_AdamPortraitPals: ; 7379f (1c:779f)
+SGBData_AdamPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/adam_pals.bin"
 
-SGBData_JonathanPortraitPals: ; 737c4 (1c:77c4)
+SGBData_JonathanPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/jonathan_pals.bin"
 
-SGBData_JoshuaPortraitPals: ; 737e9 (1c:77e9)
+SGBData_JoshuaPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/joshua_pals.bin"
 
-SGBData_NicholasPortraitPals: ; 7380e (1c:780e)
+SGBData_NicholasPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/nicholas_pals.bin"
 
-SGBData_BrandonPortraitPals: ; 73833 (1c:7833)
+SGBData_BrandonPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/brandon_pals.bin"
 
-SGBData_MatthewPortraitPals: ; 73858 (1c:7858)
+SGBData_MatthewPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/matthew_pals.bin"
 
-SGBData_RyanPortraitPals: ; 7387d (1c:787d)
+SGBData_RyanPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/ryan_pals.bin"
 
-SGBData_AndrewPortraitPals: ; 738a2 (1c:78a2)
+SGBData_AndrewPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/andrew_pals.bin"
 
-SGBData_ChrisPortraitPals: ; 738c7 (1c:78c7)
+SGBData_ChrisPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/chris_pals.bin"
 
-SGBData_MichaelPortraitPals: ; 738ec (1c:78ec)
+SGBData_MichaelPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/michael_pals.bin"
 
-SGBData_DanielPortraitPals: ; 73911 (1c:7911)
+SGBData_DanielPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/daniel_pals.bin"
 
-SGBData_RobertPortraitPals: ; 73936 (1c:7936)
+SGBData_RobertPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/robert_pals.bin"
 
-SGBData_BrittanyPortraitPals: ; 7395b (1c:795b)
+SGBData_BrittanyPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/brittany_pals.bin"
 
-SGBData_KristinPortraitPals: ; 73980 (1c:7980)
+SGBData_KristinPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/kristin_pals.bin"
 
-SGBData_HeatherPortraitPals: ; 739a5 (1c:79a5)
+SGBData_HeatherPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/heather_pals.bin"
 
-SGBData_SaraPortraitPals: ; 739ca (1c:79ca)
+SGBData_SaraPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/sara_pals.bin"
 
-SGBData_AmandaPortraitPals: ; 739ef (1c:79ef)
+SGBData_AmandaPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/amanda_pals.bin"
 
-SGBData_JenniferPortraitPals: ; 73a14 (1c:7a14)
+SGBData_JenniferPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/jennifer_pals.bin"
 
-SGBData_JessicaPortraitPals: ; 73a39 (1c:7a39)
+SGBData_JessicaPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/jessica_pals.bin"
 
-SGBData_StephaniePortraitPals: ; 73a5e (1c:7a5e)
+SGBData_StephaniePortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/stephanie_pals.bin"
 
-SGBData_AaronPortraitPals: ; 73a83 (1c:7a83)
+SGBData_AaronPortraitPals:
 	dw $20 ; length
 	INCBIN "data/sgb_data/aaron_pals.bin"
 
-SGBData_GameBoyLink: ; 73aa8 (1c:7aa8)
+SGBData_GameBoyLink:
 	dw $40 ; length
 	INCBIN "data/sgb_data/gameboy_link_pals.bin"
 
-SGBData_CardPop: ; 73ad8 (1c:7ad8)
+SGBData_CardPop:
 	dw $40 ; length
 	INCBIN "data/sgb_data/card_pop_pals.bin"
 
-SGBData_GameBoyPrinter: ; 73b05 (1c:7b05)
+SGBData_GameBoyPrinter:
 	dw $40 ; length
 	INCBIN "data/sgb_data/gameboy_printer_pals.bin"
 
-SGBData_TitleScreen: ; 73b33 (1c:7b33)
+SGBData_TitleScreen:
 	dw $40 ; length
 	INCBIN "data/sgb_data/title_screen_pals.bin"
