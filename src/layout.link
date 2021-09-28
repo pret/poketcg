@@ -105,6 +105,7 @@ ROMX $1e
 	"Gfx 2"
 ROMX $20
 	"Bank 20"
+	"Gfx"
 ROMX $21
 	"Gfx 3"
 ROMX $22

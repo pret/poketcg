@@ -118,3 +118,12 @@ INCLUDE "engine/bank1c.asm"
 
 SECTION "Bank 20", ROMX
 INCLUDE "engine/bank20.asm"
+
+SECTION "Gfx", ROMX
+INCLUDE "engine/gfx/gfx_table_pointers.asm"
+INCLUDE "engine/gfx/tilemaps.asm"
+INCLUDE "engine/gfx/tilesets.asm"
+INCLUDE "engine/gfx/sprites.asm"
+INCLUDE "engine/gfx/sprite_animations.asm"
+INCLUDE "engine/gfx/palettes.asm"
+INCLUDE "data/maps/tilemaps.asm"
