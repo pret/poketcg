@@ -30,7 +30,7 @@ Fixes are written in the `diff` format.
 
 When the AI is scoring each Play Area Pokémon card to attach an Energy card, it first checks whether it's the Arena card and, if so, checks whether the attack can KO the Defending Pokémon. If it's true, then 20 is added to the score. Then it does the same Arena card check to increase the score further. The intention is probably to score the card with 20 if it can KO the opponent regardless of Play Area position, and additionally if it's the Arena card it should score 10 more points.
 
-**Fix:** Edit `DetermineAIScoreOfAttackEnergyRequirement` in [src/engine/bank05.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank05.asm):
+**Fix:** Edit `DetermineAIScoreOfAttackEnergyRequirement` in [src/engine/duel/ai/energy.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/energy.asm):
 ```diff
 DetermineAIScoreOfAttackEnergyRequirement: ; 16695 (5:6695)
  	...
@@ -80,7 +80,7 @@ Each deck AI lists some card IDs that are not supposed to be placed as Prize car
 
 However, the routine to iterate these lists and look for these cards is buggy, which results in the game ignoring it completely.
 
-**Fix:** Edit `SetUpBossStartingHandAndDeck` in [src/engine/bank05.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank05.asm):
+**Fix:** Edit `SetUpBossStartingHandAndDeck` in [src/engine/duel/ai/boss_deck_set_up.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/boss_deck_set_up.asm):
 ```diff
 SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 	...
@@ -134,7 +134,7 @@ Each deck AI lists some Pokémon card IDs that have an associated score for retr
 
 However, the game never actually stores the pointer to these lists (a notable exception being the Legendary Moltres deck), so the AI cannot access these score modifiers.
 
-**Fix:** Edit all applicable decks in `src/engine/ai/decks/`, uncommenting the following line:
+**Fix:** Edit all applicable decks in `src/engine/duel/ai/decks/`, uncommenting the following line:
 ```diff
 .store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
@@ -151,7 +151,7 @@ However, the game never actually stores the pointer to these lists (a notable ex
 
 When the AI is checking whether to play Professor Oak or not, it does a hand check to see if there are any Basic/Evolved Pokémon cards. One of these checks is supposed to add to the score if there are Basic Pokémon in hand, but as it is coded, it will never execute the score addition.
 
-**Fix:** Edit `AIDecide_ProfessorOak` in [src/engine/bank08.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank08.asm):
+**Fix:** Edit `AIDecide_ProfessorOak` in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
 ```diff
 AIDecide_ProfessorOak: ; 20cc1 (8:4cc1)
  	...
@@ -180,7 +180,7 @@ AIDecide_ProfessorOak: ; 20cc1 (8:4cc1)
 
 The AI's decision to play Energy Search has two special cases: one for the Heated Battle deck and the other for the Wonders of Science deck. The former calls a subroutine to check only for Fire and Lightning energy cards in the deck, and the latter only checks for... Fire and Lightning energy cards. In a deck filled only with Grass and Psychic types. Needless is to say, poor Rick never finds any of those energy cards in the deck, so the Energy Search card is left forever unplayed. There's an unreferenced subroutine that looks for Grass energy that is supposed to be used instead.
 
-**Fix:** Edit `AIDecide_EnergySearch` in [src/engine/bank08.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank08.asm):
+**Fix:** Edit `AIDecide_EnergySearch` in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
 ```diff
 AIDecide_EnergySearch: ; 211aa (8:51aa)
  	...
@@ -203,7 +203,7 @@ AIDecide_EnergySearch: ; 211aa (8:51aa)
 
 Seems Rick can't catch a break. When deciding which cards to prioritize in the Pokédex card effect, the AI checks if it's playing the Wonders of Science deck, then completely disregards the result and jumps unconditionally. Thus, Rick uses the generic algorithm for sorting the deck cards.
 
-**Fix:** Edit `AIDecide_Pokedex` in [src/engine/bank08.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank08.asm):
+**Fix:** Edit `AIDecide_Pokedex` in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
 ```diff
 AIDecide_Pokedex: ; 212dc (8:52dc)
  	...
@@ -231,7 +231,7 @@ AIDecide_Pokedex: ; 212dc (8:52dc)
 
 Because of an error in the AI logic, Chris never considers using Revive on a Kangaskhan card in the Discard Pile, even though it is listed as one of the cards for the AI to check.
 
-**Fix:** Edit `AIDecide_Revive` in [src/engine/bank08.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank08.asm):
+**Fix:** Edit `AIDecide_Revive` in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
 ```diff
 AIDecide_Revive: ; 218a9 (8:58a9)
  	...
@@ -260,7 +260,7 @@ AIDecide_Revive: ; 218a9 (8:58a9)
 
 A missing line in AI logic might result in strange behavior when executing the effect of Pokémon Trader for Power Generator deck.
 
-**Fix:** Edit `AIDecide_PokemonTrader_PowerGenerator` in [src/engine/bank08.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank08.asm):
+**Fix:** Edit `AIDecide_PokemonTrader_PowerGenerator` in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
 ```diff
 AIDecide_PokemonTrader_PowerGenerator: ; 2200b (8:600b)
  	...
@@ -283,7 +283,7 @@ AIDecide_PokemonTrader_PowerGenerator: ; 2200b (8:600b)
 
 ## AI never uses Energy Trans in order to retreat Arena card
 
-There is a mistake in the AI retreat logic, in [src/engine/ai/decks/general.asm](https://github.com/pret/poketcg/blob/master/src/engine/ai/decks/general.asm):
+There is a mistake in the AI retreat logic, in [src/engine/duel/ai/decks/general.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/decks/general.asm):
 ```
 .used_switch
 ; if AI used switch, unset its AI flag
@@ -308,7 +308,7 @@ There is a mistake in the AI retreat logic, in [src/engine/ai/decks/general.asm]
 
 ## Sam's practice deck does wrong card ID check
 
-There is a mistake in the AI logic for deciding which Pokémon for Sam to switch to, in [src/engine/ai/decks/sams_practice.asm](https://github.com/pret/poketcg/blob/master/src/engine/ai/decks/sams_practice.asm):
+There is a mistake in the AI logic for deciding which Pokémon for Sam to switch to, in [src/engine/duel/ai/decks/sams_practice.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/decks/sams_practice.asm):
 ```
 ; this is a bug, it's attempting to compare a card ID with a deck index.
 ; the intention was to change the card to switch to depending on whether
@@ -328,7 +328,7 @@ There is a mistake in the AI logic for deciding which Pokémon for Sam to switch
 	inc a ; PLAY_AREA_BENCH_2
 ```
 
-**Fix:** Edit `AIDecide_PokemonTrader_PowerGenerator` in [src/engine/bank08.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank08.asm):
+**Fix:** Edit `AIDecide_PokemonTrader_PowerGenerator` in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
 ```diff
 AIPerformScriptedTurn: ; 1483a (5:483a)
  	...
@@ -360,7 +360,7 @@ AIPerformScriptedTurn: ; 1483a (5:483a)
 
 ## AI does not account for Mysterious Fossil or Clefairy Doll when using Shift Pkmn Power
 
-**Fix:** Edit `HandleAIShift` in [src/engine/bank08.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank08.asm):
+**Fix:** Edit `HandleAIShift` in [src/engine/duel/ai/pkmn_powers.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/pkmn_powers.asm):
 ```diff
 HandleAIShift: ; 22476 (8:6476)
  	...
