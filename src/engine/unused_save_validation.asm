@@ -2,7 +2,7 @@
 ; sUnusedSaveDataValidationByte would be used to store some validation byte
 ; and xor'd with $250 bytes in SRAM starting from sCardCollection
 ; if the result wasn't 0, then it would mean there was
-; some save corrpution and an error message would pop up
+; some save corruption and an error message would pop up
 StubbedUnusedSaveDataValidation:
 	ret
 
