@@ -29,7 +29,7 @@ INCLUDE "engine/bank04.asm"
 
 SECTION "AI Logic 1", ROMX
 INCLUDE "data/deck_ai_pointers.asm"
-INCLUDE "engine/ai/core.asm"
+INCLUDE "engine/duel/ai/core.asm"
 
 SECTION "Menus 2", ROMX
 INCLUDE "engine/copy_card_name.asm"
@@ -47,7 +47,7 @@ SECTION "IR Communications Core", ROMX
 INCLUDE "engine/link/ir_core.asm"
 
 SECTION "Sprite Animations VBlank", ROMX
-INCLUDE "engine/sprite_vblank.asm"
+INCLUDE "engine/gfx/sprite_vblank.asm"
 
 SECTION "Starter Deck", ROMX
 INCLUDE "engine/starter_deck.asm"
@@ -100,12 +100,12 @@ SECTION "Booster Packs", ROMX
 INCLUDE "engine/booster_packs.asm"
 
 SECTION "AI Logic 2", ROMX
-INCLUDE "engine/ai/trainer_cards.asm"
-INCLUDE "engine/ai/pkmn_powers.asm"
-INCLUDE "engine/ai/common.asm"
+INCLUDE "engine/duel/ai/trainer_cards.asm"
+INCLUDE "engine/duel/ai/pkmn_powers.asm"
+INCLUDE "engine/duel/ai/common.asm"
 
 SECTION "Effect Functions", ROMX
-INCLUDE "engine/effect_functions.asm"
+INCLUDE "engine/duel/effect_functions.asm"
 
 SECTION "Decks", ROMX
 INCLUDE "data/decks.asm"
