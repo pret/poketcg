@@ -15,7 +15,7 @@ This will output a file named "poketcg.gbc".
 ## See also
 
 - **Discord:** [pret][discord]
-- **IRC:** [freenode#pret][irc]
+- **IRC:** [libera#pret][irc]
 
 Other disassembly projects:
 
@@ -37,4 +37,4 @@ Other disassembly projects:
 [pokefirered]: https://github.com/pret/pokefirered
 [pokeemerald]: https://github.com/pret/pokeemerald
 [discord]: https://discord.gg/d5dubZ3
-[irc]: https://kiwiirc.com/client/irc.freenode.net/?#pret
+[irc]: https://web.libera.chat/?#pret
