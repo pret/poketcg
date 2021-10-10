@@ -999,7 +999,7 @@ ScriptCommand_ShowCardReceivedScreen:
 	farcall Func_10000
 	farcall FlashWhiteScreen
 	pop af
-	bank1call Func_7594
+	bank1call ShowPromotionalCardScreen
 	call WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
 	call ReturnToOverworldNoCallback
