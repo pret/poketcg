@@ -69,14 +69,14 @@ Set_OBJ_8x16:
 	ret
 
 ; set Window Display on
-Set_WD_on:
+SetWindowOn:
 	ld a, [wLCDC]
 	or LCDC_WINON
 	ld [wLCDC], a
 	ret
 
 ; set Window Display off
-SetWDOff:
+SetWindowOff:
 	ld a, [wLCDC]
 	and LCDC_WINOFF
 	ld [wLCDC], a

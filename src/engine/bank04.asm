@@ -5337,7 +5337,7 @@ Func_12871: ; 12871 (4:6871)
 	ldh [hSCY], a
 	ldh [hWX], a
 	ldh [hWY], a
-	call SetWDOff
+	call SetWindowOff
 	ret
 
 Func_1288c: ; 1288c (4:688c)

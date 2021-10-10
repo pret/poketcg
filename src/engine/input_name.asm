@@ -2,7 +2,7 @@ WhatIsYourNameData:
 	textitem 1, 1, WhatIsYourNameText
 	db $ff
 ; [Deck1Data ~ Deck4Data]
-; These are directed from around (2:4f05),
+; These are directed from InputCurDeckName,
 ; without any bank description.
 ; That is, the developers hard-coded it. -_-;;
 Deck1Data:

@@ -1,5 +1,5 @@
-JumpSetWDOff:
-	jp SetWDOff
+JumpSetWindowOff:
+	jp SetWindowOff
 
 ; debug function
 ; prints player's coordinates by pressing B
@@ -7,18 +7,18 @@ JumpSetWDOff:
 Func_1c003: ; unreferenced
 	ld a, [wCurMap]
 	or a
-	jr z, JumpSetWDOff
+	jr z, JumpSetWindowOff
 	ld a, [wOverworldMode]
 	cp OWMODE_START_SCRIPT
-	jr nc, JumpSetWDOff
+	jr nc, JumpSetWindowOff
 
 	ldh a, [hKeysHeld]
 	ld b, a
 	and A_BUTTON | B_BUTTON
 	cp b
-	jr nz, JumpSetWDOff
+	jr nz, JumpSetWindowOff
 	and B_BUTTON
-	jr z, JumpSetWDOff
+	jr z, JumpSetWindowOff
 
 	ld bc, $20
 	ld a, [wPlayerXCoord]
@@ -46,7 +46,7 @@ Func_1c003: ; unreferenced
 	ld a, $68
 	ldh [hWY], a
 .set_wd_on
-	call Set_WD_on
+	call SetWindowOn
 	ret
 
 Func_1c056:

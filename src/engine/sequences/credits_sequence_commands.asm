@@ -300,7 +300,7 @@ CreditsSequenceCmd_DisableLCD: ; 1d9db (7:59db)
 
 CreditsSequenceCmd_FadeIn: ; 1d9e1 (7:59e1)
 	call DisableLCD
-	call Set_WD_on
+	call SetWindowOn
 	farcall Func_10af9
 	jp AdvanceCreditsSequenceCmdPtrBy2
 
@@ -310,7 +310,7 @@ CreditsSequenceCmd_FadeOut: ; 1d9ee (7:59ee)
 	call EnableLCD
 	call DoFrameIfLCDEnabled
 	call DisableLCD
-	call SetWDOff
+	call SetWindowOff
 	jp AdvanceCreditsSequenceCmdPtrBy2
 
 CreditsSequenceCmd_DrawRectangle: ; 1da04 (7:5a04)

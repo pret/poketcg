@@ -23,7 +23,7 @@ PlayCreditsSequence:
 	call PlaySong
 	farcall Func_10ab4
 	call Func_3ca4
-	call SetWDOff
+	call SetWindowOff
 	call Func_1d758
 	call EnableLCD
 	call DoFrameIfLCDEnabled
@@ -52,7 +52,7 @@ Func_1d705:
 	ld [wd648], a
 	ld [wd64a], a
 	call Func_1d765
-	call Set_WD_on
+	call SetWindowOn
 	call .Func_1d73a ; can be fallthrough
 	ret
 
