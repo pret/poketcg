@@ -891,7 +891,7 @@ DrawDeckMachineScreen:
 ; to index in register a, from wMachineDeckPtrs
 ; also checks whether the deck can be built
 ; either by dismantling other decks or not,
-; and places the corresponding symbol next to the name 
+; and places the corresponding symbol next to the name
 PrintDeckMachineEntry:
 	ld b, a
 	push bc

@@ -315,7 +315,7 @@ UNION
 ; such as tiles or BG maps
 sGfxBuffer0:: ; a000
 	ds $400
-	
+
 sGfxBuffer1:: ; a400
 	ds $400
 

@@ -485,7 +485,7 @@ Func_9001:
 	ld bc, -1
 	call .GetNumberChar
 	ret
-	
+
 .GetNumberChar
 	ld a, SYM_0 - 1
 .loop

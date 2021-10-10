@@ -20,7 +20,7 @@ OpeningSequence: ; 1d59d (7:559d)
 	opening_seq_wait 44
 	opening_seq_fade_out
 	opening_seq_wait 30
-	
+
 	opening_seq_load_aerodactyl_scene
 	opening_seq_play_sfx SFX_59
 	opening_seq_set_orbs_coordinates OpeningOrbCoordinates_AerodactylScene

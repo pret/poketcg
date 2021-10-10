@@ -21,8 +21,9 @@ INCLUDE "engine/menus/card_album.asm"
 INCLUDE "engine/menus/printer.asm"
 INCLUDE "engine/menus/deck_machine.asm"
 
-SECTION "Bank 3", ROMX
-INCLUDE "engine/bank03.asm"
+SECTION "Overworld Scripting", ROMX
+INCLUDE "engine/overworld/overworld.asm"
+INCLUDE "engine/overworld/scripting.asm"
 
 SECTION "Bank 4", ROMX
 INCLUDE "engine/bank04.asm"

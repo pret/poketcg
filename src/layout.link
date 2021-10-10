@@ -38,7 +38,7 @@ ROMX $01
 ROMX $02
 	"Menus"
 ROMX $03
-	"Bank 3"
+	"Overworld Scripting"
 ROMX $04
 	"Bank 4"
 ROMX $05

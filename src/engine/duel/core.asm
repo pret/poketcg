@@ -8066,16 +8066,16 @@ Func_7338:
 	ret
 
 Func_7344:
-    push af
-    ld a, [wSerialFlags]
-    or a
-    jr nz, .asm_734d
-    pop af
-    ret
+	push af
+	ld a, [wSerialFlags]
+	or a
+	jr nz, .asm_734d
+	pop af
+	ret
 .asm_734d
-    call Func_3b31
-    call DuelTransmissionError
-    ret
+	call Func_3b31
+	call DuelTransmissionError
+	ret
 
 BuildVersion:
 	db "VER 12/20 09:36", TX_END
