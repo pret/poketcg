@@ -23,42 +23,42 @@ AutoDeckMachineEntries: ; 1b8e8 (6:78e8)
 	auto_deck BoneAttackCardList,           BoneAttackText,           BoneAttackDescriptionText
 	auto_deck ExcavationCardList,           ExcavationText,           ExcavationDescriptionText
 	auto_deck RockCrusherCardList,          RockCrusherText,          RockCrusherDescriptionText
-	
+
 ; Water Auto Deck Machine
 	auto_deck BlueWaterCardList,            BlueWaterText,            BlueWaterDescriptionText
 	auto_deck OnTheBeachCardList,           OnTheBeachText,           OnTheBeachDescriptionText
 	auto_deck ParalyzeCardList,             ParalyzeText,             ParalyzeDescriptionText
 	auto_deck EnergyRemovalCardList,        EnergyRemovalText,        EnergyRemovalDescriptionText
 	auto_deck RainDancerCardList,           RainDancerText,           RainDancerDescriptionText
-	
+
 ; Lightning Auto Deck Machine
 	auto_deck CutePokemonCardList,          CutePokemonText,          CutePokemonDescriptionText
 	auto_deck PokemonFluteCardList,         PokemonFluteText,         PokemonFluteDescriptionText
 	auto_deck YellowFlashCardList,          YellowFlashText,          YellowFlashDescriptionText
 	auto_deck ElectricShockCardList,        ElectricShockText,        ElectricShockDescriptionText
 	auto_deck ZappingSelfdestructCardList,  ZappingSelfdestructText,  ZappingSelfdestructDescriptionText
-	
+
 ; Grass Auto Deck Machine
 	auto_deck InsectCollectionCardList,     InsectCollectionText,     InsectCollectionDescriptionText
 	auto_deck JungleCardList,               JungleText,               JungleDescriptionText
 	auto_deck FlowerGardenCardList,         FlowerGardenText,         FlowerGardenDescriptionText
 	auto_deck KaleidoscopeCardList,         KaleidoscopeText,         KaleidoscopeDescriptionText
 	auto_deck FlowerPowerCardList,          FlowerPowerText,          FlowerPowerDescriptionText
-	
+
 ; Psychic Auto Deck Machine
 	auto_deck PsychicPowerCardList,         PsychicPowerText,         PsychicPowerDescriptionText
 	auto_deck DreamEaterHaunterCardList,    DreamEaterHaunterText,    DreamEaterHaunterDescriptionText
 	auto_deck ScavengingSlowbroCardList,    ScavengingSlowbroText,    ScavengingSlowbroDescriptionText
 	auto_deck StrangePowerCardList,         StrangePowerText,         StrangePowerDescriptionText
 	auto_deck StrangePsyshockCardList,      StrangePsyshockText,      StrangePsyshockDescriptionText
-	
+
 ; Science Auto Deck Machine
 	auto_deck LovelyNidoranCardList,        LovelyNidoranText,        LovelyNidoranDescriptionText
 	auto_deck ScienceCorpsCardList,         ScienceCorpsText,         ScienceCorpsDescriptionText
 	auto_deck FlyinPokemonCardList,         FlyinPokemonText,         FlyinPokemonDescriptionText
 	auto_deck PoisonCardList,               PoisonText,               PoisonDescriptionText
 	auto_deck WondersOfScienceCardList,     WondersOfScienceText,     WondersOfScienceDescriptionText
-	
+
 ; Fire Auto Deck Machine
 	auto_deck ReplaceEmAllCardList,         ReplaceEmAllText,         ReplaceEmAllDescriptionText
 	auto_deck ChariSaurCardList,            ChariSaurText,            ChariSaurDescriptionText
@@ -72,7 +72,7 @@ AutoDeckMachineEntries: ; 1b8e8 (6:78e8)
 	auto_deck BulbasaurAndFriendsCardList,  BulbasaurAndFriendsText,  BulbasaurAndFriendsDescriptionText
 	auto_deck PsychicMachampCardList,       PsychicMachampText,       PsychicMachampDescriptionText
 	auto_deck WaterBeetleCardList,          WaterBeetleText,          WaterBeetleDescriptionText
-	
+
 ; Legendary Auto Deck Machine
 	auto_deck LegendaryMoltresCardList,     LegendaryMoltresText,     LegendaryMoltresDescriptionText
 	auto_deck LegendaryZapdosCardList,      LegendaryZapdosText,      LegendaryZapdosDescriptionText

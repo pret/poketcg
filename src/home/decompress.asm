@@ -56,7 +56,7 @@ DecompressData:
 ; decompression works as follows:
 ; first a command byte is read that will dictate how the
 ; following bytes will be copied
-; the position will then move to the next byte (0xXY), and 
+; the position will then move to the next byte (0xXY), and
 ; the command byte's bits are read from higher to lower bit
 ; - if command bit is set, then copy 0xXY to buffer;
 ; - if command bit is not set, then decompression enters "repeat mode,"

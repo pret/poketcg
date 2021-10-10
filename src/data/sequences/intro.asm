@@ -3,8 +3,8 @@ INCLUDE "macros/intro_sequence.asm"
 IntroSequence: ; 1d59d (7:559d)
 	intro_seq_load_charizard_scene
 	intro_seq_play_sfx SFX_58
-	intro_seq_set_orbs_coordinates OpeningOrbCoordinates_CharizardScene
-	intro_seq_set_orbs_animations OpeningOrbAnimations_CharizardScene
+	intro_seq_set_orbs_coordinates IntroOrbCoordinates_CharizardScene
+	intro_seq_set_orbs_animations IntroOrbAnimations_CharizardScene
 	intro_seq_wait 44
 	intro_seq_fade_in
 	intro_seq_wait 44
@@ -13,18 +13,18 @@ IntroSequence: ; 1d59d (7:559d)
 
 	intro_seq_load_scyther_scene
 	intro_seq_play_sfx SFX_58
-	intro_seq_set_orbs_coordinates OpeningOrbCoordinates_ScytherScene
-	intro_seq_set_orbs_animations OpeningOrbAnimations_ScytherScene
+	intro_seq_set_orbs_coordinates IntroOrbCoordinates_ScytherScene
+	intro_seq_set_orbs_animations IntroOrbAnimations_ScytherScene
 	intro_seq_wait 44
 	intro_seq_fade_in
 	intro_seq_wait 44
 	intro_seq_fade_out
 	intro_seq_wait 30
-	
+
 	intro_seq_load_aerodactyl_scene
 	intro_seq_play_sfx SFX_59
-	intro_seq_set_orbs_coordinates OpeningOrbCoordinates_AerodactylScene
-	intro_seq_set_orbs_animations OpeningOrbAnimations_AerodactylScene
+	intro_seq_set_orbs_coordinates IntroOrbCoordinates_AerodactylScene
+	intro_seq_set_orbs_animations IntroOrbAnimations_AerodactylScene
 	intro_seq_wait 44
 	intro_seq_fade_in
 	intro_seq_wait 100
@@ -33,14 +33,14 @@ IntroSequence: ; 1d59d (7:559d)
 
 	intro_seq_load_title_screen_scene
 	intro_seq_play_sfx SFX_5A
-	intro_seq_set_orbs_coordinates OpeningOrbCoordinates_InitialTitleScreen
-	intro_seq_set_orbs_animations OpeningOrbAnimations_InitialTitleScreen
+	intro_seq_set_orbs_coordinates IntroOrbCoordinates_InitialTitleScreen
+	intro_seq_set_orbs_animations IntroOrbAnimations_InitialTitleScreen
 	intro_seq_wait_orbs_animation
 	intro_seq_fade_in
 	intro_seq_wait 16
 	intro_seq_play_sfx SFX_5B
-	intro_seq_set_orbs_coordinates OpeningOrbCoordinates_InTitleScreen
-	intro_seq_set_orbs_animations OpeningOrbAnimations_InTitleScreen
+	intro_seq_set_orbs_coordinates IntroOrbCoordinates_InTitleScreen
+	intro_seq_set_orbs_animations IntroOrbAnimations_InTitleScreen
 	intro_seq_wait_sfx
 	intro_seq_play_title_screen_music
 	intro_seq_wait 60

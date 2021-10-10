@@ -135,7 +135,7 @@ IntroSequenceCmd_SetOrbsCoordinates: ; 1d486 (7:5486)
 	scf
 	ret
 
-OpeningOrbAnimations_CharizardScene: ; 1d4b0 (7:54b0)
+IntroOrbAnimations_CharizardScene: ; 1d4b0 (7:54b0)
 	db SPRITE_ANIM_192 ; GRASS
 	db SPRITE_ANIM_193 ; FIRE
 	db SPRITE_ANIM_193 ; WATER
@@ -144,7 +144,7 @@ OpeningOrbAnimations_CharizardScene: ; 1d4b0 (7:54b0)
 	db SPRITE_ANIM_192 ; PSYCHIC
 	db SPRITE_ANIM_193 ; FIGHTING
 
-OpeningOrbCoordinates_CharizardScene: ; 1d4b7 (7:54b7)
+IntroOrbCoordinates_CharizardScene: ; 1d4b7 (7:54b7)
 	; x coord, y coord
 	db 240,  28 ; GRASS
 	db 160, 120 ; FIRE
@@ -154,7 +154,7 @@ OpeningOrbCoordinates_CharizardScene: ; 1d4b7 (7:54b7)
 	db 240, 100 ; PSYCHIC
 	db 160,  44 ; FIGHTING
 
-OpeningOrbAnimations_ScytherScene: ; 1d4c5 (7:54c5)
+IntroOrbAnimations_ScytherScene: ; 1d4c5 (7:54c5)
 	db SPRITE_ANIM_193 ; GRASS
 	db SPRITE_ANIM_192 ; FIRE
 	db SPRITE_ANIM_192 ; WATER
@@ -163,7 +163,7 @@ OpeningOrbAnimations_ScytherScene: ; 1d4c5 (7:54c5)
 	db SPRITE_ANIM_193 ; PSYCHIC
 	db SPRITE_ANIM_192 ; FIGHTING
 
-OpeningOrbCoordinates_ScytherScene: ; 1d4cc (7:54cc)
+IntroOrbCoordinates_ScytherScene: ; 1d4cc (7:54cc)
 	; x coord, y coord
 	db 160,  28 ; GRASS
 	db 240, 120 ; FIRE
@@ -173,7 +173,7 @@ OpeningOrbCoordinates_ScytherScene: ; 1d4cc (7:54cc)
 	db 160, 100 ; PSYCHIC
 	db 240,  44 ; FIGHTING
 
-OpeningOrbAnimations_AerodactylScene: ; 1d4da (7:54da)
+IntroOrbAnimations_AerodactylScene: ; 1d4da (7:54da)
 	db SPRITE_ANIM_194 ; GRASS
 	db SPRITE_ANIM_197 ; FIRE
 	db SPRITE_ANIM_200 ; WATER
@@ -182,7 +182,7 @@ OpeningOrbAnimations_AerodactylScene: ; 1d4da (7:54da)
 	db SPRITE_ANIM_209 ; PSYCHIC
 	db SPRITE_ANIM_212 ; FIGHTING
 
-OpeningOrbCoordinates_AerodactylScene: ; 1d4e1 (7:54e1)
+IntroOrbCoordinates_AerodactylScene: ; 1d4e1 (7:54e1)
 	; x coord, y coord
 	db 240,  32 ; GRASS
 	db 160, 112 ; FIRE
@@ -192,7 +192,7 @@ OpeningOrbCoordinates_AerodactylScene: ; 1d4e1 (7:54e1)
 	db 240,  96 ; PSYCHIC
 	db 160,  48 ; FIGHTING
 
-OpeningOrbAnimations_InitialTitleScreen: ; 1d4ef (7:54ef)
+IntroOrbAnimations_InitialTitleScreen: ; 1d4ef (7:54ef)
 	db SPRITE_ANIM_195 ; GRASS
 	db SPRITE_ANIM_198 ; FIRE
 	db SPRITE_ANIM_201 ; WATER
@@ -201,7 +201,7 @@ OpeningOrbAnimations_InitialTitleScreen: ; 1d4ef (7:54ef)
 	db SPRITE_ANIM_210 ; PSYCHIC
 	db SPRITE_ANIM_213 ; FIGHTING
 
-OpeningOrbCoordinates_InitialTitleScreen: ; 1d4f6 (7:54f6)
+IntroOrbCoordinates_InitialTitleScreen: ; 1d4f6 (7:54f6)
 	; x coord, y coord
 	db 112, 144 ; GRASS
 	db  12, 144 ; FIRE
@@ -211,7 +211,7 @@ OpeningOrbCoordinates_InitialTitleScreen: ; 1d4f6 (7:54f6)
 	db 132, 144 ; PSYCHIC
 	db  72, 144 ; FIGHTING
 
-OpeningOrbAnimations_InTitleScreen: ; 1d504 (7:5504)
+IntroOrbAnimations_InTitleScreen: ; 1d504 (7:5504)
 	db SPRITE_ANIM_196 ; GRASS
 	db SPRITE_ANIM_199 ; FIRE
 	db SPRITE_ANIM_202 ; WATER
@@ -220,7 +220,7 @@ OpeningOrbAnimations_InTitleScreen: ; 1d504 (7:5504)
 	db SPRITE_ANIM_211 ; PSYCHIC
 	db SPRITE_ANIM_214 ; FIGHTING
 
-OpeningOrbCoordinates_InTitleScreen: ; 1d50b (7:550b)
+IntroOrbCoordinates_InTitleScreen: ; 1d50b (7:550b)
 	; x coord, y coord
 	db 112,  76 ; GRASS
 	db   0,  28 ; FIRE

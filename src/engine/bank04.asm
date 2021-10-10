@@ -3085,7 +3085,7 @@ SaveGeneralSaveDataFromDE: ; 1125f (4:525f)
 
 ; writes in de total num of cards collected
 ; and in (de + 1) total num of cards to collect
-; also updates wTotalNumCardsCollected and wTotalNumCardsToCollect 
+; also updates wTotalNumCardsCollected and wTotalNumCardsToCollect
 UpdateAlbumProgress: ; 1127f (4:527f)
 	push hl
 	push de

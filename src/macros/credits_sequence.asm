@@ -9,7 +9,7 @@ credits_seq_load_ow_map: MACRO
 	dw CreditsSequenceCmd_LoadOWMap
 	db \1, \2, \3
 ENDM
-	
+
 credits_seq_init_volcano_sprite: MACRO
 	dw CreditsSequenceCmd_InitVolcanoSprite
 ENDM

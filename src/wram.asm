@@ -460,7 +460,7 @@ NEXTU
 
 ; used in CheckIfCurrentDeckWasChanged to determine whether
 ; wCurDeckCards was changed from the original
-; deck it was based on 
+; deck it was based on
 wCurDeckCardChanges:: ; c590
 	ds DECK_SIZE + 1
 
