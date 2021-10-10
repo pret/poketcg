@@ -70,7 +70,7 @@ AIDoAction_TakePrize:
 	jr AIDoAction ; this line is not needed
 
 ; calls the appropriate AI routine to handle action,
-; depending on the deck ID (see engine/ai/deck_ai.asm)
+; depending on the deck ID (see engine/duel/ai/deck_ai.asm)
 ; input:
 ;	- a = AIACTION_* constant
 AIDoAction:

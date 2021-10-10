@@ -763,7 +763,7 @@ ResetBackUpRamText: ; 372a9 (d:72a9)
 	text "Reset Back Up RAM?"
 	done
 
-Text00a3: ; 372bd (d:72bd)
+YourDataWasDestroyedSomehowText: ; 372bd (d:72bd)
 	text "Your Data was destroyed"
 	line "somehow."
 	line ""

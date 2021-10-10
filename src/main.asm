@@ -12,7 +12,7 @@ INCLUDE "engine/duel/core.asm"
 SECTION "Menus Common", ROMX
 INCLUDE "engine/menus/common.asm"
 
-SECTION "Menus", ROMX
+SECTION "Menus 1", ROMX
 INCLUDE "engine/menus/duel.asm"
 INCLUDE "engine/menus/deck_selection.asm"
 INCLUDE "engine/menus/deck_check.asm"
@@ -30,28 +30,83 @@ INCLUDE "engine/bank04.asm"
 
 SECTION "AI Logic 1", ROMX
 INCLUDE "data/deck_ai_pointers.asm"
-INCLUDE "engine/ai/core.asm"
+INCLUDE "engine/duel/ai/core.asm"
 
-SECTION "Bank 6", ROMX
-INCLUDE "engine/bank06.asm"
+SECTION "Menus 2", ROMX
+INCLUDE "engine/copy_card_name.asm"
+INCLUDE "engine/menus/play_area.asm"
+INCLUDE "engine/menus/glossary.asm"
+INCLUDE "engine/menus/unknown.asm"
+
+SECTION "Effect Commands", ROMX
+INCLUDE "engine/duel/effect_commands.asm"
+
+SECTION "Animation Commands", ROMX
+INCLUDE "engine/duel/animations/commands.asm"
+
+SECTION "IR Communications Core", ROMX
+INCLUDE "engine/link/ir_core.asm"
+
+SECTION "Sprite Animations VBlank", ROMX
+INCLUDE "engine/gfx/sprite_vblank.asm"
+
+SECTION "Starter Deck", ROMX
+INCLUDE "engine/starter_deck.asm"
+
+SECTION "Link Functions", ROMX
+INCLUDE "engine/link/ir_functions.asm"
+INCLUDE "engine/link/card_pop.asm"
+INCLUDE "engine/link/printer.asm"
+INCLUDE "engine/link/link_duel.asm"
+
+SECTION "Promotional Card", ROMX
+INCLUDE "engine/promotional_card.asm"
+
+SECTION "Booster Pack Menu", ROMX
+INCLUDE "engine/menus/booster_pack.asm"
+
+SECTION "Unused Save Validation", ROMX
+INCLUDE "engine/unused_save_validation.asm"
+
+SECTION "Input Name", ROMX
+INCLUDE "engine/input_name.asm"
+
+SECTION "Auto Deck Machines", ROMX
+INCLUDE "engine/auto_deck_machines.asm"
 
 SECTION "Bank 7", ROMX
 INCLUDE "engine/bank07.asm"
 
+SECTION "Duel Animations", ROMX
+INCLUDE "engine/duel/animations/core.asm"
+INCLUDE "engine/duel/animations/screen_effects.asm"
+INCLUDE "data/duel/animations/duel_animations.asm"
+
+SECTION "Start Menu", ROMX
+INCLUDE "engine/menus/start.asm"
+
+SECTION "Intro Sequence", ROMX
+INCLUDE "engine/intro.asm"
+INCLUDE "engine/sequences/intro_sequence_commands.asm"
+
+SECTION "Unused Copyright", ROMX
+INCLUDE "engine/unused_copyright.asm"
+
 SECTION "Credits Sequence", ROMX
+INCLUDE "engine/credits.asm"
 INCLUDE "engine/sequences/credits_sequence_commands.asm"
-INCLUDE "data/sequences/credits_sequence.asm"
+INCLUDE "data/sequences/credits.asm"
 
 SECTION "Booster Packs", ROMX
 INCLUDE "engine/booster_packs.asm"
 
 SECTION "AI Logic 2", ROMX
-INCLUDE "engine/ai/trainer_cards.asm"
-INCLUDE "engine/ai/pkmn_powers.asm"
-INCLUDE "engine/ai/common.asm"
+INCLUDE "engine/duel/ai/trainer_cards.asm"
+INCLUDE "engine/duel/ai/pkmn_powers.asm"
+INCLUDE "engine/duel/ai/common.asm"
 
 SECTION "Effect Functions", ROMX
-INCLUDE "engine/effect_functions.asm"
+INCLUDE "engine/duel/effect_functions.asm"
 
 SECTION "Decks", ROMX
 INCLUDE "data/decks.asm"
@@ -59,8 +114,17 @@ INCLUDE "data/decks.asm"
 SECTION "Cards", ROMX
 INCLUDE "data/cards.asm"
 
-SECTION "Bank 1C", ROMX
-INCLUDE "engine/bank1c.asm"
+SECTION "SGB", ROMX
+INCLUDE "engine/sgb.asm"
 
 SECTION "Bank 20", ROMX
 INCLUDE "engine/bank20.asm"
+
+SECTION "Gfx", ROMX
+INCLUDE "engine/gfx/gfx_table_pointers.asm"
+INCLUDE "engine/gfx/tilemaps.asm"
+INCLUDE "engine/gfx/tilesets.asm"
+INCLUDE "engine/gfx/sprites.asm"
+INCLUDE "engine/gfx/sprite_animations.asm"
+INCLUDE "engine/gfx/palettes.asm"
+INCLUDE "data/maps/tilemaps.asm"

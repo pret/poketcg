@@ -164,7 +164,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00a0                                           ; 0x00a0
 	textpointer Text00a1                                           ; 0x00a1
 	textpointer ResetBackUpRamText                                 ; 0x00a2
-	textpointer Text00a3                                           ; 0x00a3
+	textpointer YourDataWasDestroyedSomehowText                    ; 0x00a3
 	textpointer NoCardsInHandText                                  ; 0x00a4
 	textpointer TheDiscardPileHasNoCardsText                       ; 0x00a5
 	textpointer PlayerDiscardPileText                              ; 0x00a6

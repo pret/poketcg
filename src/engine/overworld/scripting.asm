@@ -1819,7 +1819,7 @@ ScriptCommand_nop:
 
 ScriptCommand_GiveStarterDeck:
 	ld a, [wStarterDeckChoice]
-	bank1call Func_7576
+	bank1call AddStarterDeck
 	jp IncreaseScriptPointerBy1
 
 Unknown_d3dd:

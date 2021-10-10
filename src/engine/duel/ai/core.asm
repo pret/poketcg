@@ -1,4 +1,4 @@
-INCLUDE "engine/ai/decks/unreferenced.asm"
+INCLUDE "engine/duel/ai/decks/unreferenced.asm"
 
 ; returns carry if damage dealt from any of
 ; a card's attacks KOs defending Pokémon
@@ -707,13 +707,13 @@ LookForCardIDInHand: ; 143bf (5:43bf)
 	or a
 	ret
 
-INCLUDE "engine/ai/damage_calculation.asm"
+INCLUDE "engine/duel/ai/damage_calculation.asm"
 
 AIProcessHandTrainerCards: ; 14663 (5:4663)
 	farcall _AIProcessHandTrainerCards
 	ret
 
-INCLUDE "engine/ai/deck_ai.asm"
+INCLUDE "engine/duel/ai/deck_ai.asm"
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
@@ -815,7 +815,7 @@ AIAttachEnergyInHandToCardInBench: ; 1562b (5:562b)
 	ld b, PLAY_AREA_BENCH_1
 	jr AIAttachEnergyInHandToCardInPlayArea.attach
 
-INCLUDE "engine/ai/init.asm"
+INCLUDE "engine/duel/ai/init.asm"
 
 ; load selected attack from Pokémon in hTempPlayAreaLocation_ff9d,
 ; gets an energy card to discard and subsequently
@@ -1306,7 +1306,7 @@ Func_15886: ; 15886 (5:5886)
 	inc hl
 	jr .loop_energy_cards
 
-INCLUDE "engine/ai/retreat.asm"
+INCLUDE "engine/duel/ai/retreat.asm"
 
 ; Copy cards from wDuelTempList in hl to wHandTempList in de
 CopyHandCardList: ; 15ea6 (5:5ea6)
@@ -1317,7 +1317,7 @@ CopyHandCardList: ; 15ea6 (5:5ea6)
 	inc de
 	jr CopyHandCardList
 
-INCLUDE "engine/ai/hand_pokemon.asm"
+INCLUDE "engine/duel/ai/hand_pokemon.asm"
 
 ; check if player's active Pokémon is Mr Mime
 ; if it isn't, set carry
@@ -1804,11 +1804,11 @@ CheckForEvolutionInDeck: ; 16451 (5:6451)
 	scf
 	ret
 
-INCLUDE "engine/ai/energy.asm"
+INCLUDE "engine/duel/ai/energy.asm"
 
-INCLUDE "engine/ai/attacks.asm"
+INCLUDE "engine/duel/ai/attacks.asm"
 
-INCLUDE "engine/ai/special_attacks.asm"
+INCLUDE "engine/duel/ai/special_attacks.asm"
 
 ; checks in other Play Area for non-basic cards.
 ; afterwards, that card is checked for damage,
@@ -2285,7 +2285,7 @@ CheckCardEvolutionInHandOrDeck: ; 17274 (5:7274)
 	scf
 	ret
 
-INCLUDE "engine/ai/boss_deck_set_up.asm"
+INCLUDE "engine/duel/ai/boss_deck_set_up.asm"
 
 ; returns carry if Pokemon at PLAY_AREA* in a
 ; can damage defending Pokémon with any of its attacks

@@ -36,7 +36,7 @@ ROMX $01
 	"Duel Core"
 	"Menus Common"
 ROMX $02
-	"Menus"
+	"Menus 1"
 ROMX $03
 	"Overworld Scripting"
 ROMX $04
@@ -44,9 +44,24 @@ ROMX $04
 ROMX $05
 	"AI Logic 1"
 ROMX $06
-	"Bank 6"
+	"Menus 2"
+	"Effect Commands"
+	"Animation Commands"
+	"IR Communications Core"
+	"Sprite Animations VBlank"
+	"Starter Deck"
+	"Link Functions"
+	"Promotional Card"
+	"Booster Pack Menu"
+	"Unused Save Validation"
+	"Input Name"
+	"Auto Deck Machines"
 ROMX $07
 	"Bank 7"
+	"Duel Animations"
+	"Start Menu"
+	"Intro Sequence"
+	"Unused Copyright"
 	"Credits Sequence"
 	"Booster Packs"
 ROMX $08
@@ -83,13 +98,14 @@ ROMX $18
 ROMX $19
 	"Text 13"
 ROMX $1c
-	"Bank 1C"
+	"SGB"
 ROMX $1d
 	"Gfx 1"
 ROMX $1e
 	"Gfx 2"
 ROMX $20
 	"Bank 20"
+	"Gfx"
 ROMX $21
 	"Gfx 3"
 ROMX $22
