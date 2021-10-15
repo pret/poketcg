@@ -19,6 +19,7 @@ This will output a file named "poketcg.gbc".
 
 Other disassembly projects:
 
+- [**Pokémon TCG 2**][poketcg2]
 - [**Pokémon Red/Blue**][pokered]
 - [**Pokémon Yellow**][pokeyellow]
 - [**Pokémon Gold/Silver**][pokegold]
@@ -28,6 +29,7 @@ Other disassembly projects:
 - [**Pokémon FireRed**][pokefirered]
 - [**Pokémon Emerald**][pokeemerald]
 
+[poketcg2]: https://github.com/pret/poketcg2
 [pokered]: https://github.com/pret/pokered
 [pokeyellow]: https://github.com/pret/pokeyellow
 [pokegold]: https://github.com/pret/pokegold
