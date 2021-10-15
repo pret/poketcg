@@ -76,7 +76,7 @@ Func_18661: ; unreferenced
 	ld a, SYM_CURSOR_R
 	bit D_RIGHT_F, [hl]
 	jr z, .draw_tile
-.draw_blank_cursor ; 186d4 (6:46d4)
+.draw_blank_cursor
 	ld a, SYM_SPACE
 .draw_tile
 	ld e, a
@@ -98,6 +98,6 @@ Func_18661: ; unreferenced
 	call WriteByteToBGMap0
 	or a
 	ret
-.draw_cursor ; 186f3 (6:46f3)
+.draw_cursor
 	ld a, SYM_CURSOR_R
 	jr .draw_tile

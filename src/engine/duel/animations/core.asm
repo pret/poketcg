@@ -102,7 +102,7 @@ PlayLoadedDuelAnimation:
 .address
 	dw .handler_func
 
-.handler_func ; 1c94a (7:494a)
+.handler_func
 ; if any of ANIM_SPRITE_ID, ANIM_PALETTE_ID and ANIM_SPRITE_ANIM_ID
 ; are 0, then return
 	ld e, l

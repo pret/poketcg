@@ -93,7 +93,7 @@ OpenInPlayAreaScreen:
 
 	jp .start
 
-.print_associated_text ; 18171 (6:4171)
+.print_associated_text
 ; each position has a text associated to it,
 ; which is printed at the bottom of the screen
 	push af
@@ -541,7 +541,7 @@ OpenInPlayAreaScreen_HandleInput:
 	bit 4, [hl] ; = and $10
 	jr nz, ZeroObjectPositionsAndToggleOAMCopy_Bank6
 
-.draw_cursor ; 184a0 (6:44a0)
+.draw_cursor
 	call ZeroObjectPositions
 	ld hl, wMenuInputTablePointer
 	ld e, [hl]

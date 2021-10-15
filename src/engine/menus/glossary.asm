@@ -56,7 +56,7 @@ OpenGlossaryScreen:
 	jr .next
 
 ; display glossary menu.
-.display_menu ; 1852b (6:452b)
+.display_menu
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -77,7 +77,7 @@ OpenGlossaryScreen:
 	ret
 
 ; print texts in glossary menu.
-.print_menu ; 1855a (6:455a)
+.print_menu
 	ld hl, wDefaultText
 
 	ld a, TX_SYMBOL
@@ -122,7 +122,7 @@ OpenGlossaryScreen:
 	ret
 
 ; display glossary description.
-.print_description ; 18598 (6:4598)
+.print_description
 	push af
 	xor a
 	ld [wTileMapFill], a

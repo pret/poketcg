@@ -242,7 +242,7 @@ Func_c1b1:
 	call DetermineImakuniAndChallengeHall
 	farcall Func_80b7a
 	farcall ClearMasterBeatenList
-	farcall Func_131b3
+	farcall ChallengeMachine_Reset
 	xor a
 	ld [wPlayTimeCounter + 0], a
 	ld [wPlayTimeCounter + 1], a

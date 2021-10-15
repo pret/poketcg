@@ -3,7 +3,7 @@
 ; 2: player's x coordinate when entering the map
 ; 2: player's y coordinate when entering the map
 ; 4: 00
-OverworldMapIndexes: ; 10f88 (4:4f88)
+OverworldMapWarps:
 	db $00, $00, $00, $00
 	db MASON_LABORATORY,        $0e, $1a, $00
 	db ISHIHARAS_HOUSE,         $08, $14, $00

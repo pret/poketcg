@@ -401,7 +401,7 @@ Func_1a0cc:
 
 ; copies 20 tiles given by hl to de
 ; then adds 2 tiles to hl
-.Copy20Tiles ; 1a0e0 (6:60e0)
+.Copy20Tiles
 	push hl
 	ld c, 20
 .loop_tiles
@@ -416,7 +416,7 @@ Func_1a0cc:
 
 ; copies a tile to de
 ; a = tile to get from sGfxBuffer1
-.CopyTile ; 1a0f0 (6:60f0)
+.CopyTile
 	push hl
 	push bc
 	ld l, a

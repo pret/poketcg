@@ -1470,12 +1470,12 @@ endr
 	dw .SelectedOppsHand
 	dw .SelectedDeck
 
-.YourOrOppPlayAreaData ; 8808 (2:4808)
+.YourOrOppPlayAreaData
 	textitem 2, 14, YourPlayAreaText
 	textitem 2, 16, OppPlayAreaText
 	db $ff
 
-.PlayAreaMenuParameters ; 8811 (2:4811)
+.PlayAreaMenuParameters
 	db 1, 14 ; cursor x, cursor y
 	db 2 ; y displacement between items
 	db 2 ; number of items
@@ -1483,7 +1483,7 @@ endr
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-.SelectedPrize ; 8819 (2:4819)
+.SelectedPrize
 	ld a, [wYourOrOppPlayAreaCurPosition]
 	ld c, a
 	ld b, $1
@@ -1511,7 +1511,7 @@ endr
 	call GetTurnDuelistVariable
 	jr .ShowSelectedCard
 
-.SelectedOppsHand ; 883c (2:483c)
+.SelectedOppsHand
 	call CreateHandCardList
 	ret c
 	ld hl, wDuelTempList
@@ -1519,7 +1519,7 @@ endr
 	ld a, [hl]
 	jr .ShowSelectedCard
 
-.SelectedDeck ; 8849 (2:4849)
+.SelectedDeck
 	call CreateDeckCardList
 	ret c
 	ld a, %01111111
@@ -1532,7 +1532,7 @@ endr
 ; output:
 ; a = wce5c
 ; with upper bit set if turn was swapped
-.ShowSelectedCard ; 8855 (2:4855)
+.ShowSelectedCard
 	ld b, a
 	ld a, [wce5c]
 	or a

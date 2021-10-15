@@ -71,7 +71,7 @@ WriteByteToBGMap0:
 ;	fallthrough
 
 ; writes a to [v*BGMap0 + BG_MAP_WIDTH * c + b] during hblank
-HblankWriteByteToBGMap0: ; 06d9
+HblankWriteByteToBGMap0:
 	push hl
 	push de
 	push bc

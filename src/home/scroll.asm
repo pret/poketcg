@@ -114,7 +114,6 @@ BGScrollData:
 	db  4,  3,  3,  3,  3,  3,  3,  3,  2,  2,  2,  1,  1,  1,  0,  0
 	db  0, -1, -1, -1, -2, -2, -2, -3, -3, -3, -4, -4, -4, -4, -4, -4
 	db -5, -4, -4, -4, -4, -4, -4, -3, -3, -3, -2, -2, -2, -1, -1, -1
-; 3f38
 
 ; x = BGScrollData[(wVBlankCounter + a) & $3f]
 ; return, in register a, x rotated right [wBGScrollMod]-1 times (max 3 times)

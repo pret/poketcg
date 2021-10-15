@@ -1575,7 +1575,7 @@ ScriptCommand_ChooseDeckToDuelAgainstMultichoice:
 	set_event_value EVENT_AARON_DECK_MENU_CHOICE
 	jp IncreaseScriptPointerBy1
 
-.multichoice_menu_args ; d25e
+.multichoice_menu_args
 	dw NULL ; NPC title for textbox under menu
 	tx SelectDeckToDuelText ; text for textbox under menu
 	dw MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst ; location of table configuration in bank 4
@@ -1583,7 +1583,7 @@ ScriptCommand_ChooseDeckToDuelAgainstMultichoice:
 	dw wMultichoiceTextboxResult_ChooseDeckToDuelAgainst ; ram location to return result into
 	dw .text_entries ; location of table containing text entries
 
-.text_entries ; d269
+.text_entries
 	tx LightningAndFireDeckChoiceText
 	tx WaterAndFightingDeckChoiceText
 	tx GrassAndPsychicDeckChoiceText
@@ -1596,7 +1596,7 @@ ScriptCommand_ChooseStarterDeckMultichoice:
 	call ShowMultichoiceTextbox
 	jp IncreaseScriptPointerBy1
 
-.multichoice_menu_args ; d27b
+.multichoice_menu_args
 	dw NULL ; NPC title for textbox under menu
 	tx SelectDeckToTakeText ; text for textbox under menu
 	dw MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck ; location of table configuration in bank 4
@@ -1703,7 +1703,7 @@ ScriptCommand_ShowSamNormalMultichoice:
 	ld [wMultichoiceTextboxResult_Sam], a
 	jp IncreaseScriptPointerBy1
 
-.multichoice_menu_args ; d30c
+.multichoice_menu_args
 	tx SamNPCName ; NPC title for textbox under menu
 	tx HowCanIHelpText ; text for textbox under menu
 	dw SamNormalMultichoice_ConfigurationTable ; location of table configuration in bank 4
