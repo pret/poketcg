@@ -1,6 +1,6 @@
 ; determine whether AI plays
 ; basic cards from hand
-AIDecidePlayPokemonCard: ; 15eae (5:5eae)
+AIDecidePlayPokemonCard:
 	call CreateHandCardList
 	call SortTempHandByIDList
 	ld hl, wDuelTempList
@@ -101,7 +101,7 @@ AIDecidePlayPokemonCard: ; 15eae (5:5eae)
 
 ; determine whether AI evolves
 ; Pokémon in the Play Area
-AIDecideEvolution: ; 15f4c (5:5f4c)
+AIDecideEvolution:
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld de, wHandTempList
@@ -388,7 +388,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 ; determine AI score for evolving
 ; Charmeleon, Magikarp, Dragonair and Grimer
 ; in certain decks
-AIDecideSpecialEvolutions: ; 16120 (5:6120)
+AIDecideSpecialEvolutions:
 ; check if deck applies
 	ld a, [wOpponentDeckID]
 	cp LEGENDARY_DRAGONITE_DECK_ID
@@ -525,7 +525,7 @@ AIDecideSpecialEvolutions: ; 16120 (5:6120)
 
 ; determine AI score for the legendary cards
 ; Moltres, Zapdos and Articuno
-AIDecidePlayLegendaryBirds: ; 161d5 (5:61d5)
+AIDecidePlayLegendaryBirds:
 ; check if deck applies
 	ld a, [wOpponentDeckID]
 	cp LEGENDARY_ZAPDOS_DECK_ID

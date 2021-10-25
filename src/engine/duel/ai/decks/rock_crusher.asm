@@ -1,4 +1,4 @@
-AIActionTable_RockCrusher: ; 14f0e (5:4f0e)
+AIActionTable_RockCrusher:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_RockCrusher: ; 14f0e (5:4f0e)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 14f1a (5:4f1a)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 14f1e (5:4f1e)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,37 +19,37 @@ AIActionTable_RockCrusher: ; 14f0e (5:4f0e)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 14f2f (5:4f2f)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 14f33 (5:4f33)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 14f37 (5:4f37)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 14f3b (5:4f3b)
+.list_arena
 	db RHYHORN
 	db ONIX
 	db GEODUDE
 	db DIGLETT
 	db $00
 
-.list_bench ; 14f40 (5:4f40)
+.list_bench
 	db DIGLETT
 	db GEODUDE
 	db RHYHORN
 	db ONIX
 	db $00
 
-.list_retreat ; 14f45 (5:4f45)
+.list_retreat
 	ai_retreat DIGLETT, -1
 	db $00
 
-.list_energy ; 14f48 (5:4f48)
+.list_energy
 	ai_energy DIGLETT,  3, +1
 	ai_energy DUGTRIO,  4, +0
 	ai_energy GEODUDE,  2, +1
@@ -59,12 +59,12 @@ AIActionTable_RockCrusher: ; 14f0e (5:4f0e)
 	ai_energy RHYHORN,  3, +0
 	db $00
 
-.list_prize ; 14f5e (5:4f5e)
+.list_prize
 	db ENERGY_REMOVAL
 	db RHYHORN
 	db $00
 
-.store_list_pointers ; 14f61 (5:4f61)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench

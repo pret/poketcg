@@ -1,7 +1,7 @@
 ; runs through Player's whole deck and
 ; sets carry if there's any Pokemon other
 ; than Mewtwo1.
-CheckIfPlayerHasPokemonOtherThanMewtwo1: ; 227a9 (8:67a9)
+CheckIfPlayerHasPokemonOtherThanMewtwo1:
 	call SwapTurn
 	ld e, 0
 .loop_deck

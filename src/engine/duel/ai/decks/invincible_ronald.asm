@@ -1,4 +1,4 @@
-AIActionTable_InvincibleRonald: ; 153e8 (5:53e8)
+AIActionTable_InvincibleRonald:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_InvincibleRonald: ; 153e8 (5:53e8)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 153f4 (5:53f4)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 153f8 (5:53f8)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_InvincibleRonald: ; 153e8 (5:53e8)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 15409 (5:5409)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 1540d (5:540d)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 15411 (5:5411)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 15415 (5:5415)
+.list_arena
 	db KANGASKHAN
 	db MAGMAR2
 	db CHANSEY
@@ -40,7 +40,7 @@ AIActionTable_InvincibleRonald: ; 153e8 (5:53e8)
 	db GRIMER
 	db $00
 
-.list_bench ; 1541c (5:541c)
+.list_bench
 	db GRIMER
 	db SCYTHER
 	db GEODUDE
@@ -49,11 +49,11 @@ AIActionTable_InvincibleRonald: ; 153e8 (5:53e8)
 	db KANGASKHAN
 	db $00
 
-.list_retreat ; 15423 (5:5423)
+.list_retreat
 	ai_retreat GRIMER, -1
 	db $00
 
-.list_energy ; 15426 (5:5426)
+.list_energy
 	ai_energy GRIMER,     1, -1
 	ai_energy MUK,        3, -1
 	ai_energy SCYTHER,    4, +1
@@ -64,11 +64,11 @@ AIActionTable_InvincibleRonald: ; 153e8 (5:53e8)
 	ai_energy KANGASKHAN, 4, -1
 	db $00
 
-.list_prize ; 1543f (5:543f)
+.list_prize
 	db GAMBLER
 	db $00
 
-.store_list_pointers ; 15441 (5:5441)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench

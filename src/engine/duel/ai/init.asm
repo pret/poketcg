@@ -1,4 +1,4 @@
-InitAIDuelVars: ; 15636 (5:5636)
+InitAIDuelVars:
 	ld a, wAIDuelVarsEnd - wAIDuelVars
 	ld hl, wAIDuelVars
 	call ClearMemory_Bank5
@@ -11,7 +11,7 @@ InitAIDuelVars: ; 15636 (5:5636)
 ; initializes some variables and sets value of wAIBarrierFlagCounter.
 ; if Player uses Barrier 3 times in a row, AI checks if Player's deck
 ; has only Mewtwo1 Pokemon cards (running a Mewtwo1 mill deck).
-InitAITurnVars: ; 15649 (5:5649)
+InitAITurnVars:
 ; increase Pokedex counter by 1
 	ld a, [wAIPokedexCounter]
 	inc a

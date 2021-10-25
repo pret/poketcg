@@ -1,4 +1,4 @@
-AIActionTable_ZappingSelfdestruct: ; 15019 (5:5019)
+AIActionTable_ZappingSelfdestruct:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_ZappingSelfdestruct: ; 15019 (5:5019)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 15025 (5:5025)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 15029 (5:5029)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_ZappingSelfdestruct: ; 15019 (5:5019)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 1503a (5:503a)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 1503e (5:503e)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 15042 (5:5042)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 15046 (5:5046)
+.list_arena
 	db KANGASKHAN
 	db ELECTABUZZ2
 	db TAUROS
@@ -39,7 +39,7 @@ AIActionTable_ZappingSelfdestruct: ; 15019 (5:5019)
 	db VOLTORB
 	db $00
 
-.list_bench ; 1504c (5:504c)
+.list_bench
 	db MAGNEMITE1
 	db VOLTORB
 	db ELECTABUZZ2
@@ -47,11 +47,11 @@ AIActionTable_ZappingSelfdestruct: ; 15019 (5:5019)
 	db KANGASKHAN
 	db $00
 
-.list_retreat ; 15052 (5:5052)
+.list_retreat
 	ai_retreat VOLTORB, -1
 	db $00
 
-.list_energy ; 15055 (5:5055)
+.list_energy
 	ai_energy MAGNEMITE1,  3, +1
 	ai_energy MAGNETON1,   4, +0
 	ai_energy VOLTORB,     3, +1
@@ -61,11 +61,11 @@ AIActionTable_ZappingSelfdestruct: ; 15019 (5:5019)
 	ai_energy TAUROS,      3, +0
 	db $00
 
-.list_prize ; 1506b (5:506b)
+.list_prize
 	db KANGASKHAN
 	db $00
 
-.store_list_pointers ; 1506d (5:506d)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench

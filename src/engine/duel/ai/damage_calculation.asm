@@ -3,7 +3,7 @@
 ; input:
 ;	a = attack index to take into account
 ;	[hTempPlayAreaLocation_ff9d] = location of attacking card to consider
-EstimateDamage_VersusDefendingCard: ; 143e5 (5:43e5)
+EstimateDamage_VersusDefendingCard:
 	ld [wSelectedAttack], a
 	ld e, a
 	ldh a, [hTempPlayAreaLocation_ff9d]

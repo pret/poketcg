@@ -1,4 +1,4 @@
-AIActionTable_WondersOfScience: ; 151ad (5:51ad)
+AIActionTable_WondersOfScience:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_WondersOfScience: ; 151ad (5:51ad)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 151b9 (5:51b9)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 151bd (5:51bd)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_WondersOfScience: ; 151ad (5:51ad)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 151ce (5:51ce)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 151d2 (5:51d2)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 151d6 (5:51d6)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 151da (5:51da)
+.list_arena
 	db MEWTWO1
 	db MEWTWO3
 	db MEWTWO2
@@ -40,7 +40,7 @@ AIActionTable_WondersOfScience: ; 151ad (5:51ad)
 	db PORYGON
 	db $00
 
-.list_bench ; 151e1 (5:51e1)
+.list_bench
 	db GRIMER
 	db KOFFING
 	db MEWTWO3
@@ -49,10 +49,10 @@ AIActionTable_WondersOfScience: ; 151ad (5:51ad)
 	db PORYGON
 	db $00
 
-.list_retreat ; 151e8 (5:51e8)
+.list_retreat
 	db $00
 
-.list_energy ; 151e9 (5:51e9)
+.list_energy
 	ai_energy GRIMER,  3, +0
 	ai_energy MUK,     4, +0
 	ai_energy KOFFING, 2, +0
@@ -63,11 +63,11 @@ AIActionTable_WondersOfScience: ; 151ad (5:51ad)
 	ai_energy PORYGON, 2, -1
 	db $00
 
-.list_prize ; 15202 (5:5202)
+.list_prize
 	db MUK
 	db $00
 
-.store_list_pointers ; 15204 (5:5204)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench

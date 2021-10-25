@@ -1394,7 +1394,9 @@ wAICardListRetreatBonus:: ; cdb0
 wAICardListEnergyBonus:: ; cdb2
 	ds $2
 
-wcdb4:: ; cdb4
+; used by the AI to track how viable
+; retreating the current Active card is
+wAIRetreatScore:: ; cdb4
 	ds $1
 
 wAIDuelVarsEnd::
@@ -1553,9 +1555,9 @@ wcdf9:: ; cdf9
 wcdfa:: ; cdfa
 	ds MAX_PLAY_AREA_POKEMON
 
-wce00:: ; ce00
+wAIFirstAttackDamage:: ; ce00
 	ds $1
-wce01:: ; ce01
+wAISecondAttackDamage:: ; ce01
 	ds $1
 
 ; whether AI's attack is damaging or not
@@ -1584,12 +1586,18 @@ wAINumberOfEnergyTransCards:: ; ce06
 ; used for storing weakness of Player's Arena card
 ; in AI routine dealing with Shift Pkmn Power.
 wAIDefendingPokemonWeakness:: ; ce06
+; number of Basic Pokemon cards when
+; setting up AI Boss deck
+wAISetupBasicPokemonCount:: ; ce06
 	ds $1
 
 wce07:: ; ce07
 	ds $1
 
 wce08:: ; ce08
+; number of Energy cards when
+; setting up AI Boss deck
+wAISetupEnergyCount:: ; ce08
 	ds $7
 
 wce0f:: ; ce0f

@@ -1,4 +1,4 @@
-AIActionTable_PowerfulRonald: ; 1534b (5:534b)
+AIActionTable_PowerfulRonald:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_PowerfulRonald: ; 1534b (5:534b)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 15357 (5:5357)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 1535b (5:535b)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_PowerfulRonald: ; 1534b (5:534b)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 1536c (5:536c)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 15370 (5:5370)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 15374 (5:5374)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 15378 (5:5378)
+.list_arena
 	db KANGASKHAN
 	db ELECTABUZZ2
 	db HITMONCHAN
@@ -44,7 +44,7 @@ AIActionTable_PowerfulRonald: ; 1534b (5:534b)
 	db DODUO
 	db $00
 
-.list_bench ; 15383 (5:5383)
+.list_bench
 	db KANGASKHAN
 	db HITMONLEE
 	db HITMONCHAN
@@ -57,13 +57,13 @@ AIActionTable_PowerfulRonald: ; 1534b (5:534b)
 	db LICKITUNG
 	db $00
 
-.list_retreat ; 1538e (5:538e)
+.list_retreat
 	ai_retreat KANGASKHAN, -1
 	ai_retreat DODUO,      -1
 	ai_retreat DODRIO,     -1
 	db $00
 
-.list_energy ; 15395 (5:5395)
+.list_energy
 	ai_energy ELECTABUZZ2, 2, +1
 	ai_energy HITMONLEE,   3, +1
 	ai_energy HITMONCHAN,  3, +1
@@ -77,12 +77,12 @@ AIActionTable_PowerfulRonald: ; 1534b (5:534b)
 	ai_energy TAUROS,      3, +0
 	db $00
 
-.list_prize ; 153b7 (5:53b7)
+.list_prize
 	db GAMBLER
 	db ENERGY_REMOVAL
 	db $00
 
-.store_list_pointers ; 153ba (5:53ba)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench

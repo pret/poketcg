@@ -1,7 +1,7 @@
 ; processes AI energy card playing logic
 ; with AI_ENERGY_FLAG_DONT_PLAY flag on
 ; unreferenced
-Func_16488: ; 16488 (5:6488)
+Func_16488:
 	ld a, AI_ENERGY_FLAG_DONT_PLAY
 	ld [wAIEnergyAttachLogicFlags], a
 	ld de, wTempPlayAreaAIScore

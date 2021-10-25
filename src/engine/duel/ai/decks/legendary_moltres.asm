@@ -1,4 +1,4 @@
-AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
+AIActionTable_LegendaryMoltres:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 149f4 (5:49f4)
+.do_turn
 	call AIDoTurn_LegendaryMoltres
 	ret
 
-.start_duel ; 149f8 (5:49f8)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 14a09 (5:4a09)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 14a0d (5:4a0d)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 14a11 (5:4a11)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 14a15 (5:4a15)
+.list_arena
 	db MAGMAR2
 	db GROWLITHE
 	db VULPIX
@@ -40,7 +40,7 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 	db MOLTRES2
 	db $00
 
-.list_bench ; 14a1c (5:4a1c)
+.list_bench
 	db MOLTRES1
 	db VULPIX
 	db GROWLITHE
@@ -48,7 +48,7 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 	db MAGMAR1
 	db $00
 
-.list_play_hand ; 14a22 (5:4a22)
+.list_play_hand
 	db MOLTRES2
 	db MOLTRES1
 	db VULPIX
@@ -57,12 +57,12 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 	db MAGMAR1
 	db $00
 
-.list_retreat ; 14a29 (5:4a29)
+.list_retreat
 	ai_retreat GROWLITHE, -5
 	ai_retreat VULPIX,    -5
 	db $00
 
-.list_energy ; 14a2e (5:4a2e)
+.list_energy
 	ai_energy VULPIX,     3, +0
 	ai_energy NINETALES2, 3, +1
 	ai_energy GROWLITHE,  3, +1
@@ -73,12 +73,12 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 	ai_energy MOLTRES1,   4, +2
 	db $00
 
-.list_prize ; 14a47 (5:4a47)
+.list_prize
 	db ENERGY_REMOVAL
 	db MOLTRES2
 	db $00
 
-.store_list_pointers ; 14a4a (5:4a4a)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench
@@ -87,7 +87,7 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 
-AIDoTurn_LegendaryMoltres: ; 14a81 (5:4a81)
+AIDoTurn_LegendaryMoltres:
 ; initialize variables
 	call InitAITurnVars
 	farcall HandleAIAntiMewtwoDeckStrategy

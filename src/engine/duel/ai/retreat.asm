@@ -1,6 +1,6 @@
 ; determine AI score for retreating
 ; return carry if AI decides to retreat
-AIDecideWhetherToRetreat: ; 158b2 (5:58b2)
+AIDecideWhetherToRetreat:
 	ld a, [wGotHeadsFromConfusionCheckDuringRetreat]
 	or a
 	jp nz, .no_carry
@@ -9,12 +9,13 @@ AIDecideWhetherToRetreat: ; 158b2 (5:58b2)
 	call LoadDefendingPokemonColorWRAndPrizeCards
 	ld a, $80 ; initial retreat score
 	ld [wAIScore], a
-	ld a, [wcdb4]
+	ld a, [wAIRetreatScore]
 	or a
 	jr z, .check_status
+	; add wAIRetreatScore * 8 to score
 	srl a
 	srl a
-	sla a
+	sla a ; *8
 	call AddToAIScore
 
 .check_status
@@ -436,7 +437,7 @@ AIDecideWhetherToRetreat: ; 158b2 (5:58b2)
 ; if player's turn and loaded attack is not a Pokémon Power OR
 ; if opponent's turn and wAITriedAttack == 0
 ; set wcdda's bit 7 flag
-Func_15b54: ; 15b54 (5:5b54)
+Func_15b54:
 	xor a
 	ld [wcdda], a
 	ld a, [wWhoseTurn]
@@ -463,7 +464,7 @@ Func_15b54: ; 15b54 (5:5b54)
 ; returns in a and [hTempPlayAreaLocation_ff9d] the
 ; Play Area location of best card to switch to.
 ; returns carry if no Bench Pokemon.
-AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
+AIDecideBenchPokemonToSwitchTo:
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -759,7 +760,7 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 
 ; done
 	xor a
-	ld [wcdb4], a
+	ld [wAIRetreatScore], a
 	jp FindHighestBenchScore
 
 ; handles AI action of retreating Arena Pokémon
@@ -769,7 +770,7 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 ; handle its effect to discard itself instead of retreating.
 ; input:
 ;	- a = Play Area location (PLAY_AREA_*) of card to retreat to.
-AITryToRetreat: ; 15d4f (5:5d4f)
+AITryToRetreat:
 	push af
 	ld a, [wAIPlayEnergyCardForRetreat]
 	or a

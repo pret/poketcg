@@ -2,7 +2,7 @@
 ; always draws at least 2 Basic Pokemon cards and 2 Energy cards.
 ; also sets up so that the next cards to be drawn have
 ; some minimum number of Basic Pokemon and Energy cards.
-SetUpBossStartingHandAndDeck: ; 172af (5:72af)
+SetUpBossStartingHandAndDeck:
 ; shuffle all hand cards in deck
 	ld a, DUELVARS_HAND
 	call GetTurnDuelistVariable
@@ -22,8 +22,8 @@ SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 ; in the first STARTING_HAND_SIZE in deck.
 .count_energy_basic
 	xor a
-	ld [wce06], a
-	ld [wce08], a
+	ld [wAISetupBasicPokemonCount], a
+	ld [wAISetupEnergyCount], a
 
 	ld a, DUELVARS_DECK_CARDS
 	call GetTurnDuelistVariable
@@ -40,18 +40,18 @@ SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 	jr z, .next_card_deck_1
 
 ; energy card
-	ld a, [wce08]
+	ld a, [wAISetupEnergyCount]
 	inc a
-	ld [wce08], a
+	ld [wAISetupEnergyCount], a
 	jr .next_card_deck_1
 
 .pokemon_card_1
 	ld a, [wLoadedCard1Stage]
 	or a
 	jr nz, .next_card_deck_1 ; not basic
-	ld a, [wce06]
+	ld a, [wAISetupBasicPokemonCount]
 	inc a
-	ld [wce06], a
+	ld [wAISetupBasicPokemonCount], a
 
 .next_card_deck_1
 	dec b
@@ -59,10 +59,10 @@ SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 
 ; tally the number of Energy and basic Pokemon cards
 ; and if any of them is smaller than 2, re-shuffle deck.
-	ld a, [wce06]
+	ld a, [wAISetupBasicPokemonCount]
 	cp 2
 	jr c, .shuffle_deck
-	ld a, [wce08]
+	ld a, [wAISetupEnergyCount]
 	cp 2
 	jr c, .shuffle_deck
 
@@ -95,27 +95,27 @@ SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 	jr z, .next_card_deck_2
 
 ; energy card
-	ld a, [wce08]
+	ld a, [wAISetupEnergyCount]
 	inc a
-	ld [wce08], a
+	ld [wAISetupEnergyCount], a
 	jr .next_card_deck_2
 
 .pokemon_card_2
 	ld a, [wLoadedCard1Stage]
 	or a
 	jr nz, .next_card_deck_2
-	ld a, [wce06]
+	ld a, [wAISetupBasicPokemonCount]
 	inc a
-	ld [wce06], a
+	ld [wAISetupBasicPokemonCount], a
 
 .next_card_deck_2
 	dec b
 	jr nz, .loop_deck_2
 
-	ld a, [wce06]
+	ld a, [wAISetupBasicPokemonCount]
 	cp 4
 	jp c, .shuffle_deck
-	ld a, [wce08]
+	ld a, [wAISetupEnergyCount]
 	cp 4
 	jp c, .shuffle_deck
 

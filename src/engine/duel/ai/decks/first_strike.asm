@@ -1,4 +1,4 @@
-AIActionTable_FirstStrike: ; 14e89 (5:4e89)
+AIActionTable_FirstStrike:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_FirstStrike: ; 14e89 (5:4e89)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 14e95 (5:4e95)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 14e99 (5:4e99)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,39 +19,39 @@ AIActionTable_FirstStrike: ; 14e89 (5:4e89)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 14eaa (5:4eaa)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 14eae (5:4eae)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 14eb2 (5:4eb2)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 14eb6 (5:1eb6)
+.list_arena
 	db HITMONCHAN
 	db MACHOP
 	db HITMONLEE
 	db MANKEY
 	db $00
 
-.list_bench ; 14ebb (5:1ebb)
+.list_bench
 	db MACHOP
 	db HITMONLEE
 	db HITMONCHAN
 	db MANKEY
 	db $00
 
-.list_retreat ; 14ec0 (5:1ec0)
+.list_retreat
 	ai_retreat MACHOP,  -1
 	ai_retreat MACHOKE, -1
 	ai_retreat MANKEY,  -2
 	db $00
 
-.list_energy ; 14ec7 (5:1ec7)
+.list_energy
 	ai_energy MACHOP,     3, +0
 	ai_energy MACHOKE,    4, +0
 	ai_energy MACHAMP,    4, -1
@@ -61,12 +61,12 @@ AIActionTable_FirstStrike: ; 14e89 (5:4e89)
 	ai_energy PRIMEAPE,   3, -1
 	db $00
 
-.list_prize ; 14edd (5:1edd)
+.list_prize
 	db HITMONLEE
 	db HITMONCHAN
 	db $00
 
-.store_list_pointers ; 14ee0 (5:4ee0)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench
