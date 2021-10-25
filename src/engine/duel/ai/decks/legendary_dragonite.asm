@@ -1,4 +1,4 @@
-AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
+AIActionTable_LegendaryDragonite:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 14d6c (5:4d6c)
+.do_turn
 	call AIDoTurn_LegendaryDragonite
 	ret
 
-.start_duel ; 14d70 (5:4d70)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 14d81 (5:4d81)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 14d85 (5:4d85)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 14d89 (5:4d89)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 14d8d (5:4d8d)
+.list_arena
 	db KANGASKHAN
 	db LAPRAS
 	db CHARMANDER
@@ -39,7 +39,7 @@ AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
 	db MAGIKARP
 	db $00
 
-.list_bench ; 14d93 (5:4d93)
+.list_bench
 	db CHARMANDER
 	db MAGIKARP
 	db DRATINI
@@ -47,12 +47,12 @@ AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
 	db KANGASKHAN
 	db $00
 
-.list_retreat ; 14d99 (5:4d99)
+.list_retreat
 	ai_retreat CHARMANDER, -1
 	ai_retreat MAGIKARP,   -5
 	db $00
 
-.list_energy ; 14d9e (5:4d9e)
+.list_energy
 	ai_energy CHARMANDER, 3, +1
 	ai_energy CHARMELEON, 4, +1
 	ai_energy CHARIZARD,  5, +0
@@ -65,13 +65,13 @@ AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
 	ai_energy LAPRAS,     3, +0
 	db $00
 
-.list_prize ; 14dbd (5:4dbd)
+.list_prize
 	db GAMBLER
 	db DRAGONITE1
 	db KANGASKHAN
 	db $00
 
-.store_list_pointers ; 14dc1 (5:4dc1)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench
@@ -80,7 +80,7 @@ AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 
-AIDoTurn_LegendaryDragonite: ; 14def (5:4def)
+AIDoTurn_LegendaryDragonite:
 ; initialize variables
 	call InitAITurnVars
 	ld a, AI_TRAINER_CARD_PHASE_01

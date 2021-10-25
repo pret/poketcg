@@ -1,6 +1,6 @@
 ; AI for Sam's practice duel, which handles his scripted actions.
 ; will act as a normal duelist AI after turn 7.
-AIActionTable_SamPractice: ; 147bd (05:47bd)
+AIActionTable_SamPractice:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -8,7 +8,7 @@ AIActionTable_SamPractice: ; 147bd (05:47bd)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 147c9 (5:47c9)
+.do_turn
 	call IsAIPracticeScriptedTurn
 	jr nc, .scripted_1
 ; not scripted, use AI main turn logic
@@ -18,11 +18,11 @@ AIActionTable_SamPractice: ; 147bd (05:47bd)
 	call AIPerformScriptedTurn
 	ret
 
-.start_duel ; 147d6 (5:47d6)
+.start_duel
 	call SetSamsStartingPlayArea
 	ret
 
-.forced_switch ; 147da (5:47da)
+.forced_switch
 	call IsAIPracticeScriptedTurn
 	jr nc, .scripted_2
 	call AIDecideBenchPokemonToSwitchTo
@@ -31,7 +31,7 @@ AIActionTable_SamPractice: ; 147bd (05:47bd)
 	call PickRandomBenchPokemon
 	ret
 
-.ko_switch: ; 147e7 (5:47e7)
+.ko_switch:
 	call IsAIPracticeScriptedTurn
 	jr nc, .scripted_3
 	call AIDecideBenchPokemonToSwitchTo
@@ -40,7 +40,7 @@ AIActionTable_SamPractice: ; 147bd (05:47bd)
 	call GetPlayAreaLocationOfRaticateOrRattata
 	ret
 
-.take_prize: ; 147f4 (5:47f4)
+.take_prize:
 	call AIPickPrizeCards
 	ret
 
@@ -48,7 +48,7 @@ AIActionTable_SamPractice: ; 147bd (05:47bd)
 ; the AI has taken >= 7.
 ; used to know whether AI Sam is still
 ; doing scripted turns.
-IsAIPracticeScriptedTurn: ; 147f8 (5:47f8)
+IsAIPracticeScriptedTurn:
 	ld a, [wDuelTurns]
 	srl a
 	cp 7
@@ -57,7 +57,7 @@ IsAIPracticeScriptedTurn: ; 147f8 (5:47f8)
 
 ; places one Machop from the hand to the Play Area
 ; and sets the number of prizes to 2.
-SetSamsStartingPlayArea: ; 14801 (5:4801)
+SetSamsStartingPlayArea:
 	call CreateHandCardList
 	ld hl, wDuelTempList
 .loop_hand
@@ -76,7 +76,7 @@ SetSamsStartingPlayArea: ; 14801 (5:4801)
 
 ; outputs in a Play Area location of Raticate or Rattata
 ; in the Bench. If neither is found, just output PLAY_AREA_BENCH_1.
-GetPlayAreaLocationOfRaticateOrRattata: ; 1481f (5:481f)
+GetPlayAreaLocationOfRaticateOrRattata:
 	ld a, RATICATE
 	ld b, PLAY_AREA_BENCH_1
 	call LookForCardIDInPlayArea_Bank5
@@ -93,7 +93,7 @@ GetPlayAreaLocationOfRaticateOrRattata: ; 1481f (5:481f)
 	ret
 
 ; has AI execute some scripted actions depending on Duel turn.
-AIPerformScriptedTurn: ; 1483a (5:483a)
+AIPerformScriptedTurn:
 	ld a, [wDuelTurns]
 	srl a
 	ld hl, .scripted_actions_list
@@ -114,7 +114,7 @@ AIPerformScriptedTurn: ; 1483a (5:483a)
 	bank1call AIMakeDecision
 	ret
 
-.scripted_actions_list ; 1485a (05:485a)
+.scripted_actions_list
 	dw .turn_1
 	dw .turn_2
 	dw .turn_3
@@ -123,13 +123,13 @@ AIPerformScriptedTurn: ; 1483a (5:483a)
 	dw .turn_6
 	dw .turn_7
 
-.turn_1 ; 14868 (5:4868)
+.turn_1
 	ld d, MACHOP
 	ld e, FIGHTING_ENERGY
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
 
-.turn_2 ; 14870 (5:4870)
+.turn_2
 	ld a, RATTATA
 	call LookForCardIDInHandList_Bank5
 	ldh [hTemp_ffa0], a
@@ -140,7 +140,7 @@ AIPerformScriptedTurn: ; 1483a (5:483a)
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
 
-.turn_3 ; 14884 (5:4884)
+.turn_3
 	ld a, RATTATA
 	ld b, PLAY_AREA_ARENA
 	call LookForCardIDInPlayArea_Bank5
@@ -155,13 +155,13 @@ AIPerformScriptedTurn: ; 1483a (5:483a)
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
 
-.turn_4 ; 148a1 (5:48a1)
+.turn_4
 	ld d, RATICATE
 	ld e, LIGHTNING_ENERGY
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
 
-.turn_5 ; 148a9 (5:48a9)
+.turn_5
 	ld a, MACHOP
 	call LookForCardIDInHandList_Bank5
 	ldh [hTemp_ffa0], a
@@ -192,13 +192,13 @@ AIPerformScriptedTurn: ; 1483a (5:483a)
 	call AITryToRetreat
 	ret
 
-.turn_6 ; 148cc (5:48cc)
+.turn_6
 	ld d, MACHOP
 	ld e, FIGHTING_ENERGY
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
 
-.turn_7 ; 148d4 (5:48d4)
+.turn_7
 	ld d, MACHOP
 	ld e, FIGHTING_ENERGY
 	call AIAttachEnergyInHandToCardInPlayArea

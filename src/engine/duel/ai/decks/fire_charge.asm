@@ -1,4 +1,4 @@
-AIActionTable_FireCharge: ; 15232 (5:5232)
+AIActionTable_FireCharge:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_FireCharge: ; 15232 (5:5232)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 1523e (5:523e)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 15242 (5:5242)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_FireCharge: ; 15232 (5:5232)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 15253 (5:5253)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 15257 (5:5257)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 1525b (5:525b)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 1525f (5:525f)
+.list_arena
 	db JIGGLYPUFF3
 	db CHANSEY
 	db TAUROS
@@ -40,7 +40,7 @@ AIActionTable_FireCharge: ; 15232 (5:5232)
 	db GROWLITHE
 	db $00
 
-.list_bench ; 15266 (5:5266)
+.list_bench
 	db JIGGLYPUFF3
 	db CHANSEY
 	db GROWLITHE
@@ -49,13 +49,13 @@ AIActionTable_FireCharge: ; 15232 (5:5232)
 	db TAUROS
 	db $00
 
-.list_retreat ; 1526e (5:526e)
+.list_retreat
 	ai_retreat JIGGLYPUFF1, -1
 	ai_retreat CHANSEY,     -1
 	ai_retreat GROWLITHE,   -1
 	db $00
 
-.list_energy ; 15274 (5:5274)
+.list_energy
 	ai_energy GROWLITHE,   3, +0
 	ai_energy ARCANINE2,   4, +0
 	ai_energy MAGMAR1,     3, +0
@@ -66,11 +66,11 @@ AIActionTable_FireCharge: ; 15232 (5:5232)
 	ai_energy TAUROS,      3, +0
 	db $00
 
-.list_prize ; 1528d (5:528d)
+.list_prize
 	db GAMBLER
 	db $00
 
-.store_list_pointers ; 1528f (5:528f)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench

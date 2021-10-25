@@ -1,4 +1,4 @@
-AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
+AIActionTable_LegendaryArticuno:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 14c17 (5:4c17)
+.do_turn
 	call AIDoTurn_LegendaryArticuno
 	ret
 
-.start_duel ; 14c1b (5:4c1b)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 14c2c (5:4c2c)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 14c30 (5:4c30)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 14c34 (5:4c34)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 14c38 (5:4c38)
+.list_arena
 	db CHANSEY
 	db LAPRAS
 	db DITTO
@@ -40,7 +40,7 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 	db ARTICUNO2
 	db $00
 
-.list_bench ; 14c3f (5:4c3f)
+.list_bench
 	db ARTICUNO1
 	db SEEL
 	db LAPRAS
@@ -48,12 +48,12 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 	db DITTO
 	db $00
 
-.list_retreat ; 14c45 (5:4c45)
+.list_retreat
 	ai_retreat SEEL,  -3
 	ai_retreat DITTO, -3
 	db $00
 
-.list_energy ; 14c4a (5:4c4a)
+.list_energy
 	ai_energy SEEL,      3, +1
 	ai_energy DEWGONG,   4, +0
 	ai_energy LAPRAS,    3, +0
@@ -63,12 +63,12 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 	ai_energy DITTO,     3, +0
 	db $00
 
-.list_prize ; 14c60 (5:4c60)
+.list_prize
 	db GAMBLER
 	db ARTICUNO2
 	db $00
 
-.store_list_pointers ; 14c63 (5:4c63)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench
@@ -82,7 +82,7 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 ; first, it makes sure that all Lapras have at least
 ; 3 energy cards before moving on to Articuno,
 ; and then to Dewgong and Seel
-ScoreLegendaryArticunoCards: ; 14c91 (5:4c91)
+ScoreLegendaryArticunoCards:
 	call SwapTurn
 	call CountPrizes
 	call SwapTurn
@@ -151,7 +151,7 @@ ScoreLegendaryArticunoCards: ; 14c91 (5:4c91)
 	call RaiseAIScoreToAllMatchingIDsInBench
 	ret
 
-AIDoTurn_LegendaryArticuno: ; 14cf7 (5:4cf7)
+AIDoTurn_LegendaryArticuno:
 ; initialize variables
 	call InitAITurnVars
 	ld a, AI_TRAINER_CARD_PHASE_01

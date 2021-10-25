@@ -4,7 +4,7 @@
 ; or a negative score (value below $80).
 ; input:
 ;	hTempPlayAreaLocation_ff9d = location of card with attack.
-HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
+HandleSpecialAIAttacks:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -61,7 +61,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 
 ; if any of card ID in a is found in deck,
 ; return a score of $80 + slots available in bench.
-.CallForFamily: ; 16e3e (5:6e3e)
+.CallForFamily:
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
 	jr nc, .zero_score
@@ -77,7 +77,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 
 ; if any of NidoranM or NidoranF is found in deck,
 ; return a score of $80 + slots available in bench.
-.NidoranFCallForFamily: ; 16e55 (5:6e55)
+.NidoranFCallForFamily:
 	ld e, NIDORANM
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
@@ -100,7 +100,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 ; checks for certain card IDs of Fighting color in deck.
 ; if any of them are found, return a score of
 ; $80 + slots available in bench.
-.CallForFriend: ; 16e77 (5:6e77)
+.CallForFriend:
 	ld e, GEODUDE
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
@@ -131,7 +131,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 
 ; if any basic cards are found in deck,
 ; return a score of $80 + slots available in bench.
-.FriendshipSong: ; 16ead (5:6ead)
+.FriendshipSong:
 	call CheckIfAnyBasicPokemonInDeck
 	jr nc, .zero_score
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -145,7 +145,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 	ret
 
 ; if AI decides to retreat, return a score of $80 + 10.
-.Teleport: ; 16ec2 (5:6ec2)
+.Teleport:
 	call AIDecideWhetherToRetreat
 	jp nc, .zero_score
 	ld a, $8a
@@ -156,7 +156,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 ; - second attack is unusable;
 ; - second attack deals no damage;
 ; if any are true, returns score of $80 + 5.
-.SwordsDanceAndFocusEnergy: ; 16ecb (5:6ecb)
+.SwordsDanceAndFocusEnergy:
 	ld a, [wAICannotDamage]
 	or a
 	jr nz, .swords_dance_focus_energy_success
@@ -177,7 +177,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 ; loops through bench looking for a Pokémon
 ; with that same color.
 ; if none are found, returns score of $80 + 2.
-.ChainLightning: ; 16eea (5:6eea)
+.ChainLightning:
 	call SwapTurn
 	call GetArenaCardColor
 	call SwapTurn
@@ -199,7 +199,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 	ld a, $82
 	ret
 
-.DevolutionBeam: ; 16f0f (5:6f0f)
+.DevolutionBeam:
 	call LookForCardThatIsKnockedOutOnDevolution
 	jp nc, .zero_score
 	ld a, $85
@@ -211,7 +211,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 ; - if that number is >= 2 and this attack is Conversion 2
 ; then return score of $80 + 2.
 ; otherwise return score of $80 + 1.
-.Conversion: ; 16f18 (5:6f18)
+.Conversion:
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and CNF_SLP_PRZ
@@ -242,7 +242,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 
 ; if any Psychic Energy is found in the Discard Pile,
 ; return a score of $80 + 2.
-.EnergyAbsorption: ; 16f41 (5:6f41)
+.EnergyAbsorption:
 	ld e, PSYCHIC_ENERGY
 	ld a, CARD_LOCATION_DISCARD_PILE
 	call CheckIfAnyCardIDinLocation
@@ -259,7 +259,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 ; otherwise, if it finds an evolution card in hand that
 ; can evolve a card in player's deck, encourage.
 ; if encouraged, returns a score of $80 + 3.
-.MixUp: ; 16f4e (5:6f4e)
+.MixUp:
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetNonTurnDuelistVariable
 	or a
@@ -326,13 +326,13 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 	ret
 
 ; return score of $80 + 3.
-.BigThunder: ; 16fb8 (5:6fb8)
+.BigThunder:
 	ld a, $83
 	ret
 
 ; dismiss attack if cards in deck <= 20.
 ; otherwise return a score of $80 + 0.
-.Fetch: ; 16fbb (5:6fbb)
+.Fetch:
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp 41
@@ -343,7 +343,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 ; dismiss attack if number of own benched cards which would
 ; be KOd is greater than or equal to the number
 ; of prize cards left for player.
-.Earthquake: ; 16fc8 (5:6fc8)
+.Earthquake:
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 
@@ -373,7 +373,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 
 ; if there's any lightning energy cards in deck,
 ; return a score of $80 + 3.
-.EnergySpike: ; 16ff2 (5:6ff2)
+.EnergySpike:
 	ld a, CARD_LOCATION_DECK
 	ld e, LIGHTNING_ENERGY
 	call CheckIfAnyCardIDinLocation
@@ -386,7 +386,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 ; only incentivize attack if player's active card,
 ; has any energy cards attached, and if so,
 ; return a score of $80 + 3.
-.HyperBeam: ; 17005 (5:7005)
+.HyperBeam:
 	call SwapTurn
 	ld e, PLAY_AREA_ARENA
 	call CountNumberOfEnergyCardsAttached
@@ -402,7 +402,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 ; called when second attack is determined by AI to have
 ; more AI score than the first attack, so that it checks
 ; whether the first attack is a better alternative.
-CheckWhetherToSwitchToFirstAttack: ; 17019 (5:7019)
+CheckWhetherToSwitchToFirstAttack:
 ; this checks whether the first attack is also viable
 ; (has more than minimum score to be used)
 	ld a, [wFirstAttackAIScore]
@@ -451,7 +451,7 @@ CheckWhetherToSwitchToFirstAttack: ; 17019 (5:7019)
 
 ; returns carry if there are
 ; any basic Pokémon cards in deck.
-CheckIfAnyBasicPokemonInDeck: ; 17057 (5:7057)
+CheckIfAnyBasicPokemonInDeck:
 	ld e, 0
 .loop
 	ld a, DUELVARS_CARD_LOCATIONS

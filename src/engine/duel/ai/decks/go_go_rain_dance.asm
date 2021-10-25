@@ -1,4 +1,4 @@
-AIActionTable_GoGoRainDance: ; 14f8f (5:4f8f)
+AIActionTable_GoGoRainDance:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_GoGoRainDance: ; 14f8f (5:4f8f)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 14f9b (5:4f9b)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 14f9f (5:4f9f)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,39 +19,39 @@ AIActionTable_GoGoRainDance: ; 14f8f (5:4f8f)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 14fb0 (5:4fb0)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 14fb4 (5:4fb4)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 14fb8 (5:4fb8)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 14fbc (5:4fbc)
+.list_arena
 	db LAPRAS
 	db HORSEA
 	db GOLDEEN
 	db SQUIRTLE
 	db $00
 
-.list_bench ; 14fc1 (5:4fc1)
+.list_bench
 	db SQUIRTLE
 	db HORSEA
 	db GOLDEEN
 	db LAPRAS
 	db $00
 
-.list_retreat ; 14fc6 (5:4fc6)
+.list_retreat
 	ai_retreat SQUIRTLE,  -3
 	ai_retreat WARTORTLE, -2
 	ai_retreat HORSEA,    -1
 	db $00
 
-.list_energy ; 14fcd (5:4fcd)
+.list_energy
 	ai_energy SQUIRTLE,  2, +0
 	ai_energy WARTORTLE, 3, +0
 	ai_energy BLASTOISE, 5, +0
@@ -62,14 +62,14 @@ AIActionTable_GoGoRainDance: ; 14f8f (5:4f8f)
 	ai_energy LAPRAS,    3, +0
 	db $00
 
-.list_prize ; 14fe6 (5:4fe6)
+.list_prize
 	db GAMBLER
 	db ENERGY_RETRIEVAL
 	db SUPER_ENERGY_RETRIEVAL
 	db BLASTOISE
 	db $00
 
-.store_list_pointers ; 14feb (5:4feb)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench

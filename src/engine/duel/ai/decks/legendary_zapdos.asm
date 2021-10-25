@@ -1,4 +1,4 @@
-AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
+AIActionTable_LegendaryZapdos:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 14b1b (5:4b1b)
+.do_turn
 	call AIDoTurn_LegendaryZapdos
 	ret
 
-.start_duel ; 14b1f (5:4b1f)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 14b30 (5:4b30)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 14b34 (5:4b34)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 14b38 (5:4b38)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 14b3c (5:4b3c)
+.list_arena
 	db ELECTABUZZ2
 	db VOLTORB
 	db EEVEE
@@ -40,7 +40,7 @@ AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
 	db ZAPDOS3
 	db $00
 
-.list_bench ; 14b43 (5:4b43)
+.list_bench
 	db ZAPDOS2
 	db ZAPDOS1
 	db EEVEE
@@ -48,13 +48,13 @@ AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
 	db ELECTABUZZ2
 	db $00
 
-.list_retreat ; 14b49 (5:4b49)
+.list_retreat
 	ai_retreat EEVEE,       -5
 	ai_retreat VOLTORB,     -5
 	ai_retreat ELECTABUZZ2, -5
 	db $00
 
-.list_energy ; 14b50 (5:4b50)
+.list_energy
 	ai_energy VOLTORB,     1, -1
 	ai_energy ELECTRODE1,  3, +0
 	ai_energy ELECTABUZZ2, 2, -1
@@ -65,12 +65,12 @@ AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
 	ai_energy EEVEE,       3, +0
 	db $00
 
-.list_prize ; 14b69 (5:4b69)
+.list_prize
 	db GAMBLER
 	db ZAPDOS3
 	db $00
 
-.store_list_pointers ; 14b6c (5:4b6c)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench
@@ -79,7 +79,7 @@ AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 
-AIDoTurn_LegendaryZapdos: ; 14b9a (5:4b9a)
+AIDoTurn_LegendaryZapdos:
 ; initialize variables
 	call InitAITurnVars
 	farcall HandleAIAntiMewtwoDeckStrategy

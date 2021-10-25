@@ -6,7 +6,7 @@
 ;	Arena Pokemon for it to be able to use its second attack;
 ;	- AI_ENERGY_TRANS_TO_BENCH: transfers all Grass Energy cards from
 ;	Arena Pokemon to Bench in case Arena card will be KO'd.
-HandleAIEnergyTrans: ; 2219b (8:619b)
+HandleAIEnergyTrans:
 	ld [wce06], a
 
 ; choose to randomly return
@@ -266,7 +266,7 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 ; AI logic to determine whether to use Energy Trans Pkmn Power
 ; to transfer energy cards attached from the Arena Pokemon to
 ; some card in the Bench.
-AIEnergyTransTransferEnergyToBench: ; 222ca (8:62ca)
+AIEnergyTransTransferEnergyToBench:
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
@@ -409,7 +409,7 @@ AIEnergyTransTransferEnergyToBench: ; 222ca (8:62ca)
 ;	- Strange Behavior;
 ;	- Curse.
 ; returns carry if turn ended.
-HandleAIPkmnPowers: ; 2237f (8:637f)
+HandleAIPkmnPowers:
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
 	ccf
@@ -506,7 +506,7 @@ HandleAIPkmnPowers: ; 2237f (8:637f)
 ; checks whether AI uses Heal on Pokemon in Play Area.
 ; input:
 ;	c = Play Area location (PLAY_AREA_*) of Vileplume.
-HandleAIHeal: ; 22402 (8:6402)
+HandleAIHeal:
 	ld a, c
 	ldh [hTemp_ffa0], a
 	call .CheckHealTarget
@@ -611,7 +611,7 @@ HandleAIHeal: ; 22402 (8:6402)
 ; checks whether AI uses Shift.
 ; input:
 ;	c = Play Area location (PLAY_AREA_*) of Venomoth
-HandleAIShift: ; 22476 (8:6476)
+HandleAIShift:
 	ld a, c
 	or a
 	ret nz ; return if Venomoth is not Arena card
@@ -700,7 +700,7 @@ HandleAIShift: ; 22476 (8:6476)
 ; checks whether AI uses Peek.
 ; input:
 ;	c = Play Area location (PLAY_AREA_*) of Mankey.
-HandleAIPeek: ; 224e6 (8:64e6)
+HandleAIPeek:
 	ld a, c
 	ldh [hTemp_ffa0], a
 	ld a, 50
@@ -783,7 +783,7 @@ HandleAIPeek: ; 224e6 (8:64e6)
 ; checks whether AI uses Strange Behavior.
 ; input:
 ;	c = Play Area location (PLAY_AREA_*) of Slowbro.
-HandleAIStrangeBehavior: ; 2255d (8:655d)
+HandleAIStrangeBehavior:
 	ld a, c
 	or a
 	ret z ; return if Slowbro is Arena card
@@ -849,7 +849,7 @@ HandleAIStrangeBehavior: ; 2255d (8:655d)
 ; checks whether AI uses Curse.
 ; input:
 ;	c = Play Area location (PLAY_AREA_*) of Gengar.
-HandleAICurse: ; 225b5 (8:65b5)
+HandleAICurse:
 	ld a, c
 	ldh [hTemp_ffa0], a
 
@@ -950,7 +950,7 @@ HandleAICurse: ; 225b5 (8:65b5)
 	ret
 
 ; handles AI logic for Cowardice
-HandleAICowardice: ; 2262d (8:662d)
+HandleAICowardice:
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
 	ret c ; return if there's Muk in play
@@ -1039,7 +1039,7 @@ HandleAICowardice: ; 2262d (8:662d)
 ; AI logic for Damage Swap to transfer damage from Arena card
 ; to a card in Bench with more than 10 HP remaining
 ; and with no energy cards attached.
-HandleAIDamageSwap: ; 226a3 (8:66a3)
+HandleAIDamageSwap:
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	dec a
@@ -1209,7 +1209,7 @@ HandleAIDamageSwap: ; 226a3 (8:66a3)
 
 ; handles AI logic for attaching energy cards
 ; in Go Go Rain Dance deck.
-HandleAIGoGoRainDanceEnergy: ; 22790 (8:6790)
+HandleAIGoGoRainDanceEnergy:
 	ld a, [wOpponentDeckID]
 	cp GO_GO_RAIN_DANCE_DECK_ID
 	ret nz ; return if not Go Go Rain Dance deck

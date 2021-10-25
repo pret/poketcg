@@ -1,5 +1,5 @@
 ; acts just like a general deck AI except never retreats
-AIActionTable_GeneralNoRetreat: ; 148dc (5:48dc)
+AIActionTable_GeneralNoRetreat:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -7,28 +7,28 @@ AIActionTable_GeneralNoRetreat: ; 148dc (5:48dc)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 148e8 (5:48e8)
+.do_turn
 	call AIDoTurn_GeneralNoRetreat
 	ret
 
-.start_duel ; 148ec (5:48ec)
+.start_duel
 	call InitAIDuelVars
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 148f3 (5:48f3)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 148f7 (5:48f7)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 148fb (5:48fb)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-AIDoTurn_GeneralNoRetreat: ; 148ff (5:48ff)
+AIDoTurn_GeneralNoRetreat:
 ; initialize variables
 	call InitAITurnVars
 	ld a, AI_TRAINER_CARD_PHASE_01

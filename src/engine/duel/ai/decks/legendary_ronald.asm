@@ -1,4 +1,4 @@
-AIActionTable_LegendaryRonald: ; 1546f (5:546f)
+AIActionTable_LegendaryRonald:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 1547b (5:547b)
+.do_turn
 	call AIDoTurn_LegendaryRonald
 	ret
 
-.start_duel ; 1547f (5:547f)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 15490 (5:5490)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 15494 (5:5494)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 15498 (5:5498)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 1549c (5:549c)
+.list_arena
 	db KANGASKHAN
 	db DRATINI
 	db EEVEE
@@ -40,13 +40,13 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 	db MOLTRES2
 	db $00
 
-.list_bench ; 154a3 (5:54a3)
+.list_bench
 	db KANGASKHAN
 	db DRATINI
 	db EEVEE
 	db $00
 
-.list_play_hand ; 154a7 (5:54a7)
+.list_play_hand
 	db MOLTRES2
 	db ZAPDOS3
 	db KANGASKHAN
@@ -55,11 +55,11 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 	db ARTICUNO2
 	db $00
 
-.list_retreat ; 154ae (5:54ae)
+.list_retreat
 	ai_retreat EEVEE, -2
 	db $00
 
-.list_energy ; 154b1 (5:54b1)
+.list_energy
 	ai_energy FLAREON1,   3, +0
 	ai_energy MOLTRES2,   3, +0
 	ai_energy VAPOREON1,  3, +0
@@ -73,7 +73,7 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 	ai_energy DRAGONITE1, 3, +0
 	db $00
 
-.list_prize ; 154d3 (5:54d3)
+.list_prize
 	db MOLTRES2
 	db ARTICUNO2
 	db ZAPDOS3
@@ -81,7 +81,7 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 	db GAMBLER
 	db $00
 
-.store_list_pointers ; 154d9 (5:54d9)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench
@@ -90,7 +90,7 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 
-AIDoTurn_LegendaryRonald: ; 15507 (5:5507)
+AIDoTurn_LegendaryRonald:
 ; initialize variables
 	call InitAITurnVars
 ; process Trainer cards

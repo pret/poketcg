@@ -1,5 +1,5 @@
 ; AI logic used by general decks
-AIActionTable_GeneralDecks: ; 14668 (05:4668)
+AIActionTable_GeneralDecks:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -7,29 +7,29 @@ AIActionTable_GeneralDecks: ; 14668 (05:4668)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 14674 (5:4674)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 14678 (5:4678)
+.start_duel
 	call InitAIDuelVars
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 1467f (5:467f)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 14683 (5:4683)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize: ; 14687 (5:4687)
+.take_prize:
 	call AIPickPrizeCards
 	ret
 
 ; handle AI routines for a whole turn
-AIMainTurnLogic: ; 1468b (5:468b)
+AIMainTurnLogic:
 ; initialize variables
 	call InitAITurnVars
 	ld a, AI_TRAINER_CARD_PHASE_01
@@ -147,7 +147,7 @@ AIMainTurnLogic: ; 1468b (5:468b)
 	ret
 
 ; handles AI retreating logic
-AIProcessRetreat: ; 14786 (5:4786)
+AIProcessRetreat:
 	ld a, [wAIRetreatedThisTurn]
 	or a
 	ret nz ; return, already retreated this turn

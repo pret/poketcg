@@ -1,4 +1,4 @@
-AIActionTable_ImRonald: ; 152bd (5:52bd)
+AIActionTable_ImRonald:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_ImRonald: ; 152bd (5:52bd)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 152c9 (5:52c9)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 152cd (5:52cd)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_ImRonald: ; 152bd (5:52bd)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 152de (5:52de)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 152e2 (5:52e2)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 152e6 (5:52e6)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 152ea (5:52ea)
+.list_arena
 	db LAPRAS
 	db SEEL
 	db CHARMANDER
@@ -40,7 +40,7 @@ AIActionTable_ImRonald: ; 152bd (5:52bd)
 	db GROWLITHE
 	db $00
 
-.list_bench ; 152f1 (5:52f1)
+.list_bench
 	db CHARMANDER
 	db SQUIRTLE
 	db SEEL
@@ -49,10 +49,10 @@ AIActionTable_ImRonald: ; 152bd (5:52bd)
 	db LAPRAS
 	db $00
 
-.list_retreat ; 152f8 (5:52f8)
+.list_retreat
 	db $00
 
-.list_energy ; 152f9 (5:52f9)
+.list_energy
 	ai_energy CHARMANDER, 3, +0
 	ai_energy CHARMELEON, 5, +0
 	ai_energy GROWLITHE,  2, +0
@@ -66,11 +66,11 @@ AIActionTable_ImRonald: ; 152bd (5:52bd)
 	ai_energy MAROWAK1,   3, +0
 	db $00
 
-.list_prize ; 1531b (5:531b)
+.list_prize
 	db LAPRAS
 	db $00
 
-.store_list_pointers ; 1531d (5:531d)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench

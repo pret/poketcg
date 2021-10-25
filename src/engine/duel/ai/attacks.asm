@@ -1,6 +1,6 @@
 ; have AI choose an attack to use, but do not execute it.
 ; return carry if an attack is chosen.
-AIProcessButDontUseAttack: ; 169ca (5:69ca)
+AIProcessButDontUseAttack:
 	ld a, $01
 	ld [wAIExecuteProcessedAttack], a
 
@@ -23,7 +23,7 @@ AIProcessButDontUseAttack: ; 169ca (5:69ca)
 ; copies wTempPlayAreaAIScore to wPlayAreaAIScore
 ; and loads wAIScore with value in wTempAIScore.
 ; identical to RetrievePlayAreaAIScoreFromBackup1.
-RetrievePlayAreaAIScoreFromBackup2: ; 169e3 (5:69e3)
+RetrievePlayAreaAIScoreFromBackup2:
 	push af
 	ld de, wPlayAreaAIScore
 	ld hl, wTempPlayAreaAIScore
@@ -42,7 +42,7 @@ RetrievePlayAreaAIScoreFromBackup2: ; 169e3 (5:69e3)
 
 ; have AI choose and execute an attack.
 ; return carry if an attack was chosen and attempted.
-AIProcessAndTryToUseAttack: ; 169f8 (5:69f8)
+AIProcessAndTryToUseAttack:
 	xor a
 	ld [wAIExecuteProcessedAttack], a
 	; fallthrough
@@ -51,7 +51,7 @@ AIProcessAndTryToUseAttack: ; 169f8 (5:69f8)
 ; If any of the attacks has enough AI score to be used,
 ; AI will use it if wAIExecuteProcessedAttack is 0.
 ; in either case, return carry if an attack is chosen to be used.
-AIProcessAttacks: ; 169fc (5:69fc)
+AIProcessAttacks:
 ; if AI used Pluspower, load its attack index
 	ld a, [wPreviousAIFlags]
 	and AI_FLAG_USED_PLUSPOWER
@@ -131,7 +131,7 @@ AIProcessAttacks: ; 169fc (5:69fc)
 
 .can_damage
 	xor a
-	ld [wcdb4], a
+	ld [wAIRetreatScore], a
 	jr .use_attack
 
 .check_damage_bench
@@ -141,7 +141,7 @@ AIProcessAttacks: ; 169fc (5:69fc)
 	jr c, .can_damage
 
 ; cannot damage either Defending Pokemon or Bench
-	ld hl, wcdb4
+	ld hl, wAIRetreatScore
 	inc [hl]
 
 ; return carry if attack is chosen
@@ -157,21 +157,20 @@ AIProcessAttacks: ; 169fc (5:69fc)
 	ld a, [wAIExecuteProcessedAttack]
 	or a
 	jr z, .failed_to_use
-
 ; reset Play Area AI score
 ; to the previous values.
 	jp RetrievePlayAreaAIScoreFromBackup2
 
 ; return no carry if no viable attack.
 .failed_to_use
-	ld hl, wcdb4
+	ld hl, wAIRetreatScore
 	inc [hl]
 	or a
 	ret
 
 ; determines the AI score of attack index in a
 ; of card in Play Area location hTempPlayAreaLocation_ff9d.
-GetAIScoreOfAttack: ; 16a86 (5:6a86)
+GetAIScoreOfAttack:
 ; initialize AI score.
 	ld [wSelectedAttack], a
 	ld a, $50

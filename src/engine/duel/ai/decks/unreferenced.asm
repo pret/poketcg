@@ -1,4 +1,4 @@
-AIActionTable_Unreferenced: ; 1406a (5:406a)
+AIActionTable_Unreferenced: ; unreferenced
 	dw $406c
 	dw .do_turn
 	dw .do_turn

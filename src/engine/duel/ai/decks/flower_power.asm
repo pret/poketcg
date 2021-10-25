@@ -1,4 +1,4 @@
-AIActionTable_FlowerPower: ; 1509b (5:509b)
+AIActionTable_FlowerPower:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_FlowerPower: ; 1509b (5:509b)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 150a7 (5:50a7)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 150ab (5:50ab)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,38 +19,38 @@ AIActionTable_FlowerPower: ; 1509b (5:509b)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 150bc (5:50bc)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 150c0 (5:50c0)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 150c4 (5:50c4)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 150c8 (5:50c8)
+.list_arena
 	db ODDISH
 	db EXEGGCUTE
 	db BULBASAUR
 	db $00
 
-.list_bench ; 150cc (5:50cc)
+.list_bench
 	db BULBASAUR
 	db EXEGGCUTE
 	db ODDISH
 	db $00
 
-.list_retreat ; 150cf (5:50cf)
+.list_retreat
 	ai_retreat GLOOM,     -2
 	ai_retreat VILEPLUME, -2
 	ai_retreat BULBASAUR, -2
 	ai_retreat IVYSAUR,   -2
 	db $00
 
-.list_energy ; 150d9 (5:50d9)
+.list_energy
 	ai_energy BULBASAUR,  3, +0
 	ai_energy IVYSAUR,    4, +0
 	ai_energy VENUSAUR2,  4, +0
@@ -61,11 +61,11 @@ AIActionTable_FlowerPower: ; 1509b (5:509b)
 	ai_energy EXEGGUTOR, 22, +0
 	db $00
 
-.list_prize ; 150f2 (5:50f2)
+.list_prize
 	db VENUSAUR2
 	db $00
 
-.store_list_pointers ; 150f4 (5:50f4)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench

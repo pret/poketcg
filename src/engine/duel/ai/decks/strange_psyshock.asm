@@ -1,4 +1,4 @@
-AIActionTable_StrangePsyshock: ; 15122 (5:5122)
+AIActionTable_StrangePsyshock:
 	dw .do_turn ; unused
 	dw .do_turn
 	dw .start_duel
@@ -6,11 +6,11 @@ AIActionTable_StrangePsyshock: ; 15122 (5:5122)
 	dw .ko_switch
 	dw .take_prize
 
-.do_turn ; 1512e (5:512e)
+.do_turn
 	call AIMainTurnLogic
 	ret
 
-.start_duel ; 15132 (5:5132)
+.start_duel
 	call InitAIDuelVars
 	call .store_list_pointers
 	call SetUpBossStartingHandAndDeck
@@ -19,19 +19,19 @@ AIActionTable_StrangePsyshock: ; 15122 (5:5122)
 	call AIPlayInitialBasicCards
 	ret
 
-.forced_switch ; 15143 (5:5143)
+.forced_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.ko_switch ; 15147 (5:5147)
+.ko_switch
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-.take_prize ; 1514b (5:514b)
+.take_prize
 	call AIPickPrizeCards
 	ret
 
-.list_arena ; 1514f (5:514f)
+.list_arena
 	db KANGASKHAN
 	db CHANSEY
 	db SNORLAX
@@ -39,7 +39,7 @@ AIActionTable_StrangePsyshock: ; 15122 (5:5122)
 	db ABRA
 	db $00
 
-.list_bench ; 15155 (5:5155)
+.list_bench
 	db ABRA
 	db MR_MIME
 	db KANGASKHAN
@@ -47,14 +47,14 @@ AIActionTable_StrangePsyshock: ; 15122 (5:5122)
 	db CHANSEY
 	db $00
 
-.list_retreat ; 1515b (5:515b)
+.list_retreat
 	ai_retreat ABRA,       -3
 	ai_retreat SNORLAX,    -3
 	ai_retreat KANGASKHAN, -1
 	ai_retreat CHANSEY,    -1
 	db $00
 
-.list_energy ; 15164 (5:5164)
+.list_energy
 	ai_energy ABRA,       3, +1
 	ai_energy KADABRA,    3, +0
 	ai_energy ALAKAZAM,   3, +0
@@ -64,14 +64,14 @@ AIActionTable_StrangePsyshock: ; 15122 (5:5122)
 	ai_energy SNORLAX,    0, -8
 	db $00
 
-.list_prize ; 1517a (5:517a)
+.list_prize
 	db GAMBLER
 	db MR_MIME
 	db ALAKAZAM
 	db SWITCH
 	db $00
 
-.store_list_pointers ; 1517f (5:517f)
+.store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
 	store_list_pointer wAICardListArenaPriority, .list_arena
 	store_list_pointer wAICardListBenchPriority, .list_bench

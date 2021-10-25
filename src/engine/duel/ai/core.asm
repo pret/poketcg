@@ -7,14 +7,14 @@ INCLUDE "engine/duel/ai/decks/unreferenced.asm"
 ;	[hTempPlayAreaLocation_ff9d] = location of attacking card to consider
 ; output:
 ;	[wSelectedAttack] = attack index that KOs
-CheckIfAnyAttackKnocksOutDefendingCard: ; 140ae (5:40ae)
+CheckIfAnyAttackKnocksOutDefendingCard:
 	xor a ; first attack
 	call CheckIfAttackKnocksOutDefendingCard
 	ret c
 	ld a, SECOND_ATTACK
 ;	fallthrough
 
-CheckIfAttackKnocksOutDefendingCard: ; 140b5 (5:40b5)
+CheckIfAttackKnocksOutDefendingCard:
 	call EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
@@ -29,7 +29,7 @@ CheckIfAttackKnocksOutDefendingCard: ; 140b5 (5:40b5)
 ; brings card at hTempPlayAreaLocation_ff9d down
 ; to exactly 0 HP.
 ; outputs that attack index in wSelectedAttack.
-CheckIfAnyDefendingPokemonAttackDealsSameDamageAsHP: ; 140c5 (5:40c5)
+CheckIfAnyDefendingPokemonAttackDealsSameDamageAsHP:
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	call .check_damage
 	ret c
@@ -51,7 +51,7 @@ CheckIfAnyDefendingPokemonAttackDealsSameDamageAsHP: ; 140c5 (5:40c5)
 ; checks AI scores for all benched Pokémon
 ; returns the location of the card with highest score
 ; in a and [hTempPlayAreaLocation_ff9d]
-FindHighestBenchScore: ; 140df (5:40df)
+FindHighestBenchScore:
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld b, a
@@ -81,7 +81,7 @@ FindHighestBenchScore: ; 140df (5:40df)
 ; if there's overflow, it's capped at $ff
 ; output:
 ;	a = a + wAIScore (capped at $ff)
-AddToAIScore: ; 140fe (5:40fe)
+AddToAIScore:
 	push hl
 	ld hl, wAIScore
 	add [hl]
@@ -94,7 +94,7 @@ AddToAIScore: ; 140fe (5:40fe)
 
 ; subs a from wAIScore
 ; if there's underflow, it's capped at $00
-SubFromAIScore: ; 1410a (5:410a)
+SubFromAIScore:
 	push hl
 	push de
 	ld e, a
@@ -113,7 +113,7 @@ SubFromAIScore: ; 1410a (5:410a)
 
 ; loads defending Pokémon's weakness/resistance
 ; and the number of prize cards in both sides
-LoadDefendingPokemonColorWRAndPrizeCards: ; 1411d (5:411d)
+LoadDefendingPokemonColorWRAndPrizeCards:
 	call SwapTurn
 	call GetArenaCardColor
 	call TranslateColorToWR
@@ -132,7 +132,7 @@ LoadDefendingPokemonColorWRAndPrizeCards: ; 1411d (5:411d)
 ; called when AI has chosen its attack.
 ; executes all effects and damage.
 ; handles AI choosing parameters for certain attacks as well.
-AITryUseAttack: ; 14145 (5:4145)
+AITryUseAttack:
 	ld a, [wSelectedAttack]
 	ldh [hTemp_ffa0], a
 	ld e, a
@@ -182,7 +182,7 @@ AITryUseAttack: ; 14145 (5:4145)
 ;	a = energy card attached to Pokémon to check
 ;	[wTempCardType] = TYPE_ENERGY_* of given Pokémon
 ;	[wTempCardID] = card index of Pokémon card to check
-CheckIfEnergyIsUseful: ; 14184 (5:4184)
+CheckIfEnergyIsUseful:
 	push de
 	call GetCardIDFromDeckIndex
 	ld a, e
@@ -242,7 +242,7 @@ CheckIfEnergyIsUseful: ; 14184 (5:4184)
 ; pick a random Pokemon in the bench.
 ; output:
 ;	- a = PLAY_AREA_* of Bench Pokemon picked.
-PickRandomBenchPokemon: ; 141da (5:41da)
+PickRandomBenchPokemon:
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	dec a
@@ -250,7 +250,7 @@ PickRandomBenchPokemon: ; 141da (5:41da)
 	inc a
 	ret
 
-AIPickPrizeCards: ; 141e5 (5:41e5)
+AIPickPrizeCards:
 	ld a, [wNumberPrizeCardsToTake]
 	ld b, a
 .loop
@@ -266,7 +266,7 @@ AIPickPrizeCards: ; 141e5 (5:41e5)
 
 ; picks a prize card at random
 ; and adds it to the hand.
-.PickPrizeCard: ; 141f8 (5:41f8)
+.PickPrizeCard:
 	ld a, DUELVARS_PRIZES
 	call GetTurnDuelistVariable
 	push hl
@@ -312,7 +312,7 @@ AIPickPrizeCards: ; 141e5 (5:41e5)
 
 ; routine for AI to play all Basic cards from its hand
 ; in the beginning of the Duel.
-AIPlayInitialBasicCards: ; 14226 (5:4226)
+AIPlayInitialBasicCards:
 	call CreateHandCardList
 	ld hl, wDuelTempList
 .check_for_next_card
@@ -341,7 +341,7 @@ AIPlayInitialBasicCards: ; 14226 (5:4226)
 ; input:
 ;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
 ;	[wSelectedAttack]         = selected attack to examine
-CheckIfSelectedAttackIsUnusable: ; 1424b (5:424b)
+CheckIfSelectedAttackIsUnusable:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	jr nz, .bench
@@ -382,7 +382,7 @@ CheckIfSelectedAttackIsUnusable: ; 1424b (5:424b)
 ;	carry set if no attack
 ;	       OR if it's a Pokémon Power
 ;	       OR if not enough energy for attack
-CheckEnergyNeededForAttack: ; 14279 (5:4279)
+CheckEnergyNeededForAttack:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -484,7 +484,7 @@ CheckEnergyNeededForAttack: ; 14279 (5:4279)
 ;	[hl] = attached energy
 ; output:
 ;	carry set if not enough of this energy type attached
-CheckIfEnoughParticularAttachedEnergy: ; 142f4 (5:42f4)
+CheckIfEnoughParticularAttachedEnergy:
 	and %00001111
 	jr nz, .check
 .has_enough
@@ -512,7 +512,7 @@ CheckIfEnoughParticularAttachedEnergy: ; 142f4 (5:42f4)
 ;	a = energy type
 ; output:
 ;	a = energy card ID
-ConvertColorToEnergyCardID: ; 1430f (5:430f)
+ConvertColorToEnergyCardID:
 	push hl
 	push de
 	ld e, a
@@ -536,7 +536,7 @@ ConvertColorToEnergyCardID: ; 1430f (5:430f)
 ; returns carry if loaded attack effect has
 ; an "initial effect 2" or "require selection" command type
 ; unreferenced
-Func_14323: ; 14323 (5:4323)
+Func_14323:
 	ld hl, wLoadedAttackEffectCommands
 	ld a, [hli]
 	ld h, [hl]
@@ -563,7 +563,7 @@ Func_14323: ; 14323 (5:4323)
 ;	- if trainer card, return carry if it can be used
 ; input:
 ;	a = card index to check
-CheckIfCardCanBePlayed: ; 1433d (5:433d)
+CheckIfCardCanBePlayed:
 	ldh [hTempCardIndex_ff9f], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
@@ -621,7 +621,7 @@ CheckIfCardCanBePlayed: ; 1433d (5:433d)
 ; loads all the energy cards
 ; in hand in wDuelTempList
 ; return carry if no energy cards found
-CreateEnergyCardListFromHand: ; 1438c (5:438c)
+CreateEnergyCardListFromHand:
 	push hl
 	push de
 	push bc
@@ -670,7 +670,7 @@ CreateEnergyCardListFromHand: ; 1438c (5:438c)
 ; output:
 ;	a = card deck index, if found
 ;	carry set if NOT found
-LookForCardIDInHand: ; 143bf (5:43bf)
+LookForCardIDInHand:
 	push hl
 	push de
 	push bc
@@ -709,7 +709,7 @@ LookForCardIDInHand: ; 143bf (5:43bf)
 
 INCLUDE "engine/duel/ai/damage_calculation.asm"
 
-AIProcessHandTrainerCards: ; 14663 (5:4663)
+AIProcessHandTrainerCards:
 	farcall _AIProcessHandTrainerCards
 	ret
 
@@ -724,7 +724,7 @@ INCLUDE "engine/duel/ai/deck_ai.asm"
 ; output:
 ;	a = card deck index, if found
 ;	carry set if found
-LookForCardIDInHandList_Bank5: ; 155d2 (5:55d2)
+LookForCardIDInHandList_Bank5:
 	ld [wTempCardIDToLook], a
 	call CreateHandCardList
 	ld hl, wDuelTempList
@@ -753,7 +753,7 @@ LookForCardIDInHandList_Bank5: ; 155d2 (5:55d2)
 ; output:
 ;	a = PLAY_AREA_* of found card
 ;	carry set if found
-LookForCardIDInPlayArea_Bank5: ; 155ef (5:55ef)
+LookForCardIDInPlayArea_Bank5:
 	ld [wTempCardIDToLook], a
 
 .loop
@@ -785,7 +785,7 @@ LookForCardIDInPlayArea_Bank5: ; 155ef (5:55ef)
 ; input:
 ;	e = Energy card ID
 ;	d = Pokemon card ID
-AIAttachEnergyInHandToCardInPlayArea: ; 15612 (5:5612)
+AIAttachEnergyInHandToCardInPlayArea:
 	ld a, e
 	push de
 	call LookForCardIDInHandList_Bank5
@@ -806,7 +806,7 @@ AIAttachEnergyInHandToCardInPlayArea: ; 15612 (5:5612)
 
 ; same as AIAttachEnergyInHandToCardInPlayArea but
 ; only look for card ID in the Bench.
-AIAttachEnergyInHandToCardInBench: ; 1562b (5:562b)
+AIAttachEnergyInHandToCardInBench:
 	ld a, e
 	push de
 	call LookForCardIDInHandList_Bank5
@@ -831,7 +831,7 @@ INCLUDE "engine/duel/ai/init.asm"
 ;	carry set if no attack
 ;	       OR if it's a Pokémon Power
 ;	       OR if not enough energy for attack
-CheckEnergyNeededForAttackAfterDiscard: ; 156c3 (5:56c3)
+CheckEnergyNeededForAttackAfterDiscard:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -934,7 +934,7 @@ CheckEnergyNeededForAttackAfterDiscard: ; 156c3 (5:56c3)
 	ret
 
 ; zeroes a bytes starting at hl
-ClearMemory_Bank5: ; 1575e (5:575e)
+ClearMemory_Bank5:
 	push af
 	push bc
 	push hl
@@ -950,7 +950,7 @@ ClearMemory_Bank5: ; 1575e (5:575e)
 	ret
 
 ; returns in a the tens digit of value in a
-CalculateByteTensDigit: ; 1576b (5:576b)
+CalculateByteTensDigit:
 	push bc
 	ld c, 0
 .loop
@@ -968,7 +968,7 @@ CalculateByteTensDigit: ; 1576b (5:576b)
 ; input:
 ;	a = divisor
 ;	b = dividend
-CalculateBDividedByA_Bank5: ; 15778 (5:5778)
+CalculateBDividedByA_Bank5:
 	push bc
 	ld c, a
 	ld a, b
@@ -992,7 +992,7 @@ CalculateBDividedByA_Bank5: ; 15778 (5:5778)
 ;	e = location to check, i.e. PLAY_AREA_*
 ; output:
 ;	a = number of energy cards attached
-CountNumberOfEnergyCardsAttached: ; 15787 (5:5787)
+CountNumberOfEnergyCardsAttached:
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
 	or a
@@ -1025,7 +1025,7 @@ CountNumberOfEnergyCardsAttached: ; 15787 (5:5787)
 ;	e = card ID to look for.
 ; output:
 ;	a = deck index of card found, if any
-CheckIfAnyCardIDinLocation: ; 157a3 (5:57a3)
+CheckIfAnyCardIDinLocation:
 	ld b, a
 	ld c, e
 	lb de, 0, 0
@@ -1058,7 +1058,7 @@ CheckIfAnyCardIDinLocation: ; 157a3 (5:57a3)
 ; plus all the cards attached in Turn Duelist's Play Area.
 ; output:
 ;	a and wTempAI = total number of energy cards.
-CountOppEnergyCardsInHandAndAttached: ; 157c6 (5:57c6)
+CountOppEnergyCardsInHandAndAttached:
 	xor a
 	ld [wTempAI], a
 	call CreateEnergyCardListFromHand
@@ -1098,7 +1098,7 @@ CountOppEnergyCardsInHandAndAttached: ; 157c6 (5:57c6)
 ; input:
 ;   e  = card ID to look for.
 ;   hl = list to look in
-RemoveCardIDInList: ; 157f3 (5:57f3)
+RemoveCardIDInList:
 	push hl
 	push de
 	push bc
@@ -1149,7 +1149,7 @@ RemoveCardIDInList: ; 157f3 (5:57f3)
 ; one list is for the Arena card is the other is for the Bench cards.
 ; if Arena card could not be set (due to hand not having any card in its list)
 ; or if list is null, return carry and do not play any cards.
-TrySetUpBossStartingPlayArea: ; 1581b (5:581b)
+TrySetUpBossStartingPlayArea:
 	ld de, wAICardListArenaPriority
 	ld a, d
 	or a
@@ -1222,7 +1222,7 @@ TrySetUpBossStartingPlayArea: ; 1581b (5:581b)
 ; returns carry if a card ID is found in bench with at least the
 ; listed number of energy cards
 ; unreferenced
-Func_1585b: ; 1585b (5:585b)
+Func_1585b:
 	ld a, [hli]
 	or a
 	jr z, .no_carry
@@ -1271,7 +1271,7 @@ Func_1585b: ; 1585b (5:585b)
 ; with less than the number of energy cards corresponding to its entry
 ; then have AI try to play an energy card from the hand to it
 ; unreferenced
-Func_15886: ; 15886 (5:5886)
+Func_15886:
 	push hl
 	call CreateEnergyCardListFromHand
 	pop hl
@@ -1309,7 +1309,7 @@ Func_15886: ; 15886 (5:5886)
 INCLUDE "engine/duel/ai/retreat.asm"
 
 ; Copy cards from wDuelTempList in hl to wHandTempList in de
-CopyHandCardList: ; 15ea6 (5:5ea6)
+CopyHandCardList:
 	ld a, [hli]
 	ld [de], a
 	cp $ff
@@ -1325,7 +1325,7 @@ INCLUDE "engine/duel/ai/hand_pokemon.asm"
 ; can damage it, and if it can, set carry
 ; input:
 ;	a = location of Pokémon card
-CheckDamageToMrMime: ; 16270 (5:6270)
+CheckDamageToMrMime:
 	push af
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
@@ -1347,7 +1347,7 @@ CheckDamageToMrMime: ; 16270 (5:6270)
 
 ; returns carry if arena card
 ; can knock out defending Pokémon
-CheckIfActiveCardCanKnockOut: ; 1628f (5:628f)
+CheckIfActiveCardCanKnockOut:
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyAttackKnocksOutDefendingCard
@@ -1363,7 +1363,7 @@ CheckIfActiveCardCanKnockOut: ; 1628f (5:628f)
 
 ; outputs carry if any of the active Pokémon attacks
 ; can be used and are not residual
-CheckIfActivePokemonCanUseAnyNonResidualAttack: ; 162a1 (5:62a1)
+CheckIfActivePokemonCanUseAnyNonResidualAttack:
 	xor a ; active card
 	ldh [hTempPlayAreaLocation_ff9d], a
 ; first atk
@@ -1400,7 +1400,7 @@ CheckIfActivePokemonCanUseAnyNonResidualAttack: ; 162a1 (5:62a1)
 ; return carry if successful in finding card
 ; input:
 ;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
-LookForEnergyNeededInHand: ; 162c8 (5:62c8)
+LookForEnergyNeededInHand:
 	xor a ; first attack
 	ld [wSelectedAttack], a
 	call CheckEnergyNeededForAttack
@@ -1462,7 +1462,7 @@ LookForEnergyNeededInHand: ; 162c8 (5:62c8)
 ; input:
 ;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
 ;	[wSelectedAttack]         = selected attack to examine
-LookForEnergyNeededForAttackInHand: ; 16311 (5:6311)
+LookForEnergyNeededForAttackInHand:
 	call CheckEnergyNeededForAttack
 	ld a, b
 	add c
@@ -1502,7 +1502,7 @@ LookForEnergyNeededForAttackInHand: ; 16311 (5:6311)
 ; by wAICardListPlayFromHandPriority and compares it to each card in hand.
 ; Sorts the hand in wDuelTempList so that the found card IDs
 ; are in the same order as the list pointed by de.
-SortTempHandByIDList: ; 1633f (5:633f)
+SortTempHandByIDList:
 	ld a, [wAICardListPlayFromHandPriority+1]
 	or a
 	ret z ; return if list is empty
@@ -1563,7 +1563,7 @@ SortTempHandByIDList: ; 1633f (5:633f)
 ; return carry if successful in finding card
 ; input:
 ;	a = energy flags needed
-CheckEnergyFlagsNeededInList: ; 1637b (5:637b)
+CheckEnergyFlagsNeededInList:
 	ld e, a
 	ld hl, wDuelTempList
 .next_card
@@ -1630,7 +1630,7 @@ CheckEnergyFlagsNeededInList: ; 1637b (5:637b)
 ;	a = card index
 ; output:
 ;	a = bits of each energy requirement
-GetAttacksEnergyCostBits: ; 163c9 (5:63c9)
+GetAttacksEnergyCostBits:
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld hl, wLoadedCard2Atk1EnergyCost
 	call GetEnergyCostBits
@@ -1651,7 +1651,7 @@ GetAttacksEnergyCostBits: ; 163c9 (5:63c9)
 ;	[hl] = Loaded card attack energy cost
 ; output:
 ;	a = bits of each energy requirement
-GetEnergyCostBits: ; 163dd (5:63dd)
+GetEnergyCostBits:
 	ld c, $00
 	ld a, [hli]
 	ld b, a
@@ -1716,7 +1716,7 @@ GetEnergyCostBits: ; 163dd (5:63dd)
 ;	a = card index to check evolution
 ; output:
 ;	a = card index of evolution found
-CheckForEvolutionInList: ; 16422 (5:6422)
+CheckForEvolutionInList:
 	ld b, a
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1760,7 +1760,7 @@ CheckForEvolutionInList: ; 16422 (5:6422)
 ;	a = card index to check evolution
 ; output:
 ;	a = card index of evolution found
-CheckForEvolutionInDeck: ; 16451 (5:6451)
+CheckForEvolutionInDeck:
 	ld b, a
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1818,7 +1818,7 @@ INCLUDE "engine/duel/ai/special_attacks.asm"
 ; output:
 ;	a = card location of Pokémon card, if found;
 ;	carry set if such a card is found.
-LookForCardThatIsKnockedOutOnDevolution: ; 17080 (5:7080)
+LookForCardThatIsKnockedOutOnDevolution:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	push af
 	call SwapTurn
@@ -1876,7 +1876,7 @@ LookForCardThatIsKnockedOutOnDevolution: ; 17080 (5:7080)
 ;	- arena card Unknown2's 4 bit is not set or
 ;	  is set but there's no evolution of card in hand/deck
 ;	- arena card can use second attack
-CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondAttack: ; 170c9 (5:70c9)
+CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondAttack:
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld d, a
@@ -1922,7 +1922,7 @@ CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondAttack: ; 170c9 (5:70c9)
 ; Outputs the number of Pokémon in bench
 ; that meet these requirements in a
 ; and returns carry if at least one is found
-CountNumberOfSetUpBenchPokemon: ; 17101 (5:7101)
+CountNumberOfSetUpBenchPokemon:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld d, a
 	ld a, [wSelectedAttack]
@@ -2004,7 +2004,7 @@ CountNumberOfSetUpBenchPokemon: ; 17101 (5:7101)
 ; returns carry if selection was successful,
 ; and no carry if unable to make one.
 ; outputs in hTempPlayAreaLocation_ffa1 the chosen parameter.
-AISelectSpecialAttackParameters: ; 17161 (5:7161)
+AISelectSpecialAttackParameters:
 	ld a, [wSelectedAttack]
 	push af
 	call .SelectAttackParameters
@@ -2013,7 +2013,7 @@ AISelectSpecialAttackParameters: ; 17161 (5:7161)
 	ld [wSelectedAttack], a
 	ret
 
-.SelectAttackParameters: ; 1716e (5:716e)
+.SelectAttackParameters:
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
@@ -2139,7 +2139,7 @@ AISelectSpecialAttackParameters: ; 17161 (5:7161)
 ;	[wSelectedAttack]         = attack index to check
 ; output:
 ;	a = number of extra energy cards attached
-CheckIfNoSurplusEnergyForAttack: ; 171fb (5:71fb)
+CheckIfNoSurplusEnergyForAttack:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -2211,7 +2211,7 @@ CheckIfNoSurplusEnergyForAttack: ; 171fb (5:71fb)
 ;	[hl] = attached energy
 ; output:
 ;	carry set if not enough of this energy type attached
-CalculateParticularAttachedEnergyNeeded: ; 17258 (5:7258)
+CalculateParticularAttachedEnergyNeeded:
 	and %00001111
 	jr nz, .check
 .done
@@ -2240,7 +2240,7 @@ CalculateParticularAttachedEnergyNeeded: ; 17258 (5:7258)
 ; output:
 ;	a = deck index of evolution in hand, if found;
 ;	carry set if there's a card in hand that can evolve.
-CheckCardEvolutionInHandOrDeck: ; 17274 (5:7274)
+CheckCardEvolutionInHandOrDeck:
 	ld b, a
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -2291,7 +2291,7 @@ INCLUDE "engine/duel/ai/boss_deck_set_up.asm"
 ; can damage defending Pokémon with any of its attacks
 ; input:
 ;	a = location of card to check
-CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
+CheckIfCanDamageDefendingPokemon:
 	ldh [hTempPlayAreaLocation_ff9d], a
 	xor a ; first attack
 	ld [wSelectedAttack], a
@@ -2323,7 +2323,7 @@ CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
 
 ; checks if defending Pokémon can knock out
 ; card at hTempPlayAreaLocation_ff9d with any of its attacks
-; and if so, stores the damage to wce00 and wce01
+; and if so, stores the damage to wAIFirstAttackDamage and wAISecondAttackDamage
 ; sets carry if any on the attacks knocks out
 ; also outputs the largest damage dealt in a
 ; input:
@@ -2331,34 +2331,35 @@ CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
 ; output:
 ;	a = largest damage of both attacks
 ;	carry set if can knock out
-CheckIfDefendingPokemonCanKnockOut: ; 173b1 (5:73b1)
-	xor a ; first attack
-	ld [wce00], a
-	ld [wce01], a
+CheckIfDefendingPokemonCanKnockOut:
+	xor a
+	ld [wAIFirstAttackDamage], a
+	ld [wAISecondAttackDamage], a
+
+	; first attack
 	call CheckIfDefendingPokemonCanKnockOutWithAttack
 	jr nc, .second_attack
 	ld a, [wDamage]
-	ld [wce00], a
-
+	ld [wAIFirstAttackDamage], a
 .second_attack
 	ld a, SECOND_ATTACK
 	call CheckIfDefendingPokemonCanKnockOutWithAttack
 	jr nc, .return_if_neither_kos
 	ld a, [wDamage]
-	ld [wce01], a
+	ld [wAISecondAttackDamage], a
 	jr .compare
 
 .return_if_neither_kos
-	ld a, [wce00]
+	ld a, [wAIFirstAttackDamage]
 	or a
 	ret z
 
 .compare
-	ld a, [wce00]
+	ld a, [wAIFirstAttackDamage]
 	ld b, a
-	ld a, [wce01]
+	ld a, [wAISecondAttackDamage]
 	cp b
-	jr nc, .set_carry
+	jr nc, .set_carry ; wAIFirstAttackDamage < wAISecondAttackDamage
 	ld a, b
 .set_carry
 	scf
@@ -2369,7 +2370,7 @@ CheckIfDefendingPokemonCanKnockOut: ; 173b1 (5:73b1)
 ; input:
 ;	a = attack index
 ;	[hTempPlayAreaLocation_ff9d] = location of card to check
-CheckIfDefendingPokemonCanKnockOutWithAttack: ; 173e4 (5:73e4)
+CheckIfDefendingPokemonCanKnockOutWithAttack:
 	ld [wSelectedAttack], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	push af
@@ -2406,7 +2407,7 @@ CheckIfDefendingPokemonCanKnockOutWithAttack: ; 173e4 (5:73e4)
 ; is between LEGENDARY_MOLTRES_DECK_ID (inclusive)
 ; and MUSCLES_FOR_BRAINS_DECK_ID (exclusive)
 ; these are the decks for Grandmaster/Club Master/Ronald
-CheckIfOpponentHasBossDeckID: ; 17414 (5:7414)
+CheckIfOpponentHasBossDeckID:
 	push af
 	ld a, [wOpponentDeckID]
 	cp LEGENDARY_MOLTRES_DECK_ID
@@ -2424,7 +2425,7 @@ CheckIfOpponentHasBossDeckID: ; 17414 (5:7414)
 
 ; sets carry if not a boss fight
 ; and if hasn't received legendary cards yet
-CheckIfNotABossDeckID: ; 17426 (5:7426)
+CheckIfNotABossDeckID:
 	call EnableSRAM
 	ld a, [sReceivedLegendaryCards]
 	call DisableSRAM
@@ -2446,7 +2447,7 @@ CheckIfNotABossDeckID: ; 17426 (5:7426)
 ; - 0% for boss decks.
 ; used for certain decks to randomly choose
 ; not to play Trainer card or use PKMN Power
-AIChooseRandomlyNotToDoAction: ; 1743b (5:743b)
+AIChooseRandomlyNotToDoAction:
 ; boss decks always use Trainer cards.
 	push hl
 	push de
@@ -2494,7 +2495,7 @@ AIChooseRandomlyNotToDoAction: ; 1743b (5:743b)
 ;	a = card ID to check for
 ; output:
 ;	carry set if the above requirements are met
-CheckForBenchIDAtHalfHPAndCanUseSecondAttack: ; 17474 (5:7474)
+CheckForBenchIDAtHalfHPAndCanUseSecondAttack:
 	ld [wcdf9], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld d, a
@@ -2559,7 +2560,7 @@ CheckForBenchIDAtHalfHPAndCanUseSecondAttack: ; 17474 (5:7474)
 ; in bench that have same ID as register a
 ; input:
 ;	a = card ID to look for
-RaiseAIScoreToAllMatchingIDsInBench: ; 174cd (5:74cd)
+RaiseAIScoreToAllMatchingIDsInBench:
 	ld d, a
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
@@ -2591,7 +2592,7 @@ RaiseAIScoreToAllMatchingIDsInBench: ; 174cd (5:74cd)
 ; card has highest value calculated from Func_17583
 ; the card with highest value gets increased wPlayAreaEnergyAIScore
 ; while all others get decreased wPlayAreaEnergyAIScore
-Func_174f2: ; 174f2 (5:74f2)
+Func_174f2:
 	ld a, MAX_PLAY_AREA_POKEMON
 	ld hl, wcdfa
 	call ClearMemory_Bank5
@@ -2713,7 +2714,7 @@ Func_174f2: ; 174f2 (5:74f2)
 ; with energy  * 2 + $80 - floor(dam / 10)
 ; loads wcdfa + play area location in e
 ; with $01
-Func_17583: ; 17583 (5:7583)
+Func_17583:
 	push hl
 	push de
 	call GetCardDamageAndMaxHP
@@ -2741,7 +2742,7 @@ Func_17583: ; 17583 (5:7583)
 ; counts how many play area locations in wcdea
 ; are != 0, and outputs result in a
 ; also returns carry if result is < 2
-Func_175a8: ; 175a8 (5:75a8)
+Func_175a8:
 	ld hl, wcdea
 	ld d, $00
 	ld e, MAX_PLAY_AREA_POKEMON + 1
@@ -2760,7 +2761,7 @@ Func_175a8: ; 175a8 (5:75a8)
 
 ; handle how AI scores giving out Energy Cards
 ; when using Legendary Articuno deck
-HandleLegendaryArticunoEnergyScoring: ; 175bd (5:75bd)
+HandleLegendaryArticunoEnergyScoring:
 	ld a, [wOpponentDeckID]
 	cp LEGENDARY_ARTICUNO_DECK_ID
 	jr z, .articuno_deck
