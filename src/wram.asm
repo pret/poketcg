@@ -1597,7 +1597,7 @@ wce07:: ; ce07
 wce08:: ; ce08
 ; number of Energy cards when
 ; setting up AI Boss deck
-wAISetupEnergyCount:: ; ce06
+wAISetupEnergyCount:: ; ce08
 	ds $7
 
 wce0f:: ; ce0f
