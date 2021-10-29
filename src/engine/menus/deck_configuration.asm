@@ -1603,66 +1603,27 @@ PrintDeckBuildingCardList:
 	ret
 
 Text_9a30:
-	db TX_SYMBOL, TX_END
-
-Text_9a32:
-	db TX_SYMBOL, TX_END
-
-Text_9a34:
-	db TX_SYMBOL, TX_END
-
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
 Text_9a36:
-	db TX_SYMBOL, TX_END
-
-Text_9a38:
-	db TX_SYMBOL, TX_END
-
-Text_9a3a:
-	db TX_SYMBOL, TX_END
-
-Text_9a3c:
-	db TX_SYMBOL, TX_END
-
-Text_9a3e:
-	db TX_SYMBOL, TX_END
-
-Text_9a40:
-	db TX_SYMBOL, TX_END
-
-Text_9a42:
-	db TX_SYMBOL, TX_END
-
-Text_9a44:
-	db TX_SYMBOL, TX_END
-
-Text_9a46:
-	db TX_SYMBOL, TX_END
-
-Text_9a48:
-	db TX_SYMBOL, TX_END
-
-Text_9a4a:
-	db TX_SYMBOL, TX_END
-
-Text_9a4c:
-	db TX_SYMBOL, TX_END
-
-Text_9a4e:
-	db TX_SYMBOL, TX_END
-
-Text_9a50:
-	db TX_SYMBOL, TX_END
-
-Text_9a52:
-	db TX_SYMBOL, TX_END
-
-Text_9a54:
-	db TX_SYMBOL, TX_END
-
-Text_9a56:
-	db TX_SYMBOL, TX_END
-
-Text_9a58:
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
+	db "<SPACE>"
 	done
 
 ; writes the card ID in register e to wVisibleListCardIDs
@@ -2650,7 +2611,7 @@ ShowDeckInfoHeader:
 	ret
 
 ; prints the name of wCurDeck in the form
-; "X· <deck name> deck", where X is the number
+; "X・ <deck name> deck", where X is the number
 ; of the deck in the given menu
 ; if no current deck, print blank line
 PrintCurDeckNumberAndName:
@@ -2659,7 +2620,7 @@ PrintCurDeckNumberAndName:
 	jr z, .skip_deck_numeral
 
 ; print the deck number in the menu
-; in the form "X·"
+; in the form "X・"
 	lb de, 3, 2
 	call InitTextPrinting
 	ld a, [wCurDeck]
@@ -2672,7 +2633,7 @@ PrintCurDeckNumberAndName:
 .got_deck_numeral
 	ld hl, wDefaultText
 	call ConvertToNumericalDigits
-	ld [hl], "FW0_·"
+	ld [hl], "FW0_・"
 	inc hl
 	ld [hl], TX_END
 	ld hl, wDefaultText

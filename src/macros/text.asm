@@ -6,17 +6,15 @@ half2full EQUS "db TX_HALF2FULL"
 
 katakana: MACRO
 	db TX_KATAKANA
-	rept _NARG
-	db STRCAT("FW0_", \1)
-	shift
+	for i, STRLEN(\1)
+		db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
 	endr
 ENDM
 
 hiragana: MACRO
 	db TX_HIRAGANA
-	rept _NARG
-	db STRCAT("FW0_", \1)
-	shift
+	for i, STRLEN(\1)
+		db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
 	endr
 ENDM
 
@@ -25,7 +23,9 @@ textfw0: MACRO
 if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
 	db \1
 else
-	db STRCAT("FW0_", \1)
+	for i, STRLEN(\1)
+		db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+	endr
 endc
 	shift
 	endr
@@ -33,12 +33,16 @@ ENDM
 
 textfw1: MACRO
 	rept _NARG
-if (\1) == " "
-	db STRCAT("FW0_", \1)
-elif STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
 	db \1
 else
-	db TX_FULLWIDTH1, STRCAT("FW1_", \1)
+	for i, STRLEN(\1)
+		if (STRSUB(\1, i + 1, 1)) == " "
+			db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+		else
+			db TX_FULLWIDTH1, STRCAT("FW1_", STRSUB(\1, i + 1, 1))
+		endc
+	endr
 endc
 	shift
 	endr
@@ -46,12 +50,16 @@ ENDM
 
 textfw2: MACRO
 	rept _NARG
-if (\1) == " "
-	db STRCAT("FW0_", \1)
-elif STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
 	db \1
 else
-	db TX_FULLWIDTH2, STRCAT("FW2_", \1)
+	for i, STRLEN(\1)
+		if (STRSUB(\1, i + 1, 1)) == " "
+			db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+		else
+			db TX_FULLWIDTH2, STRCAT("FW2_", STRSUB(\1, i + 1, 1))
+		endc
+	endr
 endc
 	shift
 	endr
@@ -59,12 +67,16 @@ ENDM
 
 textfw3: MACRO
 	rept _NARG
-if (\1) == " "
-	db STRCAT("FW0_", \1)
-elif STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
 	db \1
 else
-	db TX_FULLWIDTH3, STRCAT("FW3_", \1)
+	for i, STRLEN(\1)
+		if (STRSUB(\1, i + 1, 1)) == " "
+			db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+		else
+			db TX_FULLWIDTH3, STRCAT("FW3_", STRSUB(\1, i + 1, 1))
+		endc
+	endr
 endc
 	shift
 	endr
@@ -72,12 +84,16 @@ ENDM
 
 textfw4: MACRO
 	rept _NARG
-if (\1) == " "
-	db STRCAT("FW0_", \1)
-elif STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
 	db \1
 else
-	db TX_FULLWIDTH4, STRCAT("FW4_", \1)
+	for i, STRLEN(\1)
+		if (STRSUB(\1, i + 1, 1)) == " "
+			db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+		else
+			db TX_FULLWIDTH4, STRCAT("FW4_", STRSUB(\1, i + 1, 1))
+		endc
+	endr
 endc
 	shift
 	endr

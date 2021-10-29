@@ -39,7 +39,7 @@ PKMNPWRText: ; 36356 (d:6356)
 	done
 
 Text000b: ; 36360 (d:6360)
-	textfw0 "ポ", "ケ", "モ", "ン", "カ", "-(2)", "ド"
+	textfw0 "ポケモンカ—ド"
 	done
 
 LengthText: ; 36368 (d:6368)
@@ -613,7 +613,7 @@ DuelistIsThinkingText: ; 36f4a (d:6f4a)
 	done
 
 ClearOpponentNameText: ; 36f5a (d:6f5a)
-	textfw0 " ", " ", " ", " ", " ", " ", " ", " ", " ", " "
+	textfw0 "          "
 	done
 
 SelectComputerOpponentText: ; 36f65 (d:6f65)

@@ -140,7 +140,7 @@ HandleDeckMissingCardsList:
 	inc a
 	ld hl, wDefaultText
 	call ConvertToNumericalDigits
-	ld [hl], "FW0_·"
+	ld [hl], "FW0_・"
 	inc hl
 	ld [hl], TX_END
 	ld hl, wDefaultText
@@ -898,7 +898,7 @@ PrintDeckMachineEntry:
 	ld hl, wDefaultText
 	inc a
 	call ConvertToNumericalDigits
-	ld [hl], "FW0_·"
+	ld [hl], "FW0_・"
 	inc hl
 	ld [hl], TX_END
 	call InitTextPrinting
@@ -960,11 +960,11 @@ PrintDeckMachineEntry:
 	call CheckIfCanBuildSavedDeck
 	jr c, .cannot_build_at_all
 	pop bc
-	lb de, 3, "FW3_❄" ; can build by dismantling
+	lb de, 3, "FW3_※" ; can build by dismantling
 	jr .asm_b4c2
 
 .cannot_build_at_all
-	lb de, 0, "FW0_✕" ; cannot build even by dismantling
+	lb de, 0, "FW0_×" ; cannot build even by dismantling
 	call Func_22ca
 	pop bc
 	pop de
@@ -1008,12 +1008,7 @@ PrintDeckMachineEntry:
 	ret
 
 .text
-	db TX_SYMBOL, TX_END
-	db TX_SYMBOL, TX_END
-	db TX_SYMBOL, TX_END
-	db TX_SYMBOL, TX_END
-	db TX_SYMBOL, TX_END
-	db TX_SYMBOL, TX_END
+	db "<SPACE><SPACE><SPACE><SPACE><SPACE><SPACE>"
 	done
 
 ; outputs in a the number of cards that the player does not own

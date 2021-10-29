@@ -4076,7 +4076,7 @@ DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 
 .default_name
 	; "MARK": default player name.
-	textfw3 "M", "A", "R", "K"
+	textfw3 "MARK"
 	db TX_END, TX_END, TX_END, TX_END
 
 Unknown_128f7: ; 128f7 (4:68f7)

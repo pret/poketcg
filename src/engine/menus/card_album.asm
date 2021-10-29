@@ -376,7 +376,7 @@ PrintCardSetListEntries:
 	ret
 
 .EmptySlotText
-	textfw0 "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"
+	textfw0 "-------------"
 	done
 
 ; gets the index in the card list and adds it to wCurDeckName
@@ -456,11 +456,11 @@ PrintCardSetListEntries:
 	ret
 
 .phantom_card
-; phantom cards get only "✕✕" in their index number
+; phantom cards get only "××" in their index number
 	ld hl, wCurDeckName + 2
-	ld [hl], "FW0_✕"
+	ld [hl], "FW0_×"
 	inc hl
-	ld [hl], "FW0_✕"
+	ld [hl], "FW0_×"
 	inc hl
 	ld [hl], TX_SYMBOL
 	inc hl

@@ -590,7 +590,7 @@ NamingScreen_ProcessInput:
 	ld a, [wd009]
 	cp $02
 	jr z, .read_char
-	ldfw3 bc, "“"
+	ldfw3 bc, "゛"
 	ld a, d
 	cp b
 	jr nz, .asm_6af4
@@ -604,7 +604,7 @@ NamingScreen_ProcessInput:
 	jr c, .nothing
 	jr .asm_6b09
 .asm_6af4
-	ldfw3 bc, "º(2)"
+	ldfw3 bc, "゜"
 	ld a, d
 	cp b
 	jr nz, .asm_6b1d

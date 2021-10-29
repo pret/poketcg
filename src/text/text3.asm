@@ -1206,7 +1206,7 @@ Text035b: ; 3eb62 (f:6b62)
 	done
 
 Text035c: ; 3eb88 (f:6b88)
-	textfw0 " ", " ", " ", " ", " "
+	textfw0 "     "
 	done
 
 Text035d: ; 3eb8e (f:6b8e)
