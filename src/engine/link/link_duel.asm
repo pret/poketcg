@@ -71,7 +71,7 @@ _SetUpAndStartLinkDuel:
 	ldh a, [hWhoseTurn]
 	push af
 	call EmptyScreen
-	bank1call SetDefaultPalettes
+	bank1call SetDefaultConsolePalettes
 	ld a, SHUFFLE_DECK
 	ld [wDuelDisplayedScreen], a
 	bank1call DrawDuelistPortraitsAndNames

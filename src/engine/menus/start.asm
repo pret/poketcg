@@ -30,7 +30,7 @@ HandleTitleScreen:
 	or a
 	jr nz, .song_playing
 	; reset back to the opening sequence
-	farcall Func_10ab4
+	farcall FadeScreenToWhite
 	jr .play_opening
 
 .song_playing
@@ -49,7 +49,7 @@ HandleTitleScreen:
 	jr z, .loop
 	ld a, SFX_02
 	call PlaySFX
-	farcall Func_10ab4
+	farcall FadeScreenToWhite
 
 .start_menu
 	call CheckIfHasSaveData
@@ -105,7 +105,7 @@ HandleStartMenu:
 	ld a, MUSIC_PC_MAIN_MENU
 	call PlaySong
 	call DisableLCD
-	farcall Func_10000
+	farcall InitMenuScreen
 	lb de, $30, $8f
 	call SetupText
 	call Func_3ca0
@@ -125,7 +125,7 @@ HandleStartMenu:
 	ld a, 1 ; start at second menu option
 .init_menu
 	ld hl, wStartMenuParams
-	farcall InitAndPrintPauseMenu
+	farcall InitAndPrintMenu
 	farcall FlashWhiteScreen
 
 .wait_input
@@ -324,10 +324,10 @@ PrintStartMenuDescriptionText:
 	ld d, a
 	ld a, [wTotalNumCardsToCollect]
 	ld e, a
-	ld bc, $90e
-	farcall Func_1024f
-	ld bc, $a10
-	farcall Func_101df
+	lb bc, 9, 14
+	farcall PrintAlbumProgress_SkipGetProgress
+	lb bc, 10, 16
+	farcall PrintPlayTime_SkipUpdateTime
 	ret
 
 ; asks the player whether it's okay to delete
@@ -340,7 +340,7 @@ DeleteSaveDataForNewGame:
 	ret z
 
 	call DisableLCD
-	farcall Func_10000
+	farcall InitMenuScreen
 	call Func_3ca0
 	farcall FlashWhiteScreen
 	call DoFrameIfLCDEnabled
@@ -365,7 +365,7 @@ AskToContinueFromDiaryWithDuelData:
 	ret z
 
 	call DisableLCD
-	farcall Func_10000
+	farcall InitMenuScreen
 	call Func_3ca0
 	farcall FlashWhiteScreen
 	call DoFrameIfLCDEnabled
@@ -403,13 +403,13 @@ ShowCardPopCGBDisclaimer:
 DrawPlayerPortraitAndPrintNewGameText:
 	call DisableLCD
 	farcall Func_10a9b
-	farcall Func_10000
+	farcall InitMenuScreen
 	call Func_3ca0
 	ld hl, HandleAllSpriteAnimations
 	call SetDoFrameFunction
 	lb bc, 7, 3
 	farcall $4, DrawPlayerPortrait
-	farcall Func_10af9
+	farcall FadeScreenFromWhite
 	call DoFrameIfLCDEnabled
 	ldtx hl, IsCrazyAboutPokemonAndPokemonCardCollectingText
 	call PrintScrollableText_NoTextBoxLabel

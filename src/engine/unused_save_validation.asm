@@ -43,11 +43,11 @@ UnusedSaveDataValidation: ; unreferenced
 	bank1call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadSymbolsFont
-	bank1call SetDefaultPalettes
+	bank1call SetDefaultConsolePalettes
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	jr nz, .not_sgb
-	ld a, $e4
+	ld a, %11100100
 	ld [wOBP0], a
 	ld [wBGP], a
 	ld a, $01

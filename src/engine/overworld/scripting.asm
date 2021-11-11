@@ -996,7 +996,7 @@ ScriptCommand_ShowCardReceivedScreen:
 
 .show_card
 	push af
-	farcall Func_10000
+	farcall InitMenuScreen
 	farcall FlashWhiteScreen
 	pop af
 	bank1call ShowPromotionalCardScreen
@@ -1646,7 +1646,7 @@ ShowMultichoiceTextbox:
 	ld h, [hl]
 	ld l, a
 	ld a, [wd416]
-	farcall InitAndPrintPauseMenu
+	farcall InitAndPrintMenu
 	pop hl
 	inc hl
 	ld a, [hli]
@@ -1738,7 +1738,7 @@ ScriptCommand_OpenDeckMachine:
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a
-	farcall Func_1288c
+	farcall SetDefaultPalettes
 	call EnableLCD
 	pop bc
 	ld a, c
@@ -1776,7 +1776,7 @@ ScriptCommand_EnterMap:
 	jp IncreaseScriptPointerBy6
 
 ScriptCommand_FlashScreen:
-	farcall Func_10c96
+	farcall FlashScreenToWhite
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_SaveGame:
@@ -1788,7 +1788,7 @@ ScriptCommand_GiftCenter:
 	or a
 	jr nz, .load_gift_center
 	; show menu
-	farcall Func_10dba
+	farcall GiftCenterMenu
 	ld c, a
 	set_event_value EVENT_GIFT_CENTER_MENU_CHOICE
 	jr .done

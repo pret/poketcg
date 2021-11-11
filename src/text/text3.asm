@@ -1169,7 +1169,7 @@ TurnedPCOffText: ; 3ea7e (f:6a7e)
 	line "turned the PC off!"
 	done
 
-Text0354: ; 3ea94 (f:6a94)
+GiftCenterMenuText: ; 3ea94 (f:6a94)
 	text "Send Card"
 	line "Receive Card"
 	line "Send Deck Configuration"
@@ -1177,95 +1177,95 @@ Text0354: ; 3ea94 (f:6a94)
 	line "Exit"
 	done
 
-Text0355: ; 3eae4 (f:6ae4)
+SendCardText: ; 3eae4 (f:6ae4)
 	text "Send Card"
 	done
 
-Text0356: ; 3eaef (f:6aef)
+ReceiveCardText: ; 3eaef (f:6aef)
 	text "Receive Card"
 	done
 
-Text0357: ; 3eafd (f:6afd)
+SendDeckConfigurationText: ; 3eafd (f:6afd)
 	text "Send Deck Configuration"
 	done
 
-Text0358: ; 3eb16 (f:6b16)
+ReceiveDeckConfigurationText: ; 3eb16 (f:6b16)
 	text "Receive Deck Configuration"
 	done
 
-Text0359: ; 3eb32 (f:6b32)
+MailText: ; 3eb32 (f:6b32)
 	text "   Mail <RAMNAME> "
 	done
 
-Text035a: ; 3eb3e (f:6b3e)
+WhichMailWouldYouLikeToReadText: ; 3eb3e (f:6b3e)
 	text "Which mail would you like to read?"
 	done
 
-Text035b: ; 3eb62 (f:6b62)
+MailNumbersText: ; 3eb62 (f:6b62)
 	text "Mail 0 1 2 3 4 5 6 7 8 9101112131415"
 	done
 
-Text035c: ; 3eb88 (f:6b88)
+EmptyMailNameText: ; 3eb88 (f:6b88)
 	textfw0 "     "
 	done
 
-Text035d: ; 3eb8e (f:6b8e)
+Mail1Text: ; 3eb8e (f:6b8e)
 	text "Mail 1"
 	done
 
-Text035e: ; 3eb96 (f:6b96)
+Mail2Text: ; 3eb96 (f:6b96)
 	text "Mail 2"
 	done
 
-Text035f: ; 3eb9e (f:6b9e)
+Mail3Text: ; 3eb9e (f:6b9e)
 	text "Mail 3"
 	done
 
-Text0360: ; 3eba6 (f:6ba6)
+Mail4Text: ; 3eba6 (f:6ba6)
 	text "Mail 4"
 	done
 
-Text0361: ; 3ebae (f:6bae)
+Mail5Text: ; 3ebae (f:6bae)
 	text "Mail 5"
 	done
 
-Text0362: ; 3ebb6 (f:6bb6)
+Mail6Text: ; 3ebb6 (f:6bb6)
 	text "Mail 6"
 	done
 
-Text0363: ; 3ebbe (f:6bbe)
+Mail7Text: ; 3ebbe (f:6bbe)
 	text "Mail 7"
 	done
 
-Text0364: ; 3ebc6 (f:6bc6)
+Mail8Text: ; 3ebc6 (f:6bc6)
 	text "Mail 8"
 	done
 
-Text0365: ; 3ebce (f:6bce)
+Mail9Text: ; 3ebce (f:6bce)
 	text "Mail 9"
 	done
 
-Text0366: ; 3ebd6 (f:6bd6)
+Mail10Text: ; 3ebd6 (f:6bd6)
 	text "Mail 10"
 	done
 
-Text0367: ; 3ebdf (f:6bdf)
+Mail11Text: ; 3ebdf (f:6bdf)
 	text "Mail 11"
 	done
 
-Text0368: ; 3ebe8 (f:6be8)
+Mail12Text: ; 3ebe8 (f:6be8)
 	text "Mail 12"
 	done
 
-Text0369: ; 3ebf1 (f:6bf1)
+Mail13Text: ; 3ebf1 (f:6bf1)
 	text "Mail 13"
 	done
 
-Text036a: ; 3ebfa (f:6bfa)
+Mail14Text: ; 3ebfa (f:6bfa)
 	text "Mail 14"
 	done
 
-Text036b: ; 3ec03 (f:6c03)
+Mail15Text: ; 3ec03 (f:6c03)
 	text "Mail 15"
 	done
 
@@ -1374,7 +1374,7 @@ IsCrazyAboutPokemonAndPokemonCardCollectingText: ; 3efc3 (f:6fc3)
 	line "card researcher, Dr. Mason..."
 	done
 
-Text037a: ; 3f147 (f:7147)
+DebugMenuText: ; 3f147 (f:7147)
 	text "POWER ON"
 	line "DUEL MODE"
 	line "CONTINUE FROM DIARY"
@@ -1393,7 +1393,7 @@ Text037b: ; 3f1ce (f:71ce)
 	line "SKIP"
 	done
 
-Text037c: ; 3f1e0 (f:71e0)
+DebugBoosterPackMenuText: ; 3f1e0 (f:71e0)
 	text "COLOSSEUM"
 	line "EVOLUTION"
 	line "MYSTERY"
@@ -1401,7 +1401,7 @@ Text037c: ; 3f1e0 (f:71e0)
 	line "Energy"
 	done
 
-Text037d: ; 3f20f (f:720f)
+DebugBoosterPackColosseumEvolutionMenuText: ; 3f20f (f:720f)
 	text "1"
 	line "2"
 	line "3"
@@ -1411,7 +1411,7 @@ Text037d: ; 3f20f (f:720f)
 	line "7"
 	done
 
-Text037e: ; 3f21e (f:721e)
+DebugBoosterPackMysteryMenuText: ; 3f21e (f:721e)
 	text "1"
 	line "2"
 	line "3"
@@ -1420,7 +1420,7 @@ Text037e: ; 3f21e (f:721e)
 	line "6"
 	done
 
-Text037f: ; 3f22b (f:722b)
+DebugBoosterPackLaboratoryMenuText: ; 3f22b (f:722b)
 	text "1"
 	line "2"
 	line "3"
@@ -1428,7 +1428,7 @@ Text037f: ; 3f22b (f:722b)
 	line "5"
 	done
 
-Text0380: ; 3f236 (f:7236)
+DebugBoosterPackEnergyMenuText: ; 3f236 (f:7236)
 	text "1"
 	line "2"
 	line "3"

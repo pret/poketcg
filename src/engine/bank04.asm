@@ -1,4 +1,5 @@
-Func_10000: ; 10000 (4:4000)
+; empties screen in preparation to draw some menu
+InitMenuScreen:
 	ld a, $0
 	ld [wTileMapFill], a
 	call EmptyScreen
@@ -11,13 +12,12 @@ Func_10000: ; 10000 (4:4000)
 	ldh [hSCY], a
 	ld a, [wLCDC]
 	bit LCDC_ENABLE_F, a
-	jr nz, .asm_10025
+	jr nz, .skip_clear_scroll
 	xor a
 	ldh [rSCX], a
 	ldh [rSCY], a
-
-.asm_10025
-	call Func_1288c
+.skip_clear_scroll
+	call SetDefaultPalettes
 	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
@@ -25,7 +25,7 @@ Func_10000: ; 10000 (4:4000)
 
 ; saves all pals to SRAM, then fills them with white.
 ; after flushing, it loads back the saved pals from SRAM.
-FlashWhiteScreen: ; 10031 (4:4031)
+FlashWhiteScreen:
 	ldh a, [hBankSRAM]
 
 	push af
@@ -33,7 +33,7 @@ FlashWhiteScreen: ; 10031 (4:4031)
 	call BankswitchSRAM
 	call CopyPalsToSRAMBuffer
 	call DisableSRAM
-	call Func_10b28
+	call SetWhitePalettes
 	call FlushAllPalettes
 	call EnableLCD
 	call DoFrameIfLCDEnabled
@@ -45,10 +45,10 @@ FlashWhiteScreen: ; 10031 (4:4031)
 	call DisableSRAM
 	ret
 
-_PauseMenu_Status: ; 10059 (4:4059)
+_PauseMenu_Status:
 	ld a, [wd291]
 	push af
-	call Func_10000
+	call InitMenuScreen
 	xor a
 	ld [wMedalScreenYOffset], a
 	call LoadCollectedMedalTilemaps
@@ -56,21 +56,21 @@ _PauseMenu_Status: ; 10059 (4:4059)
 	lb bc, 20,  8
 	call DrawRegularTextBox
 	ld hl, StatusScreenLabels
-	call Func_111b3
-	ld bc, $101
-	call Func_1029a
-	ld bc, $c04
-	call Func_1024a
-	ld bc, $d06
-	call Func_101cd
+	call PrintLabels
+	lb bc, 1, 1
+	call DrawPauseMenuPlayerPortrait
+	lb bc, 12, 4
+	call PrintAlbumProgress
+	lb bc, 13, 6
+	call PrintPlayTime
 	call FlashWhiteScreen
-	ld a, $0b
-	call Func_12863
+	ld a, A_BUTTON | B_BUTTON | START
+	call WaitUntilKeysArePressed
 	pop af
 	ld [wd291], a
 	ret
 
-StatusScreenLabels: ; 10095 (4:4095)
+StatusScreenLabels:
 	db 7, 2
 	tx PlayerStatusNameText
 
@@ -82,42 +82,42 @@ StatusScreenLabels: ; 10095 (4:4095)
 
 	db $ff
 
-_PauseMenu_Diary: ; 100a2 (4:40a2)
+_PauseMenu_Diary:
 	ld a, [wd291]
 	push af
-	call Func_10000
+	call InitMenuScreen
 	lb de,  0,  0
 	lb bc, 20, 12
 	call DrawRegularTextBox
-	ld hl, Unknown_100f7
-	call Func_111b3
-	ld bc, $103
-	call Func_1029a
-	ld bc, $c08
-	call Func_1024a
-	ld bc, $d0a
-	call Func_101cd
+	ld hl, DiaryScreenLabels
+	call PrintLabels
+	lb bc, 1, 3
+	call DrawPauseMenuPlayerPortrait
+	lb bc, 12, 8
+	call PrintAlbumProgress
+	lb bc, 13, 10
+	call PrintPlayTime
 	lb bc, 16, 6
-	call Func_1027c
+	call PrintMedalCount
 	call FlashWhiteScreen
 	ldtx hl, PlayerDiarySaveQuestionText
 	call YesOrNoMenuWithText_SetCursorToYes
-	jr c, .asm_100ec
+	jr c, .cancel
 	farcall BackupPlayerPosition
 	call SaveAndBackupData
 	ld a, SFX_56
 	call PlaySFX
 	ldtx hl, PlayerDiarySaveConfirmText
-	jr .asm_100ef
-.asm_100ec
+	jr .print_result_text
+.cancel
 	ldtx hl, PlayerDiarySaveCancelText
-.asm_100ef
+.print_result_text
 	call PrintScrollableText_NoTextBoxLabel
 	pop af
 	ld [wd291], a
 	ret
 
-Unknown_100f7: ; 100f7 (4:40f7)
+DiaryScreenLabels:
 	db 5, 1
 	tx PlayerDiaryTitleText
 
@@ -135,7 +135,7 @@ Unknown_100f7: ; 100f7 (4:40f7)
 
 	db $ff
 
-LoadCollectedMedalTilemaps: ; 1010c (4:410c)
+LoadCollectedMedalTilemaps:
 	xor a
 	ld [wd291], a
 	lb de,  0,  8
@@ -156,14 +156,16 @@ LoadCollectedMedalTilemaps: ; 1010c (4:410c)
 	ld a, EVENT_MEDAL_FLAGS
 	farcall GetEventValue
 	or a
-	jr z, .asm_1017e
+	jr z, .done ; no medals?
+
+; load tilemaps of only the collected medals
 	ld c, NUM_MEDALS
-.asm_10140
+.loop_medals
 	push bc
 	push hl
 	push af
 	bit 7, a
-	jr z, .asm_10157
+	jr z, .skip_medal
 	ld b, [hl]
 	inc hl
 	ld a, [wMedalScreenYOffset]
@@ -173,7 +175,7 @@ LoadCollectedMedalTilemaps: ; 1010c (4:410c)
 	ld a, [hli]
 	ld [wCurTilemap], a
 	farcall LoadTilemap_ToVRAM
-.asm_10157
+.skip_medal
 	pop af
 	rlca
 	pop hl
@@ -181,7 +183,8 @@ LoadCollectedMedalTilemaps: ; 1010c (4:410c)
 	add hl, bc
 	pop bc
 	dec c
-	jr nz, .asm_10140
+	jr nz, .loop_medals
+
 	ld a, $80
 	ld [wd4ca], a
 	xor a
@@ -193,10 +196,10 @@ LoadCollectedMedalTilemaps: ; 1010c (4:410c)
 	ld [wd4cb], a
 	ld a, $76
 	farcall SetBGPAndLoadedPal
-.asm_1017e
+.done
 	ret
 
-MedalCoordsAndTilemaps: ; 1017f (4:417f)
+MedalCoordsAndTilemaps:
 ; x, y, tilemap
 	db  1, 10, TILEMAP_GRASS_MEDAL
 	db  6, 10, TILEMAP_SCIENCE_MEDAL
@@ -207,7 +210,7 @@ MedalCoordsAndTilemaps: ; 1017f (4:417f)
 	db 11, 14, TILEMAP_ROCK_MEDAL
 	db 16, 14, TILEMAP_FIGHTING_MEDAL
 
-FlashReceivedMedal: ; 10197 (4:4197)
+FlashReceivedMedal:
 	xor a
 	ld [wd291], a
 	ld hl, MedalCoordsAndTilemaps
@@ -242,7 +245,7 @@ FlashReceivedMedal: ; 10197 (4:4197)
 	farcall LoadTilemap_ToVRAM
 	ret
 
-Func_101cd: ; 101cd (4:41cd)
+PrintPlayTime:
 	ld a, [wPlayTimeCounter + 2]
 	ld [wPlayTimeHourMinutes], a
 	ld a, [wPlayTimeCounter + 3]
@@ -250,18 +253,18 @@ Func_101cd: ; 101cd (4:41cd)
 	ld a, [wPlayTimeCounter + 4]
 	ld [wPlayTimeHourMinutes + 2], a
 ;	fallthrough
-Func_101df: ; 101df (4:41df)
+PrintPlayTime_SkipUpdateTime:
 	push bc
 	ld a, [wPlayTimeHourMinutes + 1]
 	ld l, a
 	ld a, [wPlayTimeHourMinutes + 2]
 	ld h, a
-	call Func_10217
+	call ConvertWordToNumericalDigits
 	pop bc
 	push bc
 	call BCCoordToBGMap0Address
-	ld hl, wd4b4
-	ld b, $03
+	ld hl, wDecimalChars
+	ld b, 3
 	call SafeCopyDataHLtoDE
 	ld a, [wPlayTimeHourMinutes]
 	add 100
@@ -269,45 +272,49 @@ Func_101df: ; 101df (4:41df)
 	ld a, 0
 	adc 0
 	ld h, a
-	call Func_10217
+	call ConvertWordToNumericalDigits
 	pop bc
 	ld a, b
-	add $04
+	add 4
 	ld b, a
 	call BCCoordToBGMap0Address
-	ld hl, wd4b4 + 1
-	ld b, $02
+	ld hl, wDecimalChars + 1
+	ld b, 2
 	call SafeCopyDataHLtoDE
 	ret
 
-Func_10217: ; 10217 (4:4217)
-	ld de, wd4b4
-	ld bc, -100
-	call Func_1023b
-	ld bc, -10
-	call Func_1023b
-	ld a, l
-	add $20
+; input:
+; hl = value to convert
+ConvertWordToNumericalDigits:
+	ld de, wDecimalChars
+	ld bc, -100 ; hundreds
+	call .GetNumberSymbol
+	ld bc, -10 ; tens
+	call .GetNumberSymbol
+	ld a, l ; ones
+	add SYM_0
 	ld [de], a
-	ld hl, wd4b4
-	ld c, $02
-.asm_1022f
+
+; remove leading zeroes
+	ld hl, wDecimalChars
+	ld c, 2
+.loop_digits
 	ld a, [hl]
-	cp $20
-	jr nz, .asm_1023a
-	ld [hl], $00
+	cp SYM_0
+	jr nz, .done ; reached a non-zero digit?
+	ld [hl], SYM_SPACE
 	inc hl
 	dec c
-	jr nz, .asm_1022f
-.asm_1023a
+	jr nz, .loop_digits
+.done
 	ret
 
-Func_1023b: ; 1023b (4:423b)
-	ld a, $1f
-.asm_1023d
+.GetNumberSymbol
+	ld a, SYM_0 - 1
+.loop
 	inc a
 	add hl, bc
-	jr c, .asm_1023d
+	jr c, .loop
 	ld [de], a
 	inc de
 	ld a, l
@@ -318,57 +325,60 @@ Func_1023b: ; 1023b (4:423b)
 	ld h, a
 	ret
 
-Func_1024a: ; 1024a (4:424a)
+; prints album progress in coords bc
+PrintAlbumProgress:
 	push bc
 	call GetCardAlbumProgress
 	pop bc
 ;	fallthrough
-Func_1024f: ; 1024f (4:424f)
+PrintAlbumProgress_SkipGetProgress:
 	push bc
 	push de
 	push bc
-	ld l, d
+	ld l, d ; number of different cards collected
 	ld h, $00
-	call Func_10217
+	call ConvertWordToNumericalDigits
 	pop bc
 	call BCCoordToBGMap0Address
-	ld hl, wd4b4
-	ld b, $03
+	ld hl, wDecimalChars
+	ld b, 3
 	call SafeCopyDataHLtoDE
 	pop de
-	ld l, e
+	ld l, e ; total number of cards
 	ld h, $00
-	call Func_10217
+	call ConvertWordToNumericalDigits
 	pop bc
 	ld a, b
-	add $04
+	add 4
 	ld b, a
 	call BCCoordToBGMap0Address
-	ld hl, wd4b4
-	ld b, $03
+	ld hl, wDecimalChars
+	ld b, 3
 	call SafeCopyDataHLtoDE
 	ret
 
-Func_1027c: ; 1027c (4:427c)
+; prints the number of medals collected in bc
+PrintMedalCount:
 	push bc
 	farcall TryGiveMedalPCPacks
 	ld a, EVENT_MEDAL_COUNT
 	farcall GetEventValue
 	ld l, a
 	ld h, $00
-	call Func_10217
+	call ConvertWordToNumericalDigits
 	pop bc
 	call BCCoordToBGMap0Address
-	ld hl, wd4b4 + 2
-	ld b, $01
+	ld hl, wDecimalChars + 2
+	ld b, 1
 	call SafeCopyDataHLtoDE
 	ret
 
-Func_1029a: ; 1029a (4:429a)
+; bc = coordinates
+DrawPauseMenuPlayerPortrait:
 	call DrawPlayerPortrait
 	ret
 
-ShowMedalReceivedScreen: ; 1029e (4:429e)
+ShowMedalReceivedScreen:
 	sub $8
 	ld c, a
 	ld [wWhichMedal], a
@@ -380,7 +390,7 @@ ShowMedalReceivedScreen: ; 1029e (4:429e)
 	call PlaySong
 	farcall SetMainSGBBorder
 	call DisableLCD
-	call Func_10000
+	call InitMenuScreen
 	ld a, -6
 	ld [wMedalScreenYOffset], a
 	call LoadCollectedMedalTilemaps
@@ -419,7 +429,7 @@ ShowMedalReceivedScreen: ; 1029e (4:429e)
 	ld [wd291], a
 	ret
 
-MasterMedalNames: ; 1030b (4:430b)
+MasterMedalNames:
 	tx GrassClubMapNameText
 	tx ScienceClubMapNameText
 	tx FireClubMapNameText
@@ -429,13 +439,13 @@ MasterMedalNames: ; 1030b (4:430b)
 	tx RockClubMapNameText
 	tx FightingClubMapNameText
 
-GiveBoosterPack: ; 1031b (4:431b)
+GiveBoosterPack:
 	ld c, a
 	ld a, [wd291]
 	push af
 	push bc
 	call DisableLCD
-	call Func_10000
+	call InitMenuScreen
 	xor a
 	ld [wTextBoxFrameType], a
 	pop bc
@@ -482,7 +492,7 @@ GiveBoosterPack: ; 1031b (4:431b)
 	ldtx hl, CheckedCardsInBoosterPackText
 	call PrintScrollableText_NoTextBoxLabel
 	call DisableLCD
-	call Func_1288c
+	call SetDefaultPalettes
 	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
@@ -495,7 +505,7 @@ GiveBoosterPack: ; 1031b (4:431b)
 	ld [wd291], a
 	ret
 
-BoosterTypes: ; 103a5 (4:43a5)
+BoosterTypes:
 	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_NEUTRAL
 	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_GRASS
 	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_FIRE
@@ -526,7 +536,7 @@ BoosterTypes: ; 103a5 (4:43a5)
 	db BOOSTER_COLOSSEUM  ; BOOSTER_ENERGY_GRASS_PSYCHIC
 	db BOOSTER_COLOSSEUM  ; BOOSTER_ENERGY_RANDOM
 
-BoosterScenesAndNameTexts: ; 103c2 (4:43c2)
+BoosterScenesAndNameTexts:
 	db SCENE_COLOSSEUM_BOOSTER, SCENE_COLOSSEUM_BOOSTER
 	tx ColosseumBoosterText
 
@@ -539,14 +549,14 @@ BoosterScenesAndNameTexts: ; 103c2 (4:43c2)
 	db SCENE_LABORATORY_BOOSTER, SCENE_LABORATORY_BOOSTER
 	tx LaboratoryBoosterText
 
-_PauseMenu_Exit: ; 103d2 (4:43d2)
+_PauseMenu_Exit:
 	ret
 
-Duel_Init: ; 103d3 (4:43d3)
+Duel_Init:
 	ld a, [wd291]
 	push af
 	call DisableLCD
-	call Func_10000
+	call InitMenuScreen
 	ld a, $4
 	ld [wTextBoxFrameType], a
 	lb de,  0, 12
@@ -568,8 +578,8 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld [wTxRam2_b], a
 	ld a, [wOpponentName + 1]
 	ld [wTxRam2_b + 1], a
-	ld hl, OpponentTitleAndNameTextCoords
-	call Func_111b3 ; LoadDuelistName
+	ld hl, OpponentTitleAndNameLabel
+	call PrintLabels ; LoadDuelistName
 	pop hl
 	ld a, [hli]
 	ld [wTxRam2], a
@@ -577,14 +587,13 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld a, [hli]
 	ld [wTxRam2 + 1], a
 	or c
-	jr z, .asm_10425
-	ld hl, OpponentDeckNameTextCoords
-	call Func_111b3 ; LoadDeckName
-
-.asm_10425
+	jr z, .skip_deck_name
+	ld hl, OpponentDeckNameLabel
+	call PrintLabels ; LoadDeckName
+.skip_deck_name
 	lb bc, 7, 3
 	ld a, [wOpponentPortrait]
-	call Func_3e2a ; LoadDuelistPortrait
+	call DrawOpponentPortrait
 	ld a, [wMatchStartTheme]
 	call PlaySong
 	call FlashWhiteScreen
@@ -594,22 +603,22 @@ Duel_Init: ; 103d3 (4:43d3)
 	call SetCursorParametersForTextBox
 	call WaitForButtonAorB
 	call WaitForSongToFinish
-	call Func_10ab4 ; fade out
+	call FadeScreenToWhite ; fade out
 	pop af
 	ld [wd291], a
 	ret
 
-OpponentTitleAndNameTextCoords: ; 10451 (4:4451)
+OpponentTitleAndNameLabel:
 	db 1, 14
 	tx OpponentTitleAndNameText
 	db $ff
 
-OpponentDeckNameTextCoords: ; 10456 (4:4456)
+OpponentDeckNameLabel:
 	db 1, 16
 	tx OpponentDeckNameText
 	db $ff
 
-OpponentTitlesAndDeckNames: ; 1045b (4:445b)
+OpponentTitlesAndDeckNames:
 	tx TechText
 	tx SamsPracticeDeckName
 
@@ -769,10 +778,10 @@ OpponentTitlesAndDeckNames: ; 1045b (4:445b)
 	tx StrangeLifeformText
 	tx ImakuniDeckName
 
-_PCMenu_Glossary: ; 1052f (4:452f)
+_PCMenu_Glossary:
 	ld a, [wd291]
 	push af
-	call Func_10000
+	call InitMenuScreen
 	lb de, $30, $ff
 	call SetupText
 	call FlashWhiteScreen
@@ -781,7 +790,7 @@ _PCMenu_Glossary: ; 1052f (4:452f)
 	ld [wd291], a
 	ret
 
-_PauseMenu_Config: ; 10548 (4:4548)
+_PauseMenu_Config:
 	ld a, [wd291]
 	push af
 	ld a, [wLineSeparation]
@@ -790,27 +799,27 @@ _PauseMenu_Config: ; 10548 (4:4548)
 	ld [wConfigExitSettingsCursorPos], a
 	ld a, 1
 	ld [wLineSeparation], a
-	call Func_10000
+	call InitMenuScreen
 	lb de,  0,  3
 	lb bc, 20,  5
 	call DrawRegularTextBox
 	lb de,  0,  9
 	lb bc, 20,  5
 	call DrawRegularTextBox
-	ld hl, Unknown_105bc
-	call Func_111b3
-	call Func_105cd
+	ld hl, ConfigScreenLabels
+	call PrintLabels
+	call GetConfigCursorPositions
 	ld a, 0
-	call ShowRightArrowCursor
+	call ShowConfigMenuCursor
 	ld a, 1
-	call ShowRightArrowCursor
+	call ShowConfigMenuCursor
 	xor a
 	ld [wCursorBlinkTimer], a
 	call FlashWhiteScreen
 .asm_10588
 	call DoFrameIfLCDEnabled
 	ld a, [wConfigCursorYPos]
-	call Func_10649
+	call UpdateConfigMenuCursor
 	ld hl, wCursorBlinkTimer
 	inc [hl]
 	call ConfigScreenHandleDPadInput
@@ -826,14 +835,14 @@ _PauseMenu_Config: ; 10548 (4:4548)
 .asm_105ab
 	ld a, SFX_02
 	call PlaySFX
-	call Func_10606
+	call SaveConfigSettings
 	pop af
 	ld [wLineSeparation], a
 	pop af
 	ld [wd291], a
 	ret
 
-Unknown_105bc: ; 105bc (4:45bc)
+ConfigScreenLabels:
 	db 1, 1
 	tx ConfigMenuTitleText
 
@@ -848,10 +857,13 @@ Unknown_105bc: ; 105bc (4:45bc)
 
 	db $ff
 
-Func_105cd: ; 105cd (4:45cd)
+; checks the current saved configuration settings
+; and sets wConfigMessageSpeedCursorPos and wConfigDuelAnimationCursorPos
+; to the right positions for those values
+GetConfigCursorPositions:
 	call EnableSRAM
-	ld c, $00
-	ld hl, Unknown_10644
+	ld c, 0
+	ld hl, TextDelaySettings
 .loop
 	ld a, [sTextSpeed]
 	cp [hl]
@@ -859,45 +871,45 @@ Func_105cd: ; 105cd (4:45cd)
 	inc hl
 	inc c
 	ld a, c
-	cp $04
+	cp 4
 	jr c, .loop
 .match
 	ld a, c
 	ld [wConfigMessageSpeedCursorPos], a
 	ld a, [sSkipDelayAllowed]
-	and $01
+	and $1
 	rlca
 	ld c, a
 	ld a, [wAnimationsDisabled]
-	and $01
+	and $1
 	or c
 	ld c, a
 	ld b, $00
-	ld hl, Unknown_10602
+	ld hl, DuelAnimationSettingsIndices
 	add hl, bc
 	ld a, [hl]
 	ld [wConfigDuelAnimationCursorPos], a
 	call DisableSRAM
 	ret
 
-; indexes into Unknown_1063c
-; $00: show all
-; $01: skip some
-; $02: none
-Unknown_10602: ; 10602 (4:4602)
-	db $00 ; skip delay allowed = false, animations disabled = false
-	db $00 ; skip delay allowed = false, animations disabled = true (unused)
-	db $01 ; skip delay allowed = true, animations disabled = false
-	db $02 ; skip delay allowed = true, animations disabled = true
+; indexes into DuelAnimationSettings
+; 0: show all
+; 1: skip some
+; 2: none
+DuelAnimationSettingsIndices:
+	db 0 ; skip delay allowed = false, animations disabled = false
+	db 0 ; skip delay allowed = false, animations disabled = true (unused)
+	db 1 ; skip delay allowed = true, animations disabled = false
+	db 2 ; skip delay allowed = true, animations disabled = true
 
-Func_10606: ; 10606 (4:4606)
+SaveConfigSettings:
 	call EnableSRAM
 	ld a, [wConfigDuelAnimationCursorPos]
-	and $03
+	and %11
 	rlca
 	ld c, a
 	ld b, $00
-	ld hl, Unknown_1063c
+	ld hl, DuelAnimationSettings
 	add hl, bc
 	ld a, [hli]
 	ld [wAnimationsDisabled], a
@@ -908,7 +920,7 @@ Func_10606: ; 10606 (4:4606)
 	ld a, [wConfigMessageSpeedCursorPos]
 	ld c, a
 	ld b, $00
-	ld hl, Unknown_10644
+	ld hl, TextDelaySettings
 	add hl, bc
 	call EnableSRAM
 	ld a, [hl]
@@ -917,7 +929,7 @@ Func_10606: ; 10606 (4:4606)
 	call DisableSRAM
 	ret
 
-Unknown_1063c: ; 1063c (4:463c)
+DuelAnimationSettings:
 ; animation disabled, skip delay allowed
 	db FALSE, FALSE ; show all
 	db FALSE, TRUE  ; skip some
@@ -925,38 +937,38 @@ Unknown_1063c: ; 1063c (4:463c)
 	db FALSE, FALSE ; unused
 
 ; text printing delay
-Unknown_10644: ; 10644 (4:4644)
+TextDelaySettings:
 	; slow to fast
 	db 6, 4, 2, 1, 0
 
-Func_10649: ; 10649 (4:4649)
+UpdateConfigMenuCursor:
 	push af
 	ld a, [wCursorBlinkTimer]
 	and $10
-	jr z, .asm_10654
+	jr z, .show
 	pop af
-	jr HideRightArrowCursor
-.asm_10654
+	jr HideConfigMenuCursor
+.show
 	pop af
-	jr ShowRightArrowCursor
+	jr ShowConfigMenuCursor ; can be fallthrough
 
-ShowRightArrowCursor: ; 10657 (4:4657)
+ShowConfigMenuCursor:
 	push bc
 	ld c, a
 	ld a, SYM_CURSOR_R
-	call Func_10669
+	call DrawConfigMenuCursor
 	pop bc
 	ret
 
-HideRightArrowCursor: ; 10660 (4:4660)
+HideConfigMenuCursor:
 	push bc
 	ld c, a
 	ld a, SYM_SPACE
-	call Func_10669
+	call DrawConfigMenuCursor
 	pop bc
 	ret
 
-Func_10669: ; 10669 (4:4669)
+DrawConfigMenuCursor:
 	push af
 	sla c
 	ld b, $00
@@ -983,12 +995,12 @@ Func_10669: ; 10669 (4:4669)
 	call WriteByteToBGMap0
 	ret
 
-ConfigScreenCursorPositions: ; 10688 (4:4688)
+ConfigScreenCursorPositions:
 	dw MessageSpeedCursorPositions
 	dw DuelAnimationsCursorPositions
 	dw ExitSettingsCursorPosition
 
-MessageSpeedCursorPositions: ; 1068e (4:468e)
+MessageSpeedCursorPositions:
 	dw wConfigMessageSpeedCursorPos
 	db  5, 6
 	db  7, 6
@@ -996,19 +1008,19 @@ MessageSpeedCursorPositions: ; 1068e (4:468e)
 	db 11, 6
 	db 13, 6
 
-DuelAnimationsCursorPositions: ; 1069a (4:469a)
+DuelAnimationsCursorPositions:
 	dw wConfigDuelAnimationCursorPos
 	db  1, 12
 	db  7, 12
 	db 15, 12
 
-ExitSettingsCursorPosition: ; 106a2 (4:46a2)
+ExitSettingsCursorPosition:
 	dw wConfigExitSettingsCursorPos
 	db 1, 16
 
 	db 0
 
-ConfigScreenHandleDPadInput: ; 106a7 (4:46a7)
+ConfigScreenHandleDPadInput:
 	ldh a, [hDPadHeld]
 	and D_PAD
 	ret z
@@ -1016,28 +1028,28 @@ ConfigScreenHandleDPadInput: ; 106a7 (4:46a7)
 	ld hl, ConfigScreenDPadHandlers
 	jp JumpToFunctionInTable
 
-ConfigScreenDPadHandlers: ; 106b6 (4:46b6)
+ConfigScreenDPadHandlers:
 	dw ConfigScreenDPadUp ; up
 	dw ConfigScreenDPadRight ; right
 	dw ConfigScreenDPadDown ; down
 	dw ConfigScreenDPadLeft ; left
 
-ConfigScreenDPadUp: ; 106be (4:46be)
+ConfigScreenDPadUp:
 	ld a, -1
 	jr ConfigScreenDPadDown.up_or_down
 
-ConfigScreenDPadDown: ; 106c2 (4:46c2)
+ConfigScreenDPadDown:
 	ld a, 1
 .up_or_down
 	push af
 	ld a, [wConfigCursorYPos]
 	cp 2
 	jr z, .hide_cursor
-	call ShowRightArrowCursor
+	call ShowConfigMenuCursor
 	jr .skip
 .hide_cursor
 ; hide "exit settings" cursor if leaving bottom row
-	call HideRightArrowCursor
+	call HideConfigMenuCursor
 .skip
 	ld a, [wConfigCursorYPos]
 	ld b, a
@@ -1060,99 +1072,106 @@ ConfigScreenDPadDown: ; 106c2 (4:46c2)
 	ld a, [hl]
 	ld [wCursorBlinkTimer], a
 	ld a, [wConfigCursorYPos]
-	call Func_10649
+	call UpdateConfigMenuCursor
 	ld a, SFX_01
 	call PlaySFX
 	ret
 
-Unknown_106ff: ; 106ff (4:46ff)
+Unknown_106ff:
 	db $18 ; message speed, start hidden
 	db $18 ; duel animation, start hidden
 	db $8 ; exit settings, start visible
 
-ConfigScreenDPadRight: ; 10702 (4:4702)
-	ld a, $01
+ConfigScreenDPadRight:
+	ld a, 1
 	jr ConfigScreenDPadLeft.left_or_right
 
-ConfigScreenDPadLeft: ; 10706 (4:4706)
-	ld a, $ff
+ConfigScreenDPadLeft:
+	ld a, -1
 .left_or_right
 	push af
 	ld a, [wConfigCursorYPos]
-	call HideRightArrowCursor
+	call HideConfigMenuCursor
 	pop af
-	call Func_1071e
+	call .ApplyPosChange
 	ld a, [wConfigCursorYPos]
-	call ShowRightArrowCursor
+	call ShowConfigMenuCursor
 	xor a
 	ld [wCursorBlinkTimer], a
 	ret
 
-Func_1071e: ; 1071e (4:471e)
+; a = 1 for right, -1 for left
+.ApplyPosChange
 	push af
 	ld a, [wConfigCursorYPos]
 	ld c, a
 	add a
-	add c
+	add c ; *3
 	ld c, a
 	ld b, $00
-	ld hl, Unknown_1074d
+	ld hl, .MaxCursorPositions
 	add hl, bc
 	ld a, [hli]
 	ld e, a
 	ld a, [hli]
 	ld d, a
-	ld c, [hl]
+	ld c, [hl] ; max value
 	ld a, [de]
 	ld b, a
 	pop af
-	add b
+	add b ; apply pos change
 	cp c
-	jr c, .asm_10742
-	jr z, .asm_10742
+	jr c, .got_new_pos
+	jr z, .got_new_pos
 	cp $80
-	jr c, .asm_10741
+	jr c, .wrap_around
+	; wrap to last
 	ld a, c
-	jr .asm_10742
-.asm_10741
+	jr .got_new_pos
+.wrap_around
+	; wrap to first
 	xor a
-.asm_10742
+.got_new_pos
 	ld [de], a
 	ld a, c
 	or a
-	jr z, .asm_1074c
+	jr z, .skip_sfx
 	ld a, SFX_01
 	call PlaySFX
-.asm_1074c
+.skip_sfx
 	ret
 
-Unknown_1074d: ; 1074d (4:474d)
+.MaxCursorPositions:
 ; x pos variable, max x value
-	dwb wConfigMessageSpeedCursorPos, 4
+	dwb wConfigMessageSpeedCursorPos,  4
 	dwb wConfigDuelAnimationCursorPos, 2
-	dwb wConfigExitSettingsCursorPos, 0
+	dwb wConfigExitSettingsCursorPos,  0
 
-Func_10756: ; 10756 (4:4756)
+; clears all PC packs in WRAM 
+; and then gives the 1st pack
+; this doesn't clear in SRAM so
+; it's not done to clear PC pack data
+InitPCPacks:
 	push hl
 	push bc
 	xor a
 	ld [wPCPackSelection], a
 	ld hl, wPCPacks
 	ld c, NUM_PC_PACKS
-.asm_10761
+.loop_packs
 	ld [hli], a
 	dec c
-	jr nz, .asm_10761
+	jr nz, .loop_packs
 	ld a, $1
 	call TryGivePCPack
 	pop bc
 	pop hl
 	ret
 
-_PCMenu_ReadMail: ; 1076d (4:476d)
+_PCMenu_ReadMail:
 	ld a, [wd291]
 	push af
-	call Func_10000
+	call InitMenuScreen
 	lb de, $30, $ff
 	call SetupText
 	lb de,  0,  0
@@ -1161,17 +1180,17 @@ _PCMenu_ReadMail: ; 1076d (4:476d)
 	lb de,  0, 12
 	lb bc, 20,  6
 	call DrawRegularTextBox
-	ld hl, Unknown_107d2
-	call Func_111b3
-	call Func_10996
+	ld hl, MailScreenLabels
+	call PrintLabels
+	call PrintObtainedPCPacks
 	xor a
 	ld [wCursorBlinkTimer], a
 	call FlashWhiteScreen
 .asm_1079c
 	call DoFrameIfLCDEnabled
 	ld a, [wPCPackSelection]
-	call Func_1097c
-	call Func_10a05
+	call UpdateMailMenuCursor
+	call BlinkUnopenedPCPacks
 	ld hl, wCursorBlinkTimer
 	inc [hl]
 	call PCMailHandleDPadInput
@@ -1186,23 +1205,23 @@ _PCMenu_ReadMail: ; 1076d (4:476d)
 	ret
 
 ; unreferenced?
-Unknown_107c2: ; 107c2 (4:47c2)
+Unknown_107c2:
 	db $01, $00, $00, $4a, $21, $b5, $42, $e0
 	db $03, $4a, $29, $94, $52, $fF, $7f, $00
 
-Unknown_107d2: ; 107d2 (4:47d2)
+MailScreenLabels:
 	db 1, 0
-	tx Text0359
+	tx MailText
 
 	db 1, 14
-	tx Text035a
+	tx WhichMailWouldYouLikeToReadText
 
 	db 0, 20
-	tx Text035b
+	tx MailNumbersText
 
 	db $ff
 
-PCMailHandleDPadInput: ; 107df (4:47df)
+PCMailHandleDPadInput:
 	ldh a, [hDPadHeld]
 	and D_PAD
 	ret z
@@ -1210,7 +1229,7 @@ PCMailHandleDPadInput: ; 107df (4:47df)
 	ld [wPCLastDirectionPressed], a
 	ld a, [wPCPackSelection]
 	push af
-	call Func_10989
+	call HideMailMenuCursor
 .asm_107f2
 	ld a, [wPCPackSelection]
 	add a
@@ -1238,12 +1257,12 @@ PCMailHandleDPadInput: ; 107df (4:47df)
 	ld a, SFX_01
 	call PlaySFX
 .asm_1081d
-	call Func_10985
+	call ShowMailMenuCursor
 	xor a
 	ld [wCursorBlinkTimer], a
 	ret
 
-PCMailTransitionTable: ; 10825 (4:4825)
+PCMailTransitionTable:
 ; up, right, down, left
 	db $0c, $01, $03, $02 ; mail 1
 	db $0d, $02, $04, $00 ; mail 2
@@ -1261,14 +1280,14 @@ PCMailTransitionTable: ; 10825 (4:4825)
 	db $0a, $0e, $01, $0c ; mail 14
 	db $0b, $0c, $02, $0d ; mail 15
 
-PCMailHandleAInput: ; 10861 (4:4861)
+PCMailHandleAInput:
 	ldh a, [hKeysPressed]
 	and A_BUTTON
 	ret z
 	ld a, SFX_02
 	call PlaySFX
-	call Func_10996
-	call Func_10985
+	call PrintObtainedPCPacks
+	call ShowMailMenuCursor
 	ld a, [wPCPackSelection]
 	ld c, a
 	ld b, $00
@@ -1290,19 +1309,19 @@ PCMailHandleAInput: ; 10861 (4:4861)
 	ld h, [hl]
 	ld l, a
 	ld a, [wPCPackSelection]
-	call Func_109ab
+	call GetPCPackNameTextID
 	call PrintScrollableText_WithTextBoxLabel
 	call TryOpenPCMailBoosterPack
-	call Func_10000
+	call InitMenuScreen
 	lb de, $30, $ff
 	call SetupText
 	lb de,  0,  0
 	lb bc, 20, 12
 	call DrawRegularTextBox
-	ld hl, Unknown_107d2
-	call Func_111b3
-	call Func_10996
-	call Func_10985
+	ld hl, MailScreenLabels
+	call PrintLabels
+	call PrintObtainedPCPacks
+	call ShowMailMenuCursor
 	call FlashWhiteScreen
 	pop hl
 	inc hl
@@ -1312,18 +1331,18 @@ PCMailHandleAInput: ; 10861 (4:4861)
 	or h
 	jr z, .no_page_two
 	ld a, [wPCPackSelection]
-	call Func_109ab
+	call GetPCPackNameTextID
 	call PrintScrollableText_WithTextBoxLabel
 .no_page_two
 	lb de,  0, 12
 	lb bc, 20,  6
 	call DrawRegularTextBox
-	ld hl, Unknown_107d2
-	call Func_111b3
+	ld hl, MailScreenLabels
+	call PrintLabels
 	call DoFrameIfLCDEnabled
 	ret
 
-PCMailTextPages: ; 108e0 (4:48e0)
+PCMailTextPages:
 	; unused
 	dw NULL
 	dw NULL
@@ -1388,11 +1407,11 @@ PCMailTextPages: ; 108e0 (4:48e0)
 	tx Text0418
 	dw NULL
 
-TryOpenPCMailBoosterPack: ; 10920 (4:4920)
+TryOpenPCMailBoosterPack:
 	xor a
 	ld [wAnotherBoosterPack], a
 	ld a, [wSelectedPCPack]
-	bit 7, a
+	bit PACK_UNOPENED_F, a
 	jr z, .booster_already_open
 	and $7f
 	add a
@@ -1415,14 +1434,14 @@ TryOpenPCMailBoosterPack: ; 10920 (4:4920)
 	ret
 
 .booster_already_open
-	call Func_10000
+	call InitMenuScreen
 	lb de, $30, $ff
 	call SetupText
 	ldtx hl, Text0419
 	call PrintScrollableText_NoTextBoxLabel
 	jr .done
 
-PCMailBoosterPacks: ; 1095c (4:495c)
+PCMailBoosterPacks:
 	db $00, $00 ; unused
 	db BOOSTER_COLOSSEUM_NEUTRAL, $00 ; mail 1
 	db BOOSTER_LABORATORY_PSYCHIC, $00 ; mail 2
@@ -1440,47 +1459,52 @@ PCMailBoosterPacks: ; 1095c (4:495c)
 	db BOOSTER_MYSTERY_TRAINER_COLORLESS, $00 ; mail 14
 	db BOOSTER_LABORATORY_TRAINER, $00 ; mail 15
 
-Func_1097c: ; 1097c (4:497c)
+UpdateMailMenuCursor:
 	ld a, [wCursorBlinkTimer]
 	and $10
-	jr z, Func_10985
-	jr Func_10989
-Func_10985: ; 10985 (4:4985)
+	jr z, ShowMailMenuCursor
+	jr HideMailMenuCursor
+ShowMailMenuCursor:
 	ld a, SYM_CURSOR_R
-	jr Func_1098d
-Func_10989: ; 10989 (4:4989)
+	jr DrawMailMenuCursor
+HideMailMenuCursor:
 	ld a, SYM_SPACE
-	jr Func_1098d
-Func_1098d: ; 1098d (4:498d)
+	jr DrawMailMenuCursor ; can be fallthrough
+DrawMailMenuCursor:
 	push af
-	call Func_10a41
+	call GePCPackSelectionCoordinates
 	pop af
 	call WriteByteToBGMap0
 	ret
 
-Func_10996: ; 10996 (4:4996)
-	ld e, $00
+; prints all the PC packs that player
+; has already obtained
+PrintObtainedPCPacks:
+	ld e, $0
 	ld hl, wPCPacks
-.asm_1099b
+.loop_packs
 	ld a, [hl]
 	or a
-	jr z, .asm_109a3
+	jr z, .next_pack
 	ld a, e
-	call Func_109d7
-.asm_109a3
+	call PrintPCPackName
+.next_pack
 	inc hl
 	inc e
 	ld a, e
-	cp $0f
-	jr c, .asm_1099b
+	cp NUM_PC_PACKS
+	jr c, .loop_packs
 	ret
 
-Func_109ab: ; 109ab (4:49ab)
+; outputs in de the text ID
+; corresponding to the name
+; of the mail in input a
+GetPCPackNameTextID:
 	push hl
 	add a
 	ld e, a
 	ld d, $00
-	ld hl, Unknown_109b9
+	ld hl, .PCPackNameTextIDs
 	add hl, de
 	ld e, [hl]
 	inc hl
@@ -1488,33 +1512,35 @@ Func_109ab: ; 109ab (4:49ab)
 	pop hl
 	ret
 
-Unknown_109b9: ; 109b9 (4:49b9)
-	tx Text035d
-	tx Text035e
-	tx Text035f
-	tx Text0360
-	tx Text0361
-	tx Text0362
-	tx Text0363
-	tx Text0364
-	tx Text0365
-	tx Text0366
-	tx Text0367
-	tx Text0368
-	tx Text0369
-	tx Text036a
-	tx Text036b
+.PCPackNameTextIDs:
+	tx Mail1Text
+	tx Mail2Text
+	tx Mail3Text
+	tx Mail4Text
+	tx Mail5Text
+	tx Mail6Text
+	tx Mail7Text
+	tx Mail8Text
+	tx Mail9Text
+	tx Mail10Text
+	tx Mail11Text
+	tx Mail12Text
+	tx Mail13Text
+	tx Mail14Text
+	tx Mail15Text
 
-Func_109d7: ; 109d7 (4:49d7)
+; prints on screen the name of
+; the PC pack from input in a
+PrintPCPackName:
 	push hl
 	push bc
 	push de
 	push af
-	call Func_109ab
+	call GetPCPackNameTextID
 	ld l, e
 	ld h, d
 	pop af
-	call Func_10a2f
+	call GetPCPackCoordinates
 	ld e, c
 	ld d, b
 	call InitTextPrinting
@@ -1524,62 +1550,72 @@ Func_109d7: ; 109d7 (4:49d7)
 	pop hl
 	ret
 
-Func_109f0: ; 109f0 (4:49f0)
+; prints empty characters on screen
+; corresponding to the PC pack in a
+; this is to create the blinking
+; effect of unopened PC packs
+PrintEmptyPCPackName:
 	push hl
 	push bc
 	push de
-	call Func_10a2f
+	call GetPCPackCoordinates
 	ld e, c
 	ld d, b
 	call InitTextPrinting
-	ldtx hl, Text035c
+	ldtx hl, EmptyMailNameText
 	call PrintTextNoDelay
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_10a05: ; 10a05 (4:4a05)
+BlinkUnopenedPCPacks:
 	ld e, $00
 	ld hl, wPCPacks
-.asm_10a0a
+.loop_packs
 	ld a, [hl]
 	or a
-	jr z, .asm_10a27
-	bit 7, a
-	jr z, .asm_10a27
+	jr z, .next_pack
+	bit PACK_UNOPENED_F, a
+	jr z, .next_pack
 	ld a, [wCursorBlinkTimer]
 	and $0c
-	jr z, .asm_10a23
+	jr z, .show
 	cp $0c
-	jr nz, .asm_10a27
+	jr nz, .next_pack
+; hide
 	ld a, e
-	call Func_109f0
-	jr .asm_10a27
-.asm_10a23
+	call PrintEmptyPCPackName
+	jr .next_pack
+.show
 	ld a, e
-	call Func_109d7
-.asm_10a27
+	call PrintPCPackName
+.next_pack
 	inc hl
 	inc e
 	ld a, e
-	cp $0f
-	jr c, .asm_10a0a
+	cp NUM_PC_PACKS
+	jr c, .loop_packs
 	ret
 
-Func_10a2f: ; 10a2f (4:4a2f)
+; outputs in bc the coordinates
+; corresponding to the PC pack in a
+GetPCPackCoordinates:
 	ld c, a
 	ld a, [wPCPackSelection]
 	push af
 	ld a, c
 	ld [wPCPackSelection], a
-	call Func_10a41
+	call GePCPackSelectionCoordinates
 	inc b
 	pop af
 	ld [wPCPackSelection], a
 	ret
 
-Func_10a41: ; 10a41 (4:4a41)
+; outputs in bc the coordinates
+; corresponding to the PC pack
+; that is stored in wPCPackSelection
+GePCPackSelectionCoordinates:
 	push hl
 	ld a, [wPCPackSelection]
 	add a
@@ -1593,7 +1629,7 @@ Func_10a41: ; 10a41 (4:4a41)
 	pop hl
 	ret
 
-PCMailCoordinates: ; 10a52 (4:4a52)
+PCMailCoordinates:
 	db  1,  2 ; mail 1
 	db  7,  2 ; mail 2
 	db 13,  2 ; mail 3
@@ -1611,7 +1647,7 @@ PCMailCoordinates: ; 10a52 (4:4a52)
 	db 13, 10 ; mail 15
 
 ; gives the pc pack described in a
-TryGivePCPack: ; 10a70 (4:4a70)
+TryGivePCPack:
 	push hl
 	push bc
 	push de
@@ -1639,7 +1675,7 @@ TryGivePCPack: ; 10a70 (4:4a70)
 
 .foundFreeSlot
 	ld a, b
-	or PACK_OPENED ; mark pack as unopened
+	or PACK_UNOPENED ; mark pack as unopened
 	ld [hl], a
 
 .quit
@@ -1650,7 +1686,7 @@ TryGivePCPack: ; 10a70 (4:4a70)
 
 ; writes wd293 with byte depending on console
 ; every entry in the list is $00
-Func_10a9b: ; 10a9b (4:4a9b)
+Func_10a9b:
 	push hl
 	ld a, [wConsole]
 	add LOW(.data_10ab1)
@@ -1670,14 +1706,14 @@ Func_10a9b: ; 10a9b (4:4a9b)
 	db $00 ; CONSOLE_SGB
 	db $00 ; CONSOLE_CGB
 
-Func_10ab4: ; 10ab4 (4:4ab4)
+FadeScreenToWhite:
 	ld a, [wLCDC]
-	bit 7, a
+	bit LCDC_ENABLE_F, a
 	jr z, .lcd_off
 	ld a, [wd293]
-	ld [wd294], a
-	ld [wd295], a
-	ld [wd296], a
+	ld [wTempBGP], a
+	ld [wTempOBP0], a
+	ld [wTempOBP1], a
 	ld de, PALRGB_WHITE
 	ld hl, wTempBackgroundPalettesCGB
 	ld bc, NUM_BACKGROUND_PALETTES palettes
@@ -1699,28 +1735,28 @@ Func_10ab4: ; 10ab4 (4:4ab4)
 	call FlushAllPalettes
 	ret
 
-Func_10af9: ; 10af9 (4:4af9)
-	call BackupPalsAndSetWhite
+FadeScreenFromWhite:
+	call .BackupPalsAndSetWhite
 	call RestoreFirstColorInOBPals
 	call FlushAllPalettes
 	call EnableLCD
 	jp FadeScreenToTempPals
 
-BackupPalsAndSetWhite: ; 10b08 (4:4b08)
+.BackupPalsAndSetWhite
 	ld a, [wBGP]
-	ld [wd294], a
+	ld [wTempBGP], a
 	ld a, [wOBP0]
-	ld [wd295], a
+	ld [wTempOBP0], a
 	ld a, [wOBP1]
-	ld [wd296], a
+	ld [wTempOBP1], a
 	ld hl, wBackgroundPalettesCGB
 	ld de, wTempBackgroundPalettesCGB
 	ld bc, NUM_BACKGROUND_PALETTES palettes + NUM_OBJECT_PALETTES palettes
 	call CopyDataHLtoDE_SaveRegisters
-	jr Func_10b28 ; can be fallthrough
+	jr SetWhitePalettes ; can be fallthrough
 
 ; fills wBackgroundPalettesCGB with white pal
-Func_10b28: ; 10b28 (4:4b28)
+SetWhitePalettes:
 	ld a, [wd293]
 	ld [wBGP], a
 	ld [wOBP0], a
@@ -1733,7 +1769,7 @@ Func_10b28: ; 10b28 (4:4b28)
 
 ; gets from backup OB pals the first color
 ; of each pal and writes them in wObjectPalettesCGB
-RestoreFirstColorInOBPals: ; 10b41 (4:4b41)
+RestoreFirstColorInOBPals:
 	ld hl, wTempObjectPalettesCGB
 	ld de, wObjectPalettesCGB
 	ld c, NUM_OBJECT_PALETTES
@@ -1757,7 +1793,7 @@ RestoreFirstColorInOBPals: ; 10b41 (4:4b41)
 	jr nz, .loop_pals
 	ret
 
-FadeScreenToTempPals: ; 10b5e (4:4b5e)
+FadeScreenToTempPals:
 	ld a, [wVBlankCounter]
 	push af
 	ld c, $10
@@ -1781,13 +1817,13 @@ FadeScreenToTempPals: ; 10b5e (4:4b5e)
 	sub b
 	ret
 
-; does something with wBGP given wd294
+; does something with wBGP given wTempBGP
 ; mixes them into a single value?
-Func_10b85: ; 10b85 (4:4b85)
+Func_10b85:
 	push bc
 	ld c, $03
 	ld hl, wBGP
-	ld de, wd294
+	ld de, wTempBGP
 .asm_10b8e
 	push bc
 	ld b, [hl]
@@ -1867,28 +1903,28 @@ Func_10b85: ; 10b85 (4:4b85)
 	db %10 ; b = %11 | c = %10
 	db %11 ; b = %11 | c = %11
 
-FadeOBPalIntoTemp: ; 10be1 (4:4be1)
+FadeOBPalIntoTemp:
 	push bc
 	ld c, 4 palettes
 	ld hl, wObjectPalettesCGB
 	ld de, wTempObjectPalettesCGB
 	jr FadePalIntoAnother
 
-FadeBGPalIntoTemp1: ; 10bec (4:4bec)
+FadeBGPalIntoTemp1:
 	push bc
 	ld c, 2 palettes
 	ld hl, wBackgroundPalettesCGB
 	ld de, wTempBackgroundPalettesCGB
 	jr FadePalIntoAnother
 
-FadeBGPalIntoTemp2: ; 10bf7 (4:4bf7)
+FadeBGPalIntoTemp2:
 	push bc
 	ld c, 2 palettes
 	ld hl, wBackgroundPalettesCGB + 4 palettes
 	ld de, wTempBackgroundPalettesCGB + 4 palettes
 	jr FadePalIntoAnother
 
-FadeBGPalIntoTemp3: ; 10c02 (4:4c02)
+FadeBGPalIntoTemp3:
 	push bc
 	ld c, 4 palettes
 	ld hl, wBackgroundPalettesCGB
@@ -1898,7 +1934,7 @@ FadeBGPalIntoTemp3: ; 10c02 (4:4c02)
 ; hl = input pal to modify
 ; de = pal to fade into
 ; c = number of colors to fade
-FadePalIntoAnother: ; 10c0b (4:4c0b)
+FadePalIntoAnother:
 	push bc
 	ld a, [de]
 	inc de
@@ -2034,22 +2070,24 @@ FadePalIntoAnother: ; 10c0b (4:4c0b)
 	inc a
 	ret
 
-Func_10c96: ; 10c96 (4:4c96)
+; fades screen to white then
+; if c == 0, fade back in
+; keep white otherwise
+FlashScreenToWhite:
 	ldh a, [hBankSRAM]
 	push af
 	push bc
 	ld a, BANK("SRAM1")
 	call BankswitchSRAM
 	call CopyPalsToSRAMBuffer
-	call Func_10ab4
+	call FadeScreenToWhite
 	pop bc
 	ld a, c
 	or a
-	jr nz, .asm_10cb0
+	jr nz, .skip_fade_in
 	call LoadPalsFromSRAMBuffer
-	call Func_10af9
-
-.asm_10cb0
+	call FadeScreenFromWhite
+.skip_fade_in
 	call EnableLCD
 	pop af
 	call BankswitchSRAM
@@ -2059,7 +2097,7 @@ Func_10c96: ; 10c96 (4:4c96)
 ; copies current BG and OP pals,
 ; wBackgroundPalettesCGB and wObjectPalettesCGB
 ; to sGfxBuffer2
-CopyPalsToSRAMBuffer: ; 10cbb (4:4cbb)
+CopyPalsToSRAMBuffer:
 	ldh a, [hBankSRAM]
 
 	push af
@@ -2090,7 +2128,7 @@ CopyPalsToSRAMBuffer: ; 10cbb (4:4cbb)
 ; loads BG and OP pals,
 ; wBackgroundPalettesCGB and wObjectPalettesCGB
 ; from sGfxBuffer2
-LoadPalsFromSRAMBuffer: ; 10cea (4:4cea)
+LoadPalsFromSRAMBuffer:
 	ldh a, [hBankSRAM]
 
 	push af
@@ -2118,13 +2156,13 @@ LoadPalsFromSRAMBuffer: ; 10cea (4:4cea)
 
 ; backs up all palettes
 ; and writes 4 BG pals with white pal
-Func_10d17: ; 10d17 (4:4d17)
+Func_10d17:
 	ld a, [wBGP]
-	ld [wd294], a
+	ld [wTempBGP], a
 	ld a, [wOBP0]
-	ld [wd295], a
+	ld [wTempOBP0], a
 	ld a, [wOBP1]
-	ld [wd296], a
+	ld [wTempOBP1], a
 	ld hl, wBackgroundPalettesCGB
 	ld de, wTempBackgroundPalettesCGB
 	ld bc, NUM_BACKGROUND_PALETTES palettes + NUM_OBJECT_PALETTES palettes
@@ -2142,13 +2180,13 @@ Func_10d17: ; 10d17 (4:4d17)
 	ld [wd317], a
 	ret
 
-Func_10d50: ; 10d50 (4:4d50)
+Func_10d50:
 	ld a, [wd293]
-	ld [wd294], a
+	ld [wTempBGP], a
 	ld a, [wOBP0]
-	ld [wd295], a
+	ld [wTempOBP0], a
 	ld a, [wOBP1]
-	ld [wd296], a
+	ld [wTempOBP1], a
 	ld de, PALRGB_WHITE
 	ld hl, wTempBackgroundPalettesCGB
 	ld bc, 4 palettes
@@ -2164,7 +2202,7 @@ Func_10d50: ; 10d50 (4:4d50)
 ;   and Flush Palettes
 ; then decrements wd317
 ; does nothing if wd317 is 0
-Func_10d74: ; 10d74 (4:4d74)
+Func_10d74:
 	ld a, [wd317]
 	or a
 	ret z
@@ -2183,7 +2221,7 @@ Func_10d74: ; 10d74 (4:4d74)
 	ld [wd317], a
 	ret
 
-Unknown_10d98: ; 10d98 (4:4d98)
+Unknown_10d98:
 	db 12,  0 ; start menu coords
 	db  8, 14 ; start menu text box dimensions
 
@@ -2198,7 +2236,7 @@ Unknown_10d98: ; 10d98 (4:4d98)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Unknown_10da9: ; 10da9 (4:4da9)
+Unknown_10da9:
 	db 10,  0 ; start menu coords
 	db 10, 12 ; start menu text box dimensions
 
@@ -2213,16 +2251,16 @@ Unknown_10da9: ; 10da9 (4:4da9)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Func_10dba: ; 10dba (4:4dba)
+GiftCenterMenu:
 	ld a, 1 << AUTO_CLOSE_TEXTBOX
 	farcall SetOverworldNPCFlags
 	ld a, [wSelectedGiftCenterMenuItem]
 	ld hl, Unknown_10e17
-	farcall InitAndPrintPauseMenu
-.asm_10dca
+	farcall InitAndPrintMenu
+.loop_input
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
-	jr nc, .asm_10dca
+	jr nc, .loop_input
 	ld a, e
 	ld [wSelectedGiftCenterMenuItem], a
 	ldh a, [hCurMenuItem]
@@ -2240,17 +2278,17 @@ Func_10dba: ; 10dba (4:4dba)
 	pop af
 	ret
 
-Unknown_10df0: ; 10df0 (4:4df0)
+Unknown_10df0:
 	dw Func_10dfb
 	dw Func_10dfb
 	dw Func_10dfb
 	dw Func_10dfb
 	dw Func_10dfa
 
-Func_10dfa: ; 10dfa (4:4dfa)
+Func_10dfa:
 	ret
 
-Func_10dfb: ; 10dfb (4:4dfb)
+Func_10dfb:
 	ld a, [wd10e]
 	add a
 	ld c, a
@@ -2263,18 +2301,18 @@ Func_10dfb: ; 10dfb (4:4dfb)
 	ld [wTxRam2 + 1], a
 	ret
 
-Unknown_10e0f: ; 10e0f (4:4e0f)
-	tx Text0355
-	tx Text0356
-	tx Text0357
-	tx Text0358
+Unknown_10e0f:
+	tx SendCardText
+	tx ReceiveCardText
+	tx SendDeckConfigurationText
+	tx ReceiveDeckConfigurationText
 
-Unknown_10e17: ; 10e17 (4:4e17)
+Unknown_10e17:
 	db  4,  0 ; start menu coords
 	db 16, 12 ; start menu text box dimensions
 
 	db  6, 2 ; text alignment for InitTextPrinting
-	tx Text0354
+	tx GiftCenterMenuText
 	db $ff
 
 	db 5, 2 ; cursor x, cursor y
@@ -2288,7 +2326,7 @@ INCLUDE "engine/overworld_map.asm"
 
 ; prints $ff-terminated list of text to text box
 ; given 2 bytes for text alignment and 2 bytes for text ID
-Func_111b3: ; 111b3 (4:51b3)
+PrintLabels:
 	ldh a, [hffb0]
 	push af
 	ld a, $02
@@ -2332,7 +2370,7 @@ Func_111b3: ; 111b3 (4:51b3)
 	inc hl
 	jr .loop_text_print_2
 
-InitAndPrintPauseMenu: ; 111e9 (4:51e9)
+InitAndPrintMenu:
 	push hl
 	push bc
 	push de
@@ -2351,7 +2389,7 @@ InitAndPrintPauseMenu: ; 111e9 (4:51e9)
 	call DrawRegularTextBox
 	call DoFrameIfLCDEnabled
 	pop hl
-	call Func_111b3
+	call PrintLabels
 	pop af
 	call InitializeMenuParameters
 	pop de
@@ -2362,7 +2400,7 @@ InitAndPrintPauseMenu: ; 111e9 (4:51e9)
 ; xors sb800
 ; this has the effect of invalidating the save data checksum
 ; which the game interprets as being having no save data
-InvalidateSaveData: ; 1120f (4:520f)
+InvalidateSaveData:
 	push hl
 	ldh a, [hBankSRAM]
 
@@ -2388,7 +2426,7 @@ InvalidateSaveData: ; 1120f (4:520f)
 ; saves all data to SRAM, including
 ; General save data and Album/Deck data
 ; and backs up in SRAM2
-SaveAndBackupData: ; 11238 (4:5238)
+SaveAndBackupData:
 	push de
 	ld de, sGeneralSaveData
 	call SaveGeneralSaveDataFromDE
@@ -2399,7 +2437,7 @@ SaveAndBackupData: ; 11238 (4:5238)
 	pop de
 	ret
 
-_SaveGeneralSaveData: ; 1124d (4:524d)
+_SaveGeneralSaveData:
 	push de
 	call GetReceivedLegendaryCards
 	ld de, sGeneralSaveData
@@ -2410,7 +2448,7 @@ _SaveGeneralSaveData: ; 1124d (4:524d)
 	ret
 
 ; de = pointer to general game data in SRAM
-SaveGeneralSaveDataFromDE: ; 1125f (4:525f)
+SaveGeneralSaveDataFromDE:
 	push hl
 	push bc
 	call EnableSRAM
@@ -2431,7 +2469,7 @@ SaveGeneralSaveDataFromDE: ; 1125f (4:525f)
 ; writes in de total num of cards collected
 ; and in (de + 1) total num of cards to collect
 ; also updates wTotalNumCardsCollected and wTotalNumCardsToCollect
-UpdateAlbumProgress: ; 1127f (4:527f)
+UpdateAlbumProgress:
 	push hl
 	push de
 	push de
@@ -2451,7 +2489,7 @@ UpdateAlbumProgress: ; 1127f (4:527f)
 
 ; save values that are listed in WRAMToSRAMMapper
 ; from WRAM to SRAM, and calculate its checksum
-CopyGeneralSaveDataToSRAM: ; 11299 (4:5299)
+CopyGeneralSaveDataToSRAM:
 	push hl
 	push bc
 	push de
@@ -2541,7 +2579,7 @@ CopyGeneralSaveDataToSRAM: ; 11299 (4:5299)
 
 ; returns carry if no error
 ; is found in sBackupGeneralSaveData
-ValidateBackupGeneralSaveData: ; 11320 (4:5320)
+ValidateBackupGeneralSaveData:
 	push de
 	ldh a, [hBankSRAM]
 	push af
@@ -2561,7 +2599,7 @@ ValidateBackupGeneralSaveData: ; 11320 (4:5320)
 
 ; returns carry if no error
 ; is found in sGeneralSaveData
-_ValidateGeneralSaveData: ; 11343 (4:5343)
+_ValidateGeneralSaveData:
 	push de
 	call EnableSRAM
 	ld de, sGeneralSaveData
@@ -2576,7 +2614,7 @@ _ValidateGeneralSaveData: ; 11343 (4:5343)
 
 ; validates the general game data saved in SRAM
 ; de = pointer to general game data in SRAM
-ValidateGeneralSaveDataFromDE: ; 1135d (4:535d)
+ValidateGeneralSaveDataFromDE:
 	push hl
 	push bc
 	push de
@@ -2704,7 +2742,7 @@ ValidateGeneralSaveDataFromDE: ; 1135d (4:535d)
 	pop hl
 	ret
 
-LoadAlbumProgressFromSRAM: ; 1140a (4:540a)
+LoadAlbumProgressFromSRAM:
 	push de
 	ld a, [de]
 	ld [wTotalNumCardsCollected], a
@@ -2716,7 +2754,7 @@ LoadAlbumProgressFromSRAM: ; 1140a (4:540a)
 
 ; first copies data from backup SRAM to main SRAM
 ; then loads it to WRAM from main SRAM
-LoadBackupSaveData: ; 11416 (4:5416)
+LoadBackupSaveData:
 	push hl
 	push de
 	call EnableSRAM
@@ -2730,7 +2768,7 @@ LoadBackupSaveData: ; 11416 (4:5416)
 	pop hl
 	ret
 
-_LoadGeneralSaveData: ; 11430 (4:5430)
+_LoadGeneralSaveData:
 	push de
 	ld de, sGeneralSaveData
 	call LoadGeneralSaveDataFromDE
@@ -2738,7 +2776,7 @@ _LoadGeneralSaveData: ; 11430 (4:5430)
 	ret
 
 ; de = pointer to save data
-LoadGeneralSaveDataFromDE: ; 11439 (4:5439)
+LoadGeneralSaveDataFromDE:
 	push hl
 	push bc
 	call EnableSRAM
@@ -2819,7 +2857,7 @@ ENDM
 ; to save and subsequently retrieve them on game load
 ; also works as a test in order check whether
 ; the saved values is SRAM are legal, within the given value range
-WRAMToSRAMMapper: ; 11498 (4:5498)
+WRAMToSRAMMapper:
 	wram_sram_map wMedalCount,                        1, $00, $ff ; sMedalCount
 	wram_sram_map wCurOverworldMap,                   1, $00, $ff ; sCurOverworldMap
 	wram_sram_map wPlayTimeCounter + 0,               1, $00, $ff ; sPlayTimeCounter
@@ -2858,13 +2896,13 @@ WRAMToSRAMMapper: ; 11498 (4:5498)
 	dw NULL
 
 ; fills an empty SRAM slot with zero
-.EmptySRAMSlot: ; 1156c (4:556c)
+.EmptySRAMSlot:
 	db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 
 ; save the game
 ; if c is 0, save the player at their current position
 ; otherwise, save the player in Mason's lab
-_SaveGame: ; 1157c (4:557c)
+_SaveGame:
 	ld a, c
 	or a
 	jr nz, .force_mason_lab
@@ -2887,7 +2925,7 @@ _SaveGame: ; 1157c (4:557c)
 	call SaveAndBackupData
 	ret
 
-_AddCardToCollectionAndUpdateAlbumProgress: ; 115a3 (4:55a3)
+_AddCardToCollectionAndUpdateAlbumProgress:
 	ld [wCardToAddToCollection], a
 	push hl
 	push bc
@@ -2915,19 +2953,19 @@ _AddCardToCollectionAndUpdateAlbumProgress: ; 115a3 (4:55a3)
 	pop hl
 	ret
 
-WriteBackupCardAndDeckSaveData: ; 115d4 (4:55d4)
+WriteBackupCardAndDeckSaveData:
 	ld bc, sCardAndDeckSaveDataEnd - sCardAndDeckSaveData
 	ld hl, sCardCollection
 	jr WriteDataToBackup
 
-WriteBackupGeneralSaveData: ; 115dc (4:55dc)
+WriteBackupGeneralSaveData:
 	ld bc, sGeneralSaveDataEnd - sGeneralSaveData
 	ld hl, sGeneralSaveData
 ;	fallthrough
 
 ; bc = number of bytes to copy to backup
 ; hl = pointer in SRAM of data to backup
-WriteDataToBackup: ; 115e2 (4:55e2)
+WriteDataToBackup:
 	ldh a, [hBankSRAM]
 	push af
 .loop
@@ -2948,19 +2986,19 @@ WriteDataToBackup: ; 115e2 (4:55e2)
 	call DisableSRAM
 	ret
 
-LoadBackupCardAndDeckSaveData: ; 115ff (4:55ff)
+LoadBackupCardAndDeckSaveData:
 	ld bc, sCardAndDeckSaveDataEnd - sCardAndDeckSaveData
 	ld hl, sCardCollection
 	jr LoadDataFromBackup
 
-LoadBackupGeneralSaveData: ; 11607 (4:5607)
+LoadBackupGeneralSaveData:
 	ld bc, sGeneralSaveDataEnd - sGeneralSaveData
 	ld hl, sGeneralSaveData
 ;	fallthrough
 
 ; bc = number of bytes to load from backup
 ; hl = pointer in SRAM of backup data
-LoadDataFromBackup: ; 1160d (4:560d)
+LoadDataFromBackup:
 	ldh a, [hBankSRAM]
 	push af
 
@@ -2985,7 +3023,7 @@ LoadDataFromBackup: ; 1160d (4:560d)
 INCLUDE "data/map_scripts.asm"
 
 ; loads a pointer into hl found on NPCHeaderPointers
-GetNPCHeaderPointer: ; 1184a (4:584a)
+GetNPCHeaderPointer:
 	rlca
 	add LOW(NPCHeaderPointers)
 	ld l, a
@@ -2997,7 +3035,7 @@ GetNPCHeaderPointer: ; 1184a (4:584a)
 	ld l, a
 	ret
 
-LoadNPCSpriteData: ; 11857 (4:5857)
+LoadNPCSpriteData:
 	push hl
 	push bc
 	call GetNPCHeaderPointer
@@ -3023,7 +3061,7 @@ LoadNPCSpriteData: ; 11857 (4:5857)
 	ret
 
 ; Loads Name into wCurrentNPCNameTx and gets Script ptr into bc
-GetNPCNameAndScript: ; 1187d (4:587d)
+GetNPCNameAndScript:
 	push hl
 	call GetNPCHeaderPointer
 	ld bc, NPC_DATA_SCRIPT_PTR
@@ -3040,7 +3078,7 @@ GetNPCNameAndScript: ; 1187d (4:587d)
 	ret
 
 ; Sets Dialog Box title to the name of the npc in 'a'
-SetNPCDialogName: ; 11893 (4:5893)
+SetNPCDialogName:
 	push hl
 	push bc
 	call GetNPCHeaderPointer
@@ -3055,7 +3093,7 @@ SetNPCDialogName: ; 11893 (4:5893)
 	ret
 
 ; set the opponent name and portrait for the NPC id in register a
-SetNPCOpponentNameAndPortrait: ; 118a7 (4:58a7)
+SetNPCOpponentNameAndPortrait:
 	push hl
 	push bc
 	call GetNPCHeaderPointer
@@ -3072,7 +3110,7 @@ SetNPCOpponentNameAndPortrait: ; 118a7 (4:58a7)
 	ret
 
 ; set the deck id and duel theme for the NPC id in register a
-SetNPCDeckIDAndDuelTheme: ; 118bf (4:58bf)
+SetNPCDeckIDAndDuelTheme:
 	push hl
 	push bc
 	call GetNPCHeaderPointer
@@ -3087,7 +3125,7 @@ SetNPCDeckIDAndDuelTheme: ; 118bf (4:58bf)
 	ret
 
 ; set the start theme for the NPC id in register a
-SetNPCMatchStartTheme: ; 118d3 (4:58d3)
+SetNPCMatchStartTheme:
 	push hl
 	push bc
 	push af
@@ -3112,7 +3150,7 @@ SetNPCMatchStartTheme: ; 118d3 (4:58d3)
 
 INCLUDE "data/npcs.asm"
 
-_GetNPCDuelConfigurations: ; 11f4e (4:5f4e)
+_GetNPCDuelConfigurations:
 	push hl
 	push bc
 	push de
@@ -3145,7 +3183,7 @@ _GetNPCDuelConfigurations: ; 11f4e (4:5f4e)
 	pop hl
 	ret
 
-_GetChallengeMachineDuelConfigurations: ; 11f7d (4:5f7d)
+_GetChallengeMachineDuelConfigurations:
 	push bc
 	push de
 	ld a, [wNPCDuelDeckID]
@@ -3180,7 +3218,7 @@ _GetChallengeMachineDuelConfigurations: ; 11f7d (4:5f7d)
 	pop bc
 	ret
 
-DeckIDDuelConfigurations: ; 11fae (4:5fae)
+DeckIDDuelConfigurations:
 	db SAMS_PRACTICE_DECK_ID ; deck ID
 	db SAM_PIC ; NPC portrait
 	tx SamNPCName ; name text ID
@@ -3551,7 +3589,7 @@ DeckIDDuelConfigurations: ; 11fae (4:5fae)
 
 	db -1 ; end
 
-OverworldScriptTable: ; 1217b (4:617b)
+OverworldScriptTable:
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_CloseAdvancedTextBox
 	dw ScriptCommand_PrintNPCText
@@ -3657,7 +3695,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
 
-MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ; 1224b (4:624b)
+MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst:
 	db $04, $00     ; x, y to start drawing box
 	db $10, $08     ; width, height of box
 	db $06, $02     ; x, y coordinate to start printing next text
@@ -3674,7 +3712,7 @@ MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ; 1224b (4:624b)
 	db SYM_SPACE    ; tile behind cursor
 	dw NULL         ; function pointer if non-0
 
-MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ; 12264 (4:6264)
+MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck:
 	db $04, $00     ; x, y to start drawing box
 	db $10, $08     ; width, height of box
 	db $06, $02     ; x, y coordinate to start printing next text
@@ -3691,7 +3729,7 @@ MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ; 12264 (4:6264)
 	db SYM_SPACE    ; tile behind cursor
 	dw NULL         ; function pointer if non-0
 
-SamNormalMultichoice_ConfigurationTable: ; 1227d (4:627d)
+SamNormalMultichoice_ConfigurationTable:
 	db $0a, $00     ; x, y to start drawing box
 	db $0a, $0a     ; width, height of box
 	db $0c, $02     ; x, y coordinate to start printing next text
@@ -3704,7 +3742,7 @@ SamNormalMultichoice_ConfigurationTable: ; 1227d (4:627d)
 	db SYM_SPACE    ; tile behind cursor
 	dw NULL         ; function pointer if non-0
 
-SamRulesMultichoice_ConfigurationTable: ; 1228e (4:628e)
+SamRulesMultichoice_ConfigurationTable:
 	db $06, $00     ; x, y to start drawing box
 	db $0e, $12     ; width, height of box
 	db $08, $02     ; x coordinate to start printing text
@@ -3720,7 +3758,7 @@ SamRulesMultichoice_ConfigurationTable: ; 1228e (4:628e)
 INCLUDE "data/overworld_map/player_movement_paths.asm"
 
 ; unreferenced debug menu
-Func_12661: ; 12661 (4:6661)
+Func_12661:
 	xor a
 	ld [wDebugMenuSelection], a
 	ld [wDebugBoosterSelection], a
@@ -3740,7 +3778,7 @@ Func_12661: ; 12661 (4:6661)
 	ld [wLineSeparation], a
 	ld a, [wDebugMenuSelection]
 	ld hl, Unknown_128f7
-	call InitAndPrintPauseMenu
+	call InitAndPrintMenu
 	call EnableLCD
 .asm_12698
 	call DoFrameIfLCDEnabled
@@ -3756,12 +3794,12 @@ Func_12661: ; 12661 (4:6661)
 	jr c, .asm_1266d
 	ret
 
-Func_126b3: ; 126b3 (4:66b3)
+Func_126b3:
 	ldh a, [hCurMenuItem]
 	ld hl, Unknown_126bb
 	jp JumpToFunctionInTable
 
-Unknown_126bb: ; 126bb (4:66bb)
+Unknown_126bb:
 	dw _GameLoop
 	dw DebugDuelMode
 	dw MainMenu_ContinueFromDiary
@@ -3777,7 +3815,7 @@ Unknown_126bb: ; 126bb (4:66bb)
 ; usually, the game doesn't loop here at all, since as soon as a main menu option
 ; is selected, there is no need to come back to the menu.
 ; the only exception is after returning from Card Pop!
-_GameLoop: ; 126d1 (4:66d1)
+_GameLoop:
 	call ZeroObjectPositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
@@ -3799,13 +3837,13 @@ _GameLoop: ; 126d1 (4:66d1)
 	scf
 	ret
 
-MainMenuFunctionTable: ; 126fc (4:66fc)
+MainMenuFunctionTable:
 	dw MainMenu_CardPop
 	dw MainMenu_ContinueFromDiary
 	dw MainMenu_NewGame
 	dw MainMenu_ContinueDuel
 
-MainMenu_NewGame: ; 12704 (4:6704)
+MainMenu_NewGame:
 	farcall Func_c1b1
 	call DisplayPlayerNamingScreen
 	farcall InitSaveData
@@ -3828,7 +3866,7 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	or a
 	ret
 
-MainMenu_ContinueFromDiary: ; 12741 (4:6741)
+MainMenu_ContinueFromDiary:
 	ld a, MUSIC_STOP
 	call PlaySong
 	call ValidateBackupGeneralSaveData
@@ -3845,7 +3883,7 @@ MainMenu_ContinueFromDiary: ; 12741 (4:6741)
 	or a
 	ret
 
-MainMenu_CardPop: ; 12768 (4:6768)
+MainMenu_CardPop:
 	ld a, MUSIC_CARD_POP
 	call PlaySong
 	bank1call DoCardPop
@@ -3856,7 +3894,7 @@ MainMenu_CardPop: ; 12768 (4:6768)
 	scf
 	ret
 
-MainMenu_ContinueDuel: ; 1277e (4:677e)
+MainMenu_ContinueDuel:
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall ClearEvents
@@ -3868,21 +3906,21 @@ MainMenu_ContinueDuel: ; 1277e (4:677e)
 	or a
 	ret
 
-DebugLookAtSprite: ; 1279a (4:679a)
+DebugLookAtSprite:
 	farcall Func_80cd7
 	scf
 	ret
 
-DebugVEffect: ; 127a0 (4:67a0)
+DebugVEffect:
 	farcall Func_80cd6
 	scf
 	ret
 
-DebugCreateBoosterPack: ; 127a6 (4:67a6)
+DebugCreateBoosterPack:
 .go_back
 	ld a, [wDebugBoosterSelection]
 	ld hl, Unknown_12919
-	call InitAndPrintPauseMenu
+	call InitAndPrintMenu
 .input_loop_1
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
@@ -3900,7 +3938,7 @@ DebugCreateBoosterPack: ; 127a6 (4:67a6)
 	ld h, [hl]
 	ld l, a
 	xor a
-	call InitAndPrintPauseMenu
+	call InitAndPrintMenu
 .input_loop_2
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
@@ -3921,31 +3959,31 @@ DebugCreateBoosterPack: ; 127a6 (4:67a6)
 	scf
 	ret
 
-Unknown_127f1: ; 127f1 (4:67f1)
+Unknown_127f1:
 	dw Unknown_1292a
 	dw Unknown_1292a
 	dw Unknown_1293b
 	dw Unknown_1294c
 	dw Unknown_1295d
 
-Unknown_127fb: ; 127fb (4:67fb)
+Unknown_127fb:
 	db BOOSTER_COLOSSEUM_NEUTRAL
 	db BOOSTER_EVOLUTION_NEUTRAL
 	db BOOSTER_MYSTERY_NEUTRAL
 	db BOOSTER_LABORATORY_NEUTRAL
 	db BOOSTER_ENERGY_LIGHTNING_FIRE
 
-DebugCredits: ; 12800 (4:6800)
+DebugCredits:
 	farcall PlayCreditsSequence
 	scf
 	ret
 
-DebugCGBTest: ; 12806 (4:6806)
+DebugCGBTest:
 	farcall Func_1c865
 	scf
 	ret
 
-DebugSGBFrame: ; 1280c (4:680c)
+DebugSGBFrame:
 	call DisableLCD
 	ld a, [wDebugSGBBorder]
 	farcall SetSGBBorder
@@ -3959,13 +3997,13 @@ DebugSGBFrame: ; 1280c (4:680c)
 	scf
 	ret
 
-DebugDuelMode: ; 12824 (4:6824)
+DebugDuelMode:
 	call EnableSRAM
 	ld a, [sDebugDuelMode]
 	and $01
 	ld [sDebugDuelMode], a
 	ld hl, Unknown_12908
-	call InitAndPrintPauseMenu
+	call InitAndPrintMenu
 .input_loop
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
@@ -3979,40 +4017,41 @@ DebugDuelMode: ; 12824 (4:6824)
 	scf
 	ret
 
-DebugStandardBGCharacter: ; 1284c (4:684c)
+DebugStandardBGCharacter:
 	ld a, $80
 	ld de, $0
 	lb bc, 16, 16
 	lb hl,  1, 16
 	call FillRectangle
-	ld a, $ff
-	call Func_12863
+	ld a, BUTTONS | D_PAD
+	call WaitUntilKeysArePressed
 	scf
 	ret
 
-DebugQuit: ; 12861 (4:6861)
+DebugQuit:
 	or a
 	ret
 
-Func_12863: ; 12863 (4:6863)
+; a = keys to escape
+WaitUntilKeysArePressed:
 	push bc
 	ld b, a
-.asm_12865
+.loop_input
 	push bc
 	call DoFrameIfLCDEnabled
 	pop bc
 	ldh a, [hKeysPressed]
 	and b
-	jr z, .asm_12865
+	jr z, .loop_input
 	pop bc
 	ret
 
-Func_12871: ; 12871 (4:6871)
+Func_12871:
 	call ZeroObjectPositions
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call Set_OBJ_8x8
-	call Func_1288c
+	call SetDefaultPalettes
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a
@@ -4021,7 +4060,10 @@ Func_12871: ; 12871 (4:6871)
 	call SetWindowOff
 	ret
 
-Func_1288c: ; 1288c (4:688c)
+; same as SetDefaultConsolePalettes
+; but forces all wBGP, wOBP0 and wOBP1
+; to be the defaultm
+SetDefaultPalettes:
 	push hl
 	push bc
 	push de
@@ -4031,14 +4073,14 @@ Func_1288c: ; 1288c (4:688c)
 	ld [wOBP1], a
 	ld a, 4
 	ld [wTextBoxFrameType], a
-	bank1call SetDefaultPalettes
+	bank1call SetDefaultConsolePalettes
 	call FlushAllPalettes
 	pop de
 	pop bc
 	pop hl
 	ret
 
-DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
+DisplayPlayerNamingScreen::
 	; clear the name buffer.
 	ld hl, wNameBuffer ; c500: name buffer.
 	ld bc, NAME_BUFFER_LENGTH
@@ -4079,12 +4121,12 @@ DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 	textfw3 "MARK"
 	db TX_END, TX_END, TX_END, TX_END
 
-Unknown_128f7: ; 128f7 (4:68f7)
+Unknown_128f7:
 	db  0,  0 ; start menu coords
 	db 16, 18 ; start menu text box dimensions
 
 	db  2, 2 ; text alignment for InitTextPrinting
-	tx Text037a
+	tx DebugMenuText
 	db $ff
 
 	db 1, 2 ; cursor x, cursor y
@@ -4094,7 +4136,7 @@ Unknown_128f7: ; 128f7 (4:68f7)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Unknown_12908: ; 12908 (4:6908)
+Unknown_12908:
 	db 10, 0 ; start menu coords
 	db 10, 6 ; start menu text box dimensions
 
@@ -4109,12 +4151,12 @@ Unknown_12908: ; 12908 (4:6908)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Unknown_12919: ; 12919 (4:6919)
+Unknown_12919:
 	db  0,  0 ; start menu coords
 	db 12, 12 ; start menu text box dimensions
 
 	db  2, 2 ; text alignment for InitTextPrinting
-	tx Text037c
+	tx DebugBoosterPackMenuText
 	db $ff
 
 	db 1, 2 ; cursor x, cursor y
@@ -4124,12 +4166,12 @@ Unknown_12919: ; 12919 (4:6919)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Unknown_1292a: ; 1292a (4:692a)
+Unknown_1292a:
 	db 12,  0 ; start menu coords
 	db  4, 16 ; start menu text box dimensions
 
 	db 14, 2 ; text alignment for InitTextPrinting
-	tx Text037d
+	tx DebugBoosterPackColosseumEvolutionMenuText
 	db $ff
 
 	db 13, 2 ; cursor x, cursor y
@@ -4139,12 +4181,12 @@ Unknown_1292a: ; 1292a (4:692a)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Unknown_1293b: ; 1293b (4:693b)
+Unknown_1293b:
 	db 12,  0 ; start menu coords
 	db  4, 14 ; start menu text box dimensions
 
 	db 14, 2 ; text alignment for InitTextPrinting
-	tx Text037e
+	tx DebugBoosterPackMysteryMenuText
 	db $ff
 
 	db 13, 2 ; cursor x, cursor y
@@ -4154,12 +4196,12 @@ Unknown_1293b: ; 1293b (4:693b)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Unknown_1294c: ; 1294c (4:694c)
+Unknown_1294c:
 	db 12,  0 ; start menu coords
 	db  4, 12 ; start menu text box dimensions
 
 	db 14, 2 ; text alignment for InitTextPrinting
-	tx Text037f
+	tx DebugBoosterPackLaboratoryMenuText
 	db $ff
 
 	db 13, 2 ; cursor x, cursor y
@@ -4169,12 +4211,12 @@ Unknown_1294c: ; 1294c (4:694c)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Unknown_1295d: ; 1295d (4:695d)
+Unknown_1295d:
 	db 12,  0 ; start menu coords
 	db  4, 10 ; start menu text box dimensions
 
 	db 14, 2 ; text alignment for InitTextPrinting
-	tx Text0380
+	tx DebugBoosterPackEnergyMenuText
 	db $ff
 
 	db 13, 2 ; cursor x, cursor y
@@ -4186,15 +4228,14 @@ Unknown_1295d: ; 1295d (4:695d)
 
 ; disables all sprite animations
 ; and clears memory related to sprites
-Func_1296e: ; 1296e (4:696e)
+Func_1296e:
 	push af
 	ld a, [wd5d7]
 	or a
-	jr z, .asm_12977
+	jr z, .continue
 	pop af
 	ret
-
-.asm_12977
+.continue
 	pop af
 	push bc
 	push hl
@@ -4214,7 +4255,7 @@ Func_1296e: ; 1296e (4:696e)
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr nz, .loop_sprites
 
-	call Func_12bf3
+	call ClearSpriteVRAMBuffer
 	call ZeroObjectPositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
@@ -4223,7 +4264,7 @@ Func_1296e: ; 1296e (4:696e)
 	ret
 
 ; creates a new entry in SpriteAnimBuffer, else loads the sprite if need be
-CreateSpriteAndAnimBufferEntry: ; 1299f (4:699f)
+CreateSpriteAndAnimBufferEntry:
 	push af
 	ld a, [wd5d7]
 	or a
@@ -4263,7 +4304,7 @@ CreateSpriteAndAnimBufferEntry: ; 1299f (4:699f)
 	pop bc
 	ret
 
-FillNewSpriteAnimBufferEntry: ; 129d9 (4:69d9)
+FillNewSpriteAnimBufferEntry:
 	push hl
 	push bc
 	push hl
@@ -4289,13 +4330,13 @@ FillNewSpriteAnimBufferEntry: ; 129d9 (4:69d9)
 	pop hl
 	ret
 
-DisableCurSpriteAnim: ; 129fa (4:69fa)
+DisableCurSpriteAnim:
 	ld a, [wWhichSprite]
 	; fallthrough
 
 ; sets SPRITE_ANIM_ENABLED to false
 ; of sprite in register a
-DisableSpriteAnim: ; 129fd (4:69fd)
+DisableSpriteAnim:
 	push af
 	ld a, [wd5d7]
 	or a
@@ -4313,7 +4354,7 @@ DisableSpriteAnim: ; 129fd (4:69fd)
 	pop hl
 	ret
 
-GetSpriteAnimCounter: ; 12a13 (4:6a13)
+GetSpriteAnimCounter:
 	ld a, [wWhichSprite]
 	push hl
 	push bc
@@ -4324,7 +4365,7 @@ GetSpriteAnimCounter: ; 12a13 (4:6a13)
 	pop hl
 	ret
 
-_HandleAllSpriteAnimations: ; 12a21 (4:6a21)
+_HandleAllSpriteAnimations:
 	push af
 	ld a, [wd5d7] ; skip animating this frame if enabled
 	or a
@@ -4363,7 +4404,7 @@ _HandleAllSpriteAnimations: ; 12a21 (4:6a21)
 	pop af
 	ret
 
-LoadSpriteDataForAnimationFrame: ; 12a5b (4:6a5b)
+LoadSpriteDataForAnimationFrame:
 	push hl
 	push bc
 	inc hl
@@ -4397,7 +4438,7 @@ LoadSpriteDataForAnimationFrame: ; 12a5b (4:6a5b)
 
 ; decrements the given sprite's movement counter (2x if SPRITE_ANIM_FLAG_SPEED is set)
 ; moves to the next animation frame if necessary
-TryHandleSpriteAnimationFrame: ; 12a8b (4:6a8b)
+TryHandleSpriteAnimationFrame:
 	push hl
 	push bc
 	push de
@@ -4429,7 +4470,7 @@ TryHandleSpriteAnimationFrame: ; 12a8b (4:6a8b)
 	pop hl
 	ret
 
-StartNewSpriteAnimation: ; 12ab5 (4:6ab5)
+StartNewSpriteAnimation:
 	push hl
 	push af
 	ld c, SPRITE_ANIM_ID
@@ -4440,7 +4481,7 @@ StartNewSpriteAnimation: ; 12ab5 (4:6ab5)
 	ret z
 	; fallthrough
 
-StartSpriteAnimation: ; 12ac0 (4:6ac0)
+StartSpriteAnimation:
 	push hl
 	call LoadSpriteAnimPointers
 	call HandleAnimationFrame
@@ -4449,7 +4490,7 @@ StartSpriteAnimation: ; 12ac0 (4:6ac0)
 
 ; a = sprite animation
 ; c = animation counter value
-Func_12ac9: ; 12ac9 (4:6ac9)
+Func_12ac9:
 	push bc
 	ld b, a
 	ld a, c
@@ -4471,7 +4512,7 @@ Func_12ac9: ; 12ac9 (4:6ac9)
 
 ; Given an animation ID, fills the current sprite's Animation Pointer and Frame Offset Pointer
 ; a - Animation ID for current sprite
-LoadSpriteAnimPointers: ; 12ae2 (4:6ae2)
+LoadSpriteAnimPointers:
 	push bc
 	push af
 	call GetFirstSpriteAnimBufferProperty
@@ -4507,7 +4548,7 @@ LoadSpriteAnimPointers: ; 12ae2 (4:6ae2)
 ; hl - beginning of current sprite_anim_buffer
 ; Handles a full animation frame using all values in animation structure
 ; (frame data offset, anim counter, X Mov, Y Mov)
-HandleAnimationFrame: ; 12b13 (4:6b13)
+HandleAnimationFrame:
 	push bc
 	push de
 	push hl
@@ -4574,7 +4615,7 @@ HandleAnimationFrame: ; 12b13 (4:6b13)
 ; and wVRAMTileOffset
 ; a - frame offset from Animation Data
 ; hl - beginning of Sprite Anim Buffer
-GetAnimFramePointerFromOffset: ; 12b6a (4:6b6a)
+GetAnimFramePointerFromOffset:
 	ld [wVRAMTileOffset], a
 	push hl
 	push bc
@@ -4597,7 +4638,7 @@ GetAnimFramePointerFromOffset: ; 12b6a (4:6b6a)
 
 ; Sets the animation counter for the current sprite. If the value is zero, loop the animation
 ; a - new animation counter
-SetAnimationCounterAndLoop: ; 12b89 (4:6b89)
+SetAnimationCounterAndLoop:
 	push hl
 	push bc
 	ld bc, SPRITE_ANIM_COUNTER
@@ -4623,7 +4664,7 @@ SetAnimationCounterAndLoop: ; 12b89 (4:6b89)
 	pop hl
 	ret
 
-Func_12ba7: ; 12ba7 (4:6ba7)
+Func_12ba7:
 	push hl
 	push bc
 	push de
@@ -4643,7 +4684,7 @@ Func_12ba7: ; 12ba7 (4:6ba7)
 	pop hl
 	ret
 
-Func_12bcd: ; 12bcd (4:6bcd)
+Func_12bcd:
 	push hl
 	push bc
 	push de
@@ -4664,7 +4705,7 @@ Func_12bcd: ; 12bcd (4:6bcd)
 	ret
 
 ; clears wSpriteVRAMBufferSize and wSpriteVRAMBuffer
-Func_12bf3: ; 12bf3 (4:6bf3)
+ClearSpriteVRAMBuffer:
 	push hl
 	push bc
 	xor a
@@ -4681,7 +4722,7 @@ Func_12bf3: ; 12bf3 (4:6bf3)
 
 ; gets some value based on the sprite in a and wSpriteVRAMBuffer
 ; loads the sprites data if it doesn't already exist
-Func_12c05: ; 12c05 (4:6c05)
+Func_12c05:
 	push hl
 	push bc
 	push de
@@ -4752,7 +4793,7 @@ Func_12c05: ; 12c05 (4:6c05)
 ; d = tile offset in VRAM
 ; output:
 ; a = number of tiles in sprite
-Func_12c4f: ; 12c4f (4:6c4f)
+Func_12c4f:
 	push af
 	xor a
 	ld [wd4cb], a
@@ -4762,7 +4803,7 @@ Func_12c4f: ; 12c4f (4:6c4f)
 	farcall Func_8025b
 	ret
 
-Func_12c5e: ; 12c5e (4:6c5e)
+Func_12c5e:
 	push hl
 	push bc
 	push de
@@ -4794,7 +4835,7 @@ Func_12c5e: ; 12c5e (4:6c5e)
 ; a = scene ID (SCENE_* constant)
 ; b = base X position of scene in tiles
 ; c = base Y position of scene in tiles
-_LoadScene: ; 12c7f (4:6c7f)
+_LoadScene:
 	push hl
 	push bc
 	push de
@@ -4938,7 +4979,7 @@ _LoadScene: ; 12c7f (4:6c7f)
 	pop hl
 	ret
 
-ScenePointers: ; 12d6f (4:6d6f)
+ScenePointers:
 	dw Scene_TitleScreen
 	dw Scene_ColosseumBooster
 	dw Scene_EvolutionBooster
@@ -4980,21 +5021,21 @@ ScenePointers: ; 12d6f (4:6d6f)
 ; db animation (non-cgb), animation (cgb), x offset, y offset
 ; dw 0-terminator
 
-Scene_TitleScreen: ; 12da7 (4:6da7)
+Scene_TitleScreen:
 	dw SGBData_TitleScreen
 	dw NULL
 	db PALETTE_25, PALETTE_25, $00
 	db TILEMAP_TITLE_SCREEN, TILEMAP_TITLE_SCREEN_CGB, $00, $00
 	db $00
 
-Scene_JapaneseTitleScreen: ; 12db3 (4:6db3)
+Scene_JapaneseTitleScreen:
 	dw SGBData_TitleScreen
 	dw NULL
 	db PALETTE_25, PALETTE_25, $00
 	db TILEMAP_JAPANESE_TITLE_SCREEN, TILEMAP_JAPANESE_TITLE_SCREEN_CGB, $80, $00
 	db $00
 
-Scene_ColosseumBooster: ; 12dbf (4:6dbf)
+Scene_ColosseumBooster:
 	dw SGBData_ColosseumBooster
 	dw NULL
 	db PALETTE_108, PALETTE_101, $01
@@ -5004,7 +5045,7 @@ Scene_ColosseumBooster: ; 12dbf (4:6dbf)
 	db $ff, SPRITE_ANIM_189, $00, $00
 	dw $00
 
-Scene_EvolutionBooster: ; 12dd4 (4:6dd4)
+Scene_EvolutionBooster:
 	dw SGBData_EvolutionBooster
 	dw NULL
 	db PALETTE_108, PALETTE_102, $01
@@ -5014,7 +5055,7 @@ Scene_EvolutionBooster: ; 12dd4 (4:6dd4)
 	db $ff, SPRITE_ANIM_189, $00, $00
 	dw $00
 
-Scene_MysteryBooster: ; 12de9 (4:6de9)
+Scene_MysteryBooster:
 	dw SGBData_MysteryBooster
 	dw NULL
 	db PALETTE_108, PALETTE_103, $01
@@ -5024,7 +5065,7 @@ Scene_MysteryBooster: ; 12de9 (4:6de9)
 	db $ff, SPRITE_ANIM_189, $00, $00
 	dw $00
 
-Scene_LaboratoryBooster: ; 12dfe (4:6dfe)
+Scene_LaboratoryBooster:
 	dw SGBData_LaboratoryBooster
 	dw NULL
 	db PALETTE_108, PALETTE_104, $01
@@ -5034,84 +5075,84 @@ Scene_LaboratoryBooster: ; 12dfe (4:6dfe)
 	db $ff, SPRITE_ANIM_189, $00, $00
 	dw $00
 
-Scene_CharizardIntro: ; 12e13 (4:6e13)
+Scene_CharizardIntro:
 	dw SGBData_CharizardIntro
 	dw NULL
 	db PALETTE_108, PALETTE_105, $01
 	db TILEMAP_CHARIZARD_INTRO, TILEMAP_CHARIZARD_INTRO_CGB, $80, $00
 	db $00
 
-Scene_ScytherIntro: ; 12e1f (4:6e1f)
+Scene_ScytherIntro:
 	dw SGBData_ScytherIntro
 	dw NULL
 	db PALETTE_108, PALETTE_106, $01
 	db TILEMAP_SCYTHER_INTRO, TILEMAP_SCYTHER_INTRO_CGB, $80, $00
 	db $00
 
-Scene_AerodactylIntro: ; 12e2b (4:6e2b)
+Scene_AerodactylIntro:
 	dw SGBData_AerodactylIntro
 	dw NULL
 	db PALETTE_108, PALETTE_107, $01
 	db TILEMAP_AERODACTYL_INTRO, TILEMAP_AERODACTYL_INTRO_CGB, $80, $00
 	db $00
 
-Scene_GradientBlackAndRed: ; 12e37 (4:6e37)
+Scene_GradientBlackAndRed:
 	dw NULL
 	dw NULL
 	db PALETTE_94, PALETTE_94, $00
 	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
 	db $00
 
-Scene_GradientWhiteAndRed: ; 12e43 (4:6e43)
+Scene_GradientWhiteAndRed:
 	dw NULL
 	dw NULL
 	db PALETTE_95, PALETTE_95, $00
 	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
 	db $00
 
-Scene_GradientBlackAndGreen: ; 12e4f (4:6e4f)
+Scene_GradientBlackAndGreen:
 	dw NULL
 	dw NULL
 	db PALETTE_96, PALETTE_96, $00
 	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
 	db $00
 
-Scene_GradientWhiteAndGreen: ; 12e5b (4:6e5b)
+Scene_GradientWhiteAndGreen:
 	dw NULL
 	dw NULL
 	db PALETTE_97, PALETTE_97, $00
 	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
 	db $00
 
-Scene_ColorWheel: ; 12e67 (4:6e67)
+Scene_ColorWheel:
 	dw NULL
 	dw NULL
 	db PALETTE_98, PALETTE_98, $00
 	db TILEMAP_SOLID_TILES_2, TILEMAP_SOLID_TILES_2, $01, $00
 	db $00
 
-Scene_ColorTest: ; 12e73 (4:6e73)
+Scene_ColorTest:
 	dw NULL
 	dw NULL
 	db PALETTE_99, PALETTE_99, $00
 	db TILEMAP_SOLID_TILES_3, TILEMAP_SOLID_TILES_3, $01, $00
 	db $00
 
-Scene_ColorPalette: ; 12e7f (4:6e7f)
+Scene_ColorPalette:
 	dw NULL
 	dw NULL
 	db PALETTE_110, PALETTE_110, $00
 	db TILEMAP_SOLID_TILES_4, TILEMAP_SOLID_TILES_4, $fc, $01
 	db $00
 
-Scene_GameBoyLinkConnecting: ; 12e8b (4:6e8b)
+Scene_GameBoyLinkConnecting:
 	dw SGBData_GameBoyLink
 	dw NULL
 	db PALETTE_111, PALETTE_111, $00
 	db TILEMAP_GAMEBOY_LINK_CONNECTING, TILEMAP_GAMEBOY_LINK_CONNECTING_CGB, $90, $00
 	db $00
 
-Scene_GameBoyLinkTransmitting: ; 12e97 (4:6e97)
+Scene_GameBoyLinkTransmitting:
 	dw SGBData_GameBoyLink
 	dw NULL
 	db PALETTE_111, PALETTE_111, $00
@@ -5121,7 +5162,7 @@ Scene_GameBoyLinkTransmitting: ; 12e97 (4:6e97)
 	db SPRITE_ANIM_179, SPRITE_ANIM_176, $50, $50
 	dw $00
 
-Scene_GameBoyLinkNotConnected: ; 12eac (4:6eac)
+Scene_GameBoyLinkNotConnected:
 	dw SGBData_GameBoyLink
 	dw NULL
 	db PALETTE_111, PALETTE_111, $00
@@ -5131,7 +5172,7 @@ Scene_GameBoyLinkNotConnected: ; 12eac (4:6eac)
 	db SPRITE_ANIM_180, SPRITE_ANIM_177, $50, $50
 	dw $00
 
-Scene_GameBoyPrinterTransmitting: ; 12ec1 (4:6ec1)
+Scene_GameBoyPrinterTransmitting:
 	dw SGBData_GameBoyPrinter
 	dw LoadScene_SetGameBoyPrinterAttrBlk
 	db PALETTE_112, PALETTE_112, $00
@@ -5141,7 +5182,7 @@ Scene_GameBoyPrinterTransmitting: ; 12ec1 (4:6ec1)
 	db SPRITE_ANIM_183, SPRITE_ANIM_181, $50, $30
 	dw $00
 
-Scene_GameBoyPrinterNotConnected: ; 12ed6 (4:6ed6)
+Scene_GameBoyPrinterNotConnected:
 	dw SGBData_GameBoyPrinter
 	dw LoadScene_SetGameBoyPrinterAttrBlk
 	db PALETTE_112, PALETTE_112, $00
@@ -5151,7 +5192,7 @@ Scene_GameBoyPrinterNotConnected: ; 12ed6 (4:6ed6)
 	db SPRITE_ANIM_184, SPRITE_ANIM_182, $50, $30
 	dw $00
 
-Scene_CardPop: ; 12eeb (4:6eeb)
+Scene_CardPop:
 	dw SGBData_CardPop
 	dw LoadScene_SetCardPopAttrBlk
 	db PALETTE_113, PALETTE_113, $00
@@ -5161,7 +5202,7 @@ Scene_CardPop: ; 12eeb (4:6eeb)
 	db SPRITE_ANIM_187, SPRITE_ANIM_185, $50, $40
 	dw $00
 
-Scene_CardPopError: ; 12f00 (4:6f00)
+Scene_CardPopError:
 	dw SGBData_CardPop
 	dw LoadScene_SetCardPopAttrBlk
 	db PALETTE_113, PALETTE_113, $00
@@ -5171,35 +5212,35 @@ Scene_CardPopError: ; 12f00 (4:6f00)
 	db SPRITE_ANIM_188, SPRITE_ANIM_186, $50, $40
 	dw $00
 
-Scene_Nintendo: ; 12f15 (4:6f15)
+Scene_Nintendo:
 	dw NULL
 	dw NULL
 	db PALETTE_27, PALETTE_27, $00
 	db TILEMAP_NINTENDO, TILEMAP_NINTENDO, $00, $00
 	db $00
 
-Scene_Companies: ; 12f21 (4:6f21)
+Scene_Companies:
 	dw NULL
 	dw NULL
 	db PALETTE_28, PALETTE_28, $00
 	db TILEMAP_COMPANIES, TILEMAP_COMPANIES, $00, $00
 	db $00
 
-Scene_Copyright: ; 12f2d (4:6f2d)
+Scene_Copyright:
 	dw NULL
 	dw NULL
 	db PALETTE_26, PALETTE_26, $00
 	db TILEMAP_COPYRIGHT, TILEMAP_COPYRIGHT_CGB, $00, $00
 	db $00
 
-Scene_JapaneseTitleScreen2: ; 12f39 (4:6f39)
+Scene_JapaneseTitleScreen2:
 	dw NULL
 	dw NULL
 	db PALETTE_109, PALETTE_100, $00
 	db TILEMAP_JAPANESE_TITLE_SCREEN_2, TILEMAP_JAPANESE_TITLE_SCREEN_2_CGB, $01, $00
 	db $00
 
-LoadScene_LoadCompressedSGBPacket: ; 12f45 (4:6f45)
+LoadScene_LoadCompressedSGBPacket:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
@@ -5215,7 +5256,7 @@ LoadScene_LoadCompressedSGBPacket: ; 12f45 (4:6f45)
 	pop hl
 	ret
 
-LoadScene_LoadSGBPacket: ; 12f5b (4:6f5b)
+LoadScene_LoadSGBPacket:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
@@ -5248,7 +5289,7 @@ LoadScene_LoadSGBPacket: ; 12f5b (4:6f5b)
 	pop hl
 	ret
 
-LoadScene_SetGameBoyPrinterAttrBlk: ; 12f8c (4:6f8c)
+LoadScene_SetGameBoyPrinterAttrBlk:
 	push hl
 	push bc
 	push de
@@ -5259,7 +5300,7 @@ LoadScene_SetGameBoyPrinterAttrBlk: ; 12f8c (4:6f8c)
 	pop hl
 	ret
 
-SGBPacket_GameBoyPrinter: ; 12f99 (4:6f99)
+SGBPacket_GameBoyPrinter:
 	sgb ATTR_BLK, 1
 	db 1 ; number of data sets
 	db ATTR_BLK_CTRL_OUTSIDE | ATTR_BLK_CTRL_LINE | ATTR_BLK_CTRL_INSIDE
@@ -5271,7 +5312,7 @@ SGBPacket_GameBoyPrinter: ; 12f99 (4:6f99)
 	ds 6 ; data set 2
 	ds 2 ; data set 3
 
-LoadScene_SetCardPopAttrBlk: ; 12fa9 (4:6fa9)
+LoadScene_SetCardPopAttrBlk:
 	push hl
 	push bc
 	push de
@@ -5282,7 +5323,7 @@ LoadScene_SetCardPopAttrBlk: ; 12fa9 (4:6fa9)
 	pop hl
 	ret
 
-SGBPacket_CardPop: ; 12fb6 (4:6fb6)
+SGBPacket_CardPop:
 	sgb ATTR_BLK, 1
 	db 1 ; number of data sets
 	db ATTR_BLK_CTRL_OUTSIDE | ATTR_BLK_CTRL_LINE | ATTR_BLK_CTRL_INSIDE
@@ -5294,16 +5335,16 @@ SGBPacket_CardPop: ; 12fb6 (4:6fb6)
 	ds 6 ; data set 2
 	ds 2 ; data set 3
 
-Func_12fc6: ; 12fc6 (4:6fc6)
+Func_12fc6:
 	ld a, [wd291]
 	push af
 	push de
 	push bc
-	ld de, wNamingScreenNamePosition
+	lb de, $d0, $07
 	ld a, [wCurTilemap]
 	cp TILEMAP_PLAYER
 	jr z, .asm_12fd9
-	ld de, sTextSpeed
+	lb de, $a0, $06
 .asm_12fd9
 	ld a, e
 	ld [wd291], a
@@ -5313,7 +5354,7 @@ Func_12fc6: ; 12fc6 (4:6fc6)
 	add a
 	ld c, a
 	ld b, $00
-	ld hl, Unknown_1301e
+	ld hl, PortraitGfxData
 	add hl, bc
 	ld a, [hli]
 	push hl
@@ -5336,13 +5377,13 @@ Func_12fc6: ; 12fc6 (4:6fc6)
 	ld h, [hl]
 	ld l, a
 	pop bc
-	farcall Func_7041d
+	farcall SendSGBPortraitPalettes
 	pop de
 	pop af
 	ld [wd291], a
 	ret
 
-Unknown_1301e: ; 1301e (4:701e)
+PortraitGfxData:
 	db TILESET_PLAYER, PALETTE_119
 	dw SGBData_PlayerPortraitPals
 
@@ -5472,7 +5513,7 @@ Unknown_1301e: ; 1301e (4:701e)
 	db TILESET_PLAYER, PALETTE_120
 	dw SGBData_LinkOpponentPortraitPals
 
-LoadBoosterGfx: ; 130ca (4:70ca)
+LoadBoosterGfx:
 	push hl
 	push bc
 	push de
@@ -5492,7 +5533,7 @@ LoadBoosterGfx: ; 130ca (4:70ca)
 	pop hl
 	ret
 
-SetBoosterLogoOAM: ; 130e6 (4:70e6)
+SetBoosterLogoOAM:
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ret nz
@@ -5543,7 +5584,7 @@ SetBoosterLogoOAM: ; 130e6 (4:70e6)
 	pop hl
 	ret
 
-BoosterLogoOAM: ; 13132 (4:7132)
+BoosterLogoOAM:
 	db $20
 	db $00, $00, $00, $00
 	db $00, $08, $01, $00

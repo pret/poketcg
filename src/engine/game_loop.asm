@@ -47,7 +47,7 @@ SetupResetBackUpRamScreen:
 	ld [wTileMapFill], a
 	call DisableLCD
 	call LoadSymbolsFont
-	call SetDefaultPalettes
+	call SetDefaultConsolePalettes
 	lb de, $38, $7f
 	call SetupText
 	ret

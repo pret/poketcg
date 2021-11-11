@@ -527,7 +527,7 @@ Func_1cba6:
 	xor a
 	ld [wd4b7], a
 
-	ld hl, wd4b4
+	ld hl, wDecimalChars
 	ld de, wAnimationQueue + 1
 .asm_1cbb3
 	push hl
@@ -588,7 +588,7 @@ Func_1cc03:
 	ld a, [wDuelAnimDamage + 1]
 	ld h, a
 
-	ld de, wd4b4
+	ld de, wDecimalChars
 	ld bc, -100
 	call .Func_1cc2f
 	ld bc, -10
@@ -597,7 +597,7 @@ Func_1cc03:
 	ld a, l
 	add $4f
 	ld [de], a
-	ld hl, wd4b4
+	ld hl, wDecimalChars
 	ld c, 2
 .asm_1cc23
 	ld a, [hl]

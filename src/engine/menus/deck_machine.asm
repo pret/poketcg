@@ -172,7 +172,7 @@ Func_af1d:
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
-	bank1call SetDefaultPalettes
+	bank1call SetDefaultConsolePalettes
 
 	lb de, $3c, $bf
 	call SetupText
@@ -797,7 +797,7 @@ ClearScreenAndDrawDeckMachineScreen:
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
-	bank1call SetDefaultPalettes
+	bank1call SetDefaultConsolePalettes
 	lb de, $3c, $ff
 	call SetupText
 	lb de, 0, 0
@@ -2104,7 +2104,7 @@ HandleAutoDeckMenu:
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
-	bank1call SetDefaultPalettes
+	bank1call SetDefaultConsolePalettes
 	lb de, $3c, $ff
 	call SetupText
 	lb de, 0, 0

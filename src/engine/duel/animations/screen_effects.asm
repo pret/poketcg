@@ -97,12 +97,12 @@ ShakeScreenX:
 	ld [wd4bc + 1], a
 
 	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.update)
+	ld [hl], LOW(.Update)
 	inc hl
-	ld [hl], HIGH(.update)
+	ld [hl], HIGH(.Update)
 	ret
 
-.update
+.Update
 	call DecrementScreenAnimDuration
 	call UpdateShakeOffset
 	jp nc, LoadDefaultScreenAnimationUpdateWhenFinished
@@ -125,12 +125,12 @@ ShakeScreenY:
 	ld a, h
 	ld [wd4bc + 1], a
 	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.update)
+	ld [hl], LOW(.Update)
 	inc hl
-	ld [hl], HIGH(.update)
+	ld [hl], HIGH(.Update)
 	ret
 
-.update
+.Update
 	call DecrementScreenAnimDuration
 	call UpdateShakeOffset
 	jp nc, LoadDefaultScreenAnimationUpdateWhenFinished
@@ -186,9 +186,9 @@ DecrementScreenAnimDuration:
 
 WhiteFlashScreen:
 	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.update)
+	ld [hl], LOW(.Update)
 	inc hl
-	ld [hl], HIGH(.update)
+	ld [hl], HIGH(.Update)
 	ld a, [wBGP]
 	ld [wd4bc], a
 	; backup the current background pals
@@ -204,7 +204,7 @@ WhiteFlashScreen:
 	call SetBGP
 	call FlushAllPalettes
 
-.update
+.Update
 	call DecrementScreenAnimDuration
 	ld a, [wScreenAnimDuration]
 	or a
@@ -221,9 +221,9 @@ WhiteFlashScreen:
 
 DistortScreen:
 	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.update)
+	ld [hl], LOW(.Update)
 	inc hl
-	ld [hl], HIGH(.update)
+	ld [hl], HIGH(.Update)
 	xor a
 	ld [wApplyBGScroll], a
 	ld hl, wLCDCFunctionTrampoline + 1
@@ -234,7 +234,7 @@ DistortScreen:
 	ld [wBGScrollMod], a
 	call EnableInt_LYCoincidence
 
-.update
+.Update
 	ld a, [wScreenAnimDuration]
 	srl a
 	srl a

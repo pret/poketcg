@@ -2560,13 +2560,13 @@ wWriteBGMapToSRAM:: ; d292
 wd293:: ; d293
 	ds $1
 
-wd294:: ; d294
+wTempBGP:: ; d294
 	ds $1
 
-wd295:: ; d295
+wTempOBP0:: ; d295
 	ds $1
 
-wd296:: ; d296
+wTempOBP1:: ; d296
 	ds $1
 
 ; temporarily holds the palettes from
@@ -2922,7 +2922,10 @@ wDuelAnimDamage:: ; d4b1
 wd4b3:: ; d4b3
 	ds $1
 
-wd4b4:: ; d4b4
+; stores the character symbols of some
+; value that was converted to decimal
+; through ConvertWordToNumericalDigits
+wDecimalChars:: ; d4b4
 	ds $3
 
 wd4b7:: ; d4b7

@@ -223,7 +223,7 @@ SetupDuel:
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadSymbolsFont
-	call SetDefaultPalettes
+	call SetDefaultConsolePalettes
 	lb de, $38, $9f
 	call SetupText
 	call EnableLCD
@@ -1604,7 +1604,7 @@ DrawDuelistPortraitsAndNames:
 	; opponent's portrait
 	ld a, [wOpponentPortrait]
 	lb bc, 13, 1
-	call Func_3e2a
+	call DrawOpponentPortrait
 	; middle line
 	call DrawDuelHorizontalSeparator
 	ret
@@ -3965,7 +3965,7 @@ SetSGB3ToCardPalette:
 	jr SetBGP7OrSGB2ToCardPalette.copy_pal_loop
 
 SetOBP1OrSGB3ToCardPalette:
-	ld a, $e4
+	ld a, %11100100
 	ld [wOBP0], a
 	ld a, [wConsole]
 	or a ; CONSOLE_DMG
@@ -4125,13 +4125,13 @@ ApplyCardCGBAttributes:
 ; BGP and OBP0 on DMG
 ; SGB0 and SGB1 on SGB
 ; BGP0 to BGP5 and OBP1 on CGB
-SetDefaultPalettes:
+SetDefaultConsolePalettes:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	jr z, .sgb
 	cp CONSOLE_CGB
 	jr z, .cgb
-	ld a, $e4
+	ld a, %11100100
 	ld [wOBP0], a
 	ld [wBGP], a
 	ld a, $01 ; equivalent to FLUSH_ONE_PAL
@@ -4200,7 +4200,7 @@ CGBDefaultPalettes:
 	rgb 28, 0, 0
 	rgb 0, 0, 0
 
-; first and last byte of the packet not contained here (see SetDefaultPalettes.sgb)
+; first and last byte of the packet not contained here (see SetDefaultConsolePalettes.sgb)
 Pal01Packet_Default:
 ; SGB0
 	rgb 28, 28, 24
@@ -4718,7 +4718,7 @@ DrawLargePictureOfCard:
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadSymbolsFont
-	call SetDefaultPalettes
+	call SetDefaultConsolePalettes
 	ld a, LARGE_CARD_PICTURE
 	ld [wDuelDisplayedScreen], a
 	call LoadCardOrDuelMenuBorderTiles
