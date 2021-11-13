@@ -1,224 +1,604 @@
-; \1 = anim data pointer
-anim_data_pointer: MACRO
-	dwb \1, BANK(\1) - BANK(SpriteAnimations)
-	db $00 ; unused (padding?)
-ENDM
+; disables all sprite animations
+; and clears memory related to sprites
+Func_1296e:
+	push af
+	ld a, [wd5d7]
+	or a
+	jr z, .continue
+	pop af
+	ret
+.continue
+	pop af
+	push bc
+	push hl
+	xor a
+	ld [wWhichSprite], a
+	call GetFirstSpriteAnimBufferProperty
+	lb bc, 0, SPRITE_ANIM_LENGTH
 
-SpriteAnimations:
-	anim_data_pointer AnimData0   ; SPRITE_ANIM_LIGHT_NPC_UP
-	anim_data_pointer AnimData1   ; SPRITE_ANIM_LIGHT_NPC_RIGHT
-	anim_data_pointer AnimData2   ; SPRITE_ANIM_LIGHT_NPC_DOWN
-	anim_data_pointer AnimData3   ; SPRITE_ANIM_LIGHT_NPC_LEFT
-	anim_data_pointer AnimData4   ; SPRITE_ANIM_DARK_NPC_UP
-	anim_data_pointer AnimData5   ; SPRITE_ANIM_DARK_NPC_RIGHT
-	anim_data_pointer AnimData6   ; SPRITE_ANIM_DARK_NPC_DOWN
-	anim_data_pointer AnimData7   ; SPRITE_ANIM_DARK_NPC_LEFT
-	anim_data_pointer AnimData8   ; SPRITE_ANIM_SGB_AMY_LAYING
-	anim_data_pointer AnimData9   ; SPRITE_ANIM_SGB_AMY_STAND
-	anim_data_pointer AnimData10  ; SPRITE_ANIM_SGB_CLERK_NPC_UP
-	anim_data_pointer AnimData11  ; SPRITE_ANIM_SGB_CLERK_NPC_RIGHT
-	anim_data_pointer AnimData12  ; SPRITE_ANIM_SGB_CLERK_NPC_DOWN
-	anim_data_pointer AnimData13  ; SPRITE_ANIM_SGB_CLERK_NPC_LEFT
-	anim_data_pointer AnimData14  ; SPRITE_ANIM_BLUE_NPC_UP
-	anim_data_pointer AnimData15  ; SPRITE_ANIM_BLUE_NPC_RIGHT
-	anim_data_pointer AnimData16  ; SPRITE_ANIM_BLUE_NPC_DOWN
-	anim_data_pointer AnimData17  ; SPRITE_ANIM_BLUE_NPC_LEFT
-	anim_data_pointer AnimData18  ; SPRITE_ANIM_PINK_NPC_UP
-	anim_data_pointer AnimData19  ; SPRITE_ANIM_PINK_NPC_RIGHT
-	anim_data_pointer AnimData20  ; SPRITE_ANIM_PINK_NPC_DOWN
-	anim_data_pointer AnimData21  ; SPRITE_ANIM_PINK_NPC_LEFT
-	anim_data_pointer AnimData22  ; SPRITE_ANIM_YELLOW_NPC_UP
-	anim_data_pointer AnimData23  ; SPRITE_ANIM_YELLOW_NPC_RIGHT
-	anim_data_pointer AnimData24  ; SPRITE_ANIM_YELLOW_NPC_DOWN
-	anim_data_pointer AnimData25  ; SPRITE_ANIM_YELLOW_NPC_LEFT
-	anim_data_pointer AnimData26  ; SPRITE_ANIM_GREEN_NPC_UP
-	anim_data_pointer AnimData27  ; SPRITE_ANIM_GREEN_NPC_RIGHT
-	anim_data_pointer AnimData28  ; SPRITE_ANIM_GREEN_NPC_DOWN
-	anim_data_pointer AnimData29  ; SPRITE_ANIM_GREEN_NPC_LEFT
-	anim_data_pointer AnimData30  ; SPRITE_ANIM_RED_NPC_UP
-	anim_data_pointer AnimData31  ; SPRITE_ANIM_RED_NPC_RIGHT
-	anim_data_pointer AnimData32  ; SPRITE_ANIM_RED_NPC_DOWN
-	anim_data_pointer AnimData33  ; SPRITE_ANIM_RED_NPC_LEFT
-	anim_data_pointer AnimData34  ; SPRITE_ANIM_PURPLE_NPC_UP
-	anim_data_pointer AnimData35  ; SPRITE_ANIM_PURPLE_NPC_RIGHT
-	anim_data_pointer AnimData36  ; SPRITE_ANIM_PURPLE_NPC_DOWN
-	anim_data_pointer AnimData37  ; SPRITE_ANIM_PURPLE_NPC_LEFT
-	anim_data_pointer AnimData38  ; SPRITE_ANIM_WHITE_NPC_UP
-	anim_data_pointer AnimData39  ; SPRITE_ANIM_WHITE_NPC_RIGHT
-	anim_data_pointer AnimData40  ; SPRITE_ANIM_WHITE_NPC_DOWN
-	anim_data_pointer AnimData41  ; SPRITE_ANIM_WHITE_NPC_LEFT
-	anim_data_pointer AnimData42  ; SPRITE_ANIM_INDIGO_NPC_UP
-	anim_data_pointer AnimData43  ; SPRITE_ANIM_INDIGO_NPC_RIGHT
-	anim_data_pointer AnimData44  ; SPRITE_ANIM_INDIGO_NPC_DOWN
-	anim_data_pointer AnimData45  ; SPRITE_ANIM_INDIGO_NPC_LEFT
-	anim_data_pointer AnimData46  ; SPRITE_ANIM_CGB_AMY_LAYING
-	anim_data_pointer AnimData47  ; SPRITE_ANIM_CGB_AMY_STAND
-	anim_data_pointer AnimData48  ; SPRITE_ANIM_CGB_CLERK_NPC_UP
-	anim_data_pointer AnimData49  ; SPRITE_ANIM_CGB_CLERK_NPC_RIGHT
-	anim_data_pointer AnimData50  ; SPRITE_ANIM_CGB_CLERK_NPC_DOWN
-	anim_data_pointer AnimData51  ; SPRITE_ANIM_CGB_CLERK_NPC_LEFT
-	anim_data_pointer AnimData52  ; SPRITE_ANIM_SGB_VOLCANO_SMOKE
-	anim_data_pointer AnimData53  ; SPRITE_ANIM_SGB_OWMAP_CURSOR
-	anim_data_pointer AnimData54  ; SPRITE_ANIM_SGB_OWMAP_CURSOR_FAST
-	anim_data_pointer AnimData55  ; SPRITE_ANIM_CGB_VOLCANO_SMOKE
-	anim_data_pointer AnimData56  ; SPRITE_ANIM_CGB_OWMAP_CURSOR
-	anim_data_pointer AnimData57  ; SPRITE_ANIM_CGB_OWMAP_CURSOR_FAST
-	anim_data_pointer AnimData58  ; SPRITE_ANIM_TORCH
-	anim_data_pointer AnimData59  ; SPRITE_ANIM_SGB_CARD_TOP_LEFT
-	anim_data_pointer AnimData60  ; SPRITE_ANIM_SGB_CARD_TOP_RIGHT
-	anim_data_pointer AnimData61  ; SPRITE_ANIM_SGB_CARD_LEFT_SPARK
-	anim_data_pointer AnimData62  ; SPRITE_ANIM_SGB_CARD_BOTTOM_LEFT
-	anim_data_pointer AnimData63  ; SPRITE_ANIM_SGB_CARD_BOTTOM_RIGHT
-	anim_data_pointer AnimData64  ; SPRITE_ANIM_SGB_CARD_RIGHT_SPARK
-	anim_data_pointer AnimData65  ; SPRITE_ANIM_CGB_CARD_TOP_LEFT
-	anim_data_pointer AnimData66  ; SPRITE_ANIM_CGB_CARD_TOP_RIGHT
-	anim_data_pointer AnimData67  ; SPRITE_ANIM_CGB_CARD_LEFT_SPARK
-	anim_data_pointer AnimData68  ; SPRITE_ANIM_CGB_CARD_BOTTOM_LEFT
-	anim_data_pointer AnimData69  ; SPRITE_ANIM_CGB_CARD_BOTTOM_RIGHT
-	anim_data_pointer AnimData70  ; SPRITE_ANIM_CGB_CARD_RIGHT_SPARK
-	anim_data_pointer AnimData71  ; SPRITE_ANIM_71
-	anim_data_pointer AnimData72  ; SPRITE_ANIM_72
-	anim_data_pointer AnimData73  ; SPRITE_ANIM_73
-	anim_data_pointer AnimData74  ; SPRITE_ANIM_74
-	anim_data_pointer AnimData75  ; SPRITE_ANIM_75
-	anim_data_pointer AnimData76  ; SPRITE_ANIM_76
-	anim_data_pointer AnimData77  ; SPRITE_ANIM_77
-	anim_data_pointer AnimData78  ; SPRITE_ANIM_78
-	anim_data_pointer AnimData79  ; SPRITE_ANIM_79
-	anim_data_pointer AnimData80  ; SPRITE_ANIM_80
-	anim_data_pointer AnimData81  ; SPRITE_ANIM_81
-	anim_data_pointer AnimData82  ; SPRITE_ANIM_82
-	anim_data_pointer AnimData83  ; SPRITE_ANIM_83
-	anim_data_pointer AnimData84  ; SPRITE_ANIM_84
-	anim_data_pointer AnimData85  ; SPRITE_ANIM_85
-	anim_data_pointer AnimData86  ; SPRITE_ANIM_86
-	anim_data_pointer AnimData87  ; SPRITE_ANIM_87
-	anim_data_pointer AnimData88  ; SPRITE_ANIM_88
-	anim_data_pointer AnimData89  ; SPRITE_ANIM_89
-	anim_data_pointer AnimData90  ; SPRITE_ANIM_90
-	anim_data_pointer AnimData91  ; SPRITE_ANIM_91
-	anim_data_pointer AnimData92  ; SPRITE_ANIM_92
-	anim_data_pointer AnimData93  ; SPRITE_ANIM_93
-	anim_data_pointer AnimData94  ; SPRITE_ANIM_94
-	anim_data_pointer AnimData95  ; SPRITE_ANIM_95
-	anim_data_pointer AnimData96  ; SPRITE_ANIM_96
-	anim_data_pointer AnimData97  ; SPRITE_ANIM_97
-	anim_data_pointer AnimData98  ; SPRITE_ANIM_98
-	anim_data_pointer AnimData99  ; SPRITE_ANIM_99
-	anim_data_pointer AnimData100 ; SPRITE_ANIM_100
-	anim_data_pointer AnimData101 ; SPRITE_ANIM_101
-	anim_data_pointer AnimData102 ; SPRITE_ANIM_102
-	anim_data_pointer AnimData103 ; SPRITE_ANIM_103
-	anim_data_pointer AnimData104 ; SPRITE_ANIM_104
-	anim_data_pointer AnimData105 ; SPRITE_ANIM_105
-	anim_data_pointer AnimData106 ; SPRITE_ANIM_106
-	anim_data_pointer AnimData107 ; SPRITE_ANIM_107
-	anim_data_pointer AnimData108 ; SPRITE_ANIM_108
-	anim_data_pointer AnimData109 ; SPRITE_ANIM_109
-	anim_data_pointer AnimData110 ; SPRITE_ANIM_110
-	anim_data_pointer AnimData111 ; SPRITE_ANIM_111
-	anim_data_pointer AnimData112 ; SPRITE_ANIM_112
-	anim_data_pointer AnimData113 ; SPRITE_ANIM_113
-	anim_data_pointer AnimData114 ; SPRITE_ANIM_114
-	anim_data_pointer AnimData115 ; SPRITE_ANIM_115
-	anim_data_pointer AnimData116 ; SPRITE_ANIM_116
-	anim_data_pointer AnimData117 ; SPRITE_ANIM_117
-	anim_data_pointer AnimData118 ; SPRITE_ANIM_118
-	anim_data_pointer AnimData119 ; SPRITE_ANIM_119
-	anim_data_pointer AnimData120 ; SPRITE_ANIM_120
-	anim_data_pointer AnimData121 ; SPRITE_ANIM_121
-	anim_data_pointer AnimData122 ; SPRITE_ANIM_122
-	anim_data_pointer AnimData123 ; SPRITE_ANIM_123
-	anim_data_pointer AnimData124 ; SPRITE_ANIM_124
-	anim_data_pointer AnimData125 ; SPRITE_ANIM_125
-	anim_data_pointer AnimData126 ; SPRITE_ANIM_126
-	anim_data_pointer AnimData127 ; SPRITE_ANIM_127
-	anim_data_pointer AnimData128 ; SPRITE_ANIM_128
-	anim_data_pointer AnimData129 ; SPRITE_ANIM_129
-	anim_data_pointer AnimData130 ; SPRITE_ANIM_130
-	anim_data_pointer AnimData131 ; SPRITE_ANIM_131
-	anim_data_pointer AnimData132 ; SPRITE_ANIM_132
-	anim_data_pointer AnimData133 ; SPRITE_ANIM_133
-	anim_data_pointer AnimData134 ; SPRITE_ANIM_134
-	anim_data_pointer AnimData135 ; SPRITE_ANIM_135
-	anim_data_pointer AnimData136 ; SPRITE_ANIM_136
-	anim_data_pointer AnimData137 ; SPRITE_ANIM_137
-	anim_data_pointer AnimData138 ; SPRITE_ANIM_138
-	anim_data_pointer AnimData139 ; SPRITE_ANIM_139
-	anim_data_pointer AnimData140 ; SPRITE_ANIM_140
-	anim_data_pointer AnimData141 ; SPRITE_ANIM_141
-	anim_data_pointer AnimData142 ; SPRITE_ANIM_142
-	anim_data_pointer AnimData143 ; SPRITE_ANIM_143
-	anim_data_pointer AnimData144 ; SPRITE_ANIM_144
-	anim_data_pointer AnimData145 ; SPRITE_ANIM_145
-	anim_data_pointer AnimData146 ; SPRITE_ANIM_146
-	anim_data_pointer AnimData147 ; SPRITE_ANIM_147
-	anim_data_pointer AnimData148 ; SPRITE_ANIM_148
-	anim_data_pointer AnimData149 ; SPRITE_ANIM_149
-	anim_data_pointer AnimData150 ; SPRITE_ANIM_150
-	anim_data_pointer AnimData151 ; SPRITE_ANIM_151
-	anim_data_pointer AnimData152 ; SPRITE_ANIM_152
-	anim_data_pointer AnimData153 ; SPRITE_ANIM_153
-	anim_data_pointer AnimData154 ; SPRITE_ANIM_154
-	anim_data_pointer AnimData155 ; SPRITE_ANIM_155
-	anim_data_pointer AnimData156 ; SPRITE_ANIM_156
-	anim_data_pointer AnimData157 ; SPRITE_ANIM_157
-	anim_data_pointer AnimData158 ; SPRITE_ANIM_158
-	anim_data_pointer AnimData159 ; SPRITE_ANIM_159
-	anim_data_pointer AnimData160 ; SPRITE_ANIM_160
-	anim_data_pointer AnimData161 ; SPRITE_ANIM_161
-	anim_data_pointer AnimData162 ; SPRITE_ANIM_162
-	anim_data_pointer AnimData163 ; SPRITE_ANIM_163
-	anim_data_pointer AnimData164 ; SPRITE_ANIM_164
-	anim_data_pointer AnimData165 ; SPRITE_ANIM_165
-	anim_data_pointer AnimData166 ; SPRITE_ANIM_166
-	anim_data_pointer AnimData167 ; SPRITE_ANIM_167
-	anim_data_pointer AnimData168 ; SPRITE_ANIM_168
-	anim_data_pointer AnimData169 ; SPRITE_ANIM_169
-	anim_data_pointer AnimData170 ; SPRITE_ANIM_170
-	anim_data_pointer AnimData171 ; SPRITE_ANIM_171
-	anim_data_pointer AnimData172 ; SPRITE_ANIM_172
-	anim_data_pointer AnimData173 ; SPRITE_ANIM_173
-	anim_data_pointer AnimData174 ; SPRITE_ANIM_174
-	anim_data_pointer AnimData175 ; SPRITE_ANIM_175
-	anim_data_pointer AnimData176 ; SPRITE_ANIM_176
-	anim_data_pointer AnimData177 ; SPRITE_ANIM_177
-	anim_data_pointer AnimData178 ; SPRITE_ANIM_178
-	anim_data_pointer AnimData179 ; SPRITE_ANIM_179
-	anim_data_pointer AnimData180 ; SPRITE_ANIM_180
-	anim_data_pointer AnimData181 ; SPRITE_ANIM_181
-	anim_data_pointer AnimData182 ; SPRITE_ANIM_182
-	anim_data_pointer AnimData183 ; SPRITE_ANIM_183
-	anim_data_pointer AnimData184 ; SPRITE_ANIM_184
-	anim_data_pointer AnimData185 ; SPRITE_ANIM_185
-	anim_data_pointer AnimData186 ; SPRITE_ANIM_186
-	anim_data_pointer AnimData187 ; SPRITE_ANIM_187
-	anim_data_pointer AnimData188 ; SPRITE_ANIM_188
-	anim_data_pointer AnimData189 ; SPRITE_ANIM_189
-	anim_data_pointer AnimData190 ; SPRITE_ANIM_190
-	anim_data_pointer AnimData191 ; SPRITE_ANIM_191
-	anim_data_pointer AnimData192 ; SPRITE_ANIM_192
-	anim_data_pointer AnimData193 ; SPRITE_ANIM_193
-	anim_data_pointer AnimData194 ; SPRITE_ANIM_194
-	anim_data_pointer AnimData195 ; SPRITE_ANIM_195
-	anim_data_pointer AnimData196 ; SPRITE_ANIM_196
-	anim_data_pointer AnimData197 ; SPRITE_ANIM_197
-	anim_data_pointer AnimData198 ; SPRITE_ANIM_198
-	anim_data_pointer AnimData199 ; SPRITE_ANIM_199
-	anim_data_pointer AnimData200 ; SPRITE_ANIM_200
-	anim_data_pointer AnimData201 ; SPRITE_ANIM_201
-	anim_data_pointer AnimData202 ; SPRITE_ANIM_202
-	anim_data_pointer AnimData203 ; SPRITE_ANIM_203
-	anim_data_pointer AnimData204 ; SPRITE_ANIM_204
-	anim_data_pointer AnimData205 ; SPRITE_ANIM_205
-	anim_data_pointer AnimData206 ; SPRITE_ANIM_206
-	anim_data_pointer AnimData207 ; SPRITE_ANIM_207
-	anim_data_pointer AnimData208 ; SPRITE_ANIM_208
-	anim_data_pointer AnimData209 ; SPRITE_ANIM_209
-	anim_data_pointer AnimData210 ; SPRITE_ANIM_210
-	anim_data_pointer AnimData211 ; SPRITE_ANIM_211
-	anim_data_pointer AnimData212 ; SPRITE_ANIM_212
-	anim_data_pointer AnimData213 ; SPRITE_ANIM_213
-	anim_data_pointer AnimData214 ; SPRITE_ANIM_214
-	anim_data_pointer AnimData215 ; SPRITE_ANIM_215
-	anim_data_pointer AnimData216 ; SPRITE_ANIM_216
+; disable all sprite animations
+.loop_sprites
+	xor a
+	ld [hl], a ; set SPRITE_ANIM_ENABLED to 0
+	add hl, bc
+	ld a, [wWhichSprite]
+	inc a
+	ld [wWhichSprite], a
+	cp SPRITE_ANIM_BUFFER_CAPACITY
+	jr nz, .loop_sprites
+
+	call ClearSpriteVRAMBuffer
+	call ZeroObjectPositions
+	ld hl, wVBlankOAMCopyToggle
+	inc [hl]
+	pop hl
+	pop bc
+	ret
+
+; creates a new entry in SpriteAnimBuffer, else loads the sprite if need be
+CreateSpriteAndAnimBufferEntry:
+	push af
+	ld a, [wd5d7]
+	or a
+	jr z, .continue
+	pop af
+	ret
+.continue
+	pop af
+	push bc
+	push hl
+	call Func_12c05
+	ld [wCurrSpriteTileID], a
+	xor a
+	ld [wWhichSprite], a
+	call GetFirstSpriteAnimBufferProperty
+	ld bc, SPRITE_ANIM_LENGTH
+.findFirstEmptyAnimField
+	ld a, [hl]
+	or a
+	jr z, .foundEmptyAnimField
+	add hl, bc
+	ld a, [wWhichSprite]
+	inc a
+	ld [wWhichSprite], a
+	cp $10
+	jr nz, .findFirstEmptyAnimField
+	debug_nop
+	scf
+	jr .quit
+.foundEmptyAnimField
+	ld a, $1
+	ld [hl], a
+	call FillNewSpriteAnimBufferEntry
+	or a
+.quit
+	pop hl
+	pop bc
+	ret
+
+FillNewSpriteAnimBufferEntry:
+	push hl
+	push bc
+	push hl
+	inc hl
+	ld c, SPRITE_ANIM_LENGTH - 1
+	xor a
+.clearSpriteAnimBufferEntryLoop
+	ld [hli], a
+	dec c
+	jr nz, .clearSpriteAnimBufferEntryLoop
+	pop hl
+	ld bc, SPRITE_ANIM_ID - 1
+	add hl, bc
+	ld a, [wCurrSpriteTileID]
+	ld [hli], a
+	ld a, $ff
+	ld [hl], a
+	ld bc, SPRITE_ANIM_COUNTER - SPRITE_ANIM_ID
+	add hl, bc
+	ld a, $ff
+	ld [hl], a
+	pop bc
+	pop hl
+	ret
+
+DisableCurSpriteAnim:
+	ld a, [wWhichSprite]
+	; fallthrough
+
+; sets SPRITE_ANIM_ENABLED to false
+; of sprite in register a
+DisableSpriteAnim:
+	push af
+	ld a, [wd5d7]
+	or a
+	jr z, .disable
+	pop af
+	ret
+.disable
+	pop af
+	push hl
+	push bc
+	ld c, SPRITE_ANIM_ENABLED
+	call GetSpriteAnimBufferProperty_SpriteInA
+	ld [hl], FALSE
+	pop bc
+	pop hl
+	ret
+
+GetSpriteAnimCounter:
+	ld a, [wWhichSprite]
+	push hl
+	push bc
+	ld c, SPRITE_ANIM_COUNTER
+	call GetSpriteAnimBufferProperty_SpriteInA
+	ld a, [hl]
+	pop bc
+	pop hl
+	ret
+
+_HandleAllSpriteAnimations:
+	push af
+	ld a, [wd5d7] ; skip animating this frame if enabled
+	or a
+	jr z, .continue
+	pop af
+	ret
+.continue
+	pop af
+	push af
+	push bc
+	push de
+	push hl
+	call ZeroObjectPositions
+	xor a
+	ld [wWhichSprite], a
+	call GetFirstSpriteAnimBufferProperty
+.spriteLoop
+	ld a, [hl]
+	or a
+	jr z, .nextSprite ; skip if SPRITE_ANIM_ENABLED is 0
+	call TryHandleSpriteAnimationFrame
+	call LoadSpriteDataForAnimationFrame
+.nextSprite
+	ld bc, SPRITE_ANIM_LENGTH
+	add hl, bc
+	ld a, [wWhichSprite]
+	inc a
+	ld [wWhichSprite], a
+	cp SPRITE_ANIM_BUFFER_CAPACITY
+	jr nz, .spriteLoop
+	ld hl, wVBlankOAMCopyToggle
+	inc [hl]
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+
+LoadSpriteDataForAnimationFrame:
+	push hl
+	push bc
+	inc hl
+	ld a, [hli]
+	ld [wCurrSpriteAttributes], a
+	ld a, [hli]
+	ld [wCurrSpriteXPos], a
+	ld a, [hli]
+	ld [wCurrSpriteYPos], a
+	ld a, [hl]
+	ld [wCurrSpriteTileID], a
+	ld bc, SPRITE_ANIM_FLAGS - SPRITE_ANIM_TILE_ID
+	add hl, bc
+	ld a, [hl]
+	and 1 << SPRITE_ANIM_FLAG_UNSKIPPABLE
+	jr nz, .quit
+	ld bc, SPRITE_ANIM_FRAME_BANK - SPRITE_ANIM_FLAGS
+	add hl, bc
+	ld a, [hli]
+	ld [wd5d6], a
+	or a
+	jr z, .quit
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call DrawSpriteAnimationFrame
+.quit
+	pop bc
+	pop hl
+	ret
+
+; decrements the given sprite's movement counter (2x if SPRITE_ANIM_FLAG_SPEED is set)
+; moves to the next animation frame if necessary
+TryHandleSpriteAnimationFrame:
+	push hl
+	push bc
+	push de
+	push hl
+	ld d, 1
+	ld bc, SPRITE_ANIM_FLAGS
+	add hl, bc
+	bit SPRITE_ANIM_FLAG_SPEED, [hl]
+	jr z, .skipSpeedIncrease
+	inc d
+.skipSpeedIncrease
+	pop hl
+	ld bc, SPRITE_ANIM_COUNTER
+	add hl, bc
+	ld a, [hl]
+	cp $ff
+	jr z, .exit
+	sub d
+	ld [hl], a
+	jr z, .doNextAnimationFrame
+	jr nc, .exit
+.doNextAnimationFrame
+	ld bc, SPRITE_ANIM_ENABLED - SPRITE_ANIM_COUNTER
+	add hl, bc
+	call HandleAnimationFrame
+.exit
+	pop de
+	pop bc
+	pop hl
+	ret
+
+StartNewSpriteAnimation:
+	push hl
+	push af
+	ld c, SPRITE_ANIM_ID
+	call GetSpriteAnimBufferProperty
+	pop af
+	cp [hl]
+	pop hl
+	ret z
+	; fallthrough
+
+StartSpriteAnimation:
+	push hl
+	call LoadSpriteAnimPointers
+	call HandleAnimationFrame
+	pop hl
+	ret
+
+; a = sprite animation
+; c = animation counter value
+Func_12ac9:
+	push bc
+	ld b, a
+	ld a, c
+	or a
+	ld a, b
+	pop bc
+	jr z, StartSpriteAnimation
+
+	push hl
+	push bc
+	call LoadSpriteAnimPointers
+	ld a, $ff
+	call GetAnimFramePointerFromOffset
+	pop bc
+	ld a, c
+	call SetAnimationCounterAndLoop
+	pop hl
+	ret
+
+; Given an animation ID, fills the current sprite's Animation Pointer and Frame Offset Pointer
+; a - Animation ID for current sprite
+LoadSpriteAnimPointers:
+	push bc
+	push af
+	call GetFirstSpriteAnimBufferProperty
+	pop af
+	push hl
+	ld bc, SPRITE_ANIM_ID
+	add hl, bc
+	ld [hli], a
+	push hl
+	ld l, 6 ; SpriteAnimations
+	farcall GetMapDataPointer
+	farcall LoadGraphicsPointerFromHL
+	pop hl ; hl is animation bank
+	ld a, [wTempPointerBank]
+	ld [hli], a
+	ld a, [wTempPointer + 0]
+	ld [hli], a
+	ld c, a
+	ld a, [wTempPointer + 1]
+	ld [hli], a
+	ld b, a
+	; offset pointer = pointer + $3
+	ld a, $3
+	add c
+	ld [hli], a
+	ld a, $0
+	adc b
+	ld [hli], a
+	pop hl
+	pop bc
+	ret
+
+; hl - beginning of current sprite_anim_buffer
+; Handles a full animation frame using all values in animation structure
+; (frame data offset, anim counter, X Mov, Y Mov)
+HandleAnimationFrame:
+	push bc
+	push de
+	push hl
+.tryHandlingFrame
+	push hl
+	ld bc, SPRITE_ANIM_BANK
+	add hl, bc
+	ld a, [hli]
+	ld [wTempPointerBank], a
+
+	inc hl
+	inc hl
+	ld a, [hl] ; SPRITE_ANIM_FRAME_OFFSET_POINTER
+	ld [wTempPointer + 0], a
+	add SPRITE_FRAME_OFFSET_SIZE ; advance FRAME_OFFSET_POINTER by 1 frame, 4 bytes
+	ld [hli], a
+	ld a, [hl]
+	ld [wTempPointer + 1], a
+	adc 0
+	ld [hl], a
+
+	ld de, wLoadedPalData
+	ld bc, SPRITE_FRAME_OFFSET_SIZE
+	call CopyBankedDataToDE
+	pop hl ; beginning of current sprite_anim_buffer
+	ld de, wLoadedPalData
+	ld a, [de]
+	call GetAnimFramePointerFromOffset
+	inc de
+	ld a, [de]
+	call SetAnimationCounterAndLoop
+	jr c, .tryHandlingFrame
+	inc de
+	ld bc, SPRITE_ANIM_COORD_X
+	add hl, bc
+	push hl
+	ld bc, SPRITE_ANIM_FLAGS - SPRITE_ANIM_COORD_X
+	add hl, bc
+	ld b, [hl]
+	pop hl
+	ld a, [de]
+	bit SPRITE_ANIM_FLAG_X_SUBTRACT, b
+	jr z, .addXOffset
+	cpl
+	inc a
+.addXOffset
+	add [hl]
+	ld [hli], a
+	inc de
+	ld a, [de]
+	bit SPRITE_ANIM_FLAG_Y_SUBTRACT, b
+	jr z, .addYOffset
+	cpl
+	inc a
+.addYOffset
+	add [hl]
+	ld [hl], a
+	pop hl
+	pop de
+	pop bc
+	ret
+
+; Calls GetAnimationFramePointer after setting up wTempPointerBank
+; and wVRAMTileOffset
+; a - frame offset from Animation Data
+; hl - beginning of Sprite Anim Buffer
+GetAnimFramePointerFromOffset:
+	ld [wVRAMTileOffset], a
+	push hl
+	push bc
+	push de
+	push hl
+	ld bc, SPRITE_ANIM_BANK
+	add hl, bc
+	ld a, [hli]
+	ld [wTempPointerBank], a
+	ld a, [hli]
+	ld [wTempPointer + 0], a
+	ld a, [hli]
+	ld [wTempPointer + 1], a
+	pop hl
+	call GetAnimationFramePointer ; calls with the original map data script pointer/bank
+	pop de
+	pop bc
+	pop hl
+	ret
+
+; Sets the animation counter for the current sprite. If the value is zero, loop the animation
+; a - new animation counter
+SetAnimationCounterAndLoop:
+	push hl
+	push bc
+	ld bc, SPRITE_ANIM_COUNTER
+	add hl, bc
+	ld [hl], a
+	or a
+	jr nz, .exit
+	ld bc, SPRITE_ANIM_POINTER - SPRITE_ANIM_COUNTER
+	add hl, bc
+	ld a, [hli]
+	add $3 ; skip base bank/pointer at beginning of data structure
+	ld c, a
+	ld a, [hli]
+	adc 0
+	ld b, a
+	ld a, c
+	ld [hli], a
+	ld a, b
+	ld [hl], a
+	scf
+.exit
+	pop bc
+	pop hl
+	ret
+
+Func_12ba7:
+	push hl
+	push bc
+	push de
+	call EnableSRAM
+	ld hl, wSpriteAnimBuffer
+	ld de, sGeneralSaveDataEnd
+	ld bc, $100
+	call CopyDataHLtoDE
+	ld hl, wSpriteVRAMBuffer
+	ld bc, $40
+	call CopyDataHLtoDE
+	ld a, [wSpriteVRAMBufferSize]
+	ld [de], a
+	call DisableSRAM
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_12bcd:
+	push hl
+	push bc
+	push de
+	call EnableSRAM
+	ld hl, sGeneralSaveDataEnd
+	ld de, wSpriteAnimBuffer
+	ld bc, $100
+	call CopyDataHLtoDE
+	ld de, wSpriteVRAMBuffer
+	ld bc, $40
+	call CopyDataHLtoDE
+	ld a, [hl]
+	ld [wSpriteVRAMBufferSize], a
+	call DisableSRAM
+	pop de
+	pop bc
+	pop hl
+	ret
+
+; clears wSpriteVRAMBufferSize and wSpriteVRAMBuffer
+ClearSpriteVRAMBuffer:
+	push hl
+	push bc
+	xor a
+	ld [wSpriteVRAMBufferSize], a
+	ld c, $40
+	ld hl, wSpriteVRAMBuffer
+.asm_12bfe
+	ld [hli], a
+	dec c
+	jr nz, .asm_12bfe
+	pop bc
+	pop hl
+	ret
+
+; gets some value based on the sprite in a and wSpriteVRAMBuffer
+; loads the sprites data if it doesn't already exist
+Func_12c05:
+	push hl
+	push bc
+	push de
+	ld b, a
+	ld d, $0
+	ld a, [wSpriteVRAMBufferSize]
+	ld c, a
+	ld hl, wSpriteVRAMBuffer
+	or a
+	jr z, .tryToAddSprite
+
+.findSpriteMatchLoop
+	inc hl
+	ld a, [hl]
+	cp b
+	jr z, .foundSpriteMatch
+	inc hl
+	ld a, [hli]
+	add [hl] ; add tile size to tile offset
+	ld d, a
+	inc hl
+	dec c
+	jr nz, .findSpriteMatchLoop
+
+.tryToAddSprite
+	ld a, [wSpriteVRAMBufferSize]
+	cp $10
+	jr nc, .quitFail
+	inc a
+	ld [wSpriteVRAMBufferSize], a ; increase number of entries by 1
+	inc hl
+	push hl
+	ld a, b
+	ld [hli], a ; store sprite index
+	call Func_12c4f
+	push af
+	ld a, d
+	ld [hli], a ; store tile offset
+	pop af
+	ld [hl], a ; store tile size
+	pop hl
+
+.foundSpriteMatch
+	dec hl
+	inc [hl] ; mark this entry as valid
+	inc hl
+	inc hl
+	ld a, [hli]
+	add [hl]
+	cp $81
+	jr nc, .quitFail ; exceeds total tile size
+	ld a, d
+	or a
+	jr .quitSucceed
+
+.quitFail
+	debug_nop
+	xor a
+	scf
+.quitSucceed
+	pop de
+	pop bc
+	pop hl
+	ret
+
+; input:
+; a = sprite index within the data map
+; d = tile offset in VRAM
+; output:
+; a = number of tiles in sprite
+Func_12c4f:
+	push af
+	xor a
+	ld [wd4cb], a
+	ld a, d
+	ld [wVRAMTileOffset], a
+	pop af
+	farcall Func_8025b
+	ret
+
+Func_12c5e:
+	push hl
+	push bc
+	push de
+	ld c, $10
+	ld de, $4
+	ld hl, wSpriteVRAMBuffer
+.asm_12c69
+	ld a, [hl]
+	or a
+	jr z, .asm_12c77
+	push hl
+	push de
+	inc hl
+	ld a, [hli]
+	ld d, [hl]
+	call Func_12c4f
+	pop de
+	pop hl
+.asm_12c77
+	add hl, de
+	dec c
+	jr nz, .asm_12c69
+	pop de
+	pop bc
+	pop hl
+	ret

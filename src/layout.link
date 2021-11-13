@@ -40,11 +40,21 @@ ROMX $02
 ROMX $03
 	"Overworld Scripting"
 ROMX $04
-	"Bank 4"
+	"Menus 2"
+	"Color"
+	"Gift Center Menu"
+	"Overworld Map"
+	"Save"
+	"Map Scripts"
+	"Menus 3"
+	"Sprite Animations"
+	"Scenes"
+	"Challenge Machine"
+	"Map Objects"
 ROMX $05
 	"AI Logic 1"
 ROMX $06
-	"Menus 2"
+	"Menus 4"
 	"Effect Commands"
 	"Animation Commands"
 	"IR Communications Core"
