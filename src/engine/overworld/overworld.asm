@@ -21,7 +21,7 @@ LoadMap:
 	xor a
 	ld [wd291], a
 .warp
-	farcall Func_10ab4
+	farcall FadeScreenToWhite
 	call WhiteOutDMGPals
 	call Func_c241
 	call EmptyScreen
@@ -48,7 +48,7 @@ LoadMap:
 	ld [wOverworldTransition], a
 	ld [wOverworldNPCFlags], a
 	call PlayDefaultSong
-	farcall Func_10af9
+	farcall FadeScreenFromWhite
 	call Func_c141
 	call Func_c17a
 .overworld_loop
@@ -68,7 +68,7 @@ LoadMap:
 	call PlaySFX
 	jp .warp
 .no_warp
-	farcall Func_10ab4
+	farcall FadeScreenToWhite
 	call Func_c1a0
 	ld a, [wMatchStartTheme]
 	or a
@@ -273,7 +273,7 @@ Func_c1f8:
 	ld a, [sTextSpeed]
 	ld [wTextSpeed], a
 	call DisableSRAM
-	farcall Func_10756
+	farcall InitPCPacks
 	ret
 
 BackupPlayerPosition:
@@ -365,7 +365,7 @@ Func_c2a3:
 	push bc
 	push de
 	call BackupObjectPalettes
-	farcall Func_10ab4
+	farcall FadeScreenToWhite
 	ld a, 1 << HIDE_ALL_NPC_SPRITES
 	call SetOverworldNPCFlags
 	lb de, $30, $7f
@@ -422,7 +422,7 @@ ReturnToOverworld:
 	ld h, a
 	call CallHL2
 .no_callback
-	farcall Func_10af9
+	farcall FadeScreenFromWhite
 	pop de
 	pop bc
 	pop hl
@@ -536,6 +536,7 @@ DecompressPermissionMap:
 	pop hl
 	ret
 
+; de = coordinates
 Func_c3ca:
 	push hl
 	push bc
@@ -1149,7 +1150,7 @@ PauseMenu:
 DisplayPauseMenu:
 	ld a, [wSelectedPauseMenuItem]
 	ld hl, Unknown_10d98
-	farcall InitAndPrintPauseMenu
+	farcall InitAndPrintMenu
 	ret
 
 PauseMenuPointerTable:
@@ -1173,7 +1174,7 @@ PauseMenu_Deck:
 	ldh [hSCX], a
 	ldh [hSCY], a
 	call Set_OBJ_8x16
-	farcall Func_1288c
+	farcall SetDefaultPalettes
 	farcall DeckSelectionMenu
 	call Set_OBJ_8x8
 	ret
@@ -1183,7 +1184,7 @@ PauseMenu_Card:
 	ldh [hSCX], a
 	ldh [hSCY], a
 	call Set_OBJ_8x16
-	farcall Func_1288c
+	farcall SetDefaultPalettes
 	farcall HandlePlayersCardsScreen
 	call Set_OBJ_8x8
 	ret
@@ -1246,7 +1247,7 @@ PointerTable_c846:
 DisplayPCMenu:
 	ld a, [wSelectedPCMenuItem]
 	ld hl, Unknown_10da9
-	farcall InitAndPrintPauseMenu
+	farcall InitAndPrintMenu
 	ret
 
 PCMenu_CardAlbum:
@@ -1254,7 +1255,7 @@ PCMenu_CardAlbum:
 	ldh [hSCX], a
 	ldh [hSCY], a
 	call Set_OBJ_8x16
-	farcall Func_1288c
+	farcall SetDefaultPalettes
 	farcall HandleCardAlbumScreen
 	call Set_OBJ_8x8
 	ret
@@ -1272,7 +1273,7 @@ PCMenu_Print:
 	ldh [hSCX], a
 	ldh [hSCY], a
 	call Set_OBJ_8x16
-	farcall Func_1288c
+	farcall SetDefaultPalettes
 	farcall HandlePrinterMenu
 	call Set_OBJ_8x8
 	call WhiteOutDMGPals

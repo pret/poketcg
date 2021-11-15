@@ -272,7 +272,7 @@ DrawPlayerPortrait:
 	ld a, TILEMAP_PLAYER
 ;	fallthrough
 
-Func_3e17:
+DrawPortrait:
 	ld [wCurTilemap], a
 	ldh a, [hBankROM]
 	push af
@@ -284,10 +284,10 @@ Func_3e17:
 	ret
 
 ; draws opponent's portrait given in a at b,c
-Func_3e2a:
+DrawOpponentPortrait:
 	ld [wd61e], a
 	ld a, TILEMAP_OPPONENT
-	jr Func_3e17
+	jr DrawPortrait
 
 Func_3e31:
 	ldh a, [hBankROM]

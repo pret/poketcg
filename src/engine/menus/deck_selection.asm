@@ -67,7 +67,7 @@ EmptyScreenAndLoadFontDuelAndHandCardsIcons:
 	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
 	call LoadHandCardsIcon
-	bank1call SetDefaultPalettes
+	bank1call SetDefaultConsolePalettes
 	lb de, $3c, $bf
 	call SetupText
 	ret
@@ -86,7 +86,7 @@ Func_8d78:
 	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
 	call LoadHandCardsIcon
-	bank1call SetDefaultPalettes
+	bank1call SetDefaultConsolePalettes
 	lb de, $3c, $bf
 	call SetupText
 	ret

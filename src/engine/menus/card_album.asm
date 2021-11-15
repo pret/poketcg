@@ -793,7 +793,7 @@ HandleCardAlbumScreen:
 	call LoadCursorTile
 	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
-	bank1call SetDefaultPalettes
+	bank1call SetDefaultConsolePalettes
 	lb de, $3c, $ff
 	call SetupText
 	lb de, 1, 1
@@ -898,7 +898,7 @@ HandleCardAlbumScreen:
 	call LoadCursorTile
 	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
-	bank1call SetDefaultPalettes
+	bank1call SetDefaultConsolePalettes
 	lb de, $3c, $ff
 	call SetupText
 

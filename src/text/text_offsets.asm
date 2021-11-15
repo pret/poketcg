@@ -853,30 +853,30 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0351                                           ; 0x0351
 	textpointer TurnedPCOnText                                     ; 0x0352
 	textpointer TurnedPCOffText                                    ; 0x0353
-	textpointer Text0354                                           ; 0x0354
-	textpointer Text0355                                           ; 0x0355
-	textpointer Text0356                                           ; 0x0356
-	textpointer Text0357                                           ; 0x0357
-	textpointer Text0358                                           ; 0x0358
-	textpointer Text0359                                           ; 0x0359
-	textpointer Text035a                                           ; 0x035a
-	textpointer Text035b                                           ; 0x035b
-	textpointer Text035c                                           ; 0x035c
-	textpointer Text035d                                           ; 0x035d
-	textpointer Text035e                                           ; 0x035e
-	textpointer Text035f                                           ; 0x035f
-	textpointer Text0360                                           ; 0x0360
-	textpointer Text0361                                           ; 0x0361
-	textpointer Text0362                                           ; 0x0362
-	textpointer Text0363                                           ; 0x0363
-	textpointer Text0364                                           ; 0x0364
-	textpointer Text0365                                           ; 0x0365
-	textpointer Text0366                                           ; 0x0366
-	textpointer Text0367                                           ; 0x0367
-	textpointer Text0368                                           ; 0x0368
-	textpointer Text0369                                           ; 0x0369
-	textpointer Text036a                                           ; 0x036a
-	textpointer Text036b                                           ; 0x036b
+	textpointer GiftCenterMenuText                                 ; 0x0354
+	textpointer SendCardText                                       ; 0x0355
+	textpointer ReceiveCardText                                    ; 0x0356
+	textpointer SendDeckConfigurationText                          ; 0x0357
+	textpointer ReceiveDeckConfigurationText                       ; 0x0358
+	textpointer MailText                                           ; 0x0359
+	textpointer WhichMailWouldYouLikeToReadText                    ; 0x035a
+	textpointer MailNumbersText                                    ; 0x035b
+	textpointer EmptyMailNameText                                  ; 0x035c
+	textpointer Mail1Text                                          ; 0x035d
+	textpointer Mail2Text                                          ; 0x035e
+	textpointer Mail3Text                                          ; 0x035f
+	textpointer Mail4Text                                          ; 0x0360
+	textpointer Mail5Text                                          ; 0x0361
+	textpointer Mail6Text                                          ; 0x0362
+	textpointer Mail7Text                                          ; 0x0363
+	textpointer Mail8Text                                          ; 0x0364
+	textpointer Mail9Text                                          ; 0x0365
+	textpointer Mail10Text                                         ; 0x0366
+	textpointer Mail11Text                                         ; 0x0367
+	textpointer Mail12Text                                         ; 0x0368
+	textpointer Mail13Text                                         ; 0x0369
+	textpointer Mail14Text                                         ; 0x036a
+	textpointer Mail15Text                                         ; 0x036b
 	textpointer NewGameText                                        ; 0x036c
 	textpointer CardPopContinueDiaryNewGameText                    ; 0x036d
 	textpointer CardPopContinueDiaryNewGameContinueDuelText        ; 0x036e
@@ -891,13 +891,13 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ContinueFromDiaryText                              ; 0x0377
 	textpointer YouCanAccessCardPopOnlyWithGameBoyColorsText       ; 0x0378
 	textpointer IsCrazyAboutPokemonAndPokemonCardCollectingText    ; 0x0379
-	textpointer Text037a                                           ; 0x037a
+	textpointer DebugMenuText                                      ; 0x037a
 	textpointer Text037b                                           ; 0x037b
-	textpointer Text037c                                           ; 0x037c
-	textpointer Text037d                                           ; 0x037d
-	textpointer Text037e                                           ; 0x037e
-	textpointer Text037f                                           ; 0x037f
-	textpointer Text0380                                           ; 0x0380
+	textpointer DebugBoosterPackMenuText                           ; 0x037c
+	textpointer DebugBoosterPackColosseumEvolutionMenuText         ; 0x037d
+	textpointer DebugBoosterPackMysteryMenuText                    ; 0x037e
+	textpointer DebugBoosterPackLaboratoryMenuText                 ; 0x037f
+	textpointer DebugBoosterPackEnergyMenuText                     ; 0x0380
 	textpointer Text0381                                           ; 0x0381
 	textpointer Text0382                                           ; 0x0382
 	textpointer Text0383                                           ; 0x0383

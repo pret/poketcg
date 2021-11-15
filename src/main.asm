@@ -25,14 +25,65 @@ SECTION "Overworld Scripting", ROMX
 INCLUDE "engine/overworld/overworld.asm"
 INCLUDE "engine/overworld/scripting.asm"
 
-SECTION "Bank 4", ROMX
-INCLUDE "engine/bank04.asm"
+SECTION "Menus 2", ROMX
+INCLUDE "engine/menus/init_menu.asm"
+INCLUDE "engine/menus/status.asm"
+INCLUDE "engine/menus/diary.asm"
+INCLUDE "engine/menus/print_stats.asm"
+INCLUDE "engine/menus/medal.asm"
+INCLUDE "engine/menus/give_booster_pack.asm"
+INCLUDE "engine/menus/duel_init.asm"
+INCLUDE "engine/menus/pc_glossary.asm"
+INCLUDE "engine/menus/config.asm"
+INCLUDE "engine/menus/mail.asm"
+
+SECTION "Color", ROMX
+INCLUDE "engine/gfx/color.asm"
+
+SECTION "Gift Center Menu", ROMX
+INCLUDE "engine/menus/gift_center.asm"
+
+SECTION "Overworld Map", ROMX
+INCLUDE "engine/overworld_map.asm"
+INCLUDE "engine/menus/labels.asm"
+
+SECTION "Save", ROMX
+INCLUDE "engine/save.asm"
+
+SECTION "Map Scripts", ROMX
+INCLUDE "data/map_scripts.asm"
+INCLUDE "engine/overworld/npcs.asm"
+INCLUDE "data/duel/duel_configurations.asm"
+INCLUDE "data/script_table.asm"
+INCLUDE "data/multichoice.asm"
+INCLUDE "data/overworld_map/player_movement_paths.asm"
+
+SECTION "Menus 3", ROMX
+INCLUDE "engine/menus/debug_main.asm"
+INCLUDE "engine/menus/main_menu.asm"
+INCLUDE "engine/menus/debug.asm"
+INCLUDE "engine/menus/wait_keys.asm"
+INCLUDE "engine/gfx/default_palettes.asm"
+INCLUDE "engine/menus/naming.asm"
+
+SECTION "Sprite Animations", ROMX
+INCLUDE "engine/gfx/sprite_animations.asm"
+
+SECTION "Scenes", ROMX
+INCLUDE "engine/scenes.asm"
+
+SECTION "Challenge Machine", ROMX
+INCLUDE "engine/challenge_machine.asm"
+
+SECTION "Map Objects", ROMX
+INCLUDE "data/npc_map_data.asm"
+INCLUDE "data/map_objects.asm"
 
 SECTION "AI Logic 1", ROMX
 INCLUDE "data/deck_ai_pointers.asm"
 INCLUDE "engine/duel/ai/core.asm"
 
-SECTION "Menus 2", ROMX
+SECTION "Menus 4", ROMX
 INCLUDE "engine/copy_card_name.asm"
 INCLUDE "engine/menus/play_area.asm"
 INCLUDE "engine/menus/glossary.asm"
@@ -125,6 +176,6 @@ INCLUDE "engine/gfx/gfx_table_pointers.asm"
 INCLUDE "engine/gfx/tilemaps.asm"
 INCLUDE "engine/gfx/tilesets.asm"
 INCLUDE "engine/gfx/sprites.asm"
-INCLUDE "engine/gfx/sprite_animations.asm"
-INCLUDE "engine/gfx/palettes.asm"
+INCLUDE "data/sprite_animation_pointers.asm"
+INCLUDE "data/palette_pointers.asm"
 INCLUDE "data/maps/tilemaps.asm"

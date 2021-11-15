@@ -36,7 +36,7 @@ ChallengeMachine_Start:
 
 	ldtx hl, LetUsChooseYourOpponentText
 	call PrintScrollableText_NoTextBoxLabel
-	call Func_10ab4
+	call FadeScreenToWhite
 	call EnableSRAM
 	xor a
 	ld [sPresentConsecutiveWinsBackup], a
@@ -92,7 +92,7 @@ ChallengeMachine_Start:
 .defeated_five_opponents
 	ld hl, sTotalChallengeMachineWins
 	call ChallengeMachine_IncrementHLMax999
-	call Func_10ab4
+	call FadeScreenToWhite
 	call ChallengeMachine_CheckForNewRecord
 	call ChallengeMachine_DrawScoreScreen
 	call FlashWhiteScreen
@@ -124,7 +124,7 @@ ChallengeMachine_Start:
 	call PrintScrollableText_NoTextBoxLabel
 .quit
 	call ChallengeMachine_PrintFinalConsecutiveWinStreak
-	call Func_10ab4
+	call FadeScreenToWhite
 	call ChallengeMachine_CheckForNewRecord
 	call ChallengeMachine_DrawScoreScreen
 	call FlashWhiteScreen
@@ -394,7 +394,7 @@ ChallengeMachine_ShowNewRecord:
 	ret
 
 ChallengeMachine_DrawScoreScreen:
-	call Func_10000
+	call InitMenuScreen
 	lb de, $30, $bf
 	call SetupText
 	lb de,  0,  0
@@ -412,13 +412,13 @@ ChallengeMachine_DrawScoreScreen:
 	xor a
 	ld [wTxRam2], a
 	ld [wTxRam2 + 1], a
-	ld hl, ChallengeMachine_PlayerScoreTexts
-	call Func_111b3
+	ld hl, ChallengeMachine_PlayerScoreLabels
+	call PrintLabels
 	ld hl, ChallengeMachine_PlayerScoreValues
 	call ChallengeMachine_PrintScores
 	ret
 
-ChallengeMachine_PlayerScoreTexts:
+ChallengeMachine_PlayerScoreLabels:
 	db 1, 0
 	tx ChallengeMachineText
 
@@ -454,7 +454,7 @@ ChallengeMachine_PlayerScoreValues:
 	dw NULL
 
 ChallengeMachine_DrawOpponentList:
-	call Func_10000
+	call InitMenuScreen
 	lb de, $30, $bf
 	call SetupText
 	lb de,  0,  0
@@ -463,13 +463,13 @@ ChallengeMachine_DrawOpponentList:
 	lb de,  0, 12
 	lb bc, 20,  6
 	call DrawRegularTextBox
-	ld hl, ChallengeMachine_OpponentNumberTexts
-	call Func_111b3
+	ld hl, ChallengeMachine_OpponentNumberLabels
+	call PrintLabels
 	call ChallengeMachine_PrintOpponentInfo
 	call ChallengeMachine_PrintDuelResultIcons
 	ret
 
-ChallengeMachine_OpponentNumberTexts:
+ChallengeMachine_OpponentNumberLabels:
 	db 1, 0
 	tx ChallengeMachineText
 
@@ -637,10 +637,10 @@ ChallengeMachine_PrintScores:
 	inc de
 	ld a, [de]
 	ld h, a
-	call Func_10217
+	call ConvertWordToNumericalDigits
 	pop bc
 	call BCCoordToBGMap0Address
-	ld hl, wd4b4
+	ld hl, wDecimalChars
 	ld b, 3
 	call SafeCopyDataHLtoDE
 	pop hl

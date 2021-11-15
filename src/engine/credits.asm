@@ -9,19 +9,19 @@ PlayCreditsSequence:
 	call PlaySong
 	farcall FlashWhiteScreen
 	call SetCreditsSequenceCmdPtr
-.asm_1d6c8
+.loop_cmds
 	call DoFrameIfLCDEnabled
 	call Func_1d765
 	call ExecuteCreditsSequenceCmd
 	ld a, [wSequenceDelay]
 	cp $ff
-	jr nz, .asm_1d6c8
+	jr nz, .loop_cmds
 	call WaitForSongToFinish
-	ld a, $8
-	farcall Func_12863
+	ld a, START
+	farcall WaitUntilKeysArePressed
 	ld a, MUSIC_STOP
 	call PlaySong
-	farcall Func_10ab4
+	farcall FadeScreenToWhite
 	call Func_3ca4
 	call SetWindowOff
 	call Func_1d758
@@ -37,7 +37,7 @@ Func_1d705:
 	call DisableLCD
 	farcall Func_10a9b
 	call Func_3ca0
-	farcall Func_10000
+	farcall InitMenuScreen
 	call Func_1d7ee
 	ld hl, Func_3e31
 	call SetDoFrameFunction

@@ -1,7 +1,7 @@
 PlayIntroSequence:
 	call DisableLCD
 	farcall Func_10a9b
-	farcall Func_10000
+	farcall InitMenuScreen
 	call Func_3ca0
 	ld hl, HandleAllSpriteAnimations
 	call SetDoFrameFunction

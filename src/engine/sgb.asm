@@ -570,7 +570,7 @@ DecompressSGBPalette:
 	ret
 
 ; sends an SGB packet related with palettes
-Func_7041d:
+SendSGBPortraitPalettes:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; exit if not SGB
