@@ -7918,12 +7918,12 @@ _TossCoin:
 
 .done_toss_anim
 	ld b, DUEL_ANIM_COIN_HEADS
-	ld c, $34 ; tile for circle
+	ld c, $34 ; tile for cross
 	ld a, e
 	or a
 	jr z, .show_result
 	ld b, DUEL_ANIM_COIN_TAILS
-	ld c, $30 ; tile for cross
+	ld c, $30 ; tile for circle
 	ld hl, wCoinTossNumHeads
 	inc [hl]
 
