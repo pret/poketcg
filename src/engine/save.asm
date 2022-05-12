@@ -447,7 +447,7 @@ LoadGeneralSaveDataFromDE:
 	pop hl
 	ret
 
-wram_sram_map: MACRO
+MACRO wram_sram_map
 	dw \1 ; WRAM address
 	dw \2 ; number of bytes
 	db \3 ; min allowed value

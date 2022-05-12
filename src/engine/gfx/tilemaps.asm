@@ -1,6 +1,6 @@
 ; \1 = pointer
 ; \2 = tileset
-tilemap: MACRO
+MACRO tilemap
 	dwb \1, BANK(\1) - BANK(Tilemaps)
 	db \2
 ENDM

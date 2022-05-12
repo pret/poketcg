@@ -1,5 +1,5 @@
 ; \1 = anim data pointer
-anim_data_pointer: MACRO
+MACRO anim_data_pointer
 	dwb \1, BANK(\1) - BANK(SpriteAnimations)
 	db $00 ; unused (padding?)
 ENDM

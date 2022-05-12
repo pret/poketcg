@@ -366,7 +366,7 @@ FillSGBBorderMedalSlots:
 	jr nz, .loop_medals
 	ret
 
-border_medal_tile: MACRO
+MACRO border_medal_tile
 	dw \1 ; VRAM address
 	db \2 ; tile
 	db \3 ; pal (?)

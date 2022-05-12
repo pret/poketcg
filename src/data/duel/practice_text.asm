@@ -8,7 +8,7 @@ PracticeDuelTextPointerTable:
 	dw PracticeDuelText_Turn7
 	dw PracticeDuelText_Turn8
 
-practicetext: MACRO
+MACRO practicetext
 	db \1 ; Y coord to place the point-by-point instruction
 	tx \2 ; Dr. Mason's instruction
 	tx \3 ; static point-by-point instruction

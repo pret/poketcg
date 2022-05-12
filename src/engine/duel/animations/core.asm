@@ -242,7 +242,7 @@ AnimationCoordinatesIndex:
 	db $09, $0a, $0b, $0c, $0d, $0e ; player
 	db $09, $0a, $0b, $0c, $0d, $0e ; opponent
 
-anim_coords: MACRO
+MACRO anim_coords
 	db \1
 	db \2
 	db \3

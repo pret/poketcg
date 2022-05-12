@@ -1,6 +1,6 @@
 ; \1 = gfx pointer
 ; \2 = number of tiles
-gfx_pointer: MACRO
+MACRO gfx_pointer
 	dwb \1, BANK(\1) - BANK(Sprites)
 	db \2
 ENDM

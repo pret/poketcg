@@ -1,9 +1,9 @@
 ; wPreviousAIFlags and wCurrentAIFlags constants
-AI_FLAG_USED_PLUSPOWER     EQU 1 << 0
-AI_FLAG_USED_SWITCH        EQU 1 << 1
-AI_FLAG_USED_PROFESSOR_OAK EQU 1 << 2
-AI_FLAG_MODIFIED_HAND      EQU 1 << 3
-AI_FLAG_USED_GUST_OF_WIND  EQU 1 << 4
+DEF AI_FLAG_USED_PLUSPOWER     EQU 1 << 0
+DEF AI_FLAG_USED_SWITCH        EQU 1 << 1
+DEF AI_FLAG_USED_PROFESSOR_OAK EQU 1 << 2
+DEF AI_FLAG_MODIFIED_HAND      EQU 1 << 3
+DEF AI_FLAG_USED_GUST_OF_WIND  EQU 1 << 4
 
 ; used as input for AIProcessEnergyCards to determine what to check
 ; and whether to play card after the routine is over.
@@ -11,9 +11,9 @@ AI_FLAG_USED_GUST_OF_WIND  EQU 1 << 4
 ; not to actually play the energy card after it's finished,
 ; but AIProcessEnergyCards checks whether ANY flag is set in order
 ; to decide not to play it, so it's redundant in the presence of another flag.
-AI_ENERGY_FLAG_DONT_PLAY       EQU 1 << 0 ; whether to play energy card (?)
-AI_ENERGY_FLAG_SKIP_EVOLUTION  EQU 1 << 1 ; whether to check if card has evolutions
-AI_ENERGY_FLAG_SKIP_ARENA_CARD EQU 1 << 7 ; whether to include Arena card in determining which card to attach energy
+DEF AI_ENERGY_FLAG_DONT_PLAY       EQU 1 << 0 ; whether to play energy card (?)
+DEF AI_ENERGY_FLAG_SKIP_EVOLUTION  EQU 1 << 1 ; whether to check if card has evolutions
+DEF AI_ENERGY_FLAG_SKIP_ARENA_CARD EQU 1 << 7 ; whether to include Arena card in determining which card to attach energy
 
 ; used to determine which Trainer cards for AI
 ; to process in AIProcessHandTrainerCards.
@@ -42,15 +42,15 @@ AI_ENERGY_FLAG_SKIP_ARENA_CARD EQU 1 << 7 ; whether to include Arena card in det
 ; used by wAIBarrierFlagCounter to determine
 ; whether Player is running Mewtwo1 mill deck.
 ; flag set means true, flag not set means false.
-AI_MEWTWO_MILL_F EQU 7
-AI_MEWTWO_MILL   EQU 1 << AI_MEWTWO_MILL_F
+DEF AI_MEWTWO_MILL_F EQU 7
+DEF AI_MEWTWO_MILL   EQU 1 << AI_MEWTWO_MILL_F
 
 ; defines the behaviour of HandleAIEnergyTrans, for determining
 ; whether to move energy cards from the Bench to the Arena or vice-versa
 ; and the number of energy cards needed for achieving that.
-AI_ENERGY_TRANS_RETREAT  EQU $9 ; moves energy cards needed for Retreat Cost
-AI_ENERGY_TRANS_ATTACK   EQU $d ; moves energy cards needed for second attack
-AI_ENERGY_TRANS_TO_BENCH EQU $e ; moves energy cards away from Arena card
+DEF AI_ENERGY_TRANS_RETREAT  EQU $9 ; moves energy cards needed for Retreat Cost
+DEF AI_ENERGY_TRANS_ATTACK   EQU $d ; moves energy cards needed for second attack
+DEF AI_ENERGY_TRANS_TO_BENCH EQU $e ; moves energy cards away from Arena card
 
 ; used to know which AI routine to call in
 ; the AIAction pointer tables in AIDoAction
@@ -67,12 +67,12 @@ AI_ENERGY_TRANS_TO_BENCH EQU $e ; moves energy cards away from Arena card
 ;	%10'0001 = second prize card
 ;	%10'0010 = third prize card
 ;	etc...
-AI_PEEK_TARGET_PRIZE_F EQU 6
-AI_PEEK_TARGET_PRIZE   EQU 1 << AI_PEEK_TARGET_PRIZE_F
+DEF AI_PEEK_TARGET_PRIZE_F EQU 6
+DEF AI_PEEK_TARGET_PRIZE   EQU 1 << AI_PEEK_TARGET_PRIZE_F
 ; this bit is set when the AI decides to use Peek on Player hand card,
 ; with the following bits deciding which one to Peek. That is:
 ;	%1XXX XXXX, where XXX XXXX is the deck index of card chosen
-AI_PEEK_TARGET_HAND_F EQU 7
-AI_PEEK_TARGET_HAND   EQU 1 << AI_PEEK_TARGET_HAND_F
+DEF AI_PEEK_TARGET_HAND_F EQU 7
+DEF AI_PEEK_TARGET_HAND   EQU 1 << AI_PEEK_TARGET_HAND_F
 ; all bits set means AI chose to look at Player's top deck card
-AI_PEEK_TARGET_DECK EQU $ff
+DEF AI_PEEK_TARGET_DECK EQU $ff

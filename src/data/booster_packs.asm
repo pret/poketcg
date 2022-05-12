@@ -7,7 +7,7 @@ BoosterSetRarityAmountsTable: ; 1e4d4 (7::64d4)
 	db 0, 6, 3, 1 ; MYSTERY
 	db 0, 6, 3, 1 ; LABORATORY
 
-booster_set: MACRO
+MACRO booster_set
 	db \1 >> 4
 ENDM
 

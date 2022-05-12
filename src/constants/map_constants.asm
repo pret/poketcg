@@ -52,19 +52,19 @@
 
 ; Size of map data. See data/npc_map_data.asm and data/map_objects.asm
 ; for more info on what these represent
-NPC_MAP_SIZE          EQU $06
-MAP_OBJECT_SIZE       EQU $09
+DEF NPC_MAP_SIZE          EQU $06
+DEF MAP_OBJECT_SIZE       EQU $09
 
 ; Most of these aren't fully understood so the names aren't great
-MAP_SCRIPT_SIZE          EQU $0f
-MAP_SCRIPT_NPCS          EQU $00
-MAP_SCRIPT_POST_NPC      EQU $02
-MAP_SCRIPT_OBJECTS       EQU $04
-MAP_SCRIPT_PRESSED_A     EQU $06
-MAP_SCRIPT_LOAD_MAP      EQU $08
-MAP_SCRIPT_AFTER_DUEL    EQU $0a
-MAP_SCRIPT_MOVED_PLAYER  EQU $0c
-MAP_SCRIPT_CLOSE_TEXTBOX EQU $0e
+DEF MAP_SCRIPT_SIZE          EQU $0f
+DEF MAP_SCRIPT_NPCS          EQU $00
+DEF MAP_SCRIPT_POST_NPC      EQU $02
+DEF MAP_SCRIPT_OBJECTS       EQU $04
+DEF MAP_SCRIPT_PRESSED_A     EQU $06
+DEF MAP_SCRIPT_LOAD_MAP      EQU $08
+DEF MAP_SCRIPT_AFTER_DUEL    EQU $0a
+DEF MAP_SCRIPT_MOVED_PLAYER  EQU $0c
+DEF MAP_SCRIPT_CLOSE_TEXTBOX EQU $0e
 
 ; map palettes for use in SGB mode
 	const_def 1
@@ -91,4 +91,4 @@ MAP_SCRIPT_CLOSE_TEXTBOX EQU $0e
 	const MAP_EVENT_SCIENCE_DECK_MACHINE   ; $8
 	const MAP_EVENT_FIRE_DECK_MACHINE      ; $9
 	const MAP_EVENT_CHALLENGE_MACHINE      ; $a
-NUM_MAP_EVENTS EQU const_value
+DEF NUM_MAP_EVENTS EQU const_value

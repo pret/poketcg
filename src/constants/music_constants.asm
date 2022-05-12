@@ -31,4 +31,4 @@
 	const MUSIC_MEDAL          ; $1d
 	const MUSIC_UNUSED_1E      ; $1e
 
-NUM_SONGS = const_value
+DEF NUM_SONGS = const_value

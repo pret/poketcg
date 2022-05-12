@@ -3,7 +3,7 @@
 ; (see data/auto_deck_card_lists.asm) and two text IDs
 ; for the corresponding deck name and description/flavor text
 
-auto_deck: MACRO
+MACRO auto_deck
 	dw \1 ; deck card list
 	tx \2 ; deck name text ID
 	tx \3 ; deck description text ID

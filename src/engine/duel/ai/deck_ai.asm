@@ -3,7 +3,7 @@
 ; a Pokemon to switch to, it looks up in this list and if
 ; a card ID matches, applies a retreat score bonus to this card.
 ; positive (negative) means more (less) likely to switch to this card.
-ai_retreat: MACRO
+MACRO ai_retreat
 	db \1       ; card ID
 	db $80 + \2 ; retreat score (ranges between -128 and 127)
 ENDM
@@ -14,7 +14,7 @@ ENDM
 ; a card ID matches, skips this card if the maximum number of energy
 ; cards attached has been reached. If it hasn't been reached, additionally
 ; applies a positive (or negative) AI score to attach energy to this card.
-ai_energy: MACRO
+MACRO ai_energy
 	db \1       ; card ID
 	db \2       ; maximum number of attached cards
 	db $80 + \3 ; energy score (ranges between -128 and 127)
@@ -22,7 +22,7 @@ ENDM
 
 ; stores in WRAM pointer to data in argument
 ; e.g. store_list_pointer wSomeListPointer, SomeData
-store_list_pointer: MACRO
+MACRO store_list_pointer
 	ld hl, \1
 	ld de, \2
 	ld [hl], e
