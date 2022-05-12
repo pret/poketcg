@@ -283,33 +283,33 @@ Speaking of generic constants, there are multiple constants aleady defined for d
 Constants for WRAM address offsets (i.e. for the likes of ``wAddressN - wAddress``) are sometimes a good idea às well, and typically follow the addresses defined in some WRAM macro. For example, look at the constants defined with the previously seen ``card_data_struct`` macro in mind:
 
 ```
-CARD_DATA_TYPE                  EQU $00
-CARD_DATA_GFX                   EQU $01
-CARD_DATA_NAME                  EQU $03
-CARD_DATA_RARITY                EQU $05
+DEF CARD_DATA_TYPE                  EQU $00
+DEF CARD_DATA_GFX                   EQU $01
+DEF CARD_DATA_NAME                  EQU $03
+DEF CARD_DATA_RARITY                EQU $05
 (...)
-TRN_CARD_DATA_LENGTH    EQU $0e
-ENERGY_CARD_DATA_LENGTH EQU $0e
-PKMN_CARD_DATA_LENGTH   EQU $41
+DEF TRN_CARD_DATA_LENGTH    EQU $0e
+DEF ENERGY_CARD_DATA_LENGTH EQU $0e
+DEF PKMN_CARD_DATA_LENGTH   EQU $41
 ```
 
 Some constants make sense to have as both a value and a flag. Again, button constants are a good example of this. For these, the convention is to use ``CONSTANT_NAME`` for the value, and ``CONSTANT_NAME_F`` for the flag, so you can use either of them depending on the assembly instruction (e.g. ``and CONSTANT_NAME`` or ``bit CONSTANT_NAME_F, a``. For example:
 
 ```
-A_BUTTON_F EQU 0
-B_BUTTON_F EQU 1
+DEF A_BUTTON_F EQU 0
+DEF B_BUTTON_F EQU 1
 (...)
 
-A_BUTTON   EQU 1 << A_BUTTON_F ; $01
-B_BUTTON   EQU 1 << B_BUTTON_F ; $02
+DEF A_BUTTON   EQU 1 << A_BUTTON_F ; $01
+DEF B_BUTTON   EQU 1 << B_BUTTON_F ; $02
 (...)
 ```
 
 Bit mask constants are also useful if they are used multiple times. Buttons again are a simple enough example to illustrate this:
 
 ```
-BUTTONS    EQU A_BUTTON | B_BUTTON | SELECT | START  ; $0f
-D_PAD      EQU D_RIGHT  | D_LEFT   | D_UP   | D_DOWN ; $f0
+DEF BUTTONS    EQU A_BUTTON | B_BUTTON | SELECT | START  ; $0f
+DEF D_PAD      EQU D_RIGHT  | D_LEFT   | D_UP   | D_DOWN ; $f0
 ```
 
 Finally, note that constants that are exclusive to a specific feature or function should generally be local, and thus placed above the code that uses them. This is usually not the case, however, so you should usually be looking to declare them inside the constants/ directory as mentioned before. This kind of refactoring is also more appropriate when the disassembly is in a more advanced state as well.

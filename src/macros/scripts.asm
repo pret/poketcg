@@ -1,4 +1,4 @@
-start_script EQUS "rst $20"
+DEF start_script EQUS "rst $20"
 
 MACRO run_command
 	db \1_index

@@ -322,7 +322,7 @@ ENDM
 	fwcharmap 0, "—", $78
 	fwcharmap 0, "~", $79
 
-FW_SPACE EQU $70
+DEF FW_SPACE EQU $70
 
 MACRO txsymbol
 	const SYM_\1

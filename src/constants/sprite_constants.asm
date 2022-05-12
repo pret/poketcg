@@ -1,5 +1,5 @@
 ; wSpriteAnimBuffer
-SPRITE_ANIM_BUFFER_CAPACITY EQU 16 ; sprites
+DEF SPRITE_ANIM_BUFFER_CAPACITY EQU 16 ; sprites
 
 ; sprite_anim_struct constants
 	const_def
@@ -11,15 +11,15 @@ SPRITE_ANIM_BUFFER_CAPACITY EQU 16 ; sprites
 	const SPRITE_ANIM_ID
 	const SPRITE_ANIM_BANK
 	const SPRITE_ANIM_POINTER
-const_value = const_value+1 ; pointer
+DEF const_value = const_value+1 ; pointer
 	const SPRITE_ANIM_FRAME_OFFSET_POINTER
-const_value = const_value+1 ; pointer
+DEF const_value = const_value+1 ; pointer
 	const SPRITE_ANIM_FRAME_BANK
 	const SPRITE_ANIM_FRAME_DATA_POINTER
-const_value = const_value+1 ; pointer
+DEF const_value = const_value+1 ; pointer
 	const SPRITE_ANIM_COUNTER
 	const SPRITE_ANIM_FLAGS
-SPRITE_ANIM_LENGTH EQU const_value
+DEF SPRITE_ANIM_LENGTH EQU const_value
 
 ; SPRITE_ANIM_FLAGS values
 	const_def
@@ -32,7 +32,7 @@ SPRITE_ANIM_LENGTH EQU const_value
 	const SPRITE_ANIM_FLAG_6
 	const SPRITE_ANIM_FLAG_UNSKIPPABLE
 
-SPRITE_FRAME_OFFSET_SIZE EQU 4
+DEF SPRITE_FRAME_OFFSET_SIZE EQU 4
 
 	const_def
 	const SPRITE_OW_PLAYER          ; $00

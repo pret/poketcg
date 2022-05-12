@@ -1,4 +1,4 @@
-LOADED_NPC_MAX EQU $08
+DEF LOADED_NPC_MAX EQU $08
 
 ; wLoadedNPCs structure
 	const_def
@@ -12,9 +12,9 @@ LOADED_NPC_MAX EQU $08
 	const LOADED_NPC_DIRECTION_BACKUP
 	const LOADED_NPC_MOVEMENT_STEP
 	const LOADED_NPC_MOVEMENT_PTR
-const_value = const_value+1
+DEF const_value = const_value+1
 	const LOADED_NPC_FIELD_0B
-LOADED_NPC_LENGTH EQU const_value
+DEF LOADED_NPC_LENGTH EQU const_value
 
 ; npc_struct constants
 	const_def
@@ -24,14 +24,14 @@ LOADED_NPC_LENGTH EQU const_value
 	const NPC_DATA_ANIM_CGB
 	const NPC_DATA_FLAGS
 	const NPC_DATA_SCRIPT_PTR
-const_value = const_value+1
+DEF const_value = const_value+1
 	const NPC_DATA_NAME_TEXT
-const_value = const_value+1
+DEF const_value = const_value+1
 	const NPC_DATA_DUELIST_PICTURE
 	const NPC_DATA_DECK_ID
 	const NPC_DATA_DUEL_THEME_ID
 	const NPC_DATA_MATCH_START_ID
-NPC_DATA_LENGTH EQU const_value
+DEF NPC_DATA_LENGTH EQU const_value
 
 	const_def 1
 	const PLAYER_PIC    ; $01
@@ -200,6 +200,6 @@ NPC_DATA_LENGTH EQU const_value
 	const NPC_FLAG_MOVING_F        ; $5
 	const NPC_FLAG_UNKNOWN_F       ; $6
 
-NPC_FLAG_DIRECTIONLESS EQU 1 << NPC_FLAG_DIRECTIONLESS_F
-NPC_FLAG_MOVING        EQU 1 << NPC_FLAG_MOVING_F
-NPC_FLAG_UNKNOWN       EQU 1 << NPC_FLAG_UNKNOWN_F
+DEF NPC_FLAG_DIRECTIONLESS EQU 1 << NPC_FLAG_DIRECTIONLESS_F
+DEF NPC_FLAG_MOVING        EQU 1 << NPC_FLAG_MOVING_F
+DEF NPC_FLAG_UNKNOWN       EQU 1 << NPC_FLAG_UNKNOWN_F

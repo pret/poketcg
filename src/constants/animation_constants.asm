@@ -334,9 +334,9 @@
 	const DUEL_ANIM_96                 ; $60
 
 ; animations passed this point are treated differently
-DUEL_SPECIAL_ANIMS EQU const_value
+DEF DUEL_SPECIAL_ANIMS EQU const_value
 
-DUEL_SCREEN_ANIMS EQU const_value
+DEF DUEL_SCREEN_ANIMS EQU const_value
 	const DUEL_ANIM_SMALL_SHAKE_X      ; $61
 	const DUEL_ANIM_BIG_SHAKE_X        ; $62
 	const DUEL_ANIM_SMALL_SHAKE_Y      ; $63
@@ -368,10 +368,10 @@ DUEL_SCREEN_ANIMS EQU const_value
 	const DUEL_ANIM_STRUCT_DUELIST_SIDE   ; $2
 	const DUEL_ANIM_STRUCT_LOCATION_PARAM ; $3
 	const DUEL_ANIM_STRUCT_DAMAGE         ; $4
-const_value = const_value + 1
+DEF const_value = const_value + 1
 	const DUEL_ANIM_STRUCT_UNKNOWN_2      ; $6
 	const DUEL_ANIM_STRUCT_BANK           ; $7
-DUEL_ANIM_STRUCT_SIZE EQU const_value
+DEF DUEL_ANIM_STRUCT_SIZE EQU const_value
 
 	; ow_frame struct constants
 	const_def
@@ -380,9 +380,9 @@ DUEL_ANIM_STRUCT_SIZE EQU const_value
 	const OW_FRAME_STRUCT_VRAM_BANK        ; $2
 	const OW_FRAME_STRUCT_TILESET_BANK     ; $3
 	const OW_FRAME_STRUCT_TILESET          ; $4
-const_value = const_value + 1
+DEF const_value = const_value + 1
 	const OW_FRAME_STRUCT_TILESET_OFFSET   ; $6
-const_value = const_value + 1
-OW_FRAME_STRUCT_SIZE EQU const_value
+DEF const_value = const_value + 1
+DEF OW_FRAME_STRUCT_SIZE EQU const_value
 
-NUM_OW_FRAMESET_SUBGROUPS EQU 3
+DEF NUM_OW_FRAMESET_SUBGROUPS EQU 3
