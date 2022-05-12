@@ -324,7 +324,7 @@ OpenInPlayAreaScreen_TextTable:
 	tx PKMNPowerText          ; INPLAYAREA_OPP_BENCH_4
 	tx DoneText               ; INPLAYAREA_OPP_BENCH_5
 
-in_play_area_cursor_transition: MACRO
+MACRO in_play_area_cursor_transition
 	cursor_transition \1, \2, \3, INPLAYAREA_\4, INPLAYAREA_\5, INPLAYAREA_\6, INPLAYAREA_\7
 ENDM
 

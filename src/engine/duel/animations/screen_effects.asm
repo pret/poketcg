@@ -33,7 +33,7 @@ InitScreenAnimation:
 ; and is decreased by one each time.
 ; when it is down to 0, the animation is done.
 
-screen_effect: MACRO
+MACRO screen_effect
 	dw \1 ; function pointer
 	db \2 ; duration
 	db $00 ; padding

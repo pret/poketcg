@@ -4,101 +4,101 @@ done EQUS "db TX_END"
 
 half2full EQUS "db TX_HALF2FULL"
 
-katakana: MACRO
+MACRO katakana
 	db TX_KATAKANA
 	for i, STRLEN(\1)
 		db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
 	endr
 ENDM
 
-hiragana: MACRO
+MACRO hiragana
 	db TX_HIRAGANA
 	for i, STRLEN(\1)
 		db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
 	endr
 ENDM
 
-textfw0: MACRO
+MACRO textfw0
 	rept _NARG
-if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
-	db \1
-else
-	for i, STRLEN(\1)
-		db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
-	endr
-endc
-	shift
-	endr
-ENDM
-
-textfw1: MACRO
-	rept _NARG
-if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
-	db \1
-else
-	for i, STRLEN(\1)
-		if (STRSUB(\1, i + 1, 1)) == " "
-			db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+		if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+			db \1
 		else
-			db TX_FULLWIDTH1, STRCAT("FW1_", STRSUB(\1, i + 1, 1))
+			for i, STRLEN(\1)
+				db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+			endr
 		endc
-	endr
-endc
-	shift
+		shift
 	endr
 ENDM
 
-textfw2: MACRO
+MACRO textfw1
 	rept _NARG
-if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
-	db \1
-else
-	for i, STRLEN(\1)
-		if (STRSUB(\1, i + 1, 1)) == " "
-			db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+		if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+			db \1
 		else
-			db TX_FULLWIDTH2, STRCAT("FW2_", STRSUB(\1, i + 1, 1))
+			for i, STRLEN(\1)
+				if (STRSUB(\1, i + 1, 1)) == " "
+					db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+				else
+					db TX_FULLWIDTH1, STRCAT("FW1_", STRSUB(\1, i + 1, 1))
+				endc
+			endr
 		endc
-	endr
-endc
-	shift
+		shift
 	endr
 ENDM
 
-textfw3: MACRO
+MACRO textfw2
 	rept _NARG
-if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
-	db \1
-else
-	for i, STRLEN(\1)
-		if (STRSUB(\1, i + 1, 1)) == " "
-			db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+		if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+			db \1
 		else
-			db TX_FULLWIDTH3, STRCAT("FW3_", STRSUB(\1, i + 1, 1))
+			for i, STRLEN(\1)
+				if (STRSUB(\1, i + 1, 1)) == " "
+					db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+				else
+					db TX_FULLWIDTH2, STRCAT("FW2_", STRSUB(\1, i + 1, 1))
+				endc
+			endr
 		endc
-	endr
-endc
-	shift
+		shift
 	endr
 ENDM
 
-textfw4: MACRO
+MACRO textfw3
 	rept _NARG
-if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
-	db \1
-else
-	for i, STRLEN(\1)
-		if (STRSUB(\1, i + 1, 1)) == " "
-			db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+		if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+			db \1
 		else
-			db TX_FULLWIDTH4, STRCAT("FW4_", STRSUB(\1, i + 1, 1))
+			for i, STRLEN(\1)
+				if (STRSUB(\1, i + 1, 1)) == " "
+					db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+				else
+					db TX_FULLWIDTH3, STRCAT("FW3_", STRSUB(\1, i + 1, 1))
+				endc
+			endr
 		endc
-	endr
-endc
-	shift
+		shift
 	endr
 ENDM
 
-ldfw3: MACRO
+MACRO textfw4
+	rept _NARG
+		if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+			db \1
+		else
+			for i, STRLEN(\1)
+				if (STRSUB(\1, i + 1, 1)) == " "
+					db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
+				else
+					db TX_FULLWIDTH4, STRCAT("FW4_", STRSUB(\1, i + 1, 1))
+				endc
+			endr
+		endc
+		shift
+	endr
+ENDM
+
+MACRO ldfw3
 	ld \1, (TX_FULLWIDTH3 << 8) | STRCAT("FW3_", \2)
 ENDM

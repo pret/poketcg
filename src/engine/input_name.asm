@@ -782,15 +782,15 @@ GetCharInfoFromPos_Player:
 ; structure:
 ; abs. y pos. (1) / abs. x pos. (1) / type 1 (1) / type 2 (1) / char. code (2)
 ; unused data contains its character code as zero.
-kbitem: MACRO
+MACRO kbitem
 	db \1, \2, \3, \4
-if (_NARG == 5)
-	dw \5
-elif (\5 == TX_FULLWIDTH3)
-	dw (\5 << 8) | STRCAT("FW3_", \6)
-else
-	dw (\5 << 8) | \6
-endc
+	if (_NARG == 5)
+		dw \5
+	elif (\5 == TX_FULLWIDTH3)
+		dw (\5 << 8) | STRCAT("FW3_", \6)
+	else
+		dw (\5 << 8) | \6
+	endc
 ENDM
 
 KeyboardData_Player:

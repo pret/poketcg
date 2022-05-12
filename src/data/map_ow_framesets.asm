@@ -17,7 +17,7 @@ INCLUDE "data/map_ow_frameset_pointers.asm"
 ; \3 = VRAM bank
 ; \4 = tileset
 ; \5 = tileset offset
-ow_frame: MACRO
+MACRO ow_frame
 	db \1
 	db \2
 	db \3

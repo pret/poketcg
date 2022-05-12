@@ -192,7 +192,7 @@ OpenGlossaryScreen:
 ; unit: 5 bytes.
 ; [structure]
 ; horizontal align (1) / title text id (2) / desc. text id (2)
-glossary_entry: MACRO
+MACRO glossary_entry
 	db \1
 	tx \2
 	tx \3

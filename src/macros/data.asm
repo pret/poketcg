@@ -1,93 +1,93 @@
-dn: MACRO
+MACRO dn
 	db \1 << 4 | \2
 ENDM
 
-dbw: MACRO
+MACRO dbw
 	db \1
 	dw \2
 ENDM
 
-dwb: MACRO
+MACRO dwb
 	dw \1
 	db \2
 ENDM
 
-dx: MACRO
-x = 8 * ((\1) - 1)
+MACRO dx
+	DEF x = 8 * ((\1) - 1)
 	rept \1
-	db ((\2) >> x) & $ff
-x = x - 8
+		db ((\2) >> x) & $ff
+		DEF x = x - 8
 	endr
-	ENDM
+ENDM
 
-dt: MACRO ; three-byte (big-endian)
+MACRO dt ; three-byte (big-endian)
 	dx 3, \1
-	ENDM
+ENDM
 
-dd: MACRO ; four-byte (big-endian)
+MACRO dd ; four-byte (big-endian)
 	dx 4, \1
-	ENDM
+ENDM
 
-bigdw: MACRO ; big-endian word
+MACRO bigdw ; big-endian word
 	dx 2, \1
-	ENDM
+ENDM
 
-sgb: MACRO
+MACRO sgb
 	db \1 << 3 + \2 ; sgb_command * 8 + length
 ENDM
 
-rgb: MACRO
+MACRO rgb
 	dw (\3 << 10 | \2 << 5 | \1)
 ENDM
 
 ; poketcg specific macros below
 
-textpointer: MACRO
+MACRO textpointer
 	dw ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) & $ffff
 	db ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
 	const \1_
-EXPORT \1_
+	EXPORT \1_
 ENDM
 
-energy: MACRO
-en = 0
-if _NARG > 1
-	rept _NARG / 2
-x = 4 - 8 * (\1 % 2)
-en = en + \2 << ((\1 * 4) + x)
-	shift
-	shift
-	endr
-	rept NUM_TYPES / 2
-	db LOW(en)
-en = en >> 8
-	endr
-else
-	db 0, 0, 0, 0
-endc
+MACRO energy
+	DEF en = 0
+	if _NARG > 1
+		rept _NARG / 2
+			DEF x = 4 - 8 * (\1 % 2)
+			DEF en = en + \2 << ((\1 * 4) + x)
+			shift
+			shift
+		endr
+		rept NUM_TYPES / 2
+			db LOW(en)
+			DEF en = en >> 8
+		endr
+	else
+		db 0, 0, 0, 0
+	endc
 ENDM
 
-gfx: MACRO
+MACRO gfx
 	dw ($4000 * (BANK(\1) - BANK(CardGraphics)) + (\1 - $4000)) / 8
 ENDM
 
-frame_table: MACRO
+MACRO frame_table
 	db BANK(\1) - BANK(AnimData1) ; maybe use better reference for Bank20?
 	dw \1
 ENDM
 
-frame_data: MACRO
+MACRO frame_data
 	db \1 ; frame index
 	db \2 ; anim count
 	db \3 ; x translation
 	db \4 ; y translation
 ENDM
 
-tx: MACRO
+MACRO tx
 	dw \1_
 ENDM
 
-textitem: MACRO
+MACRO textitem
 	db \1, \2
 	tx \3
 ENDM
@@ -95,7 +95,7 @@ ENDM
 ; cursor x / cursor y / attribute / idx-up / idx-down / idx-right / idx-left
 ; idx-[direction] means the index to get when the input is in the direction.
 ; its attribute is used for drawing a flipped cursor.
-cursor_transition: MACRO
+MACRO cursor_transition
 	db \1, \2, \3
 	rept 4
 		db \4

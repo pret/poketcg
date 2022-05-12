@@ -1,7 +1,7 @@
-deck_const: MACRO
-if const_value >= 2
-\1_ID EQU const_value - 2
-endc
+MACRO deck_const
+	if const_value >= 2
+		DEF \1_ID EQU const_value - 2
+	endc
 	const \1
 ENDM
 

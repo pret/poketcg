@@ -1,22 +1,22 @@
-anim_end: MACRO
+MACRO anim_end
 	db $00
 ENDM
-anim_normal: MACRO
+MACRO anim_normal
 	db $01, \1
 ENDM
-anim_player: MACRO
+MACRO anim_player
 	db $02, \1
 ENDM
-anim_opponent: MACRO
+MACRO anim_opponent
 	db $03, \1
 ENDM
-anim_unknown: MACRO
+MACRO anim_unknown
 	db $04, \1
 ENDM
-anim_unknown2: MACRO
+MACRO anim_unknown2
 	db $05, \1
 ENDM
-anim_end2: MACRO
+MACRO anim_end2
 	db $06
 ENDM
 

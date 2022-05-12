@@ -1,7 +1,7 @@
 ; \1 = palette pointer
 ; \2 = number of palettes
 ; \3 = number of OBJ colors
-palette_pointer: MACRO
+MACRO palette_pointer
 	dwb \1, BANK(\1) - BANK(Palettes)
 	db (\2 << 4) + \3
 ENDM

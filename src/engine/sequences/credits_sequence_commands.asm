@@ -165,7 +165,7 @@ CreditsSequenceCmd_LoadClubMap: ; 1d897 (7:5897)
 .done
 	jp AdvanceCreditsSequenceCmdPtrBy3
 
-credits_club_map: MACRO
+MACRO credits_club_map
 	db \1 ; x
 	db \2 ; y
 	db \3 ; OW map
