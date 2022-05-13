@@ -20,7 +20,7 @@ ENDM
 
 MACRO textfw0
 	rept _NARG
-		if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+		if STRCMP(STRSUB(\1, 1, 1), "<") == 0 && STRLEN(\1) > 1
 			db \1
 		else
 			for i, STRLEN(\1)
@@ -33,11 +33,11 @@ ENDM
 
 MACRO textfw1
 	rept _NARG
-		if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+		if STRCMP(STRSUB(\1, 1, 1), "<") == 0 && STRLEN(\1) > 1
 			db \1
 		else
 			for i, STRLEN(\1)
-				if (STRSUB(\1, i + 1, 1)) == " "
+				if STRCMP(STRSUB(\1, i + 1, 1), " ") == 0
 					db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
 				else
 					db TX_FULLWIDTH1, STRCAT("FW1_", STRSUB(\1, i + 1, 1))
@@ -50,11 +50,11 @@ ENDM
 
 MACRO textfw2
 	rept _NARG
-		if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+		if STRCMP(STRSUB(\1, 1, 1), "<") == 0 && STRLEN(\1) > 1
 			db \1
 		else
 			for i, STRLEN(\1)
-				if (STRSUB(\1, i + 1, 1)) == " "
+				if STRCMP(STRSUB(\1, i + 1, 1), " ") == 0
 					db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
 				else
 					db TX_FULLWIDTH2, STRCAT("FW2_", STRSUB(\1, i + 1, 1))
@@ -67,11 +67,11 @@ ENDM
 
 MACRO textfw3
 	rept _NARG
-		if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+		if STRCMP(STRSUB(\1, 1, 1), "<") == 0 && STRLEN(\1) > 1
 			db \1
 		else
 			for i, STRLEN(\1)
-				if (STRSUB(\1, i + 1, 1)) == " "
+				if STRCMP(STRSUB(\1, i + 1, 1), " ") == 0
 					db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
 				else
 					db TX_FULLWIDTH3, STRCAT("FW3_", STRSUB(\1, i + 1, 1))
@@ -84,11 +84,11 @@ ENDM
 
 MACRO textfw4
 	rept _NARG
-		if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+		if STRCMP(STRSUB(\1, 1, 1), "<") == 0 && STRLEN(\1) > 1
 			db \1
 		else
 			for i, STRLEN(\1)
-				if (STRSUB(\1, i + 1, 1)) == " "
+				if STRCMP(STRSUB(\1, i + 1, 1), " ") == 0
 					db STRCAT("FW0_", STRSUB(\1, i + 1, 1))
 				else
 					db TX_FULLWIDTH4, STRCAT("FW4_", STRSUB(\1, i + 1, 1))
