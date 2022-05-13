@@ -3,11 +3,11 @@ MACRO lb ; r, hi, lo
 ENDM
 
 MACRO ldtx
-	if _NARG == 2
+	IF _NARG == 2
 		ld \1, \2_
-	else
+	ELSE
 		ld \1, \2_ \3
-	endc
+	ENDC
 ENDM
 
 MACRO bank1call
@@ -17,13 +17,13 @@ ENDM
 
 MACRO farcall
 	rst $28
-	if _NARG == 1
+	IF _NARG == 1
 		db BANK(\1)
 		dw \1
-	else
+	ELSE
 		db \1
 		dw \2
-	endc
+	ENDC
 ENDM
 
 ; runs SetEventValue with the next byte as the event, c as the new value

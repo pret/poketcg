@@ -259,9 +259,9 @@ PrintPlayerNameFromInput:
 	ret
 .char_underbar
 	db $56
-rept 10
+REPT 10
 	textfw3 "_"
-endr
+ENDR
 	done
 
 ; check if button pressed.
@@ -530,9 +530,9 @@ LoadTextCursorTile:
 	jr .loop
 
 .data
-rept TILE_SIZE
+REPT TILE_SIZE
 	db $ff
-endr
+ENDR
 
 ; set the carry bit on,
 ; if "End" was selected.
@@ -784,13 +784,13 @@ GetCharInfoFromPos_Player:
 ; unused data contains its character code as zero.
 MACRO kbitem
 	db \1, \2, \3, \4
-	if (_NARG == 5)
+	IF (_NARG == 5)
 		dw \5
-	elif (\5 == TX_FULLWIDTH3)
+	ELIF (\5 == TX_FULLWIDTH3)
 		dw (\5 << 8) | STRCAT("FW3_", \6)
-	else
+	ELSE
 		dw (\5 << 8) | \6
-	endc
+	ENDC
 ENDM
 
 KeyboardData_Player:
@@ -1035,9 +1035,9 @@ LoadHalfWidthTextCursorTile:
 	jr .loop
 
 .data
-rept TILE_SIZE
+REPT TILE_SIZE
 	db $f0
-endr
+ENDR
 
 ; it's only for naming the deck.
 ProcessTextWithUnderbar:
@@ -1070,9 +1070,9 @@ ProcessTextWithUnderbar:
 	ret
 .underbar_data
 	db TX_HALFWIDTH
-rept MAX_DECK_NAME_LENGTH
+REPT MAX_DECK_NAME_LENGTH
 	db "_"
-endr
+ENDR
 	db TX_END
 
 Func_1ae99:

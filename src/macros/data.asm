@@ -14,10 +14,10 @@ ENDM
 
 MACRO dx
 	DEF x = 8 * ((\1) - 1)
-	rept \1
+	REPT \1
 		db ((\2) >> x) & $ff
 		DEF x = x - 8
-	endr
+	ENDR
 ENDM
 
 MACRO dt ; three-byte (big-endian)
@@ -51,20 +51,20 @@ ENDM
 
 MACRO energy
 	DEF en = 0
-	if _NARG > 1
-		rept _NARG / 2
+	IF _NARG > 1
+		REPT _NARG / 2
 			DEF x = 4 - 8 * (\1 % 2)
 			DEF en = en + \2 << ((\1 * 4) + x)
-			shift
-			shift
-		endr
-		rept NUM_TYPES / 2
+			SHIFT
+			SHIFT
+		ENDR
+		REPT NUM_TYPES / 2
 			db LOW(en)
 			DEF en = en >> 8
-		endr
-	else
+		ENDR
+	ELSE
 		db 0, 0, 0, 0
-	endc
+	ENDC
 ENDM
 
 MACRO gfx
@@ -97,8 +97,8 @@ ENDM
 ; its attribute is used for drawing a flipped cursor.
 MACRO cursor_transition
 	db \1, \2, \3
-	rept 4
+	REPT 4
 		db \4
-		shift
-	endr
+		SHIFT
+	ENDR
 ENDM

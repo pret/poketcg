@@ -4,9 +4,9 @@ DEF MINOR EQU 5
 DEF PATCH EQU 0
 
 IF !DEF(__RGBDS_MAJOR__) || !DEF(__RGBDS_MINOR__) || !DEF(__RGBDS_PATCH__)
-	fail "poketcg requires rgbds {MAJOR}.{MINOR}.{PATCH} or newer."
+	FAIL "poketcg requires rgbds {MAJOR}.{MINOR}.{PATCH} or newer."
 ELIF (__RGBDS_MAJOR__ < MAJOR) || \
 	(__RGBDS_MAJOR__ == MAJOR && __RGBDS_MINOR__ < MINOR) || \
 	(__RGBDS_MAJOR__ == MAJOR && __RGBDS_MINOR__ == MINOR && __RGBDS_PATCH__ < PATCH)
-	fail "poketcg requires rgbds {MAJOR}.{MINOR}.{PATCH} or newer."
+	FAIL "poketcg requires rgbds {MAJOR}.{MINOR}.{PATCH} or newer."
 ENDC

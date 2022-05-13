@@ -1,7 +1,7 @@
 MACRO deck_const
-	if const_value >= 2
+	IF const_value >= 2
 		DEF \1_ID EQU const_value - 2
-	endc
+	ENDC
 	const \1
 ENDM
 

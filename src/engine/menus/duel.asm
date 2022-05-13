@@ -1464,9 +1464,9 @@ _HandlePeekSelection:
 	jr .loop_input_2
 
 .SelectionFunctionTable
-rept 6
+REPT 6
 	dw .SelectedPrize
-endr
+ENDR
 	dw .SelectedOppsHand
 	dw .SelectedDeck
 

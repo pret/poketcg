@@ -1,9 +1,9 @@
 MACRO const_def
-	if _NARG > 0
+	IF _NARG > 0
 		DEF const_value = \1
-	else
+	ELSE
 		DEF const_value = 0
-	endc
+	ENDC
 ENDM
 
 MACRO const
