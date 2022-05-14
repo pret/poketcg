@@ -1,0 +1,25 @@
+# Auto detect text files and perform LF normalization
+* text eol=lf
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+
+# files part of the build
+*.asm text
+*.pal text
+*.link text
+
+# extra files
+*.c text
+*.h text
+*.md text
+*.py text
+*.sha1 text
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary diff=hex
+*.bin binary diff=hex
+
+# these are generated but just in case
+*.2bpp binary diff=hex
+*.1bpp binary diff=hex
