@@ -115,7 +115,7 @@ MACRO EndLoop
 ENDM
 
 ; unused
-;music_jp: MACRO
+;MACRO music_jp
 ;	db $e1
 ;	dw \1
 ;ENDM
@@ -162,12 +162,12 @@ MACRO vibrato_delay
 ENDM
 
 ; unused
-;pitch_offset: MACRO
+;MACRO pitch_offset
 ;	db $ec, \1
 ;ENDM
 
 ; unused
-;adjust_pitch_offset: MACRO
+;MACRO adjust_pitch_offset
 ;	db $ed, \1
 ;ENDM
 
