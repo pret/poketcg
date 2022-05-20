@@ -1,4 +1,4 @@
-Sfx1c_Ch1: ; fd001 (3f:5001)
+Sfx1c_Ch1:
 	sfx_8 17
 	sfx_1 111
 	sfx_0 0, 84

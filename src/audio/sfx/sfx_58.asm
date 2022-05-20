@@ -1,4 +1,4 @@
-Sfx58_Ch1: ; ffa30 (3f:7a30)
+Sfx58_Ch1:
 	sfx_1 207
 	sfx_8 17
 	sfx_2 0

@@ -1,4 +1,4 @@
-Music_Imakuni_Ch1: ; fad55 (3e:6d55)
+Music_Imakuni_Ch1:
 	speed 3
 	stereo_panning 1, 1
 	vibrato_type 5
@@ -185,7 +185,7 @@ Branch_fae1d:
 	music_ret
 
 
-Music_Imakuni_Ch2: ; fae32 (3e:6e32)
+Music_Imakuni_Ch2:
 	stereo_panning 1, 1
 	vibrato_type 0
 	vibrato_delay 0
@@ -291,7 +291,7 @@ Branch_faea5:
 	music_ret
 
 
-Music_Imakuni_Ch3: ; faebc (3e:6ebc)
+Music_Imakuni_Ch3:
 	stereo_panning 1, 1
 	volume 32
 	wave 1
@@ -472,7 +472,7 @@ Branch_faf7d:
 	music_ret
 
 
-Music_Imakuni_Ch4: ; fafa4 (3e:6fa4)
+Music_Imakuni_Ch4:
 	speed 1
 	octave 1
 	Loop 10

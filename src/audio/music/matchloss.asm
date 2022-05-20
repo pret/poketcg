@@ -1,4 +1,4 @@
-Music_MatchLoss_Ch1: ; f7c2e (3d:7c2e)
+Music_MatchLoss_Ch1:
 	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
@@ -64,7 +64,7 @@ Music_MatchLoss_Ch1: ; f7c2e (3d:7c2e)
 	music_end
 
 
-Music_MatchLoss_Ch2: ; f7c87 (3d:7c87)
+Music_MatchLoss_Ch2:
 	stereo_panning 1, 1
 	vibrato_type 5
 	vibrato_delay 20
@@ -88,7 +88,7 @@ Music_MatchLoss_Ch2: ; f7c87 (3d:7c87)
 	music_end
 
 
-Music_MatchLoss_Ch3: ; f7ca7 (3d:7ca7)
+Music_MatchLoss_Ch3:
 	stereo_panning 1, 1
 	wave 1
 	volume 32

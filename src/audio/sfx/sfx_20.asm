@@ -1,4 +1,4 @@
-Sfx20_Ch1: ; fd33b (3f:533b)
+Sfx20_Ch1:
 	sfx_8 17
 	sfx_loop 2
 	sfx_1 111

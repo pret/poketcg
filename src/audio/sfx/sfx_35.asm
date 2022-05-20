@@ -1,4 +1,4 @@
-Sfx35_Ch1: ; fdefd (3f:5efd)
+Sfx35_Ch1:
 	sfx_8 17
 	sfx_1 47
 	sfx_0 0, 8

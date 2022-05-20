@@ -1,4 +1,4 @@
-Sfx03_Ch1: ; fc539 (3f:4539)
+Sfx03_Ch1:
 	sfx_1 212
 	sfx_8 17
 	sfx_2 0

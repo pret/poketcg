@@ -1,4 +1,4 @@
-Sfx22_Ch1: ; fd44e (3f:544e)
+Sfx22_Ch1:
 	sfx_8 17
 	sfx_loop 2
 	sfx_1 111

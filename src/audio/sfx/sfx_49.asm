@@ -1,4 +1,4 @@
-Sfx49_Ch1: ; fedcc (3f:6dcc)
+Sfx49_Ch1:
 	sfx_1 228
 	sfx_8 17
 	sfx_2 4

@@ -1,4 +1,4 @@
-Sfx40_Ch1: ; fe807 (3f:6807)
+Sfx40_Ch1:
 	sfx_8 17
 	sfx_1 255
 	sfx_2 0

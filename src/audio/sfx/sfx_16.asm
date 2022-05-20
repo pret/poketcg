@@ -1,4 +1,4 @@
-Sfx16_Ch1: ; fcd71 (3f:4d71)
+Sfx16_Ch1:
 	sfx_8 17
 	sfx_1 241
 	sfx_0 0, 45

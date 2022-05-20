@@ -1,4 +1,4 @@
-Music_PauseMenu_Ch2: ; f6bb7 (3d:6bb7)
+Music_PauseMenu_Ch2:
 	speed 7
 	stereo_panning 1, 1
 	cutoff 8
@@ -278,7 +278,7 @@ Branch_f6ce9:
 	music_ret
 
 
-Music_PauseMenu_Ch1: ; f6d4e (3d:6d4e)
+Music_PauseMenu_Ch1:
 	speed 7
 	stereo_panning 1, 1
 	cutoff 8
@@ -432,7 +432,7 @@ Music_PauseMenu_Ch1: ; f6d4e (3d:6d4e)
 	EndMainLoop
 
 
-Music_PauseMenu_Ch3: ; f6e2d (3d:6e2d)
+Music_PauseMenu_Ch3:
 	speed 1
 	wave 3
 	stereo_panning 1, 1
@@ -544,7 +544,7 @@ Music_PauseMenu_Ch3: ; f6e2d (3d:6e2d)
 	EndMainLoop
 
 
-Music_PauseMenu_Ch4: ; f6ec8 (3d:6ec8)
+Music_PauseMenu_Ch4:
 	speed 7
 	octave 1
 	MainLoop

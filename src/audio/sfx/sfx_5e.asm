@@ -1,4 +1,4 @@
-Sfx5e_Ch1: ; ffe92 (3f:7e92)
+Sfx5e_Ch1:
 	sfx_1 196
 	sfx_8 17
 	sfx_2 8

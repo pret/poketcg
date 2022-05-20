@@ -1,4 +1,4 @@
-Sfx06_Ch1: ; fc625 (3f:4625)
+Sfx06_Ch1:
 	sfx_1 241
 	sfx_8 17
 	sfx_2 8

@@ -1,4 +1,4 @@
-Sfx2d_Ch1: ; fd9ab (3f:59ab)
+Sfx2d_Ch1:
 	sfx_8 17
 	sfx_1 223
 	sfx_0 0, 36

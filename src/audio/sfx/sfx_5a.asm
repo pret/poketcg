@@ -1,4 +1,4 @@
-Sfx5a_Ch1: ; ffc03 (3f:7c03)
+Sfx5a_Ch1:
 	sfx_1 207
 	sfx_8 17
 	sfx_2 8

@@ -1,37 +1,37 @@
-Func_f8000: ; f8000 (3e:4000)
+_SetupSound_2::
 	jp Music2_Init
 
-Func_f8003: ; f8003 (3e:4003)
+SoundTimerHandler_2::
 	jp Music2_Update
 
-Func_f8006: ; f8006 (3e:4006)
+_PlaySong_2::
 	jp Music2_PlaySong
 
-Func_f8009: ; f8009 (3e:4009)
+_PlaySFX_2::
 	jp Music2_PlaySFX
 
-Func_f800c: ; f800c (3e:400c)
-	jp Func_f804e
+Music2_f400c_2::
+	jp Music2_f404e
 
-Func_f800f: ; f800f (3e:400f)
+_AssertSongFinished_2::
 	jp Music2_AssertSongFinished
 
-Func_f8012: ; f8012 (3e:4012)
+_AssertSFXFinished_2::
 	jp Music2_AssertSFXFinished
 
-Func_f8015: ; f8015 (3e:4015)
-	jp Func_f8066
+Music2_f4015_2::
+	jp Music2_f4066
 
-Func_f8018: ; f8018 (3e:4018)
-	jp Func_f806f
+Music2_f4018_2::
+	jp Music2_f406f
 
-Func_f801b: ; f801b (3e:401b)
+_PauseSong_2::
 	jp Music2_PauseSong
 
-Func_f801e: ; f801e (3e:401e)
+_ResumeSong_2::
 	jp Music2_ResumeSong
 
-Music2_PlaySong: ; f8021 (3e:4021)
+Music2_PlaySong:
 	push hl
 	ld hl, NumberOfSongs2
 	cp [hl]
@@ -41,7 +41,7 @@ Music2_PlaySong: ; f8021 (3e:4021)
 	pop hl
 	ret
 
-Music2_PlaySFX: ; f802d (3e:402d)
+Music2_PlaySFX:
 	push bc
 	push hl
 	ld b, $0
@@ -66,11 +66,11 @@ Music2_PlaySFX: ; f802d (3e:402d)
 	pop bc
 	ret
 
-Func_f804e: ; f804e (3e:404e)
+Music2_f404e:
 	ld [wddf0], a
 	ret
 
-Music2_AssertSongFinished: ; f8052 (3e:4052)
+Music2_AssertSongFinished:
 	ld a, [wCurSongID]
 	cp $80
 	ld a, $1
@@ -78,7 +78,7 @@ Music2_AssertSongFinished: ; f8052 (3e:4052)
 	xor a
 	ret
 
-Music2_AssertSFXFinished: ; f805c (3e:405c)
+Music2_AssertSFXFinished:
 	ld a, [wCurSfxID]
 	cp $80
 	ld a, $1
@@ -86,13 +86,13 @@ Music2_AssertSFXFinished: ; f805c (3e:405c)
 	xor a
 	ret
 
-Func_f8066: ; f8066 (3e:4066)
+Music2_f4066:
 	ld a, [wddf2]
 	xor $1
 	ld [wddf2], a
 	ret
 
-Func_f806f: ; f806f (3e:406f)
+Music2_f406f:
 	push bc
 	push af
 	and $7
@@ -104,7 +104,7 @@ Func_f806f: ; f806f (3e:406f)
 	pop bc
 	ret
 
-Music2_Init: ; f807d (3e:407d)
+Music2_Init:
 	xor a
 	ldh [rNR52], a
 	ld a, $80
@@ -162,7 +162,7 @@ Music2_Init: ; f807d (3e:407d)
 	jr nz, .zero_loop2
 	ret
 
-Music2_Update: ; f80e9 (3e:40e9)
+Music2_Update:
 	call Music2_EmptyFunc
 	call Music2_CheckForNewSound
 	ld hl, SFX_UpdateSFX
@@ -173,7 +173,7 @@ Music2_Update: ; f80e9 (3e:40e9)
 	ld a, [wddf2]
 	cp $0
 	jr z, .update_channels
-	call Func_f8980
+	call Music2_f4980
 	jr .skip_channel_Updates
 .update_channels
 	call Music2_UpdateChannel1
@@ -181,11 +181,11 @@ Music2_Update: ; f80e9 (3e:40e9)
 	call Music2_UpdateChannel3
 	call Music2_UpdateChannel4
 .skip_channel_Updates
-	call Func_f8866
+	call Music2_f4866
 	call Music2_CheckForEndOfSong
 	ret
 
-Music2_CheckForNewSound: ; f811c (3e:411c)
+Music2_CheckForNewSound:
 	ld a, [wCurSongID]
 	rla
 	jr c, .check_for_new_sfx
@@ -208,7 +208,7 @@ Music2_CheckForNewSound: ; f811c (3e:411c)
 .no_new_sound
 	ret
 
-Music2_StopAllChannels: ; f814b (3e:414b)
+Music2_StopAllChannels:
 	ld a, [wdd8c]
 	ld d, a
 	xor a
@@ -248,7 +248,7 @@ Music2_StopAllChannels: ; f814b (3e:414b)
 	ret
 
 ; plays the song given by the id in a
-Music2_BeginSong: ; f818c (3e:418c)
+Music2_BeginSong:
 	push af
 	ld c, a
 	ld b, $0
@@ -379,37 +379,37 @@ Music2_BeginSong: ; f818c (3e:418c)
 	ld [wddf2], a
 	ret
 
-Music2_EmptyFunc: ; f82a4 (3e:42a4)
+Music2_EmptyFunc:
 	ret
 
-Music2_UpdateChannel1: ; f82a5 (3e:42a5)
+Music2_UpdateChannel1:
 	ld a, [wMusicIsPlaying]
 	or a
-	jr z, .asm_f82fa
+	jr z, .asm_f42fa
 	ld a, [wddb7]
 	cp $0
-	jr z, .asm_f82d4
+	jr z, .asm_f42d4
 	ld a, [wddc3]
 	dec a
 	ld [wddc3], a
-	jr nz, .asm_f82d4
+	jr nz, .asm_f42d4
 	ld a, [wddbb]
 	cp $1
-	jr z, .asm_f82d4
+	jr z, .asm_f42d4
 	ld a, [wdd8c]
 	bit 0, a
-	jr nz, .asm_f82d4
+	jr nz, .asm_f42d4
 	ld hl, rNR12
 	ld a, [wMusicEcho]
 	ld [hli], a
 	inc hl
 	ld a, $80
 	ld [hl], a
-.asm_f82d4
+.asm_f42d4
 	ld a, [wddbb]
 	dec a
 	ld [wddbb], a
-	jr nz, .asm_f82f4
+	jr nz, .asm_f42f4
 	ld a, [wMusicChannelPointers + 1]
 	ld h, a
 	ld a, [wMusicChannelPointers]
@@ -418,51 +418,51 @@ Music2_UpdateChannel1: ; f82a5 (3e:42a5)
 	call Music2_PlayNextNote
 	ld a, [wMusicIsPlaying]
 	or a
-	jr z, .asm_f82fa
-	call Func_f8714
-.asm_f82f4
+	jr z, .asm_f42fa
+	call Music2_f4714
+.asm_f42f4
 	ld a, $0
-	call Func_f885a
+	call Music2_f485a
 	ret
-.asm_f82fa
+.asm_f42fa
 	ld a, [wdd8c]
 	bit 0, a
-	jr nz, .asm_f8309
+	jr nz, .asm_f4309
 	ld a, $8
 	ldh [rNR12], a
 	swap a
 	ldh [rNR14], a
-.asm_f8309
+.asm_f4309
 	ret
 
-Music2_UpdateChannel2: ; f830a (3e:430a)
+Music2_UpdateChannel2:
 	ld a, [wMusicIsPlaying + 1]
 	or a
-	jr z, .asm_f835f
+	jr z, .asm_f435f
 	ld a, [wddb8]
 	cp $0
-	jr z, .asm_f8339
+	jr z, .asm_f4339
 	ld a, [wddc3 + 1]
 	dec a
 	ld [wddc3 + 1], a
-	jr nz, .asm_f8339
+	jr nz, .asm_f4339
 	ld a, [wddbb + 1]
 	cp $1
-	jr z, .asm_f8339
+	jr z, .asm_f4339
 	ld a, [wdd8c]
 	bit 1, a
-	jr nz, .asm_f8339
+	jr nz, .asm_f4339
 	ld hl, rNR22
 	ld a, [wMusicEcho + 1]
 	ld [hli], a
 	inc hl
 	ld a, $80
 	ld [hl], a
-.asm_f8339
+.asm_f4339
 	ld a, [wddbb + 1]
 	dec a
 	ld [wddbb + 1], a
-	jr nz, .asm_f8359
+	jr nz, .asm_f4359
 	ld a, [wMusicChannelPointers + 3]
 	ld h, a
 	ld a, [wMusicChannelPointers + 2]
@@ -471,47 +471,47 @@ Music2_UpdateChannel2: ; f830a (3e:430a)
 	call Music2_PlayNextNote
 	ld a, [wMusicIsPlaying + 1]
 	or a
-	jr z, .asm_f835f
-	call Func_f875a
-.asm_f8359
+	jr z, .asm_f435f
+	call Music2_f475a
+.asm_f4359
 	ld a, $1
-	call Func_f885a
+	call Music2_f485a
 	ret
-.asm_f835f
+.asm_f435f
 	ld a, [wdd8c]
 	bit 1, a
-	jr nz, .asm_f836e
+	jr nz, .asm_f436e
 	ld a, $8
 	ldh [rNR22], a
 	swap a
 	ldh [rNR24], a
-.asm_f836e
+.asm_f436e
 	ret
 
-Music2_UpdateChannel3: ; f836f (3e:436f)
+Music2_UpdateChannel3:
 	ld a, [wMusicIsPlaying + 2]
 	or a
-	jr z, .asm_f83be
+	jr z, .asm_f43be
 	ld a, [wddb9]
 	cp $0
-	jr z, .asm_f8398
+	jr z, .asm_f4398
 	ld a, [wddc3 + 2]
 	dec a
 	ld [wddc3 + 2], a
-	jr nz, .asm_f8398
+	jr nz, .asm_f4398
 	ld a, [wdd8c]
 	bit 2, a
-	jr nz, .asm_f8398
+	jr nz, .asm_f4398
 	ld a, [wddbb + 2]
 	cp $1
-	jr z, .asm_f8398
+	jr z, .asm_f4398
 	ld a, [wMusicEcho + 2]
 	ldh [rNR32], a
-.asm_f8398
+.asm_f4398
 	ld a, [wddbb + 2]
 	dec a
 	ld [wddbb + 2], a
-	jr nz, .asm_f83b8
+	jr nz, .asm_f43b8
 	ld a, [wMusicChannelPointers + 5]
 	ld h, a
 	ld a, [wMusicChannelPointers + 4]
@@ -520,31 +520,31 @@ Music2_UpdateChannel3: ; f836f (3e:436f)
 	call Music2_PlayNextNote
 	ld a, [wMusicIsPlaying + 2]
 	or a
-	jr z, .asm_f83be
-	call Func_f879c
-.asm_f83b8
+	jr z, .asm_f43be
+	call Music2_f479c
+.asm_f43b8
 	ld a, $2
-	call Func_f885a
+	call Music2_f485a
 	ret
-.asm_f83be
+.asm_f43be
 	ld a, [wdd8c]
 	bit 2, a
-	jr nz, .asm_f83cd
+	jr nz, .asm_f43cd
 	ld a, $0
 	ldh [rNR32], a
 	ld a, $80
 	ldh [rNR34], a
-.asm_f83cd
+.asm_f43cd
 	ret
 
-Music2_UpdateChannel4: ; f83ce (3e:43ce)
+Music2_UpdateChannel4:
 	ld a, [wMusicIsPlaying + 3]
 	or a
-	jr z, .asm_f8400
+	jr z, .asm_f4400
 	ld a, [wddbb + 3]
 	dec a
 	ld [wddbb + 3], a
-	jr nz, .asm_f83f6
+	jr nz, .asm_f43f6
 	ld a, [wMusicChannelPointers + 7]
 	ld h, a
 	ld a, [wMusicChannelPointers + 6]
@@ -553,29 +553,29 @@ Music2_UpdateChannel4: ; f83ce (3e:43ce)
 	call Music2_PlayNextNote
 	ld a, [wMusicIsPlaying + 3]
 	or a
-	jr z, .asm_f8400
-	call Func_f880a
-	jr .asm_f8413
-.asm_f83f6
+	jr z, .asm_f4400
+	call Music2_f480a
+	jr .asm_f4413
+.asm_f43f6
 	ld a, [wddef]
 	or a
-	jr z, .asm_f8413
-	call Func_f8839
+	jr z, .asm_f4413
+	call Music2_f4839
 	ret
-.asm_f8400
+.asm_f4400
 	ld a, [wdd8c]
 	bit 3, a
-	jr nz, .asm_f8413
+	jr nz, .asm_f4413
 	xor a
 	ld [wddef], a
 	ld a, $8
 	ldh [rNR42], a
 	swap a
 	ldh [rNR44], a
-.asm_f8413
+.asm_f4413
 	ret
 
-Music2_PlayNextNote: ; f8414 (3e:4414)
+Music2_PlayNextNote:
 	ld a, [hli]
 	push hl
 	push af
@@ -595,7 +595,7 @@ Music2_PlayNextNote: ; f8414 (3e:4414)
 	pop af
 	jp hl
 
-Music2_CommandTable: ; f842c (3e:442c)
+Music2_CommandTable:
 	dw Music2_speed
 	dw Music2_octave
 	dw Music2_octave
@@ -645,7 +645,7 @@ Music2_CommandTable: ; f842c (3e:442c)
 	dw Music2_end
 	dw Music2_end
 
-Music2_note: ; f448c (3d:448c)
+Music2_note:
 	push af
 	ld a, [hl]
 	ld e, a
@@ -653,7 +653,7 @@ Music2_note: ; f448c (3d:448c)
 	add hl, bc
 	ld a, [hl]
 	cp $80
-	jr z, .asm_f84b0
+	jr z, .asm_f44b0
 	ld [hl], $1
 	xor a
 	ld hl, wdddb
@@ -669,7 +669,7 @@ Music2_note: ; f448c (3d:448c)
 	ld hl, wMusicVibratoType
 	add hl, bc
 	ld [hl], a
-.asm_f84b0
+.asm_f44b0
 	pop af
 	push de
 	ld hl, wMusicSpeed
@@ -678,18 +678,18 @@ Music2_note: ; f448c (3d:448c)
 	and $f
 	inc a
 	cp d
-	jr nc, .asm_f84c0
+	jr nc, .asm_f44c0
 	ld e, a
 	ld a, d
 	ld d, e
-.asm_f84c0
+.asm_f44c0
 	ld e, a
-.asm_f84c1
+.asm_f44c1
 	dec d
-	jr z, .asm_f84c7
+	jr z, .asm_f44c7
 	add e
-	jr .asm_f84c1
-.asm_f84c7
+	jr .asm_f44c1
+.asm_f44c7
 	ld hl, wddbb
 	add hl, bc
 	ld [hl], a
@@ -698,7 +698,7 @@ Music2_note: ; f448c (3d:448c)
 	ld a, e
 	cp $d9
 	ld a, d
-	jr z, .asm_f84fb
+	jr z, .asm_f44fb
 	ld e, a
 	ld hl, wMusicCutoff
 	add hl, bc
@@ -706,16 +706,16 @@ Music2_note: ; f448c (3d:448c)
 	cp $8
 	ld d, a
 	ld a, e
-	jr z, .asm_f84fb
+	jr z, .asm_f44fb
 	push hl
 	push bc
 	ld b, $0
 	ld c, a
 	ld hl, $0000
-.asm_f84e8
+.asm_f44e8
 	add hl, bc
 	dec d
-	jr nz, .asm_f84e8
+	jr nz, .asm_f44e8
 	srl h
 	rr l
 	srl h
@@ -725,7 +725,7 @@ Music2_note: ; f448c (3d:448c)
 	ld a, l
 	pop bc
 	pop hl
-.asm_f84fb
+.asm_f44fb
 	ld hl, wddc3
 	add hl, bc
 	ld [hl], a
@@ -735,18 +735,18 @@ Music2_note: ; f448c (3d:448c)
 	add hl, bc
 	ld [hl], a
 	or a
-	jr nz, .asm_f850e
-	jp .asm_f858e
-.asm_f850e
+	jr nz, .asm_f450e
+	jp .asm_f458e
+.asm_f450e
 	swap a
 	dec a
 	ld h, a
 	ld a, $3
 	cp c
 	ld a, h
-	jr z, .asm_f851a
-	jr .asm_f8564
-.asm_f851a
+	jr z, .asm_f451a
+	jr .asm_f4564
+.asm_f451a
 	push af
 	ld hl, wMusicOctave
 	add hl, bc
@@ -798,8 +798,8 @@ Music2_note: ; f448c (3d:448c)
 	ld [hl], d
 	ld a, $1
 	ld [wddef], a
-	jr .asm_f858e
-.asm_f8564
+	jr .asm_f458e
+.asm_f4564
 	ld hl, wMusicCh1CurPitch
 	add hl, bc
 	add hl, bc
@@ -824,12 +824,12 @@ Music2_note: ; f448c (3d:448c)
 	ld a, [hli]
 	ld e, a
 	ld d, [hl]
-	call Func_f8967
+	call Music2_f4967
 	pop hl
 	ld a, e
 	ld [hli], a
 	ld [hl], d
-.asm_f858e
+.asm_f458e
 	pop de
 	ld hl, wMusicChannelPointers
 	add hl, bc
@@ -839,7 +839,7 @@ Music2_note: ; f448c (3d:448c)
 	ld [hl], d
 	ret
 
-Music2_speed: ; f8598 (3e:4598)
+Music2_speed:
 	pop hl
 	ld a, [hli]
 	push hl
@@ -848,7 +848,7 @@ Music2_speed: ; f8598 (3e:4598)
 	ld [hl], a
 	jp Music2_PlayNextNote_pop
 
-Music2_octave: ; f85a3 (3e:45a3)
+Music2_octave:
 	and $7
 	dec a
 	ld hl, wMusicOctave
@@ -856,35 +856,35 @@ Music2_octave: ; f85a3 (3e:45a3)
 	push af
 	ld a, c
 	cp $2
-	jr nz, .asm_f85b6
+	jr nz, .asm_f45b6
 	pop af
 	inc a
 	ld [hl], a
 	jp Music2_PlayNextNote_pop
-.asm_f85b6
+.asm_f45b6
 	pop af
 	ld [hl], a
 	jp Music2_PlayNextNote_pop
 
-Music2_inc_octave: ; f85bb (3e:45bb)
+Music2_inc_octave:
 	ld hl, wMusicOctave
 	add hl, bc
 	inc [hl]
 	jp Music2_PlayNextNote_pop
 
-Music2_dec_octave: ; f85c3 (3e:45c3)
+Music2_dec_octave:
 	ld hl, wMusicOctave
 	add hl, bc
 	dec [hl]
 	jp Music2_PlayNextNote_pop
 
-Music2_tie: ; f85cb (3e:45cb)
+Music2_tie:
 	ld hl, wMusicTie
 	add hl, bc
 	ld [hl], $80
 	jp Music2_PlayNextNote_pop
 
-Music2_stereo_panning: ; f85d4 (3e:45d4)
+Music2_stereo_panning:
 	pop hl
 	ld a, [hli]
 	push hl
@@ -907,7 +907,7 @@ Music2_stereo_panning: ; f85d4 (3e:45d4)
 	pop bc
 	jp Music2_PlayNextNote_pop
 
-Music2_MainLoop: ; f85ef (3e:45ef)
+Music2_MainLoop:
 	pop de
 	push de
 	dec de
@@ -919,7 +919,7 @@ Music2_MainLoop: ; f85ef (3e:45ef)
 	ld [hl], d
 	jp Music2_PlayNextNote_pop
 
-Music2_EndMainLoop: ; f85fd (3e:45fd)
+Music2_EndMainLoop:
 	pop hl
 	ld hl, wMusicMainLoopStart
 	add hl, bc
@@ -929,7 +929,7 @@ Music2_EndMainLoop: ; f85fd (3e:45fd)
 	ld l, a
 	jp Music2_PlayNextNote
 
-Music2_Loop: ; f8609 (3e:4609)
+Music2_Loop:
 	pop de
 	ld a, [de] ; get loop count
 	inc de
@@ -946,7 +946,7 @@ Music2_Loop: ; f8609 (3e:4609)
 	call Music2_SetChannelStackPointer
 	jp Music2_PlayNextNote_pop
 
-Music2_EndLoop: ; f861e (3e:461e)
+Music2_EndLoop:
 	call Music2_GetChannelStackPointer
 	dec hl
 	ld a, [hl] ; get remaining loop count
@@ -966,14 +966,14 @@ Music2_EndLoop: ; f861e (3e:461e)
 	call Music2_SetChannelStackPointer
 	jp Music2_PlayNextNote_pop
 
-Music2_jp: ; f8638 (3e:4638)
+Music2_jp:
 	pop hl
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	jp Music2_PlayNextNote
 
-Music2_call: ; f863f (3e:463f)
+Music2_call:
 	call Music2_GetChannelStackPointer
 	pop de
 	ld a, e
@@ -991,7 +991,7 @@ Music2_call: ; f863f (3e:463f)
 	call Music2_SetChannelStackPointer
 	jp Music2_PlayNextNote_pop
 
-Music2_ret: ; f8656 (3e:4656)
+Music2_ret:
 	pop de
 	call Music2_GetChannelStackPointer
 	dec hl
@@ -1004,7 +1004,7 @@ Music2_ret: ; f8656 (3e:4656)
 	call Music2_SetChannelStackPointer
 	jp Music2_PlayNextNote_pop
 
-Music2_frequency_offset: ; f8667 (3e:4667)
+Music2_frequency_offset:
 	pop de
 	ld a, [de]
 	inc de
@@ -1015,7 +1015,7 @@ Music2_frequency_offset: ; f8667 (3e:4667)
 	ld l, e
 	jp Music2_PlayNextNote
 
-Music2_duty: ; f8674 (3e:4674)
+Music2_duty:
 	pop de
 	ld a, [de]
 	and $c0
@@ -1027,7 +1027,7 @@ Music2_duty: ; f8674 (3e:4674)
 	ld l, e
 	jp Music2_PlayNextNote
 
-Music2_volume: ; f8683 (3e:4683)
+Music2_volume:
 	pop de
 	ld a, [de]
 	inc de
@@ -1038,7 +1038,7 @@ Music2_volume: ; f8683 (3e:4683)
 	ld l, e
 	jp Music2_PlayNextNote
 
-Music2_wave: ; f8690 (3e:4690)
+Music2_wave:
 	pop de
 	ld a, [de]
 	inc de
@@ -1049,7 +1049,7 @@ Music2_wave: ; f8690 (3e:4690)
 	ld l, e
 	jp Music2_PlayNextNote
 
-Music2_cutoff: ; f86a0 (3e:46a0)
+Music2_cutoff:
 	pop de
 	ld a, [de]
 	inc de
@@ -1060,7 +1060,7 @@ Music2_cutoff: ; f86a0 (3e:46a0)
 	ld l, e
 	jp Music2_PlayNextNote
 
-Music2_echo: ; f86ad (3e:46ad)
+Music2_echo:
 	pop de
 	ld a, [de]
 	inc de
@@ -1071,7 +1071,7 @@ Music2_echo: ; f86ad (3e:46ad)
 	ld l, e
 	jp Music2_PlayNextNote
 
-Music2_vibrato_type: ; f86ba (3e:46ba)
+Music2_vibrato_type:
 	pop de
 	ld a, [de]
 	inc de
@@ -1085,7 +1085,7 @@ Music2_vibrato_type: ; f86ba (3e:46ba)
 	ld l, e
 	jp Music2_PlayNextNote
 
-Music2_vibrato_delay: ; f86cc (3e:46cc)
+Music2_vibrato_delay:
 	pop de
 	ld a, [de]
 	inc de
@@ -1096,7 +1096,7 @@ Music2_vibrato_delay: ; f86cc (3e:46cc)
 	ld l, e
 	jp Music2_PlayNextNote
 
-Music2_pitch_offset: ; f86d9 (3e:46d9)
+Music2_pitch_offset:
 	pop de
 	ld a, [de]
 	inc de
@@ -1107,7 +1107,7 @@ Music2_pitch_offset: ; f86d9 (3e:46d9)
 	ld l, e
 	jp Music2_PlayNextNote
 
-Music2_adjust_pitch_offset: ; f86e6 (3e:46e6)
+Music2_adjust_pitch_offset:
 	pop de
 	ld a, [de]
 	inc de
@@ -1119,7 +1119,7 @@ Music2_adjust_pitch_offset: ; f86e6 (3e:46e6)
 	ld l, e
 	jp Music2_PlayNextNote
 
-Music2_end: ; f86f4 (3e:46f4)
+Music2_end:
 	ld hl, wMusicIsPlaying
 	add hl, bc
 	ld [hl], $0
@@ -1129,7 +1129,7 @@ Music2_end: ; f86f4 (3e:46f4)
 ; returns the address of the top of the stack
 ; for the current channel
 ; used for loops and calls
-Music2_GetChannelStackPointer: ; f86fc (3e:46fc)
+Music2_GetChannelStackPointer:
 	ld hl, wMusicChannelStackPointers
 	add hl, bc
 	add hl, bc
@@ -1139,7 +1139,7 @@ Music2_GetChannelStackPointer: ; f86fc (3e:46fc)
 	ret
 
 ; sets the current channel's stack pointer to hl
-Music2_SetChannelStackPointer: ; f8705 (3e:4705)
+Music2_SetChannelStackPointer:
 	ld d, h
 	ld e, l
 	ld hl, wMusicChannelStackPointers
@@ -1150,26 +1150,26 @@ Music2_SetChannelStackPointer: ; f8705 (3e:4705)
 	ld [hl], d
 	ret
 
-Music2_PlayNextNote_pop: ; f8710 (3e:4710)
+Music2_PlayNextNote_pop:
 	pop hl
 	jp Music2_PlayNextNote
 
-Func_f8714: ; f8714 (3e:4714)
+Music2_f4714:
 	ld a, [wdd8c]
 	bit 0, a
-	jr nz, .asm_f8749
+	jr nz, .asm_f4749
 	ld a, [wddb7]
 	cp $0
-	jr z, .asm_f874a
+	jr z, .asm_f474a
 	ld d, $0
 	ld hl, wMusicTie
 	ld a, [hl]
 	cp $80
-	jr z, .asm_f8733
+	jr z, .asm_f4733
 	ld a, [wMusicVolume]
 	ldh [rNR12], a
 	ld d, $80
-.asm_f8733
+.asm_f4733
 	ld [hl], $2
 	ld a, $8
 	ldh [rNR10], a
@@ -1180,9 +1180,9 @@ Func_f8714: ; f8714 (3e:4714)
 	ld a, [wMusicCh1CurOctave]
 	or d
 	ldh [rNR14], a
-.asm_f8749
+.asm_f4749
 	ret
-.asm_f874a
+.asm_f474a
 	ld hl, wMusicTie
 	ld [hl], $0
 	ld hl, rNR12
@@ -1193,22 +1193,22 @@ Func_f8714: ; f8714 (3e:4714)
 	ld [hl], a
 	ret
 
-Func_f875a: ; f875a (3e:475a)
+Music2_f475a:
 	ld a, [wdd8c]
 	bit 1, a
-	jr nz, .asm_f878b
+	jr nz, .asm_f478b
 	ld a, [wddb8]
 	cp $0
-	jr z, .asm_f878c
+	jr z, .asm_f478c
 	ld d, $0
 	ld hl, wMusicTie + 1
 	ld a, [hl]
 	cp $80
-	jr z, .asm_f8779
+	jr z, .asm_f4779
 	ld a, [wMusicVolume + 1]
 	ldh [rNR22], a
 	ld d, $80
-.asm_f8779
+.asm_f4779
 	ld [hl], $2
 	ld a, [wMusicDuty2]
 	ldh [rNR21], a
@@ -1217,9 +1217,9 @@ Func_f875a: ; f875a (3e:475a)
 	ld a, [wMusicCh2CurOctave]
 	or d
 	ldh [rNR24], a
-.asm_f878b
+.asm_f478b
 	ret
-.asm_f878c
+.asm_f478c
 	ld hl, wMusicTie + 1
 	ld [hl], $0
 	ld hl, rNR22
@@ -1230,10 +1230,10 @@ Func_f875a: ; f875a (3e:475a)
 	ld [hl], a
 	ret
 
-Func_f879c: ; f879c (3e:479c)
+Music2_f479c:
 	ld a, [wdd8c]
 	bit 2, a
-	jr nz, .asm_f87e0
+	jr nz, .asm_f47e0
 	ld d, $0
 	ld a, [wMusicWaveChange]
 	or a
@@ -1245,17 +1245,17 @@ Func_f879c: ; f879c (3e:479c)
 .no_wave_change
 	ld a, [wddb9]
 	cp $0
-	jr z, .asm_f87e1
+	jr z, .asm_f47e1
 	ld hl, wMusicTie + 2
 	ld a, [hl]
 	cp $80
-	jr z, .asm_f87cc
+	jr z, .asm_f47cc
 	ld a, [wMusicVolume + 2]
 	ldh [rNR32], a
 	xor a
 	ldh [rNR30], a
 	ld d, $80
-.asm_f87cc
+.asm_f47cc
 	ld [hl], $2
 	xor a
 	ldh [rNR31], a
@@ -1266,16 +1266,16 @@ Func_f879c: ; f879c (3e:479c)
 	ld a, [wMusicCh3CurOctave]
 	or d
 	ldh [rNR34], a
-.asm_f87e0
+.asm_f47e0
 	ret
-.asm_f87e1
+.asm_f47e1
 	ld hl, wMusicTie
 	ld [hl], $0
 	xor a
 	ldh [rNR30], a
 	ret
 
-Music2_LoadWaveInstrument: ; f879c (3e:47ea)
+Music2_LoadWaveInstrument:
 	ld a, [wMusicWave]
 	add a
 	ld d, $0
@@ -1299,13 +1299,13 @@ Music2_LoadWaveInstrument: ; f879c (3e:47ea)
 	ld [wMusicWaveChange], a
 	ret
 
-Func_f880a: ; f880a (3e:480a)
+Music2_f480a:
 	ld a, [wdd8c]
 	bit 3, a
-	jr nz, .asm_f8829
+	jr nz, .asm_f4829
 	ld a, [wddba]
 	cp $0
-	jr z, asm_f882a
+	jr z, .asm_f482a
 	ld de, rNR41
 	ld hl, wddab
 	ld a, [hli]
@@ -1319,9 +1319,9 @@ Func_f880a: ; f880a (3e:480a)
 	inc e
 	ld a, [hli]
 	ld [de], a
-.asm_f8829
+.asm_f4829
 	ret
-asm_f882a:
+.asm_f482a
 	xor a
 	ld [wddef], a
 	ld hl, rNR42
@@ -1332,48 +1332,48 @@ asm_f882a:
 	ld [hl], a
 	ret
 
-Func_f8839: ; f8839 (3e:4839)
+Music2_f4839:
 	ld a, [wdd8c]
 	bit 3, a
-	jr z, .asm_f8846
+	jr z, .asm_f4846
 	xor a
 	ld [wddef], a
-	jr .asm_f8859
-.asm_f8846
+	jr .asm_f4859
+.asm_f4846
 	ld hl, wdded
 	ld a, [hli]
 	ld d, [hl]
 	ld e, a
 	ld a, [de]
 	cp $ff
-	jr nz, .asm_f8853
-	jr asm_f882a
-.asm_f8853
+	jr nz, .asm_f4853
+	jr Music2_f480a.asm_f482a
+.asm_f4853
 	ldh [rNR43], a
 	inc de
 	ld a, d
 	ld [hld], a
 	ld [hl], e
-.asm_f8859
+.asm_f4859
 	ret
 
-Func_f885a: ; f885a (3e:485a)
+Music2_f485a:
 	push af
 	ld b, $0
 	ld c, a
-	call Func_f8898
+	call Music2_UpdateVibrato
 	pop af
-	call Func_f890b
+	call Music2_f490b
 	ret
 
-Func_f8866: ; f8866 (3e:4866)
+Music2_f4866:
 	ld a, [wMusicPanning]
 	ldh [rNR50], a
 	ld a, [wdd8c]
 	or a
 	ld hl, wMusicStereoPanning
 	ld a, [hli]
-	jr z, .asm_f8888
+	jr z, .asm_f4888
 	ld a, [wdd8c]
 	and $f
 	ld d, a
@@ -1388,7 +1388,7 @@ Func_f8866: ; f8866 (3e:4866)
 	ld a, [hl]
 	and e
 	or d
-.asm_f8888
+.asm_f4888
 	ld d, a
 	ld a, [wddf0]
 	xor $ff
@@ -1400,19 +1400,19 @@ Func_f8866: ; f8866 (3e:4866)
 	ldh [rNR51], a
 	ret
 
-Func_f8898: ; f8898 (3e:4898)
+Music2_UpdateVibrato:
 	ld hl, wMusicVibratoDelay
 	add hl, bc
 	ld a, [hl]
 	cp $0
-	jr z, .asm_f8902
+	jr z, .asm_f4902
 	ld hl, wdde3
 	add hl, bc
 	cp [hl]
-	jr z, .asm_f88ab
+	jr z, .asm_f48ab
 	inc [hl]
-	jr .asm_f8902
-.asm_f88ab
+	jr .asm_f4902
+.asm_f48ab
 	ld hl, wMusicVibratoType
 	add hl, bc
 	ld e, [hl]
@@ -1433,7 +1433,7 @@ Func_f8898: ; f8898 (3e:4898)
 	add hl, de
 	ld a, [hli]
 	cp $80
-	jr z, .asm_f88ee
+	jr z, .asm_f48ee
 	ld hl, wMusicCh1CurPitch
 	add hl, bc
 	add hl, bc
@@ -1441,7 +1441,7 @@ Func_f8898: ; f8898 (3e:4898)
 	inc hl
 	ld d, [hl]
 	bit 7, a
-	jr nz, .asm_f88df
+	jr nz, .asm_f48df
 	add e
 	ld e, a
 	ld a, $0
@@ -1449,7 +1449,7 @@ Func_f8898: ; f8898 (3e:4898)
 	and $7
 	ld d, a
 	ret
-.asm_f88df
+.asm_f48df
 	xor $ff
 	inc a
 	push bc
@@ -1463,7 +1463,7 @@ Func_f8898: ; f8898 (3e:4898)
 	ld d, a
 	pop bc
 	ret
-.asm_f88ee
+.asm_f48ee
 	push hl
 	ld hl, wdddb
 	add hl, bc
@@ -1471,12 +1471,12 @@ Func_f8898: ; f8898 (3e:4898)
 	pop hl
 	ld a, [hl]
 	cp $80
-	jr z, .asm_f88ab
+	jr z, .asm_f48ab
 	ld hl, wMusicVibratoType
 	add hl, bc
 	ld [hl], a
-	jr .asm_f88ab
-.asm_f8902
+	jr .asm_f48ab
+.asm_f4902
 	ld hl, wMusicCh1CurPitch
 	add hl, bc
 	add hl, bc
@@ -1485,7 +1485,7 @@ Func_f8898: ; f8898 (3e:4898)
 	ld d, [hl]
 	ret
 
-Func_f890b: ; f890b (3e:490b)
+Music2_f490b:
 	cp $0
 	jr nz, .not_channel_1
 	ld a, [wMusicVibratoDelay]
@@ -1538,19 +1538,19 @@ Func_f890b: ; f890b (3e:490b)
 .done
 	ret
 
-Func_f8967: ; f8967 (3e:4967)
+Music2_f4967:
 	ld hl, wMusicFrequencyOffset
 	add hl, bc
 	ld a, [hl]
 	bit 7, a
-	jr nz, .asm_f8976
+	jr nz, .asm_f4976
 	add e
 	ld e, a
 	ld a, d
 	adc b
 	ld d, a
 	ret
-.asm_f8976
+.asm_f4976
 	xor $ff
 	ld h, a
 	ld a, e
@@ -1561,38 +1561,38 @@ Func_f8967: ; f8967 (3e:4967)
 	ld d, a
 	ret
 
-Func_f8980: ; f8980 (3e:4980)
+Music2_f4980:
 	ld a, [wdd8c]
 	ld d, a
 	bit 0, d
-	jr nz, .asm_f8990
+	jr nz, .asm_f4990
 	ld a, $8
 	ldh [rNR12], a
 	swap a
 	ldh [rNR14], a
-.asm_f8990
+.asm_f4990
 	bit 1, d
-	jr nz, .asm_f899c
+	jr nz, .asm_f499c
 	swap a
 	ldh [rNR22], a
 	swap a
 	ldh [rNR24], a
-.asm_f899c
+.asm_f499c
 	bit 3, d
-	jr nz, .asm_f89a8
+	jr nz, .asm_f49a8
 	swap a
 	ldh [rNR42], a
 	swap a
 	ldh [rNR44], a
-.asm_f89a8
+.asm_f49a8
 	bit 2, d
-	jr nz, .asm_f89b0
+	jr nz, .asm_f49b0
 	ld a, $0
 	ldh [rNR32], a
-.asm_f89b0
+.asm_f49b0
 	ret
 
-Music2_CheckForEndOfSong: ; f89b1 (3e:49b1)
+Music2_CheckForEndOfSong:
 	ld hl, wMusicIsPlaying
 	xor a
 	add [hl]
@@ -1608,23 +1608,23 @@ Music2_CheckForEndOfSong: ; f89b1 (3e:49b1)
 	ld [wCurSongID], a
 	ret
 
-Music2_PauseSong: ; f89c4 (3e:49c4)
+Music2_PauseSong:
 	di
-	call Func_f8980
+	call Music2_f4980
 	call Music2_BackupSong
 	call Music2_StopAllChannels
 	ei
 	ret
 
-Music2_ResumeSong: ; f89d0 (3e:49d0)
+Music2_ResumeSong:
 	di
-	call Func_f8980
+	call Music2_f4980
 	call Music2_StopAllChannels
 	call Music2_LoadBackup
 	ei
 	ret
 
-Music2_BackupSong: ; f89dc (3e:49dc)
+Music2_BackupSong:
 	ld a, [wCurSongID]
 	ld [wCurSongIDBackup], a
 	ld a, [wCurSongBank]
@@ -1732,7 +1732,7 @@ Music2_BackupSong: ; f89dc (3e:49dc)
 	call Music2_CopyData
 	ret
 
-Music2_LoadBackup: ; f8b01 (3e:4b01)
+Music2_LoadBackup:
 	ld a, [wCurSongIDBackup]
 	ld [wCurSongID], a
 	ld a, [wCurSongBankBackup]
@@ -1836,7 +1836,7 @@ Music2_LoadBackup: ; f8b01 (3e:4b01)
 	ret
 
 ; copies a bytes from hl to de
-Music2_CopyData: ; f8c18 (3e:4c18)
+Music2_CopyData:
 	ld c, a
 .loop
 	ld a, [hli]
@@ -1846,7 +1846,7 @@ Music2_CopyData: ; f8c18 (3e:4c18)
 	jr nz, .loop
 	ret
 
-Music2_ChannelLoopStacks: ; f8c20 (3e:4c20)
+Music2_ChannelLoopStacks:
 	dw wMusicCh1Stack
 	dw wMusicCh2Stack
 	dw wMusicCh3Stack
@@ -1854,7 +1854,7 @@ Music2_ChannelLoopStacks: ; f8c20 (3e:4c20)
 
 ; these are address offsets into the pitches table below
 ; offset = (12 notes per octave * 2 bytes per pitch) * octave
-Music2_OctaveOffsets: ; f8c28 (3e:4c28)
+Music2_OctaveOffsets:
 	db (12 * 2) * 0
 	db (12 * 2) * 1
 	db (12 * 2) * 2
@@ -1864,7 +1864,7 @@ Music2_OctaveOffsets: ; f8c28 (3e:4c28)
 	db (12 * 2) * 6
 	db (12 * 2) * 7
 
-Music2_Pitches: ; f8c30 (3e:4c30)
+Music2_Pitches:
 	dw $002c ; C_ 0
 	dw $009c ; C# 0
 	dw $0106 ; D_ 0
@@ -1951,17 +1951,17 @@ Music2_Pitches: ; f8c30 (3e:4c30)
 	dw $07ef ; B_ 6
 	dw $07f0 ; C_ 7
 
-Music2_WaveInstruments: ; f8cda (3e:4cda)
+Music2_WaveInstruments:
 INCLUDE "audio/wave_instruments.asm"
 
-Music2_NoiseInstruments: ; f8d34 (3e:4d34)
+Music2_NoiseInstruments:
 INCLUDE "audio/noise_instruments.asm"
 
-Music2_VibratoTypes: ; f8dde (3e:4dde)
+Music2_VibratoTypes:
 INCLUDE "audio/vibrato_types.asm"
 
 ; all real SFX have the same priority (SFX_STOP does not use this table)
-Music2_SFXPriorities: ; f8e85 (3e:4e85)
+Music2_SFXPriorities:
 	db $00, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a
 	db $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a
 	db $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a, $0a

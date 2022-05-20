@@ -1,4 +1,4 @@
-Sfx13_Ch1: ; fcb72 (3f:4b72)
+Sfx13_Ch1:
 	sfx_1 228
 	sfx_8 17
 	sfx_2 0

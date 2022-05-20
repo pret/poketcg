@@ -1,4 +1,4 @@
-Sfx21_Ch1: ; fd3bd (3f:53bd)
+Sfx21_Ch1:
 	sfx_8 17
 	sfx_1 111
 	sfx_0 0, 81

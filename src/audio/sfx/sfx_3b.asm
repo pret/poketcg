@@ -1,4 +1,4 @@
-Sfx3b_Ch1: ; fe638 (3f:6638)
+Sfx3b_Ch1:
 	sfx_8 17
 	sfx_1 255
 	sfx_2 0

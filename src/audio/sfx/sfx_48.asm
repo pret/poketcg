@@ -1,4 +1,4 @@
-Sfx48_Ch1: ; fed55 (3f:6d55)
+Sfx48_Ch1:
 	sfx_8 17
 	sfx_1 207
 	sfx_0 0, 116

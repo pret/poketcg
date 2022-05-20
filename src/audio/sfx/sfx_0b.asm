@@ -1,4 +1,4 @@
-Sfx0b_Ch1: ; fc813 (3f:4813)
+Sfx0b_Ch1:
 	sfx_8 17
 	sfx_1 239
 	sfx_2 0

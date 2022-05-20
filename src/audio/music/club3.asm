@@ -1,4 +1,4 @@
-Music_Club3_Ch1: ; fa210 (3e:6210)
+Music_Club3_Ch1:
 	speed 9
 	stereo_panning 1, 1
 	vibrato_type 5
@@ -432,7 +432,7 @@ Branch_fa403:
 	music_ret
 
 
-Music_Club3_Ch2: ; fa423 (3e:6423)
+Music_Club3_Ch2:
 	speed 9
 	stereo_panning 1, 1
 	vibrato_type 5
@@ -798,7 +798,7 @@ Branch_fa5a6:
 	music_ret
 
 
-Music_Club3_Ch3: ; fa63e (3e:663e)
+Music_Club3_Ch3:
 	speed 9
 	stereo_panning 1, 1
 	volume 32
@@ -1062,7 +1062,7 @@ Music_Club3_Ch3: ; fa63e (3e:663e)
 	EndMainLoop
 
 
-Music_Club3_Ch4: ; fa772 (3e:6772)
+Music_Club3_Ch4:
 	speed 9
 	octave 1
 	MainLoop

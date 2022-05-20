@@ -1,4 +1,4 @@
-Music_Club2_Ch1: ; fa077 (3e:6077)
+Music_Club2_Ch1:
 	speed 6
 	duty 2
 	stereo_panning 1, 1
@@ -92,7 +92,7 @@ Music_Club2_Ch1: ; fa077 (3e:6077)
 	EndMainLoop
 
 
-Music_Club2_Ch2: ; fa0e3 (3e:60e3)
+Music_Club2_Ch2:
 	speed 6
 	duty 2
 	stereo_panning 1, 1
@@ -206,7 +206,7 @@ Music_Club2_Ch2: ; fa0e3 (3e:60e3)
 	EndMainLoop
 
 
-Music_Club2_Ch3: ; fa164 (3e:6164)
+Music_Club2_Ch3:
 	speed 6
 	volume 32
 	stereo_panning 1, 1

@@ -1,4 +1,4 @@
-Music_DeckMachine_Ch1: ; f6ef1 (3d:6ef1)
+Music_DeckMachine_Ch1:
 	stereo_panning 1, 1
 	cutoff 8
 	duty 3
@@ -53,7 +53,7 @@ Music_DeckMachine_Ch1: ; f6ef1 (3d:6ef1)
 	EndMainLoop
 
 
-Music_DeckMachine_Ch2: ; f6f41 (3d:6f41)
+Music_DeckMachine_Ch2:
 	stereo_panning 1, 1
 	cutoff 8
 	duty 1
@@ -97,7 +97,7 @@ Music_DeckMachine_Ch2: ; f6f41 (3d:6f41)
 	EndMainLoop
 
 
-Music_DeckMachine_Ch3: ; f6f7b (3d:6f7b)
+Music_DeckMachine_Ch3:
 	stereo_panning 1, 1
 	volume 32
 	wave 1
@@ -224,7 +224,7 @@ Music_DeckMachine_Ch3: ; f6f7b (3d:6f7b)
 	EndMainLoop
 
 
-Music_DeckMachine_Ch4: ; f7018 (3d:7018)
+Music_DeckMachine_Ch4:
 	speed 1
 	octave 1
 	MainLoop

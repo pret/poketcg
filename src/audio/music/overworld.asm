@@ -1,4 +1,4 @@
-Music_Overworld_Ch1: ; f71a0 (3d:71a0)
+Music_Overworld_Ch1:
 	speed 7
 	duty 0
 	stereo_panning 1, 1
@@ -285,7 +285,7 @@ Branch_f72fb:
 	music_ret
 
 
-Music_Overworld_Ch2: ; f7334 (3d:7334)
+Music_Overworld_Ch2:
 	speed 7
 	duty 0
 	stereo_panning 1, 1
@@ -750,7 +750,7 @@ Branch_f7535:
 	music_ret
 
 
-Music_Overworld_Ch3: ; f75a1 (3d:75a1)
+Music_Overworld_Ch3:
 	speed 7
 	stereo_panning 1, 1
 	volume 32
@@ -1386,7 +1386,7 @@ Branch_f7826:
 	music_ret
 
 
-Music_Overworld_Ch4: ; f78af (3d:78af)
+Music_Overworld_Ch4:
 	speed 7
 	octave 1
 	music_call Branch_f78ee

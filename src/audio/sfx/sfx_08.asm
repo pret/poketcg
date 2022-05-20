@@ -1,4 +1,4 @@
-Sfx08_Ch1: ; fc6f6 (3f:46f6)
+Sfx08_Ch1:
 	sfx_8 17
 	sfx_1 224
 	sfx_0 0, 64

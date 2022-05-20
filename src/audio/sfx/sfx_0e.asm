@@ -1,4 +1,4 @@
-Sfx0e_Ch1: ; fc953 (3f:4953)
+Sfx0e_Ch1:
 	sfx_8 17
 	sfx_1 207
 	sfx_2 0

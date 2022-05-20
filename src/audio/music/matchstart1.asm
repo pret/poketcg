@@ -1,4 +1,4 @@
-Music_MatchStart1_Ch1: ; f7919 (3d:7919)
+Music_MatchStart1_Ch1:
 	speed 1
 	stereo_panning 1, 1
 	cutoff 8

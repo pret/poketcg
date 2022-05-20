@@ -1,4 +1,4 @@
-Music_MatchStart3_Ch1: ; f7a0f (3d:7a0f)
+Music_MatchStart3_Ch1:
 	speed 1
 	stereo_panning 1, 1
 	cutoff 8
@@ -163,7 +163,7 @@ Music_MatchStart3_Ch1: ; f7a0f (3d:7a0f)
 	music_end
 
 
-Music_MatchStart3_Ch2: ; f7aba (3d:7aba)
+Music_MatchStart3_Ch2:
 	speed 1
 	stereo_panning 1, 1
 	cutoff 8

@@ -1,4 +1,4 @@
-Music_Medal_Ch1: ; f7df8 (3d:7df8)
+Music_Medal_Ch1:
 	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
@@ -62,7 +62,7 @@ Music_Medal_Ch1: ; f7df8 (3d:7df8)
 	music_end
 
 
-Music_Medal_Ch2: ; f7e4b (3d:7e4b)
+Music_Medal_Ch2:
 	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
@@ -125,7 +125,7 @@ Music_Medal_Ch2: ; f7e4b (3d:7e4b)
 	music_end
 
 
-Music_Medal_Ch3: ; f7e9d (3d:7e9d)
+Music_Medal_Ch3:
 	stereo_panning 1, 1
 	wave 1
 	volume 32

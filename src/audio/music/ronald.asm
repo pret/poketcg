@@ -1,4 +1,4 @@
-Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
+Music_Ronald_Ch1:
 	stereo_panning 1, 1
 	vibrato_type 8
 	vibrato_delay 12
@@ -507,7 +507,7 @@ Branch_fa9ec:
 	music_ret
 
 
-Music_Ronald_Ch2: ; faa0e (3e:6a0e)
+Music_Ronald_Ch2:
 	stereo_panning 1, 1
 	vibrato_type 8
 	vibrato_delay 12
@@ -849,7 +849,7 @@ Branch_fabb1:
 	music_ret
 
 
-Music_Ronald_Ch3: ; fabc0 (3e:6bc0)
+Music_Ronald_Ch3:
 	speed 1
 	stereo_panning 1, 1
 	volume 32
@@ -1124,7 +1124,7 @@ Branch_facc5:
 	music_ret
 
 
-Music_Ronald_Ch4: ; face0 (3e:6ce0)
+Music_Ronald_Ch4:
 	speed 1
 	octave 1
 	MainLoop

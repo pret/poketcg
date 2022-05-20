@@ -1,4 +1,4 @@
-Music_MatchStart2_Ch1: ; f7956 (3d:7956)
+Music_MatchStart2_Ch1:
 	speed 1
 	stereo_panning 1, 1
 	cutoff 8
@@ -88,7 +88,7 @@ Music_MatchStart2_Ch1: ; f7956 (3d:7956)
 	music_end
 
 
-Music_MatchStart2_Ch2: ; f79b4 (3d:79b4)
+Music_MatchStart2_Ch2:
 	speed 1
 	stereo_panning 1, 1
 	cutoff 8

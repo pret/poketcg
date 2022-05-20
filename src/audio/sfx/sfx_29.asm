@@ -1,4 +1,4 @@
-Sfx29_Ch1: ; fd834 (3f:5834)
+Sfx29_Ch1:
 	sfx_8 17
 	sfx_1 223
 	sfx_loop 40

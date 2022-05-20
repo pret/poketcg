@@ -1,4 +1,4 @@
-Sfx59_Ch1: ; ffb0c (3f:7b0c)
+Sfx59_Ch1:
 	sfx_1 207
 	sfx_8 17
 	sfx_2 0

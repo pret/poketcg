@@ -1,4 +1,4 @@
-Music_BoosterPack_Ch1: ; f7d60 (3d:7d60)
+Music_BoosterPack_Ch1:
 	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
@@ -43,7 +43,7 @@ Music_BoosterPack_Ch1: ; f7d60 (3d:7d60)
 	music_end
 
 
-Music_BoosterPack_Ch2: ; f7d9e (3d:7d9e)
+Music_BoosterPack_Ch2:
 	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
@@ -87,7 +87,7 @@ Music_BoosterPack_Ch2: ; f7d9e (3d:7d9e)
 	music_end
 
 
-Music_BoosterPack_Ch3: ; f7ddb (3d:7ddb)
+Music_BoosterPack_Ch3:
 	stereo_panning 1, 1
 	wave 1
 	volume 32

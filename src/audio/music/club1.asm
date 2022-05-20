@@ -1,4 +1,4 @@
-Music_Club1_Ch1: ; f9be5 (3e:5be5)
+Music_Club1_Ch1:
 	speed 5
 	stereo_panning 1, 1
 	vibrato_type 8
@@ -289,7 +289,7 @@ Music_Club1_Ch1: ; f9be5 (3e:5be5)
 	EndMainLoop
 
 
-Music_Club1_Ch2: ; f9d5f (3e:5d5f)
+Music_Club1_Ch2:
 	speed 5
 	stereo_panning 1, 1
 	vibrato_type 8
@@ -571,7 +571,7 @@ Music_Club1_Ch2: ; f9d5f (3e:5d5f)
 	EndMainLoop
 
 
-Music_Club1_Ch3: ; f9ec4 (3e:5ec4)
+Music_Club1_Ch3:
 	speed 5
 	stereo_panning 1, 1
 	volume 32
@@ -870,7 +870,7 @@ Branch_fa01a:
 	music_ret
 
 
-Music_Club1_Ch4: ; fa044 (3e:6044)
+Music_Club1_Ch4:
 	speed 5
 	octave 1
 	bass 2

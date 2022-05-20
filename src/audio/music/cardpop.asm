@@ -1,4 +1,4 @@
-Music_CardPop_Ch1: ; f703a (3d:703a)
+Music_CardPop_Ch1:
 	speed 4
 	stereo_panning 1, 1
 	cutoff 8
@@ -119,7 +119,7 @@ Music_CardPop_Ch1: ; f703a (3d:703a)
 	EndMainLoop
 
 
-Music_CardPop_Ch2: ; f70df (3d:70df)
+Music_CardPop_Ch2:
 	speed 4
 	stereo_panning 1, 1
 	cutoff 8
@@ -205,7 +205,7 @@ Music_CardPop_Ch2: ; f70df (3d:70df)
 	EndMainLoop
 
 
-Music_CardPop_Ch3: ; f713a (3d:713a)
+Music_CardPop_Ch3:
 	speed 4
 	wave 1
 	stereo_panning 1, 1
@@ -265,7 +265,7 @@ Branch_f716c:
 	music_ret
 
 
-Music_CardPop_Ch4: ; f717d (3d:717d)
+Music_CardPop_Ch4:
 	speed 4
 	octave 1
 	Loop 11

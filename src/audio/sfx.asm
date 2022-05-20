@@ -1,10 +1,10 @@
-SFX_PlaySFX: ; fc000 (3f:4000)
+SFX_PlaySFX:
 	jp SFX_Play
 
-SFX_UpdateSFX: ; fc003 (3f:4003)
+SFX_UpdateSFX:
 	jp SFX_Update
 
-SFX_Play: ; fc006 (3f:4006)
+SFX_Play:
 	ld hl, NumberOfSFX
 	cp [hl]
 	jr nc, .invalidID
@@ -59,7 +59,7 @@ SFX_Play: ; fc006 (3f:4006)
 .invalidID
 	ret
 
-SFX_Update: ; fc059 (3f:4059)
+SFX_Update:
 	ld a, [wdd8c]
 	or a
 	jr nz, .asm_fc063
@@ -100,7 +100,7 @@ SFX_Update: ; fc059 (3f:4059)
 	jr nz, .asm_fc06c
 	ret
 
-Func_fc094: ; fc094 (3f:4094)
+Func_fc094:
 	ld a, [hl]
 	and $f0
 	swap a
@@ -119,7 +119,7 @@ Func_fc094: ; fc094 (3f:4094)
 	ld l, e
 	jp hl
 
-SFX_CommandTable: ; fc0ab (3f:40ab)
+SFX_CommandTable:
 	dw SFX_0
 	dw SFX_1
 	dw SFX_2
@@ -137,10 +137,10 @@ SFX_CommandTable: ; fc0ab (3f:40ab)
 	dw SFX_unused
 	dw SFX_end
 
-SFX_unused: ; fc0cb (3f:40cb)
+SFX_unused:
 	jp Func_fc094
 
-SFX_0: ; fc0ce (3f:40ce)
+SFX_0:
 	ld d, a
 	pop hl
 	ld a, [hli]
@@ -185,7 +185,7 @@ SFX_0: ; fc0ce (3f:40ce)
 	ld [hli], a
 	ld [hl], d
 	pop de
-Func_fc105: ; fc105 (3f:4105)
+Func_fc105:
 	ld hl, wde4b
 	add hl, bc
 	add hl, bc
@@ -194,7 +194,7 @@ Func_fc105: ; fc105 (3f:4105)
 	ld [hl], d
 	ret
 
-SFX_1: ; fc10e (3f:410e)
+SFX_1:
 	ld hl, wde2b
 	add hl, bc
 	ld a, $80
@@ -214,7 +214,7 @@ SFX_1: ; fc10e (3f:410e)
 	pop hl
 	jp Func_fc094
 
-SFX_2: ; fc127 (3f:4127)
+SFX_2:
 	swap a
 	ld e, a
 	ld hl, rNR11
@@ -228,7 +228,7 @@ SFX_2: ; fc127 (3f:4127)
 	pop hl
 	jp Func_fc094
 
-SFX_loop: ; fc138 (3f:4138)
+SFX_loop:
 	ld hl, wde43
 	add hl, bc
 	add hl, bc
@@ -245,7 +245,7 @@ SFX_loop: ; fc138 (3f:4138)
 	ld h, d
 	jp Func_fc094
 
-SFX_endloop: ; fc14d (3f:414d)
+SFX_endloop:
 	ld hl, wde3f
 	add hl, bc
 	ld a, [hl]
@@ -264,7 +264,7 @@ SFX_endloop: ; fc14d (3f:414d)
 	pop hl
 	jp Func_fc094
 
-SFX_5: ; fc166 (3f:4166)
+SFX_5:
 	ld hl, wde2f
 	add hl, bc
 	ld e, l
@@ -274,7 +274,7 @@ SFX_5: ; fc166 (3f:4166)
 	ld [de], a
 	jp Func_fc094
 
-SFX_6: ; fc172 (3f:4172)
+SFX_6:
 	ld a, c
 	cp $3
 	jr nz, .asm_fc17c
@@ -294,7 +294,7 @@ SFX_6: ; fc172 (3f:4172)
 	ld d, h
 	jp Func_fc105
 
-Func_fc18d: ; fc18d (3f:418d)
+Func_fc18d:
 	ld hl, wde2f
 	add hl, bc
 	ld a, [hl]
@@ -348,7 +348,7 @@ Func_fc18d: ; fc18d (3f:418d)
 .asm_fc1cc
 	ret
 
-Func_fc1cd: ; fc1cd (3f:41cd)
+Func_fc1cd:
 	ld hl, wde32
 	ld a, [hl]
 	or a
@@ -390,7 +390,7 @@ Func_fc1cd: ; fc1cd (3f:41cd)
 .asm_fc201
 	ret
 
-SFX_7: ; fc202 (3f:4202)
+SFX_7:
 	add a
 	ld d, $0
 	ld e, a
@@ -419,7 +419,7 @@ SFX_7: ; fc202 (3f:4202)
 	pop hl
 	jp Func_fc094
 
-SFX_8: ; fc22d (3f:422d)
+SFX_8:
 	pop hl
 	ld a, [hli]
 	push hl
@@ -443,7 +443,7 @@ SFX_8: ; fc22d (3f:422d)
 	pop hl
 	jp Func_fc094
 
-SFX_end: ; fc249 (3f:4249)
+SFX_end:
 	ld e, c
 	inc e
 	ld a, $7f
@@ -471,7 +471,7 @@ SFX_end: ; fc249 (3f:4249)
 	pop hl
 	ret
 
-Func_fc26c: ; fc26c (3f:426c)
+Func_fc26c:
 	xor a
 	ld [wde53], a
 	ld [wSfxPriority], a
@@ -479,7 +479,7 @@ Func_fc26c: ; fc26c (3f:426c)
 	ld [wCurSfxID], a
 	ret
 
-Func_fc279: ; fc279 (3f:4279)
+Func_fc279:
 	ld a, $8
 	ldh a, [rNR12]
 	ldh a, [rNR22]
@@ -495,7 +495,7 @@ Func_fc279: ; fc279 (3f:4279)
 
 INCLUDE "audio/sfx_headers.asm"
 
-SFX_WaveInstruments: ; fc485 (3f:4485)
+SFX_WaveInstruments:
 INCLUDE "audio/wave_instruments.asm"
 
 INCLUDE "audio/sfx/sfx_01.asm"

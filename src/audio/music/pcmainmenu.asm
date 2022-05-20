@@ -1,4 +1,4 @@
-Music_PCMainMenu_Ch1: ; f9052 (3e:5052)
+Music_PCMainMenu_Ch1:
 	speed 7
 	stereo_panning 1, 1
 	cutoff 8
@@ -104,7 +104,7 @@ Branch_f90c2:
 	music_ret
 
 
-Music_PCMainMenu_Ch2: ; f90ed (3e:50ed)
+Music_PCMainMenu_Ch2:
 	speed 7
 	stereo_panning 1, 1
 	cutoff 8
@@ -211,7 +211,7 @@ Branch_f915e:
 	music_ret
 
 
-Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
+Music_PCMainMenu_Ch3:
 	speed 7
 	volume 32
 	stereo_panning 1, 1
@@ -341,7 +341,7 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	EndMainLoop
 
 
-Music_PCMainMenu_Ch4: ; f922b (3e:522b)
+Music_PCMainMenu_Ch4:
 	speed 7
 	octave 1
 	MainLoop

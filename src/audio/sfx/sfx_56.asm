@@ -1,4 +1,4 @@
-Sfx56_Ch1: ; ff98b (3f:798b)
+Sfx56_Ch1:
 	sfx_1 247
 	sfx_8 17
 	sfx_2 0

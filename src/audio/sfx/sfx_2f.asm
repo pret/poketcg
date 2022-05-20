@@ -1,4 +1,4 @@
-Sfx2f_Ch1: ; fda5c (3f:5a5c)
+Sfx2f_Ch1:
 	sfx_8 17
 	sfx_1 214
 	sfx_0 0, 36

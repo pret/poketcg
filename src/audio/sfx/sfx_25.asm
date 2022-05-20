@@ -1,4 +1,4 @@
-Sfx25_Ch1: ; fd617 (3f:5617)
+Sfx25_Ch1:
 	sfx_1 207
 	sfx_8 17
 	sfx_2 8

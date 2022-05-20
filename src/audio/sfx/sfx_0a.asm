@@ -1,4 +1,4 @@
-Sfx0a_Ch1: ; fc78a (3f:478a)
+Sfx0a_Ch1:
 	sfx_8 17
 	sfx_1 228
 	sfx_2 0

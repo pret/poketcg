@@ -1,4 +1,4 @@
-Sfx51_Ch1: ; ff5f8 (3f:75f8)
+Sfx51_Ch1:
 	sfx_1 0
 	sfx_5 0
 	sfx_6 20
@@ -122,7 +122,7 @@ Sfx51_Ch1: ; ff5f8 (3f:75f8)
 	sfx_endloop
 	sfx_end
 
-Sfx51_Ch2: ; ff6e6 (3f:76e6)
+Sfx51_Ch2:
 	sfx_loop 65
 	sfx_1 127
 	sfx_8 17

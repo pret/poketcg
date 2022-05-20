@@ -1,4 +1,4 @@
-Sfx53_Ch1: ; ff81d (3f:781d)
+Sfx53_Ch1:
 	sfx_1 255
 	sfx_8 17
 	sfx_2 8
@@ -91,7 +91,7 @@ Sfx53_Ch1: ; ff81d (3f:781d)
 	sfx_1 31
 	sfx_end
 
-Sfx53_Ch2: ; ff8c8 (3f:78c8)
+Sfx53_Ch2:
 	sfx_8 17
 	sfx_loop 2
 	sfx_1 0

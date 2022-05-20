@@ -1,4 +1,4 @@
-Sfx54_Ch1: ; ff92c (3f:792c)
+Sfx54_Ch1:
 	sfx_1 231
 	sfx_8 17
 	sfx_2 8

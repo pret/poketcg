@@ -1,4 +1,4 @@
-Sfx26_Ch1: ; fd6f2 (3f:56f2)
+Sfx26_Ch1:
 	sfx_1 255
 	sfx_8 17
 	sfx_2 0

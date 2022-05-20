@@ -1,4 +1,4 @@
-Sfx27_Ch1: ; fd769 (3f:5769)
+Sfx27_Ch1:
 	sfx_1 84
 	sfx_8 17
 	sfx_2 0

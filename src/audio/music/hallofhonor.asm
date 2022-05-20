@@ -1,4 +1,4 @@
-Music_HallOfHonor_Ch1: ; fafea (3e:6fea)
+Music_HallOfHonor_Ch1:
 	speed 7
 	stereo_panning 1, 1
 	cutoff 8
@@ -92,7 +92,7 @@ Branch_fb044:
 	music_ret
 
 
-Music_HallOfHonor_Ch2: ; fb06e (3e:706e)
+Music_HallOfHonor_Ch2:
 	speed 7
 	stereo_panning 1, 1
 	cutoff 8
@@ -170,7 +170,7 @@ Branch_fb0bb:
 	music_ret
 
 
-Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
+Music_HallOfHonor_Ch3:
 	speed 7
 	volume 64
 	stereo_panning 1, 1

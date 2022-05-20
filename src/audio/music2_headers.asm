@@ -1,7 +1,7 @@
-NumberOfSongs2: ; f8ee5 (3e:4ee5)
+NumberOfSongs2:
 	db $1f
 
-SongBanks2: ; f8ee6 (3e:4ee6)
+SongBanks2:
 	db BANK(Music_Stop)
 	db BANK(Music_TitleScreen)
 	db BANK(Music_DuelTheme1)
@@ -34,7 +34,7 @@ SongBanks2: ; f8ee6 (3e:4ee6)
 	db BANK(Music_Medal)
 	db BANK(Music_Unused1e)
 
-SongHeaderPointers2: ; f8f05 (3e:4f05)
+SongHeaderPointers2:
 	dw Music_Stop
 	dw NULL
 	dw NULL
@@ -105,7 +105,7 @@ SongHeaderPointers2: ; f8f05 (3e:4f05)
 	dw NULL
 	dw NULL
 
-Music_PCMainMenu: ; f8f71 (3e:4f71)
+Music_PCMainMenu:
 	db %1111
 	dw Music_PCMainMenu_Ch1
 	dw Music_PCMainMenu_Ch2
@@ -133,63 +133,63 @@ Music_PCMainMenu: ; f8f71 (3e:4f71)
 	dw NULL
 	dw NULL
 
-Music_PokemonDome: ; f8f95 (3e:4f95)
+Music_PokemonDome:
 	db %1111
 	dw Music_PokemonDome_Ch1
 	dw Music_PokemonDome_Ch2
 	dw Music_PokemonDome_Ch3
 	dw Music_PokemonDome_Ch4
 
-Music_ChallengeHall: ; f8f9e (3e:4f9e)
+Music_ChallengeHall:
 	db %1111
 	dw Music_ChallengeHall_Ch1
 	dw Music_ChallengeHall_Ch2
 	dw Music_ChallengeHall_Ch3
 	dw Music_ChallengeHall_Ch4
 
-Music_Club1: ; f8fa7 (3e:4fa7)
+Music_Club1:
 	db %1111
 	dw Music_Club1_Ch1
 	dw Music_Club1_Ch2
 	dw Music_Club1_Ch3
 	dw Music_Club1_Ch4
 
-Music_Club2: ; f8fb0 (3e:4fb0)
+Music_Club2:
 	db %0111
 	dw Music_Club2_Ch1
 	dw Music_Club2_Ch2
 	dw Music_Club2_Ch3
 	dw NULL
 
-Music_Club3: ; f8fb9 (3e:4fb9)
+Music_Club3:
 	db %1111
 	dw Music_Club3_Ch1
 	dw Music_Club3_Ch2
 	dw Music_Club3_Ch3
 	dw Music_Club3_Ch4
 
-Music_Ronald: ; f8fc2 (3e:4fc2)
+Music_Ronald:
 	db %1111
 	dw Music_Ronald_Ch1
 	dw Music_Ronald_Ch2
 	dw Music_Ronald_Ch3
 	dw Music_Ronald_Ch4
 
-Music_Imakuni: ; f8fcb (3e:4fcb)
+Music_Imakuni:
 	db %1111
 	dw Music_Imakuni_Ch1
 	dw Music_Imakuni_Ch2
 	dw Music_Imakuni_Ch3
 	dw Music_Imakuni_Ch4
 
-Music_HallOfHonor: ; f8fd4 (3e:4fd4)
+Music_HallOfHonor:
 	db %0111
 	dw Music_HallOfHonor_Ch1
 	dw Music_HallOfHonor_Ch2
 	dw Music_HallOfHonor_Ch3
 	dw NULL
 
-Music_Credits: ; f8fdd (3e:4fdd)
+Music_Credits:
 	db %1111
 	dw Music_Credits_Ch1
 	dw Music_Credits_Ch2

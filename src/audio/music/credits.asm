@@ -1,4 +1,4 @@
-Music_Credits_Ch1: ; fb1fe (3e:71fe)
+Music_Credits_Ch1:
 	speed 13
 	stereo_panning 1, 1
 	vibrato_type 1
@@ -849,7 +849,7 @@ Branch_fb651:
 	music_ret
 
 
-Music_Credits_Ch2: ; fb68a (3e:768a)
+Music_Credits_Ch2:
 	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
@@ -1790,7 +1790,7 @@ Branch_fbb10:
 	music_ret
 
 
-Music_Credits_Ch3: ; fbb9d (3e:7b9d)
+Music_Credits_Ch3:
 	speed 1
 	stereo_panning 1, 1
 	volume 32
@@ -2301,7 +2301,7 @@ Branch_fbe3d:
 	music_ret
 
 
-Music_Credits_Ch4: ; fbe51 (3e:7e51)
+Music_Credits_Ch4:
 	speed 1
 	octave 1
 	Loop 8

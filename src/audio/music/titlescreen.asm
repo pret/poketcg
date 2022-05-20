@@ -1,4 +1,4 @@
-Music_TitleScreen_Ch1: ; f5052 (3d:5052)
+Music_TitleScreen_Ch1:
 	speed 7
 	duty 0
 	stereo_panning 1, 1
@@ -220,7 +220,7 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	music_end
 
 
-Music_TitleScreen_Ch2: ; f5193 (3d:5193)
+Music_TitleScreen_Ch2:
 	speed 7
 	duty 0
 	stereo_panning 1, 1
@@ -408,7 +408,7 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	music_end
 
 
-Music_TitleScreen_Ch3: ; f5286 (3d:5286)
+Music_TitleScreen_Ch3:
 	speed 7
 	wave 4
 	volume 32
@@ -506,7 +506,7 @@ Branch_f52f0:
 	music_ret
 
 
-Music_TitleScreen_Ch4: ; f52fa (3d:52fa)
+Music_TitleScreen_Ch4:
 	speed 7
 	octave 1
 	rest 4

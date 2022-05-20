@@ -1,4 +1,4 @@
-Music_MatchDraw_Ch1: ; f7cdf (3d:7cdf)
+Music_MatchDraw_Ch1:
 	speed 3
 	stereo_panning 1, 1
 	cutoff 8
@@ -45,7 +45,7 @@ Music_MatchDraw_Ch1: ; f7cdf (3d:7cdf)
 	music_end
 
 
-Music_MatchDraw_Ch2: ; f7d17 (3d:7d17)
+Music_MatchDraw_Ch2:
 	speed 3
 	stereo_panning 1, 1
 	cutoff 8
@@ -84,7 +84,7 @@ Music_MatchDraw_Ch2: ; f7d17 (3d:7d17)
 	music_end
 
 
-Music_MatchDraw_Ch3: ; f7d47 (3d:7d47)
+Music_MatchDraw_Ch3:
 	speed 6
 	stereo_panning 1, 1
 	wave 1

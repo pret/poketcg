@@ -1,4 +1,4 @@
-Sfx5d_Ch1: ; ffd89 (3f:7d89)
+Sfx5d_Ch1:
 	sfx_1 0
 	sfx_5 0
 	sfx_6 6
@@ -70,7 +70,7 @@ Sfx5d_Ch1: ; ffd89 (3f:7d89)
 	sfx_6 1
 	sfx_end
 
-Sfx5d_Ch2: ; ffe0d (3f:7e0d)
+Sfx5d_Ch2:
 	sfx_1 196
 	sfx_8 17
 	sfx_2 8
@@ -101,7 +101,7 @@ Sfx5d_Ch2: ; ffe0d (3f:7e0d)
 	sfx_0 6, 246
 	sfx_end
 
-Sfx5d_Ch3: ; ffe3f (3f:7e3f)
+Sfx5d_Ch3:
 	sfx_1 119
 	sfx_8 17
 	sfx_0 0, 17

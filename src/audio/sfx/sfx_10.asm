@@ -1,4 +1,4 @@
-Sfx10_Ch1: ; fc9fb (3f:49fb)
+Sfx10_Ch1:
 	sfx_loop 5
 	sfx_8 17
 	sfx_1 55

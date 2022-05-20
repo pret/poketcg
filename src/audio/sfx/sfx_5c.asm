@@ -1,4 +1,4 @@
-Sfx5c_Ch1: ; ffd5b (3f:7d5b)
+Sfx5c_Ch1:
 	sfx_loop 30
 	sfx_1 191
 	sfx_8 17
