@@ -2,7 +2,7 @@
 
 This is a disassembly of Pokémon TCG.
 
-It uses the following ROM as a base:
+It creates the following ROM:
 
 - Pokémon Trading Card Game (U) [C][!].gbc `sha1: 0f8670a583255cff3e5b7ca71b5d7454d928fc48`
 
