@@ -10,8 +10,6 @@ Fixes are written in the `diff` format.
 +add green + lines
 ```
 
-**Disclaimer regarding the fixes:** since the project is still in the process of being disassembled, applying code modifications that result in a different number of bytes in the instructions will lead to lots of pointer invalidation, which will potentially lead to crashes.
-
 ## Contents
 
 - [AI wrongfully adds score twice for attaching energy to Arena card](#ai-wrongfully-adds-score-twice-for-attaching-energy-to-arena-card)
