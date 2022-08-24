@@ -1504,11 +1504,11 @@ IvysaurCardGfx::
 	INCBIN "gfx/cards/ivysaur.2bpp"
 	INCBIN "gfx/cards/ivysaur.pal"
 
-Venusaur1CardGfx::
+Venusaur_Lv64CardGfx::
 	INCBIN "gfx/cards/venusaur1.2bpp"
 	INCBIN "gfx/cards/venusaur1.pal"
 
-Venusaur2CardGfx::
+Venusaur_Lv67CardGfx::
 	INCBIN "gfx/cards/venusaur2.2bpp"
 	INCBIN "gfx/cards/venusaur2.pal"
 
@@ -1648,11 +1648,11 @@ WeezingCardGfx::
 	INCBIN "gfx/cards/weezing.2bpp"
 	INCBIN "gfx/cards/weezing.pal"
 
-Tangela1CardGfx::
+Tangela_Lv8CardGfx::
 	INCBIN "gfx/cards/tangela1.2bpp"
 	INCBIN "gfx/cards/tangela1.pal"
 
-Tangela2CardGfx::
+Tangela_Lv12CardGfx::
 	INCBIN "gfx/cards/tangela2.2bpp"
 	INCBIN "gfx/cards/tangela2.pal"
 
@@ -1680,11 +1680,11 @@ VulpixCardGfx::
 	INCBIN "gfx/cards/vulpix.2bpp"
 	INCBIN "gfx/cards/vulpix.pal"
 
-Ninetales1CardGfx::
+Ninetales_Lv32CardGfx::
 	INCBIN "gfx/cards/ninetales1.2bpp"
 	INCBIN "gfx/cards/ninetales1.pal"
 
-Ninetales2CardGfx::
+Ninetales_Lv35CardGfx::
 	INCBIN "gfx/cards/ninetales2.2bpp"
 	INCBIN "gfx/cards/ninetales2.pal"
 
@@ -1692,11 +1692,11 @@ GrowlitheCardGfx::
 	INCBIN "gfx/cards/growlithe.2bpp"
 	INCBIN "gfx/cards/growlithe.pal"
 
-Arcanine1CardGfx::
+Arcanine_Lv34CardGfx::
 	INCBIN "gfx/cards/arcanine1.2bpp"
 	INCBIN "gfx/cards/arcanine1.pal"
 
-Arcanine2CardGfx::
+Arcanine_Lv45CardGfx::
 	INCBIN "gfx/cards/arcanine2.2bpp"
 	INCBIN "gfx/cards/arcanine2.pal"
 
@@ -1708,23 +1708,23 @@ RapidashCardGfx::
 	INCBIN "gfx/cards/rapidash.2bpp"
 	INCBIN "gfx/cards/rapidash.pal"
 
-Magmar1CardGfx::
+Magmar_Lv24CardGfx::
 	INCBIN "gfx/cards/magmar1.2bpp"
 	INCBIN "gfx/cards/magmar1.pal"
 
-Magmar2CardGfx::
+Magmar_Lv31CardGfx::
 	INCBIN "gfx/cards/magmar2.2bpp"
 	INCBIN "gfx/cards/magmar2.pal"
 
-Flareon1CardGfx::
+Flareon_Lv22CardGfx::
 	INCBIN "gfx/cards/flareon1.2bpp"
 	INCBIN "gfx/cards/flareon1.pal"
 
-Flareon2CardGfx::
+Flareon_Lv28CardGfx::
 	INCBIN "gfx/cards/flareon2.2bpp"
 	INCBIN "gfx/cards/flareon2.pal"
 
-Moltres1CardGfx::
+Moltres_Lv35CardGfx::
 	INCBIN "gfx/cards/moltres1.2bpp"
 	INCBIN "gfx/cards/moltres1.pal"
 
@@ -1732,7 +1732,7 @@ Moltres1CardGfx::
 
 SECTION "Card Gfx 4", ROMX
 
-Moltres2CardGfx::
+Moltres_Lv37CardGfx::
 	INCBIN "gfx/cards/moltres2.2bpp"
 	INCBIN "gfx/cards/moltres2.pal"
 
@@ -1840,11 +1840,11 @@ LaprasCardGfx::
 	INCBIN "gfx/cards/lapras.2bpp"
 	INCBIN "gfx/cards/lapras.pal"
 
-Vaporeon1CardGfx::
+Vaporeon_Lv29CardGfx::
 	INCBIN "gfx/cards/vaporeon1.2bpp"
 	INCBIN "gfx/cards/vaporeon1.pal"
 
-Vaporeon2CardGfx::
+Vaporeon_Lv42CardGfx::
 	INCBIN "gfx/cards/vaporeon2.2bpp"
 	INCBIN "gfx/cards/vaporeon2.pal"
 
@@ -1856,27 +1856,27 @@ OmastarCardGfx::
 	INCBIN "gfx/cards/omastar.2bpp"
 	INCBIN "gfx/cards/omastar.pal"
 
-Articuno1CardGfx::
+Articuno_Lv35CardGfx::
 	INCBIN "gfx/cards/articuno1.2bpp"
 	INCBIN "gfx/cards/articuno1.pal"
 
-Articuno2CardGfx::
+Articuno_Lv37CardGfx::
 	INCBIN "gfx/cards/articuno2.2bpp"
 	INCBIN "gfx/cards/articuno2.pal"
 
-Pikachu1CardGfx::
+Pikachu_Lv12CardGfx::
 	INCBIN "gfx/cards/pikachu1.2bpp"
 	INCBIN "gfx/cards/pikachu1.pal"
 
-Pikachu2CardGfx::
+Pikachu_Lv14CardGfx::
 	INCBIN "gfx/cards/pikachu2.2bpp"
 	INCBIN "gfx/cards/pikachu2.pal"
 
-Pikachu3CardGfx::
+Pikachu_Lv16CardGfx::
 	INCBIN "gfx/cards/pikachu3.2bpp"
 	INCBIN "gfx/cards/pikachu3.pal"
 
-Pikachu4CardGfx::
+Pikachu_Lv16ACardGfx::
 	INCBIN "gfx/cards/pikachu4.2bpp"
 	INCBIN "gfx/cards/pikachu4.pal"
 
@@ -1884,23 +1884,23 @@ FlyingPikachuCardGfx::
 	INCBIN "gfx/cards/flyingpikachu.2bpp"
 	INCBIN "gfx/cards/flyingpikachu.pal"
 
-SurfingPikachu1CardGfx::
+SurfingPikachu_Lv13CardGfx::
 	INCBIN "gfx/cards/surfingpikachu1.2bpp"
 	INCBIN "gfx/cards/surfingpikachu1.pal"
 
-SurfingPikachu2CardGfx::
+SurfingPikachu_Lv13ACardGfx::
 	INCBIN "gfx/cards/surfingpikachu2.2bpp"
 	INCBIN "gfx/cards/surfingpikachu2.pal"
 
-Raichu1CardGfx::
+Raichu_Lv40CardGfx::
 	INCBIN "gfx/cards/raichu1.2bpp"
 	INCBIN "gfx/cards/raichu1.pal"
 
-Raichu2CardGfx::
+Raichu_Lv45CardGfx::
 	INCBIN "gfx/cards/raichu2.2bpp"
 	INCBIN "gfx/cards/raichu2.pal"
 
-Magnemite1CardGfx::
+Magnemite_Lv13CardGfx::
 	INCBIN "gfx/cards/magnemite1.2bpp"
 	INCBIN "gfx/cards/magnemite1.pal"
 
@@ -1908,15 +1908,15 @@ Magnemite1CardGfx::
 
 SECTION "Card Gfx 6", ROMX
 
-Magnemite2CardGfx::
+Magnemite_Lv15CardGfx::
 	INCBIN "gfx/cards/magnemite2.2bpp"
 	INCBIN "gfx/cards/magnemite2.pal"
 
-Magneton1CardGfx::
+Magneton_Lv28CardGfx::
 	INCBIN "gfx/cards/magneton1.2bpp"
 	INCBIN "gfx/cards/magneton1.pal"
 
-Magneton2CardGfx::
+Magneton_Lv35CardGfx::
 	INCBIN "gfx/cards/magneton2.2bpp"
 	INCBIN "gfx/cards/magneton2.pal"
 
@@ -1924,39 +1924,39 @@ VoltorbCardGfx::
 	INCBIN "gfx/cards/voltorb.2bpp"
 	INCBIN "gfx/cards/voltorb.pal"
 
-Electrode1CardGfx::
+Electrode_Lv35CardGfx::
 	INCBIN "gfx/cards/electrode1.2bpp"
 	INCBIN "gfx/cards/electrode1.pal"
 
-Electrode2CardGfx::
+Electrode_Lv42CardGfx::
 	INCBIN "gfx/cards/electrode2.2bpp"
 	INCBIN "gfx/cards/electrode2.pal"
 
-Electabuzz1CardGfx::
+Electabuzz_Lv20CardGfx::
 	INCBIN "gfx/cards/electabuzz1.2bpp"
 	INCBIN "gfx/cards/electabuzz1.pal"
 
-Electabuzz2CardGfx::
+Electabuzz_Lv35CardGfx::
 	INCBIN "gfx/cards/electabuzz2.2bpp"
 	INCBIN "gfx/cards/electabuzz2.pal"
 
-Jolteon1CardGfx::
+Jolteon_Lv24CardGfx::
 	INCBIN "gfx/cards/jolteon1.2bpp"
 	INCBIN "gfx/cards/jolteon1.pal"
 
-Jolteon2CardGfx::
+Jolteon_Lv29CardGfx::
 	INCBIN "gfx/cards/jolteon2.2bpp"
 	INCBIN "gfx/cards/jolteon2.pal"
 
-Zapdos1CardGfx::
+Zapdos_Lv40CardGfx::
 	INCBIN "gfx/cards/zapdos1.2bpp"
 	INCBIN "gfx/cards/zapdos1.pal"
 
-Zapdos2CardGfx::
+Zapdos_Lv64CardGfx::
 	INCBIN "gfx/cards/zapdos2.2bpp"
 	INCBIN "gfx/cards/zapdos2.pal"
 
-Zapdos3CardGfx::
+Zapdos_Lv68CardGfx::
 	INCBIN "gfx/cards/zapdos3.2bpp"
 	INCBIN "gfx/cards/zapdos3.pal"
 
@@ -2020,11 +2020,11 @@ CuboneCardGfx::
 	INCBIN "gfx/cards/cubone.2bpp"
 	INCBIN "gfx/cards/cubone.pal"
 
-Marowak1CardGfx::
+Marowak_Lv26CardGfx::
 	INCBIN "gfx/cards/marowak1.2bpp"
 	INCBIN "gfx/cards/marowak1.pal"
 
-Marowak2CardGfx::
+Marowak_Lv32CardGfx::
 	INCBIN "gfx/cards/marowak2.2bpp"
 	INCBIN "gfx/cards/marowak2.pal"
 
@@ -2068,11 +2068,11 @@ AlakazamCardGfx::
 	INCBIN "gfx/cards/alakazam.2bpp"
 	INCBIN "gfx/cards/alakazam.pal"
 
-Slowpoke1CardGfx::
+Slowpoke_Lv9CardGfx::
 	INCBIN "gfx/cards/slowpoke1.2bpp"
 	INCBIN "gfx/cards/slowpoke1.pal"
 
-Slowpoke2CardGfx::
+Slowpoke_Lv18CardGfx::
 	INCBIN "gfx/cards/slowpoke2.2bpp"
 	INCBIN "gfx/cards/slowpoke2.pal"
 
@@ -2084,19 +2084,19 @@ SlowbroCardGfx::
 
 SECTION "Card Gfx 8", ROMX
 
-Gastly1CardGfx::
+Gastly_Lv8CardGfx::
 	INCBIN "gfx/cards/gastly1.2bpp"
 	INCBIN "gfx/cards/gastly1.pal"
 
-Gastly2CardGfx::
+Gastly_Lv17CardGfx::
 	INCBIN "gfx/cards/gastly2.2bpp"
 	INCBIN "gfx/cards/gastly2.pal"
 
-Haunter1CardGfx::
+Haunter_Lv17CardGfx::
 	INCBIN "gfx/cards/haunter1.2bpp"
 	INCBIN "gfx/cards/haunter1.pal"
 
-Haunter2CardGfx::
+Haunter_Lv22CardGfx::
 	INCBIN "gfx/cards/haunter2.2bpp"
 	INCBIN "gfx/cards/haunter2.pal"
 
@@ -2120,27 +2120,27 @@ JynxCardGfx::
 	INCBIN "gfx/cards/jynx.2bpp"
 	INCBIN "gfx/cards/jynx.pal"
 
-Mewtwo1CardGfx::
+Mewtwo_Lv53CardGfx::
 	INCBIN "gfx/cards/mewtwo1.2bpp"
 	INCBIN "gfx/cards/mewtwo1.pal"
 
-Mewtwo2CardGfx::
+Mewtwo_Lv60CardGfx::
 	INCBIN "gfx/cards/mewtwo2.2bpp"
 	INCBIN "gfx/cards/mewtwo2.pal"
 
-Mewtwo3CardGfx::
+Mewtwo_Lv60ACardGfx::
 	INCBIN "gfx/cards/mewtwo3.2bpp"
 	INCBIN "gfx/cards/mewtwo3.pal"
 
-Mew1CardGfx::
+Mew_Lv8CardGfx::
 	INCBIN "gfx/cards/mew1.2bpp"
 	INCBIN "gfx/cards/mew1.pal"
 
-Mew2CardGfx::
+Mew_Lv15CardGfx::
 	INCBIN "gfx/cards/mew2.2bpp"
 	INCBIN "gfx/cards/mew2.pal"
 
-Mew3CardGfx::
+Mew_Lv23CardGfx::
 	INCBIN "gfx/cards/mew3.2bpp"
 	INCBIN "gfx/cards/mew3.pal"
 
@@ -2188,15 +2188,15 @@ ClefableCardGfx::
 	INCBIN "gfx/cards/clefable.2bpp"
 	INCBIN "gfx/cards/clefable.pal"
 
-Jigglypuff1CardGfx::
+Jigglypuff_Lv12CardGfx::
 	INCBIN "gfx/cards/jigglypuff1.2bpp"
 	INCBIN "gfx/cards/jigglypuff1.pal"
 
-Jigglypuff2CardGfx::
+Jigglypuff_Lv13CardGfx::
 	INCBIN "gfx/cards/jigglypuff2.2bpp"
 	INCBIN "gfx/cards/jigglypuff2.pal"
 
-Jigglypuff3CardGfx::
+Jigglypuff_Lv14CardGfx::
 	INCBIN "gfx/cards/jigglypuff3.2bpp"
 	INCBIN "gfx/cards/jigglypuff3.pal"
 
@@ -2204,11 +2204,11 @@ WigglytuffCardGfx::
 	INCBIN "gfx/cards/wigglytuff.2bpp"
 	INCBIN "gfx/cards/wigglytuff.pal"
 
-Meowth1CardGfx::
+Meowth_Lv14CardGfx::
 	INCBIN "gfx/cards/meowth1.2bpp"
 	INCBIN "gfx/cards/meowth1.pal"
 
-Meowth2CardGfx::
+Meowth_Lv15CardGfx::
 	INCBIN "gfx/cards/meowth2.2bpp"
 	INCBIN "gfx/cards/meowth2.pal"
 
@@ -2272,11 +2272,11 @@ DragonairCardGfx::
 	INCBIN "gfx/cards/dragonair.2bpp"
 	INCBIN "gfx/cards/dragonair.pal"
 
-Dragonite1CardGfx::
+Dragonite_Lv41CardGfx::
 	INCBIN "gfx/cards/dragonite1.2bpp"
 	INCBIN "gfx/cards/dragonite1.pal"
 
-Dragonite2CardGfx::
+Dragonite_Lv45CardGfx::
 	INCBIN "gfx/cards/dragonite2.2bpp"
 	INCBIN "gfx/cards/dragonite2.pal"
 

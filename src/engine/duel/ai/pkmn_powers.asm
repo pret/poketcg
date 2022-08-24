@@ -18,9 +18,9 @@ HandleAIEnergyTrans:
 	dec a
 	ret z ; return if no Bench cards
 
-	ld a, VENUSAUR2
+	ld a, VENUSAUR_LV67
 	call CountPokemonIDInPlayArea
-	ret nc ; return if no Venusaur2 found in own Play Area
+	ret nc ; return if no Venusaur_Lv67 found in own Play Area
 
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
@@ -47,7 +47,7 @@ HandleAIEnergyTrans:
 .TransferEnergyToArena
 	ld [wAINumberOfEnergyTransCards], a
 
-; look for Venusaur2 in Play Area
+; look for Venusaur_Lv67 in Play Area
 ; so that its PKMN Power can be used.
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -60,7 +60,7 @@ HandleAIEnergyTrans:
 	ldh [hTempCardIndex_ff9f], a
 	call GetCardIDFromDeckIndex
 	ld a, e
-	cp VENUSAUR2
+	cp VENUSAUR_LV67
 	jr z, .use_pkmn_power
 
 	ld a, b
@@ -289,7 +289,7 @@ AIEnergyTransTransferEnergyToBench:
 	ret nc
 
 ; AI decided that an energy card is needed
-; so look for Venusaur2 in Play Area
+; so look for Venusaur_Lv67 in Play Area
 ; so that its PKMN Power can be used.
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -300,10 +300,10 @@ AIEnergyTransTransferEnergyToBench:
 	add b
 	call GetTurnDuelistVariable
 	ldh [hTempCardIndex_ff9f], a
-	ld [wAIVenusaur2DeckIndex], a
+	ld [wAIVenusaur_Lv67DeckIndex], a
 	call GetCardIDFromDeckIndex
 	ld a, e
-	cp VENUSAUR2
+	cp VENUSAUR_LV67
 	jr z, .use_pkmn_power
 
 	ld a, b
@@ -317,7 +317,7 @@ AIEnergyTransTransferEnergyToBench:
 .use_pkmn_power
 	ld a, b
 	ldh [hTemp_ffa0], a
-	ld [wAIVenusaur2PlayAreaLocation], a
+	ld [wAIVenusaur_Lv67PlayAreaLocation], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
@@ -327,7 +327,7 @@ AIEnergyTransTransferEnergyToBench:
 .loop_energy
 	xor a
 	ldh [hTempPlayAreaLocation_ffa1], a
-	ld a, [wAIVenusaur2PlayAreaLocation]
+	ld a, [wAIVenusaur_Lv67PlayAreaLocation]
 	ldh [hTemp_ffa0], a
 
 	; returns when Arena card has no Grass energy cards attached.
@@ -380,7 +380,7 @@ AIEnergyTransTransferEnergyToBench:
 	dec d
 	jr nz, .small_delay_loop
 
-	ld a, [wAIVenusaur2DeckIndex]
+	ld a, [wAIVenusaur_Lv67DeckIndex]
 	ldh [hTempCardIndex_ff9f], a
 	ld d, a
 	ld e, FIRST_ATTACK_OR_PKMN_POWER

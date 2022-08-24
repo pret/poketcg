@@ -63,8 +63,8 @@ Script_Man1:
 
 .ows_dcd7
 	print_npc_text Text0463
-	give_card PIKACHU4
-	show_card_received_screen PIKACHU4
+	give_card PIKACHU_LV16A
+	show_card_received_screen PIKACHU_LV16A
 	print_npc_text Text0464
 	set_event EVENT_MAN1_GIFT_SEQUENCE_STATE, MAN1_GIFT_SEQUENCE_COMPLETE
 	quit_script_fully

@@ -29,7 +29,7 @@ DopeyName: ; 601c8 (18:41c8)
 	text "Dopey"
 	done
 
-Slowpoke1Description: ; 601cf (18:41cf)
+Slowpoke_Lv9Description: ; 601cf (18:41cf)
 	text "Incredibly slow and dopey. It takes"
 	line "5 seconds for it to feel pain when"
 	line "under attack."
@@ -114,7 +114,7 @@ GasName: ; 605bf (18:45bf)
 	text "Gas"
 	done
 
-Gastly1Description: ; 605c4 (18:45c4)
+Gastly_Lv8Description: ; 605c4 (18:45c4)
 	text "Almost invisible, this gaseous"
 	line "Pokémon cloaks the target and puts"
 	line "it to sleep without notice."
@@ -134,7 +134,7 @@ EnergyConversionDescription: ; 6063c (18:463c)
 	line "does 10 damage to itself."
 	done
 
-Gastly2Description: ; 6069e (18:469e)
+Gastly_Lv17Description: ; 6069e (18:469e)
 	text "A mysterious Pokémon. Some say it is"
 	line "a lifeform from another dimension,"
 	line "while others believe it is formed"
@@ -345,7 +345,7 @@ GeneticName: ; 60ff3 (18:4ff3)
 	text "Genetic"
 	done
 
-Mewtwo1Description: ; 60ffc (18:4ffc)
+Mewtwo_Lv53Description: ; 60ffc (18:4ffc)
 	text "A scientist created this Pokémon"
 	line "after years of horrific"
 	line "gene-splicing and DNA engineering"
@@ -366,7 +366,7 @@ PsyburnName: ; 610c7 (18:50c7)
 	text "Psyburn"
 	done
 
-Mewtwo2Description: ; 610d0 (18:50d0)
+Mewtwo_Lv60Description: ; 610d0 (18:50d0)
 	text "Years of genetic experiments"
 	line "resulted in the creation of this"
 	line "never-before-seen violent Pokémon."
@@ -393,7 +393,7 @@ NewSpeciesName: ; 611fa (18:51fa)
 	text "New Species"
 	done
 
-Mew1Description: ; 61207 (18:5207)
+Mew_Lv8Description: ; 61207 (18:5207)
 	text "So rare that it is still said to be"
 	line "a mirage by many experts. Only a few"
 	line "people have seen it worldwide."
@@ -410,7 +410,7 @@ MysteryAttackDescription: ; 61280 (18:5280)
 	line "Pokémon."
 	done
 
-Mew2Description: ; 612f1 (18:52f1)
+Mew_Lv15Description: ; 612f1 (18:52f1)
 	text "When viewed through a microscope, "
 	line "this Pokémon's short, fine, delicate"
 	line "hair can be seen."
@@ -695,7 +695,7 @@ BalloonName: ; 61f38 (18:5f38)
 	text "Balloon"
 	done
 
-Jigglypuff1Description: ; 61f41 (18:5f41)
+Jigglypuff_Lv12Description: ; 61f41 (18:5f41)
 	text "When its huge eyes light up, it"
 	line "sings a mysteriously soothing"
 	line "melody that lulls its enemies to"
@@ -725,7 +725,7 @@ ExpandDescription: ; 62056 (18:6056)
 	line "Resistance)."
 	done
 
-Jigglypuff2Description: ; 620d1 (18:60d1)
+Jigglypuff_Lv13Description: ; 620d1 (18:60d1)
 	text "Uses its alluring eyes to enrapture"
 	line "its foe. It then sings a pleasing"
 	line "melody that lulls the foe to sleep."
@@ -735,7 +735,7 @@ LullabyName: ; 6213c (18:613c)
 	text "Lullaby"
 	done
 
-Jigglypuff3Description: ; 62145 (18:6145)
+Jigglypuff_Lv14Description: ; 62145 (18:6145)
 	text "When its huge eyes light up, it"
 	line "sings a mysteriously soothing melody"
 	line "that lulls its enemies to sleep."
@@ -782,7 +782,7 @@ ScratchCatName: ; 62359 (18:6359)
 	text "Scratch Cat"
 	done
 
-Meowth1Description: ; 62366 (18:6366)
+Meowth_Lv14Description: ; 62366 (18:6366)
 	text "Appears to be more active at night."
 	line "It loves round and shiny things, so"
 	line "it can't stop from picking them up."
@@ -796,7 +796,7 @@ PayDayDescription: ; 623dc (18:63dc)
 	text "Flip a coin. If heads, draw a card."
 	done
 
-Meowth2Description: ; 62401 (18:6401)
+Meowth_Lv15Description: ; 62401 (18:6401)
 	text "Adores circular objects. Wanders"
 	line "the streets on a nightly basis to"
 	line "look for dropped loose change."
@@ -1164,7 +1164,7 @@ HealingWindDescription: ; 631f2 (18:71f2)
 	line "Pokémon."
 	done
 
-Dragonite1Description: ; 632a2 (18:72a2)
+Dragonite_Lv41Description: ; 632a2 (18:72a2)
 	text "It is said that this Pokémon lives"
 	line "somewhere in the sea and that it"
 	line "flies. However, it is only a rumor."

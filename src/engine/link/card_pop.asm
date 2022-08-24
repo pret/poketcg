@@ -239,7 +239,7 @@ LookUpNameInCardPopNameList:
 ; decided from the names of both participants
 ; the card will always be a Pokemon card that is not
 ; from a Promotional set, with the exception
-; of Venusaur1 and Mew2
+; of Venusaur_Lv64 and Mew_Lv15
 ; output:
 ; - e = card ID chosen
 DecideCardToReceiveFromCardPop:
@@ -277,7 +277,7 @@ DecideCardToReceiveFromCardPop:
 ; 101/256 ~ 39% for Circle
 ;  90/256 ~ 35% for Diamond
 ;  63/256 ~ 25% for Star
-;   1/256 ~ .4% for Venusaur1 or Mew2
+;   1/256 ~ .4% for Venusaur_Lv64 or Mew_Lv15
 	ld a, e
 	cp 5
 	jr z, .venusaur1_or_mew2
@@ -312,16 +312,16 @@ DecideCardToReceiveFromCardPop:
 	ret
 
 .venusaur1_or_mew2
-; choose either Venusaur1 or Mew2
+; choose either Venusaur_Lv64 or Mew_Lv15
 ; depending on whether the lower
 ; bit of d is unset or set, respectively
 	ld a, MUSIC_MEDAL
 	ld [wCardPopCardObtainSong], a
-	ld e, VENUSAUR1
+	ld e, VENUSAUR_LV64
 	ld a, d
 	and $1 ; get lower bit
 	jr z, .got_card_id
-	ld e, MEW2
+	ld e, MEW_LV15
 	jr .got_card_id
 
 ; lists in wCardPopCardCandidates all cards that:

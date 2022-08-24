@@ -51,18 +51,18 @@ AIActionTable_FlowerPower:
 	db $00
 
 .list_energy
-	ai_energy BULBASAUR,  3, +0
-	ai_energy IVYSAUR,    4, +0
-	ai_energy VENUSAUR2,  4, +0
-	ai_energy ODDISH,     2, +0
-	ai_energy GLOOM,      3, -1
-	ai_energy VILEPLUME,  3, -1
-	ai_energy EXEGGCUTE,  3, +0
-	ai_energy EXEGGUTOR, 22, +0
+	ai_energy BULBASAUR,      3, +0
+	ai_energy IVYSAUR,        4, +0
+	ai_energy VENUSAUR_LV67,  4, +0
+	ai_energy ODDISH,         2, +0
+	ai_energy GLOOM,          3, -1
+	ai_energy VILEPLUME,      3, -1
+	ai_energy EXEGGCUTE,      3, +0
+	ai_energy EXEGGUTOR,     22, +0
 	db $00
 
 .list_prize
-	db VENUSAUR2
+	db VENUSAUR_LV67
 	db $00
 
 .store_list_pointers

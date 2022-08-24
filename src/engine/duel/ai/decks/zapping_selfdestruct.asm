@@ -33,16 +33,16 @@ AIActionTable_ZappingSelfdestruct:
 
 .list_arena
 	db KANGASKHAN
-	db ELECTABUZZ2
+	db ELECTABUZZ_LV35
 	db TAUROS
-	db MAGNEMITE1
+	db MAGNEMITE_LV13
 	db VOLTORB
 	db $00
 
 .list_bench
-	db MAGNEMITE1
+	db MAGNEMITE_LV13
 	db VOLTORB
-	db ELECTABUZZ2
+	db ELECTABUZZ_LV35
 	db TAUROS
 	db KANGASKHAN
 	db $00
@@ -52,13 +52,13 @@ AIActionTable_ZappingSelfdestruct:
 	db $00
 
 .list_energy
-	ai_energy MAGNEMITE1,  3, +1
-	ai_energy MAGNETON1,   4, +0
-	ai_energy VOLTORB,     3, +1
-	ai_energy ELECTRODE1,  3, +0
-	ai_energy ELECTABUZZ2, 1, +0
-	ai_energy KANGASKHAN,  2, -2
-	ai_energy TAUROS,      3, +0
+	ai_energy MAGNEMITE_LV13,  3, +1
+	ai_energy MAGNETON_LV28,   4, +0
+	ai_energy VOLTORB,         3, +1
+	ai_energy ELECTRODE_LV35,  3, +0
+	ai_energy ELECTABUZZ_LV35, 1, +0
+	ai_energy KANGASKHAN,      2, -2
+	ai_energy TAUROS,          3, +0
 	db $00
 
 .list_prize

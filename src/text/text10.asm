@@ -706,7 +706,7 @@ VineName: ; 59bcd (16:5bcd)
 	text "Vine"
 	done
 
-Tangela1Description: ; 59bd3 (16:5bd3)
+Tangela_Lv8Description: ; 59bd3 (16:5bd3)
 	text "Its whole body is swathed with wide"
 	line "vines that are similar to seaweed."
 	line "These vines shake as it walks."
@@ -716,7 +716,7 @@ PoisonWhipName: ; 59c3a (16:5c3a)
 	text "Poison Whip"
 	done
 
-Tangela2Description: ; 59c47 (16:5c47)
+Tangela_Lv12Description: ; 59c47 (16:5c47)
 	text "Its identity is obscured by masses"
 	line "of thick, blue vines. The vines are"
 	line "said to never stop growing."
@@ -889,7 +889,7 @@ FireBlastDescription: ; 5a23d (16:623d)
 	line "attack."
 	done
 
-Ninetales1Description: ; 5a28a (16:628a)
+Ninetales_Lv32Description: ; 5a28a (16:628a)
 	text "Very smart and very vengeful."
 	line "Grabbing one of its many tails could"
 	line "result in a 1,000-year curse."
@@ -924,7 +924,7 @@ DancingEmbersDescription: ; 5a441 (16:6441)
 	line "damage times the number of heads."
 	done
 
-Ninetales2Description: ; 5a486 (16:6486)
+Ninetales_Lv35Description: ; 5a486 (16:6486)
 	text "According to an enduring legend,"
 	line "9 noble heroes were united and"
 	line "reincarnated as this."
@@ -979,7 +979,7 @@ LegendaryName: ; 5a689 (16:6689)
 	text "Legendary"
 	done
 
-Arcanine1Description: ; 5a694 (16:6694)
+Arcanine_Lv34Description: ; 5a694 (16:6694)
 	text "A legendary Pokémon famous for its"
 	line "beauty. It looks almost as if it"
 	line "flies when it runs."
@@ -999,7 +999,7 @@ TakeDownDescription: ; 5a744 (16:6744)
 	text "Arcanine does 30 damage to itself."
 	done
 
-Arcanine2Description: ; 5a768 (16:6768)
+Arcanine_Lv45Description: ; 5a768 (16:6768)
 	text "A Pokémon that has been long admired"
 	line "for its beauty. It runs gracefully,"
 	line "as if on wings."
@@ -1076,7 +1076,7 @@ SpitfireName: ; 5aa09 (16:6a09)
 	text "Spitfire"
 	done
 
-Magmar1Description: ; 5aa13 (16:6a13)
+Magmar_Lv24Description: ; 5aa13 (16:6a13)
 	text "Its body always burns with an orange"
 	line "glow that enables it to hide"
 	line "perfectly among flames."
@@ -1093,7 +1093,7 @@ MagmarsSmokescreenDescription: ; 5aa7b (16:6a7b)
 	line "tails, that attack does nothing."
 	done
 
-Magmar2Description: ; 5ab07 (16:6b07)
+Magmar_Lv31Description: ; 5ab07 (16:6b07)
 	text "Found at the mouths of volcanoes and"
 	line "extremely hard to spot. There are"
 	line "very few instances of capturing this"
@@ -1121,7 +1121,7 @@ FlareonsRageDescription: ; 5ab99 (16:6b99)
 	line "for each damage counter on Flareon."
 	done
 
-Flareon1Description: ; 5abe1 (16:6be1)
+Flareon_Lv22Description: ; 5abe1 (16:6be1)
 	text "It has a flame chamber inside its"
 	line "body. It inhales, then blows out"
 	line "fire that is over 3,000 degrees."
@@ -1132,7 +1132,7 @@ FlareonsFlamethrowerDescription: ; 5ac46 (16:6c46)
 	line "Flareon in order to use this attack."
 	done
 
-Flareon2Description: ; 5ac91 (16:6c91)
+Flareon_Lv28Description: ; 5ac91 (16:6c91)
 	text "When storing thermal energy in its"
 	line "body, its temperature could soar to"
 	line "over 1,600 degrees."
@@ -1158,7 +1158,7 @@ DiveBombName: ; 5ada6 (16:6da6)
 	text "Dive Bomb"
 	done
 
-Moltres1Description: ; 5adb1 (16:6db1)
+Moltres_Lv35Description: ; 5adb1 (16:6db1)
 	text "Known as the legendary bird of fire."
 	line "Every flap of its wings creates a"
 	line "dazzling flash of flames."
@@ -1177,7 +1177,7 @@ FiregiverDescription: ; 5ae1e (16:6e1e)
 	line "deck afterward."
 	done
 
-Moltres2Description: ; 5aed3 (16:6ed3)
+Moltres_Lv37Description: ; 5aed3 (16:6ed3)
 	text "A legendary bird Pokémon. As it"
 	line "flaps its flaming wings, even the"
 	line "night sky will turn red."

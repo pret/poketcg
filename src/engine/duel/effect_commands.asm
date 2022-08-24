@@ -615,9 +615,9 @@ MoltresWildfireEffectCommands:
 	dbw EFFECTCMDTYPE_AI_SELECTION, Wildfire_AISelectEffect
 	db  $00
 
-Moltres1DiveBombEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Moltres1DiveBomb_Success50PercentEffect
-	dbw EFFECTCMDTYPE_AI, Moltres1DiveBomb_AIEffect
+Moltres_Lv35DiveBombEffectCommands:
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Moltres_Lv35DiveBomb_Success50PercentEffect
+	dbw EFFECTCMDTYPE_AI, Moltres_Lv35DiveBomb_AIEffect
 	db  $00
 
 FlareonQuickAttackEffectCommands:
@@ -689,9 +689,9 @@ MoltresFiregiverEffectCommands:
 	dbw EFFECTCMDTYPE_PKMN_POWER_TRIGGER, Firegiver_AddToHandEffect
 	db  $00
 
-Moltres2DiveBombEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Moltres2DiveBomb_Success50PercentEffect
-	dbw EFFECTCMDTYPE_AI, Moltres2DiveBomb_AIEffect
+Moltres_Lv37DiveBombEffectCommands:
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Moltres_Lv37DiveBomb_Success50PercentEffect
+	dbw EFFECTCMDTYPE_AI, Moltres_Lv37DiveBomb_AIEffect
 	db  $00
 
 AbraPsyshockEffectCommands:
@@ -818,18 +818,18 @@ MewtwoBarrierEffectCommands:
 	dbw EFFECTCMDTYPE_AI_SELECTION, Barrier_AISelectEffect
 	db  $00
 
-Mewtwo3EnergyAbsorptionEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Mewtwo3EnergyAbsorption_CheckDiscardPile
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Mewtwo3EnergyAbsorption_AddToHandEffect
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Mewtwo3EnergyAbsorption_PlayerSelectEffect
-	dbw EFFECTCMDTYPE_AI_SELECTION, Mewtwo3EnergyAbsorption_AISelectEffect
+Mewtwo_Lv60AEnergyAbsorptionEffectCommands:
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Mewtwo_Lv60AEnergyAbsorption_CheckDiscardPile
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Mewtwo_Lv60AEnergyAbsorption_AddToHandEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Mewtwo_Lv60AEnergyAbsorption_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AI_SELECTION, Mewtwo_Lv60AEnergyAbsorption_AISelectEffect
 	db  $00
 
-Mewtwo2EnergyAbsorptionEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Mewtwo2EnergyAbsorption_CheckDiscardPile
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Mewtwo2EnergyAbsorption_AddToHandEffect
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Mewtwo2EnergyAbsorption_PlayerSelectEffect
-	dbw EFFECTCMDTYPE_AI_SELECTION, Mewtwo2EnergyAbsorption_AISelectEffect
+Mewtwo_Lv60EnergyAbsorptionEffectCommands:
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Mewtwo_Lv60EnergyAbsorption_CheckDiscardPile
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Mewtwo_Lv60EnergyAbsorption_AddToHandEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Mewtwo_Lv60EnergyAbsorption_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AI_SELECTION, Mewtwo_Lv60EnergyAbsorption_AISelectEffect
 	db  $00
 
 SlowbroStrangeBehaviorEffectCommands:
@@ -1074,19 +1074,19 @@ PikachuSparkEffectCommands:
 	dbw EFFECTCMDTYPE_AI_SELECTION, Spark_AISelectEffect
 	db  $00
 
-Pikachu3GrowlEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Pikachu3GrowlEffect
+Pikachu_Lv16GrowlEffectCommands:
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Pikachu_Lv16GrowlEffect
 	db  $00
 
-Pikachu3ThundershockEffectCommands:
+Pikachu_Lv16ThundershockEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Paralysis50PercentEffect
 	db  $00
 
-Pikachu4GrowlEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Pikachu4GrowlEffect
+Pikachu_Lv16AGrowlEffectCommands:
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Pikachu_Lv16AGrowlEffect
 	db  $00
 
-Pikachu4ThundershockEffectCommands:
+Pikachu_Lv16AThundershockEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Paralysis50PercentEffect
 	db  $00
 
@@ -1113,8 +1113,8 @@ MagnetonThunderWaveEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Paralysis50PercentEffect
 	db  $00
 
-Magneton1SelfdestructEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Magneton1SelfdestructEffect
+Magneton_Lv28SelfdestructEffectCommands:
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Magneton_Lv28SelfdestructEffect
 	db  $00
 
 MagnetonSonicboomEffectCommands:
@@ -1123,8 +1123,8 @@ MagnetonSonicboomEffectCommands:
 	dbw EFFECTCMDTYPE_AI, MagnetonSonicboom_UnaffectedByColorEffect
 	db  $00
 
-Magneton2SelfdestructEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Magneton2SelfdestructEffect
+Magneton_Lv35SelfdestructEffectCommands:
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Magneton_Lv35SelfdestructEffect
 	db  $00
 
 ZapdosPealOfThunderEffectCommands:
@@ -1190,9 +1190,9 @@ DragoniteStepInEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, StepIn_SwitchEffect
 	db  $00
 
-Dragonite2SlamEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Dragonite2Slam_MultiplierEffect
-	dbw EFFECTCMDTYPE_AI, Dragonite2Slam_AIEffect
+Dragonite_Lv45SlamEffectCommands:
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Dragonite_Lv45Slam_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, Dragonite_Lv45Slam_AIEffect
 	db  $00
 
 SnorlaxThickSkinnedEffectCommands:
@@ -1376,9 +1376,9 @@ DragoniteHealingWindEffectCommands:
 	dbw EFFECTCMDTYPE_PKMN_POWER_TRIGGER, HealingWind_PlayAreaHealEffect
 	db  $00
 
-Dragonite1SlamEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Dragonite1Slam_MultiplierEffect
-	dbw EFFECTCMDTYPE_AI, Dragonite1Slam_AIEffect
+Dragonite_Lv41SlamEffectCommands:
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Dragonite_Lv41Slam_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, Dragonite_Lv41Slam_AIEffect
 	db  $00
 
 MeowthCatPunchEffectCommands:

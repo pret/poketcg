@@ -9,13 +9,13 @@ _ShowPromotionalCardScreen:
 	pop af
 	or a
 	jr nz, .else
-	ld a, MOLTRES2
+	ld a, MOLTRES_LV37
 	call .legendary_card_text
-	ld a, ARTICUNO2
+	ld a, ARTICUNO_LV37
 	call .legendary_card_text
-	ld a, ZAPDOS3
+	ld a, ZAPDOS_LV68
 	call .legendary_card_text
-	ld a, DRAGONITE1
+	ld a, DRAGONITE_LV41
 .legendary_card_text
 	ldtx hl, ReceivedLegendaryCardText
 	jr .print_text
@@ -29,9 +29,9 @@ _ShowPromotionalCardScreen:
 	cp FLYING_PIKACHU
 	jr z, .print_text
 	ldtx hl, ReceivedPromotionalSurfingPikachuText
-	cp SURFING_PIKACHU1
+	cp SURFING_PIKACHU_LV13
 	jr z, .print_text
-	cp SURFING_PIKACHU2
+	cp SURFING_PIKACHU_LV13A
 	jr z, .print_text
 	ldtx hl, ReceivedPromotionalCardText
 .print_text

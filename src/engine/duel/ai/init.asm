@@ -10,7 +10,7 @@ InitAIDuelVars:
 
 ; initializes some variables and sets value of wAIBarrierFlagCounter.
 ; if Player uses Barrier 3 times in a row, AI checks if Player's deck
-; has only Mewtwo1 Pokemon cards (running a Mewtwo1 mill deck).
+; has only Mewtwo_Lv53 Pokemon cards (running a Mewtwo_Lv53 mill deck).
 InitAITurnVars:
 ; increase Pokedex counter by 1
 	ld a, [wAIPokedexCounter]
@@ -34,13 +34,13 @@ InitAITurnVars:
 	cp $ff
 	jr z, .check_flag
 
-; if the card is Mewtwo1, it means the Player
+; if the card is Mewtwo_Lv53, it means the Player
 ; used its second attack, Barrier.
 	call SwapTurn
 	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
-	cp MEWTWO1
+	cp MEWTWO_LV53
 	jr nz, .check_flag
 	; Player used Barrier last turn
 
@@ -58,7 +58,7 @@ InitAITurnVars:
 
 ; this means that the Player used Barrier
 ; at least 3 turns in a row.
-; check if Player is running Mewtwo1-only deck,
+; check if Player is running Mewtwo_Lv53-only deck,
 ; if so, set wAIBarrierFlagCounter flag.
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
@@ -66,9 +66,9 @@ InitAITurnVars:
 	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
-	cp MEWTWO1
+	cp MEWTWO_LV53
 	jr nz, .reset_1
-	farcall CheckIfPlayerHasPokemonOtherThanMewtwo1
+	farcall CheckIfPlayerHasPokemonOtherThanMewtwo_Lv53
 	jr nc, .set_flag
 .reset_1
 ; reset wAIBarrierFlagCounter

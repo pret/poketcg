@@ -53,21 +53,21 @@ AIActionTable_LegendaryDragonite:
 	db $00
 
 .list_energy
-	ai_energy CHARMANDER, 3, +1
-	ai_energy CHARMELEON, 4, +1
-	ai_energy CHARIZARD,  5, +0
-	ai_energy MAGIKARP,   3, +1
-	ai_energy GYARADOS,   4, -1
-	ai_energy DRATINI,    2, +0
-	ai_energy DRAGONAIR,  4, +0
-	ai_energy DRAGONITE1, 3, -1
-	ai_energy KANGASKHAN, 2, -2
-	ai_energy LAPRAS,     3, +0
+	ai_energy CHARMANDER,     3, +1
+	ai_energy CHARMELEON,     4, +1
+	ai_energy CHARIZARD,      5, +0
+	ai_energy MAGIKARP,       3, +1
+	ai_energy GYARADOS,       4, -1
+	ai_energy DRATINI,        2, +0
+	ai_energy DRAGONAIR,      4, +0
+	ai_energy DRAGONITE_LV41, 3, -1
+	ai_energy KANGASKHAN,     2, -2
+	ai_energy LAPRAS,         3, +0
 	db $00
 
 .list_prize
 	db GAMBLER
-	db DRAGONITE1
+	db DRAGONITE_LV41
 	db KANGASKHAN
 	db $00
 

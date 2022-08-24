@@ -35,9 +35,9 @@ AIActionTable_LegendaryRonald:
 	db KANGASKHAN
 	db DRATINI
 	db EEVEE
-	db ZAPDOS3
-	db ARTICUNO2
-	db MOLTRES2
+	db ZAPDOS_LV68
+	db ARTICUNO_LV37
+	db MOLTRES_LV37
 	db $00
 
 .list_bench
@@ -47,12 +47,12 @@ AIActionTable_LegendaryRonald:
 	db $00
 
 .list_play_hand
-	db MOLTRES2
-	db ZAPDOS3
+	db MOLTRES_LV37
+	db ZAPDOS_LV68
 	db KANGASKHAN
 	db DRATINI
 	db EEVEE
-	db ARTICUNO2
+	db ARTICUNO_LV37
 	db $00
 
 .list_retreat
@@ -60,24 +60,24 @@ AIActionTable_LegendaryRonald:
 	db $00
 
 .list_energy
-	ai_energy FLAREON1,   3, +0
-	ai_energy MOLTRES2,   3, +0
-	ai_energy VAPOREON1,  3, +0
-	ai_energy ARTICUNO2,  0, -8
-	ai_energy JOLTEON1,   4, +0
-	ai_energy ZAPDOS3,    0, -8
-	ai_energy KANGASKHAN, 4, -1
-	ai_energy EEVEE,      3, +0
-	ai_energy DRATINI,    3, +0
-	ai_energy DRAGONAIR,  4, +0
-	ai_energy DRAGONITE1, 3, +0
+	ai_energy FLAREON_LV22,   3, +0
+	ai_energy MOLTRES_LV37,   3, +0
+	ai_energy VAPOREON_LV29,  3, +0
+	ai_energy ARTICUNO_LV37,  0, -8
+	ai_energy JOLTEON_LV24,   4, +0
+	ai_energy ZAPDOS_LV68,    0, -8
+	ai_energy KANGASKHAN,     4, -1
+	ai_energy EEVEE,          3, +0
+	ai_energy DRATINI,        3, +0
+	ai_energy DRAGONAIR,      4, +0
+	ai_energy DRAGONITE_LV41, 3, +0
 	db $00
 
 .list_prize
-	db MOLTRES2
-	db ARTICUNO2
-	db ZAPDOS3
-	db DRAGONITE1
+	db MOLTRES_LV37
+	db ARTICUNO_LV37
+	db ZAPDOS_LV68
+	db DRAGONITE_LV41
 	db GAMBLER
 	db $00
 
@@ -101,7 +101,7 @@ AIDoTurn_LegendaryRonald:
 	ld a, AI_TRAINER_CARD_PHASE_04
 	call AIProcessHandTrainerCards
 
-; check if AI can play Moltres2
+; check if AI can play Moltres_Lv37
 ; from hand and if so, play it.
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -114,9 +114,9 @@ AIDoTurn_LegendaryRonald:
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
 	jr c, .skip_moltres_1 ; skip if Muk in play
-	ld a, MOLTRES2
+	ld a, MOLTRES_LV37
 	call LookForCardIDInHandList_Bank5
-	jr nc, .skip_moltres_1 ; skip if no Moltres2 in hand
+	jr nc, .skip_moltres_1 ; skip if no Moltres_Lv37 in hand
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_PLAY_BASIC_PKMN
 	bank1call AIMakeDecision
@@ -156,7 +156,7 @@ AIDoTurn_LegendaryRonald:
 	ld a, AI_TRAINER_CARD_PHASE_04
 	call AIProcessHandTrainerCards
 
-; check if AI can play Moltres2
+; check if AI can play Moltres_Lv37
 ; from hand and if so, play it.
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -169,9 +169,9 @@ AIDoTurn_LegendaryRonald:
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
 	jr c, .skip_moltres_2 ; skip if Muk in play
-	ld a, MOLTRES2
+	ld a, MOLTRES_LV37
 	call LookForCardIDInHandList_Bank5
-	jr nc, .skip_moltres_2 ; skip if no Moltres2 in hand
+	jr nc, .skip_moltres_2 ; skip if no Moltres_Lv37 in hand
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_PLAY_BASIC_PKMN
 	bank1call AIMakeDecision
