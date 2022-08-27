@@ -3490,7 +3490,7 @@ IceBreath_RandomPokemonDamageEffect: ; 2d32e (b:532e)
 FocusEnergyEffect: ; 2d33f (b:533f)
 	ld a, [wTempTurnDuelistCardID]
 	cp VAPOREON_LV29
-	ret nz ; return if no Vaporeon_Lv29
+	ret nz ; return if no VaporeonLv29
 	ld a, SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -3818,12 +3818,12 @@ Wildfire_DiscardDeckEffect: ; 2d4f4 (b:54f4)
 	call SwapTurn
 	ret
 
-Moltres_Lv35DiveBomb_AIEffect: ; 2d523 (b:5523)
+MoltresLv35DiveBomb_AIEffect: ; 2d523 (b:5523)
 	ld a, 80 / 2
 	lb de, 0, 80
 	jp SetExpectedAIDamage
 
-Moltres_Lv35DiveBomb_Success50PercentEffect: ; 2d52b (b:552b)
+MoltresLv35DiveBomb_Success50PercentEffect: ; 2d52b (b:552b)
 	ldtx de, SuccessCheckIfHeadsAttackIsSuccessfulText
 	call TossCoin_BankB
 	jr c, .heads
@@ -4231,12 +4231,12 @@ Firegiver_AddToHandEffect: ; 2d6c2 (b:56c2)
 	call Func_2c0bd
 	ret
 
-Moltres_Lv37DiveBomb_AIEffect: ; 2d76e (b:576e)
+MoltresLv37DiveBomb_AIEffect: ; 2d76e (b:576e)
 	ld a, 70 / 2
 	lb de, 0, 70
 	jp SetExpectedAIDamage
 
-Moltres_Lv37DiveBomb_Success50PercentEffect: ; 2d776 (b:5776)
+MoltresLv37DiveBomb_Success50PercentEffect: ; 2d776 (b:5776)
 	ldtx de, SuccessCheckIfHeadsAttackIsSuccessfulText
 	call TossCoin_BankB
 	jr c, .heads
@@ -5409,17 +5409,17 @@ Barrier_BarrierEffect: ; 2ddbf (b:5dbf)
 	call ApplySubstatus1ToDefendingCard
 	ret
 
-Mewtwo_Lv60AEnergyAbsorption_CheckDiscardPile: ; 2ddc5 (b:5dc5)
+MewtwoAltLV60EnergyAbsorption_CheckDiscardPile: ; 2ddc5 (b:5dc5)
 	call CreateEnergyCardListFromDiscardPile_AllEnergy
 	ldtx hl, ThereAreNoEnergyCardsInDiscardPileText
 	ret
 
-Mewtwo_Lv60AEnergyAbsorption_PlayerSelectEffect: ; 2ddcc (b:5dcc)
+MewtwoAltLV60EnergyAbsorption_PlayerSelectEffect: ; 2ddcc (b:5dcc)
 	ldtx hl, Choose2EnergyCardsFromDiscardPileToAttachText
 	call HandleEnergyCardsInDiscardPileSelection
 	ret
 
-Mewtwo_Lv60AEnergyAbsorption_AISelectEffect: ; 2ddd3 (b:5dd3)
+MewtwoAltLV60EnergyAbsorption_AISelectEffect: ; 2ddd3 (b:5dd3)
 ; AI picks first 2 energy cards
 	call CreateEnergyCardListFromDiscardPile_AllEnergy
 	ld hl, wDuelTempList
@@ -5438,7 +5438,7 @@ Mewtwo_Lv60AEnergyAbsorption_AISelectEffect: ; 2ddd3 (b:5dd3)
 	ld [de], a
 	ret
 
-Mewtwo_Lv60AEnergyAbsorption_AddToHandEffect: ; 2ddec (b:5dec)
+MewtwoAltLV60EnergyAbsorption_AddToHandEffect: ; 2ddec (b:5dec)
 	ld hl, hTempList
 .loop
 	ld a, [hli]
@@ -5451,17 +5451,17 @@ Mewtwo_Lv60AEnergyAbsorption_AddToHandEffect: ; 2ddec (b:5dec)
 	pop hl
 	jr .loop
 
-Mewtwo_Lv60EnergyAbsorption_CheckDiscardPile: ; 2ddff (b:5dff)
+MewtwoLv60EnergyAbsorption_CheckDiscardPile: ; 2ddff (b:5dff)
 	call CreateEnergyCardListFromDiscardPile_AllEnergy
 	ldtx hl, ThereAreNoEnergyCardsInDiscardPileText
 	ret
 
-Mewtwo_Lv60EnergyAbsorption_PlayerSelectEffect: ; 2de06 (b:5e06)
+MewtwoLv60EnergyAbsorption_PlayerSelectEffect: ; 2de06 (b:5e06)
 	ldtx hl, Choose2EnergyCardsFromDiscardPileToAttachText
 	call HandleEnergyCardsInDiscardPileSelection
 	ret
 
-Mewtwo_Lv60EnergyAbsorption_AISelectEffect: ; 2de0d (b:5e0d)
+MewtwoLv60EnergyAbsorption_AISelectEffect: ; 2de0d (b:5e0d)
 ; AI picks first 2 energy cards
 	call CreateEnergyCardListFromDiscardPile_AllEnergy
 	ld hl, wDuelTempList
@@ -5480,7 +5480,7 @@ Mewtwo_Lv60EnergyAbsorption_AISelectEffect: ; 2de0d (b:5e0d)
 	ld [de], a
 	ret
 
-Mewtwo_Lv60EnergyAbsorption_AddToHandEffect: ; 2de26 (b:5e26)
+MewtwoLv60EnergyAbsorption_AddToHandEffect: ; 2de26 (b:5e26)
 	ld hl, hTempList
 .loop
 	ld a, [hli]
@@ -6692,12 +6692,12 @@ Spark_BenchDamageEffect: ; 2e574 (b:6574)
 	call SwapTurn
 	ret
 
-Pikachu_Lv16GrowlEffect: ; 2e589 (b:6589)
+PikachuLv16GrowlEffect: ; 2e589 (b:6589)
 	ld a, SUBSTATUS2_GROWL
 	call ApplySubstatus2ToDefendingCard
 	ret
 
-Pikachu_Lv16AGrowlEffect: ; 2e58f (b:658f)
+PikachuAltLv16GrowlEffect: ; 2e58f (b:658f)
 	ld a, SUBSTATUS2_GROWL
 	call ApplySubstatus2ToDefendingCard
 	ret
@@ -7010,7 +7010,7 @@ Gigashock_BenchDamageEffect: ; 2e71f (b:671f)
 	call SwapTurn
 	ret
 
-Magneton_Lv28SelfdestructEffect: ; 2e739 (b:6739)
+MagnetonLv28SelfdestructEffect: ; 2e739 (b:6739)
 	ld a, 80
 	call DealRecoilDamageToSelf
 
@@ -7037,7 +7037,7 @@ MagnetonSonicboom_UnaffectedByColorEffect: ; 2e758 (b:6758)
 MagnetonSonicboom_NullEffect: ; 2e75e (b:675e)
 	ret
 
-Magneton_Lv35SelfdestructEffect: ; 2e75f (b:675f)
+MagnetonLv35SelfdestructEffect: ; 2e75f (b:675f)
 	ld a, 100
 	call DealRecoilDamageToSelf
 
@@ -7695,12 +7695,12 @@ StepIn_SwitchEffect: ; 2eae8 (b:6ae8)
 	set USED_PKMN_POWER_THIS_TURN_F, [hl]
 	ret
 
-Dragonite_Lv45Slam_AIEffect: ; 2eaf6 (b:6af6)
+DragoniteLv45Slam_AIEffect: ; 2eaf6 (b:6af6)
 	ld a, (40 * 2) / 2
 	lb de, 0, 80
 	jp SetExpectedAIDamage
 
-Dragonite_Lv45Slam_MultiplierEffect: ; 2eafe (b:6afe)
+DragoniteLv45Slam_MultiplierEffect: ; 2eafe (b:6afe)
 	ld hl, 40
 	call LoadTxRam3
 	ldtx de, DamageCheckIfHeadsXDamageText
@@ -8512,12 +8512,12 @@ HealingWind_PlayAreaHealEffect: ; 2ef53 (b:6f53)
 
 	ret
 
-Dragonite_Lv41Slam_AIEffect: ; 2ef9c (b:6f9c)
+DragoniteLv41Slam_AIEffect: ; 2ef9c (b:6f9c)
 	ld a, (30 * 2) / 2
 	lb de, 0, 60
 	jp SetExpectedAIDamage
 
-Dragonite_Lv41Slam_MultiplierEffect: ; 2efa4 (b:6fa4)
+DragoniteLv41Slam_MultiplierEffect: ; 2efa4 (b:6fa4)
 	ld hl, 30
 	call LoadTxRam3
 	ldtx de, DamageCheckIfHeadsXDamageText

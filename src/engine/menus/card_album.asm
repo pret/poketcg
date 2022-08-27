@@ -30,9 +30,9 @@ CreateCardSetList:
 ; it's same set as input
 	ld a, e
 	cp VENUSAUR_LV64
-	jp z, .SetVenusaur_Lv64OwnedFlag
+	jp z, .SetVenusaurLv64OwnedFlag
 	cp MEW_LV15
-	jp z, .SetMew_Lv15OwnedFlag
+	jp z, .SetMewLv15OwnedFlag
 
 	push bc
 	push hl
@@ -122,11 +122,11 @@ CreateCardSetList:
 	ld a, [wOwnedPhantomCardFlags]
 	bit VENUSAUR_OWNED_PHANTOM_F, a
 	jr z, .check_mew
-	call .PlaceVenusaur_Lv64InList
+	call .PlaceVenusaurLv64InList
 .check_mew
 	bit MEW_OWNED_PHANTOM_F, a
 	jr z, .find_first_owned
-	call .PlaceMew_Lv15InList
+	call .PlaceMewLv15InList
 
 .find_first_owned
 	dec l
@@ -155,7 +155,7 @@ CreateCardSetList:
 	ld [hl], a
 	ret
 
-.SetMew_Lv15OwnedFlag
+.SetMewLv15OwnedFlag
 	ld a, (1 << MEW_OWNED_PHANTOM_F)
 ;	fallthrough
 
@@ -176,11 +176,11 @@ CreateCardSetList:
 	pop hl
 	jp .loop_all_cards
 
-.SetVenusaur_Lv64OwnedFlag
+.SetVenusaurLv64OwnedFlag
 	ld a, (1 << VENUSAUR_OWNED_PHANTOM_F)
 	jr .SetPhantomOwnedFlag
 
-.PlaceVenusaur_Lv64InList
+.PlaceVenusaurLv64InList
 	push af
 	push hl
 	ld e, VENUSAUR_LV64
@@ -201,7 +201,7 @@ CreateCardSetList:
 	pop af
 	ret
 
-.PlaceMew_Lv15InList
+.PlaceMewLv15InList
 	push af
 	push hl
 	ld e, MEW_LV15

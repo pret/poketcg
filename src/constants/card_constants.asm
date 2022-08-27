@@ -97,10 +97,10 @@
 	const PIKACHU_LV12                ; $60
 	const PIKACHU_LV14                ; $61
 	const PIKACHU_LV16                ; $62
-	const PIKACHU_LV16A               ; $63
+	const PIKACHU_ALT_LV16            ; $63
 	const FLYING_PIKACHU              ; $64
 	const SURFING_PIKACHU_LV13        ; $65
-	const SURFING_PIKACHU_LV13A       ; $66
+	const SURFING_PIKACHU_ALT_LV13    ; $66
 	const RAICHU_LV40                 ; $67
 	const RAICHU_LV45                 ; $68
 	const MAGNEMITE_LV13              ; $69
@@ -157,7 +157,7 @@
 	const JYNX                        ; $9c
 	const MEWTWO_LV53                 ; $9d
 	const MEWTWO_LV60                 ; $9e
-	const MEWTWO_LV60A                ; $9f
+	const MEWTWO_ALT_LV60             ; $9f
 	const MEW_LV8                     ; $a0
 	const MEW_LV15                    ; $a1
 	const MEW_LV23                    ; $a2

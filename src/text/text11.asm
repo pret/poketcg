@@ -193,7 +193,7 @@ BubbleJetName: ; 5c70b (17:470b)
 	text "Bubble Jet"
 	done
 
-Vaporeon_Lv29Description: ; 5c717 (17:4717)
+VaporeonLv29Description: ; 5c717 (17:4717)
 	text "Its cell structure is similar to"
 	line "water molecules. It will melt away"
 	line "and become invisible in water."
@@ -207,7 +207,7 @@ VaporeonsWaterGunDescription: ; 5c77b (17:477b)
 	line "add more than 20 damage in this way."
 	done
 
-Vaporeon_Lv42Description: ; 5c829 (17:4829)
+VaporeonLv42Description: ; 5c829 (17:4829)
 	text "Lives close to water. Its long tail"
 	line "is ridged with a fin that is often"
 	line "mistaken for a mermaid's."
@@ -294,7 +294,7 @@ FreezeName: ; 5cc5b (17:4c5b)
 	text "Freeze"
 	done
 
-Articuno_Lv35Description: ; 5cc63 (17:4c63)
+ArticunoLv35Description: ; 5cc63 (17:4c63)
 	text "A legendary bird Pokémon that is"
 	line "said to appear to doomed people who"
 	line "are lost in icy mountains."
@@ -325,7 +325,7 @@ IceBreathDescription: ; 5cd63 (17:4d63)
 	line "happen.)"
 	done
 
-Articuno_Lv37Description: ; 5ce35 (17:4e35)
+ArticunoLv37Description: ; 5ce35 (17:4e35)
 	text "A legendary bird Pokémon. It freezes"
 	line "water that is contained in winter"
 	line "air and makes it snow."
@@ -352,7 +352,7 @@ MouseName: ; 5ceeb (17:4eeb)
 	text "Mouse"
 	done
 
-Pikachu_Lv12Description: ; 5cef2 (17:4ef2)
+PikachuLv12Description: ; 5cef2 (17:4ef2)
 	text "When several of these Pokémon"
 	line "gather, their electricity can cause"
 	line "lightning storms."
@@ -370,7 +370,7 @@ SparkDescription: ; 5cf4e (17:4f4e)
 	line "Benched Pokémon.)"
 	done
 
-Pikachu_Lv14Description: ; 5cfeb (17:4feb)
+PikachuLv14Description: ; 5cfeb (17:4feb)
 	text "When several of these Pokémon"
 	line "gather, their electricity can build"
 	line "and cause lightning storms."
@@ -394,7 +394,7 @@ ThundershockName: ; 5d12f (17:512f)
 	text "Thundershock"
 	done
 
-Pikachu_Lv16Description: ; 5d13d (17:513d)
+PikachuLv16Description: ; 5d13d (17:513d)
 	text "When several of these Pokémon"
 	line "gather, their electricity could"
 	line "build and cause lightning storms."
@@ -457,7 +457,7 @@ RaichusThunderDescription: ; 5d3ae (17:53ae)
 	line "30 damage to itself."
 	done
 
-Raichu_Lv40Description: ; 5d3e7 (17:53e7)
+RaichuLv40Description: ; 5d3e7 (17:53e7)
 	text "Its long tail serves as a ground to"
 	line "protect itself from its own"
 	line "high-voltage power."
@@ -477,7 +477,7 @@ GigashockDescription: ; 5d447 (17:5447)
 	line "damage to each of them."
 	done
 
-Raichu_Lv45Description: ; 5d531 (17:5531)
+RaichuLv45Description: ; 5d531 (17:5531)
 	text "Its long tail serves as a ground to"
 	line "protect itself from its own high"
 	line "voltage power."
@@ -503,7 +503,7 @@ MagnetName: ; 5d636 (17:5636)
 	text "Magnet"
 	done
 
-Magnemite_Lv13Description: ; 5d63e (17:563e)
+MagnemiteLv13Description: ; 5d63e (17:563e)
 	text "Uses anti-gravity to stay suspended."
 	line "Appears without warning and uses"
 	line "attacks like Thunder Wave."
@@ -519,7 +519,7 @@ MagneticStormDescription: ; 5d6b0 (17:56b0)
 	line "reattach each of them."
 	done
 
-Magnemite_Lv15Description: ; 5d70f (17:570f)
+MagnemiteLv15Description: ; 5d70f (17:570f)
 	text "It is born with the ability to defy"
 	line "gravity. Floats in air on powerful"
 	line "electromagnetic waves."
@@ -529,7 +529,7 @@ MagnetonName: ; 5d76e (17:576e)
 	text "Magneton"
 	done
 
-Magneton_Lv28sSelfdestructDescription: ; 5d778 (17:5778)
+MagnetonLv28sSelfdestructDescription: ; 5d778 (17:5778)
 	text "Does 20 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
@@ -537,7 +537,7 @@ Magneton_Lv28sSelfdestructDescription: ; 5d778 (17:5778)
 	line "Magneton does 80 damage to itself."
 	done
 
-Magneton_Lv28Description: ; 5d80e (17:580e)
+MagnetonLv28Description: ; 5d80e (17:580e)
 	text "Formed by several Magnemites linked"
 	line "together. It frequently appears when"
 	line "sunspots flare up."
@@ -555,7 +555,7 @@ SonicboomDescription: ; 5d876 (17:5876)
 	line "happen.)"
 	done
 
-Magneton_Lv35sSelfdestructDescription: ; 5d907 (17:5907)
+MagnetonLv35sSelfdestructDescription: ; 5d907 (17:5907)
 	text "Does 20 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
@@ -563,7 +563,7 @@ Magneton_Lv35sSelfdestructDescription: ; 5d907 (17:5907)
 	line "to itself."
 	done
 
-Magneton_Lv35Description: ; 5d99e (17:599e)
+MagnetonLv35Description: ; 5d99e (17:599e)
 	text "Formed by several Magnemites linked"
 	line "together. They frequently appear"
 	line "when sunspots flare up."
@@ -598,7 +598,7 @@ EnergySpikeDescription: ; 5da80 (17:5a80)
 	line "afterward."
 	done
 
-Electrode_Lv35Description: ; 5daeb (17:5aeb)
+ElectrodeLv35Description: ; 5daeb (17:5aeb)
 	text "Stores electrical energy inside its"
 	line "body. Even the slightest shock could"
 	line "trigger a huge explosion."
@@ -616,7 +616,7 @@ ChainLightningDescription: ; 5db60 (17:5b60)
 	line "Pokémon (including your own)."
 	done
 
-Electrode_Lv42Description: ; 5dbfe (17:5bfe)
+ElectrodeLv42Description: ; 5dbfe (17:5bfe)
 	text "It stores electrical energy under"
 	line "very high pressure. It often"
 	line "explodes with little or no"
@@ -657,7 +657,7 @@ ElectricName: ; 5ddec (17:5dec)
 	text "Electric"
 	done
 
-Electabuzz_Lv20Description: ; 5ddf6 (17:5df6)
+ElectabuzzLv20Description: ; 5ddf6 (17:5df6)
 	text "A wild Pokémon with a short temper."
 	line "It is able to distinguish colors"
 	line "and likes the color red."
@@ -675,7 +675,7 @@ ThunderpunchDescription: ; 5de63 (17:5e63)
 	line "itself."
 	done
 
-Electabuzz_Lv35Description: ; 5def9 (17:5ef9)
+ElectabuzzLv35Description: ; 5def9 (17:5ef9)
 	text "Normally found near power plants,"
 	line "it can wander away and cause major"
 	line "blackouts in cities."
@@ -698,7 +698,7 @@ LightningName: ; 5dfaf (17:5faf)
 	text "Lightning"
 	done
 
-Jolteon_Lv24Description: ; 5dfba (17:5fba)
+JolteonLv24Description: ; 5dfba (17:5fba)
 	text "A sensitive Pokémon that easily"
 	line "becomes sad or angry. Every time"
 	line "its mood changes, it charges power."
@@ -713,7 +713,7 @@ QuadrupleAttackX20Description: ; 5e02d (17:602d)
 	line "damage times the number of heads."
 	done
 
-Jolteon_Lv29Description: ; 5e072 (17:6072)
+JolteonLv29Description: ; 5e072 (17:6072)
 	text "It accumulates negative ions from"
 	line "the atmosphere to blast out 10,000-"
 	line "volt lightning bolts."
@@ -737,7 +737,7 @@ ThunderstormDescription: ; 5e0e5 (17:60e5)
 	line "the number of tails to itself."
 	done
 
-Zapdos_Lv40Description: ; 5e1d2 (17:61d2)
+ZapdosLv40Description: ; 5e1d2 (17:61d2)
 	text "A legendary thunderbird Pokémon"
 	line "whose anger is said to cause storms."
 	line "Some say it has lived above the"
@@ -758,7 +758,7 @@ ThunderboltDescription: ; 5e29d (17:629d)
 	line "Zapdos in order to use this attack."
 	done
 
-Zapdos_Lv64Description: ; 5e2e7 (17:62e7)
+ZapdosLv64Description: ; 5e2e7 (17:62e7)
 	text "A legendary bird Pokémon said to"
 	line "appear from clouds while wielding"
 	line "enormous lightning bolts."
@@ -790,7 +790,7 @@ BigThunderDescription: ; 5e40d (17:640d)
 	line "and Resistance still happen.)"
 	done
 
-Zapdos_Lv68Description: ; 5e4f8 (17:64f8)
+ZapdosLv68Description: ; 5e4f8 (17:64f8)
 	text "This legendary bird Pokémon is said"
 	line "to appear when the sky turns dark"
 	line "and lightning showers down."
@@ -1156,7 +1156,7 @@ BonekeeperName: ; 5f3e9 (17:73e9)
 	text "Bonekeeper"
 	done
 
-Marowak_Lv26Description: ; 5f3f5 (17:73f5)
+MarowakLv26Description: ; 5f3f5 (17:73f5)
 	text "The bone it holds is its key weapon."
 	line "It throws the bone skillfully like"
 	line "a boomerang to K.O. targets."
@@ -1186,7 +1186,7 @@ WailDescription: ; 5f4cb (17:74cb)
 	line "or her deck afterward."
 	done
 
-Marowak_Lv32Description: ; 5f5b6 (17:75b6)
+MarowakLv32Description: ; 5f5b6 (17:75b6)
 	text "Small and weak, this Pokémon is"
 	line "adept with its bone club. It has"
 	line "grown more vicious over the ages."

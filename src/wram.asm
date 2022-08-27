@@ -1343,10 +1343,10 @@ wAIPeekedPrizes:: ; cda5
 wAIPokedexCounter:: ; cda6
 	ds $1
 
-; variable to keep track of Mewtwo_Lv53's Barrier usage during Player' turn.
-; AI_MEWTWO_MILL set means Player is running Mewtwo_Lv53 mill deck.
+; variable to keep track of MewtwoLv53's Barrier usage during Player' turn.
+; AI_MEWTWO_MILL set means Player is running MewtwoLv53 mill deck.
 ; 	- when flag is not set, this counts how many turns in a row
-;	  Player used Mewtwo_Lv53's Barrier attack;
+;	  Player used MewtwoLv53's Barrier attack;
 ;	- when flag is set, this counts how many turns in a row
 ;	  Player has NOT used Barrier attack.
 wAIBarrierFlagCounter:: ; cda7
@@ -1573,11 +1573,11 @@ wAIAttackIsNonDamaging:: ; ce02
 wAIRetreatedThisTurn:: ; ce03
 	ds $1
 
-; used by AI to store information of Venusaur_Lv67
+; used by AI to store information of VenusaurLv67
 ; while handling Energy Trans logic.
-wAIVenusaur_Lv67DeckIndex:: ; ce04
+wAIVenusaurLv67DeckIndex:: ; ce04
 	ds $1
-wAIVenusaur_Lv67PlayAreaLocation:: ; ce05
+wAIVenusaurLv67PlayAreaLocation:: ; ce05
 	ds $1
 
 wce06:: ; ce06
@@ -2783,7 +2783,7 @@ wTotalNumCardsCollected:: ; d3cd
 	ds $1
 
 ; total number of cards to be collected
-; doesn't count the Phantom cards (Venusaur_Lv64 and Mew_Lv15)
+; doesn't count the Phantom cards (VenusaurLv64 and MewLv15)
 ; unless they have already been collected
 wTotalNumCardsToCollect:: ; d3ce
 	ds $1

@@ -2109,11 +2109,11 @@ AIDecide_PokemonBreeder:
 	push de
 	call CheckIfCanEvolveInto_BasicToStage2
 	pop de
-	call nc, .HandleDragonite_Lv41Evolution
+	call nc, .HandleDragoniteLv41Evolution
 	call nc, .can_evolve
 
 ; not possible to evolve or returned carry
-; when handling Dragonite_Lv41 evolution
+; when handling DragoniteLv41 evolution
 	pop bc
 	inc e
 	dec c
@@ -2192,12 +2192,12 @@ AIDecide_PokemonBreeder:
 	or a
 	ret
 
-; return carry if card is evolving to Dragonite_Lv41 and if
+; return carry if card is evolving to DragoniteLv41 and if
 ; - the card that is evolving is not Arena card and
 ;   number of damage counters in Play Area is under 8;
 ; - the card that is evolving is Arena card and has under 5
 ;   damage counters or has less than 3 energy cards attached.
-.HandleDragonite_Lv41Evolution
+.HandleDragoniteLv41Evolution
 	push af
 	push bc
 	push de
@@ -4038,7 +4038,7 @@ AIDecide_ScoopUp:
 	scf
 	ret
 
-; this deck will use Scoop Up on a benched Articuno_Lv37.
+; this deck will use Scoop Up on a benched ArticunoLv37.
 ; it checks if the defending Pokemon is a Snorlax,
 ; but interestingly does not check for Muk in both Play Areas.
 ; will also use Scoop Up on
@@ -4049,7 +4049,7 @@ AIDecide_ScoopUp:
 	cp 3
 	jr c, .no_carry
 
-; look for Articuno_Lv37 in bench
+; look for ArticunoLv37 in bench
 	ld a, ARTICUNO_LV37
 	ld b, PLAY_AREA_BENCH_1
 	call LookForCardIDInPlayArea_Bank8
@@ -4065,7 +4065,7 @@ AIDecide_ScoopUp:
 	cp CHANSEY
 	jr nz, .no_carry
 
-; here either Articuno_Lv37 or Chansey
+; here either ArticunoLv37 or Chansey
 ; is the Arena Card.
 .articuno_or_chansey
 ; if can't KO defending Pokemon, check if defending Pokemon
@@ -4122,7 +4122,7 @@ AIDecide_ScoopUp:
 	scf
 	ret
 
-; this deck will use Scoop Up on a benched Articuno_Lv37, Zapdos_Lv68 or Moltres_Lv37.
+; this deck will use Scoop Up on a benched ArticunoLv37, ZapdosLv68 or MoltresLv37.
 ; interestingly, does not check for Muk in both Play Areas.
 .HandleLegendaryRonald
 ; if less than 3 Play Area Pokemon cards, skip.
@@ -4571,21 +4571,21 @@ AIPlay_Gambler:
 
 ; checks whether to play Gambler.
 ; aside from Imakuni?, all other opponents only
-; play this card if Player is running Mewtwo_Lv53-only deck.
+; play this card if Player is running MewtwoLv53-only deck.
 AIDecide_Gambler:
 ; Imakuni? has his own routine
 	ld a, [wOpponentDeckID]
 	cp IMAKUNI_DECK_ID
 	jr z, .imakuni
 
-; check if flag is set for Player using Mewtwo_Lv53 only deck
+; check if flag is set for Player using MewtwoLv53 only deck
 	ld a, [wAIBarrierFlagCounter]
 	and AI_MEWTWO_MILL
 	jr z, .no_carry
 
 ; set carry if number of cards in deck <= 4.
 ; this is done to counteract the deck out strategy
-; of Mewtwo_Lv53 deck, by replenishing the deck with hand cards.
+; of MewtwoLv53 deck, by replenishing the deck with hand cards.
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp DECK_SIZE - 4
@@ -4882,7 +4882,7 @@ AIDecide_Pokeball:
 	ld a, CARD_LOCATION_DECK
 	call LookForCardIDInLocation
 	ret c
-	ld e, PIKACHU_LV16A
+	ld e, PIKACHU_ALT_LV16
 	ld a, CARD_LOCATION_DECK
 	call LookForCardIDInLocation
 	ret c
@@ -5476,8 +5476,8 @@ AIDecide_PokemonTrader:
 	ret
 
 AIDecide_PokemonTrader_LegendaryMoltres:
-; look for Moltres_Lv37 card in deck to trade with a
-; card in hand different from Moltres_Lv35.
+; look for MoltresLv37 card in deck to trade with a
+; card in hand different from MoltresLv35.
 	ld a, MOLTRES_LV37
 	ld e, MOLTRES_LV35
 	call LookForCardIDToTradeWithDifferentHandCard

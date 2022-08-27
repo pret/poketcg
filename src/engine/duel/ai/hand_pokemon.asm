@@ -353,7 +353,7 @@ AIDecideEvolution:
 	jr z, .pikachu
 	cp PIKACHU_LV16
 	jr z, .pikachu
-	cp PIKACHU_LV16A
+	cp PIKACHU_ALT_LV16
 	jr nz, .check_score
 .pikachu
 	ld a, 3

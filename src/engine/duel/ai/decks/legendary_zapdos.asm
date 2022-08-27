@@ -102,7 +102,7 @@ AIDoTurn_LegendaryZapdos:
 	or a
 	jr nz, .skip_energy_attach
 
-; if Arena card is Voltorb and there's Electrode_Lv35 in hand,
+; if Arena card is Voltorb and there's ElectrodeLv35 in hand,
 ; or if it's Electabuzz, try attaching Energy card
 ; to the Arena card if it doesn't have any energy attached.
 ; Otherwise if Energy card is not needed,

@@ -206,7 +206,7 @@ CheckIfEnergyIsUseful:
 	ld d, WATER_ENERGY
 	cp SURFING_PIKACHU_LV13
 	jr z, .check_energy
-	cp SURFING_PIKACHU_LV13A
+	cp SURFING_PIKACHU_ALT_LV13
 	jr z, .check_energy
 
 	cp EEVEE
@@ -2020,7 +2020,7 @@ AISelectSpecialAttackParameters:
 	ld a, e
 	cp MEW_LV23
 	jr z, .DevolutionBeam
-	cp MEWTWO_LV60A
+	cp MEWTWO_ALT_LV60
 	jr z, .EnergyAbsorption
 	cp MEWTWO_LV60
 	jr z, .EnergyAbsorption

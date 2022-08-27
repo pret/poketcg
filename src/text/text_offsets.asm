@@ -2076,11 +2076,11 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer MegaDrainName                                      ; 0x0818
 	textpointer VenusaursMegaDrainDescription                      ; 0x0819
 	textpointer VenusaursMegaDrainDescriptionCont                  ; 0x081a
-	textpointer Venusaur_Lv64Description                           ; 0x081b
+	textpointer VenusaurLv64Description                           ; 0x081b
 	textpointer EnergyTransName                                    ; 0x081c
 	textpointer EnergyTransDescription                             ; 0x081d
 	textpointer SolarBeamName                                      ; 0x081e
-	textpointer Venusaur_Lv67Description                           ; 0x081f
+	textpointer VenusaurLv67Description                           ; 0x081f
 	textpointer CaterpieName                                       ; 0x0820
 	textpointer StringShotName                                     ; 0x0821
 	textpointer MayInflictParalysisDescription                     ; 0x0822
@@ -2247,9 +2247,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer TangelaName                                        ; 0x08c3
 	textpointer BindName                                           ; 0x08c4
 	textpointer VineName                                           ; 0x08c5
-	textpointer Tangela_Lv8Description                             ; 0x08c6
+	textpointer TangelaLv8Description                             ; 0x08c6
 	textpointer PoisonWhipName                                     ; 0x08c7
-	textpointer Tangela_Lv12Description                            ; 0x08c8
+	textpointer TangelaLv12Description                            ; 0x08c8
 	textpointer ScytherName                                        ; 0x08c9
 	textpointer SwordsDanceName                                    ; 0x08ca
 	textpointer SwordsDanceDescription                             ; 0x08cb
@@ -2284,13 +2284,13 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NinetalesLureDescription                           ; 0x08e8
 	textpointer FireBlastName                                      ; 0x08e9
 	textpointer FireBlastDescription                               ; 0x08ea
-	textpointer Ninetales_Lv32Description                          ; 0x08eb
+	textpointer NinetalesLv32Description                          ; 0x08eb
 	textpointer MixUpName                                          ; 0x08ec
 	textpointer MixUpDescription                                   ; 0x08ed
 	textpointer MixUpDescriptionCont                               ; 0x08ee
 	textpointer DancingEmbersName                                  ; 0x08ef
 	textpointer DancingEmbersDescription                           ; 0x08f0
-	textpointer Ninetales_Lv35Description                          ; 0x08f1
+	textpointer NinetalesLv35Description                          ; 0x08f1
 	textpointer GrowlitheName                                      ; 0x08f2
 	textpointer FlareName                                          ; 0x08f3
 	textpointer PuppyName                                          ; 0x08f4
@@ -2301,11 +2301,11 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer FlamesOfRageName                                   ; 0x08f9
 	textpointer FlamesOfRageDescription                            ; 0x08fa
 	textpointer LegendaryName                                      ; 0x08fb
-	textpointer Arcanine_Lv34Description                           ; 0x08fc
+	textpointer ArcanineLv34Description                           ; 0x08fc
 	textpointer ArcaninesFlamethrowerDescription                   ; 0x08fd
 	textpointer TakeDownName                                       ; 0x08fe
 	textpointer TakeDownDescription                                ; 0x08ff
-	textpointer Arcanine_Lv45Description                           ; 0x0900
+	textpointer ArcanineLv45Description                           ; 0x0900
 	textpointer PonytaName                                         ; 0x0901
 	textpointer SmashKickName                                      ; 0x0902
 	textpointer FlameTailName                                      ; 0x0903
@@ -2321,26 +2321,26 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer FirePunchName                                      ; 0x090d
 	textpointer FirePunchDescription                               ; 0x090e
 	textpointer SpitfireName                                       ; 0x090f
-	textpointer Magmar_Lv24Description                             ; 0x0910
+	textpointer MagmarLv24Description                             ; 0x0910
 	textpointer SmokescreenName                                    ; 0x0911
 	textpointer MagmarsSmokescreenDescription                      ; 0x0912
-	textpointer Magmar_Lv31Description                             ; 0x0913
+	textpointer MagmarLv31Description                             ; 0x0913
 	textpointer FlareonName                                        ; 0x0914
 	textpointer EeveeName                                          ; 0x0915
 	textpointer BiteName                                           ; 0x0916
 	textpointer RageName                                           ; 0x0917
 	textpointer FlareonsRageDescription                            ; 0x0918
-	textpointer Flareon_Lv22Description                            ; 0x0919
+	textpointer FlareonLv22Description                            ; 0x0919
 	textpointer FlareonsFlamethrowerDescription                    ; 0x091a
-	textpointer Flareon_Lv28Description                            ; 0x091b
+	textpointer FlareonLv28Description                            ; 0x091b
 	textpointer MoltresName                                        ; 0x091c
 	textpointer WildfireName                                       ; 0x091d
 	textpointer WildfireDescription                                ; 0x091e
 	textpointer DiveBombName                                       ; 0x091f
-	textpointer Moltres_Lv35Description                            ; 0x0920
+	textpointer MoltresLv35Description                            ; 0x0920
 	textpointer FiregiverName                                      ; 0x0921
 	textpointer FiregiverDescription                               ; 0x0922
-	textpointer Moltres_Lv37Description                            ; 0x0923
+	textpointer MoltresLv37Description                            ; 0x0923
 	textpointer SquirtleName                                       ; 0x0924
 	textpointer BubbleName                                         ; 0x0925
 	textpointer WithdrawName                                       ; 0x0926
@@ -2462,9 +2462,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer FocusEnergyName                                    ; 0x099a
 	textpointer FocusEnergyDescription                             ; 0x099b
 	textpointer BubbleJetName                                      ; 0x099c
-	textpointer Vaporeon_Lv29Description                           ; 0x099d
+	textpointer VaporeonLv29Description                           ; 0x099d
 	textpointer VaporeonsWaterGunDescription                       ; 0x099e
-	textpointer Vaporeon_Lv42Description                           ; 0x099f
+	textpointer VaporeonLv42Description                           ; 0x099f
 	textpointer OmanyteName                                        ; 0x09a0
 	textpointer MysteriousFossilName                               ; 0x09a1
 	textpointer ClairvoyanceName                                   ; 0x09a2
@@ -2480,25 +2480,25 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer BlizzardName                                       ; 0x09ac
 	textpointer BlizzardDescription                                ; 0x09ad
 	textpointer FreezeName                                         ; 0x09ae
-	textpointer Articuno_Lv35Description                           ; 0x09af
+	textpointer ArticunoLv35Description                           ; 0x09af
 	textpointer QuickfreezeName                                    ; 0x09b0
 	textpointer QuickfreezeDescription                             ; 0x09b1
 	textpointer IceBreathName                                      ; 0x09b2
 	textpointer IceBreathDescription                               ; 0x09b3
-	textpointer Articuno_Lv37Description                           ; 0x09b4
+	textpointer ArticunoLv37Description                           ; 0x09b4
 	textpointer PikachuName                                        ; 0x09b5
 	textpointer GnawName                                           ; 0x09b6
 	textpointer ThunderJoltName                                    ; 0x09b7
 	textpointer ThunderJoltDescription                             ; 0x09b8
 	textpointer MouseName                                          ; 0x09b9
-	textpointer Pikachu_Lv12Description                            ; 0x09ba
+	textpointer PikachuLv12Description                            ; 0x09ba
 	textpointer SparkName                                          ; 0x09bb
 	textpointer SparkDescription                                   ; 0x09bc
-	textpointer Pikachu_Lv14Description                            ; 0x09bd
+	textpointer PikachuLv14Description                            ; 0x09bd
 	textpointer GrowlName                                          ; 0x09be
 	textpointer GrowlDescription                                   ; 0x09bf
 	textpointer ThundershockName                                   ; 0x09c0
-	textpointer Pikachu_Lv16Description                            ; 0x09c1
+	textpointer PikachuLv16Description                            ; 0x09c1
 	textpointer FlyingPikachuName                                  ; 0x09c2
 	textpointer FlyName                                            ; 0x09c3
 	textpointer FlyDescription                                     ; 0x09c4
@@ -2510,66 +2510,66 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer RaichusAgilityDescription                          ; 0x09ca
 	textpointer ThunderName                                        ; 0x09cb
 	textpointer RaichusThunderDescription                          ; 0x09cc
-	textpointer Raichu_Lv40Description                             ; 0x09cd
+	textpointer RaichuLv40Description                             ; 0x09cd
 	textpointer GigashockName                                      ; 0x09ce
 	textpointer GigashockDescription                               ; 0x09cf
-	textpointer Raichu_Lv45Description                             ; 0x09d0
+	textpointer RaichuLv45Description                             ; 0x09d0
 	textpointer MagnemiteName                                      ; 0x09d1
 	textpointer ThunderWaveName                                    ; 0x09d2
 	textpointer MagnemitesSelfdestructDescription                  ; 0x09d3
 	textpointer MagnetName                                         ; 0x09d4
-	textpointer Magnemite_Lv13Description                          ; 0x09d5
+	textpointer MagnemiteLv13Description                          ; 0x09d5
 	textpointer MagneticStormName                                  ; 0x09d6
 	textpointer MagneticStormDescription                           ; 0x09d7
-	textpointer Magnemite_Lv15Description                          ; 0x09d8
+	textpointer MagnemiteLv15Description                          ; 0x09d8
 	textpointer MagnetonName                                       ; 0x09d9
-	textpointer Magneton_Lv28sSelfdestructDescription              ; 0x09da
-	textpointer Magneton_Lv28Description                           ; 0x09db
+	textpointer MagnetonLv28sSelfdestructDescription              ; 0x09da
+	textpointer MagnetonLv28Description                           ; 0x09db
 	textpointer SonicboomName                                      ; 0x09dc
 	textpointer SonicboomDescription                               ; 0x09dd
-	textpointer Magneton_Lv35sSelfdestructDescription              ; 0x09de
-	textpointer Magneton_Lv35Description                           ; 0x09df
+	textpointer MagnetonLv35sSelfdestructDescription              ; 0x09de
+	textpointer MagnetonLv35Description                           ; 0x09df
 	textpointer VoltorbName                                        ; 0x09e0
 	textpointer BallName                                           ; 0x09e1
 	textpointer VoltorbDescription                                 ; 0x09e2
 	textpointer ElectrodeName                                      ; 0x09e3
 	textpointer EnergySpikeName                                    ; 0x09e4
 	textpointer EnergySpikeDescription                             ; 0x09e5
-	textpointer Electrode_Lv35Description                          ; 0x09e6
+	textpointer ElectrodeLv35Description                          ; 0x09e6
 	textpointer ChainLightningName                                 ; 0x09e7
 	textpointer ChainLightningDescription                          ; 0x09e8
-	textpointer Electrode_Lv42Description                          ; 0x09e9
+	textpointer ElectrodeLv42Description                          ; 0x09e9
 	textpointer ElectabuzzName                                     ; 0x09ea
 	textpointer LightScreenName                                    ; 0x09eb
 	textpointer LightScreenDescription                             ; 0x09ec
 	textpointer LightScreenDescriptionCont                         ; 0x09ed
 	textpointer ElectabuzzsQuickAttackDescription                  ; 0x09ee
 	textpointer ElectricName                                       ; 0x09ef
-	textpointer Electabuzz_Lv20Description                         ; 0x09f0
+	textpointer ElectabuzzLv20Description                         ; 0x09f0
 	textpointer ThunderpunchName                                   ; 0x09f1
 	textpointer ThunderpunchDescription                            ; 0x09f2
-	textpointer Electabuzz_Lv35Description                         ; 0x09f3
+	textpointer ElectabuzzLv35Description                         ; 0x09f3
 	textpointer JolteonName                                        ; 0x09f4
 	textpointer DoubleAttackX20Description                         ; 0x09f5
 	textpointer StunNeedleName                                     ; 0x09f6
 	textpointer LightningName                                      ; 0x09f7
-	textpointer Jolteon_Lv24Description                            ; 0x09f8
+	textpointer JolteonLv24Description                            ; 0x09f8
 	textpointer PinMissileName                                     ; 0x09f9
 	textpointer QuadrupleAttackX20Description                      ; 0x09fa
-	textpointer Jolteon_Lv29Description                            ; 0x09fb
+	textpointer JolteonLv29Description                            ; 0x09fb
 	textpointer ZapdosName                                         ; 0x09fc
 	textpointer ThunderstormName                                   ; 0x09fd
 	textpointer ThunderstormDescription                            ; 0x09fe
-	textpointer Zapdos_Lv40Description                             ; 0x09ff
+	textpointer ZapdosLv40Description                             ; 0x09ff
 	textpointer ZapdosThunderDescription                           ; 0x0a00
 	textpointer ThunderboltName                                    ; 0x0a01
 	textpointer ThunderboltDescription                             ; 0x0a02
-	textpointer Zapdos_Lv64Description                             ; 0x0a03
+	textpointer ZapdosLv64Description                             ; 0x0a03
 	textpointer PealOfThunderName                                  ; 0x0a04
 	textpointer PealOfThunderDescription                           ; 0x0a05
 	textpointer BigThunderName                                     ; 0x0a06
 	textpointer BigThunderDescription                              ; 0x0a07
-	textpointer Zapdos_Lv68Description                             ; 0x0a08
+	textpointer ZapdosLv68Description                             ; 0x0a08
 	textpointer SandshrewName                                      ; 0x0a09
 	textpointer SandAttackName                                     ; 0x0a0a
 	textpointer SandshrewDescription                               ; 0x0a0b
@@ -2641,12 +2641,12 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer CallforFriendName                                  ; 0x0a4d
 	textpointer CallforFriendDescription                           ; 0x0a4e
 	textpointer BonekeeperName                                     ; 0x0a4f
-	textpointer Marowak_Lv26Description                            ; 0x0a50
+	textpointer MarowakLv26Description                            ; 0x0a50
 	textpointer BoneAttackName                                     ; 0x0a51
 	textpointer BoneAttackDescription                              ; 0x0a52
 	textpointer WailName                                           ; 0x0a53
 	textpointer WailDescription                                    ; 0x0a54
-	textpointer Marowak_Lv32Description                            ; 0x0a55
+	textpointer MarowakLv32Description                            ; 0x0a55
 	textpointer HitmonleeName                                      ; 0x0a56
 	textpointer StretchKickName                                    ; 0x0a57
 	textpointer StretchKickDescription                             ; 0x0a58
@@ -2698,7 +2698,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer SlowpokeName                                       ; 0x0a86
 	textpointer SlowpokesAmnesiaDescription                        ; 0x0a87
 	textpointer DopeyName                                          ; 0x0a88
-	textpointer Slowpoke_Lv9Description                            ; 0x0a89
+	textpointer SlowpokeLv9Description                            ; 0x0a89
 	textpointer SpacingOutName                                     ; 0x0a8a
 	textpointer SpacingOutDescription                              ; 0x0a8b
 	textpointer ScavengeName                                       ; 0x0a8c
@@ -2714,11 +2714,11 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DestinyBondName                                    ; 0x0a96
 	textpointer DestinyBondDescription                             ; 0x0a97
 	textpointer GasName                                            ; 0x0a98
-	textpointer Gastly_Lv8Description                              ; 0x0a99
+	textpointer GastlyLv8Description                              ; 0x0a99
 	textpointer LickName                                           ; 0x0a9a
 	textpointer EnergyConversionName                               ; 0x0a9b
 	textpointer EnergyConversionDescription                        ; 0x0a9c
-	textpointer Gastly_Lv17Description                             ; 0x0a9d
+	textpointer GastlyLv17Description                             ; 0x0a9d
 	textpointer HaunterName                                        ; 0x0a9e
 	textpointer TransparencyName                                   ; 0x0a9f
 	textpointer TransparencyDescription                            ; 0x0aa0
@@ -2758,19 +2758,19 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer PsychicDescription                                 ; 0x0ac2
 	textpointer BarrierDescription                                 ; 0x0ac3
 	textpointer GeneticName                                        ; 0x0ac4
-	textpointer Mewtwo_Lv53Description                             ; 0x0ac5
+	textpointer MewtwoLv53Description                             ; 0x0ac5
 	textpointer EnergyAbsorptionName                               ; 0x0ac6
 	textpointer EnergyAbsorptionDescription                        ; 0x0ac7
 	textpointer PsyburnName                                        ; 0x0ac8
-	textpointer Mewtwo_Lv60Description                             ; 0x0ac9
+	textpointer MewtwoLv60Description                             ; 0x0ac9
 	textpointer MewName                                            ; 0x0aca
 	textpointer NeutralizingShieldName                             ; 0x0acb
 	textpointer NeutralizingShieldDescription                      ; 0x0acc
 	textpointer NewSpeciesName                                     ; 0x0acd
-	textpointer Mew_Lv8Description                                 ; 0x0ace
+	textpointer MewLv8Description                                 ; 0x0ace
 	textpointer MysteryAttackName                                  ; 0x0acf
 	textpointer MysteryAttackDescription                           ; 0x0ad0
-	textpointer Mew_Lv15Description                                ; 0x0ad1
+	textpointer MewLv15Description                                ; 0x0ad1
 	textpointer PsywaveName                                        ; 0x0ad2
 	textpointer PsywaveDescription                                 ; 0x0ad3
 	textpointer DevolutionBeamName                                 ; 0x0ad4
@@ -2824,14 +2824,14 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DoubleEdgeName                                     ; 0x0b04
 	textpointer JigglypuffsDoubleEdgeDescription                   ; 0x0b05
 	textpointer BalloonName                                        ; 0x0b06
-	textpointer Jigglypuff_Lv12Description                         ; 0x0b07
+	textpointer JigglypuffLv12Description                         ; 0x0b07
 	textpointer FriendshipSongName                                 ; 0x0b08
 	textpointer FriendshipSongDescription                          ; 0x0b09
 	textpointer ExpandName                                         ; 0x0b0a
 	textpointer ExpandDescription                                  ; 0x0b0b
-	textpointer Jigglypuff_Lv13Description                         ; 0x0b0c
+	textpointer JigglypuffLv13Description                         ; 0x0b0c
 	textpointer LullabyName                                        ; 0x0b0d
-	textpointer Jigglypuff_Lv14Description                         ; 0x0b0e
+	textpointer JigglypuffLv14Description                         ; 0x0b0e
 	textpointer WigglytuffName                                     ; 0x0b0f
 	textpointer DoTheWaveName                                      ; 0x0b10
 	textpointer DoTheWaveDescription                               ; 0x0b11
@@ -2840,10 +2840,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer CatPunchName                                       ; 0x0b14
 	textpointer CatPunchDescription                                ; 0x0b15
 	textpointer ScratchCatName                                     ; 0x0b16
-	textpointer Meowth_Lv14Description                             ; 0x0b17
+	textpointer MeowthLv14Description                             ; 0x0b17
 	textpointer PayDayName                                         ; 0x0b18
 	textpointer PayDayDescription                                  ; 0x0b19
-	textpointer Meowth_Lv15Description                             ; 0x0b1a
+	textpointer MeowthLv15Description                             ; 0x0b1a
 	textpointer PersianName                                        ; 0x0b1b
 	textpointer PounceName                                         ; 0x0b1c
 	textpointer PounceDescription                                  ; 0x0b1d
@@ -2916,7 +2916,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DragoniteName                                      ; 0x0b60
 	textpointer HealingWindName                                    ; 0x0b61
 	textpointer HealingWindDescription                             ; 0x0b62
-	textpointer Dragonite_Lv41Description                          ; 0x0b63
+	textpointer DragoniteLv41Description                          ; 0x0b63
 	textpointer StepInName                                         ; 0x0b64
 	textpointer StepInDescription                                  ; 0x0b65
 	textpointer DoubleAttackX40Description                         ; 0x0b66

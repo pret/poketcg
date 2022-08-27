@@ -61,7 +61,7 @@ AIProcessAttacks:
 	jr .attack_chosen
 
 .no_pluspower
-; if Player is running Mewtwo_Lv53 mill deck,
+; if Player is running MewtwoLv53 mill deck,
 ; skip attack if Barrier counter is 0.
 	ld a, [wAIBarrierFlagCounter]
 	cp AI_MEWTWO_MILL + 0
@@ -367,7 +367,7 @@ GetAIScoreOfAttack:
 .magnemite1
 	ld a, 10
 	add b
-	ld b, a ; 20 bench damage if not Magnemite_Lv13
+	ld b, a ; 20 bench damage if not MagnemiteLv13
 
 ; if this attack causes player to win the duel by
 ; knocking out own Pokémon, dismiss attack.

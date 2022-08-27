@@ -186,8 +186,8 @@ Script_Ishihara:
 	print_npc_text Text072f
 	print_text Text073c
 	take_card CHANSEY
-	give_card SURFING_PIKACHU_LV13A
-	show_card_received_screen SURFING_PIKACHU_LV13A
+	give_card SURFING_PIKACHU_ALT_LV13
+	show_card_received_screen SURFING_PIKACHU_ALT_LV13
 	print_text_quit_fully Text073d
 
 .ows_dc3e

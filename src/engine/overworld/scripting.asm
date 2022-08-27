@@ -1479,13 +1479,13 @@ ChallengeCupPrizeCards:
 	db PIKACHU_LV16
 	tx PikachuTradeCardName
 
-	db PIKACHU_LV16A
+	db PIKACHU_ALT_LV16
 	tx PikachuTradeCardName
 
 	db SURFING_PIKACHU_LV13
 	tx SurfingPikachuTradeCardName
 
-	db SURFING_PIKACHU_LV13A
+	db SURFING_PIKACHU_ALT_LV13
 	tx SurfingPikachuTradeCardName
 
 	db ELECTABUZZ_LV20
@@ -1494,7 +1494,7 @@ ChallengeCupPrizeCards:
 	db SLOWPOKE_LV9
 	tx SlowpokeTradeCardName
 
-	db MEWTWO_LV60A
+	db MEWTWO_ALT_LV60
 	tx MewtwoTradeCardName
 
 	db MEWTWO_LV60

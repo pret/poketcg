@@ -101,7 +101,7 @@ AIDoTurn_LegendaryRonald:
 	ld a, AI_TRAINER_CARD_PHASE_04
 	call AIProcessHandTrainerCards
 
-; check if AI can play Moltres_Lv37
+; check if AI can play MoltresLv37
 ; from hand and if so, play it.
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -116,7 +116,7 @@ AIDoTurn_LegendaryRonald:
 	jr c, .skip_moltres_1 ; skip if Muk in play
 	ld a, MOLTRES_LV37
 	call LookForCardIDInHandList_Bank5
-	jr nc, .skip_moltres_1 ; skip if no Moltres_Lv37 in hand
+	jr nc, .skip_moltres_1 ; skip if no MoltresLv37 in hand
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_PLAY_BASIC_PKMN
 	bank1call AIMakeDecision
@@ -156,7 +156,7 @@ AIDoTurn_LegendaryRonald:
 	ld a, AI_TRAINER_CARD_PHASE_04
 	call AIProcessHandTrainerCards
 
-; check if AI can play Moltres_Lv37
+; check if AI can play MoltresLv37
 ; from hand and if so, play it.
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -171,7 +171,7 @@ AIDoTurn_LegendaryRonald:
 	jr c, .skip_moltres_2 ; skip if Muk in play
 	ld a, MOLTRES_LV37
 	call LookForCardIDInHandList_Bank5
-	jr nc, .skip_moltres_2 ; skip if no Moltres_Lv37 in hand
+	jr nc, .skip_moltres_2 ; skip if no MoltresLv37 in hand
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_PLAY_BASIC_PKMN
 	bank1call AIMakeDecision

@@ -99,7 +99,7 @@ AIDoTurn_LegendaryMoltres:
 	ld a, AI_TRAINER_CARD_PHASE_04
 	call AIProcessHandTrainerCards
 
-; check if AI can play Moltres_Lv37
+; check if AI can play MoltresLv37
 ; from hand and if so, play it.
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -114,7 +114,7 @@ AIDoTurn_LegendaryMoltres:
 	jr c, .skip_moltres ; skip if Muk in play
 	ld a, MOLTRES_LV37
 	call LookForCardIDInHandList_Bank5
-	jr nc, .skip_moltres ; skip if no Moltres_Lv37 in hand
+	jr nc, .skip_moltres ; skip if no MoltresLv37 in hand
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_PLAY_BASIC_PKMN
 	bank1call AIMakeDecision
@@ -136,7 +136,7 @@ AIDoTurn_LegendaryMoltres:
 	or a
 	jr nz, .skip_attach_energy
 
-; if Magmar_Lv31 is the Arena card and has no energy attached,
+; if MagmarLv31 is the Arena card and has no energy attached,
 ; try attaching an energy card to it from the hand.
 ; otherwise, run normal AI energy attach routine.
 	ld a, DUELVARS_ARENA_CARD
@@ -145,7 +145,7 @@ AIDoTurn_LegendaryMoltres:
 	ld a, MAGMAR_LV31
 	cp e
 	jr nz, .attach_normally
-	; Magmar_Lv31 is the Arena card
+	; MagmarLv31 is the Arena card
 	call CreateEnergyCardListFromHand
 	jr c, .skip_attach_energy
 	ld e, PLAY_AREA_ARENA
