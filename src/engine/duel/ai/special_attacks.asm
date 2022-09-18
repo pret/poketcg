@@ -23,31 +23,31 @@ HandleSpecialAIAttacks:
 	jp z, .SwordsDanceAndFocusEnergy
 	cp KRABBY
 	jr z, .CallForFamily
-	cp VAPOREON1
+	cp VAPOREON_LV29
 	jp z, .SwordsDanceAndFocusEnergy
-	cp ELECTRODE2
+	cp ELECTRODE_LV42
 	jp z, .ChainLightning
-	cp MAROWAK1
+	cp MAROWAK_LV26
 	jr z, .CallForFriend
-	cp MEW3
+	cp MEW_LV23
 	jp z, .DevolutionBeam
-	cp JIGGLYPUFF2
+	cp JIGGLYPUFF_LV13
 	jp z, .FriendshipSong
 	cp PORYGON
 	jp z, .Conversion
-	cp MEWTWO3
+	cp MEWTWO_ALT_LV60
 	jp z, .EnergyAbsorption
-	cp MEWTWO2
+	cp MEWTWO_LV60
 	jp z, .EnergyAbsorption
-	cp NINETALES2
+	cp NINETALES_LV35
 	jp z, .MixUp
-	cp ZAPDOS3
+	cp ZAPDOS_LV68
 	jp z, .BigThunder
 	cp KANGASKHAN
 	jp z, .Fetch
 	cp DUGTRIO
 	jp z, .Earthquake
-	cp ELECTRODE1
+	cp ELECTRODE_LV35
 	jp z, .EnergySpike
 	cp GOLDUCK
 	jp z, .HyperBeam

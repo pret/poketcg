@@ -1,7 +1,7 @@
 ; runs through Player's whole deck and
 ; sets carry if there's any Pokemon other
-; than Mewtwo1.
-CheckIfPlayerHasPokemonOtherThanMewtwo1:
+; than MewtwoLv53.
+CheckIfPlayerHasPokemonOtherThanMewtwoLv53:
 	call SwapTurn
 	ld e, 0
 .loop_deck
@@ -13,7 +13,7 @@ CheckIfPlayerHasPokemonOtherThanMewtwo1:
 	cp TYPE_ENERGY
 	jp nc, .next ; can be a jr
 	ld a, [wLoadedCard2ID]
-	cp MEWTWO1
+	cp MEWTWO_LV53
 	jr nz, .not_mewtwo1
 .next
 	inc e
@@ -31,13 +31,13 @@ CheckIfPlayerHasPokemonOtherThanMewtwo1:
 	scf
 	ret
 
-; returns no carry if, given the Player is using a Mewtwo1 mill deck,
+; returns no carry if, given the Player is using a MewtwoLv53 mill deck,
 ; the AI already has a Bench fully set up, in which case it
 ; will process some Trainer cards in hand (namely Energy Removals).
 ; this is used to check whether to skip some normal AI routines
 ; this turn and jump right to the attacking phase.
 HandleAIAntiMewtwoDeckStrategy: ; 227d3 (8:67d3)
-; return carry if Player is not playing Mewtwo1 mill deck
+; return carry if Player is not playing MewtwoLv53 mill deck
 	ld a, [wAIBarrierFlagCounter]
 	bit AI_MEWTWO_MILL_F, a
 	jr z, .set_carry

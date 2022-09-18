@@ -97,8 +97,8 @@ Script_Lass2:
 	print_npc_text Text06f9
 	print_text Text06fa
 	take_card CLEFAIRY
-	give_card PIKACHU3
-	show_card_received_screen PIKACHU3
+	give_card PIKACHU_LV16
+	show_card_received_screen PIKACHU_LV16
 	print_text_quit_fully Text06f3
 
 .ows_e6a1

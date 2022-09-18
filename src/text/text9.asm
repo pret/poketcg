@@ -1329,7 +1329,7 @@ VenusaursMegaDrainDescriptionCont: ; 578b7 (15:78b7)
 	line "them."
 	done
 
-Venusaur1Description: ; 578fd (15:78fd)
+VenusaurLv64Description: ; 578fd (15:78fd)
 	text "The flower on its back catches"
 	line "the sun's rays. The sunlight is then"
 	line "absorbed and used for energy."
@@ -1353,7 +1353,7 @@ SolarBeamName: ; 57a51 (15:7a51)
 	text "Solarbeam"
 	done
 
-Venusaur2Description: ; 57a5c (15:7a5c)
+VenusaurLv67Description: ; 57a5c (15:7a5c)
 	text "This plant blooms when it is"
 	line "absorbing solar energy. It stays on"
 	line "the move to seek sunlight."

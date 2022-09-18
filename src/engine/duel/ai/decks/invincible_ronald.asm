@@ -33,7 +33,7 @@ AIActionTable_InvincibleRonald:
 
 .list_arena
 	db KANGASKHAN
-	db MAGMAR2
+	db MAGMAR_LV31
 	db CHANSEY
 	db GEODUDE
 	db SCYTHER
@@ -45,7 +45,7 @@ AIActionTable_InvincibleRonald:
 	db SCYTHER
 	db GEODUDE
 	db CHANSEY
-	db MAGMAR2
+	db MAGMAR_LV31
 	db KANGASKHAN
 	db $00
 
@@ -54,14 +54,14 @@ AIActionTable_InvincibleRonald:
 	db $00
 
 .list_energy
-	ai_energy GRIMER,     1, -1
-	ai_energy MUK,        3, -1
-	ai_energy SCYTHER,    4, +1
-	ai_energy MAGMAR2,    2, +0
-	ai_energy GEODUDE,    2, +0
-	ai_energy GRAVELER,   3, +0
-	ai_energy CHANSEY,    4, +0
-	ai_energy KANGASKHAN, 4, -1
+	ai_energy GRIMER,         1, -1
+	ai_energy MUK,            3, -1
+	ai_energy SCYTHER,        4, +1
+	ai_energy MAGMAR_LV31,    2, +0
+	ai_energy GEODUDE,        2, +0
+	ai_energy GRAVELER,       3, +0
+	ai_energy CHANSEY,        4, +0
+	ai_energy KANGASKHAN,     4, -1
 	db $00
 
 .list_prize

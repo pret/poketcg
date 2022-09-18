@@ -1467,43 +1467,43 @@ ScriptCommand_PickChallengeCupPrizeCard:
 	jp IncreaseScriptPointerBy1
 
 ChallengeCupPrizeCards:
-	db MEWTWO2
+	db MEWTWO_LV60
 	tx MewtwoTradeCardName
 
-	db MEW1
+	db MEW_LV8
 	tx MewTradeCardName
 
-	db ARCANINE1
+	db ARCANINE_LV34
 	tx ArcanineTradeCardName
 
-	db PIKACHU3
+	db PIKACHU_LV16
 	tx PikachuTradeCardName
 
-	db PIKACHU4
+	db PIKACHU_ALT_LV16
 	tx PikachuTradeCardName
 
-	db SURFING_PIKACHU1
+	db SURFING_PIKACHU_LV13
 	tx SurfingPikachuTradeCardName
 
-	db SURFING_PIKACHU2
+	db SURFING_PIKACHU_ALT_LV13
 	tx SurfingPikachuTradeCardName
 
-	db ELECTABUZZ1
+	db ELECTABUZZ_LV20
 	tx ElectabuzzTradeCardName
 
-	db SLOWPOKE1
+	db SLOWPOKE_LV9
 	tx SlowpokeTradeCardName
 
-	db MEWTWO3
+	db MEWTWO_ALT_LV60
 	tx MewtwoTradeCardName
 
-	db MEWTWO2
+	db MEWTWO_LV60
 	tx MewtwoTradeCardName
 
-	db MEW1
+	db MEW_LV8
 	tx MewTradeCardName
 
-	db JIGGLYPUFF1
+	db JIGGLYPUFF_LV12
 	tx JigglypuffTradeCardName
 
 	db SUPER_ENERGY_RETRIEVAL
@@ -1543,16 +1543,16 @@ ScriptCommand_PickLegendaryCard:
 	jr ScriptCommand_PickChallengeCupPrizeCard.get_card_from_list
 
 LegendaryCards:
-	db ZAPDOS3
+	db ZAPDOS_LV68
 	tx ZapdosLegendaryCardName
 
-	db MOLTRES2
+	db MOLTRES_LV37
 	tx MoltresLegendaryCardName
 
-	db ARTICUNO2
+	db ARTICUNO_LV37
 	tx ArticunoLegendaryCardName
 
-	db DRAGONITE1
+	db DRAGONITE_LV41
 	tx DragoniteLegendaryCardName
 
 LegendaryCardEvents:

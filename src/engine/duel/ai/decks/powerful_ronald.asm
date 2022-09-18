@@ -33,14 +33,14 @@ AIActionTable_PowerfulRonald:
 
 .list_arena
 	db KANGASKHAN
-	db ELECTABUZZ2
+	db ELECTABUZZ_LV35
 	db HITMONCHAN
 	db MR_MIME
 	db LICKITUNG
 	db HITMONLEE
 	db TAUROS
 	db JYNX
-	db MEWTWO1
+	db MEWTWO_LV53
 	db DODUO
 	db $00
 
@@ -51,8 +51,8 @@ AIActionTable_PowerfulRonald:
 	db TAUROS
 	db DODUO
 	db JYNX
-	db MEWTWO1
-	db ELECTABUZZ2
+	db MEWTWO_LV53
+	db ELECTABUZZ_LV35
 	db MR_MIME
 	db LICKITUNG
 	db $00
@@ -64,17 +64,17 @@ AIActionTable_PowerfulRonald:
 	db $00
 
 .list_energy
-	ai_energy ELECTABUZZ2, 2, +1
-	ai_energy HITMONLEE,   3, +1
-	ai_energy HITMONCHAN,  3, +1
-	ai_energy MR_MIME,     2, +0
-	ai_energy JYNX,        3, +0
-	ai_energy MEWTWO1,     2, +0
-	ai_energy DODUO,       3, -1
-	ai_energy DODRIO,      3, -1
-	ai_energy LICKITUNG,   2, +0
-	ai_energy KANGASKHAN,  4, -1
-	ai_energy TAUROS,      3, +0
+	ai_energy ELECTABUZZ_LV35, 2, +1
+	ai_energy HITMONLEE,       3, +1
+	ai_energy HITMONCHAN,      3, +1
+	ai_energy MR_MIME,         2, +0
+	ai_energy JYNX,            3, +0
+	ai_energy MEWTWO_LV53,     2, +0
+	ai_energy DODUO,           3, -1
+	ai_energy DODRIO,          3, -1
+	ai_energy LICKITUNG,       2, +0
+	ai_energy KANGASKHAN,      4, -1
+	ai_energy TAUROS,          3, +0
 	db $00
 
 .list_prize

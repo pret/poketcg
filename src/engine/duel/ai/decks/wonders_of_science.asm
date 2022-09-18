@@ -32,9 +32,9 @@ AIActionTable_WondersOfScience:
 	ret
 
 .list_arena
-	db MEWTWO1
-	db MEWTWO3
-	db MEWTWO2
+	db MEWTWO_LV53
+	db MEWTWO_ALT_LV60
+	db MEWTWO_LV60
 	db GRIMER
 	db KOFFING
 	db PORYGON
@@ -43,9 +43,9 @@ AIActionTable_WondersOfScience:
 .list_bench
 	db GRIMER
 	db KOFFING
-	db MEWTWO3
-	db MEWTWO2
-	db MEWTWO1
+	db MEWTWO_ALT_LV60
+	db MEWTWO_LV60
+	db MEWTWO_LV53
 	db PORYGON
 	db $00
 
@@ -53,14 +53,14 @@ AIActionTable_WondersOfScience:
 	db $00
 
 .list_energy
-	ai_energy GRIMER,  3, +0
-	ai_energy MUK,     4, +0
-	ai_energy KOFFING, 2, +0
-	ai_energy WEEZING, 3, +0
-	ai_energy MEWTWO1, 2, -1
-	ai_energy MEWTWO3, 2, -1
-	ai_energy MEWTWO2, 2, -1
-	ai_energy PORYGON, 2, -1
+	ai_energy GRIMER,          3, +0
+	ai_energy MUK,             4, +0
+	ai_energy KOFFING,         2, +0
+	ai_energy WEEZING,         3, +0
+	ai_energy MEWTWO_LV53,     2, -1
+	ai_energy MEWTWO_ALT_LV60, 2, -1
+	ai_energy MEWTWO_LV60,     2, -1
+	ai_energy PORYGON,         2, -1
 	db $00
 
 .list_prize

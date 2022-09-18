@@ -12,8 +12,8 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw DoubleColorlessEnergyCard
 	dw BulbasaurCard
 	dw IvysaurCard
-	dw Venusaur1Card
-	dw Venusaur2Card
+	dw VenusaurLv64Card
+	dw VenusaurLv67Card
 	dw CaterpieCard
 	dw MetapodCard
 	dw ButterfreeCard
@@ -46,27 +46,27 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw ExeggutorCard
 	dw KoffingCard
 	dw WeezingCard
-	dw Tangela1Card
-	dw Tangela2Card
+	dw TangelaLv8Card
+	dw TangelaLv12Card
 	dw ScytherCard
 	dw PinsirCard
 	dw CharmanderCard
 	dw CharmeleonCard
 	dw CharizardCard
 	dw VulpixCard
-	dw Ninetales1Card
-	dw Ninetales2Card
+	dw NinetalesLv32Card
+	dw NinetalesLv35Card
 	dw GrowlitheCard
-	dw Arcanine1Card
-	dw Arcanine2Card
+	dw ArcanineLv34Card
+	dw ArcanineLv45Card
 	dw PonytaCard
 	dw RapidashCard
-	dw Magmar1Card
-	dw Magmar2Card
-	dw Flareon1Card
-	dw Flareon2Card
-	dw Moltres1Card
-	dw Moltres2Card
+	dw MagmarLv24Card
+	dw MagmarLv31Card
+	dw FlareonLv22Card
+	dw FlareonLv28Card
+	dw MoltresLv35Card
+	dw MoltresLv37Card
 	dw SquirtleCard
 	dw WartortleCard
 	dw BlastoiseCard
@@ -92,35 +92,35 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw MagikarpCard
 	dw GyaradosCard
 	dw LaprasCard
-	dw Vaporeon1Card
-	dw Vaporeon2Card
+	dw VaporeonLv29Card
+	dw VaporeonLv42Card
 	dw OmanyteCard
 	dw OmastarCard
-	dw Articuno1Card
-	dw Articuno2Card
-	dw Pikachu1Card
-	dw Pikachu2Card
-	dw Pikachu3Card
-	dw Pikachu4Card
+	dw ArticunoLv35Card
+	dw ArticunoLv37Card
+	dw PikachuLv12Card
+	dw PikachuLv14Card
+	dw PikachuLv16Card
+	dw PikachuAltLv16Card
 	dw FlyingPikachuCard
-	dw SurfingPikachu1Card
-	dw SurfingPikachu2Card
-	dw Raichu1Card
-	dw Raichu2Card
-	dw Magnemite1Card
-	dw Magnemite2Card
-	dw Magneton1Card
-	dw Magneton2Card
+	dw SurfingPikachuLv13Card
+	dw SurfingPikachuAltLv13Card
+	dw RaichuLv40Card
+	dw RaichuLv45Card
+	dw MagnemiteLv13Card
+	dw MagnemiteLv15Card
+	dw MagnetonLv28Card
+	dw MagnetonLv35Card
 	dw VoltorbCard
-	dw Electrode1Card
-	dw Electrode2Card
-	dw Electabuzz1Card
-	dw Electabuzz2Card
-	dw Jolteon1Card
-	dw Jolteon2Card
-	dw Zapdos1Card
-	dw Zapdos2Card
-	dw Zapdos3Card
+	dw ElectrodeLv35Card
+	dw ElectrodeLv42Card
+	dw ElectabuzzLv20Card
+	dw ElectabuzzLv35Card
+	dw JolteonLv24Card
+	dw JolteonLv29Card
+	dw ZapdosLv40Card
+	dw ZapdosLv64Card
+	dw ZapdosLv68Card
 	dw SandshrewCard
 	dw SandslashCard
 	dw DiglettCard
@@ -135,8 +135,8 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw GolemCard
 	dw OnixCard
 	dw CuboneCard
-	dw Marowak1Card
-	dw Marowak2Card
+	dw MarowakLv26Card
+	dw MarowakLv32Card
 	dw HitmonleeCard
 	dw HitmonchanCard
 	dw RhyhornCard
@@ -147,24 +147,24 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw AbraCard
 	dw KadabraCard
 	dw AlakazamCard
-	dw Slowpoke1Card
-	dw Slowpoke2Card
+	dw SlowpokeLv9Card
+	dw SlowpokeLv18Card
 	dw SlowbroCard
-	dw Gastly1Card
-	dw Gastly2Card
-	dw Haunter1Card
-	dw Haunter2Card
+	dw GastlyLv8Card
+	dw GastlyLv17Card
+	dw HaunterLv17Card
+	dw HaunterLv22Card
 	dw GengarCard
 	dw DrowzeeCard
 	dw HypnoCard
 	dw MrMimeCard
 	dw JynxCard
-	dw Mewtwo1Card
-	dw Mewtwo2Card
-	dw Mewtwo3Card
-	dw Mew1Card
-	dw Mew2Card
-	dw Mew3Card
+	dw MewtwoLv53Card
+	dw MewtwoLv60Card
+	dw MewtwoAltLV60Card
+	dw MewLv8Card
+	dw MewLv15Card
+	dw MewLv23Card
 	dw PidgeyCard
 	dw PidgeottoCard
 	dw Pidgeot1Card
@@ -175,12 +175,12 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw FearowCard
 	dw ClefairyCard
 	dw ClefableCard
-	dw Jigglypuff1Card
-	dw Jigglypuff2Card
-	dw Jigglypuff3Card
+	dw JigglypuffLv12Card
+	dw JigglypuffLv13Card
+	dw JigglypuffLv14Card
 	dw WigglytuffCard
-	dw Meowth1Card
-	dw Meowth2Card
+	dw MeowthLv14Card
+	dw MeowthLv15Card
 	dw PersianCard
 	dw FarfetchdCard
 	dw DoduoCard
@@ -195,8 +195,8 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw SnorlaxCard
 	dw DratiniCard
 	dw DragonairCard
-	dw Dragonite1Card
-	dw Dragonite2Card
+	dw DragoniteLv41Card
+	dw DragoniteLv45Card
 	dw ProfessorOakCard
 	dw ImposterProfessorOakCard
 	dw BillCard
@@ -335,13 +335,13 @@ IvysaurCard: ; 30e69 (c:4e69)
 	tx IvysaurDescription ; description
 	db 16
 
-Venusaur1Card: ; 30eaa (c:4eaa)
+VenusaurLv64Card: ; 30eaa (c:4eaa)
 	db TYPE_PKMN_GRASS ; type
-	gfx Venusaur1CardGfx ; gfx
+	gfx VenusaurLv64CardGfx ; gfx
 	tx VenusaurName ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; sets
-	db VENUSAUR1
+	db VENUSAUR_LV64
 	db 100 ; hp
 	db STAGE2 ; stage
 	tx IvysaurName ; pre-evo name
@@ -383,16 +383,16 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	db 64 ; level
 	db 6, 7 ; length
 	dw 221 * 10 ; weight
-	tx Venusaur1Description ; description
+	tx VenusaurLv64Description ; description
 	db 0
 
-Venusaur2Card: ; 30eeb (c:4eeb)
+VenusaurLv67Card: ; 30eeb (c:4eeb)
 	db TYPE_PKMN_GRASS ; type
-	gfx Venusaur2CardGfx ; gfx
+	gfx VenusaurLv67CardGfx ; gfx
 	tx VenusaurName ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; sets
-	db VENUSAUR2
+	db VENUSAUR_LV67
 	db 100 ; hp
 	db STAGE2 ; stage
 	tx IvysaurName ; pre-evo name
@@ -434,7 +434,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	db 67 ; level
 	db 6, 7 ; length
 	dw 221 * 10 ; weight
-	tx Venusaur2Description ; description
+	tx VenusaurLv67Description ; description
 	db 0
 
 CaterpieCard: ; 30f2c (c:4f2c)
@@ -2069,13 +2069,13 @@ WeezingCard: ; 3170b (c:570b)
 	tx WeezingDescription ; description
 	db 0
 
-Tangela1Card: ; 3174c (c:574c)
+TangelaLv8Card: ; 3174c (c:574c)
 	db TYPE_PKMN_GRASS ; type
-	gfx Tangela1CardGfx ; gfx
+	gfx TangelaLv8CardGfx ; gfx
 	tx TangelaName ; name
 	db CIRCLE ; rarity
 	db LABORATORY | NONE ; sets
-	db TANGELA1
+	db TANGELA_LV8
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -2117,16 +2117,16 @@ Tangela1Card: ; 3174c (c:574c)
 	db 8 ; level
 	db 3, 3 ; length
 	dw 77 * 10 ; weight
-	tx Tangela1Description ; description
+	tx TangelaLv8Description ; description
 	db 0
 
-Tangela2Card: ; 3178d (c:578d)
+TangelaLv12Card: ; 3178d (c:578d)
 	db TYPE_PKMN_GRASS ; type
-	gfx Tangela2CardGfx ; gfx
+	gfx TangelaLv12CardGfx ; gfx
 	tx TangelaName ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | GB ; sets
-	db TANGELA2
+	db TANGELA_LV12
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -2168,7 +2168,7 @@ Tangela2Card: ; 3178d (c:578d)
 	db 12 ; level
 	db 3, 3 ; length
 	dw 77 * 10 ; weight
-	tx Tangela2Description ; description
+	tx TangelaLv12Description ; description
 	db 0
 
 ScytherCard: ; 317ce (c:57ce)
@@ -2477,13 +2477,13 @@ VulpixCard: ; 31913 (c:5913)
 	tx VulpixDescription ; description
 	db 18
 
-Ninetales1Card: ; 31954 (c:5954)
+NinetalesLv32Card: ; 31954 (c:5954)
 	db TYPE_PKMN_FIRE ; type
-	gfx Ninetales1CardGfx ; gfx
+	gfx NinetalesLv32CardGfx ; gfx
 	tx NinetalesName ; name
 	db STAR ; rarity
 	db MYSTERY | NONE ; sets
-	db NINETALES1
+	db NINETALES_LV32
 	db 80 ; hp
 	db STAGE1 ; stage
 	tx VulpixName ; pre-evo name
@@ -2525,16 +2525,16 @@ Ninetales1Card: ; 31954 (c:5954)
 	db 32 ; level
 	db 3, 7 ; length
 	dw 44 * 10 ; weight
-	tx Ninetales1Description ; description
+	tx NinetalesLv32Description ; description
 	db 0
 
-Ninetales2Card: ; 31995 (c:5995)
+NinetalesLv35Card: ; 31995 (c:5995)
 	db TYPE_PKMN_FIRE ; type
-	gfx Ninetales2CardGfx ; gfx
+	gfx NinetalesLv35CardGfx ; gfx
 	tx NinetalesName ; name
 	db STAR ; rarity
 	db LABORATORY | GB ; sets
-	db NINETALES2
+	db NINETALES_LV35
 	db 80 ; hp
 	db STAGE1 ; stage
 	tx VulpixName ; pre-evo name
@@ -2576,7 +2576,7 @@ Ninetales2Card: ; 31995 (c:5995)
 	db 35 ; level
 	db 3, 7 ; length
 	dw 44 * 10 ; weight
-	tx Ninetales2Description ; description
+	tx NinetalesLv35Description ; description
 	db 0
 
 GrowlitheCard: ; 319d6 (c:59d6)
@@ -2630,13 +2630,13 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	tx GrowlitheDescription ; description
 	db 16
 
-Arcanine1Card: ; 31a17 (c:5a17)
+ArcanineLv34Card: ; 31a17 (c:5a17)
 	db TYPE_PKMN_FIRE ; type
-	gfx Arcanine1CardGfx ; gfx
+	gfx ArcanineLv34CardGfx ; gfx
 	tx ArcanineName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db ARCANINE1
+	db ARCANINE_LV34
 	db 70 ; hp
 	db STAGE1 ; stage
 	tx GrowlitheName ; pre-evo name
@@ -2678,16 +2678,16 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	db 34 ; level
 	db 6, 3 ; length
 	dw 342 * 10 ; weight
-	tx Arcanine1Description ; description
+	tx ArcanineLv34Description ; description
 	db 0
 
-Arcanine2Card: ; 31a58 (c:5a58)
+ArcanineLv45Card: ; 31a58 (c:5a58)
 	db TYPE_PKMN_FIRE ; type
-	gfx Arcanine2CardGfx ; gfx
+	gfx ArcanineLv45CardGfx ; gfx
 	tx ArcanineName ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; sets
-	db ARCANINE2
+	db ARCANINE_LV45
 	db 100 ; hp
 	db STAGE1 ; stage
 	tx GrowlitheName ; pre-evo name
@@ -2729,7 +2729,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	db 45 ; level
 	db 6, 3 ; length
 	dw 342 * 10 ; weight
-	tx Arcanine2Description ; description
+	tx ArcanineLv45Description ; description
 	db 0
 
 PonytaCard: ; 31a99 (c:5a99)
@@ -2834,13 +2834,13 @@ RapidashCard: ; 31ada (c:5ada)
 	tx RapidashDescription ; description
 	db 0
 
-Magmar1Card: ; 31b1b (c:5b1b)
+MagmarLv24Card: ; 31b1b (c:5b1b)
 	db TYPE_PKMN_FIRE ; type
-	gfx Magmar1CardGfx ; gfx
+	gfx MagmarLv24CardGfx ; gfx
 	tx MagmarName ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; sets
-	db MAGMAR1
+	db MAGMAR_LV24
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -2882,16 +2882,16 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	db 24 ; level
 	db 4, 3 ; length
 	dw 98 * 10 ; weight
-	tx Magmar1Description ; description
+	tx MagmarLv24Description ; description
 	db 0
 
-Magmar2Card: ; 31b5c (c:5b5c)
+MagmarLv31Card: ; 31b5c (c:5b5c)
 	db TYPE_PKMN_FIRE ; type
-	gfx Magmar2CardGfx ; gfx
+	gfx MagmarLv31CardGfx ; gfx
 	tx MagmarName ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; sets
-	db MAGMAR2
+	db MAGMAR_LV31
 	db 70 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -2933,16 +2933,16 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	db 31 ; level
 	db 4, 3 ; length
 	dw 98 * 10 ; weight
-	tx Magmar2Description ; description
+	tx MagmarLv31Description ; description
 	db 3
 
-Flareon1Card: ; 31b9d (c:5b9d)
+FlareonLv22Card: ; 31b9d (c:5b9d)
 	db TYPE_PKMN_FIRE ; type
-	gfx Flareon1CardGfx ; gfx
+	gfx FlareonLv22CardGfx ; gfx
 	tx FlareonName ; name
 	db DIAMOND ; rarity
 	db MYSTERY | GB ; sets
-	db FLAREON1
+	db FLAREON_LV22
 	db 60 ; hp
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
@@ -2984,16 +2984,16 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	db 22 ; level
 	db 2, 11 ; length
 	dw 55 * 10 ; weight
-	tx Flareon1Description ; description
+	tx FlareonLv22Description ; description
 	db 0
 
-Flareon2Card: ; 31bde (c:5bde)
+FlareonLv28Card: ; 31bde (c:5bde)
 	db TYPE_PKMN_FIRE ; type
-	gfx Flareon2CardGfx ; gfx
+	gfx FlareonLv28CardGfx ; gfx
 	tx FlareonName ; name
 	db STAR ; rarity
 	db EVOLUTION | JUNGLE ; sets
-	db FLAREON2
+	db FLAREON_LV28
 	db 70 ; hp
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
@@ -3035,16 +3035,16 @@ Flareon2Card: ; 31bde (c:5bde)
 	db 28 ; level
 	db 2, 11 ; length
 	dw 55 * 10 ; weight
-	tx Flareon2Description ; description
+	tx FlareonLv28Description ; description
 	db 0
 
-Moltres1Card: ; 31c1f (c:5c1f)
+MoltresLv35Card: ; 31c1f (c:5c1f)
 	db TYPE_PKMN_FIRE ; type
-	gfx Moltres1CardGfx ; gfx
+	gfx MoltresLv35CardGfx ; gfx
 	tx MoltresName ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; sets
-	db MOLTRES1
+	db MOLTRES_LV35
 	db 70 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -3070,7 +3070,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	dw NONE ; description (cont)
 	db 80 ; damage
 	db DAMAGE_NORMAL ; category
-	dw Moltres1DiveBombEffectCommands ; effect commands
+	dw MoltresLv35DiveBombEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -3086,16 +3086,16 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	db 35 ; level
 	db 6, 7 ; length
 	dw 132 * 10 ; weight
-	tx Moltres1Description ; description
+	tx MoltresLv35Description ; description
 	db 0
 
-Moltres2Card: ; 31c60 (c:5c60)
+MoltresLv37Card: ; 31c60 (c:5c60)
 	db TYPE_PKMN_FIRE ; type
-	gfx Moltres2CardGfx ; gfx
+	gfx MoltresLv37CardGfx ; gfx
 	tx MoltresName ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; sets
-	db MOLTRES2
+	db MOLTRES_LV37
 	db 100 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -3121,7 +3121,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	dw NONE ; description (cont)
 	db 70 ; damage
 	db DAMAGE_NORMAL ; category
-	dw Moltres2DiveBombEffectCommands ; effect commands
+	dw MoltresLv37DiveBombEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -3137,7 +3137,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	db 37 ; level
 	db 6, 7 ; length
 	dw 132 * 10 ; weight
-	tx Moltres2Description ; description
+	tx MoltresLv37Description ; description
 	db 0
 
 SquirtleCard: ; 31ca1 (c:5ca1)
@@ -4415,13 +4415,13 @@ LaprasCard: ; 322b9 (c:62b9)
 	tx LaprasDescription ; description
 	db 0
 
-Vaporeon1Card: ; 322fa (c:62fa)
+VaporeonLv29Card: ; 322fa (c:62fa)
 	db TYPE_PKMN_WATER ; type
-	gfx Vaporeon1CardGfx ; gfx
+	gfx VaporeonLv29CardGfx ; gfx
 	tx VaporeonName ; name
 	db DIAMOND ; rarity
 	db MYSTERY | GB ; sets
-	db VAPOREON1
+	db VAPOREON_LV29
 	db 60 ; hp
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
@@ -4463,16 +4463,16 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	db 29 ; level
 	db 3, 3 ; length
 	dw 64 * 10 ; weight
-	tx Vaporeon1Description ; description
+	tx VaporeonLv29Description ; description
 	db 0
 
-Vaporeon2Card: ; 3233b (c:633b)
+VaporeonLv42Card: ; 3233b (c:633b)
 	db TYPE_PKMN_WATER ; type
-	gfx Vaporeon2CardGfx ; gfx
+	gfx VaporeonLv42CardGfx ; gfx
 	tx VaporeonName ; name
 	db STAR ; rarity
 	db EVOLUTION | JUNGLE ; sets
-	db VAPOREON2
+	db VAPOREON_LV42
 	db 80 ; hp
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
@@ -4514,7 +4514,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	db 42 ; level
 	db 3, 3 ; length
 	dw 64 * 10 ; weight
-	tx Vaporeon2Description ; description
+	tx VaporeonLv42Description ; description
 	db 0
 
 OmanyteCard: ; 3237c (c:637c)
@@ -4619,13 +4619,13 @@ OmastarCard: ; 323bd (c:63bd)
 	tx OmastarDescription ; description
 	db 0
 
-Articuno1Card: ; 323fe (c:63fe)
+ArticunoLv35Card: ; 323fe (c:63fe)
 	db TYPE_PKMN_WATER ; type
-	gfx Articuno1CardGfx ; gfx
+	gfx ArticunoLv35CardGfx ; gfx
 	tx ArticunoName ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; sets
-	db ARTICUNO1
+	db ARTICUNO_LV35
 	db 70 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -4667,16 +4667,16 @@ Articuno1Card: ; 323fe (c:63fe)
 	db 35 ; level
 	db 5, 7 ; length
 	dw 122 * 10 ; weight
-	tx Articuno1Description ; description
+	tx ArticunoLv35Description ; description
 	db 0
 
-Articuno2Card: ; 3243f (c:643f)
+ArticunoLv37Card: ; 3243f (c:643f)
 	db TYPE_PKMN_WATER ; type
-	gfx Articuno2CardGfx ; gfx
+	gfx ArticunoLv37CardGfx ; gfx
 	tx ArticunoName ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; sets
-	db ARTICUNO2
+	db ARTICUNO_LV37
 	db 100 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -4718,16 +4718,16 @@ Articuno2Card: ; 3243f (c:643f)
 	db 37 ; level
 	db 5, 7 ; length
 	dw 122 * 10 ; weight
-	tx Articuno2Description ; description
+	tx ArticunoLv37Description ; description
 	db 0
 
-Pikachu1Card: ; 32480 (c:6480)
+PikachuLv12Card: ; 32480 (c:6480)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Pikachu1CardGfx ; gfx
+	gfx PikachuLv12CardGfx ; gfx
 	tx PikachuName ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; sets
-	db PIKACHU1
+	db PIKACHU_LV12
 	db 40 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -4769,16 +4769,16 @@ Pikachu1Card: ; 32480 (c:6480)
 	db 12 ; level
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
-	tx Pikachu1Description ; description
+	tx PikachuLv12Description ; description
 	db 19
 
-Pikachu2Card: ; 324c1 (c:64c1)
+PikachuLv14Card: ; 324c1 (c:64c1)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Pikachu2CardGfx ; gfx
+	gfx PikachuLv14CardGfx ; gfx
 	tx PikachuName ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; sets
-	db PIKACHU2
+	db PIKACHU_LV14
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -4820,16 +4820,16 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	db 14 ; level
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
-	tx Pikachu2Description ; description
+	tx PikachuLv14Description ; description
 	db 16
 
-Pikachu3Card: ; 32502 (c:6502)
+PikachuLv16Card: ; 32502 (c:6502)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Pikachu3CardGfx ; gfx
+	gfx PikachuLv16CardGfx ; gfx
 	tx PikachuName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db PIKACHU3
+	db PIKACHU_LV16
 	db 60 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -4841,7 +4841,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
-	dw Pikachu3GrowlEffectCommands ; effect commands
+	dw PikachuLv16GrowlEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
@@ -4855,7 +4855,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	dw NONE ; description (cont)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
-	dw Pikachu3ThundershockEffectCommands ; effect commands
+	dw PikachuLv16ThundershockEffectCommands ; effect commands
 	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -4871,16 +4871,16 @@ Pikachu3Card: ; 32502 (c:6502)
 	db 16 ; level
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
-	tx Pikachu3Description ; description
+	tx PikachuLv16Description ; description
 	db 16
 
-Pikachu4Card: ; 32543 (c:6543)
+PikachuAltLv16Card: ; 32543 (c:6543)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Pikachu4CardGfx ; gfx
+	gfx PikachuAltLv16CardGfx ; gfx
 	tx PikachuName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db PIKACHU4
+	db PIKACHU_ALT_LV16
 	db 60 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -4892,7 +4892,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
-	dw Pikachu4GrowlEffectCommands ; effect commands
+	dw PikachuAltLv16GrowlEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
@@ -4906,7 +4906,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	dw NONE ; description (cont)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
-	dw Pikachu4ThundershockEffectCommands ; effect commands
+	dw PikachuAltLv16ThundershockEffectCommands ; effect commands
 	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -4922,7 +4922,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	db 16 ; level
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
-	tx Pikachu3Description ; description
+	tx PikachuLv16Description ; description
 	db 16
 
 FlyingPikachuCard: ; 32584 (c:6584)
@@ -4976,13 +4976,13 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	tx FlyingPikachuDescription ; description
 	db 3
 
-SurfingPikachu1Card: ; 325c5 (c:65c5)
+SurfingPikachuLv13Card: ; 325c5 (c:65c5)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx SurfingPikachu1CardGfx ; gfx
+	gfx SurfingPikachuLv13CardGfx ; gfx
 	tx SurfingPikachuName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db SURFING_PIKACHU1
+	db SURFING_PIKACHU_LV13
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -5027,13 +5027,13 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	tx SurfingPikachuDescription ; description
 	db 0
 
-SurfingPikachu2Card: ; 32606 (c:6606)
+SurfingPikachuAltLv13Card: ; 32606 (c:6606)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx SurfingPikachu2CardGfx ; gfx
+	gfx SurfingPikachuAltLv13CardGfx ; gfx
 	tx SurfingPikachuName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db SURFING_PIKACHU2
+	db SURFING_PIKACHU_ALT_LV13
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -5078,13 +5078,13 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	tx SurfingPikachuDescription ; description
 	db 0
 
-Raichu1Card: ; 32647 (c:6647)
+RaichuLv40Card: ; 32647 (c:6647)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Raichu1CardGfx ; gfx
+	gfx RaichuLv40CardGfx ; gfx
 	tx RaichuName ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; sets
-	db RAICHU1
+	db RAICHU_LV40
 	db 80 ; hp
 	db STAGE1 ; stage
 	tx PikachuName ; pre-evo name
@@ -5126,16 +5126,16 @@ Raichu1Card: ; 32647 (c:6647)
 	db 40 ; level
 	db 2, 7 ; length
 	dw 66 * 10 ; weight
-	tx Raichu1Description ; description
+	tx RaichuLv40Description ; description
 	db 0
 
-Raichu2Card: ; 32688 (c:6688)
+RaichuLv45Card: ; 32688 (c:6688)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Raichu2CardGfx ; gfx
+	gfx RaichuLv45CardGfx ; gfx
 	tx RaichuName ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; sets
-	db RAICHU2
+	db RAICHU_LV45
 	db 90 ; hp
 	db STAGE1 ; stage
 	tx PikachuName ; pre-evo name
@@ -5177,16 +5177,16 @@ Raichu2Card: ; 32688 (c:6688)
 	db 45 ; level
 	db 2, 7 ; length
 	dw 66 * 10 ; weight
-	tx Raichu2Description ; description
+	tx RaichuLv45Description ; description
 	db 0
 
-Magnemite1Card: ; 326c9 (c:66c9)
+MagnemiteLv13Card: ; 326c9 (c:66c9)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Magnemite1CardGfx ; gfx
+	gfx MagnemiteLv13CardGfx ; gfx
 	tx MagnemiteName ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; sets
-	db MAGNEMITE1
+	db MAGNEMITE_LV13
 	db 40 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -5228,16 +5228,16 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	db 13 ; level
 	db 1, 0 ; length
 	dw 13 * 10 ; weight
-	tx Magnemite1Description ; description
+	tx MagnemiteLv13Description ; description
 	db 19
 
-Magnemite2Card: ; 3270a (c:670a)
+MagnemiteLv15Card: ; 3270a (c:670a)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Magnemite2CardGfx ; gfx
+	gfx MagnemiteLv15CardGfx ; gfx
 	tx MagnemiteName ; name
 	db CIRCLE ; rarity
 	db LABORATORY | GB ; sets
-	db MAGNEMITE2
+	db MAGNEMITE_LV15
 	db 40 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -5279,16 +5279,16 @@ Magnemite2Card: ; 3270a (c:670a)
 	db 15 ; level
 	db 1, 0 ; length
 	dw 13 * 10 ; weight
-	tx Magnemite2Description ; description
+	tx MagnemiteLv15Description ; description
 	db 19
 
-Magneton1Card: ; 3274b (c:674b)
+MagnetonLv28Card: ; 3274b (c:674b)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Magneton1CardGfx ; gfx
+	gfx MagnetonLv28CardGfx ; gfx
 	tx MagnetonName ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; sets
-	db MAGNETON1
+	db MAGNETON_LV28
 	db 60 ; hp
 	db STAGE1 ; stage
 	tx MagnemiteName ; pre-evo name
@@ -5310,11 +5310,11 @@ Magneton1Card: ; 3274b (c:674b)
 	; attack 2
 	energy LIGHTNING, 2, COLORLESS, 2 ; energies
 	tx SelfdestructName ; name
-	tx Magneton1sSelfdestructDescription ; description
+	tx MagnetonLv28sSelfdestructDescription ; description
 	dw NONE ; description (cont)
 	db 80 ; damage
 	db DAMAGE_NORMAL ; category
-	dw Magneton1SelfdestructEffectCommands ; effect commands
+	dw MagnetonLv28SelfdestructEffectCommands ; effect commands
 	db HIGH_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -5330,16 +5330,16 @@ Magneton1Card: ; 3274b (c:674b)
 	db 28 ; level
 	db 3, 3 ; length
 	dw 132 * 10 ; weight
-	tx Magneton1Description ; description
+	tx MagnetonLv28Description ; description
 	db 0
 
-Magneton2Card: ; 3278c (c:678c)
+MagnetonLv35Card: ; 3278c (c:678c)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Magneton2CardGfx ; gfx
+	gfx MagnetonLv35CardGfx ; gfx
 	tx MagnetonName ; name
 	db STAR ; rarity
 	db LABORATORY | FOSSIL ; sets
-	db MAGNETON2
+	db MAGNETON_LV35
 	db 80 ; hp
 	db STAGE1 ; stage
 	tx MagnemiteName ; pre-evo name
@@ -5361,11 +5361,11 @@ Magneton2Card: ; 3278c (c:678c)
 	; attack 2
 	energy LIGHTNING, 4 ; energies
 	tx SelfdestructName ; name
-	tx Magneton2sSelfdestructDescription ; description
+	tx MagnetonLv35sSelfdestructDescription ; description
 	dw NONE ; description (cont)
 	db 100 ; damage
 	db DAMAGE_NORMAL ; category
-	dw Magneton2SelfdestructEffectCommands ; effect commands
+	dw MagnetonLv35SelfdestructEffectCommands ; effect commands
 	db HIGH_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -5381,7 +5381,7 @@ Magneton2Card: ; 3278c (c:678c)
 	db 35 ; level
 	db 3, 3 ; length
 	dw 132 * 10 ; weight
-	tx Magneton2Description ; description
+	tx MagnetonLv35Description ; description
 	db 0
 
 VoltorbCard: ; 327cd (c:67cd)
@@ -5435,13 +5435,13 @@ VoltorbCard: ; 327cd (c:67cd)
 	tx VoltorbDescription ; description
 	db 21
 
-Electrode1Card: ; 3280e (c:680e)
+ElectrodeLv35Card: ; 3280e (c:680e)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Electrode1CardGfx ; gfx
+	gfx ElectrodeLv35CardGfx ; gfx
 	tx ElectrodeName ; name
 	db STAR ; rarity
 	db LABORATORY | GB ; sets
-	db ELECTRODE1
+	db ELECTRODE_LV35
 	db 70 ; hp
 	db STAGE1 ; stage
 	tx VoltorbName ; pre-evo name
@@ -5483,16 +5483,16 @@ Electrode1Card: ; 3280e (c:680e)
 	db 35 ; level
 	db 3, 11 ; length
 	dw 147 * 10 ; weight
-	tx Electrode1Description ; description
+	tx ElectrodeLv35Description ; description
 	db 0
 
-Electrode2Card: ; 3284f (c:684f)
+ElectrodeLv42Card: ; 3284f (c:684f)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Electrode2CardGfx ; gfx
+	gfx ElectrodeLv42CardGfx ; gfx
 	tx ElectrodeName ; name
 	db STAR ; rarity
 	db MYSTERY | JUNGLE ; sets
-	db ELECTRODE2
+	db ELECTRODE_LV42
 	db 90 ; hp
 	db STAGE1 ; stage
 	tx VoltorbName ; pre-evo name
@@ -5534,16 +5534,16 @@ Electrode2Card: ; 3284f (c:684f)
 	db 42 ; level
 	db 3, 11 ; length
 	dw 147 * 10 ; weight
-	tx Electrode2Description ; description
+	tx ElectrodeLv42Description ; description
 	db 0
 
-Electabuzz1Card: ; 32890 (c:6890)
+ElectabuzzLv20Card: ; 32890 (c:6890)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Electabuzz1CardGfx ; gfx
+	gfx ElectabuzzLv20CardGfx ; gfx
 	tx ElectabuzzName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db ELECTABUZZ1
+	db ELECTABUZZ_LV20
 	db 60 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -5585,16 +5585,16 @@ Electabuzz1Card: ; 32890 (c:6890)
 	db 20 ; level
 	db 3, 7 ; length
 	dw 66 * 10 ; weight
-	tx Electabuzz1Description ; description
+	tx ElectabuzzLv20Description ; description
 	db 0
 
-Electabuzz2Card: ; 328d1 (c:68d1)
+ElectabuzzLv35Card: ; 328d1 (c:68d1)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Electabuzz2CardGfx ; gfx
+	gfx ElectabuzzLv35CardGfx ; gfx
 	tx ElectabuzzName ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; sets
-	db ELECTABUZZ2
+	db ELECTABUZZ_LV35
 	db 70 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -5636,16 +5636,16 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	db 35 ; level
 	db 3, 7 ; length
 	dw 66 * 10 ; weight
-	tx Electabuzz2Description ; description
+	tx ElectabuzzLv35Description ; description
 	db 0
 
-Jolteon1Card: ; 32912 (c:6912)
+JolteonLv24Card: ; 32912 (c:6912)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Jolteon1CardGfx ; gfx
+	gfx JolteonLv24CardGfx ; gfx
 	tx JolteonName ; name
 	db DIAMOND ; rarity
 	db MYSTERY | GB ; sets
-	db JOLTEON1
+	db JOLTEON_LV24
 	db 60 ; hp
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
@@ -5687,16 +5687,16 @@ Jolteon1Card: ; 32912 (c:6912)
 	db 24 ; level
 	db 2, 7 ; length
 	dw 54 * 10 ; weight
-	tx Jolteon1Description ; description
+	tx JolteonLv24Description ; description
 	db 0
 
-Jolteon2Card: ; 32953 (c:6953)
+JolteonLv29Card: ; 32953 (c:6953)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Jolteon2CardGfx ; gfx
+	gfx JolteonLv29CardGfx ; gfx
 	tx JolteonName ; name
 	db STAR ; rarity
 	db EVOLUTION | JUNGLE ; sets
-	db JOLTEON2
+	db JOLTEON_LV29
 	db 70 ; hp
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
@@ -5738,16 +5738,16 @@ Jolteon2Card: ; 32953 (c:6953)
 	db 29 ; level
 	db 2, 7 ; length
 	dw 54 * 10 ; weight
-	tx Jolteon2Description ; description
+	tx JolteonLv29Description ; description
 	db 0
 
-Zapdos1Card: ; 32994 (c:6994)
+ZapdosLv40Card: ; 32994 (c:6994)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Zapdos1CardGfx ; gfx
+	gfx ZapdosLv40CardGfx ; gfx
 	tx ZapdosName ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; sets
-	db ZAPDOS1
+	db ZAPDOS_LV40
 	db 80 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -5789,16 +5789,16 @@ Zapdos1Card: ; 32994 (c:6994)
 	db 40 ; level
 	db 5, 3 ; length
 	dw 116 * 10 ; weight
-	tx Zapdos1Description ; description
+	tx ZapdosLv40Description ; description
 	db 0
 
-Zapdos2Card: ; 329d5 (c:69d5)
+ZapdosLv64Card: ; 329d5 (c:69d5)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Zapdos2CardGfx ; gfx
+	gfx ZapdosLv64CardGfx ; gfx
 	tx ZapdosName ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; sets
-	db ZAPDOS2
+	db ZAPDOS_LV64
 	db 90 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -5840,16 +5840,16 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	db 64 ; level
 	db 5, 3 ; length
 	dw 116 * 10 ; weight
-	tx Zapdos2Description ; description
+	tx ZapdosLv64Description ; description
 	db 0
 
-Zapdos3Card: ; 32a16 (c:6a16)
+ZapdosLv68Card: ; 32a16 (c:6a16)
 	db TYPE_PKMN_LIGHTNING ; type
-	gfx Zapdos3CardGfx ; gfx
+	gfx ZapdosLv68CardGfx ; gfx
 	tx ZapdosName ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; sets
-	db ZAPDOS3
+	db ZAPDOS_LV68
 	db 100 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -5891,7 +5891,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	db 68 ; level
 	db 5, 3 ; length
 	dw 116 * 10 ; weight
-	tx Zapdos3Description ; description
+	tx ZapdosLv68Description ; description
 	db 0
 
 SandshrewCard: ; 32a57 (c:6a57)
@@ -6608,13 +6608,13 @@ CuboneCard: ; 32da4 (c:6da4)
 	tx CuboneDescription ; description
 	db 19
 
-Marowak1Card: ; 32de5 (c:6de5)
+MarowakLv26Card: ; 32de5 (c:6de5)
 	db TYPE_PKMN_FIGHTING ; type
-	gfx Marowak1CardGfx ; gfx
+	gfx MarowakLv26CardGfx ; gfx
 	tx MarowakName ; name
 	db DIAMOND ; rarity
 	db LABORATORY | JUNGLE ; sets
-	db MAROWAK1
+	db MAROWAK_LV26
 	db 60 ; hp
 	db STAGE1 ; stage
 	tx CuboneName ; pre-evo name
@@ -6656,16 +6656,16 @@ Marowak1Card: ; 32de5 (c:6de5)
 	db 26 ; level
 	db 3, 3 ; length
 	dw 99 * 10 ; weight
-	tx Marowak1Description ; description
+	tx MarowakLv26Description ; description
 	db 0
 
-Marowak2Card: ; 32e26 (c:6e26)
+MarowakLv32Card: ; 32e26 (c:6e26)
 	db TYPE_PKMN_FIGHTING ; type
-	gfx Marowak2CardGfx ; gfx
+	gfx MarowakLv32CardGfx ; gfx
 	tx MarowakName ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | GB ; sets
-	db MAROWAK2
+	db MAROWAK_LV32
 	db 70 ; hp
 	db STAGE1 ; stage
 	tx CuboneName ; pre-evo name
@@ -6707,7 +6707,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	db 32 ; level
 	db 3, 3 ; length
 	dw 99 * 10 ; weight
-	tx Marowak2Description ; description
+	tx MarowakLv32Description ; description
 	db 0
 
 HitmonleeCard: ; 32e67 (c:6e67)
@@ -7220,13 +7220,13 @@ AlakazamCard: ; 330b0 (c:70b0)
 	tx AlakazamDescription ; description
 	db 0
 
-Slowpoke1Card: ; 330f1 (c:70f1)
+SlowpokeLv9Card: ; 330f1 (c:70f1)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Slowpoke1CardGfx ; gfx
+	gfx SlowpokeLv9CardGfx ; gfx
 	tx SlowpokeName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db SLOWPOKE1
+	db SLOWPOKE_LV9
 	db 40 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -7268,16 +7268,16 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	db 9 ; level
 	db 3, 11 ; length
 	dw 79 * 10 ; weight
-	tx Slowpoke1Description ; description
+	tx SlowpokeLv9Description ; description
 	db 19
 
-Slowpoke2Card: ; 33132 (c:7132)
+SlowpokeLv18Card: ; 33132 (c:7132)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Slowpoke2CardGfx ; gfx
+	gfx SlowpokeLv18CardGfx ; gfx
 	tx SlowpokeName ; name
 	db CIRCLE ; rarity
 	db LABORATORY | FOSSIL ; sets
-	db SLOWPOKE2
+	db SLOWPOKE_LV18
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -7319,7 +7319,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	db 18 ; level
 	db 3, 11 ; length
 	dw 79 * 10 ; weight
-	tx Slowpoke1Description ; description
+	tx SlowpokeLv9Description ; description
 	db 16
 
 SlowbroCard: ; 33173 (c:7173)
@@ -7373,13 +7373,13 @@ SlowbroCard: ; 33173 (c:7173)
 	tx SlowbroDescription ; description
 	db 1
 
-Gastly1Card: ; 331b4 (c:71b4)
+GastlyLv8Card: ; 331b4 (c:71b4)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Gastly1CardGfx ; gfx
+	gfx GastlyLv8CardGfx ; gfx
 	tx GastlyName ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; sets
-	db GASTLY1
+	db GASTLY_LV8
 	db 30 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -7421,16 +7421,16 @@ Gastly1Card: ; 331b4 (c:71b4)
 	db 8 ; level
 	db 4, 3 ; length
 	dw 2 ; weight
-	tx Gastly1Description ; description
+	tx GastlyLv8Description ; description
 	db 16
 
-Gastly2Card: ; 331f5 (c:71f5)
+GastlyLv17Card: ; 331f5 (c:71f5)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Gastly2CardGfx ; gfx
+	gfx GastlyLv17CardGfx ; gfx
 	tx GastlyName ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; sets
-	db GASTLY2
+	db GASTLY_LV17
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -7472,16 +7472,16 @@ Gastly2Card: ; 331f5 (c:71f5)
 	db 17 ; level
 	db 4, 3 ; length
 	dw 2 ; weight
-	tx Gastly2Description ; description
+	tx GastlyLv17Description ; description
 	db 19
 
-Haunter1Card: ; 33236 (c:7236)
+HaunterLv17Card: ; 33236 (c:7236)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Haunter1CardGfx ; gfx
+	gfx HaunterLv17CardGfx ; gfx
 	tx HaunterName ; name
 	db STAR ; rarity
 	db LABORATORY | FOSSIL ; sets
-	db HAUNTER1
+	db HAUNTER_LV17
 	db 50 ; hp
 	db STAGE1 ; stage
 	tx GastlyName ; pre-evo name
@@ -7526,13 +7526,13 @@ Haunter1Card: ; 33236 (c:7236)
 	tx HaunterDescription ; description
 	db 16
 
-Haunter2Card: ; 33277 (c:7277)
+HaunterLv22Card: ; 33277 (c:7277)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Haunter2CardGfx ; gfx
+	gfx HaunterLv22CardGfx ; gfx
 	tx HaunterName ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | NONE ; sets
-	db HAUNTER2
+	db HAUNTER_LV22
 	db 60 ; hp
 	db STAGE1 ; stage
 	tx GastlyName ; pre-evo name
@@ -7832,13 +7832,13 @@ JynxCard: ; 333bc (c:73bc)
 	tx JynxDescription ; description
 	db 0
 
-Mewtwo1Card: ; 333fd (c:73fd)
+MewtwoLv53Card: ; 333fd (c:73fd)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Mewtwo1CardGfx ; gfx
+	gfx MewtwoLv53CardGfx ; gfx
 	tx MewtwoName ; name
 	db STAR ; rarity
 	db LABORATORY | NONE ; sets
-	db MEWTWO1
+	db MEWTWO_LV53
 	db 60 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -7880,16 +7880,16 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	db 53 ; level
 	db 6, 7 ; length
 	dw 269 * 10 ; weight
-	tx Mewtwo1Description ; description
+	tx MewtwoLv53Description ; description
 	db 0
 
-Mewtwo2Card: ; 3343e (c:743e)
+MewtwoLv60Card: ; 3343e (c:743e)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Mewtwo2CardGfx ; gfx
+	gfx MewtwoLv60CardGfx ; gfx
 	tx MewtwoName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db MEWTWO2
+	db MEWTWO_LV60
 	db 70 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -7901,7 +7901,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db RESIDUAL ; category
-	dw Mewtwo2EnergyAbsorptionEffectCommands ; effect commands
+	dw MewtwoLv60EnergyAbsorptionEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db SPECIAL_AI_HANDLING ; flags 3
@@ -7931,16 +7931,16 @@ Mewtwo2Card: ; 3343e (c:743e)
 	db 60 ; level
 	db 6, 7 ; length
 	dw 269 * 10 ; weight
-	tx Mewtwo2Description ; description
+	tx MewtwoLv60Description ; description
 	db 0
 
-Mewtwo3Card: ; 3347f (c:747f)
+MewtwoAltLV60Card: ; 3347f (c:747f)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Mewtwo3CardGfx ; gfx
+	gfx MewtwoAltLV60CardGfx ; gfx
 	tx MewtwoName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db MEWTWO3
+	db MEWTWO_ALT_LV60
 	db 70 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -7952,7 +7952,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db RESIDUAL ; category
-	dw Mewtwo3EnergyAbsorptionEffectCommands ; effect commands
+	dw MewtwoAltLV60EnergyAbsorptionEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db SPECIAL_AI_HANDLING ; flags 3
@@ -7982,16 +7982,16 @@ Mewtwo3Card: ; 3347f (c:747f)
 	db 60 ; level
 	db 6, 7 ; length
 	dw 269 * 10 ; weight
-	tx Mewtwo2Description ; description
+	tx MewtwoLv60Description ; description
 	db 0
 
-Mew1Card: ; 334c0 (c:74c0)
+MewLv8Card: ; 334c0 (c:74c0)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Mew1CardGfx ; gfx
+	gfx MewLv8CardGfx ; gfx
 	tx MewName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db MEW1
+	db MEW_LV8
 	db 40 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -8033,16 +8033,16 @@ Mew1Card: ; 334c0 (c:74c0)
 	db 8 ; level
 	db 1, 4 ; length
 	dw 9 * 10 ; weight
-	tx Mew1Description ; description
+	tx MewLv8Description ; description
 	db 3
 
-Mew2Card: ; 33501 (c:7501)
+MewLv15Card: ; 33501 (c:7501)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Mew2CardGfx ; gfx
+	gfx MewLv15CardGfx ; gfx
 	tx MewName ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; sets
-	db MEW2
+	db MEW_LV15
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -8084,16 +8084,16 @@ Mew2Card: ; 33501 (c:7501)
 	db 15 ; level
 	db 1, 4 ; length
 	dw 9 * 10 ; weight
-	tx Mew2Description ; description
+	tx MewLv15Description ; description
 	db 0
 
-Mew3Card: ; 33542 (c:7542)
+MewLv23Card: ; 33542 (c:7542)
 	db TYPE_PKMN_PSYCHIC ; type
-	gfx Mew3CardGfx ; gfx
+	gfx MewLv23CardGfx ; gfx
 	tx MewName ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; sets
-	db MEW3
+	db MEW_LV23
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -8135,7 +8135,7 @@ Mew3Card: ; 33542 (c:7542)
 	db 23 ; level
 	db 1, 4 ; length
 	dw 9 * 10 ; weight
-	tx Mew1Description ; description
+	tx MewLv8Description ; description
 	db 8
 
 PidgeyCard: ; 33583 (c:7583)
@@ -8246,7 +8246,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	tx PidgeotName ; name
 	db STAR ; rarity
 	db LABORATORY | GB ; sets
-	db PIDGEOT1
+	db PIDGEOT_LV38
 	db 80 ; hp
 	db STAGE2 ; stage
 	tx PidgeottoName ; pre-evo name
@@ -8297,7 +8297,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	tx PidgeotName ; name
 	db STAR ; rarity
 	db EVOLUTION | JUNGLE ; sets
-	db PIDGEOT2
+	db PIDGEOT_LV40
 	db 80 ; hp
 	db STAGE2 ; stage
 	tx PidgeottoName ; pre-evo name
@@ -8648,13 +8648,13 @@ ClefableCard: ; 337cc (c:77cc)
 	tx ClefableDescription ; description
 	db 0
 
-Jigglypuff1Card: ; 3380d (c:780d)
+JigglypuffLv12Card: ; 3380d (c:780d)
 	db TYPE_PKMN_COLORLESS ; type
-	gfx Jigglypuff1CardGfx ; gfx
+	gfx JigglypuffLv12CardGfx ; gfx
 	tx JigglypuffName ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; sets
-	db JIGGLYPUFF1
+	db JIGGLYPUFF_LV12
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -8696,16 +8696,16 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	db 12 ; level
 	db 1, 8 ; length
 	dw 12 * 10 ; weight
-	tx Jigglypuff1Description ; description
+	tx JigglypuffLv12Description ; description
 	db 16
 
-Jigglypuff2Card: ; 3384e (c:784e)
+JigglypuffLv13Card: ; 3384e (c:784e)
 	db TYPE_PKMN_COLORLESS ; type
-	gfx Jigglypuff2CardGfx ; gfx
+	gfx JigglypuffLv13CardGfx ; gfx
 	tx JigglypuffName ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | GB ; sets
-	db JIGGLYPUFF2
+	db JIGGLYPUFF_LV13
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -8747,16 +8747,16 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	db 13 ; level
 	db 1, 8 ; length
 	dw 12 * 10 ; weight
-	tx Jigglypuff2Description ; description
+	tx JigglypuffLv13Description ; description
 	db 16
 
-Jigglypuff3Card: ; 3388f (c:788f)
+JigglypuffLv14Card: ; 3388f (c:788f)
 	db TYPE_PKMN_COLORLESS ; type
-	gfx Jigglypuff3CardGfx ; gfx
+	gfx JigglypuffLv14CardGfx ; gfx
 	tx JigglypuffName ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | JUNGLE ; sets
-	db JIGGLYPUFF3
+	db JIGGLYPUFF_LV14
 	db 60 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -8798,7 +8798,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	db 14 ; level
 	db 1, 8 ; length
 	dw 12 * 10 ; weight
-	tx Jigglypuff3Description ; description
+	tx JigglypuffLv14Description ; description
 	db 16
 
 WigglytuffCard: ; 338d0 (c:78d0)
@@ -8852,13 +8852,13 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	tx WigglytuffDescription ; description
 	db 0
 
-Meowth1Card: ; 33911 (c:7911)
+MeowthLv14Card: ; 33911 (c:7911)
 	db TYPE_PKMN_COLORLESS ; type
-	gfx Meowth1CardGfx ; gfx
+	gfx MeowthLv14CardGfx ; gfx
 	tx MeowthName ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | GB ; sets
-	db MEOWTH1
+	db MEOWTH_LV14
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -8900,16 +8900,16 @@ Meowth1Card: ; 33911 (c:7911)
 	db 14 ; level
 	db 1, 4 ; length
 	dw 9 * 10 ; weight
-	tx Meowth1Description ; description
+	tx MeowthLv14Description ; description
 	db 16
 
-Meowth2Card: ; 33952 (c:7952)
+MeowthLv15Card: ; 33952 (c:7952)
 	db TYPE_PKMN_COLORLESS ; type
-	gfx Meowth2CardGfx ; gfx
+	gfx MeowthLv15CardGfx ; gfx
 	tx MeowthName ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; sets
-	db MEOWTH2
+	db MEOWTH_LV15
 	db 50 ; hp
 	db BASIC ; stage
 	dw NONE ; pre-evo name
@@ -8951,7 +8951,7 @@ Meowth2Card: ; 33952 (c:7952)
 	db 15 ; level
 	db 1, 4 ; length
 	dw 9 * 10 ; weight
-	tx Meowth2Description ; description
+	tx MeowthLv15Description ; description
 	db 16
 
 PersianCard: ; 33993 (c:7993)
@@ -9668,13 +9668,13 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	tx DragonairDescription ; description
 	db 16
 
-Dragonite1Card: ; 33d21 (c:7d21)
+DragoniteLv41Card: ; 33d21 (c:7d21)
 	db TYPE_PKMN_COLORLESS ; type
-	gfx Dragonite1CardGfx ; gfx
+	gfx DragoniteLv41CardGfx ; gfx
 	tx DragoniteName ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; sets
-	db DRAGONITE1
+	db DRAGONITE_LV41
 	db 100 ; hp
 	db STAGE2 ; stage
 	tx DragonairName ; pre-evo name
@@ -9700,7 +9700,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	dw NONE ; description (cont)
 	db 30 ; damage
 	db DAMAGE_X ; category
-	dw Dragonite1SlamEffectCommands ; effect commands
+	dw DragoniteLv41SlamEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -9716,16 +9716,16 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	db 41 ; level
 	db 7, 3 ; length
 	dw 463 * 10 ; weight
-	tx Dragonite1Description ; description
+	tx DragoniteLv41Description ; description
 	db 0
 
-Dragonite2Card: ; 33d62 (c:7d62)
+DragoniteLv45Card: ; 33d62 (c:7d62)
 	db TYPE_PKMN_COLORLESS ; type
-	gfx Dragonite2CardGfx ; gfx
+	gfx DragoniteLv45CardGfx ; gfx
 	tx DragoniteName ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; sets
-	db DRAGONITE2
+	db DRAGONITE_LV45
 	db 100 ; hp
 	db STAGE2 ; stage
 	tx DragonairName ; pre-evo name
@@ -9751,7 +9751,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	dw NONE ; description (cont)
 	db 40 ; damage
 	db DAMAGE_X ; category
-	dw Dragonite2SlamEffectCommands ; effect commands
+	dw DragoniteLv45SlamEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3

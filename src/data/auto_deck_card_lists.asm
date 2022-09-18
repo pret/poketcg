@@ -17,7 +17,7 @@ AllFightingPokemonCardList: ; 1b0da (6:70da)
 	db  1, GOLEM
 	db  1, ONIX
 	db  2, CUBONE
-	db  1, MAROWAK1
+	db  1, MAROWAK_LV26
 	db  1, HITMONLEE
 	db  1, HITMONCHAN
 	db  2, RHYHORN
@@ -32,11 +32,11 @@ BenchAttackCardList: ; 1b10b (6:710b)
 	db 12, LIGHTNING_ENERGY
 	db 14, FIGHTING_ENERGY
 	db  4, VOLTORB
-	db  2, ELECTRODE2
-	db  2, ZAPDOS1
+	db  2, ELECTRODE_LV42
+	db  2, ZAPDOS_LV40
 	db  4, HITMONLEE
 	db  2, HITMONCHAN
-	db  4, MEOWTH1
+	db  4, MEOWTH_LV14
 	db  1, PROFESSOR_OAK
 	db  2, BILL
 	db  1, MR_FUJI
@@ -58,11 +58,11 @@ BattleContestCardList: ; 1b132 (6:7132)
 	db  3, MACHOKE
 	db  2, HITMONLEE
 	db  2, HITMONCHAN
-	db  3, MEOWTH1
+	db  3, MEOWTH_LV14
 	db  2, PERSIAN
 	db  3, DRATINI
 	db  2, DRAGONAIR
-	db  1, DRAGONITE2
+	db  1, DRAGONITE_LV45
 	db  1, PROFESSOR_OAK
 	db  3, PLUSPOWER
 	db  3, DEFENDER
@@ -73,8 +73,8 @@ HeatedBattleCardList: ; 1b153 (6:7153)
 	db  8, FIRE_ENERGY
 	db  4, LIGHTNING_ENERGY
 	db 15, FIGHTING_ENERGY
-	db  4, MAGMAR1
-	db  2, ELECTABUZZ2
+	db  4, MAGMAR_LV24
+	db  2, ELECTABUZZ_LV35
 	db  3, MANKEY
 	db  2, PRIMEAPE
 	db  3, HITMONLEE
@@ -109,10 +109,10 @@ SqueakingMouseCardList: ; 1b191 (6:7191)
 	db  8, LIGHTNING_ENERGY
 	db 15, FIGHTING_ENERGY
 	db  2, DOUBLE_COLORLESS_ENERGY
-	db  2, PIKACHU1
-	db  2, PIKACHU2
-	db  1, RAICHU1
-	db  1, RAICHU2
+	db  2, PIKACHU_LV12
+	db  2, PIKACHU_LV14
+	db  1, RAICHU_LV40
+	db  1, RAICHU_LV45
 	db  4, SANDSHREW
 	db  3, SANDSLASH
 	db  4, RATTATA
@@ -155,8 +155,8 @@ BoneAttackCardList: ; 1b1d9 (6:71d9)
 	db  1, GOLEM
 	db  4, ONIX
 	db  4, CUBONE
-	db  1, MAROWAK1
-	db  2, MAROWAK2
+	db  1, MAROWAK_LV26
+	db  2, MAROWAK_LV32
 	db  2, RHYHORN
 	db  1, RHYDON
 	db  2, BILL
@@ -177,7 +177,7 @@ ExcavationCardList: ; 1b1fe (6:71fe)
 	db  4, SANDSHREW
 	db  2, SANDSLASH
 	db  3, CUBONE
-	db  1, MAROWAK2
+	db  1, MAROWAK_LV32
 	db  3, HITMONCHAN
 	db  2, KABUTO
 	db  1, KABUTOPS
@@ -228,7 +228,7 @@ BlueWaterCardList: ; 1b246 (6:7246)
 	db  1, LAPRAS
 	db  1, OMANYTE
 	db  1, OMASTAR
-	db  1, ARTICUNO1
+	db  1, ARTICUNO_LV35
 	db  1, PROFESSOR_OAK
 	db  2, BILL
 	db  1, POKEMON_TRADER
@@ -287,8 +287,8 @@ EnergyRemovalCardList: ; 1b2c3 (6:72c3)
 	db  4, POLIWAG
 	db  3, POLIWHIRL
 	db  2, POLIWRATH
-	db  4, GASTLY2
-	db  3, HAUNTER1
+	db  4, GASTLY_LV17
+	db  3, HAUNTER_LV17
 	db  3, DRATINI
 	db  2, DRAGONAIR
 	db  1, PROFESSOR_OAK
@@ -325,23 +325,23 @@ CutePokemonCardList: ; 1b30d (6:730d)
 	db  6, WATER_ENERGY
 	db  8, LIGHTNING_ENERGY
 	db  2, DOUBLE_COLORLESS_ENERGY
-	db  1, FLAREON2
-	db  1, VAPOREON2
-	db  1, PIKACHU1
-	db  1, PIKACHU2
-	db  1, PIKACHU3
-	db  1, PIKACHU4
+	db  1, FLAREON_LV28
+	db  1, VAPOREON_LV42
+	db  1, PIKACHU_LV12
+	db  1, PIKACHU_LV14
+	db  1, PIKACHU_LV16
+	db  1, PIKACHU_ALT_LV16
 	db  1, FLYING_PIKACHU
-	db  1, SURFING_PIKACHU1
-	db  1, SURFING_PIKACHU2
-	db  1, RAICHU1
-	db  1, RAICHU2
-	db  1, JOLTEON2
+	db  1, SURFING_PIKACHU_LV13
+	db  1, SURFING_PIKACHU_ALT_LV13
+	db  1, RAICHU_LV40
+	db  1, RAICHU_LV45
+	db  1, JOLTEON_LV29
 	db  2, CLEFAIRY
 	db  1, CLEFABLE
-	db  1, JIGGLYPUFF1
-	db  2, JIGGLYPUFF2
-	db  1, JIGGLYPUFF3
+	db  1, JIGGLYPUFF_LV12
+	db  2, JIGGLYPUFF_LV13
+	db  1, JIGGLYPUFF_LV14
 	db  2, WIGGLYTUFF
 	db  4, EEVEE
 	db  2, PROFESSOR_OAK
@@ -359,10 +359,10 @@ PokemonFluteCardList: ; 1b34c (6:734c)
 	db 12, LIGHTNING_ENERGY
 	db  2, STARYU
 	db  2, LAPRAS
-	db  3, PIKACHU1
-	db  1, RAICHU1
-	db  2, MAGNEMITE1
-	db  3, ELECTABUZZ2
+	db  3, PIKACHU_LV12
+	db  1, RAICHU_LV40
+	db  2, MAGNEMITE_LV13
+	db  3, ELECTABUZZ_LV35
 	db  2, RATTATA
 	db  1, RATICATE
 	db  2, PROFESSOR_OAK
@@ -377,23 +377,23 @@ PokemonFluteCardList: ; 1b34c (6:734c)
 
 YellowFlashCardList: ; 1b371 (6:7371)
 	db 26, LIGHTNING_ENERGY
-	db  2, PIKACHU1
-	db  1, PIKACHU2
-	db  1, RAICHU1
-	db  1, RAICHU2
-	db  2, MAGNEMITE1
-	db  1, MAGNEMITE2
-	db  1, MAGNETON1
-	db  1, MAGNETON2
+	db  2, PIKACHU_LV12
+	db  1, PIKACHU_LV14
+	db  1, RAICHU_LV40
+	db  1, RAICHU_LV45
+	db  2, MAGNEMITE_LV13
+	db  1, MAGNEMITE_LV15
+	db  1, MAGNETON_LV28
+	db  1, MAGNETON_LV35
 	db  3, VOLTORB
-	db  1, ELECTRODE1
-	db  1, ELECTRODE2
-	db  1, ELECTABUZZ1
-	db  1, ELECTABUZZ2
-	db  1, JOLTEON1
-	db  1, JOLTEON2
-	db  1, ZAPDOS1
-	db  1, ZAPDOS2
+	db  1, ELECTRODE_LV35
+	db  1, ELECTRODE_LV42
+	db  1, ELECTABUZZ_LV20
+	db  1, ELECTABUZZ_LV35
+	db  1, JOLTEON_LV24
+	db  1, JOLTEON_LV29
+	db  1, ZAPDOS_LV40
+	db  1, ZAPDOS_LV64
 	db  3, EEVEE
 	db  1, ENERGY_RETRIEVAL
 	db  2, ENERGY_REMOVAL
@@ -406,16 +406,16 @@ YellowFlashCardList: ; 1b371 (6:7371)
 ElectricShockCardList: ; 1b3a4 (6:73a4)
 	db 24, LIGHTNING_ENERGY
 	db  1, DOUBLE_COLORLESS_ENERGY
-	db  2, PIKACHU2
-	db  1, PIKACHU3
-	db  1, PIKACHU4
-	db  2, RAICHU1
-	db  2, MAGNEMITE1
-	db  2, MAGNEMITE2
-	db  2, MAGNETON1
+	db  2, PIKACHU_LV14
+	db  1, PIKACHU_LV16
+	db  1, PIKACHU_ALT_LV16
+	db  2, RAICHU_LV40
+	db  2, MAGNEMITE_LV13
+	db  2, MAGNEMITE_LV15
+	db  2, MAGNETON_LV28
 	db  4, VOLTORB
-	db  3, ELECTRODE2
-	db  1, ZAPDOS2
+	db  3, ELECTRODE_LV42
+	db  1, ZAPDOS_LV64
 	db  3, PORYGON
 	db  2, ENERGY_RETRIEVAL
 	db  2, PLUSPOWER
@@ -427,11 +427,11 @@ ElectricShockCardList: ; 1b3a4 (6:73a4)
 ZappingSelfdestructCardList: ; 1b3c9 (6:73c9)
 	db 24, LIGHTNING_ENERGY
 	db  2, DOUBLE_COLORLESS_ENERGY
-	db  4, MAGNEMITE1
-	db  3, MAGNETON1
+	db  4, MAGNEMITE_LV13
+	db  3, MAGNETON_LV28
 	db  4, VOLTORB
-	db  2, ELECTRODE1
-	db  4, ELECTABUZZ2
+	db  2, ELECTRODE_LV35
+	db  4, ELECTABUZZ_LV35
 	db  2, KANGASKHAN
 	db  1, TAUROS
 	db  1, PROFESSOR_OAK
@@ -498,15 +498,15 @@ FlowerGardenCardList: ; 1b444 (6:7444)
 	db  2, DOUBLE_COLORLESS_ENERGY
 	db  3, BULBASAUR
 	db  2, IVYSAUR
-	db  2, VENUSAUR2
+	db  2, VENUSAUR_LV67
 	db  3, ODDISH
 	db  2, GLOOM
 	db  2, VILEPLUME
 	db  2, BELLSPROUT
 	db  1, WEEPINBELL
 	db  1, VICTREEBEL
-	db  2, TANGELA1
-	db  1, TANGELA2
+	db  2, TANGELA_LV8
+	db  1, TANGELA_LV12
 	db  2, LICKITUNG
 	db  2, POKEMON_TRADER
 	db  3, POKEMON_BREEDER
@@ -524,12 +524,12 @@ KaleidoscopeCardList: ; 1b46d (6:746d)
 	db  3, DOUBLE_COLORLESS_ENERGY
 	db  3, VENONAT
 	db  2, VENOMOTH
-	db  1, FLAREON1
-	db  1, FLAREON2
-	db  1, VAPOREON1
-	db  1, VAPOREON2
-	db  1, JOLTEON1
-	db  1, JOLTEON2
+	db  1, FLAREON_LV22
+	db  1, FLAREON_LV28
+	db  1, VAPOREON_LV29
+	db  1, VAPOREON_LV42
+	db  1, JOLTEON_LV24
+	db  1, JOLTEON_LV29
 	db  4, DITTO
 	db  4, EEVEE
 	db  4, PORYGON
@@ -545,7 +545,7 @@ FlowerPowerCardList: ; 1b498 (6:7498)
 	db  4, PSYCHIC_ENERGY
 	db  4, BULBASAUR
 	db  3, IVYSAUR
-	db  2, VENUSAUR2
+	db  2, VENUSAUR_LV67
 	db  4, ODDISH
 	db  3, GLOOM
 	db  2, VILEPLUME
@@ -564,19 +564,19 @@ PsychicPowerCardList: ; 1b4b9 (6:74b9)
 	db  3, ABRA
 	db  2, KADABRA
 	db  1, ALAKAZAM
-	db  2, SLOWPOKE2
+	db  2, SLOWPOKE_LV18
 	db  1, SLOWBRO
-	db  1, GASTLY1
-	db  2, GASTLY2
-	db  1, HAUNTER1
-	db  1, HAUNTER2
+	db  1, GASTLY_LV8
+	db  2, GASTLY_LV17
+	db  1, HAUNTER_LV17
+	db  1, HAUNTER_LV22
 	db  1, GENGAR
 	db  2, DROWZEE
 	db  1, HYPNO
 	db  1, MR_MIME
 	db  1, JYNX
-	db  1, MEWTWO1
-	db  1, MEW3
+	db  1, MEWTWO_LV53
+	db  1, MEW_LV23
 	db  1, CLEFAIRY
 	db  1, CLEFABLE
 	db  1, SNORLAX
@@ -594,14 +594,14 @@ DreamEaterHaunterCardList: ; 1b40f (6:740f)
 	db 17, PSYCHIC_ENERGY
 	db  3, ZUBAT
 	db  2, GOLBAT
-	db  4, GASTLY1
-	db  1, HAUNTER1
-	db  2, HAUNTER2
+	db  4, GASTLY_LV8
+	db  1, HAUNTER_LV17
+	db  2, HAUNTER_LV22
 	db  2, GENGAR
 	db  3, DROWZEE
 	db  2, HYPNO
-	db  2, JIGGLYPUFF3
-	db  2, MEOWTH2
+	db  2, JIGGLYPUFF_LV14
+	db  2, MEOWTH_LV15
 	db  2, PROFESSOR_OAK
 	db  2, BILL
 	db  2, ENERGY_RETRIEVAL
@@ -613,13 +613,13 @@ DreamEaterHaunterCardList: ; 1b40f (6:740f)
 
 ScavengingSlowbroCardList: ; 1b517 (6:7517)
 	db 23, PSYCHIC_ENERGY
-	db  4, SLOWPOKE2
+	db  4, SLOWPOKE_LV18
 	db  3, SLOWBRO
 	db  3, JYNX
-	db  2, MEWTWO1
-	db  2, MEW3
-	db  2, JIGGLYPUFF2
-	db  2, JIGGLYPUFF3
+	db  2, MEWTWO_LV53
+	db  2, MEW_LV23
+	db  2, JIGGLYPUFF_LV13
+	db  2, JIGGLYPUFF_LV14
 	db  2, EEVEE
 	db  2, ENERGY_RETRIEVAL
 	db  3, ENERGY_REMOVAL
@@ -632,14 +632,14 @@ ScavengingSlowbroCardList: ; 1b517 (6:7517)
 StrangePowerCardList: ; 1b536 (6:7536)
 	db 25, PSYCHIC_ENERGY
 	db  1, DOUBLE_COLORLESS_ENERGY
-	db  3, SLOWPOKE1
+	db  3, SLOWPOKE_LV9
 	db  2, SLOWBRO
 	db  4, DROWZEE
 	db  3, HYPNO
 	db  2, MR_MIME
 	db  2, JYNX
-	db  1, MEW1
-	db  2, MEW3
+	db  1, MEW_LV8
+	db  2, MEW_LV23
 	db  2, LICKITUNG
 	db  1, SNORLAX
 	db  2, POKEMON_TRADER
@@ -704,7 +704,7 @@ ScienceCorpsCardList: ; 1b59d (6:759d)
 	db  1, MUK
 	db  2, KOFFING
 	db  1, WEEZING
-	db  2, MEOWTH2
+	db  2, MEOWTH_LV15
 	db  1, PERSIAN
 	db  1, PROFESSOR_OAK
 	db  1, BILL
@@ -726,8 +726,8 @@ FlyinPokemonCardList: ; 1b5d2 (6:75d2)
 	db  2, FLYING_PIKACHU
 	db  4, PIDGEY
 	db  3, PIDGEOTTO
-	db  1, PIDGEOT1
-	db  1, PIDGEOT2
+	db  1, PIDGEOT_LV38
+	db  1, PIDGEOT_LV40
 	db  4, SPEAROW
 	db  3, FEAROW
 	db  2, IMPOSTER_PROFESSOR_OAK
@@ -763,9 +763,9 @@ WondersOfScienceCardList: ; 1b616 (6:7616)
 	db  3, MUK
 	db  4, KOFFING
 	db  3, WEEZING
-	db  2, MEWTWO1
-	db  1, MEWTWO3
-	db  1, MEWTWO2
+	db  2, MEWTWO_LV53
+	db  1, MEWTWO_ALT_LV60
+	db  1, MEWTWO_LV60
 	db  2, PORYGON
 	db  1, IMPOSTER_PROFESSOR_OAK
 	db  2, PROFESSOR_OAK
@@ -781,15 +781,15 @@ WondersOfScienceCardList: ; 1b616 (6:7616)
 ReplaceEmAllCardList: ; 1b63d (6:763d)
 	db 24, FIRE_ENERGY
 	db  4, VULPIX
-	db  2, NINETALES1
-	db  1, NINETALES2
+	db  2, NINETALES_LV32
+	db  1, NINETALES_LV35
 	db  4, GROWLITHE
-	db  1, ARCANINE1
-	db  1, ARCANINE2
+	db  1, ARCANINE_LV34
+	db  1, ARCANINE_LV45
 	db  4, PIDGEY
 	db  3, PIDGEOTTO
-	db  1, PIDGEOT1
-	db  1, PIDGEOT2
+	db  1, PIDGEOT_LV38
+	db  1, PIDGEOT_LV40
 	db  3, DODUO
 	db  2, DODRIO
 	db  2, PROFESSOR_OAK
@@ -803,11 +803,11 @@ ChariSaurCardList: ; 1b660 (6:7660)
 	db 10, FIRE_ENERGY
 	db  4, BULBASAUR
 	db  3, IVYSAUR
-	db  2, VENUSAUR2
+	db  2, VENUSAUR_LV67
 	db  4, CHARMANDER
 	db  3, CHARMELEON
 	db  2, CHARIZARD
-	db  3, FLAREON1
+	db  3, FLAREON_LV22
 	db  4, EEVEE
 	db  2, BILL
 	db  3, POKEMON_TRADER
@@ -825,12 +825,12 @@ TrafficLightCardList: ; 1b681 (6:7681)
 	db  2, CHARMELEON
 	db  3, PONYTA
 	db  2, RAPIDASH
-	db  2, FLAREON1
-	db  2, VAPOREON1
-	db  2, PIKACHU1
+	db  2, FLAREON_LV22
+	db  2, VAPOREON_LV29
+	db  2, PIKACHU_LV12
 	db  3, VOLTORB
-	db  2, ELECTRODE2
-	db  2, JOLTEON1
+	db  2, ELECTRODE_LV42
+	db  2, JOLTEON_LV24
 	db  4, EEVEE
 	db  2, ENERGY_SEARCH
 	db  2, SWITCH
@@ -844,17 +844,17 @@ FirePokemonCardList: ; 1b6a4 (6:76a4)
 	db  2, CHARMELEON
 	db  1, CHARIZARD
 	db  3, VULPIX
-	db  1, NINETALES1
-	db  1, NINETALES2
+	db  1, NINETALES_LV32
+	db  1, NINETALES_LV35
 	db  2, GROWLITHE
-	db  1, ARCANINE2
+	db  1, ARCANINE_LV45
 	db  2, PONYTA
 	db  1, RAPIDASH
-	db  1, MAGMAR1
-	db  1, MAGMAR2
-	db  1, FLAREON1
-	db  1, FLAREON2
-	db  1, MOLTRES1
+	db  1, MAGMAR_LV24
+	db  1, MAGMAR_LV31
+	db  1, FLAREON_LV22
+	db  1, FLAREON_LV28
+	db  1, MOLTRES_LV35
 	db  3, EEVEE
 	db  1, PROFESSOR_OAK
 	db  2, BILL
@@ -870,10 +870,10 @@ FireChargeCardList: ; 1b6d9 (6:76d9)
 	db 21, FIRE_ENERGY
 	db  4, DOUBLE_COLORLESS_ENERGY
 	db  4, GROWLITHE
-	db  3, ARCANINE2
-	db  2, MAGMAR1
-	db  3, JIGGLYPUFF1
-	db  1, JIGGLYPUFF3
+	db  3, ARCANINE_LV45
+	db  2, MAGMAR_LV24
+	db  3, JIGGLYPUFF_LV12
+	db  1, JIGGLYPUFF_LV14
 	db  1, WIGGLYTUFF
 	db  2, CHANSEY
 	db  2, TAUROS
@@ -902,16 +902,16 @@ CharmanderAndFriendsCardList: ; 1b702 (6:7702)
 	db  1, CHARMELEON
 	db  1, CHARIZARD
 	db  2, GROWLITHE
-	db  1, ARCANINE2
+	db  1, ARCANINE_LV45
 	db  2, PONYTA
-	db  1, MAGMAR1
+	db  1, MAGMAR_LV24
 	db  2, SEEL
 	db  1, DEWGONG
 	db  2, GOLDEEN
 	db  1, SEAKING
 	db  2, RATTATA
 	db  1, RATICATE
-	db  1, MEOWTH1
+	db  1, MEOWTH_LV14
 	db  1, PROFESSOR_OAK
 	db  2, BILL
 	db  1, SWITCH
@@ -928,8 +928,8 @@ SquirtleAndFriendsCardList: ; 1b73d (6:773d)
 	db  2, CHARMANDER
 	db  1, CHARMELEON
 	db  1, GROWLITHE
-	db  1, ARCANINE2
-	db  1, MAGMAR1
+	db  1, ARCANINE_LV45
+	db  1, MAGMAR_LV24
 	db  2, SQUIRTLE
 	db  1, WARTORTLE
 	db  1, BLASTOISE
@@ -940,13 +940,13 @@ SquirtleAndFriendsCardList: ; 1b73d (6:773d)
 	db  1, STARYU
 	db  1, STARMIE
 	db  1, LAPRAS
-	db  2, PIKACHU1
-	db  1, MAGNEMITE1
-	db  1, MAGNETON1
-	db  1, ELECTABUZZ2
+	db  2, PIKACHU_LV12
+	db  1, MAGNEMITE_LV13
+	db  1, MAGNETON_LV28
+	db  1, ELECTABUZZ_LV35
 	db  2, RATTATA
 	db  1, RATICATE
-	db  1, MEOWTH1
+	db  1, MEOWTH_LV14
 	db  1, PROFESSOR_OAK
 	db  1, BILL
 	db  1, SWITCH
@@ -963,22 +963,22 @@ BulbasaurAndFriendsCardList: ; 1b780 (6:7780)
 	db  6, PSYCHIC_ENERGY
 	db  2, BULBASAUR
 	db  1, IVYSAUR
-	db  1, VENUSAUR2
+	db  1, VENUSAUR_LV67
 	db  2, NIDORANF
 	db  2, NIDORANM
 	db  1, NIDORINO
-	db  1, TANGELA2
-	db  2, PIKACHU1
-	db  1, RAICHU1
-	db  1, MAGNEMITE1
-	db  1, ELECTABUZZ2
+	db  1, TANGELA_LV12
+	db  2, PIKACHU_LV12
+	db  1, RAICHU_LV40
+	db  1, MAGNEMITE_LV13
+	db  1, ELECTABUZZ_LV35
 	db  2, ABRA
 	db  1, KADABRA
-	db  2, GASTLY1
-	db  1, HAUNTER2
+	db  2, GASTLY_LV8
+	db  1, HAUNTER_LV22
 	db  1, JYNX
-	db  1, JIGGLYPUFF3
-	db  1, MEOWTH1
+	db  1, JIGGLYPUFF_LV14
+	db  1, MEOWTH_LV14
 	db  1, KANGASKHAN
 	db  1, PROFESSOR_OAK
 	db  1, BILL
@@ -1005,15 +1005,15 @@ PsychicMachampCardList: ; 1b7b (6:77b)
 	db  2, ABRA
 	db  1, KADABRA
 	db  1, ALAKAZAM
-	db  2, GASTLY1
-	db  1, HAUNTER2
+	db  2, GASTLY_LV8
+	db  1, HAUNTER_LV22
 	db  1, GENGAR
 	db  1, MR_MIME
 	db  1, JYNX
-	db  1, MEW3
+	db  1, MEW_LV23
 	db  2, PIDGEY
 	db  1, PIDGEOTTO
-	db  1, PIDGEOT2
+	db  1, PIDGEOT_LV40
 	db  2, RATTATA
 	db  1, RATICATE
 	db  1, PROFESSOR_OAK
@@ -1045,7 +1045,7 @@ WaterBeetleCardList: ; 1b7fc (6:77fc)
 	db  2, MAGIKARP
 	db  1, GYARADOS
 	db  1, LAPRAS
-	db  1, ARTICUNO1
+	db  1, ARTICUNO_LV35
 	db  1, LICKITUNG
 	db  1, KANGASKHAN
 	db  1, TAUROS
@@ -1061,13 +1061,13 @@ WaterBeetleCardList: ; 1b7fc (6:77fc)
 LegendaryMoltresCardList: ; 1b83b (6:783b)
 	db 25, FIRE_ENERGY
 	db  4, VULPIX
-	db  3, NINETALES2
+	db  3, NINETALES_LV35
 	db  4, GROWLITHE
-	db  2, ARCANINE2
-	db  2, MAGMAR1
-	db  2, MAGMAR2
-	db  2, MOLTRES1
-	db  2, MOLTRES2
+	db  2, ARCANINE_LV45
+	db  2, MAGMAR_LV24
+	db  2, MAGMAR_LV31
+	db  2, MOLTRES_LV35
+	db  2, MOLTRES_LV37
 	db  3, BILL
 	db  2, LASS
 	db  1, POKEMON_TRADER
@@ -1082,12 +1082,12 @@ LegendaryMoltresCardList: ; 1b83b (6:783b)
 LegendaryZapdosCardList: ; 1b860 (6:7860)
 	db 25, LIGHTNING_ENERGY
 	db  4, VOLTORB
-	db  3, ELECTRODE1
-	db  4, ELECTABUZZ2
-	db  2, JOLTEON2
-	db  1, ZAPDOS1
-	db  1, ZAPDOS2
-	db  2, ZAPDOS3
+	db  3, ELECTRODE_LV35
+	db  4, ELECTABUZZ_LV35
+	db  2, JOLTEON_LV29
+	db  1, ZAPDOS_LV40
+	db  1, ZAPDOS_LV64
+	db  2, ZAPDOS_LV68
 	db  3, EEVEE
 	db  4, BILL
 	db  2, ENERGY_RETRIEVAL
@@ -1102,8 +1102,8 @@ LegendaryArticunoCardList: ; 1b87f (6:787f)
 	db  4, SEEL
 	db  3, DEWGONG
 	db  4, LAPRAS
-	db  2, ARTICUNO2
-	db  2, ARTICUNO1
+	db  2, ARTICUNO_LV37
+	db  2, ARTICUNO_LV35
 	db  3, CHANSEY
 	db  2, DITTO
 	db  2, PROFESSOR_OAK
@@ -1126,7 +1126,7 @@ LegendaryDragoniteCardList: ; 1b89c (6:789c)
 	db  2, KANGASKHAN
 	db  4, DRATINI
 	db  3, DRAGONAIR
-	db  2, DRAGONITE1
+	db  2, DRAGONITE_LV41
 	db  2, PROFESSOR_OAK
 	db  2, POKEMON_TRADER
 	db  2, POKEMON_BREEDER
@@ -1141,14 +1141,14 @@ MysteriousPokemonCardList: ; 1b8c3 (6:78c3)
 	db 14, PSYCHIC_ENERGY
 	db  4, BULBASAUR
 	db  3, IVYSAUR
-	db  2, VENUSAUR1
+	db  2, VENUSAUR_LV64
 	db  2, SCYTHER
 	db  4, ABRA
 	db  3, KADABRA
 	db  2, ALAKAZAM
 	db  2, MR_MIME
-	db  1, MEW1
-	db  2, MEW2
+	db  1, MEW_LV8
+	db  2, MEW_LV15
 	db  1, PROFESSOR_OAK
 	db  2, BILL
 	db  2, POKEMON_BREEDER
