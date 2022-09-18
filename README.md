@@ -1,8 +1,8 @@
-# Pokémon TCG
+# Pokémon TCG [![Build Status][ci-badge]][ci]
 
 This is a disassembly of Pokémon TCG.
 
-It uses the following ROM as a base:
+It builds the following ROM:
 
 - Pokémon Trading Card Game (U) [C][!].gbc `sha1: 0f8670a583255cff3e5b7ca71b5d7454d928fc48`
 
@@ -14,6 +14,7 @@ This will output a file named "poketcg.gbc".
 
 ## See also
 
+- [**Symbols**][symbols]
 - **Discord:** [pret][discord]
 - **IRC:** [libera#pret][irc]
 
@@ -38,5 +39,8 @@ Other disassembly projects:
 [pokeruby]: https://github.com/pret/pokeruby
 [pokefirered]: https://github.com/pret/pokefirered
 [pokeemerald]: https://github.com/pret/pokeemerald
+[symbols]: https://github.com/pret/poketcg/tree/symbols
 [discord]: https://discord.gg/d5dubZ3
 [irc]: https://web.libera.chat/?#pret
+[ci]: https://github.com/pret/poketcg/actions
+[ci-badge]: https://github.com/pret/poketcg/actions/workflows/main.yml/badge.svg
