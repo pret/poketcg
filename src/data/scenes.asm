@@ -1,4 +1,5 @@
 ScenePointers:
+	table_width 2, ScenePointers
 	dw Scene_TitleScreen
 	dw Scene_ColosseumBooster
 	dw Scene_EvolutionBooster
@@ -27,6 +28,7 @@ ScenePointers:
 	dw Scene_Copyright
 	dw Scene_JapaneseTitleScreen2
 	dw Scene_ColorPalette
+	assert_table_length NUM_SCENES
 
 ; format:
 ; dw compressed sgb packet

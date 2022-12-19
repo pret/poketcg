@@ -1,4 +1,5 @@
-WarpDataPointers: ; 1c099 (7:4099)
+WarpDataPointers:
+	table_width 2, WarpDataPointers
 	dw NULL
 	dw MasonLaboratoryWarpData
 	dw DeckMachineRoomWarpData
@@ -33,6 +34,7 @@ WarpDataPointers: ; 1c099 (7:4099)
 	dw PokemonDomeEntranceWarpData
 	dw PokemonDomeWarpData
 	dw HallOfHonorWarpData
+	assert_table_length NUM_MAPS
 
 ; each warp is five bytes long
 ; coordinates are measured in tiles

@@ -2,6 +2,7 @@ NumberOfSFX:
 	db $60
 
 SFXHeaderPointers:
+	table_width 2, SFXHeaderPointers
 	dw SfxStop
 	dw Sfx01
 	dw Sfx02
@@ -98,6 +99,7 @@ SFXHeaderPointers:
 	dw Sfx5d
 	dw Sfx5e
 	dw Sfx5f
+	assert_table_length NUM_SFX
 
 SfxStop:
 	db %0000

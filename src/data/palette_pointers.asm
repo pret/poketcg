@@ -7,6 +7,7 @@ MACRO palette_pointer
 ENDM
 
 Palettes:
+	table_width 4, Palettes
 	palette_pointer Palette0,   8, 1 ; PALETTE_0
 	palette_pointer Palette1,   8, 0 ; PALETTE_1
 	palette_pointer Palette2,   8, 0 ; PALETTE_2
@@ -168,3 +169,4 @@ Palettes:
 	palette_pointer Palette158, 1, 0 ; PALETTE_158
 	palette_pointer Palette159, 1, 0 ; PALETTE_159
 	palette_pointer Palette160, 1, 0 ; PALETTE_160
+	assert_table_length NUM_PALETTES

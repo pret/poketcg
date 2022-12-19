@@ -11,7 +11,7 @@ Script_fbe1:
 	quit_script_fully
 
 .ows_fbee
-	open_deck_machine $0a
+	open_deck_machine DECK_MACHINE_LEGENDARY
 	quit_script_fully
 
 Script_fbf1:

@@ -386,6 +386,7 @@ GetEventVar:
 ; mask - which bits in the byte hold the value
 ; events 0-7 are reset when game resets
 EventVarMasks:
+	table_width 2, EventVarMasks
 	event_def $3f, %10000000 ; EVENT_TEMP_TRADED_WITH_ISHIHARA
 	event_def $3f, %01000000 ; EVENT_TEMP_GIFTED_TO_MAN1
 	event_def $3f, %00100000 ; EVENT_TEMP_TALKED_TO_IMAKUNI
@@ -505,6 +506,7 @@ EventVarMasks:
 	event_def $1b, %11111111 ; EVENT_CONSOLE
 	event_def $1c, %11110000 ; EVENT_SAM_MENU_CHOICE
 	event_def $1c, %00001111 ; EVENT_AARON_DECK_MENU_CHOICE
+	assert_table_length NUM_EVENT_FLAGS
 
 ; Used for basic level objects that just print text and quit
 PrintInteractableObjectText:

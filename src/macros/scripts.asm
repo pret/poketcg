@@ -110,6 +110,9 @@ ENDM
 	const ScriptCommand_EndScript9_index                                     ; $66
 	const ScriptCommand_EndScript10_index                                    ; $67
 
+DEF NUM_SCRIPT_COMMANDS EQU const_value
+
+
 ; Script Macros
 
 ; Stops the current script and returns control flow back to assembly
@@ -474,7 +477,7 @@ ENDM
 ; Opens the deck machine
 MACRO open_deck_machine
 	run_command ScriptCommand_OpenDeckMachine
-	db \1 ; Deck Machine Type?
+	db \1 ; DECK_MACHINE_* constant
 ENDM
 
 MACRO choose_starter_deck

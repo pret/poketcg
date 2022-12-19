@@ -50,6 +50,7 @@ ShowMedalReceivedScreen:
 	ret
 
 MasterMedalNames:
+	table_width 2, MasterMedalNames
 	tx GrassClubMapNameText
 	tx ScienceClubMapNameText
 	tx FireClubMapNameText
@@ -58,3 +59,4 @@ MasterMedalNames:
 	tx PsychicClubMapNameText
 	tx RockClubMapNameText
 	tx FightingClubMapNameText
+	assert_table_length NUM_MEDALS

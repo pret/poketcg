@@ -118,7 +118,7 @@
 	const EVENT_CONSOLE                                ; $74
 	const EVENT_SAM_MENU_CHOICE                        ; $75
 	const EVENT_AARON_DECK_MENU_CHOICE                 ; $76
-DEF EVENT_FLAG_AMOUNT EQU const_value
+DEF NUM_EVENT_FLAGS EQU const_value
 
 DEF EVENT_VAR_BYTES EQU $40
 
@@ -290,6 +290,7 @@ DEF VARIABLE_CARD	EQU 0 ; use the card located in wCardReceived instead of using
 	const FIRE_MEDAL_F      ; 5
 	const SCIENCE_MEDAL_F   ; 6
 	const GRASS_MEDAL_F     ; 7
+DEF NUM_MEDALS EQU const_value
 
 DEF FIGHTING_MEDAL  EQU 1 << FIGHTING_MEDAL_F
 DEF ROCK_MEDAL      EQU 1 << ROCK_MEDAL_F
@@ -299,8 +300,6 @@ DEF WATER_MEDAL     EQU 1 << WATER_MEDAL_F
 DEF FIRE_MEDAL      EQU 1 << FIRE_MEDAL_F
 DEF SCIENCE_MEDAL   EQU 1 << SCIENCE_MEDAL_F
 DEF GRASS_MEDAL     EQU 1 << GRASS_MEDAL_F
-
-DEF NUM_MEDALS EQU 8
 
 ; total number of packs that are obtained through the PC
 DEF NUM_PC_PACKS EQU 15

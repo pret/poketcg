@@ -227,6 +227,8 @@
 	const SPRITE_ANIM_215 ; $d7
 	const SPRITE_ANIM_216 ; $d8
 
+DEF NUM_SPRITE_ANIMS EQU const_value
+
 ; Animation duel screen constants (see wDuelAnimationScreen)
 	const_def
 	const DUEL_ANIM_SCREEN_MAIN_SCENE
@@ -333,7 +335,9 @@
 	const DUEL_ANIM_DUEL_DRAW          ; $5f
 	const DUEL_ANIM_96                 ; $60
 
-; animations passed this point are treated differently
+DEF NUM_REGULAR_DUEL_ANIMS EQU const_value
+
+	; animations passed this point are treated differently
 DEF DUEL_SPECIAL_ANIMS EQU const_value
 
 DEF DUEL_SCREEN_ANIMS EQU const_value

@@ -1,4 +1,5 @@
 DeckIDDuelConfigurations:
+	table_width 10, DeckIDDuelConfigurations
 	db SAMS_PRACTICE_DECK_ID ; deck ID
 	db SAM_PIC ; NPC portrait
 	tx SamNPCName ; name text ID
@@ -367,4 +368,5 @@ DeckIDDuelConfigurations:
 	tx StrangeLifeformText ; rank
 	dw NULL ; element
 
+	assert_table_length NUM_AI_DECK_IDS
 	db -1 ; end

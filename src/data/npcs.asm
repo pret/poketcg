@@ -2,6 +2,7 @@
 ; it will then jump to the pointer in the data item. All jumps lead to an RST20 operation.
 ; The Deck IDs are used for the challenge hall
 NPCHeaderPointers:
+	table_width 2, NPCHeaderPointers
 	dw DrMasonNPCHeader
 	dw DrMasonNPCHeader
 	dw Ronald1NPCHeader
@@ -118,6 +119,7 @@ NPCHeaderPointers:
 	dw Ronald2NPCHeader
 	dw Ronald3NPCHeader
 	dw DummyNPCHeader
+	assert_table_length NUM_NPCS
 
 DrMasonNPCHeader:
 	db NPC_DRMASON

@@ -1,4 +1,5 @@
 OverworldScriptTable:
+	table_width 2, OverworldScriptTable
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_CloseAdvancedTextBox
 	dw ScriptCommand_PrintNPCText
@@ -103,3 +104,4 @@ OverworldScriptTable:
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
+	assert_table_length NUM_SCRIPT_COMMANDS

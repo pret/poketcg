@@ -1,7 +1,8 @@
 ; TODO: Make card data structures more compact and rearrange the fields for
 ; convenience once the meaning of all fields is figured out.
 
-CardPointers: ; 30c5c (c:4c5c)
+CardPointers:
+	table_width 2, CardPointers
 	dw NULL
 	dw GrassEnergyCard
 	dw FireEnergyCard
@@ -232,8 +233,9 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw GamblerCard
 	dw RecycleCard
 	dw NULL
+	assert_table_length NUM_CARDS + 2
 
-BulbasaurCard: ; 30e28 (c:4e28)
+BulbasaurCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx BulbasaurCardGfx ; gfx
 	tx BulbasaurName ; name
@@ -284,7 +286,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	tx BulbasaurDescription ; description
 	db 16
 
-IvysaurCard: ; 30e69 (c:4e69)
+IvysaurCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx IvysaurCardGfx ; gfx
 	tx IvysaurName ; name
@@ -335,7 +337,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	tx IvysaurDescription ; description
 	db 16
 
-VenusaurLv64Card: ; 30eaa (c:4eaa)
+VenusaurLv64Card:
 	db TYPE_PKMN_GRASS ; type
 	gfx VenusaurLv64CardGfx ; gfx
 	tx VenusaurName ; name
@@ -386,7 +388,7 @@ VenusaurLv64Card: ; 30eaa (c:4eaa)
 	tx VenusaurLv64Description ; description
 	db 0
 
-VenusaurLv67Card: ; 30eeb (c:4eeb)
+VenusaurLv67Card:
 	db TYPE_PKMN_GRASS ; type
 	gfx VenusaurLv67CardGfx ; gfx
 	tx VenusaurName ; name
@@ -437,7 +439,7 @@ VenusaurLv67Card: ; 30eeb (c:4eeb)
 	tx VenusaurLv67Description ; description
 	db 0
 
-CaterpieCard: ; 30f2c (c:4f2c)
+CaterpieCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx CaterpieCardGfx ; gfx
 	tx CaterpieName ; name
@@ -488,7 +490,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	tx CaterpieDescription ; description
 	db 19
 
-MetapodCard: ; 30f6d (c:4f6d)
+MetapodCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx MetapodCardGfx ; gfx
 	tx MetapodName ; name
@@ -539,7 +541,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	tx MetapodDescription ; description
 	db 16
 
-ButterfreeCard: ; 30fae (c:4fae)
+ButterfreeCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx ButterfreeCardGfx ; gfx
 	tx ButterfreeName ; name
@@ -590,7 +592,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	tx ButterfreeDescription ; description
 	db 0
 
-WeedleCard: ; 30fef (c:4fef)
+WeedleCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx WeedleCardGfx ; gfx
 	tx WeedleName ; name
@@ -641,7 +643,7 @@ WeedleCard: ; 30fef (c:4fef)
 	tx WeedleDescription ; description
 	db 19
 
-KakunaCard: ; 31030 (c:5030)
+KakunaCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx KakunaCardGfx ; gfx
 	tx KakunaName ; name
@@ -692,7 +694,7 @@ KakunaCard: ; 31030 (c:5030)
 	tx KakunaDescription ; description
 	db 16
 
-BeedrillCard: ; 31071 (c:5071)
+BeedrillCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx BeedrillCardGfx ; gfx
 	tx BeedrillName ; name
@@ -743,7 +745,7 @@ BeedrillCard: ; 31071 (c:5071)
 	tx BeedrillDescription ; description
 	db 0
 
-EkansCard: ; 310b2 (c:50b2)
+EkansCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx EkansCardGfx ; gfx
 	tx EkansName ; name
@@ -794,7 +796,7 @@ EkansCard: ; 310b2 (c:50b2)
 	tx EkansDescription ; description
 	db 19
 
-ArbokCard: ; 310f3 (c:50f3)
+ArbokCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx ArbokCardGfx ; gfx
 	tx ArbokName ; name
@@ -845,7 +847,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	tx ArbokDescription ; description
 	db 0
 
-NidoranFCard: ; 31134 (c:5134)
+NidoranFCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx NidoranFCardGfx ; gfx
 	tx NidoranFName ; name
@@ -896,7 +898,7 @@ NidoranFCard: ; 31134 (c:5134)
 	tx NidoranFDescription ; description
 	db 19
 
-NidorinaCard: ; 31175 (c:5175)
+NidorinaCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx NidorinaCardGfx ; gfx
 	tx NidorinaName ; name
@@ -947,7 +949,7 @@ NidorinaCard: ; 31175 (c:5175)
 	tx NidorinaDescription ; description
 	db 16
 
-NidoqueenCard: ; 311b6 (c:51b6)
+NidoqueenCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx NidoqueenCardGfx ; gfx
 	tx NidoqueenName ; name
@@ -998,7 +1000,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	tx NidoqueenDescription ; description
 	db 0
 
-NidoranMCard: ; 311f7 (c:51f7)
+NidoranMCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx NidoranMCardGfx ; gfx
 	tx NidoranMName ; name
@@ -1049,7 +1051,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	tx NidoranMDescription ; description
 	db 19
 
-NidorinoCard: ; 31238 (c:5238)
+NidorinoCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx NidorinoCardGfx ; gfx
 	tx NidorinoName ; name
@@ -1100,7 +1102,7 @@ NidorinoCard: ; 31238 (c:5238)
 	tx NidorinoDescription ; description
 	db 16
 
-NidokingCard: ; 31279 (c:5279)
+NidokingCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx NidokingCardGfx ; gfx
 	tx NidokingName ; name
@@ -1151,7 +1153,7 @@ NidokingCard: ; 31279 (c:5279)
 	tx NidokingDescription ; description
 	db 0
 
-ZubatCard: ; 312ba (c:52ba)
+ZubatCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx ZubatCardGfx ; gfx
 	tx ZubatName ; name
@@ -1202,7 +1204,7 @@ ZubatCard: ; 312ba (c:52ba)
 	tx ZubatDescription ; description
 	db 16
 
-GolbatCard: ; 312fb (c:52fb)
+GolbatCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx GolbatCardGfx ; gfx
 	tx GolbatName ; name
@@ -1253,7 +1255,7 @@ GolbatCard: ; 312fb (c:52fb)
 	tx GolbatDescription ; description
 	db 0
 
-OddishCard: ; 3133c (c:533c)
+OddishCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx OddishCardGfx ; gfx
 	tx OddishName ; name
@@ -1304,7 +1306,7 @@ OddishCard: ; 3133c (c:533c)
 	tx OddishDescription ; description
 	db 16
 
-GloomCard: ; 3137d (c:537d)
+GloomCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx GloomCardGfx ; gfx
 	tx GloomName ; name
@@ -1355,7 +1357,7 @@ GloomCard: ; 3137d (c:537d)
 	tx GloomDescription ; description
 	db 16
 
-VileplumeCard: ; 313be (c:53be)
+VileplumeCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx VileplumeCardGfx ; gfx
 	tx VileplumeName ; name
@@ -1406,7 +1408,7 @@ VileplumeCard: ; 313be (c:53be)
 	tx VileplumeDescription ; description
 	db 0
 
-ParasCard: ; 313ff (c:53ff)
+ParasCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx ParasCardGfx ; gfx
 	tx ParasName ; name
@@ -1457,7 +1459,7 @@ ParasCard: ; 313ff (c:53ff)
 	tx ParasDescription ; description
 	db 16
 
-ParasectCard: ; 31440 (c:5440)
+ParasectCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx ParasectCardGfx ; gfx
 	tx ParasectName ; name
@@ -1508,7 +1510,7 @@ ParasectCard: ; 31440 (c:5440)
 	tx ParasectDescription ; description
 	db 0
 
-VenonatCard: ; 31481 (c:5481)
+VenonatCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx VenonatCardGfx ; gfx
 	tx VenonatName ; name
@@ -1559,7 +1561,7 @@ VenonatCard: ; 31481 (c:5481)
 	tx VenonatDescription ; description
 	db 19
 
-VenomothCard: ; 314c2 (c:54c2)
+VenomothCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx VenomothCardGfx ; gfx
 	tx VenomothName ; name
@@ -1610,7 +1612,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	tx VenomothDescription ; description
 	db 0
 
-BellsproutCard: ; 31503 (c:5503)
+BellsproutCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx BellsproutCardGfx ; gfx
 	tx BellsproutName ; name
@@ -1661,7 +1663,7 @@ BellsproutCard: ; 31503 (c:5503)
 	tx BellsproutDescription ; description
 	db 19
 
-WeepinbellCard: ; 31544 (c:5544)
+WeepinbellCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx WeepinbellCardGfx ; gfx
 	tx WeepinbellName ; name
@@ -1712,7 +1714,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	tx WeepinbellDescription ; description
 	db 16
 
-VictreebelCard: ; 31585 (c:5585)
+VictreebelCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx VictreebelCardGfx ; gfx
 	tx VictreebelName ; name
@@ -1763,7 +1765,7 @@ VictreebelCard: ; 31585 (c:5585)
 	tx VictreebelDescription ; description
 	db 0
 
-GrimerCard: ; 315c6 (c:55c6)
+GrimerCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx GrimerCardGfx ; gfx
 	tx GrimerName ; name
@@ -1814,7 +1816,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	tx GrimerDescription ; description
 	db 19
 
-MukCard: ; 31607 (c:5607)
+MukCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx MukCardGfx ; gfx
 	tx MukName ; name
@@ -1865,7 +1867,7 @@ MukCard: ; 31607 (c:5607)
 	tx MukDescription ; description
 	db 0
 
-ExeggcuteCard: ; 31648 (c:5648)
+ExeggcuteCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx ExeggcuteCardGfx ; gfx
 	tx ExeggcuteName ; name
@@ -1916,7 +1918,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	tx ExeggcuteDescription ; description
 	db 18
 
-ExeggutorCard: ; 31689 (c:5689)
+ExeggutorCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx ExeggutorCardGfx ; gfx
 	tx ExeggutorName ; name
@@ -1967,7 +1969,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	tx ExeggutorDescription ; description
 	db 0
 
-KoffingCard: ; 316ca (c:56ca)
+KoffingCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx KoffingCardGfx ; gfx
 	tx KoffingName ; name
@@ -2018,7 +2020,7 @@ KoffingCard: ; 316ca (c:56ca)
 	tx KoffingDescription ; description
 	db 16
 
-WeezingCard: ; 3170b (c:570b)
+WeezingCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx WeezingCardGfx ; gfx
 	tx WeezingName ; name
@@ -2069,7 +2071,7 @@ WeezingCard: ; 3170b (c:570b)
 	tx WeezingDescription ; description
 	db 0
 
-TangelaLv8Card: ; 3174c (c:574c)
+TangelaLv8Card:
 	db TYPE_PKMN_GRASS ; type
 	gfx TangelaLv8CardGfx ; gfx
 	tx TangelaName ; name
@@ -2120,7 +2122,7 @@ TangelaLv8Card: ; 3174c (c:574c)
 	tx TangelaLv8Description ; description
 	db 0
 
-TangelaLv12Card: ; 3178d (c:578d)
+TangelaLv12Card:
 	db TYPE_PKMN_GRASS ; type
 	gfx TangelaLv12CardGfx ; gfx
 	tx TangelaName ; name
@@ -2171,7 +2173,7 @@ TangelaLv12Card: ; 3178d (c:578d)
 	tx TangelaLv12Description ; description
 	db 0
 
-ScytherCard: ; 317ce (c:57ce)
+ScytherCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx ScytherCardGfx ; gfx
 	tx ScytherName ; name
@@ -2222,7 +2224,7 @@ ScytherCard: ; 317ce (c:57ce)
 	tx ScytherDescription ; description
 	db 0
 
-PinsirCard: ; 3180f (c:580f)
+PinsirCard:
 	db TYPE_PKMN_GRASS ; type
 	gfx PinsirCardGfx ; gfx
 	tx PinsirName ; name
@@ -2273,7 +2275,7 @@ PinsirCard: ; 3180f (c:580f)
 	tx PinsirDescription ; description
 	db 0
 
-CharmanderCard: ; 31850 (c:5850)
+CharmanderCard:
 	db TYPE_PKMN_FIRE ; type
 	gfx CharmanderCardGfx ; gfx
 	tx CharmanderName ; name
@@ -2324,7 +2326,7 @@ CharmanderCard: ; 31850 (c:5850)
 	tx CharmanderDescription ; description
 	db 21
 
-CharmeleonCard: ; 31891 (c:5891)
+CharmeleonCard:
 	db TYPE_PKMN_FIRE ; type
 	gfx CharmeleonCardGfx ; gfx
 	tx CharmeleonName ; name
@@ -2375,7 +2377,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	tx CharmeleonDescription ; description
 	db 18
 
-CharizardCard: ; 318d2 (c:58d2)
+CharizardCard:
 	db TYPE_PKMN_FIRE ; type
 	gfx CharizardCardGfx ; gfx
 	tx CharizardName ; name
@@ -2426,7 +2428,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	tx CharizardDescription ; description
 	db 0
 
-VulpixCard: ; 31913 (c:5913)
+VulpixCard:
 	db TYPE_PKMN_FIRE ; type
 	gfx VulpixCardGfx ; gfx
 	tx VulpixName ; name
@@ -2477,7 +2479,7 @@ VulpixCard: ; 31913 (c:5913)
 	tx VulpixDescription ; description
 	db 18
 
-NinetalesLv32Card: ; 31954 (c:5954)
+NinetalesLv32Card:
 	db TYPE_PKMN_FIRE ; type
 	gfx NinetalesLv32CardGfx ; gfx
 	tx NinetalesName ; name
@@ -2528,7 +2530,7 @@ NinetalesLv32Card: ; 31954 (c:5954)
 	tx NinetalesLv32Description ; description
 	db 0
 
-NinetalesLv35Card: ; 31995 (c:5995)
+NinetalesLv35Card:
 	db TYPE_PKMN_FIRE ; type
 	gfx NinetalesLv35CardGfx ; gfx
 	tx NinetalesName ; name
@@ -2579,7 +2581,7 @@ NinetalesLv35Card: ; 31995 (c:5995)
 	tx NinetalesLv35Description ; description
 	db 0
 
-GrowlitheCard: ; 319d6 (c:59d6)
+GrowlitheCard:
 	db TYPE_PKMN_FIRE ; type
 	gfx GrowlitheCardGfx ; gfx
 	tx GrowlitheName ; name
@@ -2630,7 +2632,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	tx GrowlitheDescription ; description
 	db 16
 
-ArcanineLv34Card: ; 31a17 (c:5a17)
+ArcanineLv34Card:
 	db TYPE_PKMN_FIRE ; type
 	gfx ArcanineLv34CardGfx ; gfx
 	tx ArcanineName ; name
@@ -2681,7 +2683,7 @@ ArcanineLv34Card: ; 31a17 (c:5a17)
 	tx ArcanineLv34Description ; description
 	db 0
 
-ArcanineLv45Card: ; 31a58 (c:5a58)
+ArcanineLv45Card:
 	db TYPE_PKMN_FIRE ; type
 	gfx ArcanineLv45CardGfx ; gfx
 	tx ArcanineName ; name
@@ -2732,7 +2734,7 @@ ArcanineLv45Card: ; 31a58 (c:5a58)
 	tx ArcanineLv45Description ; description
 	db 0
 
-PonytaCard: ; 31a99 (c:5a99)
+PonytaCard:
 	db TYPE_PKMN_FIRE ; type
 	gfx PonytaCardGfx ; gfx
 	tx PonytaName ; name
@@ -2783,7 +2785,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	tx PonytaDescription ; description
 	db 16
 
-RapidashCard: ; 31ada (c:5ada)
+RapidashCard:
 	db TYPE_PKMN_FIRE ; type
 	gfx RapidashCardGfx ; gfx
 	tx RapidashName ; name
@@ -2834,7 +2836,7 @@ RapidashCard: ; 31ada (c:5ada)
 	tx RapidashDescription ; description
 	db 0
 
-MagmarLv24Card: ; 31b1b (c:5b1b)
+MagmarLv24Card:
 	db TYPE_PKMN_FIRE ; type
 	gfx MagmarLv24CardGfx ; gfx
 	tx MagmarName ; name
@@ -2885,7 +2887,7 @@ MagmarLv24Card: ; 31b1b (c:5b1b)
 	tx MagmarLv24Description ; description
 	db 0
 
-MagmarLv31Card: ; 31b5c (c:5b5c)
+MagmarLv31Card:
 	db TYPE_PKMN_FIRE ; type
 	gfx MagmarLv31CardGfx ; gfx
 	tx MagmarName ; name
@@ -2936,7 +2938,7 @@ MagmarLv31Card: ; 31b5c (c:5b5c)
 	tx MagmarLv31Description ; description
 	db 3
 
-FlareonLv22Card: ; 31b9d (c:5b9d)
+FlareonLv22Card:
 	db TYPE_PKMN_FIRE ; type
 	gfx FlareonLv22CardGfx ; gfx
 	tx FlareonName ; name
@@ -2987,7 +2989,7 @@ FlareonLv22Card: ; 31b9d (c:5b9d)
 	tx FlareonLv22Description ; description
 	db 0
 
-FlareonLv28Card: ; 31bde (c:5bde)
+FlareonLv28Card:
 	db TYPE_PKMN_FIRE ; type
 	gfx FlareonLv28CardGfx ; gfx
 	tx FlareonName ; name
@@ -3038,7 +3040,7 @@ FlareonLv28Card: ; 31bde (c:5bde)
 	tx FlareonLv28Description ; description
 	db 0
 
-MoltresLv35Card: ; 31c1f (c:5c1f)
+MoltresLv35Card:
 	db TYPE_PKMN_FIRE ; type
 	gfx MoltresLv35CardGfx ; gfx
 	tx MoltresName ; name
@@ -3089,7 +3091,7 @@ MoltresLv35Card: ; 31c1f (c:5c1f)
 	tx MoltresLv35Description ; description
 	db 0
 
-MoltresLv37Card: ; 31c60 (c:5c60)
+MoltresLv37Card:
 	db TYPE_PKMN_FIRE ; type
 	gfx MoltresLv37CardGfx ; gfx
 	tx MoltresName ; name
@@ -3140,7 +3142,7 @@ MoltresLv37Card: ; 31c60 (c:5c60)
 	tx MoltresLv37Description ; description
 	db 0
 
-SquirtleCard: ; 31ca1 (c:5ca1)
+SquirtleCard:
 	db TYPE_PKMN_WATER ; type
 	gfx SquirtleCardGfx ; gfx
 	tx SquirtleName ; name
@@ -3191,7 +3193,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	tx SquirtleDescription ; description
 	db 21
 
-WartortleCard: ; 31ce2 (c:5ce2)
+WartortleCard:
 	db TYPE_PKMN_WATER ; type
 	gfx WartortleCardGfx ; gfx
 	tx WartortleName ; name
@@ -3242,7 +3244,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	tx WartortleDescription ; description
 	db 18
 
-BlastoiseCard: ; 31d23 (c:5d23)
+BlastoiseCard:
 	db TYPE_PKMN_WATER ; type
 	gfx BlastoiseCardGfx ; gfx
 	tx BlastoiseName ; name
@@ -3293,7 +3295,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	tx BlastoiseDescription ; description
 	db 0
 
-PsyduckCard: ; 31d64 (c:5d64)
+PsyduckCard:
 	db TYPE_PKMN_WATER ; type
 	gfx PsyduckCardGfx ; gfx
 	tx PsyduckName ; name
@@ -3344,7 +3346,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	tx PsyduckDescription ; description
 	db 19
 
-GolduckCard: ; 31da5 (c:5da5)
+GolduckCard:
 	db TYPE_PKMN_WATER ; type
 	gfx GolduckCardGfx ; gfx
 	tx GolduckName ; name
@@ -3395,7 +3397,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	tx GolduckDescription ; description
 	db 3
 
-PoliwagCard: ; 31de6 (c:5de6)
+PoliwagCard:
 	db TYPE_PKMN_WATER ; type
 	gfx PoliwagCardGfx ; gfx
 	tx PoliwagName ; name
@@ -3446,7 +3448,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	tx PoliwagDescription ; description
 	db 19
 
-PoliwhirlCard: ; 31e27 (c:5e27)
+PoliwhirlCard:
 	db TYPE_PKMN_WATER ; type
 	gfx PoliwhirlCardGfx ; gfx
 	tx PoliwhirlName ; name
@@ -3497,7 +3499,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	tx PoliwhirlsDescription ; description
 	db 16
 
-PoliwrathCard: ; 31e68 (c:5e68)
+PoliwrathCard:
 	db TYPE_PKMN_WATER ; type
 	gfx PoliwrathCardGfx ; gfx
 	tx PoliwrathName ; name
@@ -3548,7 +3550,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	tx PoliwrathDescription ; description
 	db 0
 
-TentacoolCard: ; 31ea9 (c:5ea9)
+TentacoolCard:
 	db TYPE_PKMN_WATER ; type
 	gfx TentacoolCardGfx ; gfx
 	tx TentacoolName ; name
@@ -3599,7 +3601,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	tx TentacoolDescription ; description
 	db 19
 
-TentacruelCard: ; 31eea (c:5eea)
+TentacruelCard:
 	db TYPE_PKMN_WATER ; type
 	gfx TentacruelCardGfx ; gfx
 	tx TentacruelName ; name
@@ -3650,7 +3652,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	tx TentacruelDescription ; description
 	db 0
 
-SeelCard: ; 31f2b (c:5f2b)
+SeelCard:
 	db TYPE_PKMN_WATER ; type
 	gfx SeelCardGfx ; gfx
 	tx SeelName ; name
@@ -3701,7 +3703,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	tx SeelDescription ; description
 	db 19
 
-DewgongCard: ; 31f6c (c:5f6c)
+DewgongCard:
 	db TYPE_PKMN_WATER ; type
 	gfx DewgongCardGfx ; gfx
 	tx DewgongName ; name
@@ -3752,7 +3754,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	tx DewgongDescription ; description
 	db 0
 
-ShellderCard: ; 31fad (c:5fad)
+ShellderCard:
 	db TYPE_PKMN_WATER ; type
 	gfx ShellderCardGfx ; gfx
 	tx ShellderName ; name
@@ -3803,7 +3805,7 @@ ShellderCard: ; 31fad (c:5fad)
 	tx ShellderDescription ; description
 	db 19
 
-CloysterCard: ; 31fee (c:5fee)
+CloysterCard:
 	db TYPE_PKMN_WATER ; type
 	gfx CloysterCardGfx ; gfx
 	tx CloysterName ; name
@@ -3854,7 +3856,7 @@ CloysterCard: ; 31fee (c:5fee)
 	tx CloysterDescription ; description
 	db 0
 
-KrabbyCard: ; 3202f (c:602f)
+KrabbyCard:
 	db TYPE_PKMN_WATER ; type
 	gfx KrabbyCardGfx ; gfx
 	tx KrabbyName ; name
@@ -3905,7 +3907,7 @@ KrabbyCard: ; 3202f (c:602f)
 	tx KrabbyDescription ; description
 	db 16
 
-KinglerCard: ; 32070 (c:6070)
+KinglerCard:
 	db TYPE_PKMN_WATER ; type
 	gfx KinglerCardGfx ; gfx
 	tx KinglerName ; name
@@ -3956,7 +3958,7 @@ KinglerCard: ; 32070 (c:6070)
 	tx KinglerDescription ; description
 	db 0
 
-HorseaCard: ; 320b1 (c:60b1)
+HorseaCard:
 	db TYPE_PKMN_WATER ; type
 	gfx HorseaCardGfx ; gfx
 	tx HorseaName ; name
@@ -4007,7 +4009,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	tx HorseaDescription ; description
 	db 19
 
-SeadraCard: ; 320f2 (c:60f2)
+SeadraCard:
 	db TYPE_PKMN_WATER ; type
 	gfx SeadraCardGfx ; gfx
 	tx SeadraName ; name
@@ -4058,7 +4060,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	tx SeadraDescription ; description
 	db 0
 
-GoldeenCard: ; 32133 (c:6133)
+GoldeenCard:
 	db TYPE_PKMN_WATER ; type
 	gfx GoldeenCardGfx ; gfx
 	tx GoldeenName ; name
@@ -4109,7 +4111,7 @@ GoldeenCard: ; 32133 (c:6133)
 	tx GoldeenDescription ; description
 	db 21
 
-SeakingCard: ; 32174 (c:6174)
+SeakingCard:
 	db TYPE_PKMN_WATER ; type
 	gfx SeakingCardGfx ; gfx
 	tx SeakingName ; name
@@ -4160,7 +4162,7 @@ SeakingCard: ; 32174 (c:6174)
 	tx SeakingDescription ; description
 	db 0
 
-StaryuCard: ; 321b5 (c:61b5)
+StaryuCard:
 	db TYPE_PKMN_WATER ; type
 	gfx StaryuCardGfx ; gfx
 	tx StaryuName ; name
@@ -4211,7 +4213,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	tx StaryuDescription ; description
 	db 19
 
-StarmieCard: ; 321f6 (c:61f6)
+StarmieCard:
 	db TYPE_PKMN_WATER ; type
 	gfx StarmieCardGfx ; gfx
 	tx StarmieName ; name
@@ -4262,7 +4264,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	tx StarmieDescription ; description
 	db 0
 
-MagikarpCard: ; 32237 (c:6237)
+MagikarpCard:
 	db TYPE_PKMN_WATER ; type
 	gfx MagikarpCardGfx ; gfx
 	tx MagikarpName ; name
@@ -4313,7 +4315,7 @@ MagikarpCard: ; 32237 (c:6237)
 	tx MagikarpDescription ; description
 	db 18
 
-GyaradosCard: ; 32278 (c:6278)
+GyaradosCard:
 	db TYPE_PKMN_WATER ; type
 	gfx GyaradosCardGfx ; gfx
 	tx GyaradosName ; name
@@ -4364,7 +4366,7 @@ GyaradosCard: ; 32278 (c:6278)
 	tx GyaradosDescription ; description
 	db 0
 
-LaprasCard: ; 322b9 (c:62b9)
+LaprasCard:
 	db TYPE_PKMN_WATER ; type
 	gfx LaprasCardGfx ; gfx
 	tx LaprasName ; name
@@ -4415,7 +4417,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	tx LaprasDescription ; description
 	db 0
 
-VaporeonLv29Card: ; 322fa (c:62fa)
+VaporeonLv29Card:
 	db TYPE_PKMN_WATER ; type
 	gfx VaporeonLv29CardGfx ; gfx
 	tx VaporeonName ; name
@@ -4466,7 +4468,7 @@ VaporeonLv29Card: ; 322fa (c:62fa)
 	tx VaporeonLv29Description ; description
 	db 0
 
-VaporeonLv42Card: ; 3233b (c:633b)
+VaporeonLv42Card:
 	db TYPE_PKMN_WATER ; type
 	gfx VaporeonLv42CardGfx ; gfx
 	tx VaporeonName ; name
@@ -4517,7 +4519,7 @@ VaporeonLv42Card: ; 3233b (c:633b)
 	tx VaporeonLv42Description ; description
 	db 0
 
-OmanyteCard: ; 3237c (c:637c)
+OmanyteCard:
 	db TYPE_PKMN_WATER ; type
 	gfx OmanyteCardGfx ; gfx
 	tx OmanyteName ; name
@@ -4568,7 +4570,7 @@ OmanyteCard: ; 3237c (c:637c)
 	tx OmanyteDescription ; description
 	db 17
 
-OmastarCard: ; 323bd (c:63bd)
+OmastarCard:
 	db TYPE_PKMN_WATER ; type
 	gfx OmastarCardGfx ; gfx
 	tx OmastarName ; name
@@ -4619,7 +4621,7 @@ OmastarCard: ; 323bd (c:63bd)
 	tx OmastarDescription ; description
 	db 0
 
-ArticunoLv35Card: ; 323fe (c:63fe)
+ArticunoLv35Card:
 	db TYPE_PKMN_WATER ; type
 	gfx ArticunoLv35CardGfx ; gfx
 	tx ArticunoName ; name
@@ -4670,7 +4672,7 @@ ArticunoLv35Card: ; 323fe (c:63fe)
 	tx ArticunoLv35Description ; description
 	db 0
 
-ArticunoLv37Card: ; 3243f (c:643f)
+ArticunoLv37Card:
 	db TYPE_PKMN_WATER ; type
 	gfx ArticunoLv37CardGfx ; gfx
 	tx ArticunoName ; name
@@ -4721,7 +4723,7 @@ ArticunoLv37Card: ; 3243f (c:643f)
 	tx ArticunoLv37Description ; description
 	db 0
 
-PikachuLv12Card: ; 32480 (c:6480)
+PikachuLv12Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx PikachuLv12CardGfx ; gfx
 	tx PikachuName ; name
@@ -4772,7 +4774,7 @@ PikachuLv12Card: ; 32480 (c:6480)
 	tx PikachuLv12Description ; description
 	db 19
 
-PikachuLv14Card: ; 324c1 (c:64c1)
+PikachuLv14Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx PikachuLv14CardGfx ; gfx
 	tx PikachuName ; name
@@ -4823,7 +4825,7 @@ PikachuLv14Card: ; 324c1 (c:64c1)
 	tx PikachuLv14Description ; description
 	db 16
 
-PikachuLv16Card: ; 32502 (c:6502)
+PikachuLv16Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx PikachuLv16CardGfx ; gfx
 	tx PikachuName ; name
@@ -4874,7 +4876,7 @@ PikachuLv16Card: ; 32502 (c:6502)
 	tx PikachuLv16Description ; description
 	db 16
 
-PikachuAltLv16Card: ; 32543 (c:6543)
+PikachuAltLv16Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx PikachuAltLv16CardGfx ; gfx
 	tx PikachuName ; name
@@ -4925,7 +4927,7 @@ PikachuAltLv16Card: ; 32543 (c:6543)
 	tx PikachuLv16Description ; description
 	db 16
 
-FlyingPikachuCard: ; 32584 (c:6584)
+FlyingPikachuCard:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx FlyingPikachuCardGfx ; gfx
 	tx FlyingPikachuName ; name
@@ -4976,7 +4978,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	tx FlyingPikachuDescription ; description
 	db 3
 
-SurfingPikachuLv13Card: ; 325c5 (c:65c5)
+SurfingPikachuLv13Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx SurfingPikachuLv13CardGfx ; gfx
 	tx SurfingPikachuName ; name
@@ -5027,7 +5029,7 @@ SurfingPikachuLv13Card: ; 325c5 (c:65c5)
 	tx SurfingPikachuDescription ; description
 	db 0
 
-SurfingPikachuAltLv13Card: ; 32606 (c:6606)
+SurfingPikachuAltLv13Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx SurfingPikachuAltLv13CardGfx ; gfx
 	tx SurfingPikachuName ; name
@@ -5078,7 +5080,7 @@ SurfingPikachuAltLv13Card: ; 32606 (c:6606)
 	tx SurfingPikachuDescription ; description
 	db 0
 
-RaichuLv40Card: ; 32647 (c:6647)
+RaichuLv40Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx RaichuLv40CardGfx ; gfx
 	tx RaichuName ; name
@@ -5129,7 +5131,7 @@ RaichuLv40Card: ; 32647 (c:6647)
 	tx RaichuLv40Description ; description
 	db 0
 
-RaichuLv45Card: ; 32688 (c:6688)
+RaichuLv45Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx RaichuLv45CardGfx ; gfx
 	tx RaichuName ; name
@@ -5180,7 +5182,7 @@ RaichuLv45Card: ; 32688 (c:6688)
 	tx RaichuLv45Description ; description
 	db 0
 
-MagnemiteLv13Card: ; 326c9 (c:66c9)
+MagnemiteLv13Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx MagnemiteLv13CardGfx ; gfx
 	tx MagnemiteName ; name
@@ -5231,7 +5233,7 @@ MagnemiteLv13Card: ; 326c9 (c:66c9)
 	tx MagnemiteLv13Description ; description
 	db 19
 
-MagnemiteLv15Card: ; 3270a (c:670a)
+MagnemiteLv15Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx MagnemiteLv15CardGfx ; gfx
 	tx MagnemiteName ; name
@@ -5282,7 +5284,7 @@ MagnemiteLv15Card: ; 3270a (c:670a)
 	tx MagnemiteLv15Description ; description
 	db 19
 
-MagnetonLv28Card: ; 3274b (c:674b)
+MagnetonLv28Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx MagnetonLv28CardGfx ; gfx
 	tx MagnetonName ; name
@@ -5333,7 +5335,7 @@ MagnetonLv28Card: ; 3274b (c:674b)
 	tx MagnetonLv28Description ; description
 	db 0
 
-MagnetonLv35Card: ; 3278c (c:678c)
+MagnetonLv35Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx MagnetonLv35CardGfx ; gfx
 	tx MagnetonName ; name
@@ -5384,7 +5386,7 @@ MagnetonLv35Card: ; 3278c (c:678c)
 	tx MagnetonLv35Description ; description
 	db 0
 
-VoltorbCard: ; 327cd (c:67cd)
+VoltorbCard:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx VoltorbCardGfx ; gfx
 	tx VoltorbName ; name
@@ -5435,7 +5437,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	tx VoltorbDescription ; description
 	db 21
 
-ElectrodeLv35Card: ; 3280e (c:680e)
+ElectrodeLv35Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx ElectrodeLv35CardGfx ; gfx
 	tx ElectrodeName ; name
@@ -5486,7 +5488,7 @@ ElectrodeLv35Card: ; 3280e (c:680e)
 	tx ElectrodeLv35Description ; description
 	db 0
 
-ElectrodeLv42Card: ; 3284f (c:684f)
+ElectrodeLv42Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx ElectrodeLv42CardGfx ; gfx
 	tx ElectrodeName ; name
@@ -5537,7 +5539,7 @@ ElectrodeLv42Card: ; 3284f (c:684f)
 	tx ElectrodeLv42Description ; description
 	db 0
 
-ElectabuzzLv20Card: ; 32890 (c:6890)
+ElectabuzzLv20Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx ElectabuzzLv20CardGfx ; gfx
 	tx ElectabuzzName ; name
@@ -5588,7 +5590,7 @@ ElectabuzzLv20Card: ; 32890 (c:6890)
 	tx ElectabuzzLv20Description ; description
 	db 0
 
-ElectabuzzLv35Card: ; 328d1 (c:68d1)
+ElectabuzzLv35Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx ElectabuzzLv35CardGfx ; gfx
 	tx ElectabuzzName ; name
@@ -5639,7 +5641,7 @@ ElectabuzzLv35Card: ; 328d1 (c:68d1)
 	tx ElectabuzzLv35Description ; description
 	db 0
 
-JolteonLv24Card: ; 32912 (c:6912)
+JolteonLv24Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx JolteonLv24CardGfx ; gfx
 	tx JolteonName ; name
@@ -5690,7 +5692,7 @@ JolteonLv24Card: ; 32912 (c:6912)
 	tx JolteonLv24Description ; description
 	db 0
 
-JolteonLv29Card: ; 32953 (c:6953)
+JolteonLv29Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx JolteonLv29CardGfx ; gfx
 	tx JolteonName ; name
@@ -5741,7 +5743,7 @@ JolteonLv29Card: ; 32953 (c:6953)
 	tx JolteonLv29Description ; description
 	db 0
 
-ZapdosLv40Card: ; 32994 (c:6994)
+ZapdosLv40Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx ZapdosLv40CardGfx ; gfx
 	tx ZapdosName ; name
@@ -5792,7 +5794,7 @@ ZapdosLv40Card: ; 32994 (c:6994)
 	tx ZapdosLv40Description ; description
 	db 0
 
-ZapdosLv64Card: ; 329d5 (c:69d5)
+ZapdosLv64Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx ZapdosLv64CardGfx ; gfx
 	tx ZapdosName ; name
@@ -5843,7 +5845,7 @@ ZapdosLv64Card: ; 329d5 (c:69d5)
 	tx ZapdosLv64Description ; description
 	db 0
 
-ZapdosLv68Card: ; 32a16 (c:6a16)
+ZapdosLv68Card:
 	db TYPE_PKMN_LIGHTNING ; type
 	gfx ZapdosLv68CardGfx ; gfx
 	tx ZapdosName ; name
@@ -5894,7 +5896,7 @@ ZapdosLv68Card: ; 32a16 (c:6a16)
 	tx ZapdosLv68Description ; description
 	db 0
 
-SandshrewCard: ; 32a57 (c:6a57)
+SandshrewCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx SandshrewCardGfx ; gfx
 	tx SandshrewName ; name
@@ -5945,7 +5947,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	tx SandshrewDescription ; description
 	db 19
 
-SandslashCard: ; 32a98 (c:6a98)
+SandslashCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx SandslashCardGfx ; gfx
 	tx SandslashName ; name
@@ -5996,7 +5998,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	tx SandslashDescription ; description
 	db 0
 
-DiglettCard: ; 32ad9 (c:6ad9)
+DiglettCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx DiglettCardGfx ; gfx
 	tx DiglettName ; name
@@ -6047,7 +6049,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	tx DiglettDescription ; description
 	db 19
 
-DugtrioCard: ; 32b1a (c:6b1a)
+DugtrioCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx DugtrioCardGfx ; gfx
 	tx DugtrioName ; name
@@ -6098,7 +6100,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	tx DugtrioDescription ; description
 	db 0
 
-MankeyCard: ; 32b5b (c:6b5b)
+MankeyCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx MankeyCardGfx ; gfx
 	tx MankeyName ; name
@@ -6149,7 +6151,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	tx MankeyDescription ; description
 	db 17
 
-PrimeapeCard: ; 32b9c (c:6b9c)
+PrimeapeCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx PrimeapeCardGfx ; gfx
 	tx PrimeapeName ; name
@@ -6200,7 +6202,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	tx PrimeapeDescription ; description
 	db 0
 
-MachopCard: ; 32bdd (c:6bdd)
+MachopCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx MachopCardGfx ; gfx
 	tx MachopName ; name
@@ -6251,7 +6253,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	tx MachopDescription ; description
 	db 21
 
-MachokeCard: ; 32c1e (c:6c1e)
+MachokeCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx MachokeCardGfx ; gfx
 	tx MachokeName ; name
@@ -6302,7 +6304,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	tx MachokeDescription ; description
 	db 16
 
-MachampCard: ; 32c5f (c:6c5f)
+MachampCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx MachampCardGfx ; gfx
 	tx MachampName ; name
@@ -6353,7 +6355,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	tx MachampDescription ; description
 	db 0
 
-GeodudeCard: ; 32ca0 (c:6ca0)
+GeodudeCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx GeodudeCardGfx ; gfx
 	tx GeodudeName ; name
@@ -6404,7 +6406,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	tx GeodudeDescription ; description
 	db 19
 
-GravelerCard: ; 32ce1 (c:6ce1)
+GravelerCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx GravelerCardGfx ; gfx
 	tx GravelerName ; name
@@ -6455,7 +6457,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	tx GravelerDescription ; description
 	db 16
 
-GolemCard: ; 32d22 (c:6d22)
+GolemCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx GolemCardGfx ; gfx
 	tx GolemName ; name
@@ -6506,7 +6508,7 @@ GolemCard: ; 32d22 (c:6d22)
 	tx GolemDescription ; description
 	db 0
 
-OnixCard: ; 32d63 (c:6d63)
+OnixCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx OnixCardGfx ; gfx
 	tx OnixName ; name
@@ -6557,7 +6559,7 @@ OnixCard: ; 32d63 (c:6d63)
 	tx OnixDescription ; description
 	db 0
 
-CuboneCard: ; 32da4 (c:6da4)
+CuboneCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx CuboneCardGfx ; gfx
 	tx CuboneName ; name
@@ -6608,7 +6610,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	tx CuboneDescription ; description
 	db 19
 
-MarowakLv26Card: ; 32de5 (c:6de5)
+MarowakLv26Card:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx MarowakLv26CardGfx ; gfx
 	tx MarowakName ; name
@@ -6659,7 +6661,7 @@ MarowakLv26Card: ; 32de5 (c:6de5)
 	tx MarowakLv26Description ; description
 	db 0
 
-MarowakLv32Card: ; 32e26 (c:6e26)
+MarowakLv32Card:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx MarowakLv32CardGfx ; gfx
 	tx MarowakName ; name
@@ -6710,7 +6712,7 @@ MarowakLv32Card: ; 32e26 (c:6e26)
 	tx MarowakLv32Description ; description
 	db 0
 
-HitmonleeCard: ; 32e67 (c:6e67)
+HitmonleeCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx HitmonleeCardGfx ; gfx
 	tx HitmonleeName ; name
@@ -6761,7 +6763,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	tx HitmonleeDescription ; description
 	db 0
 
-HitmonchanCard: ; 32ea8 (c:6ea8)
+HitmonchanCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx HitmonchanCardGfx ; gfx
 	tx HitmonchanName ; name
@@ -6812,7 +6814,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	tx HitmonchanDescription ; description
 	db 0
 
-RhyhornCard: ; 32ee9 (c:6ee9)
+RhyhornCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx RhyhornCardGfx ; gfx
 	tx RhyhornName ; name
@@ -6863,7 +6865,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	tx RhyhornDescription ; description
 	db 16
 
-RhydonCard: ; 32f2a (c:6f2a)
+RhydonCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx RhydonCardGfx ; gfx
 	tx RhydonName ; name
@@ -6914,7 +6916,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	tx RhydonDescription ; description
 	db 0
 
-KabutoCard: ; 32f6b (c:6f6b)
+KabutoCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx KabutoCardGfx ; gfx
 	tx KabutoName ; name
@@ -6965,7 +6967,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	tx KabutoDescription ; description
 	db 19
 
-KabutopsCard: ; 32fac (c:6fac)
+KabutopsCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx KabutopsCardGfx ; gfx
 	tx KabutopsName ; name
@@ -7016,7 +7018,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	tx KabutopsDescription ; description
 	db 0
 
-AerodactylCard: ; 32fed (c:6fed)
+AerodactylCard:
 	db TYPE_PKMN_FIGHTING ; type
 	gfx AerodactylCardGfx ; gfx
 	tx AerodactylName ; name
@@ -7067,7 +7069,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	tx AerodactylDescription ; description
 	db 1
 
-AbraCard: ; 3302e (c:702e)
+AbraCard:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx AbraCardGfx ; gfx
 	tx AbraName ; name
@@ -7118,7 +7120,7 @@ AbraCard: ; 3302e (c:702e)
 	tx AbraDescription ; description
 	db 16
 
-KadabraCard: ; 3306f (c:706f)
+KadabraCard:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx KadabraCardGfx ; gfx
 	tx KadabraName ; name
@@ -7169,7 +7171,7 @@ KadabraCard: ; 3306f (c:706f)
 	tx KadabraDescription ; description
 	db 16
 
-AlakazamCard: ; 330b0 (c:70b0)
+AlakazamCard:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx AlakazamCardGfx ; gfx
 	tx AlakazamName ; name
@@ -7220,7 +7222,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	tx AlakazamDescription ; description
 	db 0
 
-SlowpokeLv9Card: ; 330f1 (c:70f1)
+SlowpokeLv9Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx SlowpokeLv9CardGfx ; gfx
 	tx SlowpokeName ; name
@@ -7271,7 +7273,7 @@ SlowpokeLv9Card: ; 330f1 (c:70f1)
 	tx SlowpokeLv9Description ; description
 	db 19
 
-SlowpokeLv18Card: ; 33132 (c:7132)
+SlowpokeLv18Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx SlowpokeLv18CardGfx ; gfx
 	tx SlowpokeName ; name
@@ -7322,7 +7324,7 @@ SlowpokeLv18Card: ; 33132 (c:7132)
 	tx SlowpokeLv9Description ; description
 	db 16
 
-SlowbroCard: ; 33173 (c:7173)
+SlowbroCard:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx SlowbroCardGfx ; gfx
 	tx SlowbroName ; name
@@ -7373,7 +7375,7 @@ SlowbroCard: ; 33173 (c:7173)
 	tx SlowbroDescription ; description
 	db 1
 
-GastlyLv8Card: ; 331b4 (c:71b4)
+GastlyLv8Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx GastlyLv8CardGfx ; gfx
 	tx GastlyName ; name
@@ -7424,7 +7426,7 @@ GastlyLv8Card: ; 331b4 (c:71b4)
 	tx GastlyLv8Description ; description
 	db 16
 
-GastlyLv17Card: ; 331f5 (c:71f5)
+GastlyLv17Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx GastlyLv17CardGfx ; gfx
 	tx GastlyName ; name
@@ -7475,7 +7477,7 @@ GastlyLv17Card: ; 331f5 (c:71f5)
 	tx GastlyLv17Description ; description
 	db 19
 
-HaunterLv17Card: ; 33236 (c:7236)
+HaunterLv17Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx HaunterLv17CardGfx ; gfx
 	tx HaunterName ; name
@@ -7526,7 +7528,7 @@ HaunterLv17Card: ; 33236 (c:7236)
 	tx HaunterDescription ; description
 	db 16
 
-HaunterLv22Card: ; 33277 (c:7277)
+HaunterLv22Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx HaunterLv22CardGfx ; gfx
 	tx HaunterName ; name
@@ -7577,7 +7579,7 @@ HaunterLv22Card: ; 33277 (c:7277)
 	tx HaunterDescription ; description
 	db 16
 
-GengarCard: ; 332b8 (c:72b8)
+GengarCard:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx GengarCardGfx ; gfx
 	tx GengarName ; name
@@ -7628,7 +7630,7 @@ GengarCard: ; 332b8 (c:72b8)
 	tx GengarDescription ; description
 	db 1
 
-DrowzeeCard: ; 332f9 (c:72f9)
+DrowzeeCard:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx DrowzeeCardGfx ; gfx
 	tx DrowzeeName ; name
@@ -7679,7 +7681,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	tx DrowzeeDescription ; description
 	db 19
 
-HypnoCard: ; 3333a (c:733a)
+HypnoCard:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx HypnoCardGfx ; gfx
 	tx HypnoName ; name
@@ -7730,7 +7732,7 @@ HypnoCard: ; 3333a (c:733a)
 	tx HypnoDescription ; description
 	db 0
 
-MrMimeCard: ; 3337b (c:737b)
+MrMimeCard:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx MrMimeCardGfx ; gfx
 	tx MrMimeName ; name
@@ -7781,7 +7783,7 @@ MrMimeCard: ; 3337b (c:737b)
 	tx MrMimeDescription ; description
 	db 3
 
-JynxCard: ; 333bc (c:73bc)
+JynxCard:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx JynxCardGfx ; gfx
 	tx JynxName ; name
@@ -7832,7 +7834,7 @@ JynxCard: ; 333bc (c:73bc)
 	tx JynxDescription ; description
 	db 0
 
-MewtwoLv53Card: ; 333fd (c:73fd)
+MewtwoLv53Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx MewtwoLv53CardGfx ; gfx
 	tx MewtwoName ; name
@@ -7883,7 +7885,7 @@ MewtwoLv53Card: ; 333fd (c:73fd)
 	tx MewtwoLv53Description ; description
 	db 0
 
-MewtwoLv60Card: ; 3343e (c:743e)
+MewtwoLv60Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx MewtwoLv60CardGfx ; gfx
 	tx MewtwoName ; name
@@ -7934,7 +7936,7 @@ MewtwoLv60Card: ; 3343e (c:743e)
 	tx MewtwoLv60Description ; description
 	db 0
 
-MewtwoAltLV60Card: ; 3347f (c:747f)
+MewtwoAltLV60Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx MewtwoAltLV60CardGfx ; gfx
 	tx MewtwoName ; name
@@ -7985,7 +7987,7 @@ MewtwoAltLV60Card: ; 3347f (c:747f)
 	tx MewtwoLv60Description ; description
 	db 0
 
-MewLv8Card: ; 334c0 (c:74c0)
+MewLv8Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx MewLv8CardGfx ; gfx
 	tx MewName ; name
@@ -8036,7 +8038,7 @@ MewLv8Card: ; 334c0 (c:74c0)
 	tx MewLv8Description ; description
 	db 3
 
-MewLv15Card: ; 33501 (c:7501)
+MewLv15Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx MewLv15CardGfx ; gfx
 	tx MewName ; name
@@ -8087,7 +8089,7 @@ MewLv15Card: ; 33501 (c:7501)
 	tx MewLv15Description ; description
 	db 0
 
-MewLv23Card: ; 33542 (c:7542)
+MewLv23Card:
 	db TYPE_PKMN_PSYCHIC ; type
 	gfx MewLv23CardGfx ; gfx
 	tx MewName ; name
@@ -8138,7 +8140,7 @@ MewLv23Card: ; 33542 (c:7542)
 	tx MewLv8Description ; description
 	db 8
 
-PidgeyCard: ; 33583 (c:7583)
+PidgeyCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx PidgeyCardGfx ; gfx
 	tx PidgeyName ; name
@@ -8189,7 +8191,7 @@ PidgeyCard: ; 33583 (c:7583)
 	tx PidgeyDescription ; description
 	db 18
 
-PidgeottoCard: ; 335c4 (c:75c4)
+PidgeottoCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx PidgeottoCardGfx ; gfx
 	tx PidgeottoName ; name
@@ -8240,7 +8242,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	tx PidgeottoDescription ; description
 	db 16
 
-Pidgeot1Card: ; 33605 (c:7605)
+Pidgeot1Card:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx Pidgeot1CardGfx ; gfx
 	tx PidgeotName ; name
@@ -8291,7 +8293,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	tx Pidgeot1Description ; description
 	db 0
 
-Pidgeot2Card: ; 33646 (c:7646)
+Pidgeot2Card:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx Pidgeot2CardGfx ; gfx
 	tx PidgeotName ; name
@@ -8342,7 +8344,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	tx Pidgeot2Description ; description
 	db 0
 
-RattataCard: ; 33687 (c:7687)
+RattataCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx RattataCardGfx ; gfx
 	tx RattataName ; name
@@ -8393,7 +8395,7 @@ RattataCard: ; 33687 (c:7687)
 	tx RattataDescription ; description
 	db 19
 
-RaticateCard: ; 336c8 (c:76c8)
+RaticateCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx RaticateCardGfx ; gfx
 	tx RaticateName ; name
@@ -8444,7 +8446,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	tx RaticateDescription ; description
 	db 3
 
-SpearowCard: ; 33709 (c:7709)
+SpearowCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx SpearowCardGfx ; gfx
 	tx SpearowName ; name
@@ -8495,7 +8497,7 @@ SpearowCard: ; 33709 (c:7709)
 	tx SpearowDescription ; description
 	db 19
 
-FearowCard: ; 3374a (c:774a)
+FearowCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx FearowCardGfx ; gfx
 	tx FearowName ; name
@@ -8546,7 +8548,7 @@ FearowCard: ; 3374a (c:774a)
 	tx FearowDescription ; description
 	db 0
 
-ClefairyCard: ; 3378b (c:778b)
+ClefairyCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx ClefairyCardGfx ; gfx
 	tx ClefairyName ; name
@@ -8597,7 +8599,7 @@ ClefairyCard: ; 3378b (c:778b)
 	tx ClefairyDescription ; description
 	db 18
 
-ClefableCard: ; 337cc (c:77cc)
+ClefableCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx ClefableCardGfx ; gfx
 	tx ClefableName ; name
@@ -8648,7 +8650,7 @@ ClefableCard: ; 337cc (c:77cc)
 	tx ClefableDescription ; description
 	db 0
 
-JigglypuffLv12Card: ; 3380d (c:780d)
+JigglypuffLv12Card:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx JigglypuffLv12CardGfx ; gfx
 	tx JigglypuffName ; name
@@ -8699,7 +8701,7 @@ JigglypuffLv12Card: ; 3380d (c:780d)
 	tx JigglypuffLv12Description ; description
 	db 16
 
-JigglypuffLv13Card: ; 3384e (c:784e)
+JigglypuffLv13Card:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx JigglypuffLv13CardGfx ; gfx
 	tx JigglypuffName ; name
@@ -8750,7 +8752,7 @@ JigglypuffLv13Card: ; 3384e (c:784e)
 	tx JigglypuffLv13Description ; description
 	db 16
 
-JigglypuffLv14Card: ; 3388f (c:788f)
+JigglypuffLv14Card:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx JigglypuffLv14CardGfx ; gfx
 	tx JigglypuffName ; name
@@ -8801,7 +8803,7 @@ JigglypuffLv14Card: ; 3388f (c:788f)
 	tx JigglypuffLv14Description ; description
 	db 16
 
-WigglytuffCard: ; 338d0 (c:78d0)
+WigglytuffCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx WigglytuffCardGfx ; gfx
 	tx WigglytuffName ; name
@@ -8852,7 +8854,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	tx WigglytuffDescription ; description
 	db 0
 
-MeowthLv14Card: ; 33911 (c:7911)
+MeowthLv14Card:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx MeowthLv14CardGfx ; gfx
 	tx MeowthName ; name
@@ -8903,7 +8905,7 @@ MeowthLv14Card: ; 33911 (c:7911)
 	tx MeowthLv14Description ; description
 	db 16
 
-MeowthLv15Card: ; 33952 (c:7952)
+MeowthLv15Card:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx MeowthLv15CardGfx ; gfx
 	tx MeowthName ; name
@@ -8954,7 +8956,7 @@ MeowthLv15Card: ; 33952 (c:7952)
 	tx MeowthLv15Description ; description
 	db 16
 
-PersianCard: ; 33993 (c:7993)
+PersianCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx PersianCardGfx ; gfx
 	tx PersianName ; name
@@ -9005,7 +9007,7 @@ PersianCard: ; 33993 (c:7993)
 	tx PersianDescription ; description
 	db 0
 
-FarfetchdCard: ; 339d4 (c:79d4)
+FarfetchdCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx FarfetchdCardGfx ; gfx
 	tx FarfetchdName ; name
@@ -9056,7 +9058,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	tx FarfetchdDescription ; description
 	db 3
 
-DoduoCard: ; 33a15 (c:7a15)
+DoduoCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx DoduoCardGfx ; gfx
 	tx DoduoName ; name
@@ -9107,7 +9109,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	tx DoduoDescription ; description
 	db 19
 
-DodrioCard: ; 33a56 (c:7a56)
+DodrioCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx DodrioCardGfx ; gfx
 	tx DodrioName ; name
@@ -9158,7 +9160,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	tx DodrioDescription ; description
 	db 1
 
-LickitungCard: ; 33a97 (c:7a97)
+LickitungCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx LickitungCardGfx ; gfx
 	tx LickitungName ; name
@@ -9209,7 +9211,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	tx LickitungDescription ; description
 	db 0
 
-ChanseyCard: ; 33ad8 (c:7ad8)
+ChanseyCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx ChanseyCardGfx ; gfx
 	tx ChanseyName ; name
@@ -9260,7 +9262,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	tx ChanseyDescription ; description
 	db 8
 
-KangaskhanCard: ; 33b19 (c:7b19)
+KangaskhanCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx KangaskhanCardGfx ; gfx
 	tx KangaskhanName ; name
@@ -9311,7 +9313,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	tx KangaskhanDescription ; description
 	db 0
 
-TaurosCard: ; 33b5a (c:7b5a)
+TaurosCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx TaurosCardGfx ; gfx
 	tx TaurosName ; name
@@ -9362,7 +9364,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	tx TaurosDescription ; description
 	db 0
 
-DittoCard: ; 33b9b (c:7b9b)
+DittoCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx DittoCardGfx ; gfx
 	tx DittoName ; name
@@ -9413,7 +9415,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	tx DittoDescription ; description
 	db 0
 
-EeveeCard: ; 33bdc (c:7bdc)
+EeveeCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx EeveeCardGfx ; gfx
 	tx EeveeName ; name
@@ -9464,7 +9466,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	tx EeveeDescription ; description
 	db 17
 
-PorygonCard: ; 33c1d (c:7c1d)
+PorygonCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx PorygonCardGfx ; gfx
 	tx PorygonName ; name
@@ -9515,7 +9517,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	tx PorygonDescription ; description
 	db 0
 
-SnorlaxCard: ; 33c5e (c:7c5e)
+SnorlaxCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx SnorlaxCardGfx ; gfx
 	tx SnorlaxName ; name
@@ -9566,7 +9568,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	tx SnorlaxDescription ; description
 	db 0
 
-DratiniCard: ; 33c9f (c:7c9f)
+DratiniCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx DratiniCardGfx ; gfx
 	tx DratiniName ; name
@@ -9617,7 +9619,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	tx DratiniDescription ; description
 	db 18
 
-DragonairCard: ; 33ce0 (c:7ce0)
+DragonairCard:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx DragonairCardGfx ; gfx
 	tx DragonairName ; name
@@ -9668,7 +9670,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	tx DragonairDescription ; description
 	db 16
 
-DragoniteLv41Card: ; 33d21 (c:7d21)
+DragoniteLv41Card:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx DragoniteLv41CardGfx ; gfx
 	tx DragoniteName ; name
@@ -9719,7 +9721,7 @@ DragoniteLv41Card: ; 33d21 (c:7d21)
 	tx DragoniteLv41Description ; description
 	db 0
 
-DragoniteLv45Card: ; 33d62 (c:7d62)
+DragoniteLv45Card:
 	db TYPE_PKMN_COLORLESS ; type
 	gfx DragoniteLv45CardGfx ; gfx
 	tx DragoniteName ; name
@@ -9770,7 +9772,7 @@ DragoniteLv45Card: ; 33d62 (c:7d62)
 	tx DragoniteDescription ; description
 	db 0
 
-GrassEnergyCard: ; 33da3 (c:7da3)
+GrassEnergyCard:
 	db TYPE_ENERGY_GRASS ; type
 	gfx GrassEnergyCardGfx ; gfx
 	tx GrassEnergyName ; name
@@ -9781,7 +9783,7 @@ GrassEnergyCard: ; 33da3 (c:7da3)
 	tx GrassEnergyDescription ; description
 	dw NONE ; description (cont)
 
-FireEnergyCard: ; 33db1 (c:7db1)
+FireEnergyCard:
 	db TYPE_ENERGY_FIRE ; type
 	gfx FireEnergyCardGfx ; gfx
 	tx FireEnergyName ; name
@@ -9792,7 +9794,7 @@ FireEnergyCard: ; 33db1 (c:7db1)
 	tx FireEnergyDescription ; description
 	dw NONE ; description (cont)
 
-WaterEnergyCard: ; 33dbf (c:7dbf)
+WaterEnergyCard:
 	db TYPE_ENERGY_WATER ; type
 	gfx WaterEnergyCardGfx ; gfx
 	tx WaterEnergyName ; name
@@ -9803,7 +9805,7 @@ WaterEnergyCard: ; 33dbf (c:7dbf)
 	tx WaterEnergyDescription ; description
 	dw NONE ; description (cont)
 
-LightningEnergyCard: ; 33dcd (c:7dcd)
+LightningEnergyCard:
 	db TYPE_ENERGY_LIGHTNING ; type
 	gfx LightningEnergyCardGfx ; gfx
 	tx LightningEnergyName ; name
@@ -9814,7 +9816,7 @@ LightningEnergyCard: ; 33dcd (c:7dcd)
 	tx LightningEnergyDescription ; description
 	dw NONE ; description (cont)
 
-FightingEnergyCard: ; 33ddb (c:7ddb)
+FightingEnergyCard:
 	db TYPE_ENERGY_FIGHTING ; type
 	gfx FightingEnergyCardGfx ; gfx
 	tx FightingEnergyName ; name
@@ -9825,7 +9827,7 @@ FightingEnergyCard: ; 33ddb (c:7ddb)
 	tx FightingEnergyDescription ; description
 	dw NONE ; description (cont)
 
-PsychicEnergyCard: ; 33de9 (c:7de9)
+PsychicEnergyCard:
 	db TYPE_ENERGY_PSYCHIC ; type
 	gfx PsychicEnergyCardGfx ; gfx
 	tx PsychicEnergyName ; name
@@ -9836,7 +9838,7 @@ PsychicEnergyCard: ; 33de9 (c:7de9)
 	tx PsychicEnergyDescription ; description
 	dw NONE ; description (cont)
 
-DoubleColorlessEnergyCard: ; 33df7 (c:7df7)
+DoubleColorlessEnergyCard:
 	db TYPE_ENERGY_DOUBLE_COLORLESS ; type
 	gfx DoubleColorlessEnergyCardGfx ; gfx
 	tx DoubleColorlessEnergyName ; name
@@ -9847,7 +9849,7 @@ DoubleColorlessEnergyCard: ; 33df7 (c:7df7)
 	tx DoubleColorlessEnergyDescription ; description
 	dw NONE ; description (cont)
 
-ProfessorOakCard: ; 33e05 (c:7e05)
+ProfessorOakCard:
 	db TYPE_TRAINER ; type
 	gfx ProfessorOakCardGfx ; gfx
 	tx ProfessorOakName ; name
@@ -9858,7 +9860,7 @@ ProfessorOakCard: ; 33e05 (c:7e05)
 	tx ProfessorOakDescription ; description
 	dw NONE ; description (cont)
 
-ImposterProfessorOakCard: ; 33e13 (c:7e13)
+ImposterProfessorOakCard:
 	db TYPE_TRAINER ; type
 	gfx ImposterProfessorOakCardGfx ; gfx
 	tx ImposterProfessorOakName ; name
@@ -9869,7 +9871,7 @@ ImposterProfessorOakCard: ; 33e13 (c:7e13)
 	tx ImposterProfessorOakDescription ; description
 	dw NONE ; description (cont)
 
-BillCard: ; 33e21 (c:7e21)
+BillCard:
 	db TYPE_TRAINER ; type
 	gfx BillCardGfx ; gfx
 	tx BillName ; name
@@ -9880,7 +9882,7 @@ BillCard: ; 33e21 (c:7e21)
 	tx BillDescription ; description
 	dw NONE ; description (cont)
 
-MrFujiCard: ; 33e2f (c:7e2f)
+MrFujiCard:
 	db TYPE_TRAINER ; type
 	gfx MrFujiCardGfx ; gfx
 	tx MrFujiName ; name
@@ -9891,7 +9893,7 @@ MrFujiCard: ; 33e2f (c:7e2f)
 	tx MrFujiDescription ; description
 	dw NONE ; description (cont)
 
-LassCard: ; 33e3d (c:7e3d)
+LassCard:
 	db TYPE_TRAINER ; type
 	gfx LassCardGfx ; gfx
 	tx LassName ; name
@@ -9902,7 +9904,7 @@ LassCard: ; 33e3d (c:7e3d)
 	tx LassDescription ; description
 	dw NONE ; description (cont)
 
-ImakuniCard: ; 33e4b (c:7e4b)
+ImakuniCard:
 	db TYPE_TRAINER ; type
 	gfx ImakuniCardGfx ; gfx
 	tx ImakuniName ; name
@@ -9913,7 +9915,7 @@ ImakuniCard: ; 33e4b (c:7e4b)
 	tx ImakuniDescription ; description
 	dw NONE ; description (cont)
 
-PokemonTraderCard: ; 33e59 (c:7e59)
+PokemonTraderCard:
 	db TYPE_TRAINER ; type
 	gfx PokemonTraderCardGfx ; gfx
 	tx PokemonTraderName ; name
@@ -9924,7 +9926,7 @@ PokemonTraderCard: ; 33e59 (c:7e59)
 	tx PokemonTraderDescription ; description
 	dw NONE ; description (cont)
 
-PokemonBreederCard: ; 33e67 (c:7e67)
+PokemonBreederCard:
 	db TYPE_TRAINER ; type
 	gfx PokemonBreederCardGfx ; gfx
 	tx PokemonBreederName ; name
@@ -9935,7 +9937,7 @@ PokemonBreederCard: ; 33e67 (c:7e67)
 	tx PokemonBreederDescription ; description
 	dw NONE ; description (cont)
 
-ClefairyDollCard: ; 33e75 (c:7e75)
+ClefairyDollCard:
 	db TYPE_TRAINER ; type
 	gfx ClefairyDollCardGfx ; gfx
 	tx ClefairyDollName ; name
@@ -9946,7 +9948,7 @@ ClefairyDollCard: ; 33e75 (c:7e75)
 	tx ClefairyDollDescription ; description
 	tx ClefairyDollDescriptionCont ; description (cont)
 
-MysteriousFossilCard: ; 33e83 (c:7e83)
+MysteriousFossilCard:
 	db TYPE_TRAINER ; type
 	gfx MysteriousFossilCardGfx ; gfx
 	tx MysteriousFossilName ; name
@@ -9957,7 +9959,7 @@ MysteriousFossilCard: ; 33e83 (c:7e83)
 	tx MysteriousFossilDescription ; description
 	tx MysteriousFossilDescriptionCont ; description (cont)
 
-EnergyRetrievalCard: ; 33e91 (c:7e91)
+EnergyRetrievalCard:
 	db TYPE_TRAINER ; type
 	gfx EnergyRetrievalCardGfx ; gfx
 	tx EnergyRetrievalName ; name
@@ -9968,7 +9970,7 @@ EnergyRetrievalCard: ; 33e91 (c:7e91)
 	tx EnergyRetrievalDescription ; description
 	dw NONE ; description (cont)
 
-SuperEnergyRetrievalCard: ; 33e9f (c:7e9f)
+SuperEnergyRetrievalCard:
 	db TYPE_TRAINER ; type
 	gfx SuperEnergyRetrievalCardGfx ; gfx
 	tx SuperEnergyRetrievalName ; name
@@ -9979,7 +9981,7 @@ SuperEnergyRetrievalCard: ; 33e9f (c:7e9f)
 	tx SuperEnergyRetrievalDescription ; description
 	dw NONE ; description (cont)
 
-EnergySearchCard: ; 33ead (c:7ead)
+EnergySearchCard:
 	db TYPE_TRAINER ; type
 	gfx EnergySearchCardGfx ; gfx
 	tx EnergySearchName ; name
@@ -9990,7 +9992,7 @@ EnergySearchCard: ; 33ead (c:7ead)
 	tx EnergySearchDescription ; description
 	dw NONE ; description (cont)
 
-EnergyRemovalCard: ; 33ebb (c:7ebb)
+EnergyRemovalCard:
 	db TYPE_TRAINER ; type
 	gfx EnergyRemovalCardGfx ; gfx
 	tx EnergyRemovalName ; name
@@ -10001,7 +10003,7 @@ EnergyRemovalCard: ; 33ebb (c:7ebb)
 	tx EnergyRemovalDescription ; description
 	dw NONE ; description (cont)
 
-SuperEnergyRemovalCard: ; 33ec9 (c:7ec9)
+SuperEnergyRemovalCard:
 	db TYPE_TRAINER ; type
 	gfx SuperEnergyRemovalCardGfx ; gfx
 	tx SuperEnergyRemovalName ; name
@@ -10012,7 +10014,7 @@ SuperEnergyRemovalCard: ; 33ec9 (c:7ec9)
 	tx SuperEnergyRemovalDescription ; description
 	dw NONE ; description (cont)
 
-SwitchCard: ; 33ed7 (c:7ed7)
+SwitchCard:
 	db TYPE_TRAINER ; type
 	gfx SwitchCardGfx ; gfx
 	tx SwitchName ; name
@@ -10023,7 +10025,7 @@ SwitchCard: ; 33ed7 (c:7ed7)
 	tx SwitchDescription ; description
 	dw NONE ; description (cont)
 
-PokemonCenterCard: ; 33ee5 (c:7ee5)
+PokemonCenterCard:
 	db TYPE_TRAINER ; type
 	gfx PokemonCenterCardGfx ; gfx
 	tx PokemonCenterName ; name
@@ -10034,7 +10036,7 @@ PokemonCenterCard: ; 33ee5 (c:7ee5)
 	tx PokemonCenterDescription ; description
 	dw NONE ; description (cont)
 
-PokeBallCard: ; 33ef3 (c:7ef3)
+PokeBallCard:
 	db TYPE_TRAINER ; type
 	gfx PokeBallCardGfx ; gfx
 	tx PokeBallName ; name
@@ -10045,7 +10047,7 @@ PokeBallCard: ; 33ef3 (c:7ef3)
 	tx PokeBallDescription ; description
 	dw NONE ; description (cont)
 
-ScoopUpCard: ; 33f01 (c:7f01)
+ScoopUpCard:
 	db TYPE_TRAINER ; type
 	gfx ScoopUpCardGfx ; gfx
 	tx ScoopUpName ; name
@@ -10056,7 +10058,7 @@ ScoopUpCard: ; 33f01 (c:7f01)
 	tx ScoopUpDescription ; description
 	dw NONE ; description (cont)
 
-ComputerSearchCard: ; 33f0f (c:7f0f)
+ComputerSearchCard:
 	db TYPE_TRAINER ; type
 	gfx ComputerSearchCardGfx ; gfx
 	tx ComputerSearchName ; name
@@ -10067,7 +10069,7 @@ ComputerSearchCard: ; 33f0f (c:7f0f)
 	tx ComputerSearchDescription ; description
 	dw NONE ; description (cont)
 
-PokedexCard: ; 33f1d (c:7f1d)
+PokedexCard:
 	db TYPE_TRAINER ; type
 	gfx PokedexCardGfx ; gfx
 	tx PokedexName ; name
@@ -10078,7 +10080,7 @@ PokedexCard: ; 33f1d (c:7f1d)
 	tx PokedexDescription ; description
 	dw NONE ; description (cont)
 
-PlusPowerCard: ; 33f2b (c:7f2b)
+PlusPowerCard:
 	db TYPE_TRAINER ; type
 	gfx PlusPowerCardGfx ; gfx
 	tx PlusPowerName ; name
@@ -10089,7 +10091,7 @@ PlusPowerCard: ; 33f2b (c:7f2b)
 	tx PlusPowerDescription ; description
 	dw NONE ; description (cont)
 
-DefenderCard: ; 33f39 (c:7f39)
+DefenderCard:
 	db TYPE_TRAINER ; type
 	gfx DefenderCardGfx ; gfx
 	tx DefenderName ; name
@@ -10100,7 +10102,7 @@ DefenderCard: ; 33f39 (c:7f39)
 	tx DefenderDescription ; description
 	dw NONE ; description (cont)
 
-ItemFinderCard: ; 33f47 (c:7f47)
+ItemFinderCard:
 	db TYPE_TRAINER ; type
 	gfx ItemFinderCardGfx ; gfx
 	tx ItemFinderName ; name
@@ -10111,7 +10113,7 @@ ItemFinderCard: ; 33f47 (c:7f47)
 	tx ItemFinderDescription ; description
 	dw NONE ; description (cont)
 
-GustOfWindCard: ; 33f55 (c:7f55)
+GustOfWindCard:
 	db TYPE_TRAINER ; type
 	gfx GustOfWindCardGfx ; gfx
 	tx GustOfWindName ; name
@@ -10122,7 +10124,7 @@ GustOfWindCard: ; 33f55 (c:7f55)
 	tx GustOfWindDescription ; description
 	dw NONE ; description (cont)
 
-DevolutionSprayCard: ; 33f63 (c:7f63)
+DevolutionSprayCard:
 	db TYPE_TRAINER ; type
 	gfx DevolutionSprayCardGfx ; gfx
 	tx DevolutionSprayName ; name
@@ -10133,7 +10135,7 @@ DevolutionSprayCard: ; 33f63 (c:7f63)
 	tx DevolutionSprayDescription ; description
 	tx DevolutionSprayDescriptionCont ; description (cont)
 
-PotionCard: ; 33f71 (c:7f71)
+PotionCard:
 	db TYPE_TRAINER ; type
 	gfx PotionCardGfx ; gfx
 	tx PotionName ; name
@@ -10144,7 +10146,7 @@ PotionCard: ; 33f71 (c:7f71)
 	tx PotionDescription ; description
 	dw NONE ; description (cont)
 
-SuperPotionCard: ; 33f7f (c:7f7f)
+SuperPotionCard:
 	db TYPE_TRAINER ; type
 	gfx SuperPotionCardGfx ; gfx
 	tx SuperPotionName ; name
@@ -10155,7 +10157,7 @@ SuperPotionCard: ; 33f7f (c:7f7f)
 	tx SuperPotionDescription ; description
 	dw NONE ; description (cont)
 
-FullHealCard: ; 33f8d (c:7f8d)
+FullHealCard:
 	db TYPE_TRAINER ; type
 	gfx FullHealCardGfx ; gfx
 	tx FullHealName ; name
@@ -10166,7 +10168,7 @@ FullHealCard: ; 33f8d (c:7f8d)
 	tx FullHealDescription ; description
 	dw NONE ; description (cont)
 
-ReviveCard: ; 33f9b (c:7f9b)
+ReviveCard:
 	db TYPE_TRAINER ; type
 	gfx ReviveCardGfx ; gfx
 	tx ReviveName ; name
@@ -10177,7 +10179,7 @@ ReviveCard: ; 33f9b (c:7f9b)
 	tx ReviveDescription ; description
 	dw NONE ; description (cont)
 
-MaintenanceCard: ; 33fa9 (c:7fa9)
+MaintenanceCard:
 	db TYPE_TRAINER ; type
 	gfx MaintenanceCardGfx ; gfx
 	tx MaintenanceName ; name
@@ -10188,7 +10190,7 @@ MaintenanceCard: ; 33fa9 (c:7fa9)
 	tx MaintenanceDescription ; description
 	dw NONE ; description (cont)
 
-PokemonFluteCard: ; 33fb7 (c:7fb7)
+PokemonFluteCard:
 	db TYPE_TRAINER ; type
 	gfx PokemonFluteCardGfx ; gfx
 	tx PokemonFluteName ; name
@@ -10199,7 +10201,7 @@ PokemonFluteCard: ; 33fb7 (c:7fb7)
 	tx PokemonFluteDescription ; description
 	dw NONE ; description (cont)
 
-GamblerCard: ; 33fc5 (c:7fc5)
+GamblerCard:
 	db TYPE_TRAINER ; type
 	gfx GamblerCardGfx ; gfx
 	tx GamblerName ; name
@@ -10210,7 +10212,7 @@ GamblerCard: ; 33fc5 (c:7fc5)
 	tx GamblerDescription ; description
 	dw NONE ; description (cont)
 
-RecycleCard: ; 33fd3 (c:7fd3)
+RecycleCard:
 	db TYPE_TRAINER ; type
 	gfx RecycleCardGfx ; gfx
 	tx RecycleName ; name

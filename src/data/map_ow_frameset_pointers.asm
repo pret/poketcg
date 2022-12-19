@@ -1,5 +1,6 @@
-MapOWFramesetPointers: ; 805d6 (20:45d6)
+MapOWFramesetPointers:
 ; non-cgb, cgb
+	table_width 4, MapOWFramesetPointers
 	dw OverworldMapOWFrameset,    OverworldMapCGBOWFrameset    ; OVERWORLD_MAP
 	dw MasonLaboratoryOWFrameset, MasonLaboratoryOWFrameset    ; MASON_LABORATORY
 	dw DeckMachineRoomOWFrameset, DeckMachineRoomCGBOWFrameset ; DECK_MACHINE_ROOM
@@ -34,3 +35,4 @@ MapOWFramesetPointers: ; 805d6 (20:45d6)
 	dw DefaultOWFrameset,         DefaultOWFrameset            ; POKEMON_DOME_ENTRANCE
 	dw DefaultOWFrameset,         DefaultOWFrameset            ; POKEMON_DOME
 	dw HallOfHonorOWFrameset,     HallOfHonorOWFrameset        ; HALL_OF_HONOR
+	assert_table_length NUM_MAPS

@@ -1207,7 +1207,7 @@ Func_80baa:
 	add a
 	ld c, a
 	ld b, $0
-	ld hl, .tilemap_pointers
+	ld hl, .TilemapPointers
 	add hl, bc
 	ld a, [hli]
 	ld h, [hl]
@@ -1256,7 +1256,8 @@ Func_80baa:
 	pop hl
 	ret
 
-.tilemap_pointers
+.TilemapPointers
+	table_width 2, Func_80baa.TilemapPointers
 	dw .PokemonDomeDoor      ; MAP_EVENT_POKEMON_DOME_DOOR
 	dw .HallOfHonorDoor      ; MAP_EVENT_HALL_OF_HONOR_DOOR
 	dw .FightingDeckMachine  ; MAP_EVENT_FIGHTING_DECK_MACHINE
@@ -1268,6 +1269,7 @@ Func_80baa:
 	dw .ScienceDeckMachine   ; MAP_EVENT_SCIENCE_DECK_MACHINE
 	dw .FireDeckMachine      ; MAP_EVENT_FIRE_DECK_MACHINE
 	dw .ChallengeMachine     ; MAP_EVENT_CHALLENGE_MACHINE
+	assert_table_length NUM_MAP_EVENTS
 
 ; x coordinate, y coordinate, non-cgb tilemap, cgb tilemap
 .PokemonDomeDoor

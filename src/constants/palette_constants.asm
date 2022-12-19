@@ -160,3 +160,5 @@
 	const PALETTE_158               ; $9e
 	const PALETTE_159               ; $9f
 	const PALETTE_160               ; $a0
+
+DEF NUM_PALETTES EQU const_value

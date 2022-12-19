@@ -34,6 +34,8 @@
 	const POKEMON_DOME            ; $20
 	const HALL_OF_HONOR           ; $21
 
+DEF NUM_MAPS EQU const_value
+
 ; overworld map selections
 	const_def 1
 	const OWMAP_MASON_LABORATORY ; $01
@@ -48,7 +50,10 @@
 	const OWMAP_FIRE_CLUB        ; $0A
 	const OWMAP_CHALLENGE_HALL   ; $0B
 	const OWMAP_POKEMON_DOME     ; $0C
+DEF NUM_OWMAPS EQU const_value
 	const OWMAP_MYSTERY_HOUSE    ; $0D for OverworldMapNames
+DEF NUM_OWMAP_NAMES EQU const_value
+
 
 ; Size of map data. See data/npc_map_data.asm and data/map_objects.asm
 ; for more info on what these represent
@@ -56,7 +61,6 @@ DEF NPC_MAP_SIZE          EQU $06
 DEF MAP_OBJECT_SIZE       EQU $09
 
 ; Most of these aren't fully understood so the names aren't great
-DEF MAP_SCRIPT_SIZE          EQU $0f
 DEF MAP_SCRIPT_NPCS          EQU $00
 DEF MAP_SCRIPT_POST_NPC      EQU $02
 DEF MAP_SCRIPT_OBJECTS       EQU $04
@@ -65,6 +69,8 @@ DEF MAP_SCRIPT_LOAD_MAP      EQU $08
 DEF MAP_SCRIPT_AFTER_DUEL    EQU $0a
 DEF MAP_SCRIPT_MOVED_PLAYER  EQU $0c
 DEF MAP_SCRIPT_CLOSE_TEXTBOX EQU $0e
+
+DEF NUM_MAP_SCRIPTS EQU 8
 
 ; map palettes for use in SGB mode
 	const_def 1

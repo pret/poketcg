@@ -21,6 +21,7 @@ MACRO anim_end2
 ENDM
 
 PointerTable_AttackAnimation:
+	table_width 2, PointerTable_AttackAnimation
 	dw NULL                                ; ATK_ANIM_NONE
 	dw AttackAnimation_Hit                 ; ATK_ANIM_HIT
 	dw AttackAnimation_BigHit              ; ATK_ANIM_BIG_HIT
@@ -166,6 +167,7 @@ PointerTable_AttackAnimation:
 	dw AttackAnimation_HealBothSides       ; ATK_ANIM_HEAL_BOTH_SIDES
 	dw AttackAnimation_5673                ; ATK_ANIM_143
 	dw AttackAnimation_5673                ; ATK_ANIM_144
+	assert_table_length NUM_ATK_ANIMS
 
 AttackAnimation_Hit: ; (6:52c6)
 	anim_player         DUEL_ANIM_GLOW

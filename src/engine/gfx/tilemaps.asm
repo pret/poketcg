@@ -6,6 +6,7 @@ MACRO tilemap
 ENDM
 
 Tilemaps:
+	table_width 4, Tilemaps
 	tilemap OverworldMapTilemap,               TILESET_OVERWORLD_MAP               ; TILEMAP_OVERWORLD_MAP
 	tilemap OverworldMapCGBTilemap,            TILESET_OVERWORLD_MAP               ; TILEMAP_OVERWORLD_MAP_CGB
 	tilemap MasonLaboratoryTilemap,            TILESET_MASON_LABORATORY            ; TILEMAP_MASON_LABORATORY
@@ -112,3 +113,4 @@ Tilemaps:
 	tilemap CopyrightCGBTilemap,               TILESET_COPYRIGHT                   ; TILEMAP_COPYRIGHT_CGB
 	tilemap NintendoTilemap,                   TILESET_NINTENDO                    ; TILEMAP_NINTENDO
 	tilemap CompaniesTilemap,                  TILESET_COMPANIES                   ; TILEMAP_COMPANIES
+	assert_table_length NUM_TILEMAPS

@@ -8118,7 +8118,7 @@ Func_7364:
 	bit D_RIGHT_F, b
 	jr z, .check_left
 	inc a ; next deck ID
-	cp DECK_IDS_END + 1
+	cp NUM_DECK_IDS
 	jr c, .check_left
 	xor a ; wrap around to first deck ID
 
@@ -8127,7 +8127,7 @@ Func_7364:
 	jr z, .check_up
 	or a
 	jr nz, .not_first_deck_id
-	ld a, DECK_IDS_END ; wrap around to last deck ID
+	ld a, NUM_DECK_IDS - 1 ; wrap around to last deck ID
 	jr .check_up
 .not_first_deck_id
 	dec a ; previous deck ID
@@ -8136,7 +8136,7 @@ Func_7364:
 	bit D_UP_F, b
 	jr z, .check_down
 	add 10
-	cp DECK_IDS_END + 1
+	cp NUM_DECK_IDS
 	jr c, .check_down
 	xor a ; wrap around to first deck ID
 
@@ -8145,7 +8145,7 @@ Func_7364:
 	jr z, .got_deck_id
 	sub 10
 	jr nc, .got_deck_id
-	ld a, DECK_IDS_END ; wrap around to last deck ID
+	ld a, NUM_DECK_IDS - 1; wrap around to last deck ID
 
 .got_deck_id
 	ld [wOpponentDeckID], a

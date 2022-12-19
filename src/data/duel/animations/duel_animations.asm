@@ -1,5 +1,6 @@
 ; data for each animation ID (see src/constants/sprite_constants.asm)
 Animations: ; 1ce32 (7:4e32)
+	table_width 6, Animations
 	; DUEL_ANIM_NONE
 	db $00 ; sprite ID
 	db $00 ; palette ID
@@ -775,3 +776,4 @@ Animations: ; 1ce32 (7:4e32)
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db SFX_STOP ; sound FX ID
 	db $00 ; handler function
+	assert_table_length NUM_REGULAR_DUEL_ANIMS

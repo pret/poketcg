@@ -64,6 +64,7 @@ LoadCollectedMedalTilemaps:
 
 MedalCoordsAndTilemaps:
 ; x, y, tilemap
+	table_width 3, MedalCoordsAndTilemaps
 	db  1, 10, TILEMAP_GRASS_MEDAL
 	db  6, 10, TILEMAP_SCIENCE_MEDAL
 	db 11, 10, TILEMAP_FIRE_MEDAL
@@ -72,6 +73,7 @@ MedalCoordsAndTilemaps:
 	db  6, 14, TILEMAP_PSYCHIC_MEDAL
 	db 11, 14, TILEMAP_ROCK_MEDAL
 	db 16, 14, TILEMAP_FIGHTING_MEDAL
+	assert_table_length NUM_MEDALS
 
 FlashReceivedMedal:
 	xor a

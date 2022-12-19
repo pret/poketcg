@@ -9,7 +9,9 @@ MACRO auto_deck
 	tx \3 ; deck description text ID
 ENDM
 
-AutoDeckMachineEntries: ; 1b8e8 (6:78e8)
+AutoDeckMachineEntries:
+	table_width 6, AutoDeckMachineEntries
+
 ; Fighting Auto Deck Machine
 	auto_deck AllFightingPokemonCardList,   AllFightingPokemonText,   AllFightingPokemonDescriptionText
 	auto_deck BenchAttackCardList,          BenchAttackText,          BenchAttackDescriptionText
@@ -79,3 +81,5 @@ AutoDeckMachineEntries: ; 1b8e8 (6:78e8)
 	auto_deck LegendaryArticunoCardList,    LegendaryArticunoText,    LegendaryArticunoDescriptionText
 	auto_deck LegendaryDragoniteCardList,   LegendaryDragoniteText,   LegendaryDragoniteDescriptionText
 	auto_deck MysteriousPokemonCardList,    MysteriousPokemonText,    MysteriousPokemonDescriptionText
+
+	assert_table_length NUM_DECK_MACHINE_SLOTS * NUM_DECK_MACHINES

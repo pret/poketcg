@@ -6,6 +6,7 @@ MACRO gfx_pointer
 ENDM
 
 Sprites:
+	table_width 4, Sprites
 	gfx_pointer OWPlayerGfx,        $14 ; SPRITE_OW_PLAYER
 	gfx_pointer OWRonaldGfx,        $14 ; SPRITE_OW_RONALD
 	gfx_pointer OWDrMasonGfx,       $14 ; SPRITE_OW_DRMASON
@@ -120,3 +121,4 @@ Sprites:
 	gfx_pointer LightningGfx,       $04 ; SPRITE_LIGHTNING
 	gfx_pointer PsychicGfx,         $04 ; SPRITE_PSYCHIC
 	gfx_pointer FightingGfx,        $04 ; SPRITE_FIGHTING
+	assert_table_length NUM_SPRITES

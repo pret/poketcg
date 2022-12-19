@@ -1,4 +1,5 @@
 OverworldMap_MapPositions:
+	table_width 2, OverworldMap_MapPositions
 	db $00, $00 ; unused
 	db $0c, $68 ; OWMAP_MASON_LABORATORY
 	db $04, $18 ; OWMAP_ISHIHARAS_HOUSE
@@ -12,3 +13,4 @@ OverworldMap_MapPositions:
 	db $6c, $10 ; OWMAP_FIRE_CLUB
 	db $3c, $20 ; OWMAP_CHALLENGE_HALL
 	db $44, $44 ; OWMAP_POKEMON_DOME
+	assert_table_length NUM_OWMAPS
