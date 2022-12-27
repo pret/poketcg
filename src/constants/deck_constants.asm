@@ -65,7 +65,7 @@ ENDM
 	deck_const FLAMETHROWER_DECK           ; $34
 	deck_const RESHUFFLE_DECK              ; $35
 	deck_const IMAKUNI_DECK                ; $36
-DEF NUM_VALID_DECKS EQU const_value - 1
+DEF NUM_VALID_DECKS EQU const_value
 DEF NUM_DECK_IDS EQU const_value - 2
 
 DEF NUM_STARTER_DECK_IDS EQU 7

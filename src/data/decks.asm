@@ -1,5 +1,4 @@
 DeckPointers:
-	deck_list_start
 	table_width 2, DeckPointers
 	dw UnnamedDeck
 	dw UnnamedDeck2
@@ -57,7 +56,7 @@ DeckPointers:
 	dw ReshuffleDeck
 	dw ImakuniDeck
 	dw NULL
-	assert_table_length NUM_VALID_DECKS + 2
+	assert_table_length NUM_VALID_DECKS + 1
 
 UnnamedDeck:
 	deck_list_start
