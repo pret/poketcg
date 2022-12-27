@@ -5740,7 +5740,7 @@
 06:41ee OpenInPlayAreaScreen.opp_side_print_hand_or_discard_pile
 06:41f8 OpenInPlayAreaScreen.show_turn_holder_play_area
 06:4210 OpenInPlayAreaScreen.show_non_turn_holder_play_area
-06:4228 OpenInPlayAreaScreen.jump_table
+06:4228 OpenInPlayAreaScreen.PositionsJumpTable
 06:4248 OpenInPlayAreaScreen_TurnHolderPlayArea
 06:4251 OpenInPlayAreaScreen_TurnHolderPlayArea.on_bench
 06:426a OpenInPlayAreaScreen_NonTurnHolderPlayArea
@@ -12470,7 +12470,7 @@
 20:4ba4 Func_80ba4
 20:4baa Func_80baa
 20:4be7 Func_80baa.got_tilemap
-20:4c21 Func_80baa.tilemap_pointers
+20:4c21 Func_80baa.TilemapPointers
 20:4c37 Func_80baa.PokemonDomeDoor
 20:4c3b Func_80baa.HallOfHonorDoor
 20:4c3f Func_80baa.FightingDeckMachine
