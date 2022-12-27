@@ -147,3 +147,5 @@
 	const ATK_ANIM_HEAL_BOTH_SIDES        ; $8e
 	const ATK_ANIM_143                    ; $8f
 	const ATK_ANIM_144                    ; $90
+
+DEF NUM_ATK_ANIMS EQU const_value

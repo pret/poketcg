@@ -2,7 +2,7 @@
 ; Format:
 ; NPC, X position, Y Position, Direction,
 ; pre-load function. (Resets c flag if NPC should not be loaded)
-MasonLabNPCS: ; 772f (4:1372f)
+MasonLabNPCS:
 	db NPC_DRMASON, $0e, $06, SOUTH
 	dw Preload_DrMason
 	db NPC_SAM, $04, $0e, EAST
@@ -19,7 +19,7 @@ MasonLabNPCS: ; 772f (4:1372f)
 	dw Preload_Tech5
 	db $00
 
-DeckMachineRoomNPCS: ; 775a (4:1375a)
+DeckMachineRoomNPCS:
 	db NPC_TECH6, $06, $08, SOUTH
 	dw NULL
 	db NPC_TECH7, $06, $16, WEST
@@ -30,7 +30,7 @@ DeckMachineRoomNPCS: ; 775a (4:1375a)
 	dw NULL
 	db $00
 
-IshiharasHouseNPCS: ; 7773 (4:13773)
+IshiharasHouseNPCS:
 	db NPC_NIKKI, $04, $04, NORTH
 	dw Preload_NikkiInIshiharasHouse
 	db NPC_ISHIHARA, $08, $08, SOUTH
@@ -39,7 +39,7 @@ IshiharasHouseNPCS: ; 7773 (4:13773)
 	dw Preload_Ronald1InIshiharasHouse
 	db $00
 
-FightingClubEntranceNPCS: ; 7786 (4:13786)
+FightingClubEntranceNPCS:
 	db NPC_CLERK1, $06, $02, SOUTH
 	dw NULL
 	db NPC_RONALD1, $08, $fe, SOUTH
@@ -50,7 +50,7 @@ FightingClubEntranceNPCS: ; 7786 (4:13786)
 	dw Preload_Ronald3InClubEntrance
 	db $00
 
-FightingClubLobbyNPCS: ; 779f (4:1379f)
+FightingClubLobbyNPCS:
 	db NPC_MAN1, $0c, $0e, WEST
 	dw NULL
 	db NPC_IMAKUNI, $12, $02, NORTH
@@ -67,7 +67,7 @@ FightingClubLobbyNPCS: ; 779f (4:1379f)
 	dw Preload_GiftCenterClerk
 	db $00
 
-FightingClubNPCS: ; 77ca (4:137ca)
+FightingClubNPCS:
 	db NPC_CHRIS, $04, $08, SOUTH
 	dw Preload_ChrisInFightingClub
 	db NPC_MICHAEL, $0e, $0a, SOUTH
@@ -78,7 +78,7 @@ FightingClubNPCS: ; 77ca (4:137ca)
 	dw NULL
 	db $00
 
-RockClubEntranceNPCS: ; 77e3 (4:137e3)
+RockClubEntranceNPCS:
 	db NPC_CLERK2, $06, $02, SOUTH
 	dw NULL
 	db NPC_RONALD1, $08, $fe, SOUTH
@@ -89,7 +89,7 @@ RockClubEntranceNPCS: ; 77e3 (4:137e3)
 	dw Preload_Ronald3InClubEntrance
 	db $00
 
-RockClubLobbyNPCS: ; 77fc (4:137fc)
+RockClubLobbyNPCS:
 	db NPC_CHRIS, $12, $08, WEST
 	dw Preload_ChrisInRockClubLobby
 	db NPC_MATTHEW, $06, $0e, EAST
@@ -106,7 +106,7 @@ RockClubLobbyNPCS: ; 77fc (4:137fc)
 	dw Preload_GiftCenterClerk
 	db $00
 
-RockClubNPCS: ; 7827 (4:13827)
+RockClubNPCS:
 	db NPC_RYAN, $14, $0e, EAST
 	dw NULL
 	db NPC_ANDREW, $06, $14, NORTH
@@ -115,7 +115,7 @@ RockClubNPCS: ; 7827 (4:13827)
 	dw NULL
 	db $00
 
-WaterClubEntranceNPCS: ; 783a (4:1383a)
+WaterClubEntranceNPCS:
 	db NPC_CLERK3, $06, $02, SOUTH
 	dw NULL
 	db NPC_RONALD1, $08, $fe, SOUTH
@@ -126,7 +126,7 @@ WaterClubEntranceNPCS: ; 783a (4:1383a)
 	dw Preload_Ronald3InClubEntrance
 	db $00
 
-WaterClubLobbyNPCS: ; 7853 (4:13853)
+WaterClubLobbyNPCS:
 	db NPC_GAL1, $06, $0e, SOUTH
 	dw NULL
 	db NPC_LASS1, $10, $0a, SOUTH
@@ -143,7 +143,7 @@ WaterClubLobbyNPCS: ; 7853 (4:13853)
 	dw Preload_GiftCenterClerk
 	db $00
 
-WaterClubNPCS: ; 787e (4:1387e)
+WaterClubNPCS:
 	db NPC_SARA, $06, $12, EAST
 	dw NULL
 	db NPC_AMANDA, $16, $14, WEST
@@ -154,7 +154,7 @@ WaterClubNPCS: ; 787e (4:1387e)
 	dw Preload_Amy
 	db $00
 
-LightningClubEntranceNPCS: ; 7897 (4:13897)
+LightningClubEntranceNPCS:
 	db NPC_CLERK4, $06, $02, SOUTH
 	dw NULL
 	db NPC_RONALD1, $08, $fe, SOUTH
@@ -165,7 +165,7 @@ LightningClubEntranceNPCS: ; 7897 (4:13897)
 	dw Preload_Ronald3InClubEntrance
 	db $00
 
-LightningClubLobbyNPCS: ; 78b0 (4:138b0)
+LightningClubLobbyNPCS:
 	db NPC_CHAP2, $12, $10, WEST
 	dw NULL
 	db NPC_IMAKUNI, $12, $02, NORTH
@@ -180,7 +180,7 @@ LightningClubLobbyNPCS: ; 78b0 (4:138b0)
 	dw Preload_GiftCenterClerk
 	db $00
 
-LightningClubNPCS: ; 78d5 (4:138d5)
+LightningClubNPCS:
 	db NPC_JENNIFER, $0e, $12, SOUTH
 	dw NULL
 	db NPC_NICHOLAS, $06, $0a, SOUTH
@@ -191,7 +191,7 @@ LightningClubNPCS: ; 78d5 (4:138d5)
 	dw Preload_Isaac
 	db $00
 
-GrassClubEntranceNPCS: ; 78ee (4:138ee)
+GrassClubEntranceNPCS:
 	db NPC_CLERK5, $06, $02, SOUTH
 	dw NULL
 	db NPC_MICHAEL, $0e, $08, SOUTH
@@ -204,7 +204,7 @@ GrassClubEntranceNPCS: ; 78ee (4:138ee)
 	dw Preload_Ronald3InClubEntrance
 	db $00
 
-GrassClubLobbyNPCS: ; 790d (4:1390d)
+GrassClubLobbyNPCS:
 	db NPC_BRITTANY, $0c, $0e, WEST
 	dw NULL
 	db NPC_LASS2, $12, $08, SOUTH
@@ -219,7 +219,7 @@ GrassClubLobbyNPCS: ; 790d (4:1390d)
 	dw Preload_GiftCenterClerk
 	db $00
 
-GrassClubNPCS: ; 7932 (4:13932)
+GrassClubNPCS:
 	db NPC_KRISTIN, $04, $0a, EAST
 	dw NULL
 	db NPC_HEATHER, $0e, $10, SOUTH
@@ -228,7 +228,7 @@ GrassClubNPCS: ; 7932 (4:13932)
 	dw Preload_NikkiInGrassClub
 	db $00
 
-PsychicClubEntranceNPCS: ; 7945 (4:13945)
+PsychicClubEntranceNPCS:
 	db NPC_CLERK6, $06, $02, SOUTH
 	dw NULL
 	db NPC_RONALD1, $08, $fe, SOUTH
@@ -241,7 +241,7 @@ PsychicClubEntranceNPCS: ; 7945 (4:13945)
 	dw NULL
 	db $00
 
-PsychicClubLobbyNPCS: ; 7964 (4:13964)
+PsychicClubLobbyNPCS:
 	db NPC_ROBERT, $14, $08, NORTH
 	dw NULL
 	db NPC_PAPPY1, $04, $10, EAST
@@ -258,7 +258,7 @@ PsychicClubLobbyNPCS: ; 7964 (4:13964)
 	dw Preload_GiftCenterClerk
 	db $00
 
-PsychicClubNPCS: ; 798f (4:1398f)
+PsychicClubNPCS:
 	db NPC_DANIEL, $08, $08, NORTH
 	dw NULL
 	db NPC_STEPHANIE, $16, $0c, EAST
@@ -269,7 +269,7 @@ PsychicClubNPCS: ; 798f (4:1398f)
 	dw Preload_Murray1
 	db $00
 
-ScienceClubEntranceNPCS: ; 79a8 (4:139a8)
+ScienceClubEntranceNPCS:
 	db NPC_CLERK7, $06, $02, SOUTH
 	dw NULL
 	db NPC_RONALD1, $08, $fe, SOUTH
@@ -280,7 +280,7 @@ ScienceClubEntranceNPCS: ; 79a8 (4:139a8)
 	dw Preload_Ronald3InClubEntrance
 	db $00
 
-ScienceClubLobbyNPCS: ; 79c1 (4:139c1)
+ScienceClubLobbyNPCS:
 	db NPC_LAD1, $12, $12, NORTH
 	dw NULL
 	db NPC_IMAKUNI, $12, $02, NORTH
@@ -297,7 +297,7 @@ ScienceClubLobbyNPCS: ; 79c1 (4:139c1)
 	dw Preload_GiftCenterClerk
 	db $00
 
-ScienceClubNPCS: ; 79ec (4:139ec)
+ScienceClubNPCS:
 	db NPC_JOSEPH, $08, $0a, SOUTH
 	dw Preload_Joseph
 	db NPC_DAVID, $14, $04, NORTH
@@ -308,7 +308,7 @@ ScienceClubNPCS: ; 79ec (4:139ec)
 	dw NULL
 	db $00
 
-FireClubEntranceNPCS: ; 7a05 (4:13a05)
+FireClubEntranceNPCS:
 	db NPC_CLERK8, $06, $02, SOUTH
 	dw NULL
 	db NPC_RONALD1, $08, $fe, SOUTH
@@ -319,7 +319,7 @@ FireClubEntranceNPCS: ; 7a05 (4:13a05)
 	dw Preload_Ronald3InClubEntrance
 	db $00
 
-FireClubLobbyNPCS: ; 7a1e (4:13a1e)
+FireClubLobbyNPCS:
 	db NPC_JESSICA, $0c, $0e, WEST
 	dw Preload_JessicaInFireClubLobby
 	db NPC_LAD2, $12, $06, EAST
@@ -334,7 +334,7 @@ FireClubLobbyNPCS: ; 7a1e (4:13a1e)
 	dw Preload_GiftCenterClerk
 	db $00
 
-FireClubNPCS: ; 7a43 (4:13a43)
+FireClubNPCS:
 	db NPC_JOHN, $0c, $12, SOUTH
 	dw NULL
 	db NPC_ADAM, $08, $0e, SOUTH
@@ -345,12 +345,12 @@ FireClubNPCS: ; 7a43 (4:13a43)
 	dw NULL
 	db $00
 
-ChallengeHallEntranceNPCS: ; 7a5c (4:13a5c)
+ChallengeHallEntranceNPCS:
 	db NPC_CLERK9, $06, $02, SOUTH
 	dw Preload_Clerk9
 	db $00
 
-ChallengeHallLobbyNPCS: ; 7a63 (4:13a63)
+ChallengeHallLobbyNPCS:
 	db NPC_PAPPY3, $06, $0e, EAST
 	dw Preload_ChallengeHallNPCs1
 	db NPC_CHAMP, $10, $12, WEST
@@ -371,7 +371,7 @@ ChallengeHallLobbyNPCS: ; 7a63 (4:13a63)
 	dw Preload_GiftCenterClerk
 	db $00
 
-ChallengeHallNPCS: ; 7a9a (4:13a9a)
+ChallengeHallNPCS:
 	db NPC_CLERK12, $0a, $12, SOUTH
 	dw Preload_ChallengeHallNPCs1
 	db NPC_CLERK13, $14, $12, SOUTH
@@ -384,12 +384,12 @@ ChallengeHallNPCS: ; 7a9a (4:13a9a)
 	dw Preload_ChallengeHallOpponent
 	db $00
 
-PokemonDomeEntranceNPCS: ; 7ab9 (4:13ab9)
+PokemonDomeEntranceNPCS:
 	db NPC_RONALD1, $0e, $12, SOUTH
 	dw NULL
 	db $00
 
-PokemonDomeNPCS: ; 7ac0 (4:13ac0)
+PokemonDomeNPCS:
 	db NPC_COURTNEY, $12, $02, SOUTH
 	dw Preload_Courtney
 	db NPC_STEVE, $16, $02, SOUTH
@@ -402,7 +402,7 @@ PokemonDomeNPCS: ; 7ac0 (4:13ac0)
 	dw Preload_Ronald1InPokemonDome
 	db $00
 
-HallOfHonorNPCS: ; 7adf (4:13adf)
+HallOfHonorNPCS:
 	db NPC_LEGENDARY_CARD_TOP_LEFT, $0a, $08, SOUTH
 	dw NULL
 	db NPC_LEGENDARY_CARD_TOP_RIGHT, $0c, $08, SOUTH

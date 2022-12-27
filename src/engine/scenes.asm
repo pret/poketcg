@@ -292,6 +292,7 @@ Func_12fc6:
 	ret
 
 PortraitGfxData:
+	table_width 4, PortraitGfxData
 	db TILESET_PLAYER, PALETTE_119
 	dw SGBData_PlayerPortraitPals
 
@@ -420,6 +421,7 @@ PortraitGfxData:
 
 	db TILESET_PLAYER, PALETTE_120
 	dw SGBData_LinkOpponentPortraitPals
+	assert_table_length NUM_PICS
 
 LoadBoosterGfx:
 	push hl

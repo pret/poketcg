@@ -6,6 +6,7 @@ MACRO tileset
 ENDM
 
 Tilesets:
+	table_width 4, Tilesets
 	tileset OverworldMapTiles,             193 ; TILESET_OVERWORLD_MAP
 	tileset MasonLaboratoryTilesetGfx,     151 ; TILESET_MASON_LABORATORY
 	tileset IshiharaTilesetGfx,             77 ; TILESET_ISHIHARA
@@ -93,3 +94,4 @@ Tilesets:
 	tileset JessicaGfx,                     36 ; TILESET_JESSICA
 	tileset StephanieGfx,                   36 ; TILESET_STEPHANIE
 	tileset AaronGfx,                       36 ; TILESET_AARON
+	assert_table_length NUM_TILESETS

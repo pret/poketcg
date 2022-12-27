@@ -4,6 +4,7 @@
 ; 2: player's y coordinate when entering the map
 ; 4: 00
 OverworldMapWarps:
+	table_width 4, OverworldMapWarps
 	db $00, $00, $00, $00
 	db MASON_LABORATORY,        $0e, $1a, $00
 	db ISHIHARAS_HOUSE,         $08, $14, $00
@@ -17,3 +18,4 @@ OverworldMapWarps:
 	db FIRE_CLUB_ENTRANCE,      $08, $0e, $00
 	db CHALLENGE_HALL_ENTRANCE, $08, $0e, $00
 	db POKEMON_DOME_ENTRANCE,   $0e, $0e, $00
+	assert_table_length NUM_OWMAPS

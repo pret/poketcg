@@ -1,6 +1,6 @@
 ; generate a booster pack identified by its BOOSTER_* constant in a,
 ; and add the drawn cards to the player's collection (sCardCollection).
-GenerateBoosterPack: ; 1e1c4 (7:61c4)
+GenerateBoosterPack:
 	push hl
 	push bc
 	push de
@@ -19,7 +19,7 @@ GenerateBoosterPack: ; 1e1c4 (7:61c4)
 
 ; generate all Pokemon or Trainer cards (if any) for the current booster pack
 ; return carry if ran out of cards to add to the booster pack
-GenerateBoosterNonEnergies: ; 1e1df (7:61df)
+GenerateBoosterNonEnergies:
 	ld a, STAR
 	ld [wBoosterCurrentRarity], a
 .generate_card_loop
@@ -54,7 +54,7 @@ GenerateBoosterNonEnergies: ; 1e1df (7:61df)
 
 ; return hl pointing to wBoosterData_CommonAmount, wBoosterData_UncommonAmount,
 ; or wBoosterData_RareAmount, depending on the value at [wBoosterCurrentRarity]
-GetCurrentRarityAmount: ; 1e219 (7:6219)
+GetCurrentRarityAmount:
 	push bc
 	ld hl, wBoosterData_CommonAmount
 	ld a, [wBoosterCurrentRarity]
@@ -68,7 +68,7 @@ GetCurrentRarityAmount: ; 1e219 (7:6219)
 ; and add them to wBoosterViableCardList. Also fill wBoosterAmountOfCardTypeTable with
 ; the amount of available cards of each type, for the current set and rarity.
 ; Skip any card already drawn in the current pack.
-FindCardsInSetAndRarity: ; 1e226 (7:6226)
+FindCardsInSetAndRarity:
 	ld c, NUM_BOOSTER_CARD_TYPES
 	ld hl, wBoosterAmountOfCardTypeTable
 	xor a
@@ -113,7 +113,7 @@ FindCardsInSetAndRarity: ; 1e226 (7:6226)
 	ret
 
 ; return nc if card e belongs to the current set and rarity
-CheckCardInSetAndRarity: ; 1e268 (7:6268)
+CheckCardInSetAndRarity:
 	push bc
 	ld a, e
 	call GetCardTypeRarityAndSet
@@ -149,7 +149,7 @@ CheckCardInSetAndRarity: ; 1e268 (7:6268)
 
 ; Convert a card's TYPE_* constant given in a to its BOOSTER_CARD_TYPE_* constant
 ; return the result in a
-GetBoosterCardType: ; 1e2a0 (7:62a0)
+GetBoosterCardType:
 	push hl
 	push bc
 	ld hl, CardTypeTable
@@ -164,7 +164,8 @@ GetBoosterCardType: ; 1e2a0 (7:62a0)
 	pop hl
 	ret
 
-CardTypeTable: ; 1e2b1 (7:62b1)
+CardTypeTable:
+	table_width 1, CardTypeTable
 	db BOOSTER_CARD_TYPE_FIRE      ; TYPE_PKMN_FIRE
 	db BOOSTER_CARD_TYPE_GRASS     ; TYPE_PKMN_GRASS
 	db BOOSTER_CARD_TYPE_LIGHTNING ; TYPE_PKMN_LIGHTNING
@@ -182,10 +183,11 @@ CardTypeTable: ; 1e2b1 (7:62b1)
 	db BOOSTER_CARD_TYPE_ENERGY    ; TYPE_ENERGY_COLORLESS
 	db BOOSTER_CARD_TYPE_TRAINER   ; TYPE_ENERGY_UNUSED
 	db BOOSTER_CARD_TYPE_TRAINER   ; TYPE_TRAINER
+	assert_table_length NUM_CARD_TYPES
 
 ; calculate the chance of each type (BOOSTER_CARD_TYPE_*) for the next card
 ; return a = [wd4ca]: sum of all chances
-CalculateTypeChances: ; 1e2c2 (7:62c2)
+CalculateTypeChances:
 	ld c, NUM_BOOSTER_CARD_TYPES
 	xor a
 	ld hl, wBoosterTempTypeChancesTable
@@ -224,7 +226,7 @@ CalculateTypeChances: ; 1e2c2 (7:62c2)
 
 ; input: a = random number (between 0 and the sum of all chances)
 ; store the randomly generated booster card type in [wBoosterJustDrawnCardType]
-DetermineBoosterCardType: ; 1e2fa (7:62fa)
+DetermineBoosterCardType:
 	ld [wd4ca], a
 	ld c, $00
 	ld hl, wBoosterTempTypeChancesTable
@@ -251,7 +253,7 @@ DetermineBoosterCardType: ; 1e2fa (7:62fa)
 ; generate a random number between 0 and the amount of cards matching the current type.
 ; use that number to determine the card to draw from the booster pack.
 ; return the card in a.
-DetermineBoosterCard: ; 1e31d (7:631d)
+DetermineBoosterCard:
 	ld a, [wBoosterJustDrawnCardType]
 	ld c, a
 	ld b, $00
@@ -288,7 +290,7 @@ DetermineBoosterCard: ; 1e31d (7:631d)
 ; lowers the chance of getting the same type of card multiple times.
 ; more specifically, when a card of type T is drawn, T's new chances become
 ; max (1, [wBoosterData_TypeChances[T]] - [wBoosterAveragedTypeChances]).
-UpdateBoosterCardTypesChanceByte: ; 1e350 (7:6350)
+UpdateBoosterCardTypesChanceByte:
 	push hl
 	push bc
 	ld a, [wBoosterJustDrawnCardType]
@@ -313,7 +315,7 @@ UpdateBoosterCardTypesChanceByte: ; 1e350 (7:6350)
 
 ; generates between 0 and 10 energy cards for the current booster.
 ; the amount of energies and their probabilities vary with each booster.
-GenerateBoosterEnergies: ; 1e3db (7:63db)
+GenerateBoosterEnergies:
 	ld hl, wBoosterData_EnergyFunctionPointer + 1
 	ld a, [hld]
 	or a
@@ -331,20 +333,20 @@ GenerateBoosterEnergies: ; 1e3db (7:63db)
 	ret
 
 ; add the (energy) card at a to wBoosterTempNonEnergiesDrawn and wTempCardCollection
-AddBoosterEnergyToDrawnEnergies: ; 1e380 (7:6380)
+AddBoosterEnergyToDrawnEnergies:
 	ld [wBoosterCurrentCard], a
 	call AddBoosterCardToDrawnEnergies
 	ret
 
 ; generates a random energy card
-GenerateRandomEnergy: ; 1e387 (7:6387)
+GenerateRandomEnergy:
 	ld a, NUM_COLORED_TYPES
 	call Random
 	add $01
 	jr AddBoosterEnergyToDrawnEnergies
 
 ; generates a booster with 10 random energies
-GenerateRandomEnergyBooster: ; 1e390 (7:6390)
+GenerateRandomEnergyBooster:
 	ld a, NUM_CARDS_IN_BOOSTER
 .generate_energy_loop
 	push af
@@ -355,22 +357,22 @@ GenerateRandomEnergyBooster: ; 1e390 (7:6390)
 	jr ZeroBoosterRarityData
 
 ; generates a booster with 5 Lightning energies and 5 Fire energies
-GenerateEnergyBoosterLightningFire: ; 1e39c (7:639c)
+GenerateEnergyBoosterLightningFire:
 	ld hl, EnergyBoosterLightningFireData
 	jr GenerateTwoTypesEnergyBooster
 
 ; generates a booster with 5 Water energies and 5 Fighting energies
-GenerateEnergyBoosterWaterFighting: ; 1e3a1 (7:63a1)
+GenerateEnergyBoosterWaterFighting:
 	ld hl, EnergyBoosterWaterFightingData
 	jr GenerateTwoTypesEnergyBooster
 
 ; generates a booster with 5 Grass energies and 5 Psychic energies
-GenerateEnergyBoosterGrassPsychic: ; 1e3a6 (7:63a6)
+GenerateEnergyBoosterGrassPsychic:
 	ld hl, EnergyBoosterGrassPsychicData
 	jr GenerateTwoTypesEnergyBooster
 
 ; generates a booster with 5 energies of 2 different types each
-GenerateTwoTypesEnergyBooster: ; 1e3ab (7:63ab)
+GenerateTwoTypesEnergyBooster:
 	ld b, $02
 .add_two_energies_to_booster_loop
 	ld c, NUM_CARDS_IN_BOOSTER / 2
@@ -388,7 +390,7 @@ GenerateTwoTypesEnergyBooster: ; 1e3ab (7:63ab)
 	jr nz, .add_two_energies_to_booster_loop
 ;	fallthrough
 
-ZeroBoosterRarityData: ; 1e3be (7:63be)
+ZeroBoosterRarityData:
 	xor a
 	ld [wBoosterData_CommonAmount], a
 	ld [wBoosterData_UncommonAmount], a
@@ -405,7 +407,7 @@ EnergyBoosterGrassPsychicData:
 	db GRASS_ENERGY, PSYCHIC_ENERGY
 
 ; add the (energy) card at [wBoosterCurrentCard] to wBoosterTempNonEnergiesDrawn and wTempCardCollection
-AddBoosterCardToDrawnEnergies: ; 1e3cf (7:63cf)
+AddBoosterCardToDrawnEnergies:
 	push hl
 	ld hl, wBoosterTempEnergiesDrawn
 	call AppendCurrentCardToHL
@@ -414,7 +416,7 @@ AddBoosterCardToDrawnEnergies: ; 1e3cf (7:63cf)
 	ret
 
 ; add the (non-energy) card at [wBoosterCurrentCard] to wBoosterTempNonEnergiesDrawn and wTempCardCollection
-AddBoosterCardToDrawnNonEnergies: ; 1e3db (7:63db)
+AddBoosterCardToDrawnNonEnergies:
 	push hl
 	ld hl, wBoosterTempNonEnergiesDrawn
 	call AppendCurrentCardToHL
@@ -423,7 +425,7 @@ AddBoosterCardToDrawnNonEnergies: ; 1e3db (7:63db)
 	ret
 
 ; put the card at [wBoosterCurrentCard] at the end of the booster card list at hl
-AppendCurrentCardToHL: ; 1e3e7 (7:63e7)
+AppendCurrentCardToHL:
 	ld a, [hli]
 	or a
 	jr nz, AppendCurrentCardToHL
@@ -435,7 +437,7 @@ AppendCurrentCardToHL: ; 1e3e7 (7:63e7)
 	ret
 
 ; trim empty slots in wBoosterCardsDrawn between non-energy cards and energies
-PutEnergiesAndNonEnergiesTogether: ; 1e3f3 (7:63f3)
+PutEnergiesAndNonEnergiesTogether:
 	push hl
 	ld hl, wBoosterTempEnergiesDrawn
 .loop_through_extra_cards
@@ -453,7 +455,7 @@ PutEnergiesAndNonEnergiesTogether: ; 1e3f3 (7:63f3)
 	ret
 
 ; add the final cards drawn from the booster pack to the player's collection (sCardCollection)
-AddBoosterCardsToCollection: ; 1e40a (7:640a)
+AddBoosterCardsToCollection:
 	push hl
 	ld hl, wBoosterCardsDrawn
 .add_cards_loop
@@ -467,7 +469,7 @@ AddBoosterCardsToCollection: ; 1e40a (7:640a)
 	ret
 
 ; add the card at [wBoosterCurrentCard] to wTempCardCollection
-AddBoosterCardToTempCardCollection: ; 1e419 (7:6419)
+AddBoosterCardToTempCardCollection:
 	push hl
 	ld h, HIGH(wTempCardCollection)
 	ld a, [wBoosterCurrentCard]
@@ -477,7 +479,7 @@ AddBoosterCardToTempCardCollection: ; 1e419 (7:6419)
 	ret
 
 ; check if the card at [wBoosterCurrentCard] has already been added to wTempCardCollection
-CheckCardAlreadyDrawn: ; 1e423 (7:6423)
+CheckCardAlreadyDrawn:
 	push hl
 	ld h, HIGH(wTempCardCollection)
 	ld a, [wBoosterCurrentCard]
@@ -491,7 +493,7 @@ CheckCardAlreadyDrawn: ; 1e423 (7:6423)
 ; clears wBoosterCardsDrawn and wTempCardCollection.
 ; copies booster data to wBoosterDataCurSet, wBoosterData_EnergyFunctionPointer, and wBoosterData_TypeChances.
 ; copies rarity amounts to wBoosterData*Amount and averages them into wBoosterAveragedTypeChances.
-InitBoosterData: ; 1e430 (7:6430)
+InitBoosterData:
 	ld c, wBoosterCardsDrawnEnd - wBoosterCardsDrawn
 	ld hl, wBoosterCardsDrawn
 	xor a
@@ -531,7 +533,7 @@ InitBoosterData: ; 1e430 (7:6430)
 	ret
 
 ; get the pointer to the data of the booster pack at [wBoosterPackID]
-FindBoosterDataPointer: ; 1e46f (7:646f)
+FindBoosterDataPointer:
 	push bc
 	ld a, [wBoosterPackID]
 	add a
@@ -545,7 +547,8 @@ FindBoosterDataPointer: ; 1e46f (7:646f)
 	pop bc
 	ret
 
-BoosterDataJumptable: ; 1e480 (7:6480)
+BoosterDataJumptable:
+	table_width 2, BoosterDataJumptable
 	dw BoosterPack_ColosseumNeutral
 	dw BoosterPack_ColosseumGrass
 	dw BoosterPack_ColosseumFire
@@ -575,9 +578,10 @@ BoosterDataJumptable: ; 1e480 (7:6480)
 	dw BoosterPack_EnergyWaterFighting
 	dw BoosterPack_EnergyGrassPsychic
 	dw BoosterPack_RandomEnergies
+	assert_table_length NUM_BOOSTERS
 
 ; load rarity amounts of the booster pack set at [wBoosterData_Set] to wBoosterData*Amount
-LoadRarityAmountsToWram: ; 1e4ba (7:64ba)
+LoadRarityAmountsToWram:
 	ld a, [wBoosterData_Set]
 	add a
 	add a

@@ -231,6 +231,7 @@ PlayerMovementOffsetTable_Tiles:
 	db -2,  0 ; WEST
 
 OverworldMapNames:
+	table_width 2, OverworldMapNames
 	tx OverworldMapMasonLaboratoryText
 	tx OverworldMapMasonLaboratoryText
 	tx OverworldMapIshiharasHouseText
@@ -245,6 +246,7 @@ OverworldMapNames:
 	tx OverworldMapChallengeHallText
 	tx OverworldMapPokemonDomeText
 	tx OverworldMapMysteryHouseText
+	assert_table_length NUM_OWMAP_NAMES
 
 Func_3997:
 	ldh a, [hBankROM]

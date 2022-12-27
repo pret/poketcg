@@ -86,7 +86,7 @@ OpenInPlayAreaScreen:
 	call SetupText
 	ld a, [wInPlayAreaCurPosition]
 	ld [wInPlayAreaPreservedPosition], a
-	ld hl, .jump_table
+	ld hl, .PositionsJumpTable
 	call JumpToFunctionInTable
 	ld a, [wInPlayAreaPreservedPosition]
 	ld [wInPlayAreaCurPosition], a
@@ -211,7 +211,8 @@ OpenInPlayAreaScreen:
 	ld [wInPlayAreaCurPosition], a
 	jp .start
 
-.jump_table ; (6:4228)
+.PositionsJumpTable
+	table_width 2, OpenInPlayAreaScreen.PositionsJumpTable
 	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x00: INPLAYAREA_PLAYER_BENCH_1
 	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x01: INPLAYAREA_PLAYER_BENCH_2
 	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x02: INPLAYAREA_PLAYER_BENCH_3
@@ -228,6 +229,7 @@ OpenInPlayAreaScreen:
 	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0d: INPLAYAREA_OPP_BENCH_3
 	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0e: INPLAYAREA_OPP_BENCH_4
 	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0f: INPLAYAREA_OPP_BENCH_5
+	assert_table_length NUM_INPLAYAREA_POSITIONS
 
 OpenInPlayAreaScreen_TurnHolderPlayArea:
 	; wInPlayAreaCurPosition constants conveniently map to (PLAY_AREA_* constants - 1)
@@ -332,6 +334,7 @@ ENDM
 ; with this table, the cursor moves into the proper location by the input.
 ; note that the unit of the position is not a 8x8 tile.
 OpenInPlayAreaScreen_TransitionTable1:
+	table_width 7, OpenInPlayAreaScreen_TransitionTable1
 	in_play_area_cursor_transition $18, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_2, PLAYER_BENCH_5
 	in_play_area_cursor_transition $30, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_3, PLAYER_BENCH_1
 	in_play_area_cursor_transition $48, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_4, PLAYER_BENCH_2
@@ -348,8 +351,10 @@ OpenInPlayAreaScreen_TransitionTable1:
 	in_play_area_cursor_transition $60, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_2, OPP_BENCH_4
 	in_play_area_cursor_transition $48, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_3, OPP_BENCH_5
 	in_play_area_cursor_transition $30, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_4, OPP_BENCH_1
+	assert_table_length NUM_INPLAYAREA_POSITIONS
 
 OpenInPlayAreaScreen_TransitionTable2:
+	table_width 7, OpenInPlayAreaScreen_TransitionTable2
 	in_play_area_cursor_transition $18, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_2, PLAYER_BENCH_5
 	in_play_area_cursor_transition $30, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_3, PLAYER_BENCH_1
 	in_play_area_cursor_transition $48, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_4, PLAYER_BENCH_2
@@ -366,6 +371,7 @@ OpenInPlayAreaScreen_TransitionTable2:
 	in_play_area_cursor_transition $60, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_2, OPP_BENCH_4
 	in_play_area_cursor_transition $48, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_3, OPP_BENCH_5
 	in_play_area_cursor_transition $30, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_4, OPP_BENCH_1
+	assert_table_length NUM_INPLAYAREA_POSITIONS
 
 OpenInPlayAreaScreen_HandleInput:
 	xor a

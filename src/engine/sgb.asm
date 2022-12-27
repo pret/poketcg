@@ -373,6 +373,8 @@ MACRO border_medal_tile
 ENDM
 
 .SGBBorderMedalTiles
+	table_width 4 * 9, FillSGBBorderMedalSlots.SGBBorderMedalTiles
+
 ; GRASS_MEDAL
 	border_medal_tile v0Tiles1 + $182, $3f, $10
 	border_medal_tile v0Tiles1 + $184, $40, $10
@@ -460,6 +462,7 @@ ENDM
 	border_medal_tile v0Tiles1 + $538, $72, $10
 	border_medal_tile v0Tiles1 + $53a, $73, $10
 	border_medal_tile v0Tiles1 + $53c, $74, $10
+	assert_table_length NUM_MEDALS
 
 ; decompresses palette data depending on wCurMapSGBPals
 ; then sends it as SGB packet

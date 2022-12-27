@@ -1,4 +1,5 @@
-DeckAIPointerTable: ; 14000 (05:4000)
+DeckAIPointerTable:
+	table_width 2, DeckAIPointerTable
 	dw AIActionTable_SamPractice         ; SAMS_PRACTICE_DECK
 	dw AIActionTable_GeneralDecks        ; PRACTICE_PLAYER_DECK
 	dw AIActionTable_GeneralDecks        ; SAMS_NORMAL_DECK
@@ -52,4 +53,4 @@ DeckAIPointerTable: ; 14000 (05:4000)
 	dw AIActionTable_GeneralDecks        ; FLAMETHROWER_DECK
 	dw AIActionTable_GeneralDecks        ; RESHUFFLE_DECK
 	dw AIActionTable_GeneralNoRetreat    ; IMAKUNI_DECK
-; 1406a
+	assert_table_length NUM_DECK_IDS

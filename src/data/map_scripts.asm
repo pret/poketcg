@@ -11,7 +11,9 @@
 ; c: moved player
 ; e: load map/closed text box
 
-MapScripts: ; 1162a (4:562a)
+MapScripts:
+	table_width NUM_MAP_SCRIPTS * 2, MapScripts
+
 ; OVERWORLD_MAP
 	dw NULL
 	dw NULL
@@ -351,3 +353,5 @@ MapScripts: ; 1162a (4:562a)
 	dw NULL
 	dw NULL
 	dw NULL
+
+	assert_table_length NUM_MAPS

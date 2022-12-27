@@ -115,6 +115,7 @@ PCMailHandleDPadInput:
 
 PCMailTransitionTable:
 ; up, right, down, left
+	table_width 4, PCMailTransitionTable
 	db $0c, $01, $03, $02 ; mail 1
 	db $0d, $02, $04, $00 ; mail 2
 	db $0e, $00, $05, $01 ; mail 3
@@ -130,6 +131,7 @@ PCMailTransitionTable:
 	db $09, $0d, $00, $0e ; mail 13
 	db $0a, $0e, $01, $0c ; mail 14
 	db $0b, $0c, $02, $0d ; mail 15
+	assert_table_length NUM_MAILS
 
 PCMailHandleAInput:
 	ldh a, [hKeysPressed]
@@ -293,6 +295,7 @@ TryOpenPCMailBoosterPack:
 	jr .done
 
 PCMailBoosterPacks:
+	table_width 2, PCMailBoosterPacks
 	db $00, $00 ; unused
 	db BOOSTER_COLOSSEUM_NEUTRAL, $00 ; mail 1
 	db BOOSTER_LABORATORY_PSYCHIC, $00 ; mail 2
@@ -309,6 +312,7 @@ PCMailBoosterPacks:
 	db BOOSTER_EVOLUTION_TRAINER, $00 ; mail 13
 	db BOOSTER_MYSTERY_TRAINER_COLORLESS, $00 ; mail 14
 	db BOOSTER_LABORATORY_TRAINER, $00 ; mail 15
+	assert_table_length NUM_MAILS + 1
 
 UpdateMailMenuCursor:
 	ld a, [wCursorBlinkTimer]
@@ -364,6 +368,7 @@ GetPCPackNameTextID:
 	ret
 
 .PCPackNameTextIDs:
+	table_width 2, GetPCPackNameTextID.PCPackNameTextIDs
 	tx Mail1Text
 	tx Mail2Text
 	tx Mail3Text
@@ -379,6 +384,7 @@ GetPCPackNameTextID:
 	tx Mail13Text
 	tx Mail14Text
 	tx Mail15Text
+	assert_table_length NUM_MAILS
 
 ; prints on screen the name of
 ; the PC pack from input in a
@@ -481,6 +487,7 @@ GePCPackSelectionCoordinates:
 	ret
 
 PCMailCoordinates:
+	table_width 2, PCMailCoordinates
 	db  1,  2 ; mail 1
 	db  7,  2 ; mail 2
 	db 13,  2 ; mail 3
@@ -496,6 +503,7 @@ PCMailCoordinates:
 	db  1, 10 ; mail 13
 	db  7, 10 ; mail 14
 	db 13, 10 ; mail 15
+	assert_table_length NUM_MAILS
 
 ; gives the pc pack described in a
 TryGivePCPack:

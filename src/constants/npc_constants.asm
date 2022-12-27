@@ -76,6 +76,7 @@ DEF NPC_DATA_LENGTH EQU const_value
 	const STEPHANIE_PIC ; $28
 	const AARON_PIC     ; $29
 	const LINK_OPP_PIC  ; $2a
+DEF NUM_PICS EQU const_value
 
 	const_def 1
 	const NPC_DRMASON                     ; $01
@@ -193,6 +194,8 @@ DEF NPC_DATA_LENGTH EQU const_value
 	const NPC_RONALD2                     ; $71
 	const NPC_RONALD3                     ; $72
 	const NPC_PLAYER_CREDITS              ; $73
+
+DEF NUM_NPCS EQU const_value
 
 ; flags in LOADED_NPC_FLAGS
 	const_def 4

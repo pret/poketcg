@@ -1,10 +1,11 @@
 ; \1 = anim data pointer
 MACRO anim_data_pointer
 	dwb \1, BANK(\1) - BANK(SpriteAnimations)
-	db $00 ; unused (padding?)
+	db $00 ; padding
 ENDM
 
 SpriteAnimations:
+	table_width 4, SpriteAnimations
 	anim_data_pointer AnimData0   ; SPRITE_ANIM_LIGHT_NPC_UP
 	anim_data_pointer AnimData1   ; SPRITE_ANIM_LIGHT_NPC_RIGHT
 	anim_data_pointer AnimData2   ; SPRITE_ANIM_LIGHT_NPC_DOWN
@@ -222,3 +223,4 @@ SpriteAnimations:
 	anim_data_pointer AnimData214 ; SPRITE_ANIM_214
 	anim_data_pointer AnimData215 ; SPRITE_ANIM_215
 	anim_data_pointer AnimData216 ; SPRITE_ANIM_216
+	assert_table_length NUM_SPRITE_ANIMS

@@ -91,7 +91,7 @@ Script_d932:
 	quit_script_fully
 
 .ows_d93c
-	open_deck_machine $09
+	open_deck_machine DECK_MACHINE_BASIC
 	quit_script_fully
 
 Script_d93f:
@@ -119,7 +119,7 @@ Script_d93f:
 	quit_script_fully
 
 .ows_d969
-	open_deck_machine $01
+	open_deck_machine DECK_MACHINE_FIGHTING
 	quit_script_fully
 
 Func_d96c:
@@ -172,7 +172,7 @@ Script_d995:
 	quit_script_fully
 
 .ows_d9bf
-	open_deck_machine $02
+	open_deck_machine DECK_MACHINE_ROCK
 	quit_script_fully
 
 Script_d9c2:
@@ -200,7 +200,7 @@ Script_d9c2:
 	quit_script_fully
 
 .ows_d9ec
-	open_deck_machine $03
+	open_deck_machine DECK_MACHINE_WATER
 	quit_script_fully
 
 Script_d9ef:
@@ -228,7 +228,7 @@ Script_d9ef:
 	quit_script_fully
 
 .ows_da19
-	open_deck_machine $04
+	open_deck_machine DECK_MACHINE_LIGHTNING
 	quit_script_fully
 
 Script_da1c:
@@ -256,7 +256,7 @@ Script_da1c:
 	quit_script_fully
 
 .ows_da46
-	open_deck_machine $05
+	open_deck_machine DECK_MACHINE_GRASS
 	quit_script_fully
 
 Script_da49:
@@ -284,7 +284,7 @@ Script_da49:
 	quit_script_fully
 
 .ows_da73
-	open_deck_machine $06
+	open_deck_machine DECK_MACHINE_PSYCHIC
 	quit_script_fully
 
 Script_da76:
@@ -312,7 +312,7 @@ Script_da76:
 	quit_script_fully
 
 .ows_daa0
-	open_deck_machine $07
+	open_deck_machine DECK_MACHINE_SCIENCE
 	quit_script_fully
 
 Script_daa3:
@@ -340,7 +340,7 @@ Script_daa3:
 	quit_script_fully
 
 .ows_dacd
-	open_deck_machine $08
+	open_deck_machine DECK_MACHINE_FIRE
 	quit_script_fully
 
 Script_dad0:
@@ -350,5 +350,5 @@ Script_dad0:
 	quit_script_fully
 
 .ows_dada
-	open_deck_machine $00
+	open_deck_machine DECK_MACHINE_SAVE
 	quit_script_fully

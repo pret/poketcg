@@ -32,7 +32,7 @@ LoadOpponentDeck:
 	inc a ; convert from *_DECK_ID constant read from wOpponentDeckID to *_DECK constant
 	call LoadDeck
 	ld a, [wOpponentDeckID]
-	cp DECKS_END
+	cp NUM_DECK_IDS + 1
 	jr c, .valid_deck
 	ld a, PRACTICE_PLAYER_DECK_ID
 	ld [wOpponentDeckID], a

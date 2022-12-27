@@ -65,6 +65,8 @@ OpponentDeckNameLabel:
 	db $ff
 
 OpponentTitlesAndDeckNames:
+	table_width 4, OpponentTitlesAndDeckNames
+
 	tx TechText
 	tx SamsPracticeDeckName
 
@@ -223,3 +225,5 @@ OpponentTitlesAndDeckNames:
 
 	tx StrangeLifeformText
 	tx ImakuniDeckName
+
+	assert_table_length NUM_DECK_IDS
