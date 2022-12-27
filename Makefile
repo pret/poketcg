@@ -1,12 +1,12 @@
 rom := poketcg.gbc
 
 rom_obj := \
-src/main.o \
-src/gfx.o \
-src/text.o \
-src/audio.o \
-src/wram.o \
-src/hram.o
+	src/main.o \
+	src/gfx.o \
+	src/text.o \
+	src/audio.o \
+	src/wram.o \
+	src/hram.o
 
 
 ### Build tools
@@ -36,10 +36,18 @@ all: $(rom) compare
 tcg: $(rom) compare
 
 clean: tidy
-	find src/gfx \( -iname '*.1bpp' -o -iname '*.2bpp' -o -iname '*.pal' \) -delete
+	find src/gfx \
+	     \( -iname '*.1bpp' \
+	        -o -iname '*.2bpp' \
+	        -o -iname '*.pal' \) \
+	     -delete
 
 tidy:
-	rm -f $(rom) $(rom_obj) $(rom:.gbc=.map) $(rom:.gbc=.sym) src/rgbdscheck.o
+	$(RM) $(rom) \
+	      $(rom:.gbc=.sym) \
+	      $(rom:.gbc=.map) \
+	      $(rom_obj) \
+	      src/rgbdscheck.o
 	$(MAKE) clean -C tools/
 
 compare: $(rom)
@@ -49,7 +57,7 @@ tools:
 	$(MAKE) -C tools/
 
 
-RGBASMFLAGS = -h -i src/ -L -Weverything
+RGBASMFLAGS = -hL -I src/ -Weverything
 # Create a sym/map for debug purposes if `make` run with `DEBUG=1`
 ifeq ($(DEBUG),1)
 RGBASMFLAGS += -E
@@ -58,19 +66,19 @@ endif
 src/rgbdscheck.o: src/rgbdscheck.asm
 	$(RGBASM) -o $@ $<
 
-# The dep rules have to be explicit or else missing files won't be reported.
-# As a side effect, they're evaluated immediately instead of when the rule is invoked.
-# It doesn't look like $(shell) can be deferred so there might not be a better way.
-define DEP
-$1: $2 $$(shell tools/scan_includes -s -i src/ $2) | src/rgbdscheck.o
-	$$(RGBASM) $$(RGBASMFLAGS) -o $$@ $$<
-endef
-
 # Build tools when building the rom.
 # This has to happen before the rules are processed, since that's when scan_includes is run.
 ifeq (,$(filter clean tidy tools,$(MAKECMDGOALS)))
 
 $(info $(shell $(MAKE) -C tools))
+
+# The dep rules have to be explicit or else missing files won't be reported.
+# As a side effect, they're evaluated immediately instead of when the rule is invoked.
+# It doesn't look like $(shell) can be deferred so there might not be a better way.
+define DEP
+$1: $2 $$(shell tools/scan_includes -s -I src/ $2) | src/rgbdscheck.o
+	$$(RGBASM) $$(RGBASMFLAGS) -o $$@ $$<
+endef
 
 # Dependencies for objects
 $(foreach obj, $(rom_obj), $(eval $(call DEP,$(obj),$(obj:.o=.asm))))
@@ -95,7 +103,7 @@ src/gfx/booster_packs/evolution2.2bpp: rgbgfx += -x 10
 src/gfx/booster_packs/laboratory2.2bpp: rgbgfx += -x 10
 src/gfx/booster_packs/mystery2.2bpp: rgbgfx += -x 10
 
-src/gfx/cards/%.2bpp: rgbgfx += -h -P
+src/gfx/cards/%.2bpp: rgbgfx += -Z -P
 
 src/gfx/duel/anims/51.2bpp: rgbgfx += -x 10
 src/gfx/duel/dmg_sgb_symbols.2bpp: rgbgfx += -x 7

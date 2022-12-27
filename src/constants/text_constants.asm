@@ -1,6 +1,7 @@
 DEF TX_END        EQU $00 ; terminates the text
 
 ; usage: TX_FULLWIDTH*, char1, TX_FULLWIDTH*, char2, ...
+DEF TX_FULLWIDTH0 EQU $00
 ; source: gfx/fonts/full_width/1_kanji2.1bpp
 DEF TX_FULLWIDTH1 EQU $01
 ; source: gfx/fonts/full_width/2_kanji3.1bpp

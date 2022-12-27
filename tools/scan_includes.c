@@ -8,12 +8,12 @@
 #include <limits.h>
 
 void usage(void) {
-	printf("Usage: scan_includes [-h] [-s] [-i path] filename\n"
+	printf("Usage: scan_includes [-h] [-s] [-I path] filename\n"
 	       "-h, --help\n"
 	       "    Print usage and exit\n"
 	       "-s, --strict\n"
 	       "    Fail if a file cannot be read\n"
-	       "-i, --include\n"
+	       "-I, --include\n"
 	       "    Add an include path\n");
 }
 
@@ -161,11 +161,11 @@ int main(int argc, char* argv[]) {
 	struct option long_options[] = {
 		{"strict", no_argument, 0, 's'},
 		{"help", no_argument, 0, 'h'},
-		{"include", required_argument, 0, 'i'},
+		{"include", required_argument, 0, 'I'},
 		{0}
 	};
 	int opt = -1;
-	while ((opt = getopt_long(argc, argv, "shi:", long_options, &i)) != -1) {
+	while ((opt = getopt_long(argc, argv, "shI:", long_options, &i)) != -1) {
 		switch (opt) {
 		case 's':
 			Options.strict = true;
@@ -173,7 +173,7 @@ int main(int argc, char* argv[]) {
 		case 'h':
 			Options.help = true;
 			break;
-		case 'i':
+		case 'I':
 			options_add_file(optarg);
 			break;
 		default:
