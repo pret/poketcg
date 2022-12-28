@@ -1,9 +1,9 @@
-; return nc if wd42a, wd4c0, and wAnimationQueue[] are all equal to $ff
+; return nc if wActiveScreenAnim, wd4c0, and wAnimationQueue[] are all equal to $ff
 ; nc means no animation is playing (or animation(s) has/have ended)
 CheckAnyAnimationPlaying::
 	push hl
 	push bc
-	ld a, [wd42a]
+	ld a, [wActiveScreenAnim]
 	ld hl, wd4c0
 	and [hl]
 	ld hl, wAnimationQueue
@@ -61,12 +61,12 @@ PlayDuelAnimation::
 	call BankswitchROM
 	ret
 
-Func_3ba2::
+UpdateQueuedAnimations::
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_1cac5)
+	ld a, BANK(_UpdateQueuedAnimations)
 	call BankswitchROM
-	call Func_1cac5
+	call _UpdateQueuedAnimations
 	call HandleAllSpriteAnimations
 	pop af
 	call BankswitchROM

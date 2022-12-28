@@ -49,7 +49,7 @@ Func_1c003: ; unreferenced
 	call SetWindowOn
 	ret
 
-Func_1c056::
+_HandleMapWarp::
 	push hl
 	push bc
 	push de
@@ -62,25 +62,25 @@ Func_1c056::
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld bc, $0005
+	ld bc, $5
 	ld a, [wPlayerXCoord]
 	ld d, a
 	ld a, [wPlayerYCoord]
 	ld e, a
-.asm_1c072
+.loop_warp_list
 	ld a, [hli]
 	or [hl]
-	jr z, .asm_1c095
-	ld a, [hld]
+	jr z, .done ; end of warp data
+	ld a, [hld] ; y coord
 	cp e
-	jr nz, .asm_1c07e
-	ld a, [hl]
+	jr nz, .next_warp
+	ld a, [hl] ; x coord
 	cp d
-	jr z, .asm_1c081
-.asm_1c07e
+	jr z, .warp_player
+.next_warp
 	add hl, bc
-	jr .asm_1c072
-.asm_1c081
+	jr .loop_warp_list
+.warp_player
 	inc hl
 	inc hl
 	ld a, [hli]
@@ -91,7 +91,7 @@ Func_1c056::
 	ld [wTempPlayerYCoord], a
 	ld a, [wPlayerDirection]
 	ld [wTempPlayerDirection], a
-.asm_1c095
+.done
 	pop de
 	pop bc
 	pop hl

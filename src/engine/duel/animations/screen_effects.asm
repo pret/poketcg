@@ -6,7 +6,7 @@ InitScreenAnimation:
 	or a
 	jr nz, .skip
 	ld a, [wTempAnimation]
-	ld [wd42a], a
+	ld [wActiveScreenAnim], a
 	sub DUEL_SCREEN_ANIMS
 	add a
 	add a
@@ -59,7 +59,7 @@ LoadDefaultScreenAnimationUpdateWhenFinished:
 ; function called for the screen animation update when it is over
 DefaultScreenAnimationUpdate:
 	ld a, $ff
-	ld [wd42a], a
+	ld [wActiveScreenAnim], a
 	call DisableInt_LYCoincidence
 	xor a
 	ldh [hSCX], a

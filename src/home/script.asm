@@ -142,12 +142,12 @@ Func_3b11::
 	call BankswitchROM
 	ret
 
-Func_3b21::
+ResetAnimationQueue::
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_1c8bc)
+	ld a, BANK(_ResetAnimationQueue)
 	call BankswitchROM
-	call Func_1c8bc
+	call _ResetAnimationQueue
 	pop af
 	call BankswitchROM
 	ret

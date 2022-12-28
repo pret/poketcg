@@ -20,7 +20,7 @@ PlayAttackAnimationCommands:
 	or a
 	jr nz, .read_command
 	ld [hl], $01
-	call Func_3b21
+	call ResetAnimationQueue
 	pop de
 
 	push de

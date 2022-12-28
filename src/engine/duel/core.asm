@@ -126,10 +126,10 @@ MainDuelLoop:
 	call PrintDuelResultStats
 	pop af
 	ldh [hWhoseTurn], a
-	call Func_3b21
 
 ; animate the duel result screen
 ; load the correct music and animation depending on result
+	call ResetAnimationQueue
 	ld a, [wDuelFinished]
 	cp TURN_PLAYER_WON
 	jr z, .active_duelist_won_duel
@@ -1459,7 +1459,7 @@ DisplayDrawNCardsScreen:
 
 ; animates the screen for Turn Duelist drawing a card
 PlayTurnDuelistDrawAnimation:
-	call Func_3b21
+	call ResetAnimationQueue
 	ld e, DUEL_ANIM_PLAYER_DRAW
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
@@ -2187,7 +2187,7 @@ PlayShuffleAndDrawCardsAnimation:
 
 .not_practice
 ; get the shuffling animation from input value of b
-	call Func_3b21
+	call ResetAnimationQueue
 	ld hl, sp+$03
 	; play animation 3 times
 	ld a, [hl]
@@ -2210,7 +2210,7 @@ PlayShuffleAndDrawCardsAnimation:
 	xor a
 	ld [wNumCardsBeingDrawn], a
 	call PrintDeckAndHandIconsAndNumberOfCards
-	call Func_3b21
+	call ResetAnimationQueue
 	pop hl
 	call DrawWideTextBox_PrintText
 .draw_card
@@ -2279,7 +2279,7 @@ Func_4f2d:
 	ldtx hl, ShufflesTheDeckText
 	call DrawWideTextBox_PrintText
 	call EnableLCD
-	call Func_3b21
+	call ResetAnimationQueue
 
 ; load correct animation depending on turn duelist
 	ld e, DUEL_ANIM_PLAYER_SHUFFLE
@@ -6815,7 +6815,7 @@ HandleBetweenTurnsEvents:
 	; either:
 	; 1. turn holder's arena Pokemon is paralyzed, asleep, poisoned or double poisoned
 	; 2. non-turn holder's arena Pokemon is asleep, poisoned or double poisoned
-	call Func_3b21
+	call ResetAnimationQueue
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	ld a, BOXMSG_BETWEEN_TURNS
@@ -7870,7 +7870,7 @@ _TossCoin::
 	call WriteTwoDigitNumberInTxSymbolFormat
 
 .asm_7223
-	call Func_3b21
+	call ResetAnimationQueue
 	ld a, DUEL_ANIM_COIN_SPIN
 	call PlayDuelAnimation
 
@@ -7885,7 +7885,7 @@ _TossCoin::
 	call Func_72ff
 
 .asm_723c
-	call Func_3b21
+	call ResetAnimationQueue
 	ld d, DUEL_ANIM_COIN_TOSS2
 	ld e, $0 ; tails
 	call UpdateRNGSources
@@ -8012,7 +8012,7 @@ _TossCoin::
 	jp c, .print_coin_tally
 	call ExchangeRNG
 	call Func_3b31
-	call Func_3b21
+	call ResetAnimationQueue
 
 ; return carry if at least 1 heads
 	ld a, [wCoinTossNumHeads]

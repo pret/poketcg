@@ -25,7 +25,7 @@ LoadMap::
 	call WhiteOutDMGPals
 	call Func_c241
 	call EmptyScreen
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	farcall ClearNPCs
@@ -342,7 +342,7 @@ PauseMenuTextList:
 
 Func_c280:
 	call BackupPlayerPosition
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	call ZeroObjectPositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
@@ -371,7 +371,7 @@ Func_c2a3:
 	lb de, $30, $7f
 	call SetupText
 	farcall Func_12ba7
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
@@ -395,7 +395,7 @@ ReturnToOverworld:
 	push de
 	call DisableLCD
 	call Set_OBJ_8x8
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	farcall Func_12bcd
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
@@ -1045,7 +1045,7 @@ Func_c6dc:
 	res 0, [hl]
 	res 1, [hl]
 	call Func_c6f7
-	call Func_3997
+	call HandleMapWarp
 	call Func_c70d
 	ld a, [wOverworldMode]
 	cp OWMODE_MOVE

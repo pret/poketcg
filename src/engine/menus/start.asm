@@ -12,7 +12,7 @@ HandleTitleScreen:
 .play_opening
 	ld a, MUSIC_STOP
 	call PlaySong
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	call PlayIntroSequence
 	call LoadTitleScreenSprites
 
@@ -76,7 +76,7 @@ HandleTitleScreen:
 	jr c, HandleTitleScreen
 .continue_duel
 	call ResetDoFrameFunction
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	ret
 
 ; updates wHasSaveData and wHasDuelSaveData
@@ -108,7 +108,7 @@ HandleStartMenu:
 	farcall InitMenuScreen
 	lb de, $30, $8f
 	call SetupText
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	xor a
 	ld [wLineSeparation], a
 	call .DrawPlayerPortrait
@@ -341,7 +341,7 @@ DeleteSaveDataForNewGame:
 
 	call DisableLCD
 	farcall InitMenuScreen
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	farcall FlashWhiteScreen
 	call DoFrameIfLCDEnabled
 	ldtx hl, SavedDataAlreadyExistsText
@@ -366,7 +366,7 @@ AskToContinueFromDiaryWithDuelData:
 
 	call DisableLCD
 	farcall InitMenuScreen
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	farcall FlashWhiteScreen
 	call DoFrameIfLCDEnabled
 	ldtx hl, DataExistsWhenPowerWasTurnedOFFDuringDuelText
@@ -404,7 +404,7 @@ DrawPlayerPortraitAndPrintNewGameText:
 	call DisableLCD
 	farcall Func_10a9b
 	farcall InitMenuScreen
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	ld hl, HandleAllSpriteAnimations
 	call SetDoFrameFunction
 	lb bc, 7, 3
@@ -414,5 +414,5 @@ DrawPlayerPortraitAndPrintNewGameText:
 	ldtx hl, IsCrazyAboutPokemonAndPokemonCardCollectingText
 	call PrintScrollableText_NoTextBoxLabel
 	call ResetDoFrameFunction
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	ret

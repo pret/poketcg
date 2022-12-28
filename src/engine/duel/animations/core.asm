@@ -1,10 +1,10 @@
-Func_1c8bc::
+_ResetAnimationQueue::
 	push hl
 	push bc
 	call Set_OBJ_8x8
-	ld a, LOW(Func_3ba2)
+	ld a, LOW(UpdateQueuedAnimations)
 	ld [wDoFrameFunction], a
-	ld a, HIGH(Func_3ba2)
+	ld a, HIGH(UpdateQueuedAnimations)
 	ld [wDoFrameFunction + 1], a
 	ld a, $ff
 	ld hl, wAnimationQueue
@@ -13,24 +13,24 @@ Func_1c8bc::
 	ld [hli], a
 	dec c
 	jr nz, .fill_queue
-	ld [wd42a], a
+	ld [wActiveScreenAnim], a
 	ld [wd4c0], a
 	xor a
 	ld [wDuelAnimBufferCurPos], a
 	ld [wDuelAnimBufferSize], a
 	ld [wd4b3], a
 	call DefaultScreenAnimationUpdate
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	pop bc
 	pop hl
 	ret
 
 PlayLoadedDuelAnimation::
 	ld a, [wDoFrameFunction + 0]
-	cp LOW(Func_3ba2)
+	cp LOW(UpdateQueuedAnimations)
 	jr nz, .error
 	ld a, [wDoFrameFunction + 1]
-	cp HIGH(Func_3ba2)
+	cp HIGH(UpdateQueuedAnimations)
 	jr z, .okay
 .error
 	debug_nop
@@ -376,16 +376,19 @@ GetAnimationData:
 	pop bc
 	ret
 
-Func_1cac5::
-	ld a, [wd42a]
+_UpdateQueuedAnimations::
+	ld a, [wActiveScreenAnim]
 	cp $ff
-	jr nz, .asm_1cb03
-
+	jr nz, .screen_anim
 	ld a, [wd4c0]
 	or a
 	jr z, .asm_1cafb
 	cp $80
 	jr z, .asm_1cb11
+
+; iterate through all animations
+; if there is a sprite animation that has finished
+; then disable it and clear its slot in the queue
 	ld hl, wAnimationQueue
 	ld c, ANIMATION_QUEUE_LENGTH
 .loop_queue
@@ -401,7 +404,6 @@ Func_1cac5::
 	farcall DisableCurSpriteAnim
 	ld a, $ff
 	ld [hl], a
-
 .next
 	pop bc
 	pop af
@@ -409,45 +411,47 @@ Func_1cac5::
 	inc hl
 	dec c
 	jr nz, .loop_queue
+	; a is $ff if queue is empty
 
 .asm_1cafb
+	; if a is $ff, then play buffered animations
 	cp $ff
 	jr nz, .skip_play_anims
 	call PlayBufferedDuelAnimations
 .skip_play_anims
 	ret
 
-.asm_1cb03
+.screen_anim
 	ld hl, wScreenAnimUpdatePtr
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	call CallHL2
-	ld a, [wd42a]
+	ld a, [wActiveScreenAnim]
 	jr .asm_1cafb
 
 .asm_1cb11
 	ld a, $ff
 	ld [wd4c0], a
-	jr .asm_1cafb
+	jr .asm_1cafb ; will play buffered animations
 
 Func_1cb18::
 	push hl
 	push bc
 	push de
 
-	; if Func_3ba2 is not set as
+	; if UpdateQueuedAnimations is not set as
 	; wDoFrameFunction, quit and set carry
 	ld a, [wDoFrameFunction]
-	cp LOW(Func_3ba2)
+	cp LOW(UpdateQueuedAnimations)
 	jr nz, .carry
 	ld a, [wDoFrameFunction + 1]
-	cp HIGH(Func_3ba2)
+	cp HIGH(UpdateQueuedAnimations)
 	jr nz, .carry
 
 	ld a, $ff
 	ld [wd4c0], a
-	ld a, [wd42a]
+	ld a, [wActiveScreenAnim]
 	cp $ff
 	call nz, DoScreenAnimationUpdate
 

@@ -248,12 +248,12 @@ OverworldMapNames::
 	tx OverworldMapMysteryHouseText
 	assert_table_length NUM_OWMAP_NAMES
 
-Func_3997::
+HandleMapWarp::
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_1c056)
+	ld a, BANK(_HandleMapWarp)
 	call BankswitchROM
-	call Func_1c056
+	call _HandleMapWarp
 	pop af
 	call BankswitchROM
 	ret

@@ -3,7 +3,7 @@
 SetSpriteAnimationsAsVBlankFunction:
 	call EmptyScreen
 	call Set_OBJ_8x8
-	call Func_3ca4
+	call ClearSpriteAnimations
 	lb de, $38, $7f
 	call SetupText
 	ld hl, wVBlankFunctionTrampoline + 1
@@ -21,7 +21,7 @@ RestoreVBlankFunction:
 	ld hl, wVBlankFunctionTrampolineBackup
 	ld de, wVBlankFunctionTrampoline + 1
 	call BackupVBlankFunctionTrampoline
-	call Func_3ca4
+	call ClearSpriteAnimations
 	bank1call ZeroObjectPositionsAndToggleOAMCopy
 	ret
 

@@ -1,15 +1,13 @@
-; clear [SOMETHING] - something relating to animations
-Func_3ca0::
+EnableAndClearSpriteAnimations::
 	xor a
-	ld [wd5d7], a
+	ld [wAllSpriteAnimationsDisabled], a
 	; fallthrough
-
-Func_3ca4::
+ClearSpriteAnimations::
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_1296e)
+	ld a, BANK(_ClearSpriteAnimations)
 	call BankswitchROM
-	call Func_1296e
+	call _ClearSpriteAnimations
 	pop af
 	call BankswitchROM
 	ret
@@ -272,13 +270,15 @@ DrawPlayerPortrait::
 	ld a, TILEMAP_PLAYER
 ;	fallthrough
 
+; input:
+; a = TILEMAP_* constant
 DrawPortrait::
 	ld [wCurTilemap], a
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_12fc6)
+	ld a, BANK(_DrawPortrait)
 	call BankswitchROM
-	call Func_12fc6
+	call _DrawPortrait
 	pop af
 	call BankswitchROM
 	ret

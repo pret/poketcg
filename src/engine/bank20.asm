@@ -1368,7 +1368,7 @@ Func_80cd6:
 Func_80cd7:
 	call DisableLCD
 	call EmptyScreen
-	call Func_3ca4
+	call ClearSpriteAnimations
 	xor a
 	ld [wd4ca], a
 	ld [wd4cb], a
@@ -1409,7 +1409,7 @@ Func_80cd7:
 	inc a ; rotate NPC
 	and %11
 	ld [wLoadNPCDirection], a
-	call Func_3ca4
+	call ClearSpriteAnimations
 	call .DrawNPCSprite
 .no_a_button
 	ldh a, [hKeysPressed]
@@ -1466,7 +1466,7 @@ Func_80cd7:
 
 .got_npc
 	ld [wLoadedNPCTempIndex], a
-	call Func_3ca4
+	call ClearSpriteAnimations
 	call .DrawNPCSprite
 	jr .PrintNPCInfo
 
