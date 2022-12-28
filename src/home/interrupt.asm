@@ -1,19 +1,19 @@
 ; enable timer interrupt
-EnableInt_Timer:
+EnableInt_Timer::
 	ldh a, [rIE]
 	or 1 << INT_TIMER
 	ldh [rIE], a
 	ret
 
 ; enable vblank interrupt
-EnableInt_VBlank:
+EnableInt_VBlank::
 	ldh a, [rIE]
 	or 1 << INT_VBLANK
 	ldh [rIE], a
 	ret
 
 ; enable lcdc interrupt on hblank mode
-EnableInt_HBlank:
+EnableInt_HBlank::
 	ldh a, [rSTAT]
 	or 1 << STAT_MODE_HBLANK
 	ldh [rSTAT], a
@@ -25,7 +25,7 @@ EnableInt_HBlank:
 	ret
 
 ; disable lcdc interrupt and the hblank mode trigger
-DisableInt_HBlank:
+DisableInt_HBlank::
 	ldh a, [rSTAT]
 	and ~(1 << STAT_MODE_HBLANK)
 	ldh [rSTAT], a

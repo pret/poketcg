@@ -1,11 +1,11 @@
 ; return the turn holder's arena card's color in a, accounting for Venomoth's Shift Pokemon Power if active
-GetArenaCardColor:
+GetArenaCardColor::
 	xor a
 ;	fallthrough
 
-; input: a = play area location offset (PLAY_AREA_*) of the desired card
+; input:: a = play area location offset (PLAY_AREA_*) of the desired card
 ; return the turn holder's card's color in a, accounting for Venomoth's Shift Pokemon Power if active
-GetPlayAreaCardColor:
+GetPlayAreaCardColor::
 	push hl
 	push de
 	ld e, a
@@ -41,7 +41,7 @@ GetPlayAreaCardColor:
 ; return in a the weakness of the turn holder's arena or benchx Pokemon given the PLAY_AREA_* value in a
 ; if a == 0 and [DUELVARS_ARENA_CARD_CHANGED_WEAKNESS] != 0,
 ; return [DUELVARS_ARENA_CARD_CHANGED_WEAKNESS] instead
-GetPlayAreaCardWeakness:
+GetPlayAreaCardWeakness::
 	or a
 	jr z, GetArenaCardWeakness
 	add DUELVARS_ARENA_CARD
@@ -49,7 +49,7 @@ GetPlayAreaCardWeakness:
 
 ; return in a the weakness of the turn holder's arena Pokemon
 ; if [DUELVARS_ARENA_CARD_CHANGED_WEAKNESS] != 0, return it instead
-GetArenaCardWeakness:
+GetArenaCardWeakness::
 	ld a, DUELVARS_ARENA_CARD_CHANGED_WEAKNESS
 	call GetTurnDuelistVariable
 	or a
@@ -57,7 +57,7 @@ GetArenaCardWeakness:
 	ld a, DUELVARS_ARENA_CARD
 ;	fallthrough
 
-GetCardWeakness:
+GetCardWeakness::
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Weakness]
@@ -66,7 +66,7 @@ GetCardWeakness:
 ; return in a the resistance of the turn holder's arena or benchx Pokemon given the PLAY_AREA_* value in a
 ; if a == 0 and [DUELVARS_ARENA_CARD_CHANGED_RESISTANCE] != 0,
 ; return [DUELVARS_ARENA_CARD_CHANGED_RESISTANCE] instead
-GetPlayAreaCardResistance:
+GetPlayAreaCardResistance::
 	or a
 	jr z, GetArenaCardResistance
 	add DUELVARS_ARENA_CARD
@@ -74,7 +74,7 @@ GetPlayAreaCardResistance:
 
 ; return in a the resistance of the arena Pokemon
 ; if [DUELVARS_ARENA_CARD_CHANGED_RESISTANCE] != 0, return it instead
-GetArenaCardResistance:
+GetArenaCardResistance::
 	ld a, DUELVARS_ARENA_CARD_CHANGED_RESISTANCE
 	call GetTurnDuelistVariable
 	or a
@@ -82,7 +82,7 @@ GetArenaCardResistance:
 	ld a, DUELVARS_ARENA_CARD
 ;	fallthrough
 
-GetCardResistance:
+GetCardResistance::
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Resistance]
@@ -90,7 +90,7 @@ GetCardResistance:
 
 ; this function checks if turn holder's CHARIZARD energy burn is active, and if so, turns
 ; all energies at wAttachedEnergies except double colorless energies into fire energies
-HandleEnergyBurn:
+HandleEnergyBurn::
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex

@@ -1,8 +1,8 @@
-ScriptPlaySong:
+ScriptPlaySong::
 	call PlaySong
 	ret
 
-Func_3c87:
+Func_3c87::
 	push af
 	call PauseSong
 	pop af
@@ -11,7 +11,7 @@ Func_3c87:
 	call ResumeSong
 	ret
 
-WaitForSongToFinish:
+WaitForSongToFinish::
 	call DoFrameIfLCDEnabled
 	call AssertSongFinished
 	or a

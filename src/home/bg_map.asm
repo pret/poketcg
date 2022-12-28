@@ -1,19 +1,19 @@
-; reads structs:
+; reads structs::
 ;   x (1 byte), y (1 byte), data (n bytes), $00
 ;   x (1 byte), y (1 byte), data (n bytes), $00
 ;   ...
 ;   $ff
 ; for each struct, writes data to BGMap0-translated x,y
-WriteDataBlocksToBGMap0:
+WriteDataBlocksToBGMap0::
 	call WriteDataBlockToBGMap0
 	bit 7, [hl] ; check for $ff
 	jr z, WriteDataBlocksToBGMap0
 	ret
 
-; reads struct:
+; reads struct::
 ;   x (1 byte), y (1 byte), data (n bytes), $00
 ; writes data to BGMap0-translated x,y
-WriteDataBlockToBGMap0:
+WriteDataBlockToBGMap0::
 	ld b, [hl]
 	inc hl
 	ld c, [hl]
@@ -49,7 +49,7 @@ WriteDataBlockToBGMap0:
 	ret
 
 ; writes a to [v*BGMap0 + BG_MAP_WIDTH * c + b]
-WriteByteToBGMap0:
+WriteByteToBGMap0::
 	push af
 	ld a, [wLCDC]
 	rla
@@ -71,7 +71,7 @@ WriteByteToBGMap0:
 ;	fallthrough
 
 ; writes a to [v*BGMap0 + BG_MAP_WIDTH * c + b] during hblank
-HblankWriteByteToBGMap0:
+HblankWriteByteToBGMap0::
 	push hl
 	push de
 	push bc
@@ -88,7 +88,7 @@ HblankWriteByteToBGMap0:
 	ret
 
 ; copy a bytes of data from hl to vBGMap0 address pointed to by coord at bc
-CopyDataToBGMap0:
+CopyDataToBGMap0::
 	push bc
 	push hl
 	push af
@@ -102,7 +102,7 @@ CopyDataToBGMap0:
 
 ; copy b bytes of data from hl to de
 ; if LCD on, copy during h-blank only
-SafeCopyDataHLtoDE: ; 6fc (0:6fc)
+SafeCopyDataHLtoDE:: ; 6fc (0::6fc)
 	ld a, [wLCDC]
 	rla
 	jr c, JPHblankCopyDataHLtoDE
@@ -113,5 +113,5 @@ SafeCopyDataHLtoDE: ; 6fc (0:6fc)
 	dec b
 	jr nz, .lcd_off_loop
 	ret
-JPHblankCopyDataHLtoDE:
+JPHblankCopyDataHLtoDE::
 	jp HblankCopyDataHLtoDE

@@ -1,6 +1,6 @@
 ; initialize scroll, window, and lcdc registers, set trampoline functions
 ; for the lcdc and vblank interrupts, latch clock data, and enable SRAM/RTC
-SetupRegisters:
+SetupRegisters::
 	xor a
 	ldh [rSCY], a
 	ldh [rSCX], a
@@ -28,11 +28,11 @@ SetupRegisters:
 	ld [MBC3LatchClock], a
 	ld a, SRAM_ENABLE
 	ld [MBC3SRamEnable], a
-NoOp:
+NoOp::
 	ret
 
 ; sets wConsole and, if CGB, selects WRAM bank 1 and switches to double speed mode
-DetectConsole:
+DetectConsole::
 	ld b, CONSOLE_CGB
 	cp GBC
 	jr z, .got_console
@@ -52,7 +52,7 @@ DetectConsole:
 	ret
 
 ; initialize the palettes (both monochrome and color)
-SetupPalettes:
+SetupPalettes::
 	ld hl, wBGP
 	ld a, %11100100
 	ldh [rBGP], a
@@ -82,14 +82,14 @@ SetupPalettes:
 	call FlushAllCGBPalettes
 	ret
 
-InitialPalette:
+InitialPalette::
 	rgb 28, 28, 24
 	rgb 21, 21, 16
 	rgb 10, 10, 08
 	rgb 00, 00, 00
 
 ; clear VRAM tile data ([wTileMapFill] should be an empty tile)
-SetupVRAM:
+SetupVRAM::
 	call FillTileMap
 	call CheckForCGB
 	jr c, .vram0
@@ -109,7 +109,7 @@ SetupVRAM:
 	ret
 
 ; fill VRAM0 BG map 0 with [wTileMapFill] and VRAM1 BG map 0 with $00
-FillTileMap:
+FillTileMap::
 	call BankswitchVRAM0
 	ld hl, v0BGMap0
 	ld bc, v0BGMap1 - v0BGMap0
@@ -137,7 +137,7 @@ FillTileMap:
 	ret
 
 ; zero work RAM, stack area, and high RAM ($C000-$DFFF, $FF80-$FFEF)
-ZeroRAM:
+ZeroRAM::
 	ld hl, $c000
 	ld bc, $e000 - $c000
 .zero_wram_loop

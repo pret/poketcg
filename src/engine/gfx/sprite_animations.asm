@@ -1,6 +1,6 @@
 ; disables all sprite animations
 ; and clears memory related to sprites
-Func_1296e:
+Func_1296e::
 	push af
 	ld a, [wd5d7]
 	or a
@@ -137,7 +137,7 @@ GetSpriteAnimCounter:
 	pop hl
 	ret
 
-_HandleAllSpriteAnimations:
+_HandleAllSpriteAnimations::
 	push af
 	ld a, [wd5d7] ; skip animating this frame if enabled
 	or a

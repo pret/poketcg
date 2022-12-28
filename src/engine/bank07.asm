@@ -49,7 +49,7 @@ Func_1c003: ; unreferenced
 	call SetWindowOn
 	ret
 
-Func_1c056:
+Func_1c056::
 	push hl
 	push bc
 	push de
@@ -466,7 +466,7 @@ SetNPCDirection:
 	pop hl
 	ret
 
-HandleAllNPCMovement:
+HandleAllNPCMovement::
 	push hl
 	push bc
 	push de

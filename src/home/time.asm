@@ -1,5 +1,5 @@
 ; timer interrupt handler
-TimerHandler:
+TimerHandler::
 	push af
 	push hl
 	push de
@@ -37,7 +37,7 @@ TimerHandler:
 	reti
 
 ; increment play time counter by a tick
-IncrementPlayTimeCounter:
+IncrementPlayTimeCounter::
 	ld a, [wPlayTimeCounterEnable]
 	or a
 	ret z
@@ -67,7 +67,7 @@ IncrementPlayTimeCounter:
 	ret
 
 ; setup timer to 16384/68 ≈ 240.94 Hz
-SetupTimer:
+SetupTimer::
 	ld b, -68 ; Value for Normal Speed
 	call CheckForCGB
 	jr c, .set_timer
@@ -85,7 +85,7 @@ SetupTimer:
 	ret
 
 ; return carry if not CGB
-CheckForCGB:
+CheckForCGB::
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ret z

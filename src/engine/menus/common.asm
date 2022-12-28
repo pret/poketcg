@@ -39,7 +39,7 @@ Func_758a:
 	farcall Func_19eb4
 	ret
 
-SetUpAndStartLinkDuel:
+SetUpAndStartLinkDuel::
 	farcall _SetUpAndStartLinkDuel
 	ret
 

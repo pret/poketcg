@@ -1,5 +1,5 @@
 ; returns h * l in hl
-HtimesL:
+HtimesL::
 	push de
 	ld a, h
 	ld e, l
@@ -20,7 +20,7 @@ HtimesL:
 	ret
 
 ; return a random number between 0 and a (exclusive) in a
-Random:
+Random::
 	push hl
 	ld h, a
 	call UpdateRNGSources
@@ -31,7 +31,7 @@ Random:
 	ret
 
 ; get the next random numbers of the wRNG1 and wRNG2 sequences
-UpdateRNGSources:
+UpdateRNGSources::
 	push hl
 	push de
 	ld hl, wRNG1

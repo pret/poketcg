@@ -126,7 +126,7 @@ SetNPCMatchStartTheme:
 
 INCLUDE "data/npcs.asm"
 
-_GetNPCDuelConfigurations:
+_GetNPCDuelConfigurations::
 	push hl
 	push bc
 	push de

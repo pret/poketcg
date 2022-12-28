@@ -1,6 +1,6 @@
 ; continuation of Bank0 Start
 ; meant as the main loop, but the game never returns from _GameLoop anyway
-GameLoop:
+GameLoop::
 	di
 	ld sp, $e000
 	call ResetSerial
@@ -35,7 +35,7 @@ GameLoop:
 .reset_game
 	jp Reset
 
-InitSaveDataAndSetUppercase:
+InitSaveDataAndSetUppercase::
 	farcall InitSaveData
 	ld a, 1
 	ld [wUppercaseHalfWidthLetters], a

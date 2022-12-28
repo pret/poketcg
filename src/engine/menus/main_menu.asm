@@ -1,7 +1,7 @@
 ; usually, the game doesn't loop here at all, since as soon as a main menu option
 ; is selected, there is no need to come back to the menu.
 ; the only exception is after returning from Card Pop!
-_GameLoop:
+_GameLoop::
 	call ZeroObjectPositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]

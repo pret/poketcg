@@ -2,7 +2,7 @@
 ; a = scene ID (SCENE_* constant)
 ; b = base X position of scene in tiles
 ; c = base Y position of scene in tiles
-_LoadScene:
+_LoadScene::
 	push hl
 	push bc
 	push de
@@ -243,7 +243,7 @@ SGBPacket_CardPop:
 	ds 6 ; data set 2
 	ds 2 ; data set 3
 
-Func_12fc6:
+Func_12fc6::
 	ld a, [wd291]
 	push af
 	push de

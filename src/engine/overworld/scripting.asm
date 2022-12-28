@@ -95,7 +95,7 @@ Func_c9bc:
 Func_c9c0:
 	ld l, MAP_SCRIPT_MOVED_PLAYER
 
-CallMapScriptPointerIfExists:
+CallMapScriptPointerIfExists::
 	call GetMapScriptPointer
 	ret nc
 	jp hl
@@ -210,7 +210,7 @@ GetStackEventValue:
 
 ; returns the event var's value in a
 ; also ors it with itself before returning
-GetEventValue:
+GetEventValue::
 	push hl
 	push bc
 	call GetEventVar
@@ -546,7 +546,7 @@ Script_LegendaryCardRightSpark:
 ; Enters into the script loop, continuing until wBreakScriptLoop > 0
 ; When the loop is broken, it resumes normal code execution where script ended
 ; Note: Some scripts "double return" and skip this.
-RST20:
+RST20::
 	pop hl
 	ld a, l
 	ld [wScriptPointer], a
@@ -877,7 +877,7 @@ ScriptCommand_MoveActiveNPCByDirection:
 
 ; Moves an NPC given the list of directions pointed to by bc
 ; set bit 7 to only rotate the NPC
-ExecuteNPCMovement:
+ExecuteNPCMovement::
 	farcall StartNPCMovement
 .loop
 	call DoFrameIfLCDEnabled

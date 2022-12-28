@@ -1,6 +1,6 @@
 ; return nc if wd42a, wd4c0, and wAnimationQueue[] are all equal to $ff
 ; nc means no animation is playing (or animation(s) has/have ended)
-CheckAnyAnimationPlaying:
+CheckAnyAnimationPlaying::
 	push hl
 	push bc
 	ld a, [wd42a]
@@ -21,9 +21,9 @@ CheckAnyAnimationPlaying:
 ; plays duel animation
 ; the animations are loaded to a buffer
 ; and played in order, so they can be stacked
-; input:
+; input::
 ; - a = animation index
-PlayDuelAnimation:
+PlayDuelAnimation::
 	ld [wTempAnimation], a ; hold an animation temporarily
 	ldh a, [hBankROM]
 	push af
@@ -61,7 +61,7 @@ PlayDuelAnimation:
 	call BankswitchROM
 	ret
 
-Func_3ba2:
+Func_3ba2::
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1cac5)
@@ -72,7 +72,7 @@ Func_3ba2:
 	call BankswitchROM
 	ret
 
-Func_3bb5:
+Func_3bb5::
 	xor a
 	ld [wd4c0], a
 	ldh a, [hBankROM]
@@ -88,14 +88,14 @@ Func_3bb5:
 	ret
 
 ; writes from hl the pointer to the function to be called by DoFrame
-SetDoFrameFunction:
+SetDoFrameFunction::
 	ld a, l
 	ld [wDoFrameFunction], a
 	ld a, h
 	ld [wDoFrameFunction + 1], a
 	ret
 
-ResetDoFrameFunction:
+ResetDoFrameFunction::
 	push hl
 	ld hl, NULL
 	call SetDoFrameFunction

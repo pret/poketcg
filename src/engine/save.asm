@@ -38,7 +38,7 @@ SaveAndBackupData:
 	pop de
 	ret
 
-_SaveGeneralSaveData:
+_SaveGeneralSaveData::
 	push de
 	call GetReceivedLegendaryCards
 	ld de, sGeneralSaveData
@@ -200,7 +200,7 @@ ValidateBackupGeneralSaveData:
 
 ; returns carry if no error
 ; is found in sGeneralSaveData
-_ValidateGeneralSaveData:
+_ValidateGeneralSaveData::
 	push de
 	call EnableSRAM
 	ld de, sGeneralSaveData
@@ -369,7 +369,7 @@ LoadBackupSaveData:
 	pop hl
 	ret
 
-_LoadGeneralSaveData:
+_LoadGeneralSaveData::
 	push de
 	ld de, sGeneralSaveData
 	call LoadGeneralSaveDataFromDE
@@ -503,7 +503,7 @@ WRAMToSRAMMapper:
 ; save the game
 ; if c is 0, save the player at their current position
 ; otherwise, save the player in Mason's lab
-_SaveGame:
+_SaveGame::
 	ld a, c
 	or a
 	jr nz, .force_mason_lab
@@ -526,7 +526,7 @@ _SaveGame:
 	call SaveAndBackupData
 	ret
 
-_AddCardToCollectionAndUpdateAlbumProgress:
+_AddCardToCollectionAndUpdateAlbumProgress::
 	ld [wCardToAddToCollection], a
 	push hl
 	push bc

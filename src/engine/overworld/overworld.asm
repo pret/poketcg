@@ -1,4 +1,4 @@
-LoadMap:
+LoadMap::
 	call DisableLCD
 	call EnableSRAM
 	bank1call DiscardSavedDuelData
@@ -665,7 +665,7 @@ Func_c469:
 	ld [wd234], a
 	ret
 
-SetScreenScrollWram:
+SetScreenScrollWram::
 	ld a, [wSCXBuffer]
 	ld [wSCX], a
 	ld a, [wSCYBuffer]
@@ -775,7 +775,7 @@ Func_c53d:
 	call nz, Func_c6dc
 	ret
 
-Func_c554:
+Func_c554::
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
 	ld a, [wCurMap]
@@ -938,7 +938,7 @@ AttemptPlayerMovement:
 	pop hl
 	ret
 
-FindPlayerMovementFromDirection:
+FindPlayerMovementFromDirection::
 	ld a, [wPlayerDirection]
 
 FindPlayerMovementWithOffset:

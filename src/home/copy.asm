@@ -1,6 +1,6 @@
 ; copy c bytes of data from hl to de, b times.
 ; used to copy gfx data with c = TILE_SIZE
-CopyGfxData:
+CopyGfxData::
 	ld a, [wLCDC]
 	rla
 	jr nc, .next_tile
@@ -35,7 +35,7 @@ CopyGfxData:
 	ret
 
 ; copy bc bytes from hl to de. preserves all registers except af
-CopyDataHLtoDE_SaveRegisters:
+CopyDataHLtoDE_SaveRegisters::
 	push hl
 	push de
 	push bc
@@ -46,7 +46,7 @@ CopyDataHLtoDE_SaveRegisters:
 	ret
 
 ; copy bc bytes from hl to de
-CopyDataHLtoDE:
+CopyDataHLtoDE::
 	ld a, [hli]
 	ld [de], a
 	inc de

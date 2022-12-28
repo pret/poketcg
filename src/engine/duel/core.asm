@@ -1,12 +1,12 @@
 ; try to resume a saved duel from the main menu
-TryContinueDuel:
+TryContinueDuel::
 	call SetupDuel
 	call LoadAndValidateDuelSaveData
 	ldtx hl, BackUpIsBrokenText
 	jr c, HandleFailedToContinueDuel
 ;	fallthrough
 
-_ContinueDuel:
+_ContinueDuel::
 	ld hl, sp+$00
 	ld a, l
 	ld [wDuelReturnAddress], a
@@ -28,7 +28,7 @@ HandleFailedToContinueDuel:
 
 ; this function begins the duel after the opponent's graphics, name and deck have been introduced
 ; loads both player's decks and sets up the variables and resources required to begin a duel.
-StartDuel_VSAIOpp:
+StartDuel_VSAIOpp::
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	ld a, DUELIST_TYPE_PLAYER
@@ -2327,7 +2327,7 @@ Func_4f2d:
 ; draw the main scene during a duel, except the contents of the bottom text box,
 ; which depend on the type of duelist holding the turn.
 ; includes the background, both arena Pokemon, and both HUDs.
-DrawDuelMainScene:
+DrawDuelMainScene::
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_PLAYER
@@ -2399,7 +2399,7 @@ DrawDuelMainScene:
 
 ; draws the main elements of the main duel interface, including HUDs, HPs, card names
 ; and color symbols, attached cards, and other information, of both duelists.
-DrawDuelHUDs:
+DrawDuelHUDs::
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_PLAYER
@@ -5725,7 +5725,7 @@ Func_64fc:
 ; Pokemon Power. Includes the card's information above, and the Pokemon Power's
 ; description below.
 ; input: hTempPlayAreaLocation_ff9d
-DisplayUsePokemonPowerScreen:
+DisplayUsePokemonPowerScreen::
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld [wCurPlayAreaSlot], a
 	xor a
@@ -5953,7 +5953,7 @@ DisplayOpponentUsedAttackScreen:
 
 ; display card detail when a trainer card is used, and print "Used xxx"
 ; hTempCardIndex_ff9f contains the card's deck index
-DisplayUsedTrainerCardDetailScreen:
+DisplayUsedTrainerCardDetailScreen::
 	ldh a, [hTempCardIndex_ff9f]
 	ldtx hl, UsedText
 	call DisplayCardDetailScreen
@@ -5982,7 +5982,7 @@ PrintUsedTrainerCardDescription:
 ; save data of the current duel to sCurrentDuel
 ; byte 0 is $01, bytes 1 and 2 are the checksum, byte 3 is [wDuelType]
 ; next $33a bytes come from DuelDataToSave
-SaveDuelData:
+SaveDuelData::
 	farcall StubbedUnusedSaveDataValidation
 	ld de, sCurrentDuel
 ;	fallthrough
@@ -5990,7 +5990,7 @@ SaveDuelData:
 ; save data of the current duel to de (in SRAM)
 ; byte 0 is $01, bytes 1 and 2 are the checksum, byte 3 is [wDuelType]
 ; next $33a bytes come from DuelDataToSave
-SaveDuelDataToDE:
+SaveDuelDataToDE::
 	call EnableSRAM
 	push de
 	inc de
@@ -7092,7 +7092,7 @@ HandlePoisonDamage:
 ; and a pointer in hl to the wLoadedCard* buffer where the card data is loaded,
 ; check if the card is Clefairy Doll or Mysterious Fossil, and, if so, convert it
 ; to a Pokemon card in the wLoadedCard* buffer, using .trainer_to_pkmn_data.
-ConvertSpecialTrainerCardToPokemon:
+ConvertSpecialTrainerCardToPokemon::
 	ld c, a
 	ld a, [hl]
 	cp TYPE_TRAINER
@@ -7148,7 +7148,7 @@ ConvertSpecialTrainerCardToPokemon:
 
 ; this function applies status conditions to the defending Pokemon,
 ; returned by the effect functions in wEffectFunctionsFeedback
-Func_6df1:
+Func_6df1::
 	xor a
 	ld [wPlayerArenaCardLastTurnStatus], a
 	ld [wOpponentArenaCardLastTurnStatus], a
@@ -7215,7 +7215,7 @@ ApplyStatusConditionToArenaPokemon:
 	ld [de], a
 	ret
 
-Func_6e49:
+Func_6e49::
 	call HandleDestinyBondSubstatus
 	; fallthrough
 
@@ -7491,7 +7491,7 @@ Func_6ff7:
 
 ; print one of the "There was no effect from" texts depending
 ; on the value at wNoEffectFromWhichStatus (NO_STATUS or a status condition constant)
-PrintThereWasNoEffectFromStatusText:
+PrintThereWasNoEffectFromStatusText::
 	ld a, [wNoEffectFromWhichStatus]
 	or a
 	jr nz, .status
@@ -7762,7 +7762,7 @@ TakeAPrizes:
 
 ; clear the non-turn holder's duelvars starting at DUELVARS_ARENA_CARD_DISABLED_ATTACK_INDEX
 ; these duelvars only last a two-player turn at most.
-ClearNonTurnTemporaryDuelvars:
+ClearNonTurnTemporaryDuelvars::
 	ld a, DUELVARS_ARENA_CARD_DISABLED_ATTACK_INDEX
 	call GetNonTurnDuelistVariable
 	xor a
@@ -7778,7 +7778,7 @@ ClearNonTurnTemporaryDuelvars:
 
 ; same as ClearNonTurnTemporaryDuelvars, except the non-turn holder's arena
 ; Pokemon status condition is copied to wccc5
-ClearNonTurnTemporaryDuelvars_CopyStatus:
+ClearNonTurnTemporaryDuelvars_CopyStatus::
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
 	ld [wccc5], a
@@ -7788,7 +7788,7 @@ ClearNonTurnTemporaryDuelvars_CopyStatus:
 ; update non-turn holder's DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
 ; if wccef == 0: set to [wDealtDamage]
 ; if wceef != 0: set to 0
-Func_7195:
+Func_7195::
 	ld a, DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
 	call GetNonTurnDuelistVariable
 	ld a, [wccef]
@@ -7805,7 +7805,7 @@ Func_7195:
 	ld [hl], a
 	ret
 
-_TossCoin:
+_TossCoin::
 	ld [wCoinTossTotalNum], a
 	ld a, [wDuelDisplayedScreen]
 	cp COIN_TOSS
@@ -8195,12 +8195,12 @@ SelectComputerOpponentData:
 	textitem  3, 14, SelectComputerOpponentText
 	db $ff
 
-Func_7415:
+Func_7415::
 	xor a
 	ld [wce7e], a
 	ret
 
-Func_741a:
+Func_741a::
 	ld hl, wEffectFunctionsFeedbackIndex
 	ld a, [hl]
 	or a
@@ -8252,7 +8252,7 @@ Func_741a:
 ; this is a simple version of PlayAttackAnimation_DealAttackDamage that doesn't
 ; take into account status conditions, damage modifiers, etc, for damage calculation.
 ; used for confusion damage to self and for damage to benched Pokemon, for example
-PlayAttackAnimation_DealAttackDamageSimple:
+PlayAttackAnimation_DealAttackDamageSimple::
 	push hl
 	push de
 	call PlayAttackAnimation
@@ -8271,7 +8271,7 @@ PlayAttackAnimation_DealAttackDamageSimple:
 	ret
 
 ; if [wLoadedAttackAnimation] != 0, wait until the animation is over
-WaitAttackAnimation:
+WaitAttackAnimation::
 	ld a, [wLoadedAttackAnimation]
 	or a
 	ret z
@@ -8288,7 +8288,7 @@ WaitAttackAnimation:
 ; - [wLoadedAttackAnimation]: animation to play
 ; - de: damage dealt by the attack (to display the animation with the number)
 ; - c: a wDamageEffectiveness constant (to print WEAK or RESIST if necessary)
-PlayAttackAnimation:
+PlayAttackAnimation::
 	ldh a, [hWhoseTurn]
 	push af
 	push hl

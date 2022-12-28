@@ -2,7 +2,7 @@
 ; de = source of compressed data
 ; b = HIGH byte of secondary buffer ($100 bytes of buffer space)
 ; also clears this $100 byte space
-InitDataDecompression:
+InitDataDecompression::
 	ld hl, wDecompSourcePosPtr
 	ld [hl], e
 	inc hl
@@ -33,10 +33,10 @@ InitDataDecompression:
 ; decompresses data
 ; uses values initialized by InitDataDecompression
 ; wDecompSourcePosPtr holds the pointer for compressed source
-; input:
+; input::
 ; bc = row width
 ; de = buffer to place decompressed data
-DecompressData:
+DecompressData::
 	push hl
 	push de
 .loop
@@ -53,7 +53,7 @@ DecompressData:
 	pop hl
 	ret
 
-; decompression works as follows:
+; decompression works as follows::
 ; first a command byte is read that will dictate how the
 ; following bytes will be copied
 ; the position will then move to the next byte (0xXY), and
@@ -63,13 +63,13 @@ DecompressData:
 ; which means it stores 0xXY in memory as number of bytes to repeat
 ; from a given offset. This offset is in the next byte in the data,
 ; 0xZZ, which tells the offset to start repeating. A toggle is switched
-; each time the algorithm hits "repeat mode":
+; each time the algorithm hits "repeat mode"::
 ;  - if off -> on it reads 0xXY and stores it,
 ;  then repeats (0x0X + 2) bytes from the offset starting at 0xZZ;
 ;  - if on -> off, then the data only provides the offset,
 ;  and the previous byte read for number of bytes to repeat, 0xXY, is reused
 ;  in which case (0x0Y + 2) bytes are repeated starting from the offset.
-.Decompress:
+.Decompress::
 	ld hl, wDecompNumBytesToRepeat
 	ld a, [hl]
 	or a

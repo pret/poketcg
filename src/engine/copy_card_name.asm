@@ -1,6 +1,6 @@
 ; copy the name and level of the card at wLoadedCard1 to wDefaultText
 ; a = length in number of tiles (the resulting string will be padded with spaces to match it)
-_CopyCardNameAndLevel:
+_CopyCardNameAndLevel::
 	push bc
 	push de
 	ld [wCardNameLength], a

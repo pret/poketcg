@@ -1,4 +1,4 @@
-PlayCreditsSequence:
+PlayCreditsSequence::
 	ld a, MUSIC_STOP
 	call PlaySong
 	call Func_1d705

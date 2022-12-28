@@ -1,9 +1,9 @@
 ; decompresses data from a given bank
 ; uses values initialized by InitDataDecompression
-; input:
+; input::
 ; bc = row width
 ; de = buffer to place decompressed data
-DecompressDataFromBank:
+DecompressDataFromBank::
 	ldh a, [hBankROM]
 	push af
 	ld a, [wTempPointerBank]
@@ -14,7 +14,7 @@ DecompressDataFromBank:
 	ret
 
 ; Copies bc bytes from [wTempPointer] to de
-CopyBankedDataToDE:
+CopyBankedDataToDE::
 	ldh a, [hBankROM]
 	push af
 	push hl
@@ -31,7 +31,7 @@ CopyBankedDataToDE:
 	ret
 
 ; fill bc bytes of data at hl with a
-FillMemoryWithA:
+FillMemoryWithA::
 	push hl
 	push de
 	push bc
@@ -49,7 +49,7 @@ FillMemoryWithA:
 	ret
 
 ; fill 2*bc bytes of data at hl with d,e
-FillMemoryWithDE:
+FillMemoryWithDE::
 	push hl
 	push bc
 .loop
@@ -65,8 +65,8 @@ FillMemoryWithDE:
 	pop hl
 	ret
 
-; gets far byte a:hl, outputs value in a
-GetFarByte:
+; gets far byte a::hl, outputs value in a
+GetFarByte::
 	push hl
 	push af
 	ldh a, [hBankROM]

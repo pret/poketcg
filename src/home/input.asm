@@ -1,6 +1,6 @@
 ; read joypad data to refresh hKeysHeld, hKeysPressed, and hKeysReleased
 ; the A + B + Start + Select combination resets the game
-ReadJoypad:
+ReadJoypad::
 	ld a, JOY_BTNS_SELECT
 	ldh [rJOYP], a
 	ldh a, [rJOYP]
@@ -36,16 +36,16 @@ ReadJoypad:
 	and BUTTONS
 	cp BUTTONS
 	jr nz, SaveButtonsHeld
-	; A + B + Start + Select: reset game
+	; A + B + Start + Select:: reset game
 	call ResetSerial
 ;	fallthrough
 
-Reset:
+Reset::
 	ld a, [wInitialA]
 	di
 	jp Start
 
-SaveButtonsHeld:
+SaveButtonsHeld::
 	ld a, c
 	ldh [hKeysHeld], a
 	ld a, JOY_BTNS_SELECT | JOY_DPAD_SELECT
@@ -53,7 +53,7 @@ SaveButtonsHeld:
 	ret
 
 ; clear joypad hmem data
-ClearJoypad:
+ClearJoypad::
 	push hl
 	ld hl, hDPadRepeat
 	xor a

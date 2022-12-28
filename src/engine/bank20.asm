@@ -919,7 +919,7 @@ ProcessOWFrameset:
 
 ; for each of the loaded frameset subgroups
 ; load their tiles and advance their durations
-DoLoadedFramesetSubgroupsFrame:
+DoLoadedFramesetSubgroupsFrame::
 	ld a, [wNumLoadedFramesetSubgroups]
 	or a
 	ret z
@@ -1556,7 +1556,7 @@ Func_80cd7:
 	db SPRITE_OW_GRANNY,   SPRITE_ANIM_LIGHT_NPC_UP,     SPRITE_ANIM_YELLOW_NPC_UP    ; $2b
 	db SPRITE_OW_AMY,      SPRITE_ANIM_SGB_AMY_LAYING,   SPRITE_ANIM_CGB_AMY_LAYING   ; $2c
 
-SpriteNullAnimationPointer:
+SpriteNullAnimationPointer::
 	dw SpriteNullAnimationFrame
 
 SpriteNullAnimationFrame:

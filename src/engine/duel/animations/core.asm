@@ -1,4 +1,4 @@
-Func_1c8bc:
+Func_1c8bc::
 	push hl
 	push bc
 	call Set_OBJ_8x8
@@ -25,7 +25,7 @@ Func_1c8bc:
 	pop hl
 	ret
 
-PlayLoadedDuelAnimation:
+PlayLoadedDuelAnimation::
 	ld a, [wDoFrameFunction + 0]
 	cp LOW(Func_3ba2)
 	jr nz, .error
@@ -274,7 +274,7 @@ AnimationCoordinates:
 
 ; appends to end of wDuelAnimBuffer
 ; the current duel animation
-LoadDuelAnimationToBuffer:
+LoadDuelAnimationToBuffer::
 	push hl
 	push bc
 	ld a, [wDuelAnimBufferCurPos]
@@ -376,7 +376,7 @@ GetAnimationData:
 	pop bc
 	ret
 
-Func_1cac5:
+Func_1cac5::
 	ld a, [wd42a]
 	cp $ff
 	jr nz, .asm_1cb03
@@ -431,7 +431,7 @@ Func_1cac5:
 	ld [wd4c0], a
 	jr .asm_1cafb
 
-Func_1cb18:
+Func_1cb18::
 	push hl
 	push bc
 	push de
