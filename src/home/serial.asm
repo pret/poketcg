@@ -101,7 +101,7 @@ SerialHandler::
 	push bc
 	ld a, [wce63]        ;
 	or a                 ;
-	jr z, .asm_d35       ; if [wce63] nonzero::
+	jr z, .asm_d35       ; if [wce63] nonzero:
 	call Func_3189       ; ?
 	jr .done             ; return
 .asm_d35

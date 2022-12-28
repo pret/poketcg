@@ -3,7 +3,7 @@ GetArenaCardColor::
 	xor a
 ;	fallthrough
 
-; input:: a = play area location offset (PLAY_AREA_*) of the desired card
+; input: a = play area location offset (PLAY_AREA_*) of the desired card
 ; return the turn holder's card's color in a, accounting for Venomoth's Shift Pokemon Power if active
 GetPlayAreaCardColor::
 	push hl

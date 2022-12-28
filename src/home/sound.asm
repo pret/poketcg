@@ -8,12 +8,12 @@ PlaySong::
 	farcall _PlaySong
 	ret
 
-; return a = 0:: song finished, a = 1:: song not finished
+; return a = 0: song finished, a = 1: song not finished
 AssertSongFinished::
 	farcall _AssertSongFinished
 	ret
 
-; return a = 0:: SFX finished, a = 1:: SFX not finished
+; return a = 0: SFX finished, a = 1: SFX not finished
 AssertSFXFinished::
 	farcall _AssertSFXFinished
 	ret

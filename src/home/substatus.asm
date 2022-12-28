@@ -435,7 +435,7 @@ HandleTransparency::
 
 ; return carry and return the appropriate text id in hl if the target has an
 ; special status or power that prevents any damage or effect done to it this turn
-; input:: a = NO_DAMAGE_OR_EFFECT_*
+; input: a = NO_DAMAGE_OR_EFFECT_*
 CheckNoDamageOrEffect::
 	ld a, [wNoDamageOrEffect]
 	or a
@@ -503,7 +503,7 @@ CheckCannotUseDueToStatus_OnlyToxicGasIfANon0::
 ; return, in a, the amount of times that the Pokemon card with a given ID is found in the
 ; play area of both duelists. Also return carry if the Pokemon card is at least found once.
 ; if the arena Pokemon is asleep, confused, or paralyzed (Pkmn Power-incapable), it doesn't count.
-; input:: a = Pokemon card ID to search
+; input: a = Pokemon card ID to search
 CountPokemonIDInBothPlayAreas::
 	push bc
 	ld [wTempPokemonID_ce7c], a
@@ -525,7 +525,7 @@ CountPokemonIDInBothPlayAreas::
 ; return, in a, the amount of times that the Pokemon card with a given ID is found in the
 ; turn holder's play area. Also return carry if the Pokemon card is at least found once.
 ; if the arena Pokemon is asleep, confused, or paralyzed (Pkmn Power-incapable), it doesn't count.
-; input:: a = Pokemon card ID to search
+; input: a = Pokemon card ID to search
 CountPokemonIDInPlayArea::
 	push hl
 	push de

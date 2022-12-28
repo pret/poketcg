@@ -1,8 +1,8 @@
 ; initializes parameters for a card list (e.g. list of hand cards in a duel, or booster pack cards)
-; input::
+; input:
    ; a = list length
    ; de = initial page scroll offset, initial item (in the visible page)
-   ; hl:: 9 bytes with the rest of the parameters
+   ; hl: 9 bytes with the rest of the parameters
 InitializeCardListParameters::
 	ld [wNumListItems], a
 	ld a, d
@@ -51,7 +51,7 @@ HandleCardListInput::
 	ret
 
 ; initializes parameters for a menu, given the 8 bytes starting at hl,
-; which are loaded to the following addresses::
+; which are loaded to the following addresses:
 ;	wCursorXPosition, wCursorYPosition, wYDisplacementBetweenMenuItems, wNumMenuItems,
 ;	wCursorTile, wTileBehindCursor, wMenuFunctionPointer.
 ; also sets the current menu item (wCurMenuItem) to the one specified in register a.
@@ -72,7 +72,7 @@ InitializeMenuParameters::
 
 ; returns with the carry flag set if A or B were pressed
 ; returns a = 0 if A was pressed, a = -1 if B was pressed
-; note:: return values still subject to those of the function at [wMenuFunctionPointer] if any
+; note: return values still subject to those of the function at [wMenuFunctionPointer] if any
 HandleMenuInput::
 	xor a
 	ld [wRefreshMenuCursorSFX], a
@@ -310,11 +310,11 @@ DuelMenuCursorCoords::
 	db 14, 16 ; Done
 
 ; print the items of a list of cards (hand cards in a duel, cards from a booster pack...)
-; and initialize the parameters of the list given::
+; and initialize the parameters of the list given:
   ; wDuelTempList = card list source
   ; a = list length
   ; de = initial page scroll offset, initial item (in the visible page)
-  ; hl:: 9 bytes with the rest of the parameters
+  ; hl: 9 bytes with the rest of the parameters
 PrintCardListItems::
 	call InitializeCardListParameters
 	ld hl, wMenuFunctionPointer
@@ -705,7 +705,7 @@ CopyCardNameAndLevel::
 
 ; sets cursor parameters for navigating in a text box, but using
 ; default values for the cursor tile (SYM_CURSOR_R) and the tile behind it (SYM_SPACE).
-; d,e:: coordinates of the cursor
+; d,e: coordinates of the cursor
 SetCursorParametersForTextBox_Default::
 	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
@@ -730,8 +730,8 @@ WaitForButtonAorB::
 	ret
 
 ; sets cursor parameters for navigating in a text box
-; d,e:: coordinates of the cursor
-; b,c:: tile numbers of the cursor and of the tile behind it
+; d,e: coordinates of the cursor
+; b,c: tile numbers of the cursor and of the tile behind it
 SetCursorParametersForTextBox::
 	xor a
 	ld hl, wCurMenuItem
@@ -891,7 +891,7 @@ YesOrNoMenuWithText::
 ;	fallthrough
 
 ; prints the YES / NO menu items at coordinates x,y = 7,16 and handles input
-; input:: wDefaultYesOrNo. returns carry if "no" selected
+; input: wDefaultYesOrNo. returns carry if "no" selected
 YesOrNoMenu::
 	lb de, 7, 16 ; x, y
 	call PrintYesOrNoItems
@@ -899,7 +899,7 @@ YesOrNoMenu::
 	jr HandleYesOrNoMenu
 
 ; prints the YES / NO menu items at coordinates x,y = 3,16 and handles input
-; input:: wDefaultYesOrNo. returns carry if "no" selected
+; input: wDefaultYesOrNo. returns carry if "no" selected
 YesOrNoMenuWithText_LeftAligned::
 	call DrawNarrowTextBox_PrintTextNoDelay
 	lb de, 3, 16 ; x, y

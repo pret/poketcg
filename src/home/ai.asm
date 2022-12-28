@@ -71,7 +71,7 @@ AIDoAction_TakePrize::
 
 ; calls the appropriate AI routine to handle action,
 ; depending on the deck ID (see engine/duel/ai/deck_ai.asm)
-; input::
+; input:
 ;	- a = AIACTION_* constant
 AIDoAction::
 	ld c, a

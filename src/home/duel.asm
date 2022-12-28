@@ -12,7 +12,7 @@ SaveDuelStateToSRAM::
 	ld a, [hl]
 	inc [hl]
 	call DisableSRAM
-	; select hl = SRAM3::(a000 + $400 * [s0a008] & $3)
+	; select hl = SRAM3:(a000 + $400 * [s0a008] & $3)
 	; save wDuelTurns, non-turn holder's arena card ID, turn holder's arena card ID
 	and $3
 	add HIGH($a000) / 4
@@ -44,7 +44,7 @@ SaveDuelStateToSRAM::
 	ld [hli], a
 	ld a, [wTempTurnDuelistCardID]
 	ld [hli], a
-	; save duel data to SRAM3::(a000 + $400 * [s0a008] & $3) + $0010
+	; save duel data to SRAM3:(a000 + $400 * [s0a008] & $3) + $0010
 	pop hl
 	ld de, $0010
 	add hl, de
@@ -346,7 +346,7 @@ MoveDiscardPileCardToHand::
 	ret
 
 ; return in the z flag whether turn holder's prize a (0-7) has been drawn or not
-; z:: drawn, nz:: not drawn
+; z: drawn, nz: not drawn
 CheckPrizeTaken::
 	ld e, a
 	ld d, 0
@@ -430,8 +430,8 @@ CreateDeckCardList::
 
 ; fill wDuelTempList with the turn holder's energy cards
 ; in the arena or in a bench slot (their 0-59 deck indexes).
-; if a == 0:: search in CARD_LOCATION_ARENA
-; if a != 0:: search in CARD_LOCATION_BENCH_[A]
+; if a == 0: search in CARD_LOCATION_ARENA
+; if a != 0: search in CARD_LOCATION_BENCH_[A]
 ; return carry if no energy cards were found
 CreateArenaOrBenchEnergyCardList::
 	or CARD_LOCATION_PLAY_AREA
@@ -520,7 +520,7 @@ SortHandCardsByID::
 	jr nz, .loop2
 	ret
 
-; returns::
+; returns:
 ; b = turn holder's number of cards in hand (DUELVARS_NUMBER_OF_CARDS_IN_HAND)
 ; hl = pointer to turn holder's last (newest) card in DUELVARS_HAND
 ; de = wDuelTempList
@@ -536,7 +536,7 @@ FindLastCardInHand::
 	ret
 
 ; shuffles the deck by swapping the position of each card with the position of another random card
-; input::
+; input:
    ; a  = how many cards to shuffle
    ; hl = DUELVARS_DECK_CARDS + [DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK]
 ShuffleCards::
@@ -681,7 +681,7 @@ GetCardInDuelTempList_OnlyDeckIndex::
 	pop hl
 	ret
 
-; given the deck index (0-59) of a card in [wDuelTempList + a], return::
+; given the deck index (0-59) of a card in [wDuelTempList + a], return:
 ;  - the id of the card with that deck index in register de
 ;  - [wDuelTempList + a] in hTempCardIndex_ff98 and in register a
 GetCardInDuelTempList::
@@ -991,7 +991,7 @@ ClearAllStatusConditions::
 
 ; Removes a Pokemon card from the hand and places it in the arena or first available bench slot.
 ; If the Pokemon is placed in the arena, the status conditions of the player's arena card are zeroed.
-; input::
+; input:
    ; a = deck index of the card
 ; return carry if there is no room for more Pokemon
 PutHandPokemonCardInPlayArea::
@@ -1051,10 +1051,10 @@ PutHandPokemonCardInPlayArea::
 
 ; Removes a card from the hand and changes its location to arena or bench. Given that
 ; DUELVARS_ARENA_CARD or DUELVARS_BENCH aren't affected, this function is meant for energy and trainer cards.
-; input::
+; input:
    ; a = deck index of the card
    ; e = play area location offset (PLAY_AREA_*)
-; returns::
+; returns:
    ; a = CARD_LOCATION_PLAY_AREA + e
 PutHandCardInPlayArea::
 	call RemoveCardFromHand
@@ -1217,7 +1217,7 @@ SwapPlayAreaPokemon::
 
 ; Find which and how many energy cards are attached to the turn holder's Pokemon card in the arena,
 ; or a Pokemon card in the bench, depending on the value of register e.
-; input:: e = location to check, i.e. PLAY_AREA_*
+; input: e = location to check, i.e. PLAY_AREA_*
 ; Feedback is returned in wAttachedEnergies and wTotalAttachedEnergies.
 GetPlayAreaCardAttachedEnergies::
 	push hl
@@ -1408,7 +1408,7 @@ Func_161e::
 	call TryExecuteEffectCommandFunction
 	ret
 
-; copies, given a card identified by register a (card ID)::
+; copies, given a card identified by register a (card ID):
 ; - e into wSelectedAttack and d into hTempCardIndex_ff9f
 ; - Attack1 (if e == 0) or Attack2 (if e == 1) data into wLoadedAttack
 ; - Also from that attack, its Damage field into wDamage
@@ -1427,7 +1427,7 @@ CopyAttackDataAndDamage_FromCardID::
 	pop de
 	jr CopyAttackDataAndDamage
 
-; copies, given a card identified by register d (0-59 deck index)::
+; copies, given a card identified by register d (0-59 deck index):
 ; - e into wSelectedAttack and d into hTempCardIndex_ff9f
 ; - Attack1 (if e == 0) or Attack2 (if e == 1) data into wLoadedAttack
 ; - Also from that attack, its Damage field into wDamage
@@ -1840,9 +1840,9 @@ DealConfusionDamageToSelf::
 	ld [wNoDamageOrEffect], a
 	ret
 
-; given a damage value at wDamage::
-; - if the non-turn holder's arena card is weak to the turn holder's arena card color:: double damage
-; - if the non-turn holder's arena card resists the turn holder's arena card color:: reduce damage by 30
+; given a damage value at wDamage:
+; - if the non-turn holder's arena card is weak to the turn holder's arena card color: double damage
+; - if the non-turn holder's arena card resists the turn holder's arena card color: reduce damage by 30
 ; - also apply Pluspower, Defender, and other kinds of damage reduction accordingly
 ; return resulting damage in de
 ApplyDamageModifiers_DamageToTarget::
@@ -1926,9 +1926,9 @@ TranslateColorToWR::
 InvertedPowersOf2::
 	db $80, $40, $20, $10, $08, $04, $02, $01
 
-; given a damage value at wDamage::
-; - if the turn holder's arena card is weak to its own color:: double damage
-; - if the turn holder's arena card resists its own color:: reduce damage by 30
+; given a damage value at wDamage:
+; - if the turn holder's arena card is weak to its own color: double damage
+; - if the turn holder's arena card resists its own color: reduce damage by 30
 ; return resulting damage in de
 ApplyDamageModifiers_DamageToSelf::
 	xor a
@@ -2005,8 +2005,8 @@ ApplyAttachedDefender::
 	ld d, a
 	ret
 
-; hl:: address to subtract HP from
-; de:: how much HP to subtract (damage to deal)
+; hl: address to subtract HP from
+; de: how much HP to subtract (damage to deal)
 ; returns carry if the HP does not become 0 as a result
 SubtractHP::
 	push hl
@@ -2297,9 +2297,9 @@ MoveCardToDiscardPileIfInArena::
 	ret
 
 ; calculate damage and max HP of card at PLAY_AREA_* in e.
-; input::
+; input:
 ;	e = PLAY_AREA_* of card;
-; output::
+; output:
 ;	a = damage;
 ;	c = max HP.
 GetCardDamageAndMaxHP::
@@ -2322,7 +2322,7 @@ GetCardDamageAndMaxHP::
 	ret
 
 ; check if a flag of wLoadedAttack is set
-; input::
+; input:
    ; a = %fffffbbb, where
       ; fffff = flag address counting from wLoadedAttackFlag1
       ; bbb = flag bit

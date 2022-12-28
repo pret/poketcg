@@ -33,7 +33,7 @@ InitDataDecompression::
 ; decompresses data
 ; uses values initialized by InitDataDecompression
 ; wDecompSourcePosPtr holds the pointer for compressed source
-; input::
+; input:
 ; bc = row width
 ; de = buffer to place decompressed data
 DecompressData::
@@ -53,7 +53,7 @@ DecompressData::
 	pop hl
 	ret
 
-; decompression works as follows::
+; decompression works as follows:
 ; first a command byte is read that will dictate how the
 ; following bytes will be copied
 ; the position will then move to the next byte (0xXY), and
@@ -63,7 +63,7 @@ DecompressData::
 ; which means it stores 0xXY in memory as number of bytes to repeat
 ; from a given offset. This offset is in the next byte in the data,
 ; 0xZZ, which tells the offset to start repeating. A toggle is switched
-; each time the algorithm hits "repeat mode"::
+; each time the algorithm hits "repeat mode":
 ;  - if off -> on it reads 0xXY and stores it,
 ;  then repeats (0x0X + 2) bytes from the offset starting at 0xZZ;
 ;  - if on -> off, then the data only provides the offset,

@@ -54,14 +54,14 @@ DisableLCD::
 	ldh [rIE], a
 	ret
 
-; set OBJ size:: 8x8
+; set OBJ size: 8x8
 Set_OBJ_8x8::
 	ld a, [wLCDC]
 	and LCDC_OBJ8
 	ld [wLCDC], a
 	ret
 
-; set OBJ size:: 8x16
+; set OBJ size: 8x16
 Set_OBJ_8x16::
 	ld a, [wLCDC]
 	or LCDC_OBJ16

@@ -23,7 +23,7 @@ OpenInPlayAreaScreen_FromSelectButton::
 
 ; loads tiles and icons to display Your Play Area / Opp. Play Area screen,
 ; and draws the screen according to the turn player
-; input:: h -> [wCheckMenuPlayAreaWhichDuelist] and l -> [wCheckMenuPlayAreaWhichLayout]
+; input: h -> [wCheckMenuPlayAreaWhichDuelist] and l -> [wCheckMenuPlayAreaWhichLayout]
 ; similar to DrawYourOrOppPlayArea (bank 2) except it also draws a wide text box.
 ; this is because bank 2's DrawYourOrOppPlayArea is supposed to come from the Check Menu,
 ; so the text box is always already there.

@@ -204,10 +204,10 @@ InitTextPrinting::
 	ret
 
 ; requests a text tile to be generated and prints it in the screen
-; different modes depending on hffb0::
-   ; hffb0 == $0:: generate and place text tile
-   ; hffb0 == $2 (bit 1 set):: only generate text tile?
-   ; hffb0 == $1 (bit 0 set):: not even generate it, but just update text buffers?
+; different modes depending on hffb0:
+   ; hffb0 == $0: generate and place text tile
+   ; hffb0 == $2 (bit 1 set): only generate text tile?
+   ; hffb0 == $1 (bit 0 set): not even generate it, but just update text buffers?
 Func_22ca::
 	push hl
 	push de
@@ -356,7 +356,7 @@ Func_235e::
 	jr nz, .asm_238a     ;                        ; linked list
 	inc h ; $c7          ;                        ;
 	ld a, [hl]           ; if key1[l] == e and    ;
-	cp d                 ;   key2[l] == d::        ;
+	cp d                 ;   key2[l] == d:        ;
 	jr z, .asm_238f      ;   break                ;
 .asm_238a
 	ld h, $c8            ;                        ;
@@ -383,7 +383,7 @@ Func_235e::
 	ld h, $c9
 	inc c
 	dec c
-	jr z, .asm_23af      ; if next[i] != NULL::
+	jr z, .asm_23af      ; if next[i] != NULL:
 	ld l, c              ;   l ← next[i]
 	ld [hl], b           ;   prev[next[i]] ← prev[i]
 .asm_23af
@@ -406,7 +406,7 @@ CaseHalfWidthLetter::
 
 ; iterates over text at hl until TX_END is found, and sets wFontWidth to
 ; FULL_WIDTH if the first character is TX_HALFWIDTH
-; returns::
+; returns:
 ;   b = length of text in tiles
 ;   c = length of text in bytes
 ;   a = -b
@@ -427,7 +427,7 @@ GetTextLengthInTiles::
 ;	fallthrough
 
 ; iterates over text at hl until TX_END is found
-; returns::
+; returns:
 ;   b = length of text in half-tiles
 ;   c = length of text in bytes
 ;   a = -b
@@ -439,8 +439,8 @@ GetTextLengthInHalfTiles::
 	ld a, [hli]
 	or a ; TX_END
 	jr z, .tx_end
-	inc c ; any char except TX_END:: c ++
-	; TX_FULLWIDTH, TX_SYMBOL, or > TX_CTRL_END :: b ++
+	inc c ; any char except TX_END: c ++
+	; TX_FULLWIDTH, TX_SYMBOL, or > TX_CTRL_END : b ++
 	cp TX_CTRL_START
 	jr c, .character_pair
 	cp TX_CTRL_END
@@ -457,7 +457,7 @@ GetTextLengthInHalfTiles::
 	jr nc, .char_loop
 	; TX_FULLWIDTH
 .next
-	inc c ; TX_FULLWIDTH or TX_SYMBOL:: c ++
+	inc c ; TX_FULLWIDTH or TX_SYMBOL: c ++
 	inc hl
 	jr .char_loop
 .tx_end
@@ -703,7 +703,7 @@ CreateFullWidthFontTile_ConvertToTileDataAddress::
 ;	fallthrough
 
 ; given a tile number in b, return its v*Tiles address in hl, and return c = TILE_SIZE
-; wTilePatternSelector and wTilePatternSelectorCorrection are used to select the source::
+; wTilePatternSelector and wTilePatternSelectorCorrection are used to select the source:
 ; - if wTilePatternSelector == $80 and wTilePatternSelectorCorrection == $00 -> $8000-$8FFF
 ; - if wTilePatternSelector == $88 and wTilePatternSelectorCorrection == $80 -> $8800-$97FF
 ConvertTileNumberToTileDataAddress::
@@ -783,9 +783,9 @@ ClassifyTextCharacterPair::
 
 ; convert the full-width font tile number at de to the
 ; equivalent offset within the full-width font tile graphics.
-;   if d == TX_KATAKANA:: get tile from the 0_0_katakana.1bpp font.
-;   if d == TX_HIRAGANA or d == $0:: get tile from the 0_1_hiragana.1bpp or 0_2_digits_kanji1.1bpp font.
-;   if d >= TX_FULLWIDTH1 and d <= TX_FULLWIDTH4:: get tile from one of the other full-width fonts.
+;   if d == TX_KATAKANA: get tile from the 0_0_katakana.1bpp font.
+;   if d == TX_HIRAGANA or d == $0: get tile from the 0_1_hiragana.1bpp or 0_2_digits_kanji1.1bpp font.
+;   if d >= TX_FULLWIDTH1 and d <= TX_FULLWIDTH4: get tile from one of the other full-width fonts.
 GetFullWidthFontTileOffset::
 	ld bc, $50 tiles_1bpp
 	ld a, d

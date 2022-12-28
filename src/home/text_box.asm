@@ -166,7 +166,7 @@ DrawRegularTextBoxDMG::
 	call CopyLine
 ;	fallthrough
 
-; continue drawing a labeled or regular textbox on DMG or SGB::
+; continue drawing a labeled or regular textbox on DMG or SGB:
 ; body and bottom line of either type of textbox
 ContinueDrawingTextBoxDMGorSGB::
 	dec c
@@ -227,7 +227,7 @@ DrawRegularTextBoxCGB::
 	call CopyCurrentLineTilesAndAttrCGB
 ;	fallthrough
 
-; continue drawing a labeled or regular textbox on CGB::
+; continue drawing a labeled or regular textbox on CGB:
 ; body and bottom line of either type of textbox
 ContinueDrawingTextBoxCGB::
 	dec c

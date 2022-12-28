@@ -44,7 +44,7 @@ Bank1Call_FarCall_Common::
 	ret
 
 ; switch to the ROM bank at sp+4
-SwitchToBankAtSP:: ; 9dc (0::9dc)
+SwitchToBankAtSP::
 	push af
 	push hl
 	ld hl, sp+$04

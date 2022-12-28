@@ -167,7 +167,7 @@ GetCardPointer::
 	pop de
 	ret
 
-; input::
+; input:
 ; hl = card_gfx_index
 ; de = where to load the card gfx to
 ; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
@@ -185,7 +185,7 @@ LoadCardGfx::
 	add h
 	call BankswitchROM
 	pop hl
-	; once we have the bank, get the pointer:: multiply by 8 and discard the bank offset
+	; once we have the bank, get the pointer: multiply by 8 and discard the bank offset
 	add hl, hl
 	add hl, hl
 	add hl, hl

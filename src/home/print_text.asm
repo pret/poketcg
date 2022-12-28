@@ -1,4 +1,4 @@
-; writes n items of text each given in the following format in hl::
+; writes n items of text each given in the following format in hl:
 ; x coord, y coord, text id
 ; $ff-terminated
 PlaceTextItems::
@@ -344,9 +344,9 @@ ProcessTextHeader::
 	call WriteToTextHeader
 	jp ProcessTextHeader
 
-; input::
-  ; de:: wTxRam2 or wTxRam3
-  ; hl:: wWhichTxRam2 or wWhichTxRam3
+; input:
+  ; de: wTxRam2 or wTxRam3
+  ; hl: wWhichTxRam2 or wWhichTxRam3
 ; return, in hl, the contents of the contents of the
 ; wTxRam* buffer's current entry, and increment wWhichTxRam*.
 HandleTxRam2Or3::
@@ -393,10 +393,10 @@ GetTextOffsetFromTextID::
 	pop de
 	ret
 
-; if [wFontWidth] == HALF_WIDTH::
+; if [wFontWidth] == HALF_WIDTH:
 ;   convert the number at hl to text (ascii) format and write it to wStringBuffer
 ;   return c = 4 - leading_zeros
-; if [wFontWidth] == FULL_WIDTH::
+; if [wFontWidth] == FULL_WIDTH:
 ;   convert the number at hl to TX_SYMBOL text format and write it to wStringBuffer
 ;   replace leading zeros with SYM_SPACE
 TwoByteNumberToText_CountLeadingZeros::
@@ -417,8 +417,8 @@ TwoByteNumberToText_CountLeadingZeros::
 	jr nz, .digit_loop
 	ret
 
-; in the overworld:: copy the player's name to wStringBuffer
-; in a duel:: copy the name of the duelist whose turn it is to wStringBuffer
+; in the overworld: copy the player's name to wStringBuffer
+; in a duel: copy the name of the duelist whose turn it is to wStringBuffer
 CopyPlayerNameOrTurnDuelistName::
 	ld de, wStringBuffer
 	push de

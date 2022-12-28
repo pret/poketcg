@@ -1,7 +1,7 @@
-; reads struct::
+; reads struct:
 ;   x (1 byte), y (1 byte), data (n bytes), $00
 ; writes data to BGMap0-translated x,y
-; important:: make sure VRAM can be accessed first, else use WriteDataBlockToBGMap0
+; important: make sure VRAM can be accessed first, else use WriteDataBlockToBGMap0
 UnsafeWriteDataBlockToBGMap0::
 	ld a, [hli]
 	ld b, a

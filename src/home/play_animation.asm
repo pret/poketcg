@@ -21,7 +21,7 @@ CheckAnyAnimationPlaying::
 ; plays duel animation
 ; the animations are loaded to a buffer
 ; and played in order, so they can be stacked
-; input::
+; input:
 ; - a = animation index
 PlayDuelAnimation::
 	ld [wTempAnimation], a ; hold an animation temporarily

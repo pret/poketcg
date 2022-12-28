@@ -1,5 +1,5 @@
 ; Fill a bxc rectangle at de and at sp-$26,
-; using tile a and the subsequent ones in the following pattern::
+; using tile a and the subsequent ones in the following pattern:
 ; | a+0*l+0*h | a+0*l+1*h | a+0*l+2*h |
 ; | a+1*l+0*h | a+1*l+1*h | a+1*l+2*h |
 ; | a+2*l+0*h | a+2*l+1*h | a+2*l+2*h |
@@ -341,9 +341,9 @@ LoadSymbolsFont::
 ;	fallthrough
 
 ; if hl ≤ $3fff
-;   copy b tiles from Gfx1::(hl+$4000) to de
+;   copy b tiles from Gfx1:(hl+$4000) to de
 ; if $4000 ≤ hl ≤ $7fff
-;   copy b tiles from Gfx2::hl to de
+;   copy b tiles from Gfx2:hl to de
 CopyFontsOrDuelGraphicsTiles::
 	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM

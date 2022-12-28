@@ -1,4 +1,4 @@
-; reads structs::
+; reads structs:
 ;   x (1 byte), y (1 byte), data (n bytes), $00
 ;   x (1 byte), y (1 byte), data (n bytes), $00
 ;   ...
@@ -10,7 +10,7 @@ WriteDataBlocksToBGMap0::
 	jr z, WriteDataBlocksToBGMap0
 	ret
 
-; reads struct::
+; reads struct:
 ;   x (1 byte), y (1 byte), data (n bytes), $00
 ; writes data to BGMap0-translated x,y
 WriteDataBlockToBGMap0::
@@ -102,7 +102,7 @@ CopyDataToBGMap0::
 
 ; copy b bytes of data from hl to de
 ; if LCD on, copy during h-blank only
-SafeCopyDataHLtoDE:: ; 6fc (0::6fc)
+SafeCopyDataHLtoDE::
 	ld a, [wLCDC]
 	rla
 	jr c, JPHblankCopyDataHLtoDE

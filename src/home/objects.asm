@@ -1,6 +1,6 @@
 ; set attributes for [hl] sprites starting from wOAM + [wOAMOffset] / 4
 ; return carry if reached end of wOAM before finishing
-SetManyObjectsAttributes:: ; 950 (0::950)
+SetManyObjectsAttributes::
 	push hl
 	ld a, [wOAMOffset]
 	ld c, a

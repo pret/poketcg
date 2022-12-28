@@ -1,5 +1,5 @@
 ; switch to CGB Normal Speed Mode if playing on CGB and current mode is Double Speed Mode
-SwitchToCGBNormalSpeed:: ; 7db (0::7db)
+SwitchToCGBNormalSpeed::
 	call CheckForCGB
 	ret c
 	ld hl, rKEY1

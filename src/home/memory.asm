@@ -1,6 +1,6 @@
 ; decompresses data from a given bank
 ; uses values initialized by InitDataDecompression
-; input::
+; input:
 ; bc = row width
 ; de = buffer to place decompressed data
 DecompressDataFromBank::
@@ -65,7 +65,7 @@ FillMemoryWithDE::
 	pop hl
 	ret
 
-; gets far byte a::hl, outputs value in a
+; gets far byte a:hl, outputs value in a
 GetFarByte::
 	push hl
 	push af

@@ -36,7 +36,7 @@ ReadJoypad::
 	and BUTTONS
 	cp BUTTONS
 	jr nz, SaveButtonsHeld
-	; A + B + Start + Select:: reset game
+	; A + B + Start + Select: reset game
 	call ResetSerial
 ;	fallthrough
 
