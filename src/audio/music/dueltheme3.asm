@@ -1,6 +1,6 @@
 Music_DuelTheme3_Ch1:
 	speed 11
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 8
 	vibrato_delay 20
 	cutoff 8
@@ -475,7 +475,7 @@ Branch_f661d:
 
 Music_DuelTheme3_Ch2:
 	speed 11
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 8
 	vibrato_delay 20
 	cutoff 8
@@ -909,7 +909,7 @@ Branch_f6866:
 
 Music_DuelTheme3_Ch3:
 	speed 11
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	volume_envelope 2, 0
 	wave 1
 	echo 96

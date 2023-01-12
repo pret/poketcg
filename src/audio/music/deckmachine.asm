@@ -1,5 +1,5 @@
 Music_DeckMachine_Ch1:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	duty 3
 	MainLoop
@@ -54,7 +54,7 @@ Music_DeckMachine_Ch1:
 
 
 Music_DeckMachine_Ch2:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	duty 1
 	cutoff 7
@@ -98,7 +98,7 @@ Music_DeckMachine_Ch2:
 
 
 Music_DeckMachine_Ch3:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	volume_envelope 2, 0
 	wave 1
 	echo 96

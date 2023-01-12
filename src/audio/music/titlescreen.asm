@@ -1,7 +1,7 @@
 Music_TitleScreen_Ch1:
 	speed 7
 	duty 0
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 1
 	vibrato_delay 20
 	volume_envelope 10, 0
@@ -223,7 +223,7 @@ Music_TitleScreen_Ch1:
 Music_TitleScreen_Ch2:
 	speed 7
 	duty 0
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 1
 	vibrato_delay 20
 	volume_envelope 8, 0
@@ -413,7 +413,7 @@ Music_TitleScreen_Ch3:
 	wave 4
 	volume_envelope 2, 0
 	echo 0
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 6
 	octave 2
 	rest 4

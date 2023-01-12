@@ -1,6 +1,6 @@
 Music_MatchDraw_Ch1:
 	speed 3
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	octave 4
 	duty 1
@@ -47,7 +47,7 @@ Music_MatchDraw_Ch1:
 
 Music_MatchDraw_Ch2:
 	speed 3
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	octave 3
 	duty 1
@@ -86,7 +86,7 @@ Music_MatchDraw_Ch2:
 
 Music_MatchDraw_Ch3:
 	speed 6
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	wave 1
 	volume_envelope 2, 0
 	cutoff 8

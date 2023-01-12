@@ -1,7 +1,7 @@
 Music_Overworld_Ch1:
 	speed 7
 	duty 0
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 9
 	vibrato_delay 25
 	volume_envelope 10, 2
@@ -288,7 +288,7 @@ Branch_f72fb:
 Music_Overworld_Ch2:
 	speed 7
 	duty 0
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 9
 	vibrato_delay 30
 	cutoff 7
@@ -752,7 +752,7 @@ Branch_f7535:
 
 Music_Overworld_Ch3:
 	speed 7
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	volume_envelope 2, 0
 	wave 1
 	echo 64

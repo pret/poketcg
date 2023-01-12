@@ -1,6 +1,6 @@
 Music_Club1_Ch1:
 	speed 5
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 8
 	vibrato_delay 20
 	cutoff 8
@@ -291,7 +291,7 @@ Music_Club1_Ch1:
 
 Music_Club1_Ch2:
 	speed 5
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 8
 	vibrato_delay 20
 	cutoff 7
@@ -573,7 +573,7 @@ Music_Club1_Ch2:
 
 Music_Club1_Ch3:
 	speed 5
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	volume_envelope 2, 0
 	wave 1
 	echo 96

@@ -1,6 +1,6 @@
 Music_PauseMenu_Ch2:
 	speed 7
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	duty 2
 	MainLoop
@@ -280,7 +280,7 @@ Branch_f6ce9:
 
 Music_PauseMenu_Ch1:
 	speed 7
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	duty 2
 	MainLoop
@@ -435,7 +435,7 @@ Music_PauseMenu_Ch1:
 Music_PauseMenu_Ch3:
 	speed 1
 	wave 3
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	volume_envelope 4, 0
 	echo 96
 	cutoff 4

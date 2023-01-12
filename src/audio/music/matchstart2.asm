@@ -1,6 +1,6 @@
 Music_MatchStart2_Ch1:
 	speed 1
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	octave 2
 	volume_envelope 15, 0
@@ -90,7 +90,7 @@ Music_MatchStart2_Ch1:
 
 Music_MatchStart2_Ch2:
 	speed 1
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	frequency_offset 6
 	rest 4

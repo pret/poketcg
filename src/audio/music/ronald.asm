@@ -1,5 +1,5 @@
 Music_Ronald_Ch1:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 8
 	vibrato_delay 12
 	cutoff 8
@@ -508,7 +508,7 @@ Branch_fa9ec:
 
 
 Music_Ronald_Ch2:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 8
 	vibrato_delay 12
 	cutoff 8
@@ -851,7 +851,7 @@ Branch_fabb1:
 
 Music_Ronald_Ch3:
 	speed 1
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	volume_envelope 2, 0
 	wave 1
 	echo 0

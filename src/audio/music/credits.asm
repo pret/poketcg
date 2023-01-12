@@ -1,6 +1,6 @@
 Music_Credits_Ch1:
 	speed 13
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 1
 	vibrato_delay 20
 	cutoff 8
@@ -850,7 +850,7 @@ Branch_fb651:
 
 
 Music_Credits_Ch2:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 1
 	vibrato_delay 20
 	cutoff 8
@@ -1792,7 +1792,7 @@ Branch_fbb10:
 
 Music_Credits_Ch3:
 	speed 1
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	volume_envelope 2, 0
 	wave 1
 	echo 96

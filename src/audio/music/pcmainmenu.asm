@@ -1,6 +1,6 @@
 Music_PCMainMenu_Ch1:
 	speed 7
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	octave 3
 	duty 2
@@ -106,7 +106,7 @@ Branch_f90c2:
 
 Music_PCMainMenu_Ch2:
 	speed 7
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	octave 3
 	duty 2
@@ -214,7 +214,7 @@ Branch_f915e:
 Music_PCMainMenu_Ch3:
 	speed 7
 	volume_envelope 2, 0
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	wave 1
 	cutoff 7
 	echo 0

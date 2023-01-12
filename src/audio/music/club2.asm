@@ -1,7 +1,7 @@
 Music_Club2_Ch1:
 	speed 6
 	duty 2
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	MainLoop
 	octave 4
@@ -95,7 +95,7 @@ Music_Club2_Ch1:
 Music_Club2_Ch2:
 	speed 6
 	duty 2
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	MainLoop
 	octave 2
@@ -209,7 +209,7 @@ Music_Club2_Ch2:
 Music_Club2_Ch3:
 	speed 6
 	volume_envelope 2, 0
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	wave 0
 	vibrato_type 4
 	vibrato_delay 35

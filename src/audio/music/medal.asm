@@ -1,5 +1,5 @@
 Music_Medal_Ch1:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 1
 	vibrato_delay 20
 	cutoff 8
@@ -63,7 +63,7 @@ Music_Medal_Ch1:
 
 
 Music_Medal_Ch2:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 1
 	vibrato_delay 20
 	cutoff 8
@@ -126,7 +126,7 @@ Music_Medal_Ch2:
 
 
 Music_Medal_Ch3:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	wave 1
 	volume_envelope 2, 0
 	cutoff 8

@@ -1,6 +1,6 @@
 Music_CardPop_Ch1:
 	speed 4
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	duty 2
 	volume_envelope 9, 0
@@ -121,7 +121,7 @@ Music_CardPop_Ch1:
 
 Music_CardPop_Ch2:
 	speed 4
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	duty 2
 	volume_envelope 6, 0
@@ -208,7 +208,7 @@ Music_CardPop_Ch2:
 Music_CardPop_Ch3:
 	speed 4
 	wave 1
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	volume_envelope 2, 0
 	echo 0
 	cutoff 8

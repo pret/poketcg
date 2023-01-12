@@ -1,6 +1,6 @@
 Music_Imakuni_Ch1:
 	speed 3
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 5
 	vibrato_delay 20
 	cutoff 8
@@ -186,7 +186,7 @@ Branch_fae1d:
 
 
 Music_Imakuni_Ch2:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	vibrato_type 0
 	vibrato_delay 0
 	cutoff 8
@@ -292,7 +292,7 @@ Branch_faea5:
 
 
 Music_Imakuni_Ch3:
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	volume_envelope 2, 0
 	wave 1
 	vibrato_type 6

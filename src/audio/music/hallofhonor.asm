@@ -1,6 +1,6 @@
 Music_HallOfHonor_Ch1:
 	speed 7
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	duty 2
 	Loop 4
@@ -94,7 +94,7 @@ Branch_fb044:
 
 Music_HallOfHonor_Ch2:
 	speed 7
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	cutoff 8
 	duty 2
 	frequency_offset -1
@@ -173,7 +173,7 @@ Branch_fb0bb:
 Music_HallOfHonor_Ch3:
 	speed 7
 	volume_envelope 4, 0
-	stereo_panning 1, 1
+	stereo_panning TRUE, TRUE
 	wave 2
 	vibrato_type 4
 	vibrato_delay 35
