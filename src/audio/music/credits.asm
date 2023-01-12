@@ -6,128 +6,128 @@ Music_Credits_Ch1:
 	cutoff 8
 	octave 2
 	duty 1
-	volume 79
+	volume_envelope 4, -7
 	F_ 1
-	volume 96
+	volume_envelope 6, 0
 	F_ 2
 	tie
 	speed 1
 	F_ 6
-	volume 55
+	volume_envelope 3, 7
 	F_ 7
 	speed 13
-	volume 111
+	volume_envelope 6, -7
 	G_ 1
-	volume 112
+	volume_envelope 7, 0
 	G_ 2
 	tie
 	speed 1
 	G_ 6
-	volume 71
+	volume_envelope 4, 7
 	G_ 7
 	speed 13
-	volume 111
+	volume_envelope 6, -7
 	A_ 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 2
 	tie
 	speed 1
 	A_ 6
-	volume 71
+	volume_envelope 4, 7
 	A_ 7
 	speed 13
-	volume 128
+	volume_envelope 8, 0
 	B_ 3
-	volume 71
+	volume_envelope 4, 7
 	B_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	music_call Branch_fb5bc
 	octave 2
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
 	music_call Branch_fb36b
 	octave 4
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	D# 3
 	E_ 10
 	tie
 	speed 13
 	E_ 4
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
-	volume 160
+	volume_envelope 10, 0
 	F_ 1
 	speed 1
 	G_ 5
-	volume 55
+	volume_envelope 3, 7
 	G_ 8
 	speed 13
-	volume 160
+	volume_envelope 10, 0
 	E_ 5
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
-	volume 160
+	volume_envelope 10, 0
 	F_ 1
 	speed 1
 	G_ 5
-	volume 55
+	volume_envelope 3, 7
 	G_ 8
 	speed 13
-	volume 160
+	volume_envelope 10, 0
 	C_ 5
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	dec_octave
 	speed 1
-	volume 160
+	volume_envelope 10, 0
 	A_ 6
-	volume 55
+	volume_envelope 3, 7
 	A_ 13
 	rest 7
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	C# 3
 	D_ 10
 	tie
 	speed 13
 	D_ 2
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
-	volume 160
+	volume_envelope 10, 0
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	G# 1
-	volume 55
+	volume_envelope 3, 7
 	G# 1
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	F# 3
 	G_ 10
 	tie
 	speed 13
 	G_ 3
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 160
+	volume_envelope 10, 0
 	G_ 1
 	speed 1
 	A_ 5
-	volume 55
+	volume_envelope 3, 7
 	A_ 8
-	volume 160
+	volume_envelope 10, 0
 	B_ 5
-	volume 55
+	volume_envelope 3, 7
 	B_ 8
-	volume 160
+	volume_envelope 10, 0
 	B_ 3
 	inc_octave
 	C_ 10
@@ -137,37 +137,37 @@ Music_Credits_Ch1:
 	tie
 	speed 1
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
 	rest 7
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	B_ 3
 	inc_octave
 	C_ 10
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 8
-	volume 160
+	volume_envelope 10, 0
 	E_ 5
-	volume 55
+	volume_envelope 3, 7
 	E_ 8
 	speed 13
-	volume 160
+	volume_envelope 10, 0
 	F_ 3
 	E_ 1
 	speed 1
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
 	rest 7
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	A_ 6
-	volume 55
+	volume_envelope 3, 7
 	A_ 13
 	rest 7
-	volume 160
+	volume_envelope 10, 0
 	B_ 3
 	inc_octave
 	C_ 10
@@ -177,57 +177,57 @@ Music_Credits_Ch1:
 	tie
 	speed 1
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
 	rest 7
-	volume 160
+	volume_envelope 10, 0
 	C# 3
 	D_ 10
 	tie
 	speed 13
 	D_ 2
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
-	volume 160
+	volume_envelope 10, 0
 	C_ 8
 	tie
 	C_ 8
 	tie
 	C_ 8
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	music_call Branch_fb36b
 	octave 4
 	speed 1
-	volume 160
+	volume_envelope 10, 0
 	D_ 3
 	D# 10
 	tie
 	speed 13
 	D# 4
-	volume 55
+	volume_envelope 3, 7
 	D# 1
-	volume 160
+	volume_envelope 10, 0
 	D_ 1
 	speed 1
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 7
-	volume 160
+	volume_envelope 10, 0
 	E_ 3
 	F_ 10
 	tie
 	speed 13
 	F_ 3
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
-	volume 160
+	volume_envelope 10, 0
 	D# 1
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
 	speed 1
-	volume 160
+	volume_envelope 10, 0
 	F# 3
 	G_ 10
 	tie
@@ -236,7 +236,7 @@ Music_Credits_Ch1:
 	dec_octave
 	dec_octave
 	speed 1
-	volume 144
+	volume_envelope 9, 0
 	E_ 6
 	A_ 7
 	inc_octave
@@ -252,73 +252,73 @@ Music_Credits_Ch1:
 	E_ 8
 	tie
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 2
 	music_end
 
 Branch_fb36b:
 	speed 13
 	octave 2
-	volume 128
+	volume_envelope 8, 0
 	A_ 1
 	rest 1
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 1
 	B_ 1
 	inc_octave
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	rest 1
 	music_call Branch_fb5bc
 	octave 2
 	A_ 2
 	A_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 1
 	inc_octave
 	music_call Branch_fb5e4
 	octave 4
-	volume 160
+	volume_envelope 10, 0
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	G_ 4
 	tie
 	G_ 8
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 160
+	volume_envelope 10, 0
 	E_ 1
 	F_ 1
 	speed 1
 	G_ 6
-	volume 55
+	volume_envelope 3, 7
 	G_ 7
-	volume 160
+	volume_envelope 10, 0
 	F# 3
 	G_ 10
 	tie
 	speed 13
 	G_ 4
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 160
+	volume_envelope 10, 0
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	E_ 3
 	F_ 10
@@ -333,9 +333,9 @@ Branch_fb36b:
 	E_ 3
 	D_ 13
 	C_ 13
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
-	volume 160
+	volume_envelope 10, 0
 	C# 3
 	D_ 10
 	tie
@@ -343,61 +343,61 @@ Branch_fb36b:
 	D_ 4
 	tie
 	D_ 8
-	volume 55
+	volume_envelope 3, 7
 	D_ 2
 	music_call Branch_fb5e4
 	octave 4
-	volume 160
+	volume_envelope 10, 0
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	G_ 4
 	tie
 	G_ 8
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 160
+	volume_envelope 10, 0
 	E_ 1
 	F_ 1
 	speed 1
 	G_ 6
-	volume 55
+	volume_envelope 3, 7
 	G_ 7
-	volume 160
+	volume_envelope 10, 0
 	G_ 3
 	G# 10
 	tie
 	G# 13
-	volume 55
+	volume_envelope 3, 7
 	G# 13
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	C_ 13
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
-	volume 160
+	volume_envelope 10, 0
 	C# 3
 	D_ 10
 	C_ 13
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
-	volume 160
+	volume_envelope 10, 0
 	F# 3
 	G_ 10
 	tie
 	speed 13
 	G_ 2
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
-	volume 160
+	volume_envelope 10, 0
 	C_ 1
 	D_ 1
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	D# 3
 	E_ 10
@@ -408,65 +408,65 @@ Branch_fb36b:
 	speed 13
 	octave 4
 	G_ 8
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	F# 3
 	G_ 10
-	volume 55
+	volume_envelope 3, 7
 	G_ 13
-	volume 160
+	volume_envelope 10, 0
 	F_ 13
-	volume 55
+	volume_envelope 3, 7
 	F_ 13
-	volume 160
+	volume_envelope 10, 0
 	E_ 13
-	volume 55
+	volume_envelope 3, 7
 	E_ 13
-	volume 160
+	volume_envelope 10, 0
 	E_ 6
 	F_ 7
 	E_ 13
 	dec_octave
 	A_ 6
-	volume 55
+	volume_envelope 3, 7
 	A_ 7
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 7
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	F_ 6
-	volume 55
+	volume_envelope 3, 7
 	F_ 13
 	rest 7
-	volume 160
+	volume_envelope 10, 0
 	A_ 13
 	inc_octave
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 7
-	volume 160
+	volume_envelope 10, 0
 	D# 3
 	E_ 10
 	tie
 	E_ 13
 	F_ 6
-	volume 55
+	volume_envelope 3, 7
 	F_ 7
-	volume 160
+	volume_envelope 10, 0
 	E_ 6
-	volume 55
+	volume_envelope 3, 7
 	E_ 7
-	volume 160
+	volume_envelope 10, 0
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
 	rest 7
-	volume 160
+	volume_envelope 10, 0
 	C# 3
 	D_ 10
 	tie
@@ -477,117 +477,117 @@ Branch_fb36b:
 	B_ 13
 	inc_octave
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 7
-	volume 160
+	volume_envelope 10, 0
 	G_ 6
-	volume 55
+	volume_envelope 3, 7
 	G_ 7
-	volume 160
+	volume_envelope 10, 0
 	speed 13
 	E_ 5
 	music_call Branch_fb60c
 	speed 13
 	octave 4
 	G_ 3
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 160
+	volume_envelope 10, 0
 	G_ 1
 	speed 1
 	A_ 6
-	volume 55
+	volume_envelope 3, 7
 	A_ 7
-	volume 160
+	volume_envelope 10, 0
 	B_ 6
-	volume 55
+	volume_envelope 3, 7
 	B_ 7
-	volume 160
+	volume_envelope 10, 0
 	B_ 3
 	inc_octave
 	C_ 10
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	F# 3
 	G_ 10
-	volume 55
+	volume_envelope 3, 7
 	G_ 13
-	volume 160
+	volume_envelope 10, 0
 	F_ 13
-	volume 55
+	volume_envelope 3, 7
 	F_ 13
-	volume 160
+	volume_envelope 10, 0
 	E_ 13
-	volume 55
+	volume_envelope 3, 7
 	E_ 13
-	volume 160
+	volume_envelope 10, 0
 	E_ 3
 	F_ 10
 	tie
 	F_ 13
 	E_ 13
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 7
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	A_ 6
-	volume 55
+	volume_envelope 3, 7
 	A_ 7
 	rest 13
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	C_ 13
 	dec_octave
 	A_ 6
-	volume 55
+	volume_envelope 3, 7
 	A_ 7
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	E_ 3
 	F_ 10
 	tie
 	F_ 13
 	E_ 13
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 7
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	G# 6
-	volume 55
+	volume_envelope 3, 7
 	G# 7
 	rest 13
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 7
 	rest 13
-	volume 160
+	volume_envelope 10, 0
 	F# 3
 	G_ 10
 	tie
 	speed 13
 	G_ 8
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
 	dec_octave
 	dec_octave
-	volume 128
+	volume_envelope 8, 0
 	G_ 1
-	volume 39
+	volume_envelope 2, 7
 	G_ 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 1
-	volume 39
+	volume_envelope 2, 7
 	A_ 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 1
 	speed 1
-	volume 160
+	volume_envelope 10, 0
 	G_ 3
 	A_ 3
 	B_ 3
@@ -599,41 +599,41 @@ Branch_fb36b:
 	G_ 4
 	music_call Branch_fb651
 	octave 3
-	volume 160
+	volume_envelope 10, 0
 	G# 3
 	A_ 10
 	tie
 	A_ 13
-	volume 55
+	volume_envelope 3, 7
 	A_ 13
-	volume 160
+	volume_envelope 10, 0
 	C_ 13
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
-	volume 160
+	volume_envelope 10, 0
 	C# 3
 	D_ 10
 	C_ 13
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
-	volume 160
+	volume_envelope 10, 0
 	F# 3
 	G_ 10
 	tie
 	G_ 13
-	volume 55
+	volume_envelope 3, 7
 	G_ 13
-	volume 160
+	volume_envelope 10, 0
 	D# 3
 	E_ 10
-	volume 55
+	volume_envelope 3, 7
 	E_ 13
-	volume 160
+	volume_envelope 10, 0
 	D_ 13
 	C_ 13
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
-	volume 160
+	volume_envelope 10, 0
 	C# 3
 	D_ 10
 	tie
@@ -641,52 +641,52 @@ Branch_fb36b:
 	D_ 4
 	tie
 	D_ 8
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
 	dec_octave
-	volume 128
+	volume_envelope 8, 0
 	G_ 1
 	speed 1
 	A_ 6
-	volume 39
+	volume_envelope 2, 7
 	A_ 7
-	volume 128
+	volume_envelope 8, 0
 	B_ 6
-	volume 39
+	volume_envelope 2, 7
 	B_ 7
 	music_call Branch_fb651
 	octave 3
-	volume 160
+	volume_envelope 10, 0
 	G_ 3
 	G# 10
 	tie
 	G# 13
-	volume 55
+	volume_envelope 3, 7
 	G# 13
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	C_ 13
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
-	volume 160
+	volume_envelope 10, 0
 	C# 3
 	D_ 10
 	C_ 13
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
-	volume 160
+	volume_envelope 10, 0
 	F# 3
 	G_ 10
 	tie
 	speed 13
 	G_ 2
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
-	volume 160
+	volume_envelope 10, 0
 	C_ 1
 	D_ 1
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
 	music_ret
 
@@ -694,30 +694,30 @@ Branch_fb5bc:
 	octave 2
 	speed 13
 	rest 2
-	volume 128
+	volume_envelope 8, 0
 	G_ 1
 	inc_octave
 	C_ 1
 	rest 1
 	dec_octave
 	A_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
 	rest 2
-	volume 128
+	volume_envelope 8, 0
 	B_ 1
-	volume 55
+	volume_envelope 3, 7
 	B_ 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 1
 	rest 1
 	inc_octave
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	rest 3
 	dec_octave
-	volume 128
+	volume_envelope 8, 0
 	G_ 1
 	inc_octave
 	C_ 1
@@ -726,78 +726,78 @@ Branch_fb5bc:
 
 Branch_fb5e4:
 	octave 3
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	F# 3
 	G_ 10
 	F_ 6
-	volume 55
+	volume_envelope 3, 7
 	F_ 7
 	speed 13
-	volume 128
+	volume_envelope 8, 0
 	E_ 4
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
-	volume 160
+	volume_envelope 10, 0
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	C# 3
 	D_ 10
 	tie
 	speed 13
 	D_ 4
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
 	music_ret
 
 Branch_fb60c:
 	octave 4
 	speed 13
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	D# 3
 	E_ 10
 	speed 13
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
-	volume 160
+	volume_envelope 10, 0
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
-	volume 160
+	volume_envelope 10, 0
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	G# 3
 	A_ 10
 	tie
 	speed 13
 	A_ 8
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	G# 3
 	A_ 10
-	volume 55
+	volume_envelope 3, 7
 	A_ 13
-	volume 160
+	volume_envelope 10, 0
 	G_ 13
-	volume 55
+	volume_envelope 3, 7
 	G_ 13
-	volume 160
+	volume_envelope 10, 0
 	F_ 13
-	volume 55
+	volume_envelope 3, 7
 	F_ 13
-	volume 160
+	volume_envelope 10, 0
 	F# 3
 	G_ 10
 	tie
@@ -805,46 +805,46 @@ Branch_fb60c:
 
 Branch_fb651:
 	octave 3
-	volume 160
+	volume_envelope 10, 0
 	D# 3
 	E_ 10
 	F_ 6
-	volume 55
+	volume_envelope 3, 7
 	F_ 7
-	volume 160
+	volume_envelope 10, 0
 	G_ 5
-	volume 55
+	volume_envelope 3, 7
 	G_ 8
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	C# 3
 	D_ 10
 	tie
 	D_ 13
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 13
 	rest 7
 	dec_octave
 	speed 13
-	volume 160
+	volume_envelope 10, 0
 	G_ 6
 	tie
 	G_ 6
 	tie
 	G_ 8
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	D# 3
 	E_ 10
 	F_ 5
-	volume 55
+	volume_envelope 3, 7
 	F_ 8
-	volume 160
+	volume_envelope 10, 0
 	G_ 5
-	volume 55
+	volume_envelope 3, 7
 	G_ 8
 	music_ret
 
@@ -857,177 +857,177 @@ Music_Credits_Ch2:
 	duty 1
 	octave 2
 	speed 13
-	volume 63
+	volume_envelope 3, -7
 	A_ 1
-	volume 112
+	volume_envelope 7, 0
 	A_ 2
 	tie
 	speed 1
 	A_ 6
-	volume 39
+	volume_envelope 2, 7
 	A_ 7
 	speed 13
-	volume 127
+	volume_envelope 7, -7
 	B_ 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 2
 	tie
 	speed 1
 	B_ 6
-	volume 55
+	volume_envelope 3, 7
 	B_ 7
 	inc_octave
 	speed 13
-	volume 95
+	volume_envelope 5, -7
 	C_ 1
-	volume 144
+	volume_envelope 9, 0
 	C_ 2
 	tie
 	speed 1
 	C_ 6
-	volume 55
+	volume_envelope 3, 7
 	C_ 7
 	speed 13
-	volume 144
+	volume_envelope 9, 0
 	D_ 3
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
 	music_call Branch_fb79e
 	octave 4
 	speed 13
-	volume 128
+	volume_envelope 8, 0
 	C_ 3
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	rest 2
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	D_ 1
 	cutoff 4
 	E_ 1
 	cutoff 8
 	C_ 3
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	D_ 1
 	rest 2
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	D_ 1
 	cutoff 4
 	E_ 1
 	dec_octave
 	cutoff 8
 	A_ 3
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	rest 2
 	cutoff 4
-	volume 128
+	volume_envelope 8, 0
 	F_ 1
 	cutoff 8
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	G# 3
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	G# 1
 	rest 1
 	F_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	E_ 3
-	volume 146
+	volume_envelope 9, 2
 	D_ 1
 	rest 1
 	dec_octave
-	volume 128
+	volume_envelope 8, 0
 	B_ 1
 	inc_octave
 	cutoff 4
 	C_ 1
-	volume 146
+	volume_envelope 9, 2
 	cutoff 8
 	D_ 1
-	volume 128
+	volume_envelope 8, 0
 	E_ 3
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	rest 1
-	volume 128
+	volume_envelope 8, 0
 	E_ 1
 	cutoff 4
 	F_ 1
 	cutoff 8
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 3
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	cutoff 4
 	A_ 1
 	rest 1
 	F_ 1
 	cutoff 8
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 3
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	rest 1
-	volume 128
+	volume_envelope 8, 0
 	G# 3
 	rest 1
 	music_call Branch_fb79e
 	octave 4
 	speed 13
-	volume 128
+	volume_envelope 8, 0
 	C_ 1
 	tie
 	C_ 2
 	dec_octave
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	G# 1
 	rest 2
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	A# 1
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	G# 1
 	inc_octave
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	C_ 1
 	tie
 	C_ 2
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	rest 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	C_ 1
 	C_ 1
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	E_ 1
 	tie
 	E_ 4
 	dec_octave
 	dec_octave
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	C_ 6
 	F_ 7
 	A_ 6
@@ -1043,43 +1043,43 @@ Music_Credits_Ch2:
 	C_ 8
 	tie
 	C_ 1
-	volume 39
+	volume_envelope 2, 7
 	C_ 2
 	music_end
 
 Branch_fb79e:
 	speed 13
 	octave 3
-	volume 144
+	volume_envelope 9, 0
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
 	music_call Branch_fba68
 	octave 2
-	volume 144
+	volume_envelope 9, 0
 	A_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
 	inc_octave
-	volume 144
+	volume_envelope 9, 0
 	C_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	B_ 1
-	volume 55
+	volume_envelope 3, 7
 	B_ 1
 	inc_octave
-	volume 144
+	volume_envelope 9, 0
 	C_ 1
 	D_ 1
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
 	rest 1
 	music_call Branch_fba68
-	volume 144
+	volume_envelope 9, 0
 	octave 3
 	speed 1
 	E_ 3
@@ -1088,15 +1088,15 @@ Branch_fb79e:
 	speed 13
 	F_ 1
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
-	volume 144
+	volume_envelope 9, 0
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
-	volume 144
+	volume_envelope 9, 0
 	D_ 3
-	volume 146
+	volume_envelope 9, 2
 	duty 1
 	Loop 2
 	rest 2
@@ -1114,7 +1114,7 @@ Branch_fb79e:
 	music_call Branch_fba9d
 	rest 2
 	duty 1
-	volume 146
+	volume_envelope 9, 2
 	octave 3
 	C_ 1
 	rest 1
@@ -1125,29 +1125,29 @@ Branch_fb79e:
 	EndLoop
 	rest 2
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	speed 1
 	E_ 3
 	F_ 10
 	A_ 5
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	inc_octave
-	volume 112
+	volume_envelope 7, 0
 	C_ 5
-	volume 39
+	volume_envelope 2, 7
 	C_ 8
-	volume 112
+	volume_envelope 7, 0
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	duty 1
 	C_ 13
 	inc_octave
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	E_ 3
 	F_ 10
 	tie
@@ -1157,28 +1157,28 @@ Branch_fb79e:
 	E_ 4
 	dec_octave
 	duty 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 13
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	A_ 5
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	inc_octave
-	volume 112
+	volume_envelope 7, 0
 	C_ 5
-	volume 39
+	volume_envelope 2, 7
 	C_ 8
-	volume 112
+	volume_envelope 7, 0
 	C# 3
 	D_ 10
 	dec_octave
 	duty 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 13
 	rest 13
 	dec_octave
-	volume 128
+	volume_envelope 8, 0
 	B_ 3
 	inc_octave
 	C_ 10
@@ -1187,10 +1187,10 @@ Branch_fb79e:
 	C_ 3
 	rest 1
 	E_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	A# 3
 	B_ 10
 	tie
@@ -1201,9 +1201,9 @@ Branch_fb79e:
 	C_ 1
 	dec_octave
 	duty 1
-	volume 146
+	volume_envelope 9, 2
 	D_ 1
-	volume 128
+	volume_envelope 8, 0
 	E_ 5
 	rest 1
 	music_call Branch_fba9d
@@ -1211,10 +1211,10 @@ Branch_fb79e:
 	octave 3
 	C_ 1
 	D_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	E_ 3
 	F_ 10
 	tie
@@ -1225,10 +1225,10 @@ Branch_fb79e:
 	rest 1
 	G# 1
 	F_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	speed 1
 	D_ 3
 	D# 10
@@ -1237,25 +1237,25 @@ Branch_fb79e:
 	D# 2
 	dec_octave
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	G# 1
 	rest 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	G# 1
 	A# 1
 	dec_octave
-	volume 147
+	volume_envelope 9, 3
 	G# 1
 	inc_octave
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	C_ 3
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	rest 1
-	volume 128
+	volume_envelope 8, 0
 	speed 1
 	F# 3
 	G_ 10
@@ -1270,11 +1270,11 @@ Branch_fb79e:
 	rest 1
 	music_call Branch_fbacb
 	octave 3
-	volume 146
+	volume_envelope 9, 2
 	cutoff 8
 	D_ 1
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 3
 	inc_octave
 	C_ 10
@@ -1282,52 +1282,52 @@ Branch_fb79e:
 	rest 1
 	C_ 1
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	C_ 1
 	rest 1
 	C_ 1
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	C_ 1
 	C_ 1
 	dec_octave
 	cutoff 4
 	F_ 1
 	cutoff 8
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	cutoff 4
 	D_ 1
 	rest 1
 	cutoff 8
 	F_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	C_ 2
 	cutoff 4
 	D_ 1
 	dec_octave
 	cutoff 8
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	cutoff 4
 	A_ 1
 	rest 1
 	cutoff 8
 	B_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	cutoff 4
 	A_ 1
 	cutoff 8
@@ -1335,10 +1335,10 @@ Branch_fb79e:
 	cutoff 4
 	A_ 1
 	cutoff 8
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	C_ 2
 	dec_octave
 	speed 1
@@ -1360,52 +1360,52 @@ Branch_fb79e:
 	rest 1
 	C_ 1
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	C_ 1
 	rest 1
 	C_ 1
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	cutoff 7
 	C_ 2
 	cutoff 8
 	C_ 1
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	cutoff 4
 	F_ 1
 	rest 1
 	cutoff 8
 	A_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	cutoff 7
 	C_ 2
 	cutoff 8
 	C_ 1
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	cutoff 4
 	F_ 1
 	rest 1
 	G# 1
 	cutoff 8
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 3
 	inc_octave
 	C_ 10
@@ -1420,28 +1420,28 @@ Branch_fb79e:
 	C_ 1
 	dec_octave
 	cutoff 8
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	A# 3
 	B_ 10
 	rest 13
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	A# 3
 	B_ 10
-	volume 39
+	volume_envelope 2, 7
 	B_ 13
 	inc_octave
-	volume 144
+	volume_envelope 9, 0
 	C_ 13
-	volume 39
+	volume_envelope 2, 7
 	C_ 13
-	volume 144
+	volume_envelope 9, 0
 	speed 13
 	D_ 2
-	volume 39
+	volume_envelope 2, 7
 	D_ 1
 	music_call Branch_fbb10
 	rest 1
@@ -1451,9 +1451,9 @@ Branch_fb79e:
 	B_ 1
 	A_ 1
 	inc_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	E_ 2
 	rest 1
 	C_ 1
@@ -1464,11 +1464,11 @@ Branch_fb79e:
 	cutoff 8
 	G_ 1
 	inc_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	dec_octave
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	E_ 3
 	F_ 10
 	tie
@@ -1477,28 +1477,28 @@ Branch_fb79e:
 	rest 1
 	inc_octave
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	speed 1
 	F_ 13
 	A_ 6
-	volume 39
+	volume_envelope 2, 7
 	A_ 7
 	inc_octave
-	volume 112
+	volume_envelope 7, 0
 	C_ 6
-	volume 39
+	volume_envelope 2, 7
 	C_ 7
-	volume 112
+	volume_envelope 7, 0
 	E_ 6
-	volume 39
+	volume_envelope 2, 7
 	E_ 7
 	dec_octave
 	duty 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 13
 	inc_octave
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	D# 3
 	E_ 10
 	tie
@@ -1507,27 +1507,27 @@ Branch_fb79e:
 	F_ 1
 	speed 1
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
-	volume 112
+	volume_envelope 7, 0
 	D_ 5
-	volume 39
+	volume_envelope 2, 7
 	D_ 8
 	speed 13
 	rest 1
 	dec_octave
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	duty 1
 	B_ 1
 	inc_octave
 	speed 1
 	C_ 6
-	volume 39
+	volume_envelope 2, 7
 	C_ 7
-	volume 144
+	volume_envelope 9, 0
 	D_ 6
-	volume 39
+	volume_envelope 2, 7
 	D_ 7
 	music_call Branch_fbb10
 	octave 3
@@ -1536,11 +1536,11 @@ Branch_fb79e:
 	rest 1
 	G# 1
 	F_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	inc_octave
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	D_ 3
 	D# 10
 	tie
@@ -1548,12 +1548,12 @@ Branch_fb79e:
 	D# 2
 	dec_octave
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	G# 1
 	rest 1
 	speed 1
 	rest 6
-	volume 144
+	volume_envelope 9, 0
 	G# 7
 	inc_octave
 	C_ 6
@@ -1564,74 +1564,74 @@ Branch_fb79e:
 
 Branch_fba68:
 	octave 3
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	rest 1
-	volume 144
+	volume_envelope 9, 0
 	C_ 1
 	E_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 144
+	volume_envelope 9, 0
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
 	rest 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 144
+	volume_envelope 9, 0
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 144
+	volume_envelope 9, 0
 	F_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
-	volume 144
+	volume_envelope 9, 0
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
 	rest 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	rest 1
-	volume 144
+	volume_envelope 9, 0
 	C_ 1
 	E_ 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	music_ret
 
 Branch_fba9d:
 	octave 4
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	speed 1
 	F# 3
 	G_ 10
 	dec_octave
 	duty 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 13
 	inc_octave
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
-	volume 112
+	volume_envelope 7, 0
 	E_ 3
 	F_ 10
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
 	dec_octave
 	speed 13
 	duty 1
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	G_ 1
 	music_ret
 
@@ -1645,20 +1645,20 @@ Branch_fbacb:
 	inc_octave
 	C_ 3
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	rest 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 1
 	inc_octave
 	cutoff 4
 	C_ 1
 	dec_octave
 	cutoff 8
-	volume 146
+	volume_envelope 9, 2
 	C_ 1
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	A# 3
 	B_ 16
 	rest 7
@@ -1666,23 +1666,23 @@ Branch_fbacb:
 	B_ 10
 	dec_octave
 	speed 13
-	volume 146
+	volume_envelope 9, 2
 	B_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	B_ 1
 	rest 1
 	A_ 1
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	B_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	B_ 3
-	volume 146
+	volume_envelope 9, 2
 	D_ 1
 	rest 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 1
 	inc_octave
 	cutoff 4
@@ -1692,92 +1692,92 @@ Branch_fbacb:
 Branch_fbb10:
 	octave 3
 	speed 13
-	volume 128
+	volume_envelope 8, 0
 	C_ 1
 	cutoff 3
 	D_ 1
-	volume 146
+	volume_envelope 9, 2
 	cutoff 8
 	C_ 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 2
 	cutoff 3
 	A_ 1
-	volume 147
+	volume_envelope 9, 3
 	cutoff 8
 	C_ 1
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	D# 3
 	E_ 10
 	tie
 	speed 13
 	E_ 2
-	volume 146
+	volume_envelope 9, 2
 	D_ 1
 	inc_octave
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	speed 1
 	G_ 5
-	volume 39
+	volume_envelope 2, 7
 	G_ 8
-	volume 112
+	volume_envelope 7, 0
 	F_ 5
 	G_ 4
 	F_ 4
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
 	dec_octave
 	duty 1
-	volume 146
+	volume_envelope 9, 2
 	D_ 13
 	inc_octave
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	C_ 5
-	volume 39
+	volume_envelope 2, 7
 	C_ 8
-	volume 112
+	volume_envelope 7, 0
 	D_ 13
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
-	volume 112
+	volume_envelope 7, 0
 	C_ 5
-	volume 39
+	volume_envelope 2, 7
 	C_ 8
 	dec_octave
 	speed 13
-	volume 112
+	volume_envelope 7, 0
 	E_ 4
 	inc_octave
 	inc_octave
 	speed 1
 	C_ 5
-	volume 39
+	volume_envelope 2, 7
 	C_ 8
 	dec_octave
-	volume 112
+	volume_envelope 7, 0
 	B_ 13
 	inc_octave
 	C_ 5
-	volume 39
+	volume_envelope 2, 7
 	C_ 8
 	dec_octave
-	volume 112
+	volume_envelope 7, 0
 	B_ 5
-	volume 39
+	volume_envelope 2, 7
 	B_ 8
-	volume 112
+	volume_envelope 7, 0
 	G_ 5
-	volume 39
+	volume_envelope 2, 7
 	G_ 8
 	dec_octave
 	dec_octave
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 3
 	inc_octave
 	C_ 10
@@ -1793,7 +1793,7 @@ Branch_fbb10:
 Music_Credits_Ch3:
 	speed 1
 	stereo_panning 1, 1
-	volume 32
+	volume_envelope 2, 0
 	wave 1
 	echo 96
 	cutoff 8

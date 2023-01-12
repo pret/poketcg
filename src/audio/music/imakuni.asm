@@ -5,7 +5,7 @@ Music_Imakuni_Ch1:
 	vibrato_delay 20
 	cutoff 8
 	duty 2
-	volume 160
+	volume_envelope 10, 0
 	MainLoop
 	Loop 16
 	rest 10
@@ -191,7 +191,7 @@ Music_Imakuni_Ch2:
 	vibrato_delay 0
 	cutoff 8
 	duty 1
-	volume 160
+	volume_envelope 10, 0
 	Loop 6
 	music_call Branch_faea5
 	EndLoop
@@ -293,7 +293,7 @@ Branch_faea5:
 
 Music_Imakuni_Ch3:
 	stereo_panning 1, 1
-	volume 32
+	volume_envelope 2, 0
 	wave 1
 	vibrato_type 6
 	vibrato_delay 0

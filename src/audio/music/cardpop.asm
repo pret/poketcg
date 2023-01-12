@@ -3,7 +3,7 @@ Music_CardPop_Ch1:
 	stereo_panning 1, 1
 	cutoff 8
 	duty 2
-	volume 144
+	volume_envelope 9, 0
 	MainLoop
 	Loop 7
 	rest 16
@@ -16,45 +16,45 @@ Music_CardPop_Ch1:
 	G_ 1
 	cutoff 6
 	F# 1
-	volume 55
+	volume_envelope 3, 7
 	F# 1
-	volume 144
+	volume_envelope 9, 0
 	D_ 1
-	volume 55
+	volume_envelope 3, 7
 	F# 1
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	A_ 1
 	inc_octave
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
-	volume 144
+	volume_envelope 9, 0
 	F# 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 144
+	volume_envelope 9, 0
 	D_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	A_ 1
-	volume 55
+	volume_envelope 3, 7
 	inc_octave
 	D_ 1
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
-	volume 144
+	volume_envelope 9, 0
 	F# 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
 	rest 1
 	F# 1
@@ -62,57 +62,57 @@ Music_CardPop_Ch1:
 	rest 16
 	rest 14
 	octave 5
-	volume 144
+	volume_envelope 9, 0
 	cutoff 8
 	E_ 1
 	F_ 1
 	cutoff 6
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
-	volume 144
+	volume_envelope 9, 0
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	G_ 1
 	inc_octave
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 144
+	volume_envelope 9, 0
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
-	volume 144
+	volume_envelope 9, 0
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	inc_octave
 	C_ 1
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 144
+	volume_envelope 9, 0
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
 	rest 1
 	E_ 1
 	rest 12
 	rest 16
-	volume 144
+	volume_envelope 9, 0
 	rest 14
 	EndLoop
 	rest 2
@@ -124,7 +124,7 @@ Music_CardPop_Ch2:
 	stereo_panning 1, 1
 	cutoff 8
 	duty 2
-	volume 96
+	volume_envelope 6, 0
 	cutoff 3
 	Loop 2
 	octave 2
@@ -209,7 +209,7 @@ Music_CardPop_Ch3:
 	speed 4
 	wave 1
 	stereo_panning 1, 1
-	volume 32
+	volume_envelope 2, 0
 	echo 0
 	cutoff 8
 	music_call Branch_f715b

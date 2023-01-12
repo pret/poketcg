@@ -5,7 +5,7 @@ Music_Medal_Ch1:
 	cutoff 8
 	octave 2
 	duty 1
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	E_ 5
 	A_ 5
@@ -30,26 +30,26 @@ Music_Medal_Ch1:
 	tie
 	speed 1
 	A_ 10
-	volume 55
+	volume_envelope 3, 7
 	A_ 5
-	volume 160
+	volume_envelope 10, 0
 	cutoff 7
 	A_ 5
 	A_ 5
 	A_ 5
 	cutoff 8
 	A_ 15
-	volume 55
+	volume_envelope 3, 7
 	A_ 5
-	volume 160
+	volume_envelope 10, 0
 	A_ 16
-	volume 55
+	volume_envelope 3, 7
 	A_ 5
-	volume 160
+	volume_envelope 10, 0
 	A_ 16
-	volume 55
+	volume_envelope 3, 7
 	A_ 6
-	volume 160
+	volume_envelope 10, 0
 	speed 9
 	A_ 5
 	tie
@@ -57,7 +57,7 @@ Music_Medal_Ch1:
 	tie
 	speed 1
 	A_ 2
-	volume 55
+	volume_envelope 3, 7
 	A_ 16
 	music_end
 
@@ -69,7 +69,7 @@ Music_Medal_Ch2:
 	cutoff 8
 	octave 1
 	duty 0
-	volume 144
+	volume_envelope 9, 0
 	speed 1
 	A_ 5
 	inc_octave
@@ -93,26 +93,26 @@ Music_Medal_Ch2:
 	tie
 	speed 1
 	C_ 10
-	volume 39
+	volume_envelope 2, 7
 	C_ 5
-	volume 160
+	volume_envelope 10, 0
 	cutoff 7
 	C_ 5
 	C_ 5
 	C_ 5
 	cutoff 8
 	D_ 15
-	volume 55
+	volume_envelope 3, 7
 	D_ 5
-	volume 144
+	volume_envelope 9, 0
 	D_ 16
-	volume 39
+	volume_envelope 2, 7
 	D_ 5
-	volume 144
+	volume_envelope 9, 0
 	D_ 16
-	volume 55
+	volume_envelope 3, 7
 	D_ 6
-	volume 144
+	volume_envelope 9, 0
 	speed 9
 	C# 5
 	tie
@@ -120,7 +120,7 @@ Music_Medal_Ch2:
 	tie
 	speed 1
 	C# 2
-	volume 39
+	volume_envelope 2, 7
 	C# 16
 	music_end
 
@@ -128,7 +128,7 @@ Music_Medal_Ch2:
 Music_Medal_Ch3:
 	stereo_panning 1, 1
 	wave 1
-	volume 32
+	volume_envelope 2, 0
 	cutoff 8
 	echo 0
 	octave 1

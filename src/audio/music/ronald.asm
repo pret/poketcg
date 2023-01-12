@@ -8,7 +8,7 @@ Music_Ronald_Ch1:
 	octave 3
 	speed 13
 	Loop 2
-	volume 146
+	volume_envelope 9, 2
 	cutoff 3
 	D_ 1
 	D_ 1
@@ -23,12 +23,12 @@ Music_Ronald_Ch1:
 	rest 1
 	F_ 1
 	rest 1
-	volume 144
+	volume_envelope 9, 0
 	cutoff 8
 	E_ 2
 	rest 1
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	cutoff 3
 	G_ 1
 	inc_octave
@@ -45,7 +45,7 @@ Music_Ronald_Ch1:
 	A_ 1
 	rest 1
 	cutoff 8
-	volume 144
+	volume_envelope 9, 0
 	G_ 2
 	rest 1
 	EndLoop
@@ -83,7 +83,7 @@ Music_Ronald_Ch1:
 	D_ 3
 	rest 7
 	duty 2
-	volume 144
+	volume_envelope 9, 0
 	rest 6
 	dec_octave
 	cutoff 4
@@ -151,7 +151,7 @@ Music_Ronald_Ch1:
 	D_ 3
 	rest 7
 	duty 2
-	volume 144
+	volume_envelope 9, 0
 	rest 6
 	dec_octave
 	cutoff 4
@@ -222,7 +222,7 @@ Music_Ronald_Ch1:
 	D_ 3
 	rest 7
 	duty 2
-	volume 144
+	volume_envelope 9, 0
 	rest 13
 	cutoff 4
 	F_ 6
@@ -278,7 +278,7 @@ Music_Ronald_Ch1:
 	inc_octave
 	D_ 7
 	duty 1
-	volume 160
+	volume_envelope 10, 0
 	cutoff 8
 	music_call Branch_fa9cb
 	speed 1
@@ -296,7 +296,7 @@ Music_Ronald_Ch1:
 	F_ 4
 	vibrato_delay 12
 	speed 1
-	volume 147
+	volume_envelope 9, 3
 	C_ 6
 	rest 7
 	rest 13
@@ -307,12 +307,12 @@ Music_Ronald_Ch1:
 	rest 7
 	rest 13
 	speed 13
-	volume 144
+	volume_envelope 9, 0
 	G_ 2
 	rest 1
 	vibrato_delay 20
 	speed 1
-	volume 160
+	volume_envelope 10, 0
 	F# 3
 	G_ 10
 	A# 3
@@ -420,7 +420,7 @@ Music_Ronald_Ch1:
 Branch_fa9aa:
 	octave 4
 	duty 1
-	volume 160
+	volume_envelope 10, 0
 	rest 2
 	speed 1
 	G# 3
@@ -450,7 +450,7 @@ Branch_fa9aa:
 Branch_fa9cb:
 	octave 4
 	duty 1
-	volume 160
+	volume_envelope 10, 0
 	speed 1
 	D# 3
 	E_ 10
@@ -482,7 +482,7 @@ Branch_fa9cb:
 Branch_fa9ec:
 	octave 3
 	duty 0
-	volume 146
+	volume_envelope 9, 2
 	speed 1
 	F_ 6
 	rest 7
@@ -501,7 +501,7 @@ Branch_fa9ec:
 	rest 7
 	rest 13
 	speed 13
-	volume 144
+	volume_envelope 9, 0
 	G_ 2
 	rest 1
 	music_ret
@@ -517,7 +517,7 @@ Music_Ronald_Ch2:
 	octave 2
 	Loop 2
 	speed 1
-	volume 146
+	volume_envelope 9, 2
 	G_ 3
 	rest 3
 	G_ 3
@@ -552,12 +552,12 @@ Music_Ronald_Ch2:
 	rest 7
 	rest 13
 	speed 13
-	volume 144
+	volume_envelope 9, 0
 	C_ 2
 	rest 1
 	dec_octave
 	speed 1
-	volume 146
+	volume_envelope 9, 2
 	D_ 3
 	rest 3
 	G_ 3
@@ -596,7 +596,7 @@ Music_Ronald_Ch2:
 	rest 7
 	rest 13
 	speed 13
-	volume 144
+	volume_envelope 9, 0
 	E_ 2
 	rest 1
 	dec_octave
@@ -604,18 +604,18 @@ Music_Ronald_Ch2:
 	Loop 4
 	music_call Branch_fab76
 	cutoff 8
-	volume 128
+	volume_envelope 8, 0
 	C_ 2
 	rest 1
 	music_call Branch_fab76
 	cutoff 8
-	volume 128
+	volume_envelope 8, 0
 	E_ 2
 	rest 1
 	EndLoop
 	Loop 2
 	vibrato_delay 20
-	volume 128
+	volume_envelope 8, 0
 	speed 13
 	duty 1
 	octave 4
@@ -629,13 +629,13 @@ Music_Ronald_Ch2:
 	dec_octave
 	cutoff 4
 	duty 0
-	volume 146
+	volume_envelope 9, 2
 	A# 1
 	rest 1
 	inc_octave
 	inc_octave
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	C_ 1
 	rest 1
 	cutoff 8
@@ -652,7 +652,7 @@ Music_Ronald_Ch2:
 	rest 2
 	vibrato_delay 12
 	duty 0
-	volume 146
+	volume_envelope 9, 2
 	F_ 1
 	rest 2
 	F_ 1
@@ -666,7 +666,7 @@ Music_Ronald_Ch2:
 	A_ 1
 	rest 1
 	cutoff 8
-	volume 144
+	volume_envelope 9, 0
 	G_ 2
 	rest 1
 	EndLoop
@@ -676,7 +676,7 @@ Music_Ronald_Ch2:
 	rest 2
 	vibrato_delay 12
 	duty 0
-	volume 146
+	volume_envelope 9, 2
 	cutoff 4
 	F_ 1
 	rest 2
@@ -691,7 +691,7 @@ Music_Ronald_Ch2:
 	A_ 1
 	rest 1
 	cutoff 8
-	volume 144
+	volume_envelope 9, 0
 	G_ 2
 	rest 1
 	vibrato_delay 20
@@ -709,7 +709,7 @@ Music_Ronald_Ch2:
 	dec_octave
 	vibrato_delay 12
 	duty 0
-	volume 146
+	volume_envelope 9, 2
 	cutoff 4
 	G_ 1
 	rest 1
@@ -719,7 +719,7 @@ Music_Ronald_Ch2:
 	D_ 1
 	rest 1
 	cutoff 8
-	volume 144
+	volume_envelope 9, 0
 	E_ 2
 	rest 1
 	music_call Branch_fabb1
@@ -732,10 +732,10 @@ Music_Ronald_Ch2:
 	rest 1
 	inc_octave
 	cutoff 8
-	volume 144
+	volume_envelope 9, 0
 	C_ 2
 	rest 1
-	volume 146
+	volume_envelope 9, 2
 	rest 2
 	cutoff 4
 	F_ 1
@@ -749,7 +749,7 @@ Music_Ronald_Ch2:
 	A_ 1
 	rest 1
 	cutoff 8
-	volume 144
+	volume_envelope 9, 0
 	F_ 2
 	rest 1
 	music_call Branch_fabb1
@@ -762,12 +762,12 @@ Music_Ronald_Ch2:
 	rest 1
 	inc_octave
 	cutoff 8
-	volume 144
+	volume_envelope 9, 0
 	C_ 2
 	rest 1
 	rest 2
 	dec_octave
-	volume 146
+	volume_envelope 9, 2
 	cutoff 4
 	G_ 1
 	rest 2
@@ -776,7 +776,7 @@ Music_Ronald_Ch2:
 	vibrato_delay 20
 	cutoff 8
 	duty 1
-	volume 112
+	volume_envelope 7, 0
 	F# 8
 	rest 1
 	duty 0
@@ -785,7 +785,7 @@ Music_Ronald_Ch2:
 
 Branch_fab76:
 	octave 2
-	volume 146
+	volume_envelope 9, 2
 	speed 13
 	rest 2
 	cutoff 4
@@ -805,7 +805,7 @@ Branch_fab76:
 Branch_fab8a:
 	octave 4
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	speed 13
 	C_ 1
 	cutoff 3
@@ -836,7 +836,7 @@ Branch_fab8a:
 
 Branch_fabb1:
 	octave 2
-	volume 146
+	volume_envelope 9, 2
 	speed 13
 	rest 2
 	cutoff 4
@@ -852,7 +852,7 @@ Branch_fabb1:
 Music_Ronald_Ch3:
 	speed 1
 	stereo_panning 1, 1
-	volume 32
+	volume_envelope 2, 0
 	wave 1
 	echo 0
 	cutoff 8

@@ -3,7 +3,7 @@ Music_MatchStart2_Ch1:
 	stereo_panning 1, 1
 	cutoff 8
 	octave 2
-	volume 240
+	volume_envelope 15, 0
 	duty 0
 	C_ 1
 	E_ 1
@@ -73,14 +73,14 @@ Music_MatchStart2_Ch1:
 	F_ 1
 	B_ 1
 	dec_octave
-	volume 96
+	volume_envelope 6, 0
 	E_ 1
 	G_ 1
 	B_ 1
 	inc_octave
 	C_ 1
 	E_ 1
-	volume 32
+	volume_envelope 2, 0
 	G_ 1
 	B_ 1
 	inc_octave
@@ -95,7 +95,7 @@ Music_MatchStart2_Ch2:
 	frequency_offset 6
 	rest 4
 	octave 2
-	volume 96
+	volume_envelope 6, 0
 	duty 0
 	C_ 1
 	E_ 1
@@ -165,7 +165,7 @@ Music_MatchStart2_Ch2:
 	F_ 1
 	B_ 1
 	dec_octave
-	volume 32
+	volume_envelope 2, 0
 	E_ 1
 	G_ 1
 	B_ 1

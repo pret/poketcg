@@ -8,30 +8,30 @@ Music_Club3_Ch1:
 	duty 0
 	Loop 2
 	octave 2
-	volume 144
+	volume_envelope 9, 0
 	rest 4
 	G_ 2
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
 	inc_octave
-	volume 144
+	volume_envelope 9, 0
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 2
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	A# 6
 	tie
 	A# 12
-	volume 55
+	volume_envelope 3, 7
 	A# 4
 	rest 4
-	volume 144
+	volume_envelope 9, 0
 	G_ 2
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
 	inc_octave
-	volume 144
+	volume_envelope 9, 0
 	speed 1
 	C_ 5
 	tie
@@ -39,18 +39,18 @@ Music_Club3_Ch1:
 	tie
 	speed 9
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	dec_octave
-	volume 144
+	volume_envelope 9, 0
 	A# 6
 	tie
 	A# 12
-	volume 55
+	volume_envelope 3, 7
 	A# 4
 	EndLoop
 	duty 1
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	music_call Branch_fa330
 	music_call Branch_fa403
@@ -82,15 +82,15 @@ Music_Club3_Ch1:
 	cutoff 8
 	speed 1
 	G_ 5
-	volume 55
+	volume_envelope 3, 7
 	G_ 4
 	speed 9
-	volume 128
+	volume_envelope 8, 0
 	C# 1
 	C_ 1
 	dec_octave
 	A# 1
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	music_call Branch_fa330
 	music_call Branch_fa403
@@ -122,7 +122,7 @@ Music_Club3_Ch1:
 	G_ 1
 	octave 4
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	speed 1
 	cutoff 8
 	G_ 5
@@ -168,10 +168,10 @@ Music_Club3_Ch1:
 	cutoff 8
 	speed 1
 	G_ 5
-	volume 55
+	volume_envelope 3, 7
 	G_ 4
 	speed 9
-	volume 128
+	volume_envelope 8, 0
 	C# 1
 	C_ 1
 	dec_octave
@@ -208,7 +208,7 @@ Music_Club3_Ch1:
 	duty 2
 	speed 1
 	cutoff 8
-	volume 112
+	volume_envelope 7, 0
 	G_ 5
 	C# 4
 	C_ 5
@@ -287,7 +287,7 @@ Branch_fa330:
 
 Branch_fa370:
 	octave 2
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	G_ 1
 	inc_octave
@@ -314,49 +314,49 @@ Branch_fa370:
 	F# 4
 	octave 4
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	G_ 3
-	volume 23
+	volume_envelope 1, 7
 	G_ 2
 	inc_octave
-	volume 112
+	volume_envelope 7, 0
 	D_ 2
-	volume 23
+	volume_envelope 1, 7
 	dec_octave
 	G_ 2
 	inc_octave
-	volume 112
+	volume_envelope 7, 0
 	G_ 3
-	volume 23
+	volume_envelope 1, 7
 	D_ 2
-	volume 112
+	volume_envelope 7, 0
 	D_ 2
-	volume 23
+	volume_envelope 1, 7
 	G_ 2
 	dec_octave
-	volume 112
+	volume_envelope 7, 0
 	G_ 3
-	volume 23
+	volume_envelope 1, 7
 	inc_octave
 	D_ 2
-	volume 112
+	volume_envelope 7, 0
 	D_ 2
-	volume 23
+	volume_envelope 1, 7
 	dec_octave
 	G_ 2
 	inc_octave
-	volume 112
+	volume_envelope 7, 0
 	G_ 3
-	volume 23
+	volume_envelope 1, 7
 	D_ 2
-	volume 112
+	volume_envelope 7, 0
 	D_ 2
-	volume 23
+	volume_envelope 1, 7
 	G_ 2
 	speed 9
 	duty 1
 	cutoff 7
-	volume 147
+	volume_envelope 9, 3
 	octave 2
 	G_ 1
 	inc_octave
@@ -383,7 +383,7 @@ Branch_fa370:
 	duty 2
 	speed 1
 	cutoff 8
-	volume 112
+	volume_envelope 7, 0
 	octave 5
 	G_ 5
 	C# 4
@@ -398,7 +398,7 @@ Branch_fa370:
 	speed 9
 	duty 1
 	cutoff 7
-	volume 147
+	volume_envelope 9, 3
 	music_ret
 
 Branch_fa403:
@@ -442,40 +442,40 @@ Music_Club3_Ch2:
 	duty 0
 	Loop 2
 	octave 2
-	volume 112
+	volume_envelope 7, 0
 	rest 4
 	D_ 2
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
-	volume 112
+	volume_envelope 7, 0
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 2
-	volume 112
+	volume_envelope 7, 0
 	E_ 6
 	tie
 	E_ 12
-	volume 55
+	volume_envelope 3, 7
 	E_ 4
 	rest 4
-	volume 112
+	volume_envelope 7, 0
 	D_ 2
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
-	volume 112
+	volume_envelope 7, 0
 	speed 1
 	F_ 5
 	tie
 	F# 4
 	speed 9
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
-	volume 112
+	volume_envelope 7, 0
 	E_ 6
 	tie
 	E_ 12
-	volume 55
+	volume_envelope 3, 7
 	E_ 4
 	EndLoop
 	duty 1
@@ -484,44 +484,44 @@ Music_Club3_Ch2:
 	speed 9
 	rest 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	speed 1
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
 	speed 9
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	G_ 1
 	dec_octave
 	speed 1
 	cutoff 8
-	volume 128
+	volume_envelope 8, 0
 	F_ 5
 	F# 4
 	inc_octave
 	speed 9
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	G_ 1
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 147
+	volume_envelope 9, 3
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 2
 	dec_octave
-	volume 147
+	volume_envelope 9, 3
 	D_ 1
 	inc_octave
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	speed 1
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
-	volume 147
+	volume_envelope 9, 3
 	speed 9
 	rest 1
 	dec_octave
@@ -531,59 +531,59 @@ Music_Club3_Ch2:
 	D_ 4
 	dec_octave
 	A# 5
-	volume 55
+	volume_envelope 3, 7
 	A# 4
 	inc_octave
 	inc_octave
-	volume 147
+	volume_envelope 9, 3
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
 	speed 9
-	volume 128
+	volume_envelope 8, 0
 	rest 1
 	dec_octave
 	speed 1
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
 	speed 9
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	G_ 1
 	dec_octave
 	speed 1
 	cutoff 8
-	volume 128
+	volume_envelope 8, 0
 	F_ 5
 	F# 4
 	inc_octave
 	speed 9
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	A# 1
-	volume 55
+	volume_envelope 3, 7
 	A# 2
 	inc_octave
-	volume 147
+	volume_envelope 9, 3
 	C# 1
-	volume 55
+	volume_envelope 3, 7
 	C# 1
 	dec_octave
-	volume 147
+	volume_envelope 9, 3
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
 	dec_octave
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	A# 5
-	volume 55
+	volume_envelope 3, 7
 	C_ 4
 	speed 9
 	rest 1
 	dec_octave
-	volume 128
+	volume_envelope 8, 0
 	cutoff 8
 	A# 1
 	B_ 1
@@ -594,95 +594,95 @@ Music_Club3_Ch2:
 	rest 1
 	inc_octave
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
 	speed 9
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	G_ 1
 	dec_octave
 	speed 1
 	cutoff 8
-	volume 128
+	volume_envelope 8, 0
 	F_ 5
 	F# 4
 	inc_octave
 	speed 9
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	G_ 1
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 147
+	volume_envelope 9, 3
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 2
-	volume 147
+	volume_envelope 9, 3
 	D_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	speed 1
 	G_ 5
-	volume 55
+	volume_envelope 3, 7
 	G_ 4
 	speed 9
 	rest 1
 	dec_octave
 	dec_octave
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	G_ 5
-	volume 55
+	volume_envelope 3, 7
 	G_ 4
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
 	speed 9
 	rest 1
 	rest 1
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
 	speed 9
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	G_ 1
 	dec_octave
 	speed 1
 	cutoff 8
-	volume 128
+	volume_envelope 8, 0
 	F_ 5
 	F# 4
 	inc_octave
 	inc_octave
 	speed 9
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	C# 1
-	volume 55
+	volume_envelope 3, 7
 	C# 2
-	volume 147
+	volume_envelope 9, 3
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	dec_octave
-	volume 147
+	volume_envelope 9, 3
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 128
+	volume_envelope 8, 0
 	speed 1
 	F_ 5
-	volume 55
+	volume_envelope 3, 7
 	F_ 4
-	volume 128
+	volume_envelope 8, 0
 	speed 9
 	rest 1
 	dec_octave
@@ -696,43 +696,43 @@ Music_Club3_Ch2:
 Branch_fa5a6:
 	octave 3
 	rest 1
-	volume 128
+	volume_envelope 8, 0
 	speed 1
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
 	speed 9
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	G_ 1
 	dec_octave
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	cutoff 8
 	F_ 5
 	F# 4
 	inc_octave
 	speed 9
 	cutoff 7
-	volume 147
+	volume_envelope 9, 3
 	G_ 1
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
-	volume 147
+	volume_envelope 9, 3
 	F_ 1
-	volume 55
+	volume_envelope 3, 7
 	F_ 2
-	volume 147
+	volume_envelope 9, 3
 	E_ 1
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	cutoff 8
 	speed 1
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
-	volume 128
+	volume_envelope 8, 0
 	speed 9
 	rest 1
 	dec_octave
@@ -742,58 +742,58 @@ Branch_fa5a6:
 	D_ 4
 	dec_octave
 	A# 5
-	volume 55
+	volume_envelope 3, 7
 	A# 4
-	volume 128
+	volume_envelope 8, 0
 	inc_octave
 	inc_octave
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
 	speed 9
 	rest 1
 	dec_octave
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	D_ 5
-	volume 55
+	volume_envelope 3, 7
 	D_ 4
 	speed 9
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	G_ 1
 	dec_octave
 	speed 1
-	volume 128
+	volume_envelope 8, 0
 	cutoff 8
 	F_ 5
 	F# 4
 	speed 9
 	inc_octave
-	volume 147
+	volume_envelope 9, 3
 	cutoff 7
 	A# 1
-	volume 55
+	volume_envelope 3, 7
 	A# 2
 	inc_octave
-	volume 147
+	volume_envelope 9, 3
 	C# 1
-	volume 55
+	volume_envelope 3, 7
 	C# 1
 	dec_octave
-	volume 147
+	volume_envelope 9, 3
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
 	dec_octave
-	volume 147
+	volume_envelope 9, 3
 	A# 1
-	volume 55
+	volume_envelope 3, 7
 	A# 1
 	cutoff 8
-	volume 128
+	volume_envelope 8, 0
 	A# 1
-	volume 55
+	volume_envelope 3, 7
 	A# 2
 	music_ret
 
@@ -801,7 +801,7 @@ Branch_fa5a6:
 Music_Club3_Ch3:
 	speed 9
 	stereo_panning 1, 1
-	volume 32
+	volume_envelope 2, 0
 	wave 1
 	echo 0
 	cutoff 8

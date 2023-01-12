@@ -4,7 +4,7 @@ Music_MatchDraw_Ch1:
 	cutoff 8
 	octave 4
 	duty 1
-	volume 176
+	volume_envelope 11, 0
 	C_ 4
 	dec_octave
 	B_ 2
@@ -23,24 +23,24 @@ Music_MatchDraw_Ch1:
 	B_ 2
 	A# 4
 	B_ 2
-	volume 39
+	volume_envelope 2, 7
 	B_ 2
-	volume 176
+	volume_envelope 11, 0
 	F# 4
 	G_ 2
-	volume 39
+	volume_envelope 2, 7
 	G_ 2
-	volume 176
+	volume_envelope 11, 0
 	C_ 2
-	volume 39
+	volume_envelope 2, 7
 	C_ 4
 	inc_octave
-	volume 176
+	volume_envelope 11, 0
 	E_ 1
 	G_ 1
 	inc_octave
 	C_ 2
-	volume 39
+	volume_envelope 2, 7
 	C_ 2
 	music_end
 
@@ -51,7 +51,7 @@ Music_MatchDraw_Ch2:
 	cutoff 8
 	octave 3
 	duty 1
-	volume 176
+	volume_envelope 11, 0
 	rest 16
 	C_ 4
 	dec_octave
@@ -63,23 +63,23 @@ Music_MatchDraw_Ch2:
 	F# 2
 	F_ 4
 	F# 2
-	volume 39
+	volume_envelope 2, 7
 	F# 2
-	volume 176
+	volume_envelope 11, 0
 	C# 4
 	D_ 2
-	volume 39
+	volume_envelope 2, 7
 	D_ 2
 	dec_octave
-	volume 176
+	volume_envelope 11, 0
 	G_ 2
-	volume 39
+	volume_envelope 2, 7
 	G_ 6
 	inc_octave
 	inc_octave
-	volume 176
+	volume_envelope 11, 0
 	E_ 2
-	volume 39
+	volume_envelope 2, 7
 	E_ 2
 	music_end
 
@@ -88,7 +88,7 @@ Music_MatchDraw_Ch3:
 	speed 6
 	stereo_panning 1, 1
 	wave 1
-	volume 32
+	volume_envelope 2, 0
 	cutoff 8
 	echo 0
 	octave 1

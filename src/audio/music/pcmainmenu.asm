@@ -10,65 +10,65 @@ Music_PCMainMenu_Ch1:
 	dec_octave
 	duty 1
 	cutoff 5
-	volume 97
+	volume_envelope 6, 1
 	F_ 1
 	rest 1
 	duty 2
 	cutoff 8
-	volume 180
+	volume_envelope 11, 4
 	A_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
 	rest 2
 	inc_octave
-	volume 180
+	volume_envelope 11, 4
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	dec_octave
 	duty 1
 	cutoff 5
-	volume 97
+	volume_envelope 6, 1
 	F_ 1
 	rest 1
 	duty 2
 	cutoff 8
-	volume 180
+	volume_envelope 11, 4
 	B_ 1
-	volume 55
+	volume_envelope 3, 7
 	B_ 1
 	music_call Branch_f90c2
 	rest 4
 	dec_octave
 	duty 1
 	cutoff 5
-	volume 97
+	volume_envelope 6, 1
 	F_ 1
 	rest 1
 	inc_octave
 	duty 2
 	cutoff 8
-	volume 180
+	volume_envelope 11, 4
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
 	rest 2
-	volume 180
+	volume_envelope 11, 4
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	duty 1
 	cutoff 5
-	volume 97
+	volume_envelope 6, 1
 	dec_octave
 	F_ 1
 	rest 1
 	inc_octave
 	duty 2
 	cutoff 8
-	volume 180
+	volume_envelope 11, 4
 	D_ 1
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
 	EndMainLoop
 
@@ -76,30 +76,30 @@ Branch_f90c2:
 	octave 3
 	rest 4
 	duty 1
-	volume 97
+	volume_envelope 6, 1
 	cutoff 5
 	G_ 1
 	rest 3
 	cutoff 8
 	duty 2
-	volume 180
+	volume_envelope 11, 4
 	B_ 2
 	inc_octave
 	D_ 1
-	volume 39
+	volume_envelope 2, 7
 	D_ 1
 	dec_octave
 	duty 1
-	volume 97
+	volume_envelope 6, 1
 	cutoff 5
 	G_ 1
 	rest 1
 	inc_octave
 	duty 2
 	cutoff 8
-	volume 180
+	volume_envelope 11, 4
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 1
 	music_ret
 
@@ -116,66 +116,66 @@ Music_PCMainMenu_Ch2:
 	inc_octave
 	duty 1
 	cutoff 5
-	volume 97
+	volume_envelope 6, 1
 	C_ 1
 	rest 1
 	dec_octave
 	duty 2
 	cutoff 8
-	volume 132
+	volume_envelope 8, 4
 	F_ 1
-	volume 39
+	volume_envelope 2, 7
 	F_ 1
 	rest 2
-	volume 132
+	volume_envelope 8, 4
 	A_ 1
-	volume 39
+	volume_envelope 2, 7
 	A_ 1
 	duty 1
 	cutoff 5
-	volume 97
+	volume_envelope 6, 1
 	inc_octave
 	C_ 1
 	rest 1
 	dec_octave
 	duty 2
 	cutoff 8
-	volume 132
+	volume_envelope 8, 4
 	G_ 1
-	volume 39
+	volume_envelope 2, 7
 	G_ 1
 	music_call Branch_f915e
 	rest 4
 	inc_octave
 	duty 1
 	cutoff 5
-	volume 97
+	volume_envelope 6, 1
 	C_ 1
 	rest 1
 	duty 2
 	cutoff 8
-	volume 132
+	volume_envelope 8, 4
 	C_ 1
-	volume 39
+	volume_envelope 2, 7
 	C_ 1
 	rest 2
 	dec_octave
-	volume 132
+	volume_envelope 8, 4
 	A_ 1
-	volume 39
+	volume_envelope 2, 7
 	A_ 1
 	duty 1
 	inc_octave
-	volume 97
+	volume_envelope 6, 1
 	cutoff 5
 	C_ 1
 	rest 1
 	dec_octave
 	duty 2
 	cutoff 8
-	volume 132
+	volume_envelope 8, 4
 	B_ 1
-	volume 39
+	volume_envelope 2, 7
 	B_ 1
 	EndMainLoop
 
@@ -184,36 +184,36 @@ Branch_f915e:
 	rest 4
 	duty 1
 	cutoff 5
-	volume 97
+	volume_envelope 6, 1
 	D_ 1
 	rest 3
 	duty 2
 	cutoff 8
 	dec_octave
-	volume 132
+	volume_envelope 8, 4
 	G_ 2
 	B_ 1
-	volume 39
+	volume_envelope 2, 7
 	B_ 1
 	inc_octave
 	duty 1
 	cutoff 5
-	volume 97
+	volume_envelope 6, 1
 	D_ 1
 	rest 1
 	dec_octave
 	duty 2
 	cutoff 8
-	volume 132
+	volume_envelope 8, 4
 	A_ 1
-	volume 39
+	volume_envelope 2, 7
 	A_ 1
 	music_ret
 
 
 Music_PCMainMenu_Ch3:
 	speed 7
-	volume 32
+	volume_envelope 2, 0
 	stereo_panning 1, 1
 	wave 1
 	cutoff 7

@@ -6,43 +6,43 @@ Music_Club2_Ch1:
 	MainLoop
 	octave 4
 	Loop 8
-	volume 117
+	volume_envelope 7, 5
 	G_ 4
 	E_ 4
 	C_ 4
-	volume 119
+	volume_envelope 7, 7
 	F# 4
 	tie
 	F# 16
-	volume 117
+	volume_envelope 7, 5
 	G_ 4
 	A_ 4
 	B_ 4
-	volume 119
+	volume_envelope 7, 7
 	F# 4
 	tie
 	F# 16
 	EndLoop
-	volume 117
+	volume_envelope 7, 5
 	G_ 4
 	D_ 4
 	dec_octave
 	B_ 4
 	inc_octave
-	volume 119
+	volume_envelope 7, 7
 	B_ 4
 	tie
 	B_ 16
-	volume 117
+	volume_envelope 7, 5
 	G_ 4
 	D_ 4
 	C_ 4
-	volume 119
+	volume_envelope 7, 7
 	B_ 4
 	tie
 	B_ 16
 	dec_octave
-	volume 117
+	volume_envelope 7, 5
 	F# 4
 	dec_octave
 	D_ 4
@@ -81,7 +81,7 @@ Music_Club2_Ch1:
 	speed 1
 	A_ 3
 	inc_octave
-	volume 119
+	volume_envelope 7, 7
 	rest 4
 	D_ 5
 	tie
@@ -100,25 +100,25 @@ Music_Club2_Ch2:
 	MainLoop
 	octave 2
 	Loop 8
-	volume 117
+	volume_envelope 7, 5
 	C_ 4
 	G_ 4
 	inc_octave
 	G_ 4
 	inc_octave
-	volume 119
+	volume_envelope 7, 7
 	D_ 4
 	tie
 	D_ 16
 	dec_octave
 	dec_octave
-	volume 117
+	volume_envelope 7, 5
 	C_ 4
 	G_ 4
 	inc_octave
 	inc_octave
 	C_ 4
-	volume 119
+	volume_envelope 7, 7
 	D_ 4
 	tie
 	D_ 16
@@ -126,34 +126,34 @@ Music_Club2_Ch2:
 	dec_octave
 	EndLoop
 	dec_octave
-	volume 117
+	volume_envelope 7, 5
 	B_ 4
 	inc_octave
 	G_ 4
 	inc_octave
 	G_ 4
 	inc_octave
-	volume 119
+	volume_envelope 7, 7
 	G_ 4
 	tie
 	G_ 16
 	dec_octave
 	dec_octave
 	dec_octave
-	volume 117
+	volume_envelope 7, 5
 	A_ 4
 	inc_octave
 	A_ 4
 	inc_octave
 	A_ 4
 	inc_octave
-	volume 119
+	volume_envelope 7, 7
 	C_ 4
 	tie
 	C_ 16
 	dec_octave
 	dec_octave
-	volume 117
+	volume_envelope 7, 5
 	D_ 4
 	octave 2
 	F# 4
@@ -193,10 +193,10 @@ Music_Club2_Ch2:
 	speed 1
 	E_ 3
 	dec_octave
-	volume 116
+	volume_envelope 7, 4
 	A_ 8
 	inc_octave
-	volume 119
+	volume_envelope 7, 7
 	F# 7
 	tie
 	speed 6
@@ -208,7 +208,7 @@ Music_Club2_Ch2:
 
 Music_Club2_Ch3:
 	speed 6
-	volume 32
+	volume_envelope 2, 0
 	stereo_panning 1, 1
 	wave 0
 	vibrato_type 4
@@ -216,7 +216,7 @@ Music_Club2_Ch3:
 	cutoff 6
 	echo 64
 	MainLoop
-	volume 96
+	volume_envelope 6, 0
 	cutoff 8
 	rest 2
 	octave 4
@@ -232,7 +232,7 @@ Music_Club2_Ch3:
 	F# 2
 	rest 2
 	rest 14
-	volume 64
+	volume_envelope 4, 0
 	echo 96
 	music_call Branch_fa1cf
 	octave 4
@@ -240,7 +240,7 @@ Music_Club2_Ch3:
 	G_ 8
 	music_call Branch_fa1cf
 	echo 64
-	volume 32
+	volume_envelope 2, 0
 	octave 3
 	cutoff 8
 	G_ 8

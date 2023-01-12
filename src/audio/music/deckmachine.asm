@@ -7,46 +7,46 @@ Music_DeckMachine_Ch1:
 	speed 1
 	Loop 9
 	cutoff 6
-	volume 145
+	volume_envelope 9, 1
 	C_ 7
-	volume 49
+	volume_envelope 3, 1
 	C_ 8
-	volume 65
+	volume_envelope 4, 1
 	C_ 8
-	volume 145
+	volume_envelope 9, 1
 	G_ 7
-	volume 49
+	volume_envelope 3, 1
 	G_ 8
-	volume 65
+	volume_envelope 4, 1
 	C_ 7
-	volume 145
+	volume_envelope 9, 1
 	E_ 7
-	volume 49
+	volume_envelope 3, 1
 	E_ 8
-	volume 65
+	volume_envelope 4, 1
 	E_ 8
-	volume 145
+	volume_envelope 9, 1
 	C_ 7
-	volume 49
+	volume_envelope 3, 1
 	C_ 8
-	volume 65
+	volume_envelope 4, 1
 	C_ 7
-	volume 145
+	volume_envelope 9, 1
 	G_ 7
-	volume 49
+	volume_envelope 3, 1
 	G_ 8
-	volume 145
+	volume_envelope 9, 1
 	cutoff 4
 	F_ 7
 	cutoff 5
-	volume 65
+	volume_envelope 4, 1
 	G_ 8
 	EndLoop
-	volume 145
+	volume_envelope 9, 1
 	C_ 7
-	volume 49
+	volume_envelope 3, 1
 	C_ 8
-	volume 65
+	volume_envelope 4, 1
 	C_ 15
 	speed 10
 	rest 9
@@ -63,33 +63,33 @@ Music_DeckMachine_Ch2:
 	speed 1
 	Loop 9
 	rest 15
-	volume 178
+	volume_envelope 11, 2
 	rest 7
 	C_ 8
-	volume 39
+	volume_envelope 2, 7
 	C_ 8
 	rest 7
-	volume 178
+	volume_envelope 11, 2
 	C_ 7
-	volume 39
+	volume_envelope 2, 7
 	C_ 8
 	rest 7
-	volume 178
+	volume_envelope 11, 2
 	dec_octave
 	A_ 8
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	rest 7
 	inc_octave
-	volume 178
+	volume_envelope 11, 2
 	C_ 7
-	volume 39
+	volume_envelope 2, 7
 	C_ 8
 	rest 15
 	EndLoop
-	volume 178
+	volume_envelope 11, 2
 	E_ 7
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
 	rest 15
 	speed 10
@@ -99,7 +99,7 @@ Music_DeckMachine_Ch2:
 
 Music_DeckMachine_Ch3:
 	stereo_panning 1, 1
-	volume 32
+	volume_envelope 2, 0
 	wave 1
 	echo 96
 	cutoff 8

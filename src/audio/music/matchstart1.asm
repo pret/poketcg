@@ -4,7 +4,7 @@ Music_MatchStart1_Ch1:
 	cutoff 8
 	Loop 3
 	duty 2
-	volume 240
+	volume_envelope 15, 0
 	octave 3
 	C_ 1
 	inc_octave
@@ -40,12 +40,12 @@ Music_MatchStart1_Ch1:
 	A_ 1
 	EndLoop
 	octave 4
-	volume 96
+	volume_envelope 6, 0
 	E_ 1
 	inc_octave
 	E_ 1
 	octave 4
-	volume 32
+	volume_envelope 2, 0
 	dec_octave
 	B_ 1
 	inc_octave

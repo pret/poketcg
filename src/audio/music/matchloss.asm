@@ -5,7 +5,7 @@ Music_MatchLoss_Ch1:
 	cutoff 8
 	octave 4
 	duty 2
-	volume 176
+	volume_envelope 11, 0
 	speed 1
 	E_ 3
 	F_ 2
@@ -13,30 +13,30 @@ Music_MatchLoss_Ch1:
 	speed 5
 	F_ 3
 	C_ 1
-	volume 55
+	volume_envelope 3, 7
 	C_ 3
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	A# 1
-	volume 55
+	volume_envelope 3, 7
 	A# 3
 	inc_octave
 	speed 1
-	volume 160
+	volume_envelope 10, 0
 	D_ 3
 	D# 2
 	tie
 	D# 16
 	dec_octave
 	A# 6
-	volume 55
+	volume_envelope 3, 7
 	A# 16
-	volume 160
+	volume_envelope 10, 0
 	G# 6
-	volume 55
+	volume_envelope 3, 7
 	G# 16
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	C_ 3
 	C# 8
 	tie
@@ -44,22 +44,22 @@ Music_MatchLoss_Ch1:
 	dec_octave
 	speed 6
 	G# 1
-	volume 55
+	volume_envelope 3, 7
 	G# 3
-	volume 160
+	volume_envelope 10, 0
 	F# 1
 	speed 7
-	volume 55
+	volume_envelope 3, 7
 	F# 3
 	speed 1
-	volume 160
+	volume_envelope 10, 0
 	B_ 5
 	inc_octave
 	C_ 4
 	tie
 	speed 9
 	C_ 11
-	volume 55
+	volume_envelope 3, 7
 	C_ 2
 	music_end
 
@@ -71,7 +71,7 @@ Music_MatchLoss_Ch2:
 	cutoff 8
 	octave 3
 	duty 2
-	volume 144
+	volume_envelope 9, 0
 	speed 9
 	rest 9
 	speed 11
@@ -83,7 +83,7 @@ Music_MatchLoss_Ch2:
 	G_ 6
 	tie
 	G_ 6
-	volume 55
+	volume_envelope 3, 7
 	G_ 2
 	music_end
 
@@ -91,7 +91,7 @@ Music_MatchLoss_Ch2:
 Music_MatchLoss_Ch3:
 	stereo_panning 1, 1
 	wave 1
-	volume 32
+	volume_envelope 2, 0
 	cutoff 8
 	echo 64
 	octave 1

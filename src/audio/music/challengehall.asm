@@ -5,60 +5,60 @@ Music_ChallengeHall_Ch1:
 	cutoff 7
 	octave 3
 	duty 2
-	volume 128
+	volume_envelope 8, 0
 	cutoff 8
 	speed 1
 	A_ 7
 	G# 4
-	volume 23
+	volume_envelope 1, 7
 	G# 4
-	volume 128
+	volume_envelope 8, 0
 	A_ 4
-	volume 23
+	volume_envelope 1, 7
 	A_ 3
-	volume 128
+	volume_envelope 8, 0
 	B_ 4
-	volume 23
+	volume_envelope 1, 7
 	B_ 4
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	C# 7
 	C_ 4
-	volume 23
+	volume_envelope 1, 7
 	C_ 4
-	volume 128
+	volume_envelope 8, 0
 	C# 4
-	volume 23
+	volume_envelope 1, 7
 	C# 3
-	volume 128
+	volume_envelope 8, 0
 	D_ 4
-	volume 23
+	volume_envelope 1, 7
 	D_ 4
-	volume 128
+	volume_envelope 8, 0
 	E_ 7
 	D# 4
-	volume 23
+	volume_envelope 1, 7
 	D# 4
-	volume 128
+	volume_envelope 8, 0
 	E_ 4
-	volume 23
+	volume_envelope 1, 7
 	E_ 3
-	volume 128
+	volume_envelope 8, 0
 	F# 4
-	volume 23
+	volume_envelope 1, 7
 	F# 4
-	volume 128
+	volume_envelope 8, 0
 	G# 4
-	volume 23
+	volume_envelope 1, 7
 	G# 3
-	volume 128
+	volume_envelope 8, 0
 	A_ 8
 	B_ 7
 	inc_octave
 	C# 4
 	D_ 4
 	MainLoop
-	volume 112
+	volume_envelope 7, 0
 	speed 1
 	octave 5
 	Loop 8
@@ -68,111 +68,111 @@ Music_ChallengeHall_Ch1:
 	F# 4
 	EndLoop
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	dec_octave
 	dec_octave
 	dec_octave
 	B_ 7
-	volume 39
+	volume_envelope 2, 7
 	B_ 8
 	dec_octave
-	volume 128
+	volume_envelope 8, 0
 	B_ 7
 	B_ 8
 	B_ 7
-	volume 39
+	volume_envelope 2, 7
 	B_ 8
-	volume 128
+	volume_envelope 8, 0
 	B_ 7
-	volume 39
+	volume_envelope 2, 7
 	B_ 8
-	volume 128
+	volume_envelope 8, 0
 	B_ 7
-	volume 39
+	volume_envelope 2, 7
 	B_ 8
-	volume 128
+	volume_envelope 8, 0
 	B_ 15
 	inc_octave
 	D_ 15
 	E_ 15
 	inc_octave
 	duty 0
-	volume 160
+	volume_envelope 10, 0
 	music_call Branch_f9848
-	volume 160
+	volume_envelope 10, 0
 	D_ 8
 	speed 10
 	C# 6
 	tie
 	C# 6
-	volume 55
+	volume_envelope 3, 7
 	speed 1
 	C# 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	C# 7
-	volume 39
+	volume_envelope 2, 7
 	C# 8
 	rest 15
-	volume 128
+	volume_envelope 8, 0
 	C# 7
-	volume 39
+	volume_envelope 2, 7
 	C# 8
 	rest 15
-	volume 128
+	volume_envelope 8, 0
 	D_ 7
-	volume 39
+	volume_envelope 2, 7
 	D_ 8
 	rest 15
-	volume 128
+	volume_envelope 8, 0
 	D_ 7
-	volume 39
+	volume_envelope 2, 7
 	D_ 8
 	duty 0
-	volume 160
+	volume_envelope 10, 0
 	music_call Branch_f9848
-	volume 160
+	volume_envelope 10, 0
 	C# 8
 	dec_octave
 	speed 10
 	A_ 6
 	tie
 	A_ 6
-	volume 55
+	volume_envelope 3, 7
 	speed 1
 	A_ 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	inc_octave
 	C# 7
-	volume 39
+	volume_envelope 2, 7
 	C# 8
 	rest 15
-	volume 128
+	volume_envelope 8, 0
 	C# 7
-	volume 39
+	volume_envelope 2, 7
 	C# 8
 	rest 15
-	volume 128
+	volume_envelope 8, 0
 	C# 15
 	D_ 15
 	E_ 15
-	volume 39
+	volume_envelope 2, 7
 	E_ 15
 	duty 0
-	volume 160
+	volume_envelope 10, 0
 	F# 7
 	F_ 7
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
-	volume 160
+	volume_envelope 10, 0
 	F# 7
 	F_ 8
 	F# 7
 	G# 7
-	volume 55
+	volume_envelope 3, 7
 	G# 1
-	volume 160
+	volume_envelope 10, 0
 	speed 10
 	A_ 3
 	tie
@@ -180,165 +180,165 @@ Music_ChallengeHall_Ch1:
 	A_ 15
 	dec_octave
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	duty 0
-	volume 160
+	volume_envelope 10, 0
 	rest 15
 	inc_octave
 	E_ 7
 	D# 7
-	volume 55
+	volume_envelope 3, 7
 	D# 1
-	volume 160
+	volume_envelope 10, 0
 	E_ 7
 	D# 8
 	E_ 7
 	G# 7
-	volume 55
+	volume_envelope 3, 7
 	G# 1
-	volume 160
+	volume_envelope 10, 0
 	speed 9
 	A_ 5
 	speed 1
 	dec_octave
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	duty 0
-	volume 160
+	volume_envelope 10, 0
 	rest 15
 	inc_octave
 	D_ 7
 	C# 8
 	D_ 7
-	volume 55
+	volume_envelope 3, 7
 	D_ 8
-	volume 160
+	volume_envelope 10, 0
 	A_ 7
-	volume 55
+	volume_envelope 3, 7
 	A_ 8
-	volume 160
+	volume_envelope 10, 0
 	G# 15
 	tie
 	G# 7
-	volume 55
+	volume_envelope 3, 7
 	G# 8
-	volume 160
+	volume_envelope 10, 0
 	F# 15
-	volume 55
+	volume_envelope 3, 7
 	F# 7
-	volume 160
+	volume_envelope 10, 0
 	G# 8
 	speed 10
 	E_ 6
 	speed 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 15
-	volume 160
+	volume_envelope 10, 0
 	C# 15
 	D_ 15
 	E_ 15
-	volume 55
+	volume_envelope 3, 7
 	E_ 15
-	volume 160
+	volume_envelope 10, 0
 	F# 7
 	F_ 7
-	volume 55
+	volume_envelope 3, 7
 	F_ 1
-	volume 160
+	volume_envelope 10, 0
 	F# 7
 	F_ 8
 	F# 6
-	volume 55
+	volume_envelope 3, 7
 	F# 1
-	volume 160
+	volume_envelope 10, 0
 	G# 6
-	volume 55
+	volume_envelope 3, 7
 	G# 2
-	volume 160
+	volume_envelope 10, 0
 	speed 10
 	A_ 3
 	speed 1
 	G# 15
 	dec_octave
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 7
 	inc_octave
 	duty 0
-	volume 160
+	volume_envelope 10, 0
 	F# 6
-	volume 55
+	volume_envelope 3, 7
 	F# 2
-	volume 160
+	volume_envelope 10, 0
 	E_ 15
-	volume 55
+	volume_envelope 3, 7
 	E_ 15
-	volume 160
+	volume_envelope 10, 0
 	B_ 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	dec_octave
 	B_ 7
 	inc_octave
 	duty 0
-	volume 160
+	volume_envelope 10, 0
 	G# 6
-	volume 55
+	volume_envelope 3, 7
 	G# 2
-	volume 160
+	volume_envelope 10, 0
 	speed 10
 	A_ 3
 	speed 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 15
-	volume 160
+	volume_envelope 10, 0
 	B_ 6
-	volume 55
+	volume_envelope 3, 7
 	B_ 1
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	C# 6
-	volume 55
+	volume_envelope 3, 7
 	C# 2
-	volume 160
+	volume_envelope 10, 0
 	speed 10
 	D_ 3
 	speed 1
-	volume 55
+	volume_envelope 3, 7
 	D_ 15
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	F# 6
-	volume 55
+	volume_envelope 3, 7
 	F# 1
-	volume 160
+	volume_envelope 10, 0
 	B_ 6
-	volume 55
+	volume_envelope 3, 7
 	B_ 2
-	volume 160
+	volume_envelope 10, 0
 	A_ 15
-	volume 55
+	volume_envelope 3, 7
 	A_ 15
-	volume 160
+	volume_envelope 10, 0
 	G# 11
-	volume 55
+	volume_envelope 3, 7
 	G# 4
 	rest 7
-	volume 160
+	volume_envelope 10, 0
 	A_ 7
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
-	volume 160
+	volume_envelope 10, 0
 	speed 10
 	A_ 6
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	speed 1
 	inc_octave
 	C# 7
@@ -357,44 +357,44 @@ Music_ChallengeHall_Ch1:
 
 Branch_f9848:
 	C# 15
-	volume 55
+	volume_envelope 3, 7
 	C# 15
-	volume 160
+	volume_envelope 10, 0
 	E_ 15
-	volume 55
+	volume_envelope 3, 7
 	E_ 7
-	volume 160
+	volume_envelope 10, 0
 	C# 8
 	D_ 15
-	volume 55
+	volume_envelope 3, 7
 	D_ 15
-	volume 160
+	volume_envelope 10, 0
 	F# 15
-	volume 55
+	volume_envelope 3, 7
 	F# 7
-	volume 160
+	volume_envelope 10, 0
 	D_ 8
 	E_ 7
-	volume 55
+	volume_envelope 3, 7
 	E_ 8
-	volume 160
+	volume_envelope 10, 0
 	A_ 15
 	G# 7
-	volume 55
+	volume_envelope 3, 7
 	G# 8
-	volume 160
+	volume_envelope 10, 0
 	F# 7
-	volume 55
+	volume_envelope 3, 7
 	F# 8
-	volume 160
+	volume_envelope 10, 0
 	E_ 15
 	D_ 7
-	volume 55
+	volume_envelope 3, 7
 	D_ 8
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	B_ 15
-	volume 55
+	volume_envelope 3, 7
 	B_ 7
 	inc_octave
 	music_ret
@@ -412,7 +412,7 @@ Music_ChallengeHall_Ch2:
 	EndLoop
 	MainLoop
 	duty 1
-	volume 144
+	volume_envelope 9, 0
 	cutoff 8
 	speed 10
 	E_ 6
@@ -420,24 +420,24 @@ Music_ChallengeHall_Ch2:
 	E_ 6
 	speed 1
 	E_ 7
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
 	dec_octave
-	volume 128
+	volume_envelope 8, 0
 	E_ 7
 	E_ 8
 	E_ 7
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
-	volume 128
+	volume_envelope 8, 0
 	E_ 7
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
-	volume 128
+	volume_envelope 8, 0
 	E_ 7
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
-	volume 128
+	volume_envelope 8, 0
 	E_ 15
 	F# 15
 	G# 15
@@ -450,24 +450,24 @@ Music_ChallengeHall_Ch2:
 	speed 1
 	rest 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	rest 15
-	volume 128
+	volume_envelope 8, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	rest 15
-	volume 128
+	volume_envelope 8, 0
 	B_ 7
-	volume 39
+	volume_envelope 2, 7
 	B_ 8
 	rest 15
-	volume 128
+	volume_envelope 8, 0
 	B_ 7
-	volume 39
+	volume_envelope 2, 7
 	B_ 8
 	music_call Branch_f9a28
 	G# 8
@@ -478,77 +478,77 @@ Music_ChallengeHall_Ch2:
 	speed 1
 	rest 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	rest 15
-	volume 128
+	volume_envelope 8, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	rest 15
-	volume 128
+	volume_envelope 8, 0
 	A_ 15
 	B_ 15
 	inc_octave
 	C# 15
-	volume 39
+	volume_envelope 2, 7
 	C# 15
-	volume 128
+	volume_envelope 8, 0
 	D_ 7
-	volume 39
+	volume_envelope 2, 7
 	D_ 8
 	rest 15
 	dec_octave
-	volume 128
+	volume_envelope 8, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	rest 15
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	D_ 7
 	duty 2
-	volume 96
+	volume_envelope 6, 0
 	inc_octave
 	D_ 8
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	inc_octave
-	volume 96
+	volume_envelope 6, 0
 	D_ 7
-	volume 39
+	volume_envelope 2, 7
 	D_ 8
-	volume 96
+	volume_envelope 6, 0
 	Loop 4
 	E_ 4
 	F# 3
 	E_ 4
 	F# 4
 	EndLoop
-	volume 39
+	volume_envelope 2, 7
 	F# 5
 	rest 10
 	dec_octave
 	dec_octave
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	C# 7
 	inc_octave
 	duty 2
-	volume 96
+	volume_envelope 6, 0
 	E_ 8
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	inc_octave
-	volume 96
+	volume_envelope 6, 0
 	C# 7
-	volume 39
+	volume_envelope 2, 7
 	C# 8
-	volume 80
+	volume_envelope 5, 0
 	Loop 4
 	D_ 4
 	E_ 3
@@ -559,63 +559,63 @@ Music_ChallengeHall_Ch2:
 	B_ 15
 	inc_octave
 	D_ 7
-	volume 39
+	volume_envelope 2, 7
 	D_ 8
-	volume 80
+	volume_envelope 5, 0
 	C# 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	octave 2
 	B_ 7
 	inc_octave
 	inc_octave
 	vibrato_type 1
 	duty 2
-	volume 80
+	volume_envelope 5, 0
 	B_ 8
 	inc_octave
 	speed 10
 	C# 6
-	volume 39
+	volume_envelope 2, 7
 	speed 1
 	C# 15
 	vibrato_type 8
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	octave 2
 	E_ 15
 	F# 15
 	A# 15
 	rest 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	inc_octave
 	D_ 7
-	volume 39
+	volume_envelope 2, 7
 	D_ 8
 	rest 15
 	dec_octave
-	volume 128
+	volume_envelope 8, 0
 	B_ 7
-	volume 39
+	volume_envelope 2, 7
 	B_ 8
 	rest 15
 	inc_octave
-	volume 128
+	volume_envelope 8, 0
 	D_ 7
 	inc_octave
 	duty 2
-	volume 96
+	volume_envelope 6, 0
 	D_ 8
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	inc_octave
-	volume 96
+	volume_envelope 6, 0
 	D_ 7
-	volume 39
+	volume_envelope 2, 7
 	D_ 8
-	volume 96
+	volume_envelope 6, 0
 	Loop 2
 	E_ 4
 	F# 3
@@ -623,7 +623,7 @@ Music_ChallengeHall_Ch2:
 	F# 4
 	EndLoop
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	dec_octave
 	dec_octave
 	F_ 15
@@ -635,10 +635,10 @@ Music_ChallengeHall_Ch2:
 	speed 1
 	rest 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	C# 7
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	E_ 6
 	rest 2
 	speed 10
@@ -647,51 +647,51 @@ Music_ChallengeHall_Ch2:
 	rest 15
 	dec_octave
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 7
 	inc_octave
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	D_ 6
 	rest 2
 	E_ 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	E_ 7
-	volume 39
+	volume_envelope 2, 7
 	E_ 8
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	D_ 11
 	rest 4
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	dec_octave
 	B_ 7
 	inc_octave
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	D_ 6
 	rest 2
 	C# 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	cutoff 7
 	C# 5
 	C# 5
 	C# 5
 	cutoff 8
 	C# 7
-	volume 39
+	volume_envelope 2, 7
 	C# 8
-	volume 128
+	volume_envelope 8, 0
 	C# 7
-	volume 39
+	volume_envelope 2, 7
 	C# 8
 	duty 0
-	volume 160
+	volume_envelope 10, 0
 	A_ 7
-	volume 55
+	volume_envelope 3, 7
 	A_ 8
 	rest 15
 	speed 10
@@ -700,80 +700,80 @@ Music_ChallengeHall_Ch2:
 
 Branch_f9a28:
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	A_ 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 8
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	inc_octave
 	C# 15
 	dec_octave
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	A_ 7
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	A_ 8
 	B_ 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 7
-	volume 39
+	volume_envelope 2, 7
 	B_ 8
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	inc_octave
 	D_ 15
 	dec_octave
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	B_ 7
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	B_ 8
 	inc_octave
 	C# 7
-	volume 55
+	volume_envelope 3, 7
 	C# 8
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	C# 7
-	volume 39
+	volume_envelope 2, 7
 	C# 8
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	E_ 7
 	rest 8
 	E_ 7
 	rest 8
-	volume 112
+	volume_envelope 7, 0
 	D_ 15
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	D_ 7
-	volume 39
+	volume_envelope 2, 7
 	D_ 8
 	dec_octave
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	G# 15
 	inc_octave
 	duty 1
-	volume 128
+	volume_envelope 8, 0
 	D_ 7
 	dec_octave
 	duty 0
-	volume 112
+	volume_envelope 7, 0
 	music_ret
 
 
 Music_ChallengeHall_Ch3:
 	stereo_panning 1, 1
-	volume 32
+	volume_envelope 2, 0
 	wave 1
 	echo 0
 	cutoff 8

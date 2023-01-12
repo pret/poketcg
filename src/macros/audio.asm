@@ -137,8 +137,13 @@ MACRO duty
 	db $e5, \1 << 6
 ENDM
 
-MACRO volume
-	db $e6, \1
+MACRO volume_envelope
+	db $e6
+	IF \2 < 0
+		dn \1, %1000 | (\2 * -1)
+	ELSE
+		dn \1, \2
+	ENDC
 ENDM
 
 MACRO wave

@@ -5,50 +5,50 @@ Music_MatchVictory_Ch1:
 	cutoff 8
 	octave 3
 	duty 0
-	volume 176
+	volume_envelope 11, 0
 	speed 1
 	A_ 15
 	tie
 	A_ 9
-	volume 39
+	volume_envelope 2, 7
 	A_ 5
-	volume 176
+	volume_envelope 11, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 3
-	volume 176
+	volume_envelope 11, 0
 	F_ 7
-	volume 39
+	volume_envelope 2, 7
 	F_ 3
-	volume 176
+	volume_envelope 11, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 2
-	volume 176
+	volume_envelope 11, 0
 	B_ 11
-	volume 39
+	volume_envelope 2, 7
 	B_ 10
 	inc_octave
-	volume 176
+	volume_envelope 11, 0
 	C_ 10
-	volume 39
+	volume_envelope 2, 7
 	C_ 11
-	volume 176
+	volume_envelope 11, 0
 	D_ 10
-	volume 39
+	volume_envelope 2, 7
 	D_ 10
-	volume 176
+	volume_envelope 11, 0
 	C# 8
-	volume 39
+	volume_envelope 2, 7
 	C# 13
-	volume 176
+	volume_envelope 11, 0
 	D_ 5
-	volume 39
+	volume_envelope 2, 7
 	D_ 6
-	volume 176
+	volume_envelope 11, 0
 	speed 8
 	E_ 12
-	volume 39
+	volume_envelope 2, 7
 	E_ 4
 	music_end
 
@@ -60,58 +60,58 @@ Music_MatchVictory_Ch2:
 	cutoff 8
 	octave 3
 	duty 0
-	volume 176
+	volume_envelope 11, 0
 	speed 1
 	F_ 5
-	volume 39
+	volume_envelope 2, 7
 	F_ 5
 	dec_octave
-	volume 176
+	volume_envelope 11, 0
 	A_ 5
 	inc_octave
 	C_ 5
 	F_ 5
-	volume 39
+	volume_envelope 2, 7
 	F_ 4
-	volume 176
+	volume_envelope 11, 0
 	C_ 7
-	volume 39
+	volume_envelope 2, 7
 	C_ 3
 	dec_octave
-	volume 176
+	volume_envelope 11, 0
 	A_ 7
-	volume 39
+	volume_envelope 2, 7
 	A_ 3
 	inc_octave
-	volume 176
+	volume_envelope 11, 0
 	C_ 7
-	volume 39
+	volume_envelope 2, 7
 	C_ 2
-	volume 176
+	volume_envelope 11, 0
 	G_ 11
-	volume 39
+	volume_envelope 2, 7
 	G_ 10
-	volume 176
+	volume_envelope 11, 0
 	A_ 10
-	volume 39
+	volume_envelope 2, 7
 	A_ 11
-	volume 176
+	volume_envelope 11, 0
 	B_ 10
-	volume 39
+	volume_envelope 2, 7
 	B_ 10
-	volume 176
+	volume_envelope 11, 0
 	A_ 8
-	volume 39
+	volume_envelope 2, 7
 	A_ 13
-	volume 176
+	volume_envelope 11, 0
 	B_ 5
-	volume 39
+	volume_envelope 2, 7
 	B_ 6
 	inc_octave
-	volume 176
+	volume_envelope 11, 0
 	speed 8
 	C# 12
-	volume 39
+	volume_envelope 2, 7
 	C# 4
 	music_end
 
@@ -119,7 +119,7 @@ Music_MatchVictory_Ch2:
 Music_MatchVictory_Ch3:
 	stereo_panning 1, 1
 	wave 1
-	volume 32
+	volume_envelope 2, 0
 	cutoff 8
 	echo 0
 	octave 1

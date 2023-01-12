@@ -9,27 +9,27 @@ Music_DuelTheme3_Ch1:
 	duty 0
 	Loop 4
 	Loop 4
-	volume 146
+	volume_envelope 9, 2
 	F# 2
 	rest 1
 	EndLoop
-	volume 144
+	volume_envelope 9, 0
 	E_ 2
-	volume 149
+	volume_envelope 9, 5
 	F_ 2
 	EndLoop
 	Loop 4
 	music_call Branch_f67b2
 	EndLoop
 	duty 1
-	volume 160
+	volume_envelope 10, 0
 	Loop 2
 	octave 3
 	C# 1
 	F# 1
 	speed 1
 	G# 5
-	volume 55
+	volume_envelope 3, 7
 	G# 6
 	music_call Branch_f65a7
 	octave 3
@@ -37,42 +37,42 @@ Music_DuelTheme3_Ch1:
 	F# 1
 	speed 1
 	B_ 5
-	volume 55
+	volume_envelope 3, 7
 	B_ 6
 	music_call Branch_f65a7
 	EndLoop
 	duty 0
-	volume 163
+	volume_envelope 10, 3
 	dec_octave
 	rest 2
 	speed 1
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 6
 	music_call Branch_f65cf
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
 	speed 11
 	rest 1
 	dec_octave
 	duty 0
-	volume 163
+	volume_envelope 10, 3
 	speed 1
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 6
 	music_call Branch_f65cf
 	speed 11
 	duty 1
-	volume 160
+	volume_envelope 10, 0
 	Loop 2
 	octave 3
 	C# 1
 	F# 1
 	speed 1
 	G# 5
-	volume 55
+	volume_envelope 3, 7
 	G# 6
 	music_call Branch_f65a7
 	octave 3
@@ -80,9 +80,9 @@ Music_DuelTheme3_Ch1:
 	F# 1
 	speed 1
 	B_ 5
-	volume 55
+	volume_envelope 3, 7
 	B_ 6
-	volume 160
+	volume_envelope 10, 0
 	music_call Branch_f65a7
 	EndLoop
 	vibrato_delay 10
@@ -90,20 +90,20 @@ Music_DuelTheme3_Ch1:
 	Loop 2
 	octave 2
 	rest 4
-	volume 144
+	volume_envelope 9, 0
 	F# 2
-	volume 39
+	volume_envelope 2, 7
 	F# 2
 	rest 2
-	volume 144
+	volume_envelope 9, 0
 	E_ 2
-	volume 39
+	volume_envelope 2, 7
 	E_ 4
-	volume 144
+	volume_envelope 9, 0
 	D# 2
-	volume 39
+	volume_envelope 2, 7
 	D# 4
-	volume 144
+	volume_envelope 9, 0
 	D_ 2
 	C# 2
 	EndLoop
@@ -114,40 +114,40 @@ Music_DuelTheme3_Ch1:
 	music_call Branch_f661d
 	EndLoop
 	octave 4
-	volume 112
+	volume_envelope 7, 0
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
-	volume 112
+	volume_envelope 7, 0
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
 	Loop 3
 	music_call Branch_f661d
 	EndLoop
 	octave 4
-	volume 112
+	volume_envelope 7, 0
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
-	volume 112
+	volume_envelope 7, 0
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
 	inc_octave
-	volume 112
+	volume_envelope 7, 0
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
 	dec_octave
-	volume 112
+	volume_envelope 7, 0
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
 	dec_octave
 	speed 11
 	duty 1
-	volume 144
+	volume_envelope 9, 0
 	cutoff 8
 	D_ 2
 	C# 2
@@ -175,44 +175,44 @@ Music_DuelTheme3_Ch1:
 	octave 2
 	Loop 2
 	Loop 4
-	volume 144
+	volume_envelope 9, 0
 	F# 1
-	volume 55
+	volume_envelope 3, 7
 	F# 1
 	rest 1
 	EndLoop
-	volume 144
+	volume_envelope 9, 0
 	F# 1
-	volume 55
+	volume_envelope 3, 7
 	F# 1
-	volume 144
+	volume_envelope 9, 0
 	F# 1
-	volume 55
+	volume_envelope 3, 7
 	F# 1
 	Loop 4
-	volume 144
+	volume_envelope 9, 0
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
 	rest 1
 	EndLoop
-	volume 144
+	volume_envelope 9, 0
 	A_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
-	volume 144
+	volume_envelope 9, 0
 	G_ 1
-	volume 55
+	volume_envelope 3, 7
 	G_ 1
 	EndLoop
 	duty 1
-	volume 160
+	volume_envelope 10, 0
 	octave 3
 	C# 1
 	F# 1
 	speed 1
 	G# 5
-	volume 55
+	volume_envelope 3, 7
 	G# 6
 	music_call Branch_f65a7
 	octave 3
@@ -220,16 +220,16 @@ Music_DuelTheme3_Ch1:
 	F# 1
 	speed 1
 	G# 5
-	volume 55
+	volume_envelope 3, 7
 	G# 6
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	speed 11
 	C# 9
-	volume 55
+	volume_envelope 3, 7
 	C# 2
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	B_ 1
 	inc_octave
 	C# 1
@@ -238,55 +238,55 @@ Music_DuelTheme3_Ch1:
 	dec_octave
 	speed 1
 	B_ 5
-	volume 55
+	volume_envelope 3, 7
 	B_ 6
 	speed 11
-	volume 160
+	volume_envelope 10, 0
 	F# 9
-	volume 55
+	volume_envelope 3, 7
 	F# 4
-	volume 160
+	volume_envelope 10, 0
 	G# 1
 	A_ 1
 	speed 1
 	G# 5
-	volume 55
+	volume_envelope 3, 7
 	G# 6
-	volume 160
+	volume_envelope 10, 0
 	speed 11
 	B_ 8
-	volume 55
+	volume_envelope 3, 7
 	B_ 1
-	volume 160
+	volume_envelope 10, 0
 	A_ 2
 	B_ 1
 	tie
 	speed 1
 	B_ 5
-	volume 55
+	volume_envelope 3, 7
 	B_ 6
 	speed 11
 	inc_octave
-	volume 160
+	volume_envelope 10, 0
 	C# 1
 	D_ 1
 	speed 1
 	C# 5
-	volume 55
+	volume_envelope 3, 7
 	C# 6
-	volume 160
+	volume_envelope 10, 0
 	speed 11
 	E_ 10
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
-	volume 160
+	volume_envelope 10, 0
 	D_ 1
 	speed 1
 	C# 8
-	volume 55
+	volume_envelope 3, 7
 	C# 3
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	speed 11
 	B_ 1
 	inc_octave
@@ -294,55 +294,55 @@ Music_DuelTheme3_Ch1:
 	dec_octave
 	speed 1
 	B_ 5
-	volume 55
+	volume_envelope 3, 7
 	B_ 6
 	speed 11
-	volume 160
+	volume_envelope 10, 0
 	E_ 10
-	volume 55
+	volume_envelope 3, 7
 	E_ 3
-	volume 31
+	volume_envelope 1, -7
 	A_ 3
-	volume 96
+	volume_envelope 6, 0
 	A_ 5
 	inc_octave
-	volume 63
+	volume_envelope 3, -7
 	E_ 3
-	volume 127
+	volume_envelope 7, -7
 	E_ 3
-	volume 160
+	volume_envelope 10, 0
 	E_ 2
 	duty 1
 	Loop 4
 	Loop 4
-	volume 144
+	volume_envelope 9, 0
 	G# 1
-	volume 55
+	volume_envelope 3, 7
 	G# 1
 	rest 1
 	EndLoop
-	volume 144
+	volume_envelope 9, 0
 	G# 1
-	volume 55
+	volume_envelope 3, 7
 	G# 1
-	volume 144
+	volume_envelope 9, 0
 	G# 1
-	volume 55
+	volume_envelope 3, 7
 	G# 1
 	Loop 4
-	volume 144
+	volume_envelope 9, 0
 	A_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
 	rest 1
 	EndLoop
-	volume 144
+	volume_envelope 9, 0
 	A_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
-	volume 144
+	volume_envelope 9, 0
 	A_ 1
-	volume 55
+	volume_envelope 3, 7
 	A_ 1
 	EndLoop
 	EndMainLoop
@@ -350,14 +350,14 @@ Music_DuelTheme3_Ch1:
 Branch_f65a7:
 	speed 11
 	octave 4
-	volume 160
+	volume_envelope 10, 0
 	C# 5
 	tie
 	C# 4
-	volume 55
+	volume_envelope 3, 7
 	C# 2
 	dec_octave
-	volume 160
+	volume_envelope 10, 0
 	B_ 1
 	inc_octave
 	C# 1
@@ -366,17 +366,17 @@ Branch_f65a7:
 	dec_octave
 	speed 1
 	B_ 5
-	volume 55
+	volume_envelope 3, 7
 	B_ 6
 	speed 11
-	volume 160
+	volume_envelope 10, 0
 	inc_octave
 	C# 5
 	tie
 	C# 4
-	volume 55
+	volume_envelope 3, 7
 	C# 4
-	volume 160
+	volume_envelope 10, 0
 	music_ret
 
 Branch_f65cf:
@@ -385,13 +385,13 @@ Branch_f65cf:
 	speed 11
 	rest 2
 	speed 1
-	volume 163
+	volume_envelope 10, 3
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 6
 	EndLoop
 	duty 2
-	volume 128
+	volume_envelope 8, 0
 	D_ 5
 	G_ 6
 	B_ 5
@@ -404,29 +404,29 @@ Branch_f65cf:
 	D_ 5
 	G_ 6
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
 	duty 0
-	volume 163
+	volume_envelope 10, 3
 	speed 11
 	rest 1
 	dec_octave
 	speed 1
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 6
 	Loop 3
 	speed 11
 	rest 2
 	speed 1
-	volume 163
+	volume_envelope 10, 3
 	E_ 5
-	volume 39
+	volume_envelope 2, 7
 	E_ 6
 	EndLoop
 	dec_octave
 	duty 2
-	volume 128
+	volume_envelope 8, 0
 	B_ 5
 	inc_octave
 	E_ 6
@@ -442,33 +442,33 @@ Branch_f65cf:
 Branch_f661d:
 	octave 4
 	speed 1
-	volume 112
+	volume_envelope 7, 0
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
-	volume 112
+	volume_envelope 7, 0
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
 	inc_octave
-	volume 112
+	volume_envelope 7, 0
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
 	dec_octave
-	volume 112
+	volume_envelope 7, 0
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
 	inc_octave
-	volume 112
+	volume_envelope 7, 0
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
 	dec_octave
-	volume 112
+	volume_envelope 7, 0
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
 	music_ret
 
@@ -485,22 +485,22 @@ Music_DuelTheme3_Ch2:
 	frequency_offset 3
 	Loop 4
 	Loop 4
-	volume 130
+	volume_envelope 8, 2
 	F# 2
 	rest 1
 	EndLoop
-	volume 128
+	volume_envelope 8, 0
 	E_ 2
-	volume 133
+	volume_envelope 8, 5
 	F_ 2
 	EndLoop
 	frequency_offset 0
 	octave 3
 	Loop 4
 	rest 6
-	volume 163
+	volume_envelope 10, 3
 	E_ 1
-	volume 39
+	volume_envelope 2, 7
 	E_ 1
 	rest 8
 	EndLoop
@@ -513,36 +513,36 @@ Music_DuelTheme3_Ch2:
 	EndLoop
 	EndLoop
 	octave 2
-	volume 163
+	volume_envelope 10, 3
 	speed 11
 	rest 1
 	speed 1
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
-	volume 163
+	volume_envelope 10, 3
 	A_ 5
-	volume 39
+	volume_envelope 2, 7
 	A_ 6
 	music_call Branch_f6866
 	octave 4
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
 	dec_octave
 	dec_octave
 	duty 0
-	volume 163
+	volume_envelope 10, 3
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
-	volume 163
+	volume_envelope 10, 3
 	A_ 5
-	volume 39
+	volume_envelope 2, 7
 	A_ 6
 	music_call Branch_f6866
 	duty 0
-	volume 144
+	volume_envelope 9, 0
 	Loop 2
 	Loop 2
 	music_call Branch_f67b2
@@ -553,71 +553,71 @@ Music_DuelTheme3_Ch2:
 	EndLoop
 	vibrato_delay 10
 	Loop 4
-	volume 163
+	volume_envelope 10, 3
 	cutoff 6
 	F# 1
 	F# 1
 	cutoff 8
 	speed 1
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
-	volume 163
+	volume_envelope 10, 3
 	cutoff 6
 	speed 11
 	F# 1
 	inc_octave
-	volume 144
+	volume_envelope 9, 0
 	cutoff 8
 	C# 2
 	dec_octave
-	volume 163
+	volume_envelope 10, 3
 	cutoff 6
 	F# 1
 	F# 1
 	speed 1
 	cutoff 8
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
-	volume 163
+	volume_envelope 10, 3
 	cutoff 6
 	speed 11
 	F# 1
-	volume 144
+	volume_envelope 9, 0
 	cutoff 8
 	B_ 2
-	volume 163
+	volume_envelope 10, 3
 	cutoff 6
 	F# 1
 	F# 1
 	cutoff 8
 	speed 1
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
-	volume 163
+	volume_envelope 10, 3
 	cutoff 6
 	speed 11
 	F# 1
-	volume 144
+	volume_envelope 9, 0
 	cutoff 8
 	B_ 2
-	volume 163
+	volume_envelope 10, 3
 	cutoff 6
 	F# 1
 	F# 1
 	speed 1
 	cutoff 8
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
-	volume 163
+	volume_envelope 10, 3
 	cutoff 6
 	speed 11
 	F# 1
 	cutoff 8
-	volume 144
+	volume_envelope 9, 0
 	A_ 2
 	G# 2
 	EndLoop
@@ -644,195 +644,195 @@ Music_DuelTheme3_Ch2:
 	octave 3
 	Loop 6
 	Loop 4
-	volume 144
+	volume_envelope 9, 0
 	C# 1
-	volume 55
+	volume_envelope 3, 7
 	C# 1
 	rest 1
 	EndLoop
-	volume 144
+	volume_envelope 9, 0
 	C# 1
-	volume 55
+	volume_envelope 3, 7
 	C# 1
-	volume 144
+	volume_envelope 9, 0
 	C# 1
-	volume 55
+	volume_envelope 3, 7
 	C# 1
 	Loop 4
-	volume 144
+	volume_envelope 9, 0
 	D_ 1
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
 	rest 1
 	EndLoop
-	volume 144
+	volume_envelope 9, 0
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
-	volume 144
+	volume_envelope 9, 0
 	D_ 1
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
 	EndLoop
 	duty 1
 	inc_octave
 	Loop 4
 	Loop 4
-	volume 128
+	volume_envelope 8, 0
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
 	rest 1
 	EndLoop
-	volume 128
+	volume_envelope 8, 0
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
-	volume 128
+	volume_envelope 8, 0
 	E_ 1
-	volume 55
+	volume_envelope 3, 7
 	E_ 1
 	Loop 4
-	volume 128
+	volume_envelope 8, 0
 	D_ 1
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
 	rest 1
 	EndLoop
-	volume 128
+	volume_envelope 8, 0
 	D_ 1
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
-	volume 128
+	volume_envelope 8, 0
 	D_ 1
-	volume 55
+	volume_envelope 3, 7
 	D_ 1
 	EndLoop
 	EndMainLoop
 
 Branch_f67b2:
 	octave 2
-	volume 163
+	volume_envelope 10, 3
 	speed 11
 	rest 1
 	speed 1
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
-	volume 163
+	volume_envelope 10, 3
 	A_ 5
-	volume 39
+	volume_envelope 2, 7
 	A_ 6
-	volume 163
+	volume_envelope 10, 3
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
-	volume 163
+	volume_envelope 10, 3
 	speed 11
 	rest 1
 	speed 1
 	F# 5
-	volume 55
+	volume_envelope 3, 7
 	F# 6
 	inc_octave
-	volume 163
+	volume_envelope 10, 3
 	speed 11
 	C_ 1
 	dec_octave
 	speed 1
 	B_ 5
-	volume 39
+	volume_envelope 2, 7
 	B_ 6
 	speed 11
 	rest 1
 	speed 1
-	volume 163
+	volume_envelope 10, 3
 	A_ 5
-	volume 39
+	volume_envelope 2, 7
 	A_ 6
 	speed 11
 	rest 1
 	speed 1
-	volume 163
+	volume_envelope 10, 3
 	B_ 5
-	volume 39
+	volume_envelope 2, 7
 	B_ 6
-	volume 163
+	volume_envelope 10, 3
 	A_ 4
 	B_ 4
 	A_ 3
 	F# 5
-	volume 39
+	volume_envelope 2, 7
 	F# 6
 	speed 11
-	volume 144
+	volume_envelope 9, 0
 	E_ 1
-	volume 163
+	volume_envelope 10, 3
 	F_ 1
 	music_ret
 
 Branch_f680a:
 	octave 2
-	volume 163
+	volume_envelope 10, 3
 	speed 11
 	rest 1
 	speed 1
 	G_ 5
-	volume 39
+	volume_envelope 2, 7
 	G_ 6
-	volume 163
+	volume_envelope 10, 3
 	B_ 5
-	volume 39
+	volume_envelope 2, 7
 	B_ 6
-	volume 163
+	volume_envelope 10, 3
 	G_ 5
-	volume 39
+	volume_envelope 2, 7
 	G_ 6
 	speed 11
 	rest 1
 	speed 1
-	volume 163
+	volume_envelope 10, 3
 	G_ 5
-	volume 39
+	volume_envelope 2, 7
 	G_ 6
 	inc_octave
-	volume 163
+	volume_envelope 10, 3
 	speed 11
 	C# 1
 	speed 1
 	C_ 5
-	volume 39
+	volume_envelope 2, 7
 	C_ 6
-	volume 163
+	volume_envelope 10, 3
 	speed 11
 	rest 1
 	dec_octave
 	speed 1
 	B_ 5
-	volume 39
+	volume_envelope 2, 7
 	B_ 6
 	speed 11
 	rest 1
 	inc_octave
 	speed 1
-	volume 163
+	volume_envelope 10, 3
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
 	dec_octave
-	volume 163
+	volume_envelope 10, 3
 	B_ 4
 	inc_octave
 	C# 4
 	dec_octave
 	B_ 3
 	G_ 5
-	volume 39
+	volume_envelope 2, 7
 	G_ 6
 	speed 11
-	volume 144
+	volume_envelope 9, 0
 	B_ 1
-	volume 163
+	volume_envelope 10, 3
 	G_ 1
 	music_ret
 
@@ -842,17 +842,17 @@ Branch_f6866:
 	speed 11
 	rest 1
 	speed 1
-	volume 163
+	volume_envelope 10, 3
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
-	volume 163
+	volume_envelope 10, 3
 	A_ 5
-	volume 39
+	volume_envelope 2, 7
 	A_ 6
 	EndLoop
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	B_ 5
 	inc_octave
 	D_ 6
@@ -864,34 +864,34 @@ Branch_f6866:
 	inc_octave
 	D_ 6
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
 	dec_octave
 	dec_octave
 	duty 0
-	volume 163
+	volume_envelope 10, 3
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
-	volume 163
+	volume_envelope 10, 3
 	A_ 5
-	volume 39
+	volume_envelope 2, 7
 	A_ 6
 	Loop 3
 	speed 11
 	rest 1
 	speed 1
-	volume 163
+	volume_envelope 10, 3
 	C# 5
-	volume 39
+	volume_envelope 2, 7
 	C# 6
-	volume 163
+	volume_envelope 10, 3
 	A_ 5
-	volume 39
+	volume_envelope 2, 7
 	A_ 6
 	EndLoop
 	duty 2
-	volume 112
+	volume_envelope 7, 0
 	G_ 5
 	B_ 6
 	inc_octave
@@ -910,7 +910,7 @@ Branch_f6866:
 Music_DuelTheme3_Ch3:
 	speed 11
 	stereo_panning 1, 1
-	volume 32
+	volume_envelope 2, 0
 	wave 1
 	echo 96
 	vibrato_type 8

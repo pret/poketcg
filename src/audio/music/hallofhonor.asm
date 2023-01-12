@@ -11,15 +11,15 @@ Music_HallOfHonor_Ch1:
 	music_call Branch_fb016
 	EndLoop
 	octave 4
-	volume 85
+	volume_envelope 5, 5
 	C_ 1
-	volume 39
+	volume_envelope 2, 7
 	C_ 1
 	music_call Branch_fb044
 	Loop 23
-	volume 85
+	volume_envelope 5, 5
 	C_ 1
-	volume 39
+	volume_envelope 2, 7
 	G_ 1
 	music_call Branch_fb044
 	EndLoop
@@ -27,67 +27,67 @@ Music_HallOfHonor_Ch1:
 
 Branch_fb016:
 	octave 4
-	volume 101
+	volume_envelope 6, 5
 	C_ 1
-	volume 39
+	volume_envelope 2, 7
 	C_ 1
-	volume 101
+	volume_envelope 6, 5
 	F_ 1
-	volume 39
+	volume_envelope 2, 7
 	F_ 1
-	volume 101
+	volume_envelope 6, 5
 	G_ 1
-	volume 39
+	volume_envelope 2, 7
 	G_ 1
-	volume 101
+	volume_envelope 6, 5
 	F_ 1
-	volume 39
+	volume_envelope 2, 7
 	F_ 1
 	inc_octave
-	volume 101
+	volume_envelope 6, 5
 	C_ 1
-	volume 39
+	volume_envelope 2, 7
 	C_ 1
 	dec_octave
-	volume 101
+	volume_envelope 6, 5
 	F_ 1
-	volume 39
+	volume_envelope 2, 7
 	F_ 1
-	volume 101
+	volume_envelope 6, 5
 	G_ 1
-	volume 39
+	volume_envelope 2, 7
 	G_ 1
 	music_ret
 
 Branch_fb044:
 	octave 4
-	volume 85
+	volume_envelope 5, 5
 	F_ 1
-	volume 39
+	volume_envelope 2, 7
 	C_ 1
-	volume 85
+	volume_envelope 5, 5
 	G_ 1
-	volume 39
+	volume_envelope 2, 7
 	F_ 1
-	volume 85
+	volume_envelope 5, 5
 	F_ 1
-	volume 39
+	volume_envelope 2, 7
 	G_ 1
 	inc_octave
-	volume 85
+	volume_envelope 5, 5
 	C_ 1
 	dec_octave
-	volume 39
+	volume_envelope 2, 7
 	F_ 1
-	volume 85
+	volume_envelope 5, 5
 	F_ 1
 	inc_octave
-	volume 39
+	volume_envelope 2, 7
 	C_ 1
 	dec_octave
-	volume 85
+	volume_envelope 5, 5
 	G_ 1
-	volume 39
+	volume_envelope 2, 7
 	F_ 1
 	music_ret
 
@@ -102,7 +102,7 @@ Music_HallOfHonor_Ch2:
 	speed 1
 	rest 4
 	speed 7
-	volume 23
+	volume_envelope 1, 7
 	Loop 3
 	music_call Branch_fb1ec
 	EndLoop
@@ -130,18 +130,18 @@ Music_HallOfHonor_Ch2:
 	Loop 3
 	music_call Branch_fb0bb
 	octave 1
-	volume 109
+	volume_envelope 6, -5
 	E_ 5
-	volume 208
+	volume_envelope 13, 0
 	E_ 11
 	tie
 	E_ 12
 	EndLoop
 	music_call Branch_fb0bb
 	octave 1
-	volume 109
+	volume_envelope 6, -5
 	G_ 5
-	volume 208
+	volume_envelope 13, 0
 	G_ 11
 	tie
 	G_ 12
@@ -149,21 +149,21 @@ Music_HallOfHonor_Ch2:
 
 Branch_fb0bb:
 	octave 1
-	volume 109
+	volume_envelope 6, -5
 	F_ 5
-	volume 208
+	volume_envelope 13, 0
 	F_ 11
 	tie
 	F_ 12
-	volume 109
+	volume_envelope 6, -5
 	E_ 5
-	volume 208
+	volume_envelope 13, 0
 	E_ 11
 	tie
 	E_ 12
-	volume 109
+	volume_envelope 6, -5
 	D_ 5
-	volume 208
+	volume_envelope 13, 0
 	D_ 11
 	tie
 	D_ 12
@@ -172,7 +172,7 @@ Branch_fb0bb:
 
 Music_HallOfHonor_Ch3:
 	speed 7
-	volume 64
+	volume_envelope 4, 0
 	stereo_panning 1, 1
 	wave 2
 	vibrato_type 4
@@ -180,7 +180,7 @@ Music_HallOfHonor_Ch3:
 	cutoff 6
 	echo 64
 	rest 3
-	volume 96
+	volume_envelope 6, 0
 	cutoff 8
 	frequency_offset -1
 	Loop 4
@@ -204,7 +204,7 @@ Music_HallOfHonor_Ch3:
 	rest 1
 	dec_octave
 	F_ 1
-	volume 32
+	volume_envelope 2, 0
 	frequency_offset 0
 	octave 4
 	speed 1
@@ -371,7 +371,7 @@ Music_HallOfHonor_Ch3:
 	tie
 	C_ 12
 	rest 3
-	volume 96
+	volume_envelope 6, 0
 	frequency_offset -1
 	cutoff 8
 	EndMainLoop
