@@ -2,7 +2,7 @@ PlayIntroSequence:
 	call DisableLCD
 	farcall Func_10a9b
 	farcall InitMenuScreen
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	ld hl, HandleAllSpriteAnimations
 	call SetDoFrameFunction
 	call LoadTitleScreenSprites
@@ -47,7 +47,7 @@ PlayIntroSequence:
 	call LoadScene
 	call IntroSequenceEmptyFunc
 .asm_1d39f
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	call .ShowPressStart
 	call EnableLCD
 	ret

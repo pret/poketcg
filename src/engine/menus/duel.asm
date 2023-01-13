@@ -1,4 +1,4 @@
-_OpenDuelCheckMenu:
+_OpenDuelCheckMenu::
 	call ResetCheckMenuCursorPositionAndBlink
 	xor a
 	ld [wce5e], a
@@ -397,7 +397,7 @@ DrawYourOrOppPlayAreaScreen:
 ; loads tiles and icons to display Your Play Area / Opp. Play Area screen,
 ; and draws the screen according to the turn player
 ; input: [wCheckMenuPlayAreaWhichDuelist] and [wCheckMenuPlayAreaWhichLayout]
-_DrawYourOrOppPlayAreaScreen:
+_DrawYourOrOppPlayAreaScreen::
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -562,7 +562,7 @@ DrawInPlayAreaScreen:
 	ret
 
 ; draws players prize cards and bench cards
-_DrawPlayersPrizeAndBenchCards:
+_DrawPlayersPrizeAndBenchCards::
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -1373,7 +1373,7 @@ DisplayCheckMenuCursor_YourOrOppPlayArea:
 	jr DrawCheckMenuCursor_YourOrOppPlayArea
 
 ; handles Peek Pkmn Power selection menus
-_HandlePeekSelection:
+_HandlePeekSelection::
 	call Set_OBJ_8x8
 	call LoadCursorTile
 ; reset wce5c and wIsSwapTurnPending
@@ -1622,7 +1622,7 @@ PeekOppPlayAreaTransitionTable:
 	cursor_transition $08, $38, $00, $07, $07, $05, $04
 	cursor_transition $08, $60, $00, $06, $06, $01, $00
 
-_DrawAIPeekScreen:
+_DrawAIPeekScreen::
 	push bc
 	call Set_OBJ_8x8
 	call LoadCursorTile
@@ -1897,7 +1897,7 @@ ZeroObjectPositionsWithCopyToggleOn:
 	ret
 
 ; handles the screen for Player to select prize card(s)
-_SelectPrizeCards:
+_SelectPrizeCards::
 	xor a
 	call GetFirstSetPrizeCard
 	ld [wYourOrOppPlayAreaCurPosition], a
@@ -2015,7 +2015,7 @@ _SelectPrizeCards:
 	cursor_transition $08, $48, $00, $02, $00, $05, $05
 	cursor_transition $30, $48, $20, $03, $01, $04, $04
 
-_DrawPlayAreaToPlacePrizeCards:
+_DrawPlayAreaToPlacePrizeCards::
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions

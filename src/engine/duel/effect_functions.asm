@@ -6511,7 +6511,7 @@ ThunderstormEffect: ; 2e429 (b:6429)
 	ld [hl], $ff
 	ld a, b
 	ldh [hTemp_ffa0], a
-	call Func_3b21
+	call ResetAnimationQueue
 	call SwapTurn
 
 ; tally recoil damage

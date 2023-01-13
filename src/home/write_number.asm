@@ -1,6 +1,6 @@
 ; converts the two-digit BCD number provided in a to text (ascii) format,
 ; writes them to [wStringBuffer] and [wStringBuffer + 1], and to the BGMap0 address at bc
-WriteTwoDigitBCDNumber:
+WriteTwoDigitBCDNumber::
 	push hl
 	push bc
 	push de
@@ -20,7 +20,7 @@ WriteTwoDigitBCDNumber:
 
 ; converts the one-digit BCD number provided in the lower nybble of a to text
 ; (ascii) format, and writes it to [wStringBuffer] and to the BGMap0 address at bc
-WriteOneDigitBCDNumber:
+WriteOneDigitBCDNumber::
 	push hl
 	push bc
 	push de
@@ -40,7 +40,7 @@ WriteOneDigitBCDNumber:
 
 ; converts the four-digit BCD number provided in h and l to text (ascii) format,
 ; writes them to [wStringBuffer] through [wStringBuffer + 3], and to the BGMap0 address at bc
-WriteFourDigitBCDNumber:
+WriteFourDigitBCDNumber::
 	push hl
 	push bc
 	push de
@@ -66,7 +66,7 @@ WriteFourDigitBCDNumber:
 ; given two BCD digits in the two nybbles of register a,
 ; write them in text (ascii) format to hl (most significant nybble first).
 ; numbers above 9 end up converted to half-width font tiles.
-WriteBCDNumberInTextFormat:
+WriteBCDNumberInTextFormat::
 	push af
 	swap a
 	call WriteBCDDigitInTextFormat
@@ -75,7 +75,7 @@ WriteBCDNumberInTextFormat:
 
 ; given a BCD digit in the (lower nybble) of register a, write it in text (ascii)
 ;  format to hl. numbers above 9 end up converted to half-width font tiles.
-WriteBCDDigitInTextFormat:
+WriteBCDDigitInTextFormat::
 	and $0f
 	add "0"
 	cp "9" + 1
@@ -87,7 +87,7 @@ WriteBCDDigitInTextFormat:
 
 ; converts the one-byte number at a to text (ascii) format,
 ; and writes it to [wStringBuffer] and the BGMap0 address at bc
-WriteOneByteNumber:
+WriteOneByteNumber::
 	push bc
 	push hl
 	ld l, a
@@ -112,7 +112,7 @@ WriteOneByteNumber:
 
 ; converts the two-byte number at hl to text (ascii) format,
 ; and writes it to [wStringBuffer] and the BGMap0 address at bc
-WriteTwoByteNumber:
+WriteTwoByteNumber::
 	push bc
 	ld de, wStringBuffer
 	push de
@@ -125,7 +125,7 @@ WriteTwoByteNumber:
 	ret
 
 ; convert the number at hl to text (ascii) format and write it to de
-TwoByteNumberToText:
+TwoByteNumberToText::
 	push bc
 	ld bc, -10000
 	call .get_digit

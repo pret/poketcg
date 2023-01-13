@@ -11,7 +11,7 @@
 ; c: moved player
 ; e: load map/closed text box
 
-MapScripts:
+MapScripts::
 	table_width NUM_MAP_SCRIPTS * 2, MapScripts
 
 ; OVERWORLD_MAP

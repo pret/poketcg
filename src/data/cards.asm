@@ -1,7 +1,7 @@
 ; TODO: Make card data structures more compact and rearrange the fields for
 ; convenience once the meaning of all fields is figured out.
 
-CardPointers:
+CardPointers::
 	table_width 2, CardPointers
 	dw NULL
 	dw GrassEnergyCard

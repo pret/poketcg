@@ -1,9 +1,9 @@
-; return nc if wd42a, wd4c0, and wAnimationQueue[] are all equal to $ff
+; return nc if wActiveScreenAnim, wd4c0, and wAnimationQueue[] are all equal to $ff
 ; nc means no animation is playing (or animation(s) has/have ended)
-CheckAnyAnimationPlaying:
+CheckAnyAnimationPlaying::
 	push hl
 	push bc
-	ld a, [wd42a]
+	ld a, [wActiveScreenAnim]
 	ld hl, wd4c0
 	and [hl]
 	ld hl, wAnimationQueue
@@ -23,7 +23,7 @@ CheckAnyAnimationPlaying:
 ; and played in order, so they can be stacked
 ; input:
 ; - a = animation index
-PlayDuelAnimation:
+PlayDuelAnimation::
 	ld [wTempAnimation], a ; hold an animation temporarily
 	ldh a, [hBankROM]
 	push af
@@ -61,18 +61,18 @@ PlayDuelAnimation:
 	call BankswitchROM
 	ret
 
-Func_3ba2:
+UpdateQueuedAnimations::
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_1cac5)
+	ld a, BANK(_UpdateQueuedAnimations)
 	call BankswitchROM
-	call Func_1cac5
+	call _UpdateQueuedAnimations
 	call HandleAllSpriteAnimations
 	pop af
 	call BankswitchROM
 	ret
 
-Func_3bb5:
+Func_3bb5::
 	xor a
 	ld [wd4c0], a
 	ldh a, [hBankROM]
@@ -88,14 +88,14 @@ Func_3bb5:
 	ret
 
 ; writes from hl the pointer to the function to be called by DoFrame
-SetDoFrameFunction:
+SetDoFrameFunction::
 	ld a, l
 	ld [wDoFrameFunction], a
 	ld a, h
 	ld [wDoFrameFunction + 1], a
 	ret
 
-ResetDoFrameFunction:
+ResetDoFrameFunction::
 	push hl
 	ld hl, NULL
 	call SetDoFrameFunction

@@ -1,6 +1,6 @@
 ; save duel state to SRAM
 ; called between each two-player turn, just after player draws card (ROM bank 1 loaded)
-SaveDuelStateToSRAM:
+SaveDuelStateToSRAM::
 	ld a, $2
 	call BankswitchSRAM
 	; save duel data to sCurrentDuel
@@ -57,7 +57,7 @@ SaveDuelStateToSRAM:
 	ret
 
 ; copies the deck pointed to by de to wPlayerDeck or wOpponentDeck (depending on whose turn it is)
-CopyDeckData:
+CopyDeckData::
 	ld hl, wPlayerDeck
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
@@ -104,7 +104,7 @@ CopyDeckData:
 	ret
 
 ; return, in register a, the amount of prizes that the turn holder has not yet drawn
-CountPrizes:
+CountPrizes::
 	push hl
 	ld a, DUELVARS_PRIZES
 	call GetTurnDuelistVariable
@@ -121,7 +121,7 @@ CountPrizes:
 
 ; shuffles the turn holder's deck
 ; if less than 60 cards remain in the deck, it makes sure that the rest are ignored
-ShuffleDeck:
+ShuffleDeck::
 	ldh a, [hWhoseTurn]
 	ld h, a
 	ld d, a
@@ -139,7 +139,7 @@ ShuffleDeck:
 ; draw a card from the turn holder's deck, saving its location as CARD_LOCATION_JUST_DRAWN.
 ; returns carry if deck is empty, nc if a card was successfully drawn.
 ; AddCardToHand is meant to be called next (unless this function returned carry).
-DrawCardFromDeck:
+DrawCardFromDeck::
 	push hl
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
@@ -162,7 +162,7 @@ DrawCardFromDeck:
 
 ; add a card to the top of the turn holder's deck
 ; the card is identified by register a, which contains the deck index (0-59) of the card
-ReturnCardToDeck:
+ReturnCardToDeck::
 	push hl
 	push af
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
@@ -182,7 +182,7 @@ ReturnCardToDeck:
 ; search a card in the turn holder's deck, extract it, and set its location to
 ; CARD_LOCATION_JUST_DRAWN. AddCardToHand is meant to be called next.
 ; the card is identified by register a, which contains the deck index (0-59) of the card.
-SearchCardInDeckAndAddToHand:
+SearchCardInDeckAndAddToHand::
 	push af
 	push hl
 	push de
@@ -218,7 +218,7 @@ SearchCardInDeckAndAddToHand:
 
 ; adds a card to the turn holder's hand and increments the number of cards in the hand
 ; the card is identified by register a, which contains the deck index (0-59) of the card
-AddCardToHand:
+AddCardToHand::
 	push af
 	push hl
 	push de
@@ -243,7 +243,7 @@ AddCardToHand:
 
 ; removes a card from the turn holder's hand and decrements the number of cards in the hand
 ; the card is identified by register a, which contains the deck index (0-59) of the card
-RemoveCardFromHand:
+RemoveCardFromHand::
 	push af
 	push hl
 	push bc
@@ -281,7 +281,7 @@ RemoveCardFromHand:
 
 ; moves a card to the turn holder's discard pile, as long as it is in the hand
 ; the card is identified by register a, which contains the deck index (0-59) of the card
-MoveHandCardToDiscardPile:
+MoveHandCardToDiscardPile::
 	call GetTurnDuelistVariable
 	ld a, [hl]
 	and $ff ^ CARD_LOCATION_JUST_DRAWN
@@ -292,7 +292,7 @@ MoveHandCardToDiscardPile:
 ;	fallthrough
 
 ; puts the turn holder's card with the deck index (0-59) given in a into the discard pile
-PutCardInDiscardPile:
+PutCardInDiscardPile::
 	push af
 	push hl
 	push de
@@ -313,7 +313,7 @@ PutCardInDiscardPile:
 ; search a card in the turn holder's discard pile, extract it, and set its location to
 ; CARD_LOCATION_JUST_DRAWN. AddCardToHand is meant to be called next.
 ; the card is identified by register a, which contains the deck index (0-59) of the card
-MoveDiscardPileCardToHand:
+MoveDiscardPileCardToHand::
 	push hl
 	push de
 	push bc
@@ -347,7 +347,7 @@ MoveDiscardPileCardToHand:
 
 ; return in the z flag whether turn holder's prize a (0-7) has been drawn or not
 ; z: drawn, nz: not drawn
-CheckPrizeTaken:
+CheckPrizeTaken::
 	ld e, a
 	ld d, 0
 	ld hl, PowersOf2
@@ -361,12 +361,12 @@ CheckPrizeTaken:
 	and e
 	ret
 
-PowersOf2:
+PowersOf2::
 	db $01, $02, $04, $08, $10, $20, $40, $80
 
 ; fill wDuelTempList with the turn holder's discard pile cards (their 0-59 deck indexes)
 ; return carry if the turn holder has no cards in the discard pile
-CreateDiscardPileCardList:
+CreateDiscardPileCardList::
 	ldh a, [hWhoseTurn]
 	ld h, a
 	ld l, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
@@ -395,7 +395,7 @@ CreateDiscardPileCardList:
 
 ; fill wDuelTempList with the turn holder's remaining deck cards (their 0-59 deck indexes)
 ; return carry if the turn holder has no cards left in the deck
-CreateDeckCardList:
+CreateDeckCardList::
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp DECK_SIZE
@@ -433,7 +433,7 @@ CreateDeckCardList:
 ; if a == 0: search in CARD_LOCATION_ARENA
 ; if a != 0: search in CARD_LOCATION_BENCH_[A]
 ; return carry if no energy cards were found
-CreateArenaOrBenchEnergyCardList:
+CreateArenaOrBenchEnergyCardList::
 	or CARD_LOCATION_PLAY_AREA
 	ld c, a
 	ld de, wDuelTempList
@@ -471,7 +471,7 @@ CreateArenaOrBenchEnergyCardList:
 ; fill wDuelTempList with the turn holder's hand cards (their 0-59 deck indexes)
 ; return carry if the turn holder has no cards in hand
 ; and outputs in a number of cards.
-CreateHandCardList:
+CreateHandCardList::
 	call FindLastCardInHand
 	inc b
 	jr .skip_card
@@ -500,7 +500,7 @@ CreateHandCardList:
 
 ; sort the turn holder's hand cards by ID (highest to lowest ID)
 ; makes use of wDuelTempList
-SortHandCardsByID:
+SortHandCardsByID::
 	call FindLastCardInHand
 .loop
 	ld a, [hld]
@@ -524,7 +524,7 @@ SortHandCardsByID:
 ; b = turn holder's number of cards in hand (DUELVARS_NUMBER_OF_CARDS_IN_HAND)
 ; hl = pointer to turn holder's last (newest) card in DUELVARS_HAND
 ; de = wDuelTempList
-FindLastCardInHand:
+FindLastCardInHand::
 	ldh a, [hWhoseTurn]
 	ld h, a
 	ld l, DUELVARS_NUMBER_OF_CARDS_IN_HAND
@@ -539,7 +539,7 @@ FindLastCardInHand:
 ; input:
    ; a  = how many cards to shuffle
    ; hl = DUELVARS_DECK_CARDS + [DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK]
-ShuffleCards:
+ShuffleCards::
 	or a
 	ret z ; return if deck is empty
 	push hl
@@ -576,7 +576,7 @@ ShuffleCards:
 
 ; sort a $ff-terminated list of deck index cards by ID (lowest to highest ID).
 ; the list is wDuelTempList.
-SortCardsInDuelTempListByID:
+SortCardsInDuelTempListByID::
 	ld hl, hTempListPtr_ff99
 	ld [hl], LOW(wDuelTempList)
 	inc hl
@@ -587,7 +587,7 @@ SortCardsInDuelTempListByID:
 ; the pointer to the list is given in hTempListPtr_ff99.
 ; sorting by ID rather than deck index means that the order of equal (same ID) cards does not matter,
 ; even if they have a different deck index.
-SortCardsInListByID:
+SortCardsInListByID::
 	; load [hTempListPtr_ff99] into hl and de
 	ld hl, hTempListPtr_ff99
 	ld a, [hli]
@@ -648,7 +648,7 @@ SortCardsInListByID:
 	inc [hl]
 ;	fallthrough
 
-SortCardsInListByID_CheckForListTerminator:
+SortCardsInListByID_CheckForListTerminator::
 	ld hl, hTempListPtr_ff99
 	ld a, [hli]
 	ld h, [hl]
@@ -659,7 +659,7 @@ SortCardsInListByID_CheckForListTerminator:
 
 ; returns, in register bc, the id of the card with the deck index specified in register a
 ; preserves hl
-GetCardIDFromDeckIndex_bc:
+GetCardIDFromDeckIndex_bc::
 	push hl
 	call _GetCardIDFromDeckIndex
 	ld c, a
@@ -668,7 +668,7 @@ GetCardIDFromDeckIndex_bc:
 	ret
 
 ; return [wDuelTempList + a] in a and in hTempCardIndex_ff98
-GetCardInDuelTempList_OnlyDeckIndex:
+GetCardInDuelTempList_OnlyDeckIndex::
 	push hl
 	push de
 	ld e, a
@@ -684,7 +684,7 @@ GetCardInDuelTempList_OnlyDeckIndex:
 ; given the deck index (0-59) of a card in [wDuelTempList + a], return:
 ;  - the id of the card with that deck index in register de
 ;  - [wDuelTempList + a] in hTempCardIndex_ff98 and in register a
-GetCardInDuelTempList:
+GetCardInDuelTempList::
 	push hl
 	ld e, a
 	ld d, $0
@@ -699,7 +699,7 @@ GetCardInDuelTempList:
 
 ; returns, in register de, the id of the card with the deck index (0-59) specified by register a
 ; preserves af and hl
-GetCardIDFromDeckIndex:
+GetCardIDFromDeckIndex::
 	push af
 	push hl
 	call _GetCardIDFromDeckIndex
@@ -711,7 +711,7 @@ GetCardIDFromDeckIndex:
 
 ; remove card c from wDuelTempList (it contains a $ff-terminated list of deck indexes)
 ; returns carry if no matches were found.
-RemoveCardFromDuelTempList:
+RemoveCardFromDuelTempList::
 	push hl
 	push de
 	push bc
@@ -744,7 +744,7 @@ RemoveCardFromDuelTempList:
 	ret
 
 ; return the number of cards in wDuelTempList in a
-CountCardsInDuelTempList:
+CountCardsInDuelTempList::
 	push hl
 	push bc
 	ld hl, wDuelTempList
@@ -760,7 +760,7 @@ CountCardsInDuelTempList:
 	ret
 
 ; returns, in register a, the id of the card with the deck index (0-59) specified in register a
-_GetCardIDFromDeckIndex:
+_GetCardIDFromDeckIndex::
 	push de
 	ld e, a
 	ld d, $0
@@ -776,7 +776,7 @@ _GetCardIDFromDeckIndex:
 	ret
 
 ; load data of card with deck index a (0-59) to wLoadedCard1
-LoadCardDataToBuffer1_FromDeckIndex:
+LoadCardDataToBuffer1_FromDeckIndex::
 	push hl
 	push de
 	push bc
@@ -793,7 +793,7 @@ LoadCardDataToBuffer1_FromDeckIndex:
 	ret
 
 ; load data of card with deck index a (0-59) to wLoadedCard2
-LoadCardDataToBuffer2_FromDeckIndex:
+LoadCardDataToBuffer2_FromDeckIndex::
 	push hl
 	push de
 	push bc
@@ -812,7 +812,7 @@ LoadCardDataToBuffer2_FromDeckIndex:
 ; evolve a turn holder's Pokemon card in the play area slot determined by hTempPlayAreaLocation_ff9d
 ; into another turn holder's Pokemon card identifier by its deck index (0-59) in hTempCardIndex_ff98.
 ; return nc if evolution was successful.
-EvolvePokemonCardIfPossible:
+EvolvePokemonCardIfPossible::
 	; first make sure the attempted evolution is viable
 	ldh a, [hTempCardIndex_ff98]
 	ld d, a
@@ -824,7 +824,7 @@ EvolvePokemonCardIfPossible:
 
 ; evolve a turn holder's Pokemon card in the play area slot determined by hTempPlayAreaLocation_ff9d
 ; into another turn holder's Pokemon card identifier by its deck index (0-59) in hTempCardIndex_ff98.
-EvolvePokemonCard:
+EvolvePokemonCard::
 ; place the evolved Pokemon card in the play area location of the pre-evolved Pokemon card
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld e, a
@@ -877,7 +877,7 @@ EvolvePokemonCard:
 ; e is the play area location offset (PLAY_AREA_*) of the Pokemon trying to evolve.
 ; d is the deck index (0-59) of the Pokemon card that was selected to be the evolution target.
 ; return carry if can't evolve, plus nz if the reason for it is the card was played this turn.
-CheckIfCanEvolveInto:
+CheckIfCanEvolveInto::
 	push de
 	ld a, e
 	add DUELVARS_ARENA_CARD
@@ -920,7 +920,7 @@ CheckIfCanEvolveInto:
 ; e is the play area location offset (PLAY_AREA_*) of the Pokemon trying to evolve.
 ; d is the deck index (0-59) of the Pokemon card that was selected to be the evolution target.
 ; return carry if not basic to stage 2 evolution, or if evolution not possible this turn.
-CheckIfCanEvolveInto_BasicToStage2:
+CheckIfCanEvolveInto_BasicToStage2::
 	ld a, e
 	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
@@ -960,7 +960,7 @@ CheckIfCanEvolveInto_BasicToStage2:
 ; clear the status, all substatuses, and temporary duelvars of the turn holder's
 ; arena Pokemon. called when sending a new Pokemon into the arena.
 ; does not reset Headache, since it targets a player rather than a Pokemon.
-ClearAllStatusConditions:
+ClearAllStatusConditions::
 	push hl
 	ldh a, [hWhoseTurn]
 	ld h, a
@@ -994,7 +994,7 @@ ClearAllStatusConditions:
 ; input:
    ; a = deck index of the card
 ; return carry if there is no room for more Pokemon
-PutHandPokemonCardInPlayArea:
+PutHandPokemonCardInPlayArea::
 	push af
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -1056,7 +1056,7 @@ PutHandPokemonCardInPlayArea:
    ; e = play area location offset (PLAY_AREA_*)
 ; returns:
    ; a = CARD_LOCATION_PLAY_AREA + e
-PutHandCardInPlayArea:
+PutHandCardInPlayArea::
 	call RemoveCardFromHand
 	call GetTurnDuelistVariable
 	ld a, e
@@ -1066,7 +1066,7 @@ PutHandCardInPlayArea:
 
 ; move the Pokemon card of the turn holder in the
 ; PLAY_AREA_* location given in e to the discard pile
-MovePlayAreaCardToDiscardPile:
+MovePlayAreaCardToDiscardPile::
 	call EmptyPlayAreaSlot
 	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	dec [hl]
@@ -1089,7 +1089,7 @@ MovePlayAreaCardToDiscardPile:
 
 ; init a turn holder's play area slot to empty
 ; which slot (arena or benchx) is determined by the play area location offset (PLAY_AREA_*) in e
-EmptyPlayAreaSlot:
+EmptyPlayAreaSlot::
 	ldh a, [hWhoseTurn]
 	ld h, a
 	ld d, -1
@@ -1112,7 +1112,7 @@ EmptyPlayAreaSlot:
 	ret
 
 ; shift play area Pokemon of both players to the first available play area (arena + benchx) slots
-ShiftAllPokemonToFirstPlayAreaSlots:
+ShiftAllPokemonToFirstPlayAreaSlots::
 	call ShiftTurnPokemonToFirstPlayAreaSlots
 	call SwapTurn
 	call ShiftTurnPokemonToFirstPlayAreaSlots
@@ -1120,7 +1120,7 @@ ShiftAllPokemonToFirstPlayAreaSlots:
 	ret
 
 ; shift play area Pokemon of the turn holder to the first available play area (arena + benchx) slots
-ShiftTurnPokemonToFirstPlayAreaSlots:
+ShiftTurnPokemonToFirstPlayAreaSlots::
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	lb de, PLAY_AREA_ARENA, PLAY_AREA_ARENA
@@ -1141,7 +1141,7 @@ ShiftTurnPokemonToFirstPlayAreaSlots:
 ; data of the turn holder's Pokemon card in play area e.
 ; reset the status and all substatuses of the arena Pokemon before swapping.
 ; e is the play area location offset of the bench Pokemon (PLAY_AREA_*).
-SwapArenaWithBenchPokemon:
+SwapArenaWithBenchPokemon::
 	call ClearAllStatusConditions
 	ld d, PLAY_AREA_ARENA
 ;	fallthrough
@@ -1149,7 +1149,7 @@ SwapArenaWithBenchPokemon:
 ; swap the data of the turn holder's Pokemon card in play area d with the
 ; data of the turn holder's Pokemon card in play area e.
 ; d and e are play area location offsets (PLAY_AREA_*).
-SwapPlayAreaPokemon:
+SwapPlayAreaPokemon::
 	push bc
 	push de
 	push hl
@@ -1219,7 +1219,7 @@ SwapPlayAreaPokemon:
 ; or a Pokemon card in the bench, depending on the value of register e.
 ; input: e = location to check, i.e. PLAY_AREA_*
 ; Feedback is returned in wAttachedEnergies and wTotalAttachedEnergies.
-GetPlayAreaCardAttachedEnergies:
+GetPlayAreaCardAttachedEnergies::
 	push hl
 	push de
 	push bc
@@ -1288,7 +1288,7 @@ GetPlayAreaCardAttachedEnergies:
 ; e = card id to search
 ; b = location to consider (CARD_LOCATION_*)
 ; h = PLAYER_TURN or OPPONENT_TURN
-CountCardIDInLocation:
+CountCardIDInLocation::
 	push bc
 	ld l, DUELVARS_CARD_LOCATIONS
 	ld c, $0
@@ -1314,7 +1314,7 @@ CountCardIDInLocation:
 
 ; returns [[hWhoseTurn] << 8 + a] in a and in [hl]
 ; i.e. duelvar a of the player whose turn it is
-GetTurnDuelistVariable:
+GetTurnDuelistVariable::
 	ld l, a
 	ldh a, [hWhoseTurn]
 	ld h, a
@@ -1323,7 +1323,7 @@ GetTurnDuelistVariable:
 
 ; returns [([hWhoseTurn] ^ $1) << 8 + a] in a and in [hl]
 ; i.e. duelvar a of the player whose turn it is not
-GetNonTurnDuelistVariable:
+GetNonTurnDuelistVariable::
 	ld l, a
 	ldh a, [hWhoseTurn]
 	ld h, OPPONENT_TURN
@@ -1337,7 +1337,7 @@ GetNonTurnDuelistVariable:
 ; when playing a Pokemon card, initializes some variables according to the
 ; card played, and checks if the played card has Pokemon Power to show it to
 ; the player, and possibly to use it if it triggers when the card is played.
-Func_161e:
+Func_161e::
 	ldh a, [hTempCardIndex_ff98]
 	call ClearChangedTypesIfMuk
 	ldh a, [hTempCardIndex_ff98]
@@ -1413,7 +1413,7 @@ Func_161e:
 ; - Attack1 (if e == 0) or Attack2 (if e == 1) data into wLoadedAttack
 ; - Also from that attack, its Damage field into wDamage
 ; finally, clears wNoDamageOrEffect and wDealtDamage
-CopyAttackDataAndDamage_FromCardID:
+CopyAttackDataAndDamage_FromCardID::
 	push de
 	push af
 	ld a, e
@@ -1432,7 +1432,7 @@ CopyAttackDataAndDamage_FromCardID:
 ; - Attack1 (if e == 0) or Attack2 (if e == 1) data into wLoadedAttack
 ; - Also from that attack, its Damage field into wDamage
 ; finally, clears wNoDamageOrEffect and wDealtDamage
-CopyAttackDataAndDamage_FromDeckIndex:
+CopyAttackDataAndDamage_FromDeckIndex::
 	ld a, e
 	ld [wSelectedAttack], a
 	ld a, d
@@ -1440,7 +1440,7 @@ CopyAttackDataAndDamage_FromDeckIndex:
 	call LoadCardDataToBuffer1_FromDeckIndex
 ;	fallthrough
 
-CopyAttackDataAndDamage:
+CopyAttackDataAndDamage::
 	ld a, [wLoadedCard1ID]
 	ld [wTempCardID_ccc2], a
 	ld hl, wLoadedCard1Atk1
@@ -1471,7 +1471,7 @@ CopyAttackDataAndDamage:
 ; wTempNonTurnDuelistCardID to the non-turn holder's arena card, and zeroes other temp
 ; variables that only last between each two-player turn.
 ; this is called when a Pokemon card is played or when an attack is used
-Func_16f6:
+Func_16f6::
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ldh [hTempCardIndex_ff9f], a
@@ -1497,7 +1497,7 @@ Func_16f6:
 	ret
 
 ; Use an attack (from DuelMenu_Attack) or a Pokemon Power (from DuelMenu_PkmnPower)
-UseAttackOrPokemonPower:
+UseAttackOrPokemonPower::
 	ld a, [wSelectedAttack]
 	ld [wPlayerAttackingAttackIndex], a
 	ldh a, [hTempCardIndex_ff9f]
@@ -1541,7 +1541,7 @@ UseAttackOrPokemonPower:
 	call SetOppAction_SerialSendDuelData
 ;	fallthrough
 
-PlayAttackAnimation_DealAttackDamage:
+PlayAttackAnimation_DealAttackDamage::
 	call Func_7415
 	ld a, [wLoadedAttackCategory]
 	and RESIDUAL
@@ -1583,7 +1583,7 @@ PlayAttackAnimation_DealAttackDamage:
 	call PrintKnockedOutIfHLZero
 	jr Func_17fb
 
-Func_17ed:
+Func_17ed::
 	call DrawWideTextBox_WaitForInput
 	xor a
 	ld hl, wDamage
@@ -1593,7 +1593,7 @@ Func_17ed:
 	ld [wNoDamageOrEffect], a
 ;	fallthrough
 
-Func_17fb:
+Func_17fb::
 	ld a, [wTempNonTurnDuelistCardID]
 	push af
 	ld a, EFFECTCMDTYPE_AFTER_DAMAGE
@@ -1608,28 +1608,28 @@ Func_17fb:
 	or a
 	ret
 
-DisplayUsePokemonPowerScreen_WaitForInput:
+DisplayUsePokemonPowerScreen_WaitForInput::
 	push hl
 	call DisplayUsePokemonPowerScreen
 	pop hl
 ;	fallthrough
 
-DrawWideTextBox_WaitForInput_ReturnCarry:
+DrawWideTextBox_WaitForInput_ReturnCarry::
 	call DrawWideTextBox_WaitForInput
 ;	fallthrough
 
-ReturnCarry:
+ReturnCarry::
 	scf
 	ret
 
-ClearNonTurnTemporaryDuelvars_ResetCarry:
+ClearNonTurnTemporaryDuelvars_ResetCarry::
 	bank1call ClearNonTurnTemporaryDuelvars
 	or a
 	ret
 
 ; called when attacker deals damage to itself due to confusion
 ; display the corresponding animation and deal 20 damage to self
-HandleConfusionDamageToSelf:
+HandleConfusionDamageToSelf::
 	bank1call DrawDuelMainScene
 	ld a, 1
 	ld [wIsDamageToSelf], a
@@ -1646,7 +1646,7 @@ HandleConfusionDamageToSelf:
 	ret
 
 ; use Pokemon Power
-UsePokemonPower:
+UsePokemonPower::
 	call Func_7415
 	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
 	call TryExecuteEffectCommandFunction
@@ -1668,7 +1668,7 @@ UsePokemonPower:
 ; called by UseAttackOrPokemonPower (on an attack only)
 ; in a link duel, it's used to send the other game data about the
 ; attack being in use, triggering a call to OppAction_BeginUseAttack in the receiver
-SendAttackDataToLinkOpponent:
+SendAttackDataToLinkOpponent::
 	ld a, [wccec]
 	or a
 	ret nz
@@ -1691,7 +1691,7 @@ SendAttackDataToLinkOpponent:
 	ldh [hTemp_ffa0], a
 	ret
 
-Func_189d:
+Func_189d::
 	ld a, [wLoadedAttackCategory]
 	bit RESIDUAL_F, a
 	ret nz
@@ -1725,7 +1725,7 @@ Func_189d:
 	ret
 
 ; return carry and 1 into wGotHeadsFromConfusionCheck if damage will be dealt to oneself due to confusion
-CheckSelfConfusionDamage:
+CheckSelfConfusionDamage::
 	xor a
 	ld [wGotHeadsFromConfusionCheck], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
@@ -1750,7 +1750,7 @@ CheckSelfConfusionDamage:
 ; play the trainer card with deck index at hTempCardIndex_ff98.
 ; a trainer card is like an attack effect, with its own effect commands.
 ; return nc if the card was played, carry if it wasn't.
-PlayTrainerCard:
+PlayTrainerCard::
 	call CheckCantUseTrainerDueToHeadache
 	jr c, .cant_use
 	ldh a, [hWhoseTurn]
@@ -1790,7 +1790,7 @@ PlayTrainerCard:
 
 ; loads the effect commands of a (trainer or energy) card with deck index (0-59) at hTempCardIndex_ff9f
 ; into wLoadedAttackEffectCommands. in practice, only used for trainer cards
-LoadNonPokemonCardEffectCommands:
+LoadNonPokemonCardEffectCommands::
 	ldh a, [hTempCardIndex_ff9f]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld hl, wLoadedCard1EffectCommands
@@ -1804,7 +1804,7 @@ LoadNonPokemonCardEffectCommands:
 
 ; Make turn holder deal A damage to self due to recoil (e.g. Thrash, Selfdestruct)
 ; display recoil animation
-DealRecoilDamageToSelf:
+DealRecoilDamageToSelf::
 	push af
 	ld a, ATK_ANIM_RECOIL_HIT
 	ld [wLoadedAttackAnimation], a
@@ -1813,7 +1813,7 @@ DealRecoilDamageToSelf:
 
 ; Make turn holder deal A damage to self due to confusion
 ; display animation at wLoadedAttackAnimation
-DealConfusionDamageToSelf:
+DealConfusionDamageToSelf::
 	ld hl, wDamage
 	ld [hli], a
 	ld [hl], 0
@@ -1845,7 +1845,7 @@ DealConfusionDamageToSelf:
 ; - if the non-turn holder's arena card resists the turn holder's arena card color: reduce damage by 30
 ; - also apply Pluspower, Defender, and other kinds of damage reduction accordingly
 ; return resulting damage in de
-ApplyDamageModifiers_DamageToTarget:
+ApplyDamageModifiers_DamageToTarget::
 	xor a
 	ld [wDamageEffectiveness], a
 	ld hl, wDamage
@@ -1912,7 +1912,7 @@ ApplyDamageModifiers_DamageToTarget:
 	ret
 
 ; convert a color to its equivalent WR_* (weakness/resistance) value
-TranslateColorToWR:
+TranslateColorToWR::
 	push hl
 	add LOW(InvertedPowersOf2)
 	ld l, a
@@ -1923,14 +1923,14 @@ TranslateColorToWR:
 	pop hl
 	ret
 
-InvertedPowersOf2:
+InvertedPowersOf2::
 	db $80, $40, $20, $10, $08, $04, $02, $01
 
 ; given a damage value at wDamage:
 ; - if the turn holder's arena card is weak to its own color: double damage
 ; - if the turn holder's arena card resists its own color: reduce damage by 30
 ; return resulting damage in de
-ApplyDamageModifiers_DamageToSelf:
+ApplyDamageModifiers_DamageToSelf::
 	xor a
 	ld [wDamageEffectiveness], a
 	ld hl, wDamage
@@ -1973,7 +1973,7 @@ ApplyDamageModifiers_DamageToSelf:
 	ret
 
 ; increases de by 10 points for each Pluspower found in location b
-ApplyAttachedPluspower:
+ApplyAttachedPluspower::
 	push de
 	call GetTurnDuelistVariable
 	ld de, PLUSPOWER
@@ -1988,7 +1988,7 @@ ApplyAttachedPluspower:
 	ret
 
 ; reduces de by 20 points for each Defender found in location b
-ApplyAttachedDefender:
+ApplyAttachedDefender::
 	push de
 	call GetTurnDuelistVariable
 	ld de, DEFENDER
@@ -2008,7 +2008,7 @@ ApplyAttachedDefender:
 ; hl: address to subtract HP from
 ; de: how much HP to subtract (damage to deal)
 ; returns carry if the HP does not become 0 as a result
-SubtractHP:
+SubtractHP::
 	push hl
 	push de
 	ld a, [hl]
@@ -2031,7 +2031,7 @@ SubtractHP:
 
 ; given a play area location offset in a, check if the turn holder's Pokemon card in
 ; that location has no HP left, and, if so, print that it was knocked out.
-PrintPlayAreaCardKnockedOutIfNoHP:
+PrintPlayAreaCardKnockedOutIfNoHP::
 	ld e, a
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
@@ -2051,7 +2051,7 @@ PrintPlayAreaCardKnockedOutIfNoHP:
 	scf
 	ret
 
-PrintKnockedOutIfHLZero:
+PrintKnockedOutIfHLZero::
 	ld a, [hl] ; this is supposed to point to a remaining HP value after some form of damage calculation
 	or a
 	ret nz
@@ -2059,7 +2059,7 @@ PrintKnockedOutIfHLZero:
 
 ; print in a text box that the Pokemon card at wTempNonTurnDuelistCardID
 ; was knocked out and wait 40 frames
-PrintKnockedOut:
+PrintKnockedOut::
 	ld a, [wTempNonTurnDuelistCardID]
 	ld e, a
 	call LoadCardDataToBuffer1_FromCardID
@@ -2082,7 +2082,7 @@ PrintKnockedOut:
 ; damage to deal is given in de.
 ; shows the defending player's play area screen when dealing the damage
 ; instead of the main duel interface with regular attack animation.
-DealDamageToPlayAreaPokemon_RegularAnim:
+DealDamageToPlayAreaPokemon_RegularAnim::
 	ld a, ATK_ANIM_BENCH_HIT
 	ld [wLoadedAttackAnimation], a
 ;	fallthrough
@@ -2092,7 +2092,7 @@ DealDamageToPlayAreaPokemon_RegularAnim:
 ; shows the defending player's play area screen when dealing the damage
 ; instead of the main duel interface.
 ; plays animation that is loaded in wLoadedAttackAnimation.
-DealDamageToPlayAreaPokemon:
+DealDamageToPlayAreaPokemon::
 	ld a, b
 	ld [wTempPlayAreaLocation_cceb], a
 	or a ; cp PLAY_AREA_ARENA
@@ -2184,14 +2184,14 @@ DealDamageToPlayAreaPokemon:
 ; draw duel main scene, then print the "<Pokemon Lvxx>'s <attack>" text
 ; The Pokemon's name is the turn holder's arena Pokemon, and the
 ; attack's name is taken from wLoadedAttackName.
-DrawDuelMainScene_PrintPokemonsAttackText:
+DrawDuelMainScene_PrintPokemonsAttackText::
 	bank1call DrawDuelMainScene
 ;	fallthrough
 
 ; print the "<Pokemon Lvxx>'s <attack>" text
 ; The Pokemon's name is the turn holder's arena Pokemon, and the
 ; attack's name is taken from wLoadedAttackName.
-PrintPokemonsAttackText:
+PrintPokemonsAttackText::
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -2211,7 +2211,7 @@ PrintPokemonsAttackText:
 	call DrawWideTextBox_PrintText
 	ret
 
-Func_1bb4:
+Func_1bb4::
 	call Func_3b31
 	bank1call DrawDuelMainScene
 	call DrawDuelHUDs
@@ -2224,7 +2224,7 @@ Func_1bb4:
 
 ; prints one of the ThereWasNoEffectFrom*Text if wEffectFailed contains EFFECT_FAILED_NO_EFFECT,
 ; and prints WasUnsuccessfulText if wEffectFailed contains EFFECT_FAILED_UNSUCCESSFUL
-Func_1bca:
+Func_1bca::
 	ld a, [wEffectFailed]
 	or a
 	ret z
@@ -2259,7 +2259,7 @@ Func_1bca:
 
 ; return in a the retreat cost of the turn holder's arena or bench Pokemon
 ; given the PLAY_AREA_* value in hTempPlayAreaLocation_ff9d
-GetPlayAreaCardRetreatCost:
+GetPlayAreaCardRetreatCost::
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -2269,7 +2269,7 @@ GetPlayAreaCardRetreatCost:
 
 ; move the turn holder's card with ID at de to the discard pile
 ; if it's currently in the arena.
-MoveCardToDiscardPileIfInArena:
+MoveCardToDiscardPileIfInArena::
 	ld c, e
 	ld b, d
 	ld l, DUELVARS_CARD_LOCATIONS
@@ -2302,7 +2302,7 @@ MoveCardToDiscardPileIfInArena:
 ; output:
 ;	a = damage;
 ;	c = max HP.
-GetCardDamageAndMaxHP:
+GetCardDamageAndMaxHP::
 	push hl
 	push de
 	ld a, DUELVARS_ARENA_CARD
@@ -2327,7 +2327,7 @@ GetCardDamageAndMaxHP:
       ; fffff = flag address counting from wLoadedAttackFlag1
       ; bbb = flag bit
 ; return carry if the flag is set
-CheckLoadedAttackFlag:
+CheckLoadedAttackFlag::
 	push hl
 	push de
 	push bc
@@ -2360,7 +2360,7 @@ CheckLoadedAttackFlag:
 ;   As a side effect, this also returns a duelist variable in a similar manner to
 ;   GetNonTurnDuelistVariable, but this function appears to be
 ;   only called to swap the turn value.
-SwapTurn:
+SwapTurn::
 	push af
 	push hl
 	call GetNonTurnDuelistVariable
@@ -2371,7 +2371,7 @@ SwapTurn:
 	ret
 
 ; copy the TX_END-terminated player's name from sPlayerName to de
-CopyPlayerName:
+CopyPlayerName::
 	call EnableSRAM
 	ld hl, sPlayerName
 .loop
@@ -2388,7 +2388,7 @@ CopyPlayerName:
 ; if text ID at wOpponentName is non-0, copy it from there
 ; else, if text at wc500 is non-0, copy if from there
 ; else, copy Player2Text
-CopyOpponentName:
+CopyOpponentName::
 	ld hl, wOpponentName
 	ld a, [hli]
 	or [hl]

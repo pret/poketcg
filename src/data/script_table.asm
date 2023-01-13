@@ -1,4 +1,4 @@
-OverworldScriptTable:
+OverworldScriptTable::
 	table_width 2, OverworldScriptTable
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_CloseAdvancedTextBox

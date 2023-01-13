@@ -1,7 +1,7 @@
 ; this function is called when the player is shown the "In Play Area" screen.
 ; it can be called with either the select button (DuelMenuShortcut_BothActivePokemon),
 ; or via the "In Play Area" item of the Check menu (DuelCheckMenu_InPlayArea)
-OpenInPlayAreaScreen:
+OpenInPlayAreaScreen::
 	ld a, INPLAYAREA_PLAYER_ACTIVE
 	ld [wInPlayAreaCurPosition], a
 .start

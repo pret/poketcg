@@ -481,7 +481,7 @@ EmptyScreenAndDrawTextBox:
 	call DrawRegularTextBox
 	ret
 
-Func_b177:
+Func_b177::
 	ld a, [wd10e]
 	and $03
 	ld hl, .FunctionTable

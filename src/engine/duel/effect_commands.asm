@@ -1,4 +1,4 @@
-EffectCommands: ; 186f7 (6:46f7)
+EffectCommands::
 ; Each attack has a two-byte effect pointer (attack's 7th param) that points to one of these structures.
 ; Similarly, trainer cards have a two-byte pointer (7th param) to one of these structures, which determines the card's function.
 ; Energy cards also point to one of these, but their data is just $00.

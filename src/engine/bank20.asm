@@ -919,7 +919,7 @@ ProcessOWFrameset:
 
 ; for each of the loaded frameset subgroups
 ; load their tiles and advance their durations
-DoLoadedFramesetSubgroupsFrame:
+DoLoadedFramesetSubgroupsFrame::
 	ld a, [wNumLoadedFramesetSubgroups]
 	or a
 	ret z
@@ -1368,7 +1368,7 @@ Func_80cd6:
 Func_80cd7:
 	call DisableLCD
 	call EmptyScreen
-	call Func_3ca4
+	call ClearSpriteAnimations
 	xor a
 	ld [wd4ca], a
 	ld [wd4cb], a
@@ -1409,7 +1409,7 @@ Func_80cd7:
 	inc a ; rotate NPC
 	and %11
 	ld [wLoadNPCDirection], a
-	call Func_3ca4
+	call ClearSpriteAnimations
 	call .DrawNPCSprite
 .no_a_button
 	ldh a, [hKeysPressed]
@@ -1466,7 +1466,7 @@ Func_80cd7:
 
 .got_npc
 	ld [wLoadedNPCTempIndex], a
-	call Func_3ca4
+	call ClearSpriteAnimations
 	call .DrawNPCSprite
 	jr .PrintNPCInfo
 
@@ -1556,7 +1556,7 @@ Func_80cd7:
 	db SPRITE_OW_GRANNY,   SPRITE_ANIM_LIGHT_NPC_UP,     SPRITE_ANIM_YELLOW_NPC_UP    ; $2b
 	db SPRITE_OW_AMY,      SPRITE_ANIM_SGB_AMY_LAYING,   SPRITE_ANIM_CGB_AMY_LAYING   ; $2c
 
-SpriteNullAnimationPointer:
+SpriteNullAnimationPointer::
 	dw SpriteNullAnimationFrame
 
 SpriteNullAnimationFrame:

@@ -1,6 +1,6 @@
 ; set attributes for [hl] sprites starting from wOAM + [wOAMOffset] / 4
 ; return carry if reached end of wOAM before finishing
-SetManyObjectsAttributes: ; 950 (0:950)
+SetManyObjectsAttributes::
 	push hl
 	ld a, [wOAMOffset]
 	ld c, a
@@ -43,7 +43,7 @@ SetManyObjectsAttributes: ; 950 (0:950)
 
 ; for the sprite at wOAM + [wOAMOffset] / 4, set its attributes from registers e, d, c, b
 ; return carry if [wOAMOffset] > 40 * 4 (beyond the end of wOAM)
-SetOneObjectAttributes:
+SetOneObjectAttributes::
 	push hl
 	ld a, [wOAMOffset]
 	ld l, a
@@ -69,7 +69,7 @@ SetOneObjectAttributes:
 	ret
 
 ; set the Y Position and X Position of all sprites in wOAM to $00
-ZeroObjectPositions:
+ZeroObjectPositions::
 	xor a
 	ld [wOAMOffset], a
 	ld hl, wOAM

@@ -1,22 +1,22 @@
-SaveGeneralSaveData:
+SaveGeneralSaveData::
 	farcall _SaveGeneralSaveData
 	ret
 
-LoadGeneralSaveData:
+LoadGeneralSaveData::
 	farcall _LoadGeneralSaveData
 	ret
 
-ValidateGeneralSaveData:
+ValidateGeneralSaveData::
 	farcall _ValidateGeneralSaveData
 	ret
 
 ; adds card with card ID in register a to collection
 ; and updates album progress in RAM
-AddCardToCollectionAndUpdateAlbumProgress:
+AddCardToCollectionAndUpdateAlbumProgress::
 	farcall _AddCardToCollectionAndUpdateAlbumProgress
 	ret
 
-SaveGame:
+SaveGame::
 	push af
 	push bc
 	push de

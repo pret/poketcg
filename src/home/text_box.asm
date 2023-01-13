@@ -1,7 +1,7 @@
 
 ; copy c bytes of data from de to hl
 ; if LCD on, copy during h-blank only
-SafeCopyDataDEtoHL:
+SafeCopyDataDEtoHL::
 	ld a, [wLCDC]        ;
 	bit LCDC_ENABLE_F, a ;
 	jr nz, .lcd_on       ; assert that LCD is on
@@ -17,7 +17,7 @@ SafeCopyDataDEtoHL:
 
 ; returns v*BGMap0 + BG_MAP_WIDTH * e + d in hl.
 ; used to map coordinates at de to a BGMap0 address.
-DECoordToBGMap0Address:
+DECoordToBGMap0Address::
 	ld l, e
 	ld h, $0
 	add hl, hl
@@ -34,7 +34,7 @@ DECoordToBGMap0Address:
 	ret
 
 ; Apply SCX and SCY correction to xy coordinates at de
-AdjustCoordinatesForBGScroll:
+AdjustCoordinatesForBGScroll::
 	push af
 	ldh a, [hSCX]
 	rra
@@ -56,7 +56,7 @@ AdjustCoordinatesForBGScroll:
 ; Draws a bxc text box at de printing a name in the left side of the top border.
 ; The name's text id must be at hl when this function is called.
 ; Mostly used to print text boxes for talked-to NPCs, but occasionally used in duels as well.
-DrawLabeledTextBox:
+DrawLabeledTextBox::
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	jr nz, .draw_textbox
@@ -150,7 +150,7 @@ DrawLabeledTextBox:
 ; Draws a bxc text box at de to print menu data in the overworld.
 ; Also used to print a text box during a duel.
 ; When talking to NPCs, DrawLabeledTextBox is used instead.
-DrawRegularTextBox:
+DrawRegularTextBox::
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr z, DrawRegularTextBoxCGB
@@ -158,7 +158,7 @@ DrawRegularTextBox:
 	jp z, DrawRegularTextBoxSGB
 ;	fallthrough
 
-DrawRegularTextBoxDMG:
+DrawRegularTextBoxDMG::
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, SYM_BOX_TOP
@@ -168,7 +168,7 @@ DrawRegularTextBoxDMG:
 
 ; continue drawing a labeled or regular textbox on DMG or SGB:
 ; body and bottom line of either type of textbox
-ContinueDrawingTextBoxDMGorSGB:
+ContinueDrawingTextBoxDMGorSGB::
 	dec c
 	dec c
 .draw_text_box_body_loop
@@ -187,7 +187,7 @@ ContinueDrawingTextBoxDMGorSGB:
 ; e = value of byte b
 ; a = value of bytes [1, b-1]
 ; b is supposed to be BG_MAP_WIDTH or smaller, else the stack would get corrupted
-CopyLine:
+CopyLine::
 	add sp, -BG_MAP_WIDTH
 	push hl
 	push bc
@@ -219,7 +219,7 @@ CopyLine:
 	ret
 
 ; DrawRegularTextBox branches here on CGB console
-DrawRegularTextBoxCGB:
+DrawRegularTextBoxCGB::
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, SYM_BOX_TOP
@@ -229,7 +229,7 @@ DrawRegularTextBoxCGB:
 
 ; continue drawing a labeled or regular textbox on CGB:
 ; body and bottom line of either type of textbox
-ContinueDrawingTextBoxCGB:
+ContinueDrawingTextBoxCGB::
 	dec c
 	dec c
 .draw_text_box_body_loop
@@ -257,13 +257,13 @@ ContinueDrawingTextBoxCGB:
 ; e = id of top right tile
 ; a = id of rest of tiles
 ; Assumes b = SCREEN_WIDTH and that VRAM bank 0 is loaded
-CopyCurrentLineTilesAndAttrCGB:
+CopyCurrentLineTilesAndAttrCGB::
 	push hl
 	call CopyLine
 	pop hl
 ;	fallthrough
 
-CopyCurrentLineAttrCGB:
+CopyCurrentLineAttrCGB::
 	call BankswitchVRAM1
 	ld a, [wTextBoxFrameType] ; on CGB, wTextBoxFrameType determines the palette and the other attributes
 	ld e, a
@@ -273,7 +273,7 @@ CopyCurrentLineAttrCGB:
 	ret
 
 ; DrawRegularTextBox branches here on SGB console
-DrawRegularTextBoxSGB:
+DrawRegularTextBoxSGB::
 	push bc
 	push de
 	call DrawRegularTextBoxDMG
@@ -284,7 +284,7 @@ DrawRegularTextBoxSGB:
 	ret z
 ;	fallthrough
 
-ColorizeTextBoxSGB:
+ColorizeTextBoxSGB::
 	push bc
 	push de
 	ld hl, wTempSGBPacket
@@ -326,7 +326,7 @@ ColorizeTextBoxSGB:
 	call SendSGB
 	ret
 
-AttrBlkPacket_TextBox:
+AttrBlkPacket_TextBox::
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
 	; Control Code, Color Palette Designation, X1, Y1, X2, Y2

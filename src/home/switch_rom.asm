@@ -1,7 +1,7 @@
 ; switch to rombank (a + top2 of h shifted down),
 ; set top2 of h to 01 (switchable ROM bank area),
 ; return old rombank id on top-of-stack
-BankpushROM:
+BankpushROM::
 	push hl
 	push bc
 	push af
@@ -38,7 +38,7 @@ BankpushROM:
 
 ; switch to rombank a,
 ; return old rombank id on top-of-stack
-BankpushROM2:
+BankpushROM2::
 	push hl
 	push bc
 	push af
@@ -66,7 +66,7 @@ BankpushROM2:
 	ret
 
 ; restore rombank from top-of-stack
-BankpopROM:
+BankpopROM::
 	push hl
 	push de
 	ld hl, sp+$7
@@ -87,7 +87,7 @@ BankpopROM:
 	ret
 
 ; switch ROM bank to a
-BankswitchROM:
+BankswitchROM::
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	ret

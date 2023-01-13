@@ -2528,7 +2528,7 @@ wTempAnimation:: ; d422
 wAnimationQueue:: ; d423
 	ds ANIMATION_QUEUE_LENGTH
 
-wd42a:: ; d42a
+wActiveScreenAnim:: ; d42a
 	ds $1
 
 wAnimFlags:: ; d42b
@@ -2700,7 +2700,11 @@ wCurrSpriteBottomEdgeCheck:: ; d5d5
 wd5d6:: ; d5d6
 	ds $1
 
-wd5d7:: ; d5d7
+; when non-0, skips all routines
+; related to animating sprites
+; (perhaps used during testing)
+; it is always set to 0
+wAllSpriteAnimationsDisabled:: ; d5d7
 	ds $1
 
 wSpriteVRAMBuffer:: ; d5d8

@@ -306,7 +306,7 @@ CreditsSequenceCmd_FadeIn: ; 1d9e1 (7:59e1)
 
 CreditsSequenceCmd_FadeOut: ; 1d9ee (7:59ee)
 	farcall FadeScreenToWhite
-	call Func_3ca4
+	call ClearSpriteAnimations
 	call EnableLCD
 	call DoFrameIfLCDEnabled
 	call DisableLCD

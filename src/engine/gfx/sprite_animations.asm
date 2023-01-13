@@ -1,8 +1,8 @@
 ; disables all sprite animations
 ; and clears memory related to sprites
-Func_1296e:
+_ClearSpriteAnimations::
 	push af
-	ld a, [wd5d7]
+	ld a, [wAllSpriteAnimationsDisabled]
 	or a
 	jr z, .continue
 	pop af
@@ -38,7 +38,7 @@ Func_1296e:
 ; creates a new entry in SpriteAnimBuffer, else loads the sprite if need be
 CreateSpriteAndAnimBufferEntry:
 	push af
-	ld a, [wd5d7]
+	ld a, [wAllSpriteAnimationsDisabled]
 	or a
 	jr z, .continue
 	pop af
@@ -110,7 +110,7 @@ DisableCurSpriteAnim:
 ; of sprite in register a
 DisableSpriteAnim:
 	push af
-	ld a, [wd5d7]
+	ld a, [wAllSpriteAnimationsDisabled]
 	or a
 	jr z, .disable
 	pop af
@@ -137,9 +137,9 @@ GetSpriteAnimCounter:
 	pop hl
 	ret
 
-_HandleAllSpriteAnimations:
+_HandleAllSpriteAnimations::
 	push af
-	ld a, [wd5d7] ; skip animating this frame if enabled
+	ld a, [wAllSpriteAnimationsDisabled] ; skip animating this frame if enabled
 	or a
 	jr z, .continue
 	pop af

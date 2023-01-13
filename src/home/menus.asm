@@ -3,7 +3,7 @@
    ; a = list length
    ; de = initial page scroll offset, initial item (in the visible page)
    ; hl: 9 bytes with the rest of the parameters
-InitializeCardListParameters:
+InitializeCardListParameters::
 	ld [wNumListItems], a
 	ld a, d
 	ld [wListScrollOffset], a
@@ -39,7 +39,7 @@ InitializeCardListParameters:
 ; state of the list in a, d, and e if A or B were pressed. also returns carry
 ; if A or B were pressed, nc otherwise. returns -1 in a if B was pressed.
 ; used for example in the Hand card list and Discard Pile card list screens.
-HandleCardListInput:
+HandleCardListInput::
 	call HandleMenuInput
 	ret nc
 	ld a, [wListScrollOffset]
@@ -55,7 +55,7 @@ HandleCardListInput:
 ;	wCursorXPosition, wCursorYPosition, wYDisplacementBetweenMenuItems, wNumMenuItems,
 ;	wCursorTile, wTileBehindCursor, wMenuFunctionPointer.
 ; also sets the current menu item (wCurMenuItem) to the one specified in register a.
-InitializeMenuParameters:
+InitializeMenuParameters::
 	ld [wCurMenuItem], a
 	ldh [hCurMenuItem], a
 	ld de, wCursorXPosition
@@ -73,7 +73,7 @@ InitializeMenuParameters:
 ; returns with the carry flag set if A or B were pressed
 ; returns a = 0 if A was pressed, a = -1 if B was pressed
 ; note: return values still subject to those of the function at [wMenuFunctionPointer] if any
-HandleMenuInput:
+HandleMenuInput::
 	xor a
 	ld [wRefreshMenuCursorSFX], a
 	ldh a, [hDPadHeld]
@@ -146,7 +146,7 @@ HandleMenuInput:
 
 ; plays an "open screen" sound (SFX_02) if [hCurMenuItem] != 0xff
 ; plays an "exit screen" sound (SFX_03) if [hCurMenuItem] == 0xff
-PlayOpenOrExitScreenSFX:
+PlayOpenOrExitScreenSFX::
 	push af
 	ldh a, [hCurMenuItem]
 	inc a
@@ -163,14 +163,14 @@ PlayOpenOrExitScreenSFX:
 ; called once per frame when a menu is open
 ; play the sound effect at wRefreshMenuCursorSFX if non-0 and blink the
 ; cursor when wCursorBlinkCounter hits 16 (i.e. every 16 frames)
-RefreshMenuCursor_CheckPlaySFX:
+RefreshMenuCursor_CheckPlaySFX::
 	ld a, [wRefreshMenuCursorSFX]
 	or a
 	jr z, RefreshMenuCursor
 	call PlaySFX
 ;	fallthrough
 
-RefreshMenuCursor:
+RefreshMenuCursor::
 	ld hl, wCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
@@ -183,12 +183,12 @@ RefreshMenuCursor:
 ;	fallthrough
 
 ; set the tile at [wCursorXPosition],[wCursorYPosition] to [wTileBehindCursor]
-EraseCursor:
+EraseCursor::
 	ld a, [wTileBehindCursor]
 ;	fallthrough
 
 ; set the tile at [wCursorXPosition],[wCursorYPosition] to a
-DrawCursor:
+DrawCursor::
 	ld c, a
 	ld a, [wYDisplacementBetweenMenuItems]
 	ld l, a
@@ -210,12 +210,12 @@ DrawCursor:
 	ret
 
 ; set the tile at [wCursorXPosition],[wCursorYPosition] to [wCursorTile]
-DrawCursor2:
+DrawCursor2::
 	ld a, [wCursorTile]
 	jr DrawCursor
 
 ; set wCurMenuItem, and hCurMenuItem to a, and zero wCursorBlinkCounter
-SetMenuItem:
+SetMenuItem::
 	ld [wCurMenuItem], a
 	ldh [hCurMenuItem], a
 	xor a
@@ -226,7 +226,7 @@ SetMenuItem:
 ; only handles input not involving the B, START, or SELECT buttons, that is,
 ; navigating through the menu or selecting an item with the A button.
 ; other input in handled by PrintDuelMenuAndHandleInput.handle_input
-HandleDuelMenuInput:
+HandleDuelMenuInput::
 	ldh a, [hDPadHeld]
 	or a
 	jr z, .blink_cursor
@@ -301,7 +301,7 @@ HandleDuelMenuInput:
 	or a
 	ret
 
-DuelMenuCursorCoords:
+DuelMenuCursorCoords::
 	db  2, 14 ; Hand
 	db  2, 16 ; Attack
 	db  8, 14 ; Check
@@ -315,7 +315,7 @@ DuelMenuCursorCoords:
   ; a = list length
   ; de = initial page scroll offset, initial item (in the visible page)
   ; hl: 9 bytes with the rest of the parameters
-PrintCardListItems:
+PrintCardListItems::
 	call InitializeCardListParameters
 	ld hl, wMenuFunctionPointer
 	ld a, LOW(CardListMenuFunction)
@@ -330,7 +330,7 @@ PrintCardListItems:
 
 ; like PrintCardListItems, except more parameters are already initialized
 ; called instead of PrintCardListItems to reload the list after moving up or down
-ReloadCardListItems:
+ReloadCardListItems::
 	ld e, SYM_SPACE
 	ld a, [wListScrollOffset]
 	or a
@@ -402,7 +402,7 @@ ReloadCardListItems:
 	ret
 
 ; reload a list of cards, except don't print their names
-Func_2827:
+Func_2827::
 	ld a, $01
 	ldh [hffb0], a
 	call ReloadCardListItems
@@ -412,7 +412,7 @@ Func_2827:
 
 ; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
 ; if the first digit is a 0, delete it and shift the number one tile to the left
-OneByteNumberToTxSymbol_TrimLeadingZerosAndAlign:
+OneByteNumberToTxSymbol_TrimLeadingZerosAndAlign::
 	call OneByteNumberToTxSymbol
 	ld a, [hli]
 	cp SYM_0
@@ -426,7 +426,7 @@ OneByteNumberToTxSymbol_TrimLeadingZerosAndAlign:
 
 ; this function is always loaded to wMenuFunctionPointer by PrintCardListItems
 ; takes care of things like handling page scrolling and calling the function at wListFunctionPointer
-CardListMenuFunction:
+CardListMenuFunction::
 	ldh a, [hDPadHeld]
 	ld b, a
 	ld a, [wNumMenuItems]
@@ -595,7 +595,7 @@ CardListMenuFunction:
 
 ; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
 ; replace leading zeros with SYM_SPACE
-OneByteNumberToTxSymbol_TrimLeadingZeros:
+OneByteNumberToTxSymbol_TrimLeadingZeros::
 	call OneByteNumberToTxSymbol
 	ld a, [hl]
 	cp SYM_0
@@ -604,7 +604,7 @@ OneByteNumberToTxSymbol_TrimLeadingZeros:
 	ret
 
 ; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
-OneByteNumberToTxSymbol:
+OneByteNumberToTxSymbol::
 	ld hl, wDefaultText
 	push hl
 	ld e, SYM_0 - 1
@@ -621,7 +621,7 @@ OneByteNumberToTxSymbol:
 	ret
 
 ; translate the TYPE_* constant in wLoadedCard1Type to an index for CardSymbolTable
-CardTypeToSymbolID:
+CardTypeToSymbolID::
 	ld a, [wLoadedCard1Type]
 	cp TYPE_TRAINER
 	jr nc, .trainer_card
@@ -640,7 +640,7 @@ CardTypeToSymbolID:
 
 ; return the entry in CardSymbolTable of the TYPE_* constant in wLoadedCard1Type
 ; also return the first byte of said entry (starting tile number) in a
-GetCardSymbolData:
+GetCardSymbolData::
 	call CardTypeToSymbolID
 	add a
 	ld c, a
@@ -651,7 +651,7 @@ GetCardSymbolData:
 	ret
 
 ; draw, at de, the 2x2 tile card symbol associated to the TYPE_* constant in wLoadedCard1Type
-DrawCardSymbol:
+DrawCardSymbol::
 	push hl
 	push de
 	push bc
@@ -682,7 +682,7 @@ DrawCardSymbol:
 	pop hl
 	ret
 
-CardSymbolTable:
+CardSymbolTable::
 ; starting tile number, cgb palette (grey, yellow/red, green/blue, pink/orange)
 	db $e0, $01 ; TYPE_ENERGY_FIRE
 	db $e4, $02 ; TYPE_ENERGY_GRASS
@@ -699,21 +699,21 @@ CardSymbolTable:
 
 ; copy the name and level of the card at wLoadedCard1 to wDefaultText
 ; a = length in number of tiles (the resulting string will be padded with spaces to match it)
-CopyCardNameAndLevel:
+CopyCardNameAndLevel::
 	farcall _CopyCardNameAndLevel
 	ret
 
 ; sets cursor parameters for navigating in a text box, but using
 ; default values for the cursor tile (SYM_CURSOR_R) and the tile behind it (SYM_SPACE).
 ; d,e: coordinates of the cursor
-SetCursorParametersForTextBox_Default:
+SetCursorParametersForTextBox_Default::
 	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
 ;	fallthrough
 
 ; wait until A or B is pressed.
 ; return carry if A is pressed, nc if B is pressed. erase the cursor either way
-WaitForButtonAorB:
+WaitForButtonAorB::
 	call DoFrame
 	call RefreshMenuCursor
 	ldh a, [hKeysPressed]
@@ -732,7 +732,7 @@ WaitForButtonAorB:
 ; sets cursor parameters for navigating in a text box
 ; d,e: coordinates of the cursor
 ; b,c: tile numbers of the cursor and of the tile behind it
-SetCursorParametersForTextBox:
+SetCursorParametersForTextBox::
 	xor a
 	ld hl, wCurMenuItem
 	ld [hli], a
@@ -752,13 +752,13 @@ SetCursorParametersForTextBox:
 
 ; draw a 20x6 text box aligned to the bottom of the screen,
 ; print the text at hl without letter delay, and wait for A or B pressed
-DrawWideTextBox_PrintTextNoDelay_Wait:
+DrawWideTextBox_PrintTextNoDelay_Wait::
 	call DrawWideTextBox_PrintTextNoDelay
 	jp WaitForWideTextBoxInput
 
 ; draw a 20x6 text box aligned to the bottom of the screen
 ; and print the text at hl without letter delay
-DrawWideTextBox_PrintTextNoDelay:
+DrawWideTextBox_PrintTextNoDelay::
 	push hl
 	call DrawWideTextBox
 	ld a, 19
@@ -766,13 +766,13 @@ DrawWideTextBox_PrintTextNoDelay:
 
 ; draw a 12x6 text box aligned to the bottom left of the screen
 ; and print the text at hl without letter delay
-DrawNarrowTextBox_PrintTextNoDelay:
+DrawNarrowTextBox_PrintTextNoDelay::
 	push hl
 	call DrawNarrowTextBox
 	ld a, 11
 ;	fallthrough
 
-DrawTextBox_PrintTextNoDelay:
+DrawTextBox_PrintTextNoDelay::
 	lb de, 1, 14
 	call AdjustCoordinatesForBGScroll
 	call InitTextPrintingInTextbox
@@ -785,7 +785,7 @@ DrawTextBox_PrintTextNoDelay:
 
 ; draw a 20x6 text box aligned to the bottom of the screen
 ; and print the text at hl with letter delay
-DrawWideTextBox_PrintText:
+DrawWideTextBox_PrintText::
 	push hl
 	call DrawWideTextBox
 	ld a, 19
@@ -797,7 +797,7 @@ DrawWideTextBox_PrintText:
 	jp PrintText
 
 ; draw a 12x6 text box aligned to the bottom left of the screen
-DrawNarrowTextBox:
+DrawNarrowTextBox::
 	lb de, 0, 12
 	lb bc, 12, 6
 	call AdjustCoordinatesForBGScroll
@@ -806,7 +806,7 @@ DrawNarrowTextBox:
 
 ; draw a 12x6 text box aligned to the bottom left of the screen,
 ; print the text at hl without letter delay, and wait for A or B pressed
-DrawNarrowTextBox_WaitForInput:
+DrawNarrowTextBox_WaitForInput::
 	call DrawNarrowTextBox_PrintTextNoDelay
 	xor a
 	ld hl, NarrowTextBoxMenuParameters
@@ -820,7 +820,7 @@ DrawNarrowTextBox_WaitForInput:
 	jr z, .wait_A_or_B_loop
 	ret
 
-NarrowTextBoxMenuParameters:
+NarrowTextBoxMenuParameters::
 	db 10, 17 ; cursor x, cursor y
 	db 1 ; y displacement between items
 	db 1 ; number of items
@@ -829,7 +829,7 @@ NarrowTextBoxMenuParameters:
 	dw NULL ; function pointer if non-0
 
 ; draw a 20x6 text box aligned to the bottom of the screen
-DrawWideTextBox:
+DrawWideTextBox::
 	lb de, 0, 12
 	lb bc, 20, 6
 	call AdjustCoordinatesForBGScroll
@@ -838,12 +838,12 @@ DrawWideTextBox:
 
 ; draw a 20x6 text box aligned to the bottom of the screen,
 ; print the text at hl with letter delay, and wait for A or B pressed
-DrawWideTextBox_WaitForInput:
+DrawWideTextBox_WaitForInput::
 	call DrawWideTextBox_PrintText
 ;	fallthrough
 
 ; wait for A or B to be pressed on a wide (20x6) text box
-WaitForWideTextBoxInput:
+WaitForWideTextBoxInput::
 	xor a
 	ld hl, WideTextBoxMenuParameters
 	call InitializeMenuParameters
@@ -857,7 +857,7 @@ WaitForWideTextBoxInput:
 	call EraseCursor
 	ret
 
-WideTextBoxMenuParameters:
+WideTextBoxMenuParameters::
 	db 18, 17 ; cursor x, cursor y
 	db 1 ; y displacement between items
 	db 1 ; number of items
@@ -866,7 +866,7 @@ WideTextBoxMenuParameters:
 	dw NULL ; function pointer if non-0
 
 ; display a two-item horizontal menu with custom text provided in hl and handle input
-TwoItemHorizontalMenu:
+TwoItemHorizontalMenu::
 	call DrawWideTextBox_PrintText
 	lb de, 6, 16 ; x, y
 	ld a, d
@@ -878,7 +878,7 @@ TwoItemHorizontalMenu:
 	call EnableLCD
 	jp HandleYesOrNoMenu.refresh_menu
 
-YesOrNoMenuWithText_SetCursorToYes:
+YesOrNoMenuWithText_SetCursorToYes::
 	ld a, $01
 	ld [wDefaultYesOrNo], a
 ;	fallthrough
@@ -886,13 +886,13 @@ YesOrNoMenuWithText_SetCursorToYes:
 ; display a yes / no menu in a 20x8 textbox with custom text provided in hl and handle input
 ; wDefaultYesOrNo determines whether the cursor initially points to YES or to NO
 ; returns carry if "no" selected
-YesOrNoMenuWithText:
+YesOrNoMenuWithText::
 	call DrawWideTextBox_PrintText
 ;	fallthrough
 
 ; prints the YES / NO menu items at coordinates x,y = 7,16 and handles input
 ; input: wDefaultYesOrNo. returns carry if "no" selected
-YesOrNoMenu:
+YesOrNoMenu::
 	lb de, 7, 16 ; x, y
 	call PrintYesOrNoItems
 	lb de, 6, 16 ; x, y
@@ -900,14 +900,14 @@ YesOrNoMenu:
 
 ; prints the YES / NO menu items at coordinates x,y = 3,16 and handles input
 ; input: wDefaultYesOrNo. returns carry if "no" selected
-YesOrNoMenuWithText_LeftAligned:
+YesOrNoMenuWithText_LeftAligned::
 	call DrawNarrowTextBox_PrintTextNoDelay
 	lb de, 3, 16 ; x, y
 	call PrintYesOrNoItems
 	lb de, 2, 16 ; x, y
 ;	fallthrough
 
-HandleYesOrNoMenu:
+HandleYesOrNoMenu::
 	ld a, d
 	ld [wLeftmostItemCursorX], a
 	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
@@ -962,13 +962,13 @@ HandleYesOrNoMenu:
 	ret
 
 ; prints "YES NO" at de
-PrintYesOrNoItems:
+PrintYesOrNoItems::
 	call AdjustCoordinatesForBGScroll
 	ldtx hl, YesOrNoText
 	call InitTextPrinting_ProcessTextFromID
 	ret
 
-ContinueDuel:
+ContinueDuel::
 	ld a, BANK(_ContinueDuel)
 	call BankswitchROM
 	jp _ContinueDuel

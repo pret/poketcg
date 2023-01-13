@@ -1,4 +1,4 @@
-DeckPointers:
+DeckPointers::
 	table_width 2, DeckPointers
 	dw UnnamedDeck
 	dw UnnamedDeck2

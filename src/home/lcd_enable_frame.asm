@@ -1,4 +1,4 @@
-DoFrameIfLCDEnabled:
+DoFrameIfLCDEnabled::
 	push af
 	ldh a, [rLCDC]
 	bit LCDC_ENABLE_F, a

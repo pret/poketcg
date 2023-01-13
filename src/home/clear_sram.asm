@@ -1,6 +1,6 @@
 ; validate the saved data in SRAM
 ; it must contain with the sequence $04, $21, $05 at s0a000
-ValidateSRAM:
+ValidateSRAM::
 	xor a
 	call BankswitchSRAM
 	ld hl, $a000
@@ -41,7 +41,7 @@ ValidateSRAM:
 	ret
 
 ; zero all SRAM banks and set s0a000 to $04, $21, $05
-RestartSRAM:
+RestartSRAM::
 	ld a, 3
 .clear_loop
 	call ClearSRAMBank
@@ -57,7 +57,7 @@ RestartSRAM:
 	ret
 
 ; zero the loaded SRAM bank
-ClearSRAMBank:
+ClearSRAMBank::
 	push af
 	call BankswitchSRAM
 	call EnableSRAM

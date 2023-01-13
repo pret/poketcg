@@ -1,20 +1,18 @@
-; clear [SOMETHING] - something relating to animations
-Func_3ca0:
+EnableAndClearSpriteAnimations::
 	xor a
-	ld [wd5d7], a
+	ld [wAllSpriteAnimationsDisabled], a
 	; fallthrough
-
-Func_3ca4:
+ClearSpriteAnimations::
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_1296e)
+	ld a, BANK(_ClearSpriteAnimations)
 	call BankswitchROM
-	call Func_1296e
+	call _ClearSpriteAnimations
 	pop af
 	call BankswitchROM
 	ret
 
-HandleAllSpriteAnimations:
+HandleAllSpriteAnimations::
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(_HandleAllSpriteAnimations)
@@ -26,7 +24,7 @@ HandleAllSpriteAnimations:
 
 ; hl - pointer to animation frame
 ; wd5d6 - bank of animation frame
-DrawSpriteAnimationFrame:
+DrawSpriteAnimationFrame::
 	ldh a, [hBankROM]
 	push af
 	ld a, [wd5d6]
@@ -143,7 +141,7 @@ DrawSpriteAnimationFrame:
 ; the current frame's offset
 ; [wd4ca] - current frame offset
 ; wTempPointer* - Pointer to current Animation
-GetAnimationFramePointer:
+GetAnimationFramePointer::
 	ldh a, [hBankROM]
 	push af
 	push hl
@@ -194,7 +192,7 @@ GetAnimationFramePointer:
 
 ; return hl pointing to the start of a sprite in wSpriteAnimBuffer.
 ; the sprite is identified by its index in wWhichSprite.
-GetFirstSpriteAnimBufferProperty:
+GetFirstSpriteAnimBufferProperty::
 	push bc
 	ld c, SPRITE_ANIM_ENABLED
 	call GetSpriteAnimBufferProperty
@@ -203,11 +201,11 @@ GetFirstSpriteAnimBufferProperty:
 
 ; return hl pointing to the property (byte) c of a sprite in wSpriteAnimBuffer.
 ; the sprite is identified by its index in wWhichSprite.
-GetSpriteAnimBufferProperty:
+GetSpriteAnimBufferProperty::
 	ld a, [wWhichSprite]
 ;	fallthrough
 
-GetSpriteAnimBufferProperty_SpriteInA:
+GetSpriteAnimBufferProperty_SpriteInA::
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite
 	debug_nop
@@ -227,7 +225,7 @@ GetSpriteAnimBufferProperty_SpriteInA:
 	pop bc
 	ret
 
-Func_3ddb:
+Func_3ddb::
 	push hl
 	push bc
 	ld c, SPRITE_ANIM_FLAGS
@@ -237,7 +235,7 @@ Func_3ddb:
 	pop hl
 	ret
 
-Func_3de7:
+Func_3de7::
 	push hl
 	push bc
 	ld c, SPRITE_ANIM_FLAGS
@@ -247,7 +245,7 @@ Func_3de7:
 	pop hl
 	ret
 
-LoadScene:
+LoadScene::
 	push af
 	ldh a, [hBankROM]
 	push af
@@ -266,30 +264,32 @@ LoadScene:
 	ret
 
 ; draws player's portrait at b,c
-DrawPlayerPortrait:
+DrawPlayerPortrait::
 	ld a, $1
 	ld [wd61e], a
 	ld a, TILEMAP_PLAYER
 ;	fallthrough
 
-DrawPortrait:
+; input:
+; a = TILEMAP_* constant
+DrawPortrait::
 	ld [wCurTilemap], a
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_12fc6)
+	ld a, BANK(_DrawPortrait)
 	call BankswitchROM
-	call Func_12fc6
+	call _DrawPortrait
 	pop af
 	call BankswitchROM
 	ret
 
 ; draws opponent's portrait given in a at b,c
-DrawOpponentPortrait:
+DrawOpponentPortrait::
 	ld [wd61e], a
 	ld a, TILEMAP_OPPONENT
 	jr DrawPortrait
 
-Func_3e31:
+Func_3e31::
 	ldh a, [hBankROM]
 	push af
 	call HandleAllSpriteAnimations

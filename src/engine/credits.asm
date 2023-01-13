@@ -1,4 +1,4 @@
-PlayCreditsSequence:
+PlayCreditsSequence::
 	ld a, MUSIC_STOP
 	call PlaySong
 	call Func_1d705
@@ -22,7 +22,7 @@ PlayCreditsSequence:
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall FadeScreenToWhite
-	call Func_3ca4
+	call ClearSpriteAnimations
 	call SetWindowOff
 	call Func_1d758
 	call EnableLCD
@@ -36,7 +36,7 @@ PlayCreditsSequence:
 Func_1d705:
 	call DisableLCD
 	farcall Func_10a9b
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	farcall InitMenuScreen
 	call Func_1d7ee
 	ld hl, Func_3e31

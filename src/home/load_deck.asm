@@ -1,7 +1,7 @@
 ; loads the deck id in a from DeckPointers and copies it to wPlayerDeck or to
 ; wOpponentDeck, depending on whose turn it is.
 ; sets carry flag if an invalid deck id is used.
-LoadDeck:
+LoadDeck::
 	push hl
 	ld l, a
 	ld h, $0

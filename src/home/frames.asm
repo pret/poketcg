@@ -1,5 +1,5 @@
 ; calls DoFrame a times
-DoAFrames:
+DoAFrames::
 .loop
 	push af
 	call DoFrame
@@ -10,7 +10,7 @@ DoAFrames:
 
 ; updates background, sprites and other game variables, halts until vblank, and reads user input
 ; if wDebugPauseAllowed is not 0, the game can be paused (and resumed) by pressing the SELECT button
-DoFrame:
+DoFrame::
 	push af
 	push hl
 	push de
@@ -42,7 +42,7 @@ DoFrame:
 
 ; handle D-pad repeat counter
 ; used to quickly scroll through menus when a relevant D-pad key is held
-HandleDPadRepeat:
+HandleDPadRepeat::
 	ldh a, [hKeysHeld]
 	ldh [hDPadHeld], a
 	and D_PAD

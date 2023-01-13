@@ -1,7 +1,7 @@
 ; RST18
 ; this function affects the stack so that it returns to the pointer following
 ; the rst call. similar to rst 28, except this always loads bank 1
-Bank1Call:
+Bank1Call::
 	push hl
 	push hl
 	push hl
@@ -30,7 +30,7 @@ Bank1Call:
 	ld a, $1
 ;	fallthrough
 
-Bank1Call_FarCall_Common:
+Bank1Call_FarCall_Common::
 	call BankswitchROM
 	ld hl, sp+$d
 	inc de
@@ -44,7 +44,7 @@ Bank1Call_FarCall_Common:
 	ret
 
 ; switch to the ROM bank at sp+4
-SwitchToBankAtSP: ; 9dc (0:9dc)
+SwitchToBankAtSP::
 	push af
 	push hl
 	ld hl, sp+$04
@@ -59,7 +59,7 @@ SwitchToBankAtSP: ; 9dc (0:9dc)
 ; RST28
 ; this function affects the stack so that it returns
 ; to the three byte pointer following the rst call
-FarCall:
+FarCall::
 	push hl
 	push hl
 	push hl

@@ -1,5 +1,5 @@
 ; returns a *= 10
-ATimes10:
+ATimes10::
 	push de
 	ld e, a
 	add a
@@ -10,7 +10,7 @@ ATimes10:
 	ret
 
 ; returns hl *= 10
-HLTimes10:
+HLTimes10::
 	push de
 	ld l, a
 	ld e, a
@@ -25,7 +25,7 @@ HLTimes10:
 
 ; returns a /= 10
 ; returns carry if a % 10 >= 5
-ADividedBy10:
+ADividedBy10::
 	push de
 	ld e, -1
 .asm_c62

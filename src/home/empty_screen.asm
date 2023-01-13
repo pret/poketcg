@@ -1,5 +1,5 @@
 ; initialize the screen by emptying the tilemap. used during screen transitions
-EmptyScreen:
+EmptyScreen::
 	call DisableLCD
 	call FillTileMap
 	xor a
@@ -13,7 +13,7 @@ EmptyScreen:
 	call DisableLCD
 	ret
 
-AttrBlkPacket_EmptyScreen:
+AttrBlkPacket_EmptyScreen::
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
 	; Control Code, Color Palette Designation, X1, Y1, X2, Y2
@@ -23,7 +23,7 @@ AttrBlkPacket_EmptyScreen:
 
 ; returns v*BGMap0 + BG_MAP_WIDTH * c + b in de.
 ; used to map coordinates at bc to a BGMap0 address.
-BCCoordToBGMap0Address:
+BCCoordToBGMap0Address::
 	ld l, c
 	ld h, $0
 	add hl, hl

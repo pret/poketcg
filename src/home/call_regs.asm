@@ -1,5 +1,5 @@
-CallHL2:
+CallHL2::
 	jp hl
 
-CallBC:
+CallBC::
 	retbc

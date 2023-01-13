@@ -1,5 +1,5 @@
 ; load data of card with text id of name at de to wLoadedCard1
-LoadCardDataToBuffer1_FromName:
+LoadCardDataToBuffer1_FromName::
 	ld hl, CardPointers + 2 ; skip first NULL pointer
 	ld a, BANK(CardPointers)
 	call BankpushROM2
@@ -45,18 +45,18 @@ LoadCardDataToBuffer1_FromName:
 	ret
 
 ; load data of card with id at e to wLoadedCard2
-LoadCardDataToBuffer2_FromCardID:
+LoadCardDataToBuffer2_FromCardID::
 	push hl
 	ld hl, wLoadedCard2
 	jr LoadCardDataToHL_FromCardID
 
 ; load data of card with id at e to wLoadedCard1
-LoadCardDataToBuffer1_FromCardID:
+LoadCardDataToBuffer1_FromCardID::
 	push hl
 	ld hl, wLoadedCard1
 ;	fallthrough
 
-LoadCardDataToHL_FromCardID:
+LoadCardDataToHL_FromCardID::
 	push de
 	push bc
 	push hl
@@ -81,7 +81,7 @@ LoadCardDataToHL_FromCardID:
 	ret
 
 ; return in a the type (TYPE_* constant) of the card with id at e
-GetCardType:
+GetCardType::
 	push hl
 	call GetCardPointer
 	jr c, .done
@@ -96,7 +96,7 @@ GetCardType:
 	ret
 
 ; return in de the 2-byte text id of the name of the card with id at e
-GetCardName:
+GetCardName::
 	push hl
 	call GetCardPointer
 	jr c, .done
@@ -114,7 +114,7 @@ GetCardName:
 	ret
 
 ; from the card id in a, returns type into a, rarity into b, and set into c
-GetCardTypeRarityAndSet:
+GetCardTypeRarityAndSet::
 	push hl
 	push de
 	ld d, 0
@@ -139,7 +139,7 @@ GetCardTypeRarityAndSet:
 
 ; return at hl the pointer to the data of the card with id at e
 ; return carry if e was out of bounds, so no pointer was returned
-GetCardPointer:
+GetCardPointer::
 	push de
 	push bc
 	ld l, e
@@ -173,7 +173,7 @@ GetCardPointer:
 ; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
 ; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8  (using absolute ROM addresses)
 ; also copies the card's palette to wCardPalette
-LoadCardGfx:
+LoadCardGfx::
 	ldh a, [hBankROM]
 	push af
 	push hl
@@ -205,7 +205,7 @@ LoadCardGfx:
 	ret
 
 ; identical to CopyFontsOrDuelGraphicsTiles
-CopyFontsOrDuelGraphicsTiles2:
+CopyFontsOrDuelGraphicsTiles2::
 	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	ld c, TILE_SIZE

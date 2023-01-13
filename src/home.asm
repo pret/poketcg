@@ -1,3 +1,6 @@
+INCLUDE "macros.asm"
+INCLUDE "constants.asm"
+
 ; rst vectors
 SECTION "rst00", ROM0
 	ret

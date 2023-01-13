@@ -13,7 +13,7 @@ Func_12661:
 	call LoadSymbolsFont
 	lb de, $30, $7f
 	call SetupText
-	call Func_3ca0
+	call EnableAndClearSpriteAnimations
 	call Func_12871
 	ld a, $01
 	ld [wLineSeparation], a
