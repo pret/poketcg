@@ -7,49 +7,49 @@ Music_MatchVictory_Ch1:
 	duty 0
 	volume_envelope 11, 0
 	speed 1
-	A_ 15
+	note A_, 15
 	tie
-	A_ 9
+	note A_, 9
 	volume_envelope 2, 7
-	A_ 5
+	note A_, 5
 	volume_envelope 11, 0
-	A_ 7
+	note A_, 7
 	volume_envelope 2, 7
-	A_ 3
+	note A_, 3
 	volume_envelope 11, 0
-	F_ 7
+	note F_, 7
 	volume_envelope 2, 7
-	F_ 3
+	note F_, 3
 	volume_envelope 11, 0
-	A_ 7
+	note A_, 7
 	volume_envelope 2, 7
-	A_ 2
+	note A_, 2
 	volume_envelope 11, 0
-	B_ 11
+	note B_, 11
 	volume_envelope 2, 7
-	B_ 10
+	note B_, 10
 	inc_octave
 	volume_envelope 11, 0
-	C_ 10
+	note C_, 10
 	volume_envelope 2, 7
-	C_ 11
+	note C_, 11
 	volume_envelope 11, 0
-	D_ 10
+	note D_, 10
 	volume_envelope 2, 7
-	D_ 10
+	note D_, 10
 	volume_envelope 11, 0
-	C# 8
+	note C#, 8
 	volume_envelope 2, 7
-	C# 13
+	note C#, 13
 	volume_envelope 11, 0
-	D_ 5
+	note D_, 5
 	volume_envelope 2, 7
-	D_ 6
+	note D_, 6
 	volume_envelope 11, 0
 	speed 8
-	E_ 12
+	note E_, 12
 	volume_envelope 2, 7
-	E_ 4
+	note E_, 4
 	music_end
 
 
@@ -62,57 +62,57 @@ Music_MatchVictory_Ch2:
 	duty 0
 	volume_envelope 11, 0
 	speed 1
-	F_ 5
+	note F_, 5
 	volume_envelope 2, 7
-	F_ 5
+	note F_, 5
 	dec_octave
 	volume_envelope 11, 0
-	A_ 5
+	note A_, 5
 	inc_octave
-	C_ 5
-	F_ 5
+	note C_, 5
+	note F_, 5
 	volume_envelope 2, 7
-	F_ 4
+	note F_, 4
 	volume_envelope 11, 0
-	C_ 7
+	note C_, 7
 	volume_envelope 2, 7
-	C_ 3
+	note C_, 3
 	dec_octave
 	volume_envelope 11, 0
-	A_ 7
+	note A_, 7
 	volume_envelope 2, 7
-	A_ 3
+	note A_, 3
 	inc_octave
 	volume_envelope 11, 0
-	C_ 7
+	note C_, 7
 	volume_envelope 2, 7
-	C_ 2
+	note C_, 2
 	volume_envelope 11, 0
-	G_ 11
+	note G_, 11
 	volume_envelope 2, 7
-	G_ 10
+	note G_, 10
 	volume_envelope 11, 0
-	A_ 10
+	note A_, 10
 	volume_envelope 2, 7
-	A_ 11
+	note A_, 11
 	volume_envelope 11, 0
-	B_ 10
+	note B_, 10
 	volume_envelope 2, 7
-	B_ 10
+	note B_, 10
 	volume_envelope 11, 0
-	A_ 8
+	note A_, 8
 	volume_envelope 2, 7
-	A_ 13
+	note A_, 13
 	volume_envelope 11, 0
-	B_ 5
+	note B_, 5
 	volume_envelope 2, 7
-	B_ 6
+	note B_, 6
 	inc_octave
 	volume_envelope 11, 0
 	speed 8
-	C# 12
+	note C#, 12
 	volume_envelope 2, 7
-	C# 4
+	note C#, 4
 	music_end
 
 
@@ -124,26 +124,26 @@ Music_MatchVictory_Ch3:
 	echo 0
 	octave 1
 	speed 1
-	F_ 15
+	note F_, 15
 	tie
-	F_ 9
+	note F_, 9
 	rest 5
-	F_ 7
+	note F_, 7
 	rest 3
-	F_ 7
+	note F_, 7
 	rest 3
-	F_ 7
+	note F_, 7
 	rest 2
-	G_ 11
+	note G_, 11
 	rest 10
-	G_ 11
+	note G_, 11
 	rest 10
-	G_ 10
+	note G_, 10
 	rest 10
-	A_ 8
+	note A_, 8
 	rest 13
-	E_ 5
+	note E_, 5
 	rest 6
 	speed 8
-	A_ 12
+	note A_, 12
 	music_end

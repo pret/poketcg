@@ -7,58 +7,58 @@ Music_Medal_Ch1:
 	duty 1
 	volume_envelope 10, 0
 	speed 1
-	E_ 5
-	A_ 5
+	note E_, 5
+	note A_, 5
 	inc_octave
-	C# 5
-	E_ 5
-	A_ 5
+	note C#, 5
+	note E_, 5
+	note A_, 5
 	inc_octave
-	C# 5
+	note C#, 5
 	dec_octave
 	dec_octave
-	A_ 5
+	note A_, 5
 	inc_octave
-	C# 5
-	E_ 5
-	A_ 5
+	note C#, 5
+	note E_, 5
+	note A_, 5
 	inc_octave
-	C# 5
-	E_ 5
+	note C#, 5
+	note E_, 5
 	speed 15
-	A_ 2
+	note A_, 2
 	tie
 	speed 1
-	A_ 10
+	note A_, 10
 	volume_envelope 3, 7
-	A_ 5
+	note A_, 5
 	volume_envelope 10, 0
 	cutoff 7
-	A_ 5
-	A_ 5
-	A_ 5
+	note A_, 5
+	note A_, 5
+	note A_, 5
 	cutoff 8
-	A_ 15
+	note A_, 15
 	volume_envelope 3, 7
-	A_ 5
+	note A_, 5
 	volume_envelope 10, 0
-	A_ 16
+	note A_, 16
 	volume_envelope 3, 7
-	A_ 5
+	note A_, 5
 	volume_envelope 10, 0
-	A_ 16
+	note A_, 16
 	volume_envelope 3, 7
-	A_ 6
+	note A_, 6
 	volume_envelope 10, 0
 	speed 9
-	A_ 5
+	note A_, 5
 	tie
-	A_ 8
+	note A_, 8
 	tie
 	speed 1
-	A_ 2
+	note A_, 2
 	volume_envelope 3, 7
-	A_ 16
+	note A_, 16
 	music_end
 
 
@@ -71,57 +71,57 @@ Music_Medal_Ch2:
 	duty 0
 	volume_envelope 9, 0
 	speed 1
-	A_ 5
+	note A_, 5
 	inc_octave
-	C# 5
-	E_ 5
-	A_ 5
+	note C#, 5
+	note E_, 5
+	note A_, 5
 	inc_octave
-	C# 5
-	E_ 5
+	note C#, 5
+	note E_, 5
 	dec_octave
-	C# 5
-	E_ 5
-	A_ 5
+	note C#, 5
+	note E_, 5
+	note A_, 5
 	inc_octave
-	C# 5
-	E_ 5
-	A_ 5
+	note C#, 5
+	note E_, 5
+	note A_, 5
 	inc_octave
 	speed 15
-	C_ 2
+	note C_, 2
 	tie
 	speed 1
-	C_ 10
+	note C_, 10
 	volume_envelope 2, 7
-	C_ 5
+	note C_, 5
 	volume_envelope 10, 0
 	cutoff 7
-	C_ 5
-	C_ 5
-	C_ 5
+	note C_, 5
+	note C_, 5
+	note C_, 5
 	cutoff 8
-	D_ 15
+	note D_, 15
 	volume_envelope 3, 7
-	D_ 5
+	note D_, 5
 	volume_envelope 9, 0
-	D_ 16
+	note D_, 16
 	volume_envelope 2, 7
-	D_ 5
+	note D_, 5
 	volume_envelope 9, 0
-	D_ 16
+	note D_, 16
 	volume_envelope 3, 7
-	D_ 6
+	note D_, 6
 	volume_envelope 9, 0
 	speed 9
-	C# 5
+	note C#, 5
 	tie
-	C# 8
+	note C#, 8
 	tie
 	speed 1
-	C# 2
+	note C#, 2
 	volume_envelope 2, 7
-	C# 16
+	note C#, 16
 	music_end
 
 
@@ -135,25 +135,25 @@ Music_Medal_Ch3:
 	speed 1
 	speed 15
 	rest 4
-	F_ 2
+	note F_, 2
 	tie
 	speed 1
-	F_ 10
+	note F_, 10
 	rest 5
 	cutoff 7
-	F_ 5
-	F_ 5
-	F_ 5
+	note F_, 5
+	note F_, 5
+	note F_, 5
 	cutoff 8
-	A# 15
+	note A#, 15
 	rest 5
-	A# 16
+	note A#, 16
 	rest 5
-	A# 16
+	note A#, 16
 	rest 6
 	speed 9
-	A_ 13
+	note A_, 13
 	tie
 	speed 1
-	A_ 2
+	note A_, 2
 	music_end

@@ -8,304 +8,304 @@ Music_PokemonDome_Ch1:
 	duty 0
 	volume_envelope 10, 0
 	speed 1
-	G_ 5
-	A_ 5
-	B_ 4
+	note G_, 5
+	note A_, 5
+	note B_, 4
 	inc_octave
-	C_ 5
-	D_ 5
-	E_ 4
-	C_ 5
-	D_ 5
-	E_ 4
-	F_ 5
-	G_ 5
-	A_ 4
-	F_ 5
-	G_ 5
-	A_ 4
-	B_ 5
+	note C_, 5
+	note D_, 5
+	note E_, 4
+	note C_, 5
+	note D_, 5
+	note E_, 4
+	note F_, 5
+	note G_, 5
+	note A_, 4
+	note F_, 5
+	note G_, 5
+	note A_, 4
+	note B_, 5
 	inc_octave
-	C_ 5
-	D_ 4
+	note C_, 5
+	note D_, 4
 	dec_octave
-	B_ 5
+	note B_, 5
 	inc_octave
-	C_ 5
-	D_ 4
-	E_ 5
-	F_ 5
-	G_ 4
+	note C_, 5
+	note D_, 4
+	note E_, 5
+	note F_, 5
+	note G_, 4
 	duty 1
 	volume_envelope 8, 0
 	dec_octave
 	speed 1
-	C_ 11
+	note C_, 11
 	volume_envelope 3, 7
-	C_ 3
+	note C_, 3
 	volume_envelope 8, 0
-	C_ 11
+	note C_, 11
 	volume_envelope 3, 7
-	C_ 10
+	note C_, 10
 	rest 7
 	volume_envelope 8, 0
-	C_ 4
+	note C_, 4
 	volume_envelope 3, 7
-	C_ 3
+	note C_, 3
 	volume_envelope 8, 0
-	C_ 4
+	note C_, 4
 	volume_envelope 3, 7
-	C_ 3
+	note C_, 3
 	volume_envelope 8, 0
-	C_ 11
+	note C_, 11
 	volume_envelope 3, 7
-	C_ 3
+	note C_, 3
 	volume_envelope 8, 0
-	C_ 11
+	note C_, 11
 	volume_envelope 3, 7
-	C_ 10
+	note C_, 10
 	speed 7
 	rest 3
 	volume_envelope 8, 0
 	speed 1
-	D_ 11
+	note D_, 11
 	volume_envelope 3, 7
-	D_ 3
+	note D_, 3
 	volume_envelope 8, 0
-	D_ 11
+	note D_, 11
 	volume_envelope 3, 7
-	D_ 10
+	note D_, 10
 	rest 7
 	volume_envelope 8, 0
-	D_ 4
+	note D_, 4
 	volume_envelope 3, 7
-	D_ 3
+	note D_, 3
 	volume_envelope 8, 0
-	D_ 4
+	note D_, 4
 	volume_envelope 3, 7
-	D_ 3
+	note D_, 3
 	volume_envelope 8, 0
-	D_ 11
+	note D_, 11
 	volume_envelope 3, 7
-	D_ 3
+	note D_, 3
 	volume_envelope 8, 0
-	D_ 11
+	note D_, 11
 	volume_envelope 3, 7
-	D_ 3
+	note D_, 3
 	MainLoop
 	speed 7
 	duty 1
 	volume_envelope 10, 4
 	octave 2
-	G_ 4
+	note G_, 4
 	inc_octave
 	duty 1
 	volume_envelope 8, 0
 	speed 1
-	E_ 11
+	note E_, 11
 	volume_envelope 3, 7
-	E_ 3
+	note E_, 3
 	volume_envelope 8, 0
 	speed 1
-	E_ 11
+	note E_, 11
 	volume_envelope 3, 7
-	E_ 10
+	note E_, 10
 	rest 7
 	volume_envelope 8, 0
-	E_ 4
+	note E_, 4
 	volume_envelope 3, 7
-	E_ 3
+	note E_, 3
 	volume_envelope 8, 0
-	E_ 4
+	note E_, 4
 	volume_envelope 3, 7
-	E_ 3
+	note E_, 3
 	volume_envelope 8, 0
-	E_ 11
+	note E_, 11
 	volume_envelope 3, 7
-	E_ 3
+	note E_, 3
 	volume_envelope 8, 0
-	E_ 11
+	note E_, 11
 	volume_envelope 3, 7
-	E_ 10
+	note E_, 10
 	speed 7
 	rest 3
 	volume_envelope 8, 0
 	speed 1
-	D_ 11
+	note D_, 11
 	volume_envelope 3, 7
-	D_ 3
+	note D_, 3
 	volume_envelope 8, 0
-	D_ 11
+	note D_, 11
 	volume_envelope 3, 7
-	D_ 10
+	note D_, 10
 	rest 7
 	speed 1
 	volume_envelope 8, 0
-	D_ 4
+	note D_, 4
 	volume_envelope 3, 7
-	D_ 3
+	note D_, 3
 	volume_envelope 8, 0
-	D_ 4
+	note D_, 4
 	volume_envelope 3, 7
-	D_ 3
+	note D_, 3
 	volume_envelope 8, 0
-	D_ 11
+	note D_, 11
 	volume_envelope 3, 7
-	D_ 3
+	note D_, 3
 	volume_envelope 8, 0
-	D_ 11
+	note D_, 11
 	volume_envelope 3, 7
-	D_ 3
+	note D_, 3
 	duty 0
 	volume_envelope 10, 0
 	dec_octave
 	speed 1
-	B_ 4
+	note B_, 4
 	inc_octave
-	C_ 3
-	D_ 4
-	E_ 3
-	F_ 4
-	G_ 3
-	A_ 4
-	B_ 3
+	note C_, 3
+	note D_, 4
+	note E_, 3
+	note F_, 4
+	note G_, 3
+	note A_, 4
+	note B_, 3
 	speed 7
 	inc_octave
-	C_ 12
+	note C_, 12
 	dec_octave
-	G_ 1
+	note G_, 1
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	rest 1
 	inc_octave
 	volume_envelope 10, 0
-	C_ 1
-	D_ 10
+	note C_, 1
+	note D_, 10
 	volume_envelope 3, 7
-	D_ 2
+	note D_, 2
 	volume_envelope 10, 0
-	G_ 3
+	note G_, 3
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	volume_envelope 10, 0
-	F_ 10
+	note F_, 10
 	volume_envelope 3, 7
-	F_ 2
+	note F_, 2
 	volume_envelope 10, 0
-	C_ 3
+	note C_, 3
 	volume_envelope 3, 7
-	C_ 1
+	note C_, 1
 	volume_envelope 10, 0
-	F_ 10
-	E_ 1
+	note F_, 10
+	note E_, 1
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	volume_envelope 10, 0
-	D_ 3
+	note D_, 3
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	volume_envelope 10, 0
-	E_ 12
+	note E_, 12
 	dec_octave
-	G_ 1
+	note G_, 1
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	rest 1
 	inc_octave
 	volume_envelope 10, 0
-	C_ 1
-	D_ 8
+	note C_, 1
+	note D_, 8
 	dec_octave
-	A_ 4
+	note A_, 4
 	inc_octave
-	D_ 3
+	note D_, 3
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	volume_envelope 10, 0
-	C_ 14
+	note C_, 14
 	volume_envelope 3, 7
-	C_ 2
+	note C_, 2
 	dec_octave
 	volume_envelope 10, 0
-	B_ 10
+	note B_, 10
 	volume_envelope 3, 7
-	B_ 2
+	note B_, 2
 	volume_envelope 10, 0
-	G_ 4
-	A_ 12
-	B_ 1
+	note G_, 4
+	note A_, 12
+	note B_, 1
 	volume_envelope 3, 7
-	B_ 2
+	note B_, 2
 	inc_octave
 	volume_envelope 10, 0
-	C_ 1
-	D_ 8
-	E_ 4
-	F_ 4
-	G_ 8
+	note C_, 1
+	note D_, 8
+	note E_, 4
+	note F_, 4
+	note G_, 8
 	tie
-	G_ 8
+	note G_, 8
 	tie
-	G_ 8
+	note G_, 8
 	volume_envelope 3, 7
-	G_ 2
+	note G_, 2
 	volume_envelope 10, 0
-	F_ 2
-	E_ 2
+	note F_, 2
+	note E_, 2
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	volume_envelope 10, 0
 	speed 1
-	E_ 5
+	note E_, 5
 	volume_envelope 3, 7
-	E_ 2
+	note E_, 2
 	speed 7
 	volume_envelope 10, 0
-	E_ 1
+	note E_, 1
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	rest 1
 	dec_octave
 	volume_envelope 10, 0
-	A_ 1
+	note A_, 1
 	inc_octave
-	C_ 8
-	G_ 1
+	note C_, 8
+	note G_, 1
 	volume_envelope 3, 7
-	G_ 2
+	note G_, 2
 	volume_envelope 10, 0
-	F_ 1
-	E_ 1
+	note F_, 1
+	note E_, 1
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	rest 1
 	dec_octave
 	volume_envelope 10, 0
-	A_ 1
+	note A_, 1
 	inc_octave
-	C_ 8
-	G_ 1
+	note C_, 8
+	note G_, 1
 	volume_envelope 3, 7
-	G_ 2
+	note G_, 2
 	volume_envelope 10, 0
-	F_ 1
-	E_ 1
+	note F_, 1
+	note E_, 1
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	rest 1
 	dec_octave
 	volume_envelope 10, 0
-	G# 1
+	note G#, 1
 	inc_octave
-	C_ 12
+	note C_, 12
 	tie
-	C_ 8
-	D_ 8
-	C_ 8
+	note C_, 8
+	note D_, 8
+	note C_, 8
 	tie
-	C_ 8
+	note C_, 8
 	tie
-	C_ 12
+	note C_, 12
 	EndMainLoop
 
 
@@ -319,63 +319,63 @@ Music_PokemonDome_Ch2:
 	duty 0
 	volume_envelope 8, 0
 	speed 1
-	B_ 5
+	note B_, 5
 	inc_octave
-	C_ 5
-	D_ 4
-	E_ 5
-	F_ 5
-	G_ 4
-	E_ 5
-	F_ 5
-	G_ 4
-	A_ 5
-	B_ 5
+	note C_, 5
+	note D_, 4
+	note E_, 5
+	note F_, 5
+	note G_, 4
+	note E_, 5
+	note F_, 5
+	note G_, 4
+	note A_, 5
+	note B_, 5
 	inc_octave
-	C_ 4
+	note C_, 4
 	dec_octave
-	A_ 5
-	B_ 5
+	note A_, 5
+	note B_, 5
 	inc_octave
-	C_ 4
-	D_ 5
-	E_ 5
-	F_ 4
-	D_ 5
-	E_ 5
-	F_ 4
-	G_ 5
-	A_ 5
-	B_ 4
+	note C_, 4
+	note D_, 5
+	note E_, 5
+	note F_, 4
+	note D_, 5
+	note E_, 5
+	note F_, 4
+	note G_, 5
+	note A_, 5
+	note B_, 4
 	MainLoop
 	duty 1
 	volume_envelope 7, 0
 	octave 3
 	speed 1
-	E_ 11
+	note E_, 11
 	volume_envelope 3, 7
-	E_ 3
+	note E_, 3
 	volume_envelope 7, 0
-	E_ 11
+	note E_, 11
 	volume_envelope 3, 7
-	E_ 10
+	note E_, 10
 	rest 7
 	volume_envelope 7, 0
-	E_ 4
+	note E_, 4
 	volume_envelope 3, 7
-	E_ 3
+	note E_, 3
 	volume_envelope 7, 0
-	E_ 4
+	note E_, 4
 	volume_envelope 3, 7
-	E_ 3
+	note E_, 3
 	volume_envelope 7, 0
-	E_ 11
+	note E_, 11
 	volume_envelope 3, 7
-	E_ 3
+	note E_, 3
 	volume_envelope 7, 0
-	E_ 11
+	note E_, 11
 	volume_envelope 3, 7
-	E_ 10
+	note E_, 10
 	speed 7
 	rest 3
 	music_call Branch_f9554
@@ -383,30 +383,30 @@ Music_PokemonDome_Ch2:
 	rest 4
 	volume_envelope 7, 0
 	speed 1
-	G_ 11
+	note G_, 11
 	volume_envelope 3, 7
-	G_ 3
+	note G_, 3
 	volume_envelope 7, 0
-	G_ 11
+	note G_, 11
 	volume_envelope 3, 7
-	G_ 10
+	note G_, 10
 	rest 7
 	volume_envelope 7, 0
-	G_ 4
+	note G_, 4
 	volume_envelope 3, 7
-	G_ 3
+	note G_, 3
 	volume_envelope 7, 0
-	G_ 4
+	note G_, 4
 	volume_envelope 3, 7
-	G_ 3
+	note G_, 3
 	volume_envelope 7, 0
-	G_ 11
+	note G_, 11
 	volume_envelope 3, 7
-	G_ 3
+	note G_, 3
 	volume_envelope 7, 0
-	G_ 11
+	note G_, 11
 	volume_envelope 3, 7
-	G_ 10
+	note G_, 10
 	speed 7
 	rest 3
 	music_call Branch_f9554
@@ -414,206 +414,206 @@ Music_PokemonDome_Ch2:
 	volume_envelope 8, 0
 	dec_octave
 	speed 1
-	G_ 4
-	A_ 3
-	B_ 4
+	note G_, 4
+	note A_, 3
+	note B_, 4
 	inc_octave
-	C_ 3
-	D_ 4
-	E_ 3
-	F_ 4
-	F# 3
+	note C_, 3
+	note D_, 4
+	note E_, 3
+	note F_, 4
+	note F#, 3
 	speed 7
-	G_ 10
-	F_ 1
+	note G_, 10
+	note F_, 1
 	rest 1
-	E_ 1
+	note E_, 1
 	volume_envelope 2, 7
-	E_ 1
+	note E_, 1
 	rest 1
 	volume_envelope 7, 0
-	G_ 1
-	G_ 10
-	A_ 2
-	B_ 2
-	G_ 2
+	note G_, 1
+	note G_, 10
+	note A_, 2
+	note B_, 2
+	note G_, 2
 	inc_octave
-	C_ 10
+	note C_, 10
 	rest 2
 	dec_octave
-	A_ 3
+	note A_, 3
 	rest 1
-	G# 10
-	A# 1
+	note G#, 10
+	note A#, 1
 	rest 1
-	G# 3
+	note G#, 3
 	rest 1
-	G_ 8
+	note G_, 8
 	inc_octave
-	C_ 4
+	note C_, 4
 	dec_octave
-	E_ 4
-	F# 8
-	F# 4
+	note E_, 4
+	note F#, 8
+	note F#, 4
 	cutoff 6
-	F# 3
+	note F#, 3
 	cutoff 8
 	speed 1
-	F# 5
+	note F#, 5
 	rest 2
 	speed 7
-	F_ 14
+	note F_, 14
 	rest 2
 	dec_octave
-	G_ 1
-	A_ 1
-	B_ 1
+	note G_, 1
+	note A_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
-	D_ 1
+	note C_, 1
+	note D_, 1
 	dec_octave
-	B_ 1
+	note B_, 1
 	inc_octave
-	C_ 1
-	D_ 1
-	E_ 1
-	C_ 1
-	D_ 1
-	E_ 1
-	F_ 1
-	F_ 1
-	A_ 1
-	B_ 1
+	note C_, 1
+	note D_, 1
+	note E_, 1
+	note C_, 1
+	note D_, 1
+	note E_, 1
+	note F_, 1
+	note F_, 1
+	note A_, 1
+	note B_, 1
 	duty 1
 	volume_envelope 7, -7
 	speed 1
 	Loop 4
-	F_ 5
-	C_ 5
+	note F_, 5
+	note C_, 5
 	dec_octave
-	A_ 4
+	note A_, 4
 	inc_octave
-	C_ 5
+	note C_, 5
 	dec_octave
-	A_ 5
-	F_ 4
-	inc_octave
-	EndLoop
-	Loop 4
-	G# 5
-	F_ 5
-	C_ 4
-	F_ 5
-	C_ 5
-	dec_octave
-	G# 4
+	note A_, 5
+	note F_, 4
 	inc_octave
 	EndLoop
 	Loop 4
-	inc_octave
-	D_ 5
+	note G#, 5
+	note F_, 5
+	note C_, 4
+	note F_, 5
+	note C_, 5
 	dec_octave
-	B_ 5
-	G_ 4
-	B_ 5
-	G_ 5
-	D_ 4
+	note G#, 4
+	inc_octave
+	EndLoop
+	Loop 4
+	inc_octave
+	note D_, 5
+	dec_octave
+	note B_, 5
+	note G_, 4
+	note B_, 5
+	note G_, 5
+	note D_, 4
 	EndLoop
 	Loop 3
 	inc_octave
-	C# 5
+	note C#, 5
 	dec_octave
-	A# 5
-	G_ 4
-	A# 5
-	G_ 5
-	E_ 4
+	note A#, 5
+	note G_, 4
+	note A#, 5
+	note G_, 5
+	note E_, 4
 	EndLoop
 	inc_octave
-	C# 5
+	note C#, 5
 	dec_octave
-	C# 5
-	E_ 4
-	G_ 5
-	A# 5
+	note C#, 5
+	note E_, 4
+	note G_, 5
+	note A#, 5
 	inc_octave
-	C# 4
+	note C#, 4
 	duty 0
 	volume_envelope 8, 0
 	speed 7
 	Loop 2
-	C_ 1
+	note C_, 1
 	volume_envelope 2, 7
-	C_ 1
+	note C_, 1
 	rest 1
 	volume_envelope 7, 0
 	dec_octave
-	F_ 1
-	A_ 8
+	note F_, 1
+	note A_, 8
 	inc_octave
-	E_ 1
+	note E_, 1
 	volume_envelope 2, 7
-	E_ 1
+	note E_, 1
 	rest 1
 	volume_envelope 7, 0
-	D_ 1
+	note D_, 1
 	EndLoop
-	C_ 1
+	note C_, 1
 	volume_envelope 2, 7
-	C_ 1
+	note C_, 1
 	rest 1
 	dec_octave
 	volume_envelope 7, 0
-	F_ 1
-	G# 12
-	C_ 1
+	note F_, 1
+	note G#, 12
+	note C_, 1
 	dec_octave
-	F_ 1
-	G# 1
+	note F_, 1
+	note G#, 1
 	inc_octave
-	C_ 1
-	F_ 1
+	note C_, 1
+	note F_, 1
 	dec_octave
-	G# 1
+	note G#, 1
 	inc_octave
-	C_ 1
-	F_ 1
-	G# 1
-	C_ 1
-	F_ 1
-	G# 1
+	note C_, 1
+	note F_, 1
+	note G#, 1
+	note C_, 1
+	note F_, 1
+	note G#, 1
 	inc_octave
-	C_ 1
+	note C_, 1
 	dec_octave
-	F_ 1
-	G# 1
-	B_ 1
+	note F_, 1
+	note G#, 1
+	note B_, 1
 	EndMainLoop
 
 Branch_f9554:
 	speed 1
 	volume_envelope 7, 0
-	F_ 11
+	note F_, 11
 	volume_envelope 3, 7
-	F_ 3
+	note F_, 3
 	volume_envelope 7, 0
-	F_ 11
+	note F_, 11
 	volume_envelope 3, 7
-	F_ 10
+	note F_, 10
 	rest 7
 	volume_envelope 7, 0
-	F_ 4
+	note F_, 4
 	volume_envelope 3, 7
-	F_ 3
+	note F_, 3
 	volume_envelope 7, 0
-	F_ 4
+	note F_, 4
 	volume_envelope 3, 7
-	F_ 3
+	note F_, 3
 	Loop 2
 	volume_envelope 7, 0
-	F_ 11
+	note F_, 11
 	volume_envelope 3, 7
-	F_ 3
+	note F_, 3
 	EndLoop
 	music_ret
 
@@ -629,146 +629,146 @@ Music_PokemonDome_Ch3:
 	cutoff 4
 	speed 1
 	Loop 8
-	G_ 5
-	G_ 5
-	G_ 4
+	note G_, 5
+	note G_, 5
+	note G_, 4
 	EndLoop
 	cutoff 6
 	speed 7
 	MainLoop
 	inc_octave
-	C_ 2
-	C_ 2
+	note C_, 2
+	note C_, 2
 	rest 2
-	C_ 1
-	C_ 1
+	note C_, 1
+	note C_, 1
 	music_call Branch_f9613
 	octave 1
 	cutoff 4
-	C_ 2
+	note C_, 2
 	inc_octave
 	cutoff 6
-	C_ 2
+	note C_, 2
 	rest 2
-	C_ 1
-	C_ 1
+	note C_, 1
+	note C_, 1
 	music_call Branch_f9613
 	octave 2
-	C_ 2
-	C_ 2
+	note C_, 2
+	note C_, 2
 	rest 2
-	C_ 1
-	C_ 1
-	C_ 2
-	C_ 2
+	note C_, 1
+	note C_, 1
+	note C_, 2
+	note C_, 2
 	rest 2
 	dec_octave
-	G_ 2
-	B_ 2
-	B_ 2
+	note G_, 2
+	note B_, 2
+	note B_, 2
 	rest 2
-	B_ 1
-	B_ 1
-	B_ 2
-	B_ 2
+	note B_, 1
+	note B_, 1
+	note B_, 2
+	note B_, 2
 	rest 2
-	G_ 2
-	A_ 2
-	A_ 2
+	note G_, 2
+	note A_, 2
+	note A_, 2
 	rest 2
-	A_ 1
-	A_ 1
-	A_ 2
-	A_ 2
+	note A_, 1
+	note A_, 1
+	note A_, 2
+	note A_, 2
 	rest 2
-	F_ 2
-	G# 2
-	G# 2
+	note F_, 2
+	note G#, 2
+	note G#, 2
 	rest 2
-	G# 1
-	G# 1
-	G# 2
-	G# 2
+	note G#, 1
+	note G#, 1
+	note G#, 2
+	note G#, 2
 	rest 2
-	F_ 2
+	note F_, 2
 	Loop 2
-	G_ 2
-	G_ 2
+	note G_, 2
+	note G_, 2
 	rest 2
-	G_ 1
-	G_ 1
-	EndLoop
-	Loop 2
-	F# 2
-	F# 2
-	rest 2
-	F# 1
-	F# 1
-	EndLoop
-	Loop 4
-	G_ 2
-	G_ 2
-	rest 2
-	G_ 1
-	G_ 1
-	EndLoop
-	Loop 4
-	F_ 2
-	F_ 2
-	rest 2
-	F_ 1
-	F_ 1
+	note G_, 1
+	note G_, 1
 	EndLoop
 	Loop 2
-	E_ 2
-	E_ 2
+	note F#, 2
+	note F#, 2
 	rest 2
-	E_ 1
-	E_ 1
+	note F#, 1
+	note F#, 1
+	EndLoop
+	Loop 4
+	note G_, 2
+	note G_, 2
+	rest 2
+	note G_, 1
+	note G_, 1
+	EndLoop
+	Loop 4
+	note F_, 2
+	note F_, 2
+	rest 2
+	note F_, 1
+	note F_, 1
 	EndLoop
 	Loop 2
-	A_ 2
-	A_ 2
+	note E_, 2
+	note E_, 2
 	rest 2
-	A_ 1
-	A_ 1
+	note E_, 1
+	note E_, 1
+	EndLoop
+	Loop 2
+	note A_, 2
+	note A_, 2
+	rest 2
+	note A_, 1
+	note A_, 1
 	EndLoop
 	Loop 4
-	D_ 2
-	D_ 2
+	note D_, 2
+	note D_, 2
 	rest 2
-	D_ 1
-	D_ 1
+	note D_, 1
+	note D_, 1
 	EndLoop
 	Loop 4
-	G_ 2
-	G_ 2
+	note G_, 2
+	note G_, 2
 	rest 2
-	G_ 1
-	G_ 1
+	note G_, 1
+	note G_, 1
 	EndLoop
 	EndMainLoop
 
 Branch_f9613:
 	octave 2
-	C_ 2
-	C_ 2
+	note C_, 2
+	note C_, 2
 	rest 2
 	dec_octave
-	G_ 2
+	note G_, 2
 	inc_octave
-	C_ 2
-	C_ 2
+	note C_, 2
+	note C_, 2
 	rest 2
-	C_ 1
-	C_ 1
-	C_ 2
-	C_ 2
+	note C_, 1
+	note C_, 1
+	note C_, 2
+	note C_, 2
 	dec_octave
 	cutoff 4
-	G_ 2
+	note G_, 2
 	cutoff 6
-	G_ 2
+	note G_, 2
 	music_ret
 
 

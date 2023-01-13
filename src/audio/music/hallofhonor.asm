@@ -12,15 +12,15 @@ Music_HallOfHonor_Ch1:
 	EndLoop
 	octave 4
 	volume_envelope 5, 5
-	C_ 1
+	note C_, 1
 	volume_envelope 2, 7
-	C_ 1
+	note C_, 1
 	music_call Branch_fb044
 	Loop 23
 	volume_envelope 5, 5
-	C_ 1
+	note C_, 1
 	volume_envelope 2, 7
-	G_ 1
+	note G_, 1
 	music_call Branch_fb044
 	EndLoop
 	EndMainLoop
@@ -28,67 +28,67 @@ Music_HallOfHonor_Ch1:
 Branch_fb016:
 	octave 4
 	volume_envelope 6, 5
-	C_ 1
+	note C_, 1
 	volume_envelope 2, 7
-	C_ 1
+	note C_, 1
 	volume_envelope 6, 5
-	F_ 1
+	note F_, 1
 	volume_envelope 2, 7
-	F_ 1
+	note F_, 1
 	volume_envelope 6, 5
-	G_ 1
+	note G_, 1
 	volume_envelope 2, 7
-	G_ 1
+	note G_, 1
 	volume_envelope 6, 5
-	F_ 1
+	note F_, 1
 	volume_envelope 2, 7
-	F_ 1
+	note F_, 1
 	inc_octave
 	volume_envelope 6, 5
-	C_ 1
+	note C_, 1
 	volume_envelope 2, 7
-	C_ 1
+	note C_, 1
 	dec_octave
 	volume_envelope 6, 5
-	F_ 1
+	note F_, 1
 	volume_envelope 2, 7
-	F_ 1
+	note F_, 1
 	volume_envelope 6, 5
-	G_ 1
+	note G_, 1
 	volume_envelope 2, 7
-	G_ 1
+	note G_, 1
 	music_ret
 
 Branch_fb044:
 	octave 4
 	volume_envelope 5, 5
-	F_ 1
+	note F_, 1
 	volume_envelope 2, 7
-	C_ 1
+	note C_, 1
 	volume_envelope 5, 5
-	G_ 1
+	note G_, 1
 	volume_envelope 2, 7
-	F_ 1
+	note F_, 1
 	volume_envelope 5, 5
-	F_ 1
+	note F_, 1
 	volume_envelope 2, 7
-	G_ 1
+	note G_, 1
 	inc_octave
 	volume_envelope 5, 5
-	C_ 1
+	note C_, 1
 	dec_octave
 	volume_envelope 2, 7
-	F_ 1
+	note F_, 1
 	volume_envelope 5, 5
-	F_ 1
+	note F_, 1
 	inc_octave
 	volume_envelope 2, 7
-	C_ 1
+	note C_, 1
 	dec_octave
 	volume_envelope 5, 5
-	G_ 1
+	note G_, 1
 	volume_envelope 2, 7
-	F_ 1
+	note F_, 1
 	music_ret
 
 
@@ -107,19 +107,19 @@ Music_HallOfHonor_Ch2:
 	music_call Branch_fb1ec
 	EndLoop
 	octave 4
-	C_ 1
+	note C_, 1
 	rest 1
-	F_ 1
+	note F_, 1
 	rest 1
-	G_ 1
+	note G_, 1
 	rest 1
-	F_ 1
+	note F_, 1
 	rest 1
 	inc_octave
-	C_ 1
+	note C_, 1
 	rest 1
 	dec_octave
-	F_ 1
+	note F_, 1
 	speed 1
 	rest 3
 	speed 7
@@ -131,42 +131,42 @@ Music_HallOfHonor_Ch2:
 	music_call Branch_fb0bb
 	octave 1
 	volume_envelope 6, -5
-	E_ 5
+	note E_, 5
 	volume_envelope 13, 0
-	E_ 11
+	note E_, 11
 	tie
-	E_ 12
+	note E_, 12
 	EndLoop
 	music_call Branch_fb0bb
 	octave 1
 	volume_envelope 6, -5
-	G_ 5
+	note G_, 5
 	volume_envelope 13, 0
-	G_ 11
+	note G_, 11
 	tie
-	G_ 12
+	note G_, 12
 	EndMainLoop
 
 Branch_fb0bb:
 	octave 1
 	volume_envelope 6, -5
-	F_ 5
+	note F_, 5
 	volume_envelope 13, 0
-	F_ 11
+	note F_, 11
 	tie
-	F_ 12
+	note F_, 12
 	volume_envelope 6, -5
-	E_ 5
+	note E_, 5
 	volume_envelope 13, 0
-	E_ 11
+	note E_, 11
 	tie
-	E_ 12
+	note E_, 12
 	volume_envelope 6, -5
-	D_ 5
+	note D_, 5
 	volume_envelope 13, 0
-	D_ 11
+	note D_, 11
 	tie
-	D_ 12
+	note D_, 12
 	music_ret
 
 
@@ -191,185 +191,185 @@ Music_HallOfHonor_Ch3:
 	Loop 7
 	music_call Branch_fb1ec
 	EndLoop
-	C_ 1
+	note C_, 1
 	rest 1
-	F_ 1
+	note F_, 1
 	rest 1
-	G_ 1
+	note G_, 1
 	rest 1
-	F_ 1
+	note F_, 1
 	rest 1
 	inc_octave
-	C_ 1
+	note C_, 1
 	rest 1
 	dec_octave
-	F_ 1
+	note F_, 1
 	volume_envelope 2, 0
 	frequency_offset 0
 	octave 4
 	speed 1
 	cutoff 6
-	B_ 3
+	note B_, 3
 	inc_octave
-	C_ 4
+	note C_, 4
 	tie
 	speed 7
-	C_ 15
+	note C_, 15
 	tie
-	C_ 8
+	note C_, 8
 	dec_octave
 	cutoff 8
-	B_ 2
+	note B_, 2
 	cutoff 4
-	A_ 2
+	note A_, 2
 	cutoff 6
-	G_ 6
-	C_ 10
+	note G_, 6
+	note C_, 10
 	tie
-	C_ 12
+	note C_, 12
 	speed 1
 	cutoff 8
-	B_ 3
+	note B_, 3
 	inc_octave
 	cutoff 6
-	C_ 4
+	note C_, 4
 	tie
 	speed 7
-	C_ 15
+	note C_, 15
 	tie
-	C_ 6
+	note C_, 6
 	dec_octave
 	cutoff 8
-	B_ 2
+	note B_, 2
 	inc_octave
-	C_ 2
+	note C_, 2
 	cutoff 4
-	D_ 2
+	note D_, 2
 	dec_octave
 	speed 1
 	cutoff 8
-	F# 3
+	note F#, 3
 	cutoff 6
-	G_ 4
+	note G_, 4
 	tie
 	speed 7
-	G_ 15
+	note G_, 15
 	tie
-	G_ 6
+	note G_, 6
 	cutoff 8
-	G_ 2
-	A_ 2
+	note G_, 2
+	note A_, 2
 	cutoff 4
-	B_ 2
+	note B_, 2
 	speed 1
 	cutoff 8
-	B_ 3
+	note B_, 3
 	inc_octave
-	C_ 4
+	note C_, 4
 	tie
 	speed 7
-	C_ 15
+	note C_, 15
 	tie
-	C_ 8
+	note C_, 8
 	dec_octave
-	B_ 2
+	note B_, 2
 	cutoff 4
-	A_ 2
+	note A_, 2
 	cutoff 6
-	G_ 6
+	note G_, 6
 	cutoff 8
 	speed 1
-	B_ 3
+	note B_, 3
 	inc_octave
 	cutoff 6
-	C_ 4
+	note C_, 4
 	tie
 	speed 7
-	C_ 9
+	note C_, 9
 	tie
-	C_ 6
+	note C_, 6
 	dec_octave
 	cutoff 8
-	G_ 2
+	note G_, 2
 	inc_octave
-	C_ 2
+	note C_, 2
 	cutoff 4
-	E_ 2
+	note E_, 2
 	speed 1
 	cutoff 8
-	E_ 3
-	F_ 4
+	note E_, 3
+	note F_, 4
 	tie
 	speed 7
-	F_ 1
-	E_ 2
+	note F_, 1
+	note E_, 2
 	cutoff 4
-	C_ 2
+	note C_, 2
 	cutoff 7
-	C_ 10
+	note C_, 10
 	tie
-	C_ 10
+	note C_, 10
 	cutoff 4
-	E_ 2
+	note E_, 2
 	speed 1
 	cutoff 8
-	E_ 3
-	F_ 4
+	note E_, 3
+	note F_, 4
 	tie
 	speed 7
-	F_ 1
-	E_ 2
+	note F_, 1
+	note E_, 2
 	cutoff 4
-	C_ 2
+	note C_, 2
 	cutoff 6
-	C_ 10
+	note C_, 10
 	tie
-	C_ 12
+	note C_, 12
 	speed 1
 	cutoff 8
-	F# 3
+	note F#, 3
 	cutoff 7
-	G_ 4
+	note G_, 4
 	tie
 	speed 7
-	G_ 15
+	note G_, 15
 	tie
-	G_ 8
+	note G_, 8
 	cutoff 8
-	F_ 2
+	note F_, 2
 	cutoff 4
-	E_ 2
+	note E_, 2
 	cutoff 8
-	F_ 2
+	note F_, 2
 	cutoff 4
-	E_ 2
-	C_ 2
+	note E_, 2
+	note C_, 2
 	dec_octave
 	cutoff 7
-	G_ 10
+	note G_, 10
 	tie
-	G_ 10
+	note G_, 10
 	cutoff 8
-	E_ 2
-	F_ 2
+	note E_, 2
+	note F_, 2
 	inc_octave
 	cutoff 4
-	C_ 2
+	note C_, 2
 	cutoff 7
-	C_ 12
+	note C_, 12
 	tie
-	C_ 10
+	note C_, 10
 	dec_octave
 	cutoff 8
-	E_ 2
-	F_ 2
+	note E_, 2
+	note F_, 2
 	inc_octave
 	cutoff 4
-	C_ 2
+	note C_, 2
 	cutoff 6
-	C_ 12
+	note C_, 12
 	tie
-	C_ 12
+	note C_, 12
 	rest 3
 	volume_envelope 6, 0
 	frequency_offset -1
@@ -378,20 +378,20 @@ Music_HallOfHonor_Ch3:
 
 Branch_fb1ec:
 	octave 4
-	C_ 1
+	note C_, 1
 	rest 1
-	F_ 1
+	note F_, 1
 	rest 1
-	G_ 1
+	note G_, 1
 	rest 1
-	F_ 1
+	note F_, 1
 	rest 1
 	inc_octave
-	C_ 1
+	note C_, 1
 	rest 1
 	dec_octave
-	F_ 1
+	note F_, 1
 	rest 1
-	G_ 1
+	note G_, 1
 	rest 1
 	music_ret

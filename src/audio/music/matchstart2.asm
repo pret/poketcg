@@ -5,86 +5,86 @@ Music_MatchStart2_Ch1:
 	octave 2
 	volume_envelope 15, 0
 	duty 0
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	inc_octave
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	dec_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	inc_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	dec_octave
-	E_ 1
-	G_ 1
-	B_ 1
+	note E_, 1
+	note G_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
-	E_ 1
-	B_ 1
+	note C_, 1
+	note E_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
+	note C_, 1
 	octave 3
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	inc_octave
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	dec_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	inc_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	dec_octave
-	E_ 1
-	G_ 1
-	B_ 1
+	note E_, 1
+	note G_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
-	E_ 1
-	B_ 1
+	note C_, 1
+	note E_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
+	note C_, 1
 	octave 4
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	inc_octave
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	dec_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	inc_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	dec_octave
 	volume_envelope 6, 0
-	E_ 1
-	G_ 1
-	B_ 1
+	note E_, 1
+	note G_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
-	E_ 1
+	note C_, 1
+	note E_, 1
 	volume_envelope 2, 0
-	G_ 1
-	B_ 1
+	note G_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
+	note C_, 1
 	music_end
 
 
@@ -97,79 +97,79 @@ Music_MatchStart2_Ch2:
 	octave 2
 	volume_envelope 6, 0
 	duty 0
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	inc_octave
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	dec_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	inc_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	dec_octave
-	E_ 1
-	G_ 1
-	B_ 1
+	note E_, 1
+	note G_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
-	E_ 1
-	B_ 1
+	note C_, 1
+	note E_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
+	note C_, 1
 	octave 3
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	inc_octave
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	dec_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	inc_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	dec_octave
-	E_ 1
-	G_ 1
-	B_ 1
+	note E_, 1
+	note G_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
-	E_ 1
-	B_ 1
+	note C_, 1
+	note E_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
+	note C_, 1
 	octave 4
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	inc_octave
-	C_ 1
-	E_ 1
-	A_ 1
+	note C_, 1
+	note E_, 1
+	note A_, 1
 	dec_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	inc_octave
-	D_ 1
-	F_ 1
-	B_ 1
+	note D_, 1
+	note F_, 1
+	note B_, 1
 	dec_octave
 	volume_envelope 2, 0
-	E_ 1
-	G_ 1
-	B_ 1
+	note E_, 1
+	note G_, 1
+	note B_, 1
 	inc_octave
-	C_ 1
-	E_ 1
+	note C_, 1
+	note E_, 1
 	music_end

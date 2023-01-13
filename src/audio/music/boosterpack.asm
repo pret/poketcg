@@ -7,39 +7,39 @@ Music_BoosterPack_Ch1:
 	duty 1
 	speed 1
 	volume_envelope 10, 0
-	D# 5
+	note D#, 5
 	volume_envelope 3, 7
-	D# 1
+	note D#, 1
 	volume_envelope 10, 0
-	G_ 5
+	note G_, 5
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	volume_envelope 10, 0
-	A# 5
+	note A#, 5
 	volume_envelope 3, 7
-	A# 2
+	note A#, 2
 	volume_envelope 10, 0
-	F_ 5
+	note F_, 5
 	volume_envelope 3, 7
-	F_ 1
+	note F_, 1
 	volume_envelope 10, 0
-	A_ 5
+	note A_, 5
 	volume_envelope 3, 7
-	A_ 1
+	note A_, 1
 	inc_octave
 	volume_envelope 10, 0
-	C_ 5
+	note C_, 5
 	volume_envelope 3, 7
-	C_ 2
+	note C_, 2
 	dec_octave
 	volume_envelope 10, 0
-	B_ 16
+	note B_, 16
 	tie
-	B_ 16
+	note B_, 16
 	tie
-	B_ 6
+	note B_, 6
 	volume_envelope 3, 7
-	B_ 9
+	note B_, 9
 	music_end
 
 
@@ -52,38 +52,38 @@ Music_BoosterPack_Ch2:
 	duty 1
 	speed 1
 	volume_envelope 9, 0
-	A# 5
+	note A#, 5
 	volume_envelope 2, 7
-	A# 1
+	note A#, 1
 	inc_octave
 	volume_envelope 9, 0
-	D# 5
+	note D#, 5
 	volume_envelope 2, 7
-	D# 1
+	note D#, 1
 	volume_envelope 9, 0
-	G_ 5
+	note G_, 5
 	volume_envelope 2, 7
-	G_ 2
+	note G_, 2
 	volume_envelope 9, 0
-	C_ 5
+	note C_, 5
 	volume_envelope 2, 7
-	C_ 1
+	note C_, 1
 	volume_envelope 9, 0
-	F_ 5
+	note F_, 5
 	volume_envelope 2, 7
-	F_ 1
+	note F_, 1
 	volume_envelope 9, 0
-	A_ 5
+	note A_, 5
 	volume_envelope 2, 7
-	A_ 2
+	note A_, 2
 	volume_envelope 9, 0
-	G_ 16
+	note G_, 16
 	tie
-	G_ 16
+	note G_, 16
 	tie
-	G_ 6
+	note G_, 6
 	volume_envelope 2, 7
-	G_ 9
+	note G_, 9
 	music_end
 
 
@@ -95,19 +95,19 @@ Music_BoosterPack_Ch3:
 	echo 0
 	octave 1
 	speed 1
-	D# 6
-	A# 6
+	note D#, 6
+	note A#, 6
 	inc_octave
-	D# 7
+	note D#, 7
 	dec_octave
-	F_ 6
+	note F_, 6
 	inc_octave
-	C_ 6
-	F_ 7
+	note C_, 6
+	note F_, 7
 	dec_octave
-	G_ 16
+	note G_, 16
 	tie
-	G_ 16
+	note G_, 16
 	tie
-	G_ 6
+	note G_, 6
 	music_end

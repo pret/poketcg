@@ -10,13 +10,13 @@ Music_DuelTheme3_Ch1:
 	Loop 4
 	Loop 4
 	volume_envelope 9, 2
-	F# 2
+	note F#, 2
 	rest 1
 	EndLoop
 	volume_envelope 9, 0
-	E_ 2
+	note E_, 2
 	volume_envelope 9, 5
-	F_ 2
+	note F_, 2
 	EndLoop
 	Loop 4
 	music_call Branch_f67b2
@@ -25,20 +25,20 @@ Music_DuelTheme3_Ch1:
 	volume_envelope 10, 0
 	Loop 2
 	octave 3
-	C# 1
-	F# 1
+	note C#, 1
+	note F#, 1
 	speed 1
-	G# 5
+	note G#, 5
 	volume_envelope 3, 7
-	G# 6
+	note G#, 6
 	music_call Branch_f65a7
 	octave 3
-	D_ 1
-	F# 1
+	note D_, 1
+	note F#, 1
 	speed 1
-	B_ 5
+	note B_, 5
 	volume_envelope 3, 7
-	B_ 6
+	note B_, 6
 	music_call Branch_f65a7
 	EndLoop
 	duty 0
@@ -46,42 +46,42 @@ Music_DuelTheme3_Ch1:
 	dec_octave
 	rest 2
 	speed 1
-	E_ 5
+	note E_, 5
 	volume_envelope 2, 7
-	E_ 6
+	note E_, 6
 	music_call Branch_f65cf
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	speed 11
 	rest 1
 	dec_octave
 	duty 0
 	volume_envelope 10, 3
 	speed 1
-	E_ 5
+	note E_, 5
 	volume_envelope 2, 7
-	E_ 6
+	note E_, 6
 	music_call Branch_f65cf
 	speed 11
 	duty 1
 	volume_envelope 10, 0
 	Loop 2
 	octave 3
-	C# 1
-	F# 1
+	note C#, 1
+	note F#, 1
 	speed 1
-	G# 5
+	note G#, 5
 	volume_envelope 3, 7
-	G# 6
+	note G#, 6
 	music_call Branch_f65a7
 	octave 3
-	D_ 1
-	F# 1
+	note D_, 1
+	note F#, 1
 	speed 1
-	B_ 5
+	note B_, 5
 	volume_envelope 3, 7
-	B_ 6
+	note B_, 6
 	volume_envelope 10, 0
 	music_call Branch_f65a7
 	EndLoop
@@ -91,21 +91,21 @@ Music_DuelTheme3_Ch1:
 	octave 2
 	rest 4
 	volume_envelope 9, 0
-	F# 2
+	note F#, 2
 	volume_envelope 2, 7
-	F# 2
+	note F#, 2
 	rest 2
 	volume_envelope 9, 0
-	E_ 2
+	note E_, 2
 	volume_envelope 2, 7
-	E_ 4
+	note E_, 4
 	volume_envelope 9, 0
-	D# 2
+	note D#, 2
 	volume_envelope 2, 7
-	D# 4
+	note D#, 4
 	volume_envelope 9, 0
-	D_ 2
-	C# 2
+	note D_, 2
+	note C#, 2
 	EndLoop
 	vibrato_delay 20
 	duty 2
@@ -115,235 +115,235 @@ Music_DuelTheme3_Ch1:
 	EndLoop
 	octave 4
 	volume_envelope 7, 0
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	volume_envelope 7, 0
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	Loop 3
 	music_call Branch_f661d
 	EndLoop
 	octave 4
 	volume_envelope 7, 0
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	volume_envelope 7, 0
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	inc_octave
 	volume_envelope 7, 0
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	dec_octave
 	volume_envelope 7, 0
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	dec_octave
 	speed 11
 	duty 1
 	volume_envelope 9, 0
 	cutoff 8
-	D_ 2
-	C# 2
+	note D_, 2
+	note C#, 2
 	dec_octave
-	F# 3
+	note F#, 3
 	inc_octave
 	speed 1
-	D_ 3
-	D# 2
-	E_ 3
-	F_ 3
+	note D_, 3
+	note D#, 2
+	note E_, 3
+	note F_, 3
 	speed 11
-	F# 4
+	note F#, 4
 	dec_octave
-	G# 3
+	note G#, 3
 	inc_octave
 	speed 1
-	E_ 3
-	F_ 2
-	F# 3
-	G_ 3
+	note E_, 3
+	note F_, 2
+	note F#, 3
+	note G_, 3
 	speed 11
-	G# 4
+	note G#, 4
 	duty 0
 	octave 2
 	Loop 2
 	Loop 4
 	volume_envelope 9, 0
-	F# 1
+	note F#, 1
 	volume_envelope 3, 7
-	F# 1
+	note F#, 1
 	rest 1
 	EndLoop
 	volume_envelope 9, 0
-	F# 1
+	note F#, 1
 	volume_envelope 3, 7
-	F# 1
+	note F#, 1
 	volume_envelope 9, 0
-	F# 1
+	note F#, 1
 	volume_envelope 3, 7
-	F# 1
+	note F#, 1
 	Loop 4
 	volume_envelope 9, 0
-	G_ 1
+	note G_, 1
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	rest 1
 	EndLoop
 	volume_envelope 9, 0
-	A_ 1
+	note A_, 1
 	volume_envelope 3, 7
-	A_ 1
+	note A_, 1
 	volume_envelope 9, 0
-	G_ 1
+	note G_, 1
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	EndLoop
 	duty 1
 	volume_envelope 10, 0
 	octave 3
-	C# 1
-	F# 1
+	note C#, 1
+	note F#, 1
 	speed 1
-	G# 5
+	note G#, 5
 	volume_envelope 3, 7
-	G# 6
+	note G#, 6
 	music_call Branch_f65a7
 	octave 3
-	C# 1
-	F# 1
+	note C#, 1
+	note F#, 1
 	speed 1
-	G# 5
+	note G#, 5
 	volume_envelope 3, 7
-	G# 6
+	note G#, 6
 	inc_octave
 	volume_envelope 10, 0
 	speed 11
-	C# 9
+	note C#, 9
 	volume_envelope 3, 7
-	C# 2
+	note C#, 2
 	dec_octave
 	volume_envelope 10, 0
-	B_ 1
+	note B_, 1
 	inc_octave
-	C# 1
-	F# 1
-	C# 1
+	note C#, 1
+	note F#, 1
+	note C#, 1
 	dec_octave
 	speed 1
-	B_ 5
+	note B_, 5
 	volume_envelope 3, 7
-	B_ 6
+	note B_, 6
 	speed 11
 	volume_envelope 10, 0
-	F# 9
+	note F#, 9
 	volume_envelope 3, 7
-	F# 4
+	note F#, 4
 	volume_envelope 10, 0
-	G# 1
-	A_ 1
+	note G#, 1
+	note A_, 1
 	speed 1
-	G# 5
+	note G#, 5
 	volume_envelope 3, 7
-	G# 6
+	note G#, 6
 	volume_envelope 10, 0
 	speed 11
-	B_ 8
+	note B_, 8
 	volume_envelope 3, 7
-	B_ 1
+	note B_, 1
 	volume_envelope 10, 0
-	A_ 2
-	B_ 1
+	note A_, 2
+	note B_, 1
 	tie
 	speed 1
-	B_ 5
+	note B_, 5
 	volume_envelope 3, 7
-	B_ 6
+	note B_, 6
 	speed 11
 	inc_octave
 	volume_envelope 10, 0
-	C# 1
-	D_ 1
+	note C#, 1
+	note D_, 1
 	speed 1
-	C# 5
+	note C#, 5
 	volume_envelope 3, 7
-	C# 6
+	note C#, 6
 	volume_envelope 10, 0
 	speed 11
-	E_ 10
+	note E_, 10
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	volume_envelope 10, 0
-	D_ 1
+	note D_, 1
 	speed 1
-	C# 8
+	note C#, 8
 	volume_envelope 3, 7
-	C# 3
+	note C#, 3
 	dec_octave
 	volume_envelope 10, 0
 	speed 11
-	B_ 1
+	note B_, 1
 	inc_octave
-	C# 1
+	note C#, 1
 	dec_octave
 	speed 1
-	B_ 5
+	note B_, 5
 	volume_envelope 3, 7
-	B_ 6
+	note B_, 6
 	speed 11
 	volume_envelope 10, 0
-	E_ 10
+	note E_, 10
 	volume_envelope 3, 7
-	E_ 3
+	note E_, 3
 	volume_envelope 1, -7
-	A_ 3
+	note A_, 3
 	volume_envelope 6, 0
-	A_ 5
+	note A_, 5
 	inc_octave
 	volume_envelope 3, -7
-	E_ 3
+	note E_, 3
 	volume_envelope 7, -7
-	E_ 3
+	note E_, 3
 	volume_envelope 10, 0
-	E_ 2
+	note E_, 2
 	duty 1
 	Loop 4
 	Loop 4
 	volume_envelope 9, 0
-	G# 1
+	note G#, 1
 	volume_envelope 3, 7
-	G# 1
+	note G#, 1
 	rest 1
 	EndLoop
 	volume_envelope 9, 0
-	G# 1
+	note G#, 1
 	volume_envelope 3, 7
-	G# 1
+	note G#, 1
 	volume_envelope 9, 0
-	G# 1
+	note G#, 1
 	volume_envelope 3, 7
-	G# 1
+	note G#, 1
 	Loop 4
 	volume_envelope 9, 0
-	A_ 1
+	note A_, 1
 	volume_envelope 3, 7
-	A_ 1
+	note A_, 1
 	rest 1
 	EndLoop
 	volume_envelope 9, 0
-	A_ 1
+	note A_, 1
 	volume_envelope 3, 7
-	A_ 1
+	note A_, 1
 	volume_envelope 9, 0
-	A_ 1
+	note A_, 1
 	volume_envelope 3, 7
-	A_ 1
+	note A_, 1
 	EndLoop
 	EndMainLoop
 
@@ -351,31 +351,31 @@ Branch_f65a7:
 	speed 11
 	octave 4
 	volume_envelope 10, 0
-	C# 5
+	note C#, 5
 	tie
-	C# 4
+	note C#, 4
 	volume_envelope 3, 7
-	C# 2
+	note C#, 2
 	dec_octave
 	volume_envelope 10, 0
-	B_ 1
+	note B_, 1
 	inc_octave
-	C# 1
-	F# 1
-	C# 1
+	note C#, 1
+	note F#, 1
+	note C#, 1
 	dec_octave
 	speed 1
-	B_ 5
+	note B_, 5
 	volume_envelope 3, 7
-	B_ 6
+	note B_, 6
 	speed 11
 	volume_envelope 10, 0
 	inc_octave
-	C# 5
+	note C#, 5
 	tie
-	C# 4
+	note C#, 4
 	volume_envelope 3, 7
-	C# 4
+	note C#, 4
 	volume_envelope 10, 0
 	music_ret
 
@@ -386,90 +386,90 @@ Branch_f65cf:
 	rest 2
 	speed 1
 	volume_envelope 10, 3
-	E_ 5
+	note E_, 5
 	volume_envelope 2, 7
-	E_ 6
+	note E_, 6
 	EndLoop
 	duty 2
 	volume_envelope 8, 0
-	D_ 5
-	G_ 6
-	B_ 5
+	note D_, 5
+	note G_, 6
+	note B_, 5
 	inc_octave
-	D_ 6
+	note D_, 6
 	dec_octave
-	G_ 5
-	B_ 6
+	note G_, 5
+	note B_, 6
 	inc_octave
-	D_ 5
-	G_ 6
-	F# 5
+	note D_, 5
+	note G_, 6
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	duty 0
 	volume_envelope 10, 3
 	speed 11
 	rest 1
 	dec_octave
 	speed 1
-	E_ 5
+	note E_, 5
 	volume_envelope 2, 7
-	E_ 6
+	note E_, 6
 	Loop 3
 	speed 11
 	rest 2
 	speed 1
 	volume_envelope 10, 3
-	E_ 5
+	note E_, 5
 	volume_envelope 2, 7
-	E_ 6
+	note E_, 6
 	EndLoop
 	dec_octave
 	duty 2
 	volume_envelope 8, 0
-	B_ 5
+	note B_, 5
 	inc_octave
-	E_ 6
-	G_ 5
-	B_ 6
-	E_ 5
-	G_ 6
-	B_ 5
+	note E_, 6
+	note G_, 5
+	note B_, 6
+	note E_, 5
+	note G_, 6
+	note B_, 5
 	inc_octave
-	E_ 6
+	note E_, 6
 	music_ret
 
 Branch_f661d:
 	octave 4
 	speed 1
 	volume_envelope 7, 0
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	volume_envelope 7, 0
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	inc_octave
 	volume_envelope 7, 0
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	dec_octave
 	volume_envelope 7, 0
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	inc_octave
 	volume_envelope 7, 0
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	dec_octave
 	volume_envelope 7, 0
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	music_ret
 
 
@@ -486,22 +486,22 @@ Music_DuelTheme3_Ch2:
 	Loop 4
 	Loop 4
 	volume_envelope 8, 2
-	F# 2
+	note F#, 2
 	rest 1
 	EndLoop
 	volume_envelope 8, 0
-	E_ 2
+	note E_, 2
 	volume_envelope 8, 5
-	F_ 2
+	note F_, 2
 	EndLoop
 	frequency_offset 0
 	octave 3
 	Loop 4
 	rest 6
 	volume_envelope 10, 3
-	E_ 1
+	note E_, 1
 	volume_envelope 2, 7
-	E_ 1
+	note E_, 1
 	rest 8
 	EndLoop
 	Loop 2
@@ -517,29 +517,29 @@ Music_DuelTheme3_Ch2:
 	speed 11
 	rest 1
 	speed 1
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	volume_envelope 10, 3
-	A_ 5
+	note A_, 5
 	volume_envelope 2, 7
-	A_ 6
+	note A_, 6
 	music_call Branch_f6866
 	octave 4
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	dec_octave
 	dec_octave
 	duty 0
 	volume_envelope 10, 3
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	volume_envelope 10, 3
-	A_ 5
+	note A_, 5
 	volume_envelope 2, 7
-	A_ 6
+	note A_, 6
 	music_call Branch_f6866
 	duty 0
 	volume_envelope 9, 0
@@ -555,158 +555,158 @@ Music_DuelTheme3_Ch2:
 	Loop 4
 	volume_envelope 10, 3
 	cutoff 6
-	F# 1
-	F# 1
+	note F#, 1
+	note F#, 1
 	cutoff 8
 	speed 1
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	volume_envelope 10, 3
 	cutoff 6
 	speed 11
-	F# 1
+	note F#, 1
 	inc_octave
 	volume_envelope 9, 0
 	cutoff 8
-	C# 2
+	note C#, 2
 	dec_octave
 	volume_envelope 10, 3
 	cutoff 6
-	F# 1
-	F# 1
+	note F#, 1
+	note F#, 1
 	speed 1
 	cutoff 8
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	volume_envelope 10, 3
 	cutoff 6
 	speed 11
-	F# 1
+	note F#, 1
 	volume_envelope 9, 0
 	cutoff 8
-	B_ 2
+	note B_, 2
 	volume_envelope 10, 3
 	cutoff 6
-	F# 1
-	F# 1
+	note F#, 1
+	note F#, 1
 	cutoff 8
 	speed 1
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	volume_envelope 10, 3
 	cutoff 6
 	speed 11
-	F# 1
+	note F#, 1
 	volume_envelope 9, 0
 	cutoff 8
-	B_ 2
+	note B_, 2
 	volume_envelope 10, 3
 	cutoff 6
-	F# 1
-	F# 1
+	note F#, 1
+	note F#, 1
 	speed 1
 	cutoff 8
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	volume_envelope 10, 3
 	cutoff 6
 	speed 11
-	F# 1
+	note F#, 1
 	cutoff 8
 	volume_envelope 9, 0
-	A_ 2
-	G# 2
+	note A_, 2
+	note G#, 2
 	EndLoop
 	vibrato_delay 20
-	D_ 3
+	note D_, 3
 	speed 1
-	A# 3
-	B_ 2
+	note A#, 3
+	note B_, 2
 	inc_octave
-	C_ 3
-	C# 3
+	note C_, 3
+	note C#, 3
 	speed 11
-	D_ 4
+	note D_, 4
 	dec_octave
-	E_ 3
+	note E_, 3
 	inc_octave
 	speed 1
-	C_ 3
-	C# 2
-	D_ 3
-	D# 3
+	note C_, 3
+	note C#, 2
+	note D_, 3
+	note D#, 3
 	speed 11
-	E_ 4
+	note E_, 4
 	octave 3
 	Loop 6
 	Loop 4
 	volume_envelope 9, 0
-	C# 1
+	note C#, 1
 	volume_envelope 3, 7
-	C# 1
+	note C#, 1
 	rest 1
 	EndLoop
 	volume_envelope 9, 0
-	C# 1
+	note C#, 1
 	volume_envelope 3, 7
-	C# 1
+	note C#, 1
 	volume_envelope 9, 0
-	C# 1
+	note C#, 1
 	volume_envelope 3, 7
-	C# 1
+	note C#, 1
 	Loop 4
 	volume_envelope 9, 0
-	D_ 1
+	note D_, 1
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	rest 1
 	EndLoop
 	volume_envelope 9, 0
-	E_ 1
+	note E_, 1
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	volume_envelope 9, 0
-	D_ 1
+	note D_, 1
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	EndLoop
 	duty 1
 	inc_octave
 	Loop 4
 	Loop 4
 	volume_envelope 8, 0
-	E_ 1
+	note E_, 1
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	rest 1
 	EndLoop
 	volume_envelope 8, 0
-	E_ 1
+	note E_, 1
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	volume_envelope 8, 0
-	E_ 1
+	note E_, 1
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	Loop 4
 	volume_envelope 8, 0
-	D_ 1
+	note D_, 1
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	rest 1
 	EndLoop
 	volume_envelope 8, 0
-	D_ 1
+	note D_, 1
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	volume_envelope 8, 0
-	D_ 1
+	note D_, 1
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	EndLoop
 	EndMainLoop
 
@@ -716,59 +716,59 @@ Branch_f67b2:
 	speed 11
 	rest 1
 	speed 1
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	volume_envelope 10, 3
-	A_ 5
+	note A_, 5
 	volume_envelope 2, 7
-	A_ 6
+	note A_, 6
 	volume_envelope 10, 3
-	F# 5
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	volume_envelope 10, 3
 	speed 11
 	rest 1
 	speed 1
-	F# 5
+	note F#, 5
 	volume_envelope 3, 7
-	F# 6
+	note F#, 6
 	inc_octave
 	volume_envelope 10, 3
 	speed 11
-	C_ 1
+	note C_, 1
 	dec_octave
 	speed 1
-	B_ 5
+	note B_, 5
 	volume_envelope 2, 7
-	B_ 6
+	note B_, 6
 	speed 11
 	rest 1
 	speed 1
 	volume_envelope 10, 3
-	A_ 5
+	note A_, 5
 	volume_envelope 2, 7
-	A_ 6
+	note A_, 6
 	speed 11
 	rest 1
 	speed 1
 	volume_envelope 10, 3
-	B_ 5
+	note B_, 5
 	volume_envelope 2, 7
-	B_ 6
+	note B_, 6
 	volume_envelope 10, 3
-	A_ 4
-	B_ 4
-	A_ 3
-	F# 5
+	note A_, 4
+	note B_, 4
+	note A_, 3
+	note F#, 5
 	volume_envelope 2, 7
-	F# 6
+	note F#, 6
 	speed 11
 	volume_envelope 9, 0
-	E_ 1
+	note E_, 1
 	volume_envelope 10, 3
-	F_ 1
+	note F_, 1
 	music_ret
 
 Branch_f680a:
@@ -777,63 +777,63 @@ Branch_f680a:
 	speed 11
 	rest 1
 	speed 1
-	G_ 5
+	note G_, 5
 	volume_envelope 2, 7
-	G_ 6
+	note G_, 6
 	volume_envelope 10, 3
-	B_ 5
+	note B_, 5
 	volume_envelope 2, 7
-	B_ 6
+	note B_, 6
 	volume_envelope 10, 3
-	G_ 5
+	note G_, 5
 	volume_envelope 2, 7
-	G_ 6
+	note G_, 6
 	speed 11
 	rest 1
 	speed 1
 	volume_envelope 10, 3
-	G_ 5
+	note G_, 5
 	volume_envelope 2, 7
-	G_ 6
+	note G_, 6
 	inc_octave
 	volume_envelope 10, 3
 	speed 11
-	C# 1
+	note C#, 1
 	speed 1
-	C_ 5
+	note C_, 5
 	volume_envelope 2, 7
-	C_ 6
+	note C_, 6
 	volume_envelope 10, 3
 	speed 11
 	rest 1
 	dec_octave
 	speed 1
-	B_ 5
+	note B_, 5
 	volume_envelope 2, 7
-	B_ 6
+	note B_, 6
 	speed 11
 	rest 1
 	inc_octave
 	speed 1
 	volume_envelope 10, 3
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	dec_octave
 	volume_envelope 10, 3
-	B_ 4
+	note B_, 4
 	inc_octave
-	C# 4
+	note C#, 4
 	dec_octave
-	B_ 3
-	G_ 5
+	note B_, 3
+	note G_, 5
 	volume_envelope 2, 7
-	G_ 6
+	note G_, 6
 	speed 11
 	volume_envelope 9, 0
-	B_ 1
+	note B_, 1
 	volume_envelope 10, 3
-	G_ 1
+	note G_, 1
 	music_ret
 
 Branch_f6866:
@@ -843,66 +843,66 @@ Branch_f6866:
 	rest 1
 	speed 1
 	volume_envelope 10, 3
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	volume_envelope 10, 3
-	A_ 5
+	note A_, 5
 	volume_envelope 2, 7
-	A_ 6
+	note A_, 6
 	EndLoop
 	duty 2
 	volume_envelope 7, 0
-	B_ 5
+	note B_, 5
 	inc_octave
-	D_ 6
-	G_ 5
-	B_ 6
-	D_ 5
-	G_ 6
-	B_ 5
+	note D_, 6
+	note G_, 5
+	note B_, 6
+	note D_, 5
+	note G_, 6
+	note B_, 5
 	inc_octave
-	D_ 6
-	C# 5
+	note D_, 6
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	dec_octave
 	dec_octave
 	duty 0
 	volume_envelope 10, 3
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	volume_envelope 10, 3
-	A_ 5
+	note A_, 5
 	volume_envelope 2, 7
-	A_ 6
+	note A_, 6
 	Loop 3
 	speed 11
 	rest 1
 	speed 1
 	volume_envelope 10, 3
-	C# 5
+	note C#, 5
 	volume_envelope 2, 7
-	C# 6
+	note C#, 6
 	volume_envelope 10, 3
-	A_ 5
+	note A_, 5
 	volume_envelope 2, 7
-	A_ 6
+	note A_, 6
 	EndLoop
 	duty 2
 	volume_envelope 7, 0
-	G_ 5
-	B_ 6
+	note G_, 5
+	note B_, 6
 	inc_octave
-	E_ 5
-	G_ 6
+	note E_, 5
+	note G_, 6
 	dec_octave
-	B_ 5
+	note B_, 5
 	inc_octave
-	E_ 6
-	G_ 5
-	B_ 6
+	note E_, 6
+	note G_, 5
+	note B_, 6
 	inc_octave
 	music_ret
 
@@ -921,12 +921,12 @@ Music_DuelTheme3_Ch3:
 	Loop 4
 	Loop 4
 	cutoff 4
-	F# 2
+	note F#, 2
 	rest 1
 	EndLoop
 	cutoff 8
-	E_ 2
-	F_ 2
+	note E_, 2
+	note F_, 2
 	EndLoop
 	Loop 4
 	music_call Branch_f6973
@@ -937,17 +937,17 @@ Music_DuelTheme3_Ch3:
 	octave 1
 	Loop 2
 	Loop 4
-	F# 1
+	note F#, 1
 	rest 2
 	EndLoop
-	G_ 2
-	G_ 2
+	note G_, 2
+	note G_, 2
 	Loop 4
-	F# 1
+	note F#, 1
 	rest 2
 	EndLoop
-	E_ 2
-	F_ 2
+	note E_, 2
+	note F_, 2
 	EndLoop
 	Loop 2
 	music_call Branch_f6992
@@ -959,262 +959,262 @@ Music_DuelTheme3_Ch3:
 	speed 11
 	octave 3
 	cutoff 8
-	D_ 2
-	C# 2
+	note D_, 2
+	note C#, 2
 	dec_octave
 	dec_octave
 	EndLoop
 	music_call Branch_f69f0
 	octave 1
 	cutoff 8
-	F# 2
-	E_ 2
+	note F#, 2
+	note E_, 2
 	vibrato_delay 0
-	D_ 3
+	note D_, 3
 	speed 1
-	A# 3
-	B_ 2
+	note A#, 3
+	note B_, 2
 	inc_octave
-	C_ 3
-	C# 3
+	note C_, 3
+	note C#, 3
 	speed 11
-	D_ 4
+	note D_, 4
 	dec_octave
-	E_ 3
+	note E_, 3
 	inc_octave
 	speed 1
-	C_ 3
-	C# 2
-	D_ 3
-	D# 3
+	note C_, 3
+	note C#, 2
+	note D_, 3
+	note D#, 3
 	speed 11
-	E_ 4
+	note E_, 4
 	dec_octave
 	Loop 6
 	Loop 4
-	F# 1
+	note F#, 1
 	rest 2
 	EndLoop
-	F# 2
-	F_ 2
+	note F#, 2
+	note F_, 2
 	Loop 4
-	E_ 1
+	note E_, 1
 	rest 2
 	EndLoop
-	E_ 2
-	F_ 2
+	note E_, 2
+	note F_, 2
 	EndLoop
 	cutoff 7
 	Loop 4
 	inc_octave
 	Loop 4
-	F# 1
+	note F#, 1
 	dec_octave
-	F# 1
-	F# 1
+	note F#, 1
+	note F#, 1
 	inc_octave
 	EndLoop
-	F# 1
+	note F#, 1
 	dec_octave
-	F# 1
+	note F#, 1
 	inc_octave
-	F# 1
+	note F#, 1
 	dec_octave
-	F# 1
+	note F#, 1
 	inc_octave
 	Loop 4
-	E_ 1
+	note E_, 1
 	dec_octave
-	E_ 1
-	E_ 1
+	note E_, 1
+	note E_, 1
 	inc_octave
 	EndLoop
-	E_ 1
+	note E_, 1
 	dec_octave
-	E_ 1
+	note E_, 1
 	inc_octave
-	E_ 1
+	note E_, 1
 	dec_octave
-	E_ 1
+	note E_, 1
 	EndLoop
 	cutoff 8
 	EndMainLoop
 
 Branch_f6973:
 	octave 1
-	F# 1
+	note F#, 1
 	rest 1
 	inc_octave
 	inc_octave
 	cutoff 4
-	E_ 1
+	note E_, 1
 	dec_octave
 	dec_octave
 	cutoff 8
-	F# 1
+	note F#, 1
 	rest 2
-	F# 1
+	note F#, 1
 	rest 1
 	rest 1
-	F# 1
+	note F#, 1
 	rest 1
 	inc_octave
 	inc_octave
 	cutoff 4
-	E_ 1
+	note E_, 1
 	dec_octave
 	dec_octave
 	cutoff 8
-	E_ 2
-	F_ 2
+	note E_, 2
+	note F_, 2
 	music_ret
 
 Branch_f6992:
 	octave 1
 	music_call Branch_f6973
-	F# 1
+	note F#, 1
 	rest 1
 	inc_octave
 	inc_octave
 	cutoff 4
-	E_ 1
+	note E_, 1
 	dec_octave
 	dec_octave
 	cutoff 8
-	F# 1
+	note F#, 1
 	rest 2
-	F# 1
+	note F#, 1
 	rest 1
 	rest 1
-	F# 1
-	rest 1
-	inc_octave
-	inc_octave
-	cutoff 4
-	E_ 1
-	dec_octave
-	dec_octave
-	cutoff 8
-	F# 1
-	rest 1
-	F# 2
-	G_ 1
+	note F#, 1
 	rest 1
 	inc_octave
 	inc_octave
 	cutoff 4
-	F# 1
+	note E_, 1
 	dec_octave
 	dec_octave
 	cutoff 8
-	G_ 1
+	note F#, 1
+	rest 1
+	note F#, 2
+	note G_, 1
+	rest 1
+	inc_octave
+	inc_octave
+	cutoff 4
+	note F#, 1
+	dec_octave
+	dec_octave
+	cutoff 8
+	note G_, 1
 	rest 2
-	G_ 1
+	note G_, 1
 	rest 1
 	rest 1
-	G_ 1
-	rest 1
-	inc_octave
-	inc_octave
-	cutoff 4
-	F# 1
-	dec_octave
-	dec_octave
-	cutoff 8
-	F_ 2
-	F# 2
-	G_ 1
+	note G_, 1
 	rest 1
 	inc_octave
 	inc_octave
 	cutoff 4
-	F# 1
+	note F#, 1
 	dec_octave
 	dec_octave
 	cutoff 8
-	G_ 1
+	note F_, 2
+	note F#, 2
+	note G_, 1
+	rest 1
+	inc_octave
+	inc_octave
+	cutoff 4
+	note F#, 1
+	dec_octave
+	dec_octave
+	cutoff 8
+	note G_, 1
 	rest 2
-	G_ 1
+	note G_, 1
 	rest 1
 	rest 1
-	G_ 1
+	note G_, 1
 	rest 1
 	inc_octave
 	inc_octave
 	cutoff 4
-	F# 1
+	note F#, 1
 	dec_octave
 	dec_octave
 	cutoff 8
-	G_ 1
+	note G_, 1
 	rest 1
-	F_ 2
+	note F_, 2
 	music_ret
 
 Branch_f69f0:
 	octave 1
 	cutoff 6
-	F# 1
+	note F#, 1
 	inc_octave
-	C# 1
+	note C#, 1
 	inc_octave
 	cutoff 4
-	C# 1
+	note C#, 1
 	dec_octave
 	dec_octave
 	cutoff 6
-	F# 1
+	note F#, 1
 	inc_octave
 	inc_octave
 	cutoff 8
-	F# 2
+	note F#, 2
 	dec_octave
 	dec_octave
 	cutoff 6
-	F# 1
+	note F#, 1
 	inc_octave
-	C# 1
+	note C#, 1
 	inc_octave
 	cutoff 4
-	C# 1
+	note C#, 1
 	dec_octave
 	dec_octave
 	cutoff 6
-	F# 1
+	note F#, 1
 	inc_octave
 	inc_octave
 	cutoff 8
-	E_ 2
+	note E_, 2
 	dec_octave
 	dec_octave
 	cutoff 6
-	F# 1
+	note F#, 1
 	inc_octave
-	C# 1
+	note C#, 1
 	inc_octave
 	cutoff 4
-	C# 1
+	note C#, 1
 	dec_octave
 	dec_octave
 	cutoff 6
-	F# 1
+	note F#, 1
 	inc_octave
 	inc_octave
 	cutoff 8
-	D# 2
+	note D#, 2
 	dec_octave
 	dec_octave
 	cutoff 6
-	F# 1
+	note F#, 1
 	inc_octave
-	C# 1
+	note C#, 1
 	inc_octave
 	cutoff 4
-	C# 1
+	note C#, 1
 	dec_octave
 	dec_octave
 	cutoff 6
-	F# 1
+	note F#, 1
 	music_ret
 
 

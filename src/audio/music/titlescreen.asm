@@ -7,216 +7,216 @@ Music_TitleScreen_Ch1:
 	volume_envelope 10, 0
 	cutoff 8
 	octave 3
-	G_ 1
+	note G_, 1
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	rest 1
 	volume_envelope 10, 0
 	cutoff 6
-	F_ 1
+	note F_, 1
 	cutoff 8
-	E_ 3
+	note E_, 3
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	volume_envelope 10, 0
-	G_ 3
+	note G_, 3
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	inc_octave
 	volume_envelope 10, 0
-	D_ 5
+	note D_, 5
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	volume_envelope 13, 0
 	cutoff 6
-	C_ 2
+	note C_, 2
 	dec_octave
 	cutoff 8
-	G_ 10
+	note G_, 10
 	volume_envelope 3, 7
-	G_ 2
+	note G_, 2
 	volume_envelope 13, 0
-	E_ 1
+	note E_, 1
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	rest 1
 	volume_envelope 10, 0
 	cutoff 6
-	G_ 1
+	note G_, 1
 	cutoff 8
-	G_ 5
+	note G_, 5
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	volume_envelope 10, 0
 	cutoff 6
-	F_ 2
+	note F_, 2
 	cutoff 8
-	F_ 2
+	note F_, 2
 	speed 1
-	E_ 5
+	note E_, 5
 	tie
-	F_ 4
+	note F_, 4
 	tie
-	E_ 5
+	note E_, 5
 	speed 7
-	D_ 1
+	note D_, 1
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	volume_envelope 10, 0
-	C_ 1
+	note C_, 1
 	volume_envelope 3, 7
-	C_ 1
+	note C_, 1
 	volume_envelope 10, 0
 	cutoff 8
-	D_ 11
+	note D_, 11
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	volume_envelope 13, 0
-	G_ 1
+	note G_, 1
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	rest 1
 	volume_envelope 10, 0
 	cutoff 6
-	F_ 1
+	note F_, 1
 	cutoff 8
-	E_ 3
+	note E_, 3
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	volume_envelope 10, 0
-	G_ 3
+	note G_, 3
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	inc_octave
 	volume_envelope 10, 0
-	D_ 5
+	note D_, 5
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	volume_envelope 13, 0
 	cutoff 6
-	E_ 2
+	note E_, 2
 	dec_octave
 	cutoff 8
-	G_ 8
+	note G_, 8
 	volume_envelope 3, 7
-	G_ 2
+	note G_, 2
 	volume_envelope 13, 0
-	E_ 2
-	F_ 2
-	G_ 2
-	G# 3
+	note E_, 2
+	note F_, 2
+	note G_, 2
+	note G#, 3
 	volume_envelope 3, 7
-	G# 1
+	note G#, 1
 	volume_envelope 13, 0
 	inc_octave
-	C_ 3
+	note C_, 3
 	volume_envelope 3, 7
-	C_ 1
+	note C_, 1
 	volume_envelope 10, 0
-	D_ 5
+	note D_, 5
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	volume_envelope 13, 0
 	cutoff 6
-	C_ 2
+	note C_, 2
 	cutoff 8
-	G_ 9
+	note G_, 9
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	volume_envelope 13, 0
-	F_ 2
-	C_ 2
-	D_ 2
+	note F_, 2
+	note C_, 2
+	note D_, 2
 	Loop 2
-	E_ 10
+	note E_, 10
 	volume_envelope 3, 7
-	E_ 2
+	note E_, 2
 	volume_envelope 10, 0
-	E_ 1
+	note E_, 1
 	volume_envelope 3, 7
-	E_ 1
+	note E_, 1
 	rest 1
 	volume_envelope 10, 0
 	cutoff 6
-	E_ 1
+	note E_, 1
 	cutoff 8
 	EndLoop
-	E_ 12
+	note E_, 12
 	volume_envelope 3, 7
-	E_ 2
+	note E_, 2
 	volume_envelope 10, 0
-	D_ 1
-	C_ 1
-	D_ 1
+	note D_, 1
+	note C_, 1
+	note D_, 1
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	rest 1
 	volume_envelope 10, 0
 	cutoff 6
-	G_ 1
+	note G_, 1
 	cutoff 8
-	G_ 8
+	note G_, 8
 	volume_envelope 3, 7
-	G_ 2
+	note G_, 2
 	volume_envelope 10, 0
 	speed 1
 	cutoff 7
-	G_ 5
-	G_ 4
-	G_ 5
+	note G_, 5
+	note G_, 4
+	note G_, 5
 	cutoff 8
 	speed 7
-	G_ 9
+	note G_, 9
 	volume_envelope 3, 7
-	G_ 1
+	note G_, 1
 	volume_envelope 10, 0
-	F_ 2
-	C_ 2
-	D_ 2
-	E_ 10
+	note F_, 2
+	note C_, 2
+	note D_, 2
+	note E_, 10
 	volume_envelope 3, 7
-	E_ 2
+	note E_, 2
 	volume_envelope 10, 0
-	C_ 1
+	note C_, 1
 	volume_envelope 3, 7
-	C_ 1
+	note C_, 1
 	rest 1
 	cutoff 6
 	volume_envelope 10, 0
-	E_ 1
+	note E_, 1
 	cutoff 8
-	E_ 6
+	note E_, 6
 	volume_envelope 3, 7
-	E_ 2
+	note E_, 2
 	volume_envelope 10, 0
-	D_ 3
+	note D_, 3
 	volume_envelope 3, 7
-	D_ 1
+	note D_, 1
 	volume_envelope 10, 0
-	C_ 3
+	note C_, 3
 	volume_envelope 3, 7
-	C_ 1
+	note C_, 1
 	volume_envelope 10, 0
-	C_ 6
+	note C_, 6
 	volume_envelope 3, 7
-	C_ 2
+	note C_, 2
 	dec_octave
 	volume_envelope 10, 0
-	B_ 5
+	note B_, 5
 	volume_envelope 3, 7
-	B_ 2
+	note B_, 2
 	volume_envelope 10, 0
 	inc_octave
 	cutoff 6
-	C_ 1
+	note C_, 1
 	cutoff 8
-	C_ 8
+	note C_, 8
 	tie
-	C_ 8
+	note C_, 8
 	tie
-	C_ 8
+	note C_, 8
 	volume_envelope 3, 7
-	C_ 8
+	note C_, 8
 	music_end
 
 
@@ -229,182 +229,182 @@ Music_TitleScreen_Ch2:
 	volume_envelope 8, 0
 	cutoff 8
 	octave 2
-	B_ 1
+	note B_, 1
 	volume_envelope 2, 7
-	B_ 1
+	note B_, 1
 	rest 1
 	inc_octave
 	volume_envelope 8, 0
 	cutoff 6
-	D_ 1
+	note D_, 1
 	cutoff 8
-	C_ 3
+	note C_, 3
 	volume_envelope 2, 7
-	C_ 1
+	note C_, 1
 	volume_envelope 8, 0
-	E_ 3
+	note E_, 3
 	rest 1
-	G_ 5
+	note G_, 5
 	rest 1
 	cutoff 6
-	G_ 2
+	note G_, 2
 	cutoff 8
-	E_ 10
+	note E_, 10
 	rest 2
-	C_ 1
+	note C_, 1
 	rest 2
 	cutoff 6
-	E_ 1
+	note E_, 1
 	cutoff 8
-	F_ 5
+	note F_, 5
 	rest 1
 	cutoff 6
-	C_ 2
+	note C_, 2
 	cutoff 7
-	C_ 2
+	note C_, 2
 	cutoff 8
-	C_ 2
+	note C_, 2
 	dec_octave
-	G_ 1
+	note G_, 1
 	rest 1
-	E_ 1
+	note E_, 1
 	rest 1
-	F_ 4
-	A_ 1
+	note F_, 4
+	note A_, 1
 	rest 2
 	inc_octave
 	cutoff 6
-	C_ 1
+	note C_, 1
 	dec_octave
 	cutoff 8
-	B_ 3
+	note B_, 3
 	rest 1
-	B_ 1
+	note B_, 1
 	rest 2
 	inc_octave
 	cutoff 6
-	D_ 1
+	note D_, 1
 	cutoff 8
-	C_ 3
+	note C_, 3
 	volume_envelope 2, 7
-	C_ 1
+	note C_, 1
 	volume_envelope 8, 0
-	E_ 3
+	note E_, 3
 	rest 1
-	G_ 5
+	note G_, 5
 	rest 1
 	cutoff 6
-	G_ 2
+	note G_, 2
 	cutoff 8
-	E_ 8
+	note E_, 8
 	rest 2
-	C_ 2
-	D_ 2
-	E_ 2
-	F_ 3
+	note C_, 2
+	note D_, 2
+	note E_, 2
+	note F_, 3
 	rest 1
-	G# 3
+	note G#, 3
 	rest 1
-	G# 5
+	note G#, 5
 	rest 1
 	cutoff 6
-	F_ 2
+	note F_, 2
 	cutoff 8
-	G# 9
+	note G#, 9
 	rest 1
-	G# 2
-	F_ 2
-	G# 2
+	note G#, 2
+	note F_, 2
+	note G#, 2
 	inc_octave
-	C_ 10
+	note C_, 10
 	rest 2
 	dec_octave
-	A_ 1
+	note A_, 1
 	volume_envelope 2, 7
-	A_ 1
+	note A_, 1
 	rest 1
 	volume_envelope 8, 0
 	inc_octave
 	cutoff 6
-	C_ 1
+	note C_, 1
 	cutoff 8
 	dec_octave
-	B_ 10
+	note B_, 10
 	rest 2
-	G_ 1
+	note G_, 1
 	volume_envelope 2, 7
-	G_ 1
+	note G_, 1
 	rest 1
 	volume_envelope 8, 0
 	cutoff 6
-	B_ 1
+	note B_, 1
 	cutoff 8
-	A_ 12
+	note A_, 12
 	volume_envelope 2, 7
-	A_ 2
+	note A_, 2
 	volume_envelope 8, 0
-	B_ 1
-	A_ 1
-	B_ 1
+	note B_, 1
+	note A_, 1
+	note B_, 1
 	volume_envelope 2, 7
-	B_ 1
+	note B_, 1
 	rest 1
 	volume_envelope 8, 0
 	inc_octave
 	cutoff 6
-	D_ 1
+	note D_, 1
 	cutoff 8
-	D_ 8
+	note D_, 8
 	rest 2
 	speed 1
 	cutoff 7
-	D_ 5
-	D_ 4
-	D_ 5
+	note D_, 5
+	note D_, 4
+	note D_, 5
 	speed 7
 	cutoff 8
-	C_ 9
+	note C_, 9
 	rest 1
-	C_ 2
+	note C_, 2
 	dec_octave
 	cutoff 7
-	G# 2
+	note G#, 2
 	cutoff 8
-	G# 2
-	G_ 10
+	note G#, 2
+	note G_, 10
 	rest 2
-	G_ 1
+	note G_, 1
 	rest 2
 	cutoff 6
-	G_ 1
+	note G_, 1
 	cutoff 8
-	A_ 6
+	note A_, 6
 	rest 2
-	F# 3
+	note F#, 3
 	rest 1
-	A_ 3
+	note A_, 3
 	rest 1
-	F_ 6
+	note F_, 6
 	rest 2
-	F_ 5
+	note F_, 5
 	rest 2
 	cutoff 6
-	F_ 1
+	note F_, 1
 	cutoff 8
-	F_ 7
+	note F_, 7
 	rest 1
 	speed 1
 	cutoff 8
-	F_ 14
+	note F_, 14
 	rest 5
-	D_ 13
+	note D_, 13
 	rest 5
-	F_ 14
+	note F_, 14
 	rest 5
 	speed 7
-	E_ 8
+	note E_, 8
 	volume_envelope 2, 7
-	E_ 8
+	note E_, 8
 	music_end
 
 
@@ -418,91 +418,91 @@ Music_TitleScreen_Ch3:
 	octave 2
 	rest 4
 	music_call Branch_f52f0
-	F_ 4
-	F_ 4
-	E_ 4
-	E_ 4
-	D_ 4
-	D_ 4
-	G_ 4
-	G_ 4
+	note F_, 4
+	note F_, 4
+	note E_, 4
+	note E_, 4
+	note D_, 4
+	note D_, 4
+	note G_, 4
+	note G_, 4
 	inc_octave
 	music_call Branch_f52f0
 	Loop 4
-	F_ 4
+	note F_, 4
 	EndLoop
 	Loop 4
-	A# 4
+	note A#, 4
 	EndLoop
 	Loop 2
-	A_ 2
-	A_ 2
+	note A_, 2
+	note A_, 2
 	rest 2
-	A_ 1
-	A_ 1
+	note A_, 1
+	note A_, 1
 	EndLoop
 	Loop 2
-	G_ 2
-	G_ 2
+	note G_, 2
+	note G_, 2
 	rest 2
-	G_ 1
-	G_ 1
+	note G_, 1
+	note G_, 1
 	EndLoop
 	Loop 2
-	F_ 2
-	F_ 2
+	note F_, 2
+	note F_, 2
 	rest 2
-	F_ 1
-	F_ 1
+	note F_, 1
+	note F_, 1
 	EndLoop
 	Loop 2
-	E_ 2
-	E_ 2
+	note E_, 2
+	note E_, 2
 	rest 2
-	E_ 1
-	E_ 1
+	note E_, 1
+	note E_, 1
 	EndLoop
 	Loop 4
-	G# 4
+	note G#, 4
 	EndLoop
 	Loop 4
-	G_ 4
+	note G_, 4
 	EndLoop
 	Loop 4
-	F# 4
+	note F#, 4
 	EndLoop
 	Loop 4
-	G_ 4
+	note G_, 4
 	EndLoop
 	inc_octave
-	C_ 4
-	C_ 4
+	note C_, 4
+	note C_, 4
 	speed 1
-	C_ 9
+	note C_, 9
 	tie
-	C_ 10
+	note C_, 10
 	dec_octave
-	G_ 9
+	note G_, 9
 	tie
-	G_ 9
-	G_ 9
+	note G_, 9
+	note G_, 9
 	tie
-	G_ 10
+	note G_, 10
 	speed 7
 	cutoff 8
-	C_ 8
+	note C_, 8
 	music_end
 
 Branch_f52f0:
-	C_ 4
-	C_ 4
+	note C_, 4
+	note C_, 4
 	dec_octave
-	B_ 4
-	B_ 4
-	A_ 4
-	A_ 4
-	G_ 4
-	G_ 4
+	note B_, 4
+	note B_, 4
+	note A_, 4
+	note A_, 4
+	note G_, 4
+	note G_, 4
 	music_ret
 
 

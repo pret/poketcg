@@ -8,46 +8,46 @@ Music_DeckMachine_Ch1:
 	Loop 9
 	cutoff 6
 	volume_envelope 9, 1
-	C_ 7
+	note C_, 7
 	volume_envelope 3, 1
-	C_ 8
+	note C_, 8
 	volume_envelope 4, 1
-	C_ 8
+	note C_, 8
 	volume_envelope 9, 1
-	G_ 7
+	note G_, 7
 	volume_envelope 3, 1
-	G_ 8
+	note G_, 8
 	volume_envelope 4, 1
-	C_ 7
+	note C_, 7
 	volume_envelope 9, 1
-	E_ 7
+	note E_, 7
 	volume_envelope 3, 1
-	E_ 8
+	note E_, 8
 	volume_envelope 4, 1
-	E_ 8
+	note E_, 8
 	volume_envelope 9, 1
-	C_ 7
+	note C_, 7
 	volume_envelope 3, 1
-	C_ 8
+	note C_, 8
 	volume_envelope 4, 1
-	C_ 7
+	note C_, 7
 	volume_envelope 9, 1
-	G_ 7
+	note G_, 7
 	volume_envelope 3, 1
-	G_ 8
+	note G_, 8
 	volume_envelope 9, 1
 	cutoff 4
-	F_ 7
+	note F_, 7
 	cutoff 5
 	volume_envelope 4, 1
-	G_ 8
+	note G_, 8
 	EndLoop
 	volume_envelope 9, 1
-	C_ 7
+	note C_, 7
 	volume_envelope 3, 1
-	C_ 8
+	note C_, 8
 	volume_envelope 4, 1
-	C_ 15
+	note C_, 15
 	speed 10
 	rest 9
 	EndMainLoop
@@ -65,32 +65,32 @@ Music_DeckMachine_Ch2:
 	rest 15
 	volume_envelope 11, 2
 	rest 7
-	C_ 8
+	note C_, 8
 	volume_envelope 2, 7
-	C_ 8
+	note C_, 8
 	rest 7
 	volume_envelope 11, 2
-	C_ 7
+	note C_, 7
 	volume_envelope 2, 7
-	C_ 8
+	note C_, 8
 	rest 7
 	volume_envelope 11, 2
 	dec_octave
-	A_ 8
+	note A_, 8
 	volume_envelope 2, 7
-	A_ 8
+	note A_, 8
 	rest 7
 	inc_octave
 	volume_envelope 11, 2
-	C_ 7
+	note C_, 7
 	volume_envelope 2, 7
-	C_ 8
+	note C_, 8
 	rest 15
 	EndLoop
 	volume_envelope 11, 2
-	E_ 7
+	note E_, 7
 	volume_envelope 2, 7
-	E_ 8
+	note E_, 8
 	rest 15
 	speed 10
 	rest 9
@@ -107,119 +107,119 @@ Music_DeckMachine_Ch3:
 	octave 2
 	speed 1
 	Loop 4
-	C_ 7
+	note C_, 7
 	rest 8
-	G_ 7
+	note G_, 7
 	inc_octave
 	cutoff 5
-	G_ 8
+	note G_, 8
 	cutoff 8
 	rest 7
 	dec_octave
-	C_ 8
+	note C_, 8
 	inc_octave
 	cutoff 5
-	E_ 7
+	note E_, 7
 	dec_octave
 	cutoff 8
-	C_ 8
-	D_ 7
+	note C_, 8
+	note D_, 7
 	inc_octave
 	cutoff 5
-	C_ 8
+	note C_, 8
 	dec_octave
 	rest 7
 	cutoff 8
-	A_ 8
+	note A_, 8
 	inc_octave
 	cutoff 5
-	G_ 7
+	note G_, 7
 	dec_octave
 	dec_octave
 	cutoff 8
-	A_ 8
+	note A_, 8
 	inc_octave
-	D_ 7
+	note D_, 7
 	rest 8
-	E_ 7
+	note E_, 7
 	rest 8
-	G_ 7
+	note G_, 7
 	inc_octave
 	cutoff 5
-	G_ 8
+	note G_, 8
 	rest 7
 	dec_octave
 	cutoff 8
-	E_ 8
+	note E_, 8
 	inc_octave
 	cutoff 5
-	E_ 7
+	note E_, 7
 	dec_octave
 	cutoff 8
-	C_ 8
-	F_ 7
+	note C_, 8
+	note F_, 7
 	inc_octave
 	cutoff 5
-	C_ 8
+	note C_, 8
 	rest 7
 	dec_octave
 	cutoff 8
-	F_ 8
+	note F_, 8
 	inc_octave
 	cutoff 5
-	G_ 7
+	note G_, 7
 	dec_octave
 	cutoff 8
-	E_ 8
-	D_ 7
+	note E_, 8
+	note D_, 7
 	rest 8
 	EndLoop
-	C_ 7
+	note C_, 7
 	rest 8
-	G_ 7
+	note G_, 7
 	inc_octave
 	cutoff 5
-	G_ 8
+	note G_, 8
 	rest 7
 	dec_octave
 	cutoff 8
-	C_ 8
+	note C_, 8
 	inc_octave
 	cutoff 5
-	E_ 7
+	note E_, 7
 	dec_octave
 	dec_octave
 	cutoff 8
-	G_ 8
+	note G_, 8
 	inc_octave
-	C_ 7
+	note C_, 7
 	inc_octave
 	cutoff 5
-	C_ 8
+	note C_, 8
 	rest 7
 	dec_octave
 	cutoff 8
-	F_ 8
+	note F_, 8
 	inc_octave
 	cutoff 5
-	G_ 7
+	note G_, 7
 	dec_octave
 	cutoff 8
-	E_ 8
-	D_ 7
+	note E_, 8
+	note D_, 7
 	rest 8
-	C_ 15
+	note C_, 15
 	rest 15
 	speed 10
 	rest 3
 	speed 1
 	rest 7
 	dec_octave
-	G_ 15
+	note G_, 15
 	rest 8
-	A_ 7
+	note A_, 7
 	rest 8
-	B_ 7
+	note B_, 7
 	rest 8
 	EndMainLoop
 

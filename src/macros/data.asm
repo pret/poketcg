@@ -1,5 +1,5 @@
 MACRO dn
-	db \1 << 4 | \2
+	db ((\1) << 4) | (\2)
 ENDM
 
 MACRO dbw

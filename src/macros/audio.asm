@@ -1,73 +1,42 @@
-MACRO C_
-	db $10 | (\1 - 1)
-ENDM
+C_ EQU $1
+C# EQU $2
+D_ EQU $3
+D# EQU $4
+E_ EQU $5
+F_ EQU $6
+F# EQU $7
+G_ EQU $8
+G# EQU $9
+A_ EQU $a
+A# EQU $b
+B_ EQU $c
 
-MACRO C#
-	db $20 | (\1 - 1)
-ENDM
-
-MACRO D_
-	db $30 | (\1 - 1)
-ENDM
-
-MACRO D#
-	db $40 | (\1 - 1)
-ENDM
-
-MACRO E_
-	db $50 | (\1 - 1)
-ENDM
-
-MACRO F_
-	db $60 | (\1 - 1)
-ENDM
-
-MACRO F#
-	db $70 | (\1 - 1)
-ENDM
-
-MACRO G_
-	db $80 | (\1 - 1)
-ENDM
-
-MACRO G#
-	db $90 | (\1 - 1)
-ENDM
-
-MACRO A_
-	db $a0 | (\1 - 1)
-ENDM
-
-MACRO A#
-	db $b0 | (\1 - 1)
-ENDM
-
-MACRO B_
-	db $c0 | (\1 - 1)
+MACRO note
+	dn (\1), (\2) - 1 ; pitch, length
 ENDM
 
 MACRO bass
-	db $10 | (\1 - 1)
+	dn $1, (\1) - 1
 ENDM
 
 MACRO snare1 ; medium length
-	db $30 | (\1 - 1)
+	dn $3, (\1) - 1
 ENDM
 
 MACRO snare2 ; medium length
-	db $50 | (\1 - 1)
+	dn $5, (\1) - 1
 ENDM
 
 MACRO snare3 ; short
-	db $70 | (\1 - 1)
+	dn $7, (\1) - 1
 ENDM
 
 MACRO snare4 ; long
-	db $90 | (\1 - 1)
+	dn $9, (\1) - 1
 ENDM
 
 MACRO snare5 ; long
-	db $c0 | (\1 - 1)
+	dn $c, (\1) - 1
 ENDM
 
 MACRO rest
