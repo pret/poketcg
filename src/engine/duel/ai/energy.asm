@@ -21,7 +21,7 @@ Func_16488:
 ; does not consider whether the cards have evolutions to be played.
 ; return carry if an energy card is chosen to use in any Play Area card,
 ; and if so, return its Play Area location in hTempPlayAreaLocation_ff9d.
-AIProcessButDontPlayEnergy_SkipEvolution: ; 164a1 (5:64a1)
+AIProcessButDontPlayEnergy_SkipEvolution:
 	ld a, AI_ENERGY_FLAG_DONT_PLAY | AI_ENERGY_FLAG_SKIP_EVOLUTION
 	ld [wAIEnergyAttachLogicFlags], a
 
@@ -45,7 +45,7 @@ AIProcessButDontPlayEnergy_SkipEvolution: ; 164a1 (5:64a1)
 ; does not consider whether the cards have evolutions to be played.
 ; return carry if an energy card is chosen to use in any Bench card,
 ; and if so, return its Play Area location in hTempPlayAreaLocation_ff9d.
-AIProcessButDontPlayEnergy_SkipEvolutionAndArena: ; 164ba (5:64ba)
+AIProcessButDontPlayEnergy_SkipEvolutionAndArena:
 	ld a, AI_ENERGY_FLAG_DONT_PLAY | AI_ENERGY_FLAG_SKIP_EVOLUTION | AI_ENERGY_FLAG_SKIP_ARENA_CARD
 	ld [wAIEnergyAttachLogicFlags], a
 
@@ -68,7 +68,7 @@ AIProcessButDontPlayEnergy_SkipEvolutionAndArena: ; 164ba (5:64ba)
 ; copies wTempPlayAreaAIScore to wPlayAreaAIScore
 ; and loads wAIScore with value in wTempAIScore.
 ; identical to RetrievePlayAreaAIScoreFromBackup2.
-RetrievePlayAreaAIScoreFromBackup1: ; 164d3 (5:64d3)
+RetrievePlayAreaAIScoreFromBackup1:
 	push af
 	ld de, wPlayAreaAIScore
 	ld hl, wTempPlayAreaAIScore
@@ -86,7 +86,7 @@ RetrievePlayAreaAIScoreFromBackup1: ; 164d3 (5:64d3)
 
 ; have AI decide whether to play energy card from hand
 ; and determine which card is best to attach it.
-AIProcessAndTryToPlayEnergy: ; 164e8 (5:64e8)
+AIProcessAndTryToPlayEnergy:
 	xor a
 	ld [wAIEnergyAttachLogicFlags], a
 
@@ -105,7 +105,7 @@ AIProcessAndTryToPlayEnergy: ; 164e8 (5:64e8)
 
 ; have AI decide whether to play energy card
 ; and determine which card is best to attach it.
-AIProcessEnergyCards: ; 164fc (5:64fc)
+AIProcessEnergyCards:
 ; initialize Play Area AI score
 	ld a, $80
 	ld b, MAX_PLAY_AREA_POKEMON
@@ -380,7 +380,7 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 	call CreateEnergyCardListFromHand
 	jp AITryToPlayEnergyCard
 
-.not_found: ; 1668a (5:668a)
+.not_found:
 	ld a, [wAIEnergyAttachLogicFlags]
 	or a
 	jr z, .no_carry
@@ -394,7 +394,7 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 ; the AI score is increased/decreased accordingly.
 ; input:
 ;	[wSelectedAttack] = attack to check.
-DetermineAIScoreOfAttackEnergyRequirement: ; 16695 (5:6695)
+DetermineAIScoreOfAttackEnergyRequirement:
 	ld [wSelectedAttack], a
 	call CheckEnergyNeededForAttack
 	jp c, .not_enough_energy
@@ -594,7 +594,7 @@ DetermineAIScoreOfAttackEnergyRequirement: ; 16695 (5:6695)
 ; if it succeeds in return a card location, set carry.
 ; if AI_ENERGY_FLAG_SKIP_ARENA_CARD is set in wAIEnergyAttachLogicFlags
 ; doesn't include the Arena card and there's no minimum score.
-FindPlayAreaCardWithHighestAIScore: ; 167b5 (5:67b5)
+FindPlayAreaCardWithHighestAIScore:
 	ld a, [wAIEnergyAttachLogicFlags]
 	and AI_ENERGY_FLAG_SKIP_ARENA_CARD
 	jr nz, .only_bench
@@ -668,7 +668,7 @@ FindPlayAreaCardWithHighestAIScore: ; 167b5 (5:67b5)
 ; returns carry if there's an evolution card
 ; that can evolve card in hTempPlayAreaLocation_ff9d,
 ; and that card needs energy to use wSelectedAttack.
-CheckIfEvolutionNeedsEnergyForAttack: ; 16805 (5:6805)
+CheckIfEvolutionNeedsEnergyForAttack:
 	call CreateHandCardList
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
@@ -713,7 +713,7 @@ CheckIfEvolutionNeedsEnergyForAttack: ; 16805 (5:6805)
 ;	b = 1 if needs color energy, 0 otherwise;
 ;	c = 1 if only needs colorless energy, 0 otherwise;
 ;	carry set if not ZapdosLv64's Thunderbolt attack.
-GetEnergyCardForDiscardOrEnergyBoostAttack: ; 1683b (5:683b)
+GetEnergyCardForDiscardOrEnergyBoostAttack:
 ; load card ID and check selected attack index.
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
@@ -801,7 +801,7 @@ GetEnergyCardForDiscardOrEnergyBoostAttack: ; 1683b (5:683b)
 ; this card needs more energy or not, and chooses the
 ; right energy card to play. If the card is played,
 ; return with carry flag set.
-AITryToPlayEnergyCard: ; 1689f (5:689f)
+AITryToPlayEnergyCard:
 ; check if energy cards are still needed for attacks.
 ; if first attack doesn't need, test for the second attack.
 	xor a
@@ -970,7 +970,7 @@ AITryToPlayEnergyCard: ; 1689f (5:689f)
 ; output:
 ;	[hTemp_ffa0] = card index of double colorless in hand;
 ;	carry set if can play energy card.
-CheckSpecificDecksToAttachDoubleColorless: ; 1696e (5:696e)
+CheckSpecificDecksToAttachDoubleColorless:
 	push bc
 	push de
 	push hl

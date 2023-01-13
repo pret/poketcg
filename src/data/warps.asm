@@ -44,24 +44,24 @@ WarpDataPointers:
 ; 4: x coordinate of connected map
 ; 5: y coordinate of connected map
 ; double null terminated
-MasonLaboratoryWarpData: ; 1c0dd (7:40dd)
+MasonLaboratoryWarpData:
 	db $0e, $1c, OVERWORLD_MAP,     $00, $00
 	db $10, $1c, OVERWORLD_MAP,     $00, $00
 	db $1a, $0a, DECK_MACHINE_ROOM, $02, $0a
 	db $1a, $0c, DECK_MACHINE_ROOM, $02, $0c
 	db $00, $00
 
-DeckMachineRoomWarpData: ; 1c0f3 (7:40f3)
+DeckMachineRoomWarpData:
 	db $00, $0a, MASON_LABORATORY, $18, $0a
 	db $00, $0c, MASON_LABORATORY, $18, $0c
 	db $00, $00
 
-IshiharasHouseWarpData: ; 1c0ff (7:40ff)
+IshiharasHouseWarpData:
 	db $08, $16, OVERWORLD_MAP, $00, $00
 	db $0a, $16, OVERWORLD_MAP, $00, $00
 	db $00, $00
 
-FightingClubEntranceWarpData: ; 1c10b (7:410b)
+FightingClubEntranceWarpData:
 	db $08, $10, OVERWORLD_MAP,       $00, $00
 	db $0a, $10, OVERWORLD_MAP,       $00, $00
 	db $00, $06, FIGHTING_CLUB_LOBBY, $18, $0a
@@ -70,17 +70,17 @@ FightingClubEntranceWarpData: ; 1c10b (7:410b)
 	db $0a, $00, FIGHTING_CLUB,       $0c, $0e
 	db $00, $00
 
-FightingClubLobbyWarpData: ; 1c12b (7:412b)
+FightingClubLobbyWarpData:
 	db $1a, $0a, FIGHTING_CLUB_ENTRANCE, $02, $06
 	db $1a, $0c, FIGHTING_CLUB_ENTRANCE, $02, $08
 	db $00, $00
 
-FightingClubWarpData: ; 1c137 (7:4137)
+FightingClubWarpData:
 	db $0a, $10, FIGHTING_CLUB_ENTRANCE, $08, $02
 	db $0c, $10, FIGHTING_CLUB_ENTRANCE, $0a, $02
 	db $00, $00
 
-RockClubEntranceWarpData: ; 1c143 (7:4143)
+RockClubEntranceWarpData:
 	db $08, $10, OVERWORLD_MAP,   $00, $00
 	db $0a, $10, OVERWORLD_MAP,   $00, $00
 	db $00, $06, ROCK_CLUB_LOBBY, $18, $0a
@@ -89,17 +89,17 @@ RockClubEntranceWarpData: ; 1c143 (7:4143)
 	db $0a, $00, ROCK_CLUB,       $0e, $1a
 	db $00, $00
 
-RockClubLobbyWarpData: ; 1c163 (7:4163)
+RockClubLobbyWarpData:
 	db $1a, $0a, ROCK_CLUB_ENTRANCE, $02, $06
 	db $1a, $0c, ROCK_CLUB_ENTRANCE, $02, $08
 	db $00, $00
 
-RockClubWarpData: ; 1c16f (7:416f)
+RockClubWarpData:
 	db $0c, $1c, ROCK_CLUB_ENTRANCE, $08, $02
 	db $0e, $1c, ROCK_CLUB_ENTRANCE, $0a, $02
 	db $00, $00
 
-WaterClubEntranceWarpData: ; 1c17b (7:417b)
+WaterClubEntranceWarpData:
 	db $08, $10, OVERWORLD_MAP,    $00, $00
 	db $0a, $10, OVERWORLD_MAP,    $00, $00
 	db $00, $06, WATER_CLUB_LOBBY, $18, $0a
@@ -108,17 +108,17 @@ WaterClubEntranceWarpData: ; 1c17b (7:417b)
 	db $0a, $00, WATER_CLUB,       $0e, $1c
 	db $00, $00
 
-WaterClubLobbyWarpData: ; 1c19b (7:419b)
+WaterClubLobbyWarpData:
 	db $1a, $0a, WATER_CLUB_ENTRANCE, $02, $06
 	db $1a, $0c, WATER_CLUB_ENTRANCE, $02, $08
 	db $00, $00
 
-WaterClubWarpData: ; 1c1a7 (7:41a7)
+WaterClubWarpData:
 	db $0c, $1e, WATER_CLUB_ENTRANCE, $08, $02
 	db $0e, $1e, WATER_CLUB_ENTRANCE, $0a, $02
 	db $00, $00
 
-LightningClubEntranceWarpData: ; 1c1b3 (7:41b3)
+LightningClubEntranceWarpData:
 	db $08, $10, OVERWORLD_MAP,        $00, $00
 	db $0a, $10, OVERWORLD_MAP,        $00, $00
 	db $00, $06, LIGHTNING_CLUB_LOBBY, $18, $0a
@@ -127,17 +127,17 @@ LightningClubEntranceWarpData: ; 1c1b3 (7:41b3)
 	db $0a, $00, LIGHTNING_CLUB,       $0e, $1c
 	db $00, $00
 
-LightningClubLobbyWarpData: ; 1c1d3 (7:41d3)
+LightningClubLobbyWarpData:
 	db $1a, $0a, LIGHTNING_CLUB_ENTRANCE, $02, $06
 	db $1a, $0c, LIGHTNING_CLUB_ENTRANCE, $02, $08
 	db $00, $00
 
-LightningClubWarpData: ; 1c1df (7:41df)
+LightningClubWarpData:
 	db $0c, $1e, LIGHTNING_CLUB_ENTRANCE, $08, $02
 	db $0e, $1e, LIGHTNING_CLUB_ENTRANCE, $0a, $02
 	db $00, $00
 
-GrassClubEntranceWarpData: ; 1c1eb (7:41eb)
+GrassClubEntranceWarpData:
 	db $08, $10, OVERWORLD_MAP,    $00, $00
 	db $0a, $10, OVERWORLD_MAP,    $00, $00
 	db $00, $06, GRASS_CLUB_LOBBY, $18, $0a
@@ -146,17 +146,17 @@ GrassClubEntranceWarpData: ; 1c1eb (7:41eb)
 	db $0a, $00, GRASS_CLUB,       $0e, $1c
 	db $00, $00
 
-GrassClubLobbyWarpData: ; 1c20b (7:420b)
+GrassClubLobbyWarpData:
 	db $1a, $0a, GRASS_CLUB_ENTRANCE, $02, $06
 	db $1a, $0c, GRASS_CLUB_ENTRANCE, $02, $08
 	db $00, $00
 
-GrassClubWarpData: ; 1c217 (7:4217)
+GrassClubWarpData:
 	db $0c, $1e, GRASS_CLUB_ENTRANCE, $08, $02
 	db $0e, $1e, GRASS_CLUB_ENTRANCE, $0a, $02
 	db $00, $00
 
-PsychicClubEntranceWarpData: ; 1c223 (7:4223)
+PsychicClubEntranceWarpData:
 	db $08, $10, OVERWORLD_MAP,      $00, $00
 	db $0a, $10, OVERWORLD_MAP,      $00, $00
 	db $00, $06, PSYCHIC_CLUB_LOBBY, $18, $0a
@@ -165,17 +165,17 @@ PsychicClubEntranceWarpData: ; 1c223 (7:4223)
 	db $0a, $00, PSYCHIC_CLUB,       $0e, $18
 	db $00, $00
 
-PsychicClubLobbyWarpData: ; 1c243 (7:4243)
+PsychicClubLobbyWarpData:
 	db $1a, $0a, PSYCHIC_CLUB_ENTRANCE, $02, $06
 	db $1a, $0c, PSYCHIC_CLUB_ENTRANCE, $02, $08
 	db $00, $00
 
-PsychicClubWarpData: ; 1c24f (7:424f)
+PsychicClubWarpData:
 	db $0c, $1a, PSYCHIC_CLUB_ENTRANCE, $08, $02
 	db $0e, $1a, PSYCHIC_CLUB_ENTRANCE, $0a, $02
 	db $00, $00
 
-ScienceClubEntranceWarpData: ; 1c25b (7:425b)
+ScienceClubEntranceWarpData:
 	db $08, $10, OVERWORLD_MAP,      $00, $00
 	db $0a, $10, OVERWORLD_MAP,      $00, $00
 	db $00, $06, SCIENCE_CLUB_LOBBY, $18, $0a
@@ -184,17 +184,17 @@ ScienceClubEntranceWarpData: ; 1c25b (7:425b)
 	db $0a, $00, SCIENCE_CLUB,       $0e, $1c
 	db $00, $00
 
-ScienceClubLobbyWarpData: ; 1c27b (7:427b)
+ScienceClubLobbyWarpData:
 	db $1a, $0a, SCIENCE_CLUB_ENTRANCE, $02, $06
 	db $1a, $0c, SCIENCE_CLUB_ENTRANCE, $02, $08
 	db $00, $00
 
-ScienceClubWarpData: ; 1c287 (7:4287)
+ScienceClubWarpData:
 	db $0c, $1e, SCIENCE_CLUB_ENTRANCE, $08, $02
 	db $0e, $1e, SCIENCE_CLUB_ENTRANCE, $0a, $02
 	db $00, $00
 
-FireClubEntranceWarpData: ; 1c293 (7:4293)
+FireClubEntranceWarpData:
 	db $08, $10, OVERWORLD_MAP,   $00, $00
 	db $0a, $10, OVERWORLD_MAP,   $00, $00
 	db $00, $06, FIRE_CLUB_LOBBY, $18, $0a
@@ -203,17 +203,17 @@ FireClubEntranceWarpData: ; 1c293 (7:4293)
 	db $0a, $00, FIRE_CLUB,       $0e, $1c
 	db $00, $00
 
-FireClubLobbyWarpData: ; 1c2b3 (7:42b3)
+FireClubLobbyWarpData:
 	db $1a, $0a, FIRE_CLUB_ENTRANCE, $02, $06
 	db $1a, $0c, FIRE_CLUB_ENTRANCE, $02, $08
 	db $00, $00
 
-FireClubWarpData: ; 1c2bf (7:42bf)
+FireClubWarpData:
 	db $0c, $1e, FIRE_CLUB_ENTRANCE, $08, $02
 	db $0e, $1e, FIRE_CLUB_ENTRANCE, $0a, $02
 	db $00, $00
 
-ChallengeHallEntranceWarpData: ; 1c2cb (7:42cb)
+ChallengeHallEntranceWarpData:
 	db $08, $10, OVERWORLD_MAP,        $00, $00
 	db $0a, $10, OVERWORLD_MAP,        $00, $00
 	db $00, $06, CHALLENGE_HALL_LOBBY, $18, $0a
@@ -222,31 +222,31 @@ ChallengeHallEntranceWarpData: ; 1c2cb (7:42cb)
 	db $0a, $00, CHALLENGE_HALL,       $10, $1c
 	db $00, $00
 
-ChallengeHallLobbyWarpData: ; 1c2eb (7:42eb)
+ChallengeHallLobbyWarpData:
 	db $1a, $0a, CHALLENGE_HALL_ENTRANCE, $02, $06
 	db $1a, $0c, CHALLENGE_HALL_ENTRANCE, $02, $08
 	db $00, $00
 
-ChallengeHallWarpData: ; 1c2f7 (7:42f7)
+ChallengeHallWarpData:
 	db $0e, $1e, CHALLENGE_HALL_ENTRANCE, $08, $02
 	db $10, $1e, CHALLENGE_HALL_ENTRANCE, $0a, $02
 	db $00, $00
 
-PokemonDomeEntranceWarpData: ; 1c303 (7:4303)
+PokemonDomeEntranceWarpData:
 	db $0e, $10, OVERWORLD_MAP, $00, $00
 	db $10, $10, OVERWORLD_MAP, $00, $00
 	db $16, $00, POKEMON_DOME,  $0e, $1c
 	db $18, $00, POKEMON_DOME,  $10, $1c
 	db $00, $00
 
-PokemonDomeWarpData: ; 1c319 (7:4319)
+PokemonDomeWarpData:
 	db $0e, $1e, POKEMON_DOME_ENTRANCE, $16, $02
 	db $10, $1e, POKEMON_DOME_ENTRANCE, $18, $02
 	db $0e, $00, HALL_OF_HONOR,         $0a, $16
 	db $10, $00, HALL_OF_HONOR,         $0c, $16
 	db $00, $00
 
-HallOfHonorWarpData: ; 1c32f (7:432f)
+HallOfHonorWarpData:
 	db $0a, $18, POKEMON_DOME, $0e, $02
 	db $0c, $18, POKEMON_DOME, $10, $02
 	db $00, $00

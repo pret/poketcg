@@ -92,7 +92,7 @@ EstimateDamage_VersusDefendingCard:
 ;	[wAIMaxDamage] = base damage
 ;	[wDamage]      = base damage
 ;	[hTempPlayAreaLocation_ff9d] = turn holder's card location as the attacker
-CalculateDamage_VersusDefendingPokemon: ; 14453 (5:4453)
+CalculateDamage_VersusDefendingPokemon:
 	ld hl, wAIMinDamage
 	call _CalculateDamage_VersusDefendingPokemon
 	ld hl, wAIMaxDamage
@@ -100,7 +100,7 @@ CalculateDamage_VersusDefendingPokemon: ; 14453 (5:4453)
 	ld hl, wDamage
 ;	fallthrough
 
-_CalculateDamage_VersusDefendingPokemon: ; 14462 (5:4462)
+_CalculateDamage_VersusDefendingPokemon:
 	ld e, [hl]
 	ld d, $00
 	push hl
@@ -216,7 +216,7 @@ _CalculateDamage_VersusDefendingPokemon: ; 14462 (5:4462)
 ;	a = attack index
 ;	[hTempPlayAreaLocation_ff9d] = location of card to calculate
 ;	                               damage as the receiver
-EstimateDamage_FromDefendingPokemon: ; 1450b (5:450b)
+EstimateDamage_FromDefendingPokemon:
 	call SwapTurn
 	ld [wSelectedAttack], a
 	ld e, a
@@ -316,7 +316,7 @@ EstimateDamage_FromDefendingPokemon: ; 1450b (5:450b)
 ;	[wDamage]      = base damage
 ;	[hTempPlayAreaLocation_ff9d] = location of card to calculate
 ;								 damage as the receiver
-CalculateDamage_FromDefendingPokemon: ; 1458c (5:458c)
+CalculateDamage_FromDefendingPokemon:
 	ld hl, wAIMinDamage
 	call .CalculateDamage
 	ld hl, wAIMaxDamage
@@ -324,7 +324,7 @@ CalculateDamage_FromDefendingPokemon: ; 1458c (5:458c)
 	ld hl, wDamage
 	; fallthrough
 
-.CalculateDamage ; 1459b (5:459b)
+.CalculateDamage
 	ld e, [hl]
 	ld d, $00
 	push hl

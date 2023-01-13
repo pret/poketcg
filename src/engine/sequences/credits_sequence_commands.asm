@@ -1,4 +1,4 @@
-SetCreditsSequenceCmdPtr: ; 1d7fc (7:57fc)
+SetCreditsSequenceCmdPtr:
 	ld a, LOW(CreditsSequence)
 	ld [wSequenceCmdPtr + 0], a
 	ld a, HIGH(CreditsSequence)
@@ -7,7 +7,7 @@ SetCreditsSequenceCmdPtr: ; 1d7fc (7:57fc)
 	ld [wSequenceDelay], a
 	ret
 
-ExecuteCreditsSequenceCmd: ; 1d80b (7:580b)
+ExecuteCreditsSequenceCmd:
 	ld a, [wSequenceDelay]
 	or a
 	jr z, .call_func
@@ -42,27 +42,27 @@ ExecuteCreditsSequenceCmd: ; 1d80b (7:580b)
 
 	ret ; stray ret
 
-AdvanceCreditsSequenceCmdPtrBy2: ; 1d835 (7:5835)
+AdvanceCreditsSequenceCmdPtrBy2:
 	ld a, 2
 	jr AdvanceCreditsSequenceCmdPtr
 
-AdvanceCreditsSequenceCmdPtrBy3: ; 1d839 (7:5839)
+AdvanceCreditsSequenceCmdPtrBy3:
 	ld a, 3
 	jr AdvanceCreditsSequenceCmdPtr
 
-AdvanceCreditsSequenceCmdPtrBy5: ; 1d83d (7:583d)
+AdvanceCreditsSequenceCmdPtrBy5:
 	ld a, 5
 	jr AdvanceCreditsSequenceCmdPtr
 
-AdvanceCreditsSequenceCmdPtrBy6: ; 1d841 (7:5841)
+AdvanceCreditsSequenceCmdPtrBy6:
 	ld a, 6
 	jr AdvanceCreditsSequenceCmdPtr
 
-AdvanceCreditsSequenceCmdPtrBy4: ; 1d845 (7:5845)
+AdvanceCreditsSequenceCmdPtrBy4:
 	ld a, 4
 ;	fallthrough
 
-AdvanceCreditsSequenceCmdPtr: ; 1d847 (7:5847)
+AdvanceCreditsSequenceCmdPtr:
 	push hl
 	ld hl, wSequenceCmdPtr
 	add [hl]
@@ -73,12 +73,12 @@ AdvanceCreditsSequenceCmdPtr: ; 1d847 (7:5847)
 	pop hl
 	ret
 
-CreditsSequenceCmd_Wait: ; 1d853 (7:5853)
+CreditsSequenceCmd_Wait:
 	ld a, c
 	ld [wSequenceDelay], a
 	jp AdvanceCreditsSequenceCmdPtrBy3
 
-CreditsSequenceCmd_LoadScene: ; 1d85a (7:585a)
+CreditsSequenceCmd_LoadScene:
 	push bc
 	push de
 	farcall ClearNumLoadedFramesetSubgroups
@@ -96,7 +96,7 @@ CreditsSequenceCmd_LoadScene: ; 1d85a (7:585a)
 	call LoadScene
 	jp AdvanceCreditsSequenceCmdPtrBy5
 
-CreditsSequenceCmd_LoadBooster: ; 1d878 (7:5878)
+CreditsSequenceCmd_LoadBooster:
 	push bc
 	push de
 	farcall ClearNumLoadedFramesetSubgroups
@@ -114,7 +114,7 @@ CreditsSequenceCmd_LoadBooster: ; 1d878 (7:5878)
 	farcall LoadBoosterGfx
 	jp AdvanceCreditsSequenceCmdPtrBy5
 
-CreditsSequenceCmd_LoadClubMap: ; 1d897 (7:5897)
+CreditsSequenceCmd_LoadClubMap:
 	ld b, $00
 	ld hl, wMastersBeatenList
 	add hl, bc
@@ -264,7 +264,7 @@ ENDM
 
 ; bc = coordinates
 ; e = OW map
-LoadOWMapForCreditsSequence: ; 1d9a6 (7:59a6)
+LoadOWMapForCreditsSequence:
 	push bc
 	push de
 	call EmptyScreen
@@ -290,21 +290,21 @@ LoadOWMapForCreditsSequence: ; 1d9a6 (7:59a6)
 	farcall LoadPaletteData
 	ret
 
-CreditsSequenceCmd_LoadOWMap: ; 1d9d5 (7:59d5)
+CreditsSequenceCmd_LoadOWMap:
 	call LoadOWMapForCreditsSequence
 	jp AdvanceCreditsSequenceCmdPtrBy5
 
-CreditsSequenceCmd_DisableLCD: ; 1d9db (7:59db)
+CreditsSequenceCmd_DisableLCD:
 	call DisableLCD
 	jp AdvanceCreditsSequenceCmdPtrBy2
 
-CreditsSequenceCmd_FadeIn: ; 1d9e1 (7:59e1)
+CreditsSequenceCmd_FadeIn:
 	call DisableLCD
 	call SetWindowOn
 	farcall FadeScreenFromWhite
 	jp AdvanceCreditsSequenceCmdPtrBy2
 
-CreditsSequenceCmd_FadeOut: ; 1d9ee (7:59ee)
+CreditsSequenceCmd_FadeOut:
 	farcall FadeScreenToWhite
 	call ClearSpriteAnimations
 	call EnableLCD
@@ -313,7 +313,7 @@ CreditsSequenceCmd_FadeOut: ; 1d9ee (7:59ee)
 	call SetWindowOff
 	jp AdvanceCreditsSequenceCmdPtrBy2
 
-CreditsSequenceCmd_DrawRectangle: ; 1da04 (7:5a04)
+CreditsSequenceCmd_DrawRectangle:
 	ld a, c
 	or $20
 	ld e, a
@@ -325,7 +325,7 @@ CreditsSequenceCmd_DrawRectangle: ; 1da04 (7:5a04)
 	call FillRectangle
 	jp AdvanceCreditsSequenceCmdPtrBy4
 
-CreditsSequenceCmd_PrintText: ; 1da17 (7:5a17)
+CreditsSequenceCmd_PrintText:
 	ld a, $01
 	ld [wLineSeparation], a
 	push de
@@ -338,7 +338,7 @@ CreditsSequenceCmd_PrintText: ; 1da17 (7:5a17)
 	call PrintTextNoDelay
 	jp AdvanceCreditsSequenceCmdPtrBy6
 
-CreditsSequenceCmd_PrintTextBox: ; 1da2c (7:5a2c)
+CreditsSequenceCmd_PrintTextBox:
 	ld a, $01
 	ld [wLineSeparation], a
 	push de
@@ -349,7 +349,7 @@ CreditsSequenceCmd_PrintTextBox: ; 1da2c (7:5a2c)
 	call PrintTextNoDelay
 	jp AdvanceCreditsSequenceCmdPtrBy6
 
-CreditsSequenceCmd_InitOverlay: ; 1da3e (7:5a3e)
+CreditsSequenceCmd_InitOverlay:
 	ld a, c
 	ld [wd647], a
 	ld a, b
@@ -361,14 +361,14 @@ CreditsSequenceCmd_InitOverlay: ; 1da3e (7:5a3e)
 	call Func_1d765
 	jp AdvanceCreditsSequenceCmdPtrBy6
 
-CreditsSequenceCmd_LoadNPC: ; 1da54 (7:5a54)
+CreditsSequenceCmd_LoadNPC:
 	call LoadNPCForCreditsSequence
 	jp AdvanceCreditsSequenceCmdPtrBy6
 
 ; bc = coordinates
 ; e = direction
 ; d = NPC ID
-LoadNPCForCreditsSequence: ; 1da5a (7:5a5a)
+LoadNPCForCreditsSequence:
 	ld a, c
 	ld [wLoadNPCXPos], a
 	ld a, b
@@ -408,11 +408,11 @@ LoadNPCForCreditsSequence: ; 1da5a (7:5a5a)
 	farcall StartNewSpriteAnimation
 	ret
 
-CreditsSequenceCmd_InitVolcanoSprite: ; 1da9e (7:5a9e)
+CreditsSequenceCmd_InitVolcanoSprite:
 	farcall OverworldMap_InitVolcanoSprite
 	jp AdvanceCreditsSequenceCmdPtrBy2
 
-CreditsSequenceCmd_TransformOverlay: ; 1daa5 (7:5aa5)
+CreditsSequenceCmd_TransformOverlay:
 ; either stretches or shrinks overlay
 ; to the input configurations
 	ld l, 0

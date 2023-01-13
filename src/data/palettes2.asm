@@ -1,4 +1,4 @@
-Palette100:: ; b8000 (2e:4000)
+Palette100::
 	db 0
 	db 8
 
@@ -42,7 +42,7 @@ Palette100:: ; b8000 (2e:4000)
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette102:: ; b8042 (2e:4042)
+Palette102::
 	db 0
 	db 7
 
@@ -81,7 +81,7 @@ Palette102:: ; b8042 (2e:4042)
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette103:: ; b807c (2e:407c)
+Palette103::
 	db 0
 	db 7
 
@@ -120,7 +120,7 @@ Palette103:: ; b807c (2e:407c)
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette104:: ; b80b6 (2e:40b6)
+Palette104::
 	db 0
 	db 7
 
@@ -159,7 +159,7 @@ Palette104:: ; b80b6 (2e:40b6)
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette105:: ; b80f0 (2e:40f0)
+Palette105::
 	db 0
 	db 7
 
@@ -198,7 +198,7 @@ Palette105:: ; b80f0 (2e:40f0)
 	rgb  4,  7, 15
 	rgb 31, 24,  0
 
-Palette106:: ; b812a (2e:412a)
+Palette106::
 	db 0
 	db 7
 
@@ -237,7 +237,7 @@ Palette106:: ; b812a (2e:412a)
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette107:: ; b8164 (2e:4164)
+Palette107::
 	db 0
 	db 7
 
@@ -276,7 +276,7 @@ Palette107:: ; b8164 (2e:4164)
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette111:: ; b819e (2e:419e)
+Palette111::
 	db 1, %11100100
 	db 8
 
@@ -320,7 +320,7 @@ Palette111:: ; b819e (2e:419e)
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette112:: ; b81e1 (2e:41e1)
+Palette112::
 	db 1, %11100100
 	db 8
 
@@ -364,7 +364,7 @@ Palette112:: ; b81e1 (2e:41e1)
 	rgb  3,  3,  8
 	rgb 25, 14,  0
 
-Palette113:: ; b8224 (2e:4224)
+Palette113::
 	db 1, %11100100
 	db 8
 
@@ -408,7 +408,7 @@ Palette113:: ; b8224 (2e:4224)
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette114:: ; b8267 (2e:4267)
+Palette114::
 	db 2, %11100100, %00000011
 	db 4
 
@@ -432,7 +432,7 @@ Palette114:: ; b8267 (2e:4267)
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette115:: ; b828b (2e:428b)
+Palette115::
 	db 2, %11100100, %00000011
 	db 4
 
@@ -456,7 +456,7 @@ Palette115:: ; b828b (2e:428b)
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette116:: ; b82af (2e:42af)
+Palette116::
 	db 2, %11010010, %11100100
 	db 4
 
@@ -480,7 +480,7 @@ Palette116:: ; b82af (2e:42af)
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette118:: ; b82d3 (2e:42d3)
+Palette118::
 	db 0
 	db 6
 
@@ -514,7 +514,7 @@ Palette118:: ; b82d3 (2e:42d3)
 	rgb 19,  0, 25
 	rgb  0,  0,  0
 
-Palette120:: ; b8305 (2e:4305)
+Palette120::
 	db 0
 	db 1
 
@@ -523,7 +523,7 @@ Palette120:: ; b8305 (2e:4305)
 	rgb  0, 12,  0
 	rgb  0,  1,  0
 
-Palette121:: ; b830f (2e:430f)
+Palette121::
 	db 0
 	db 1
 
@@ -532,7 +532,7 @@ Palette121:: ; b830f (2e:430f)
 	rgb  4,  8, 28
 	rgb  0,  0, 12
 
-Palette122:: ; b8319 (2e:4319)
+Palette122::
 	db 0
 	db 1
 
@@ -541,7 +541,7 @@ Palette122:: ; b8319 (2e:4319)
 	rgb  4, 12,  8
 	rgb  0,  4,  0
 
-Palette123:: ; b8323 (2e:4323)
+Palette123::
 	db 0
 	db 1
 
@@ -550,7 +550,7 @@ Palette123:: ; b8323 (2e:4323)
 	rgb 20,  8,  0
 	rgb  4,  0,  0
 
-Palette124:: ; b832d (2e:432d)
+Palette124::
 	db 0
 	db 1
 
@@ -559,7 +559,7 @@ Palette124:: ; b832d (2e:432d)
 	rgb  8, 12,  0
 	rgb  5,  0,  0
 
-Palette125:: ; b8337 (2e:4337)
+Palette125::
 	db 0
 	db 1
 
@@ -568,7 +568,7 @@ Palette125:: ; b8337 (2e:4337)
 	rgb  8, 12,  0
 	rgb  5,  0,  0
 
-Palette126:: ; b8341 (2e:4341)
+Palette126::
 	db 0
 	db 1
 
@@ -577,7 +577,7 @@ Palette126:: ; b8341 (2e:4341)
 	rgb 28,  4,  0
 	rgb  5,  0,  0
 
-Palette127:: ; b834b (2e:434b)
+Palette127::
 	db 0
 	db 1
 
@@ -586,7 +586,7 @@ Palette127:: ; b834b (2e:434b)
 	rgb  5,  5, 29
 	rgb  5,  0,  0
 
-Palette128:: ; b8355 (2e:4355)
+Palette128::
 	db 0
 	db 1
 
@@ -595,7 +595,7 @@ Palette128:: ; b8355 (2e:4355)
 	rgb 14, 11,  0
 	rgb  3,  1,  1
 
-Palette129:: ; b835f (2e:435f)
+Palette129::
 	db 0
 	db 1
 
@@ -604,7 +604,7 @@ Palette129:: ; b835f (2e:435f)
 	rgb 28, 10,  0
 	rgb  4,  1,  0
 
-Palette130:: ; b8369 (2e:4369)
+Palette130::
 	db 0
 	db 1
 
@@ -613,7 +613,7 @@ Palette130:: ; b8369 (2e:4369)
 	rgb 18,  8,  0
 	rgb  4,  0,  0
 
-Palette131:: ; b8373 (2e:4373)
+Palette131::
 	db 0
 	db 1
 
@@ -622,7 +622,7 @@ Palette131:: ; b8373 (2e:4373)
 	rgb 10,  0, 18
 	rgb  5,  0,  0
 
-Palette132:: ; b837d (2e:437d)
+Palette132::
 	db 0
 	db 1
 
@@ -631,7 +631,7 @@ Palette132:: ; b837d (2e:437d)
 	rgb 28,  4,  0
 	rgb  5,  0,  0
 
-Palette133:: ; b8387 (2e:4387)
+Palette133::
 	db 0
 	db 1
 
@@ -640,7 +640,7 @@ Palette133:: ; b8387 (2e:4387)
 	rgb 28, 12,  0
 	rgb  2,  2,  0
 
-Palette134:: ; b8391 (2e:4391)
+Palette134::
 	db 0
 	db 1
 
@@ -649,7 +649,7 @@ Palette134:: ; b8391 (2e:4391)
 	rgb  5,  5, 29
 	rgb  0,  0,  2
 
-Palette135:: ; b839b (2e:439b)
+Palette135::
 	db 0
 	db 1
 
@@ -658,7 +658,7 @@ Palette135:: ; b839b (2e:439b)
 	rgb  0, 17, 10
 	rgb  0,  3,  0
 
-Palette136:: ; b83a5 (2e:43a5)
+Palette136::
 	db 0
 	db 1
 
@@ -667,7 +667,7 @@ Palette136:: ; b83a5 (2e:43a5)
 	rgb  0, 12,  0
 	rgb  0,  1,  0
 
-Palette137:: ; b83af (2e:43af)
+Palette137::
 	db 0
 	db 1
 
@@ -676,7 +676,7 @@ Palette137:: ; b83af (2e:43af)
 	rgb  0, 12,  0
 	rgb  0,  1,  0
 
-Palette138:: ; b83b9 (2e:43b9)
+Palette138::
 	db 0
 	db 1
 
@@ -685,7 +685,7 @@ Palette138:: ; b83b9 (2e:43b9)
 	rgb  0, 12,  0
 	rgb  0,  1,  0
 
-Palette139:: ; b83c3 (2e:43c3)
+Palette139::
 	db 0
 	db 1
 
@@ -694,7 +694,7 @@ Palette139:: ; b83c3 (2e:43c3)
 	rgb 28,  4,  0
 	rgb  4,  0,  0
 
-Palette140:: ; b83cd (2e:43cd)
+Palette140::
 	db 0
 	db 1
 
@@ -703,7 +703,7 @@ Palette140:: ; b83cd (2e:43cd)
 	rgb 28,  4,  0
 	rgb  4,  0,  0
 
-Palette141:: ; b83d7 (2e:43d7)
+Palette141::
 	db 0
 	db 1
 
@@ -712,7 +712,7 @@ Palette141:: ; b83d7 (2e:43d7)
 	rgb 28,  4,  0
 	rgb  4,  0,  0
 
-Palette142:: ; b83e1 (2e:43e1)
+Palette142::
 	db 0
 	db 1
 
@@ -721,7 +721,7 @@ Palette142:: ; b83e1 (2e:43e1)
 	rgb  8,  8, 20
 	rgb  0,  0,  4
 
-Palette143:: ; b83eb (2e:43eb)
+Palette143::
 	db 0
 	db 1
 
@@ -730,7 +730,7 @@ Palette143:: ; b83eb (2e:43eb)
 	rgb  8,  8,  4
 	rgb  2,  1,  1
 
-Palette144:: ; b83f5 (2e:43f5)
+Palette144::
 	db 0
 	db 1
 
@@ -739,7 +739,7 @@ Palette144:: ; b83f5 (2e:43f5)
 	rgb  8,  8,  4
 	rgb  2,  1,  1
 
-Palette145:: ; b83ff (2e:43ff)
+Palette145::
 	db 0
 	db 1
 
@@ -748,7 +748,7 @@ Palette145:: ; b83ff (2e:43ff)
 	rgb 24,  8,  4
 	rgb  2,  0,  0
 
-Palette146:: ; b8409 (2e:4409)
+Palette146::
 	db 0
 	db 1
 
@@ -757,7 +757,7 @@ Palette146:: ; b8409 (2e:4409)
 	rgb 24,  8,  4
 	rgb  2,  0,  0
 
-Palette147:: ; b8413 (2e:4413)
+Palette147::
 	db 0
 	db 1
 
@@ -766,7 +766,7 @@ Palette147:: ; b8413 (2e:4413)
 	rgb 24,  8,  4
 	rgb  2,  0,  0
 
-Palette148:: ; b841d (2e:441d)
+Palette148::
 	db 0
 	db 1
 
@@ -775,7 +775,7 @@ Palette148:: ; b841d (2e:441d)
 	rgb 12,  4,  8
 	rgb  2,  0,  0
 
-Palette149:: ; b8427 (2e:4427)
+Palette149::
 	db 0
 	db 1
 
@@ -784,7 +784,7 @@ Palette149:: ; b8427 (2e:4427)
 	rgb 12,  4,  8
 	rgb  2,  0,  0
 
-Palette150:: ; b8431 (2e:4431)
+Palette150::
 	db 0
 	db 1
 
@@ -793,7 +793,7 @@ Palette150:: ; b8431 (2e:4431)
 	rgb 16,  8, 12
 	rgb  2,  1,  1
 
-Palette151:: ; b843b (2e:443b)
+Palette151::
 	db 0
 	db 1
 
@@ -802,7 +802,7 @@ Palette151:: ; b843b (2e:443b)
 	rgb 16,  8, 12
 	rgb  2,  1,  1
 
-Palette152:: ; b8445 (2e:4445)
+Palette152::
 	db 0
 	db 1
 
@@ -811,7 +811,7 @@ Palette152:: ; b8445 (2e:4445)
 	rgb  8, 16,  4
 	rgb  0,  2,  0
 
-Palette153:: ; b844f (2e:444f)
+Palette153::
 	db 0
 	db 1
 
@@ -820,7 +820,7 @@ Palette153:: ; b844f (2e:444f)
 	rgb  8, 16,  4
 	rgb  0,  2,  0
 
-Palette154:: ; b8459 (2e:4459)
+Palette154::
 	db 0
 	db 1
 
@@ -829,7 +829,7 @@ Palette154:: ; b8459 (2e:4459)
 	rgb  8, 16,  4
 	rgb  0,  2,  0
 
-Palette155:: ; b8463 (2e:4463)
+Palette155::
 	db 0
 	db 1
 
@@ -838,7 +838,7 @@ Palette155:: ; b8463 (2e:4463)
 	rgb  8,  8, 20
 	rgb  0,  0,  2
 
-Palette156:: ; b846d (2e:446d)
+Palette156::
 	db 0
 	db 1
 
@@ -847,7 +847,7 @@ Palette156:: ; b846d (2e:446d)
 	rgb  8,  8, 20
 	rgb  0,  0,  2
 
-Palette157:: ; b8477 (2e:4477)
+Palette157::
 	db 0
 	db 1
 
@@ -856,7 +856,7 @@ Palette157:: ; b8477 (2e:4477)
 	rgb  8,  8,  4
 	rgb  2,  1,  1
 
-Palette158:: ; b8481 (2e:4481)
+Palette158::
 	db 0
 	db 1
 
@@ -865,7 +865,7 @@ Palette158:: ; b8481 (2e:4481)
 	rgb 12,  4,  8
 	rgb  1,  0,  0
 
-Palette159:: ; b848b (2e:448b)
+Palette159::
 	db 0
 	db 1
 
@@ -874,7 +874,7 @@ Palette159:: ; b848b (2e:448b)
 	rgb 16,  8, 12
 	rgb  2,  1,  1
 
-Palette160:: ; b8495 (2e:4495)
+Palette160::
 	db 0
 	db 1
 

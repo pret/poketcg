@@ -25,11 +25,11 @@ MACRO ow_frame
 	dw \5
 ENDM
 
-DefaultOWFrameset: ; 8055e (20:455e)
+DefaultOWFrameset:
 	db $3, $3, $3
 	db -1 ; end
 
-OverworldMapOWFrameset: ; 80662 (20:4662)
+OverworldMapOWFrameset:
 	db $3, $33, $33
 
 	ow_frame 7, $f3, 0, OverworldMapTiles, $73
@@ -40,7 +40,7 @@ OverworldMapOWFrameset: ; 80662 (20:4662)
 	ow_frame 7, $f4, 0, OverworldMapTiles, $73
 	db -1 ; end
 
-OverworldMapCGBOWFrameset: ; 80696 (20:4696)
+OverworldMapCGBOWFrameset:
 	db $3, $ab, $ab
 
 	ow_frame 4, $f3, 0, OverworldMapTiles, $73
@@ -66,7 +66,7 @@ OverworldMapCGBOWFrameset: ; 80696 (20:4696)
 	ow_frame 0, $1c, 1, OverworldMapTiles, $a6
 	db -1 ; end
 
-MasonLaboratoryOWFrameset: ; 80742 (20:4742)
+MasonLaboratoryOWFrameset:
 	db $3, $43, $43
 
 	ow_frame 3, $dc, 0, MasonLaboratoryTilesetGfx, $5c
@@ -79,7 +79,7 @@ MasonLaboratoryOWFrameset: ; 80742 (20:4742)
 	ow_frame 0, $df, 0, MasonLaboratoryTilesetGfx, $63
 	db -1 ; end
 
-DeckMachineRoomOWFrameset: ; 80786 (20:4786)
+DeckMachineRoomOWFrameset:
 	db $3, $83, $83
 
 	ow_frame 3, $dc, 0, MasonLaboratoryTilesetGfx, $5c
@@ -100,7 +100,7 @@ DeckMachineRoomOWFrameset: ; 80786 (20:4786)
 	ow_frame 0, $e7, 0, MasonLaboratoryTilesetGfx, $6b
 	db -1 ; end
 
-DeckMachineRoomCGBOWFrameset: ; 8080a (20:480a)
+DeckMachineRoomCGBOWFrameset:
 	db $3, $83, $83
 
 	ow_frame 3, $dc, 0, MasonLaboratoryTilesetGfx, $5c
@@ -121,7 +121,7 @@ DeckMachineRoomCGBOWFrameset: ; 8080a (20:480a)
 	ow_frame 0, $06, 1, MasonLaboratoryTilesetGfx, $8a
 	db -1 ; end
 
-FireClubOWFrameset: ; 8088e (20:488e)
+FireClubOWFrameset:
 	db $3, $83, $83
 
 	ow_frame 5, $9f, 0, FireClubTilesetGfx, $1f
@@ -142,7 +142,7 @@ FireClubOWFrameset: ; 8088e (20:488e)
 	ow_frame 0, $a6, 0, FireClubTilesetGfx, $2e
 	db -1 ; end
 
-FireClubCGBOWFrameset: ; 80912 (20:4912)
+FireClubCGBOWFrameset:
 	db $3, $83, $83
 
 	ow_frame 5, $bb, 0, FireClubTilesetGfx, $3b
@@ -163,7 +163,7 @@ FireClubCGBOWFrameset: ; 80912 (20:4912)
 	ow_frame 0, $c2, 0, FireClubTilesetGfx, $4a
 	db -1 ; end
 
-WaterClubOWFrameset: ; 80996 (20:4996)
+WaterClubOWFrameset:
 	db $3, $c3, $c3
 
 	ow_frame 1, $e2, 0, WaterClubTilesetGfx, $62
@@ -192,7 +192,7 @@ WaterClubOWFrameset: ; 80996 (20:4996)
 	ow_frame 0, $e7, 0, WaterClubTilesetGfx, $73
 	db -1 ; end
 
-LightningClubOWFrameset: ; 80a5a (20:4a5a)
+LightningClubOWFrameset:
 	db $3, $c3, $c3
 
 	ow_frame 10, $a2, 0, LightningClubTilesetGfx, $22
@@ -221,17 +221,17 @@ LightningClubOWFrameset: ; 80a5a (20:4a5a)
 	ow_frame  0, $b1, 0, LightningClubTilesetGfx, $29
 	db -1 ; end
 
-ScienceClubOWFrameset: ; 80b1e (20:4b1e)
+ScienceClubOWFrameset:
 	db $3, $13, $13
 	ow_frame 11, $c7, 0, ScienceClubTilesetGfx, $47
 	ow_frame 11, $c7, 0, ScienceClubTilesetGfx, $48
 	db -1 ; end
 
-ChallengeHallOWFrameset: ; 80b32 (20:4b32)
+ChallengeHallOWFrameset:
 	db $3, $3, $3
 	db -1 ; end
 
-HallOfHonorOWFrameset: ; 80b36 (20:4b36)
+HallOfHonorOWFrameset:
 	db $3, $43, $43
 	ow_frame 11, $a4, 0, HallOfHonorTilesetGfx, $28
 	ow_frame  0, $a5, 0, HallOfHonorTilesetGfx, $29

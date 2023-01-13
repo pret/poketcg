@@ -300,7 +300,7 @@ AIPickPrizeCards:
 	call AddCardToHand
 	ret
 
-.prize_flags ; 1421e (5:421e)
+.prize_flags
 	db $1 << 0
 	db $1 << 1
 	db $1 << 2
@@ -1182,7 +1182,7 @@ TrySetUpBossStartingPlayArea:
 ; plays to Play Area first card that is found in hand.
 ; returns carry if none of the cards in the list are found.
 ; returns number of Pokemon in Play Area in a.
-.PlayPokemonCardInOrder ; 1583f (5:583f)
+.PlayPokemonCardInOrder
 	ld a, [de]
 	ld c, a
 	inc de

@@ -138,7 +138,7 @@ SetUpBossStartingHandAndDeck:
 ; so it always ends up returning in the first item in list.
 ; input:
 ;	- a = deck index of card to check
-.CheckIfIDIsInList ; 17366 (5:7366)
+.CheckIfIDIsInList
 	ld b, a
 	ld a, [wAICardListAvoidPrize + 1]
 	or a

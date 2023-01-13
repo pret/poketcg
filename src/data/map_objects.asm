@@ -4,7 +4,7 @@
 ; Direction you need to face, X coord, Y coord
 ; Routine that gets called when you hit A in front of it
 ; Object Name, and Object default Text
-MasonLabObjects: ; 13b04 (3:7b04)
+MasonLabObjects:
 	db NORTH, 18, 2
 	dw PrintInteractableObjectText
 	tx Text04a0
@@ -48,7 +48,7 @@ MasonLabObjects: ; 13b04 (3:7b04)
 	db $ff
 
 
-DeckMachineRoomObjects: ; 13b4d (3:7b4d)
+DeckMachineRoomObjects:
 	db NORTH, 2, 2
 	dw Script_d932
 	tx PlaceholderMessageText
@@ -152,7 +152,7 @@ DeckMachineRoomObjects: ; 13b4d (3:7b4d)
 	db $ff
 
 
-IshiharasHouseObjects: ; 13c02 (3:7c02)
+IshiharasHouseObjects:
 	db NORTH, 6, 2
 	dw PrintInteractableObjectText
 	tx Text04ae
@@ -216,7 +216,7 @@ IshiharasHouseObjects: ; 13c02 (3:7c02)
 	db $ff
 
 
-FightingClubLobbyObjects: ; 13c6f (3:7c6f)
+FightingClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04c6
@@ -250,7 +250,7 @@ FightingClubLobbyObjects: ; 13c6f (3:7c6f)
 	db $ff
 
 
-RockClubLobbyObjects: ; 13ca6 (3:7ca6)
+RockClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04cc
@@ -284,7 +284,7 @@ RockClubLobbyObjects: ; 13ca6 (3:7ca6)
 	db $ff
 
 
-WaterClubLobbyObjects: ; 13cdd (3:7cdd)
+WaterClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04d2
@@ -318,7 +318,7 @@ WaterClubLobbyObjects: ; 13cdd (3:7cdd)
 	db $ff
 
 
-LightningClubLobbyObjects: ; 13d14 (3:7d14)
+LightningClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04d8
@@ -352,7 +352,7 @@ LightningClubLobbyObjects: ; 13d14 (3:7d14)
 	db $ff
 
 
-GrassClubLobbyObjects: ; 13d4b (3:7d4b)
+GrassClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04de
@@ -386,7 +386,7 @@ GrassClubLobbyObjects: ; 13d4b (3:7d4b)
 	db $ff
 
 
-PsychicClubLobbyObjects: ; 13d82 (3:7d82)
+PsychicClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04e4
@@ -420,7 +420,7 @@ PsychicClubLobbyObjects: ; 13d82 (3:7d82)
 	db $ff
 
 
-ScienceClubLobbyObjects: ; 13db9 (3:7db9)
+ScienceClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04ea
@@ -454,7 +454,7 @@ ScienceClubLobbyObjects: ; 13db9 (3:7db9)
 	db $ff
 
 
-FireClubLobbyObjects: ; 13df0 (3:7df0)
+FireClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04f0
@@ -488,7 +488,7 @@ FireClubLobbyObjects: ; 13df0 (3:7df0)
 	db $ff
 
 
-ChallengeHallLobbyObjects: ; 13e27 (3:7e27)
+ChallengeHallLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04f6
@@ -522,7 +522,7 @@ ChallengeHallLobbyObjects: ; 13e27 (3:7e27)
 	db $ff
 
 
-PokemonDomeEntranceObjects: ; 13e5e (3:7e5e)
+PokemonDomeEntranceObjects:
 	db NORTH, 2, 2
 	dw PrintInteractableObjectText
 	tx Text04fc
@@ -581,7 +581,7 @@ PokemonDomeEntranceObjects: ; 13e5e (3:7e5e)
 	db $ff
 
 
-HallOfHonorObjects: ; 13ec2 (3:7ec2)
+HallOfHonorObjects:
 	; Legendary Cards
 	db NORTH, 10, 10
 	dw Script_fbf1

@@ -1,105 +1,105 @@
-Text048c: ; 44000 (11:4000)
+Text048c:
 	text "You're just going to turn "
 	line "and run!?! You chicken!"
 	done
 
-Text048d: ; 44034 (11:4034)
+Text048d:
 	text "A 1-match duel with 4 prizes!"
 	line "Let's do it!"
 	done
 
-Text048e: ; 44060 (11:4060)
+Text048e:
 	text "No! I lost again!"
 	line "I can't start training, yet!"
 	done
 
-Text048f: ; 44090 (11:4090)
+Text048f:
 	text "Shoot! I'm going to "
 	line "become a better player!"
 	done
 
-Text0490: ; 440be (11:40be)
+Text0490:
 	text "Yeah! I won!"
 	line "I've gotten pretty good, haven't I?"
 	line "I think I'll start training again."
 	done
 
-Text0491: ; 44113 (11:4113)
+Text0491:
 	text "I've been training since I lost"
 	line "to you at the Grass Club."
 	line "How about a rematch?"
 	done
 
-Text0492: ; 44163 (11:4163)
+Text0492:
 	text "Would you like to duel Michael?"
 	done
 
-Text0493: ; 44184 (11:4184)
+Text0493:
 	text "OK. But do duel me "
 	line "again sometime."
 	done
 
-Text0494: ; 441a9 (11:41a9)
+Text0494:
 	text "OK, a 1-match duel with 4 prizes!"
 	line "Let's do it!"
 	done
 
-Text0495: ; 441d9 (11:41d9)
+Text0495:
 	text "I guess I need to train more..."
 	done
 
-Text0496: ; 441fa (11:41fa)
+Text0496:
 	text "Duel me again another time."
 	line "See ya!"
 	done
 
-Text0497: ; 4421f (11:421f)
+Text0497:
 	text "I guess my training has paid off!"
 	line "Duel me again sometime. See ya!"
 	done
 
-Text0498: ; 44262 (11:4262)
+Text0498:
 	text "Training is so boring..."
 	line "Why anyone would want to?"
 	line "Hey, it's you!"
 	line "Do you want to duel me again?"
 	done
 
-Text0499: ; 442c3 (11:42c3)
+Text0499:
 	text "Would you like to duel Jessica?"
 	done
 
-Text049a: ; 442e4 (11:42e4)
+Text049a:
 	text "Well, OK."
 	line "I'm busy anyway!"
 	done
 
-Text049b: ; 44300 (11:4300)
+Text049b:
 	text "OK! A 1-match duel with 4 prizes!"
 	line "Let's go to it!"
 	done
 
-Text049c: ; 44333 (11:4333)
+Text049c:
 	text "Oops! I lost..."
 	line "Here! You can have this!"
 	done
 
-Text049d: ; 4435d (11:435d)
+Text049d:
 	text "Don't talk to me, I'm busy!"
 	done
 
-Text049e: ; 4437a (11:437a)
+Text049e:
 	text "Hey, I won!"
 	line "Could this also be due to my "
 	line "natural ability? "
 	line "Well, I hope I see you around!"
 	done
 
-WhatIsADeckText: ; 443d6 (11:43d6)
+WhatIsADeckText:
 	text "What is a deck?"
 	done
 
-Text04a0: ; 443e7 (11:43e7)
+Text04a0:
 	text "A deck is the set of Pokémon cards"
 	line "used in duels."
 	line "A deck consists of 60 cards."
@@ -110,11 +110,11 @@ Text04a0: ; 443e7 (11:43e7)
 	line "Pokémon Trading Card Game."
 	done
 
-Text04a1: ; 444ca (11:44ca)
+Text04a1:
 	text "Cards, Vol. 1: Pokémon Cards"
 	done
 
-Text04a2: ; 444e8 (11:44e8)
+Text04a2:
 	text "There are 2 types of Pokémon cards "
 	line "in the Pokémon Trading Card Game:"
 	line "Basic Pokémon and Evolution "
@@ -127,11 +127,11 @@ Text04a2: ; 444e8 (11:44e8)
 	line "Pokémon on top of Stage 1 Pokémon."
 	done
 
-Text04a3: ; 44630 (11:4630)
+Text04a3:
 	text "Cards, Vol. 2: Energy Cards"
 	done
 
-Text04a4: ; 4464d (11:464d)
+Text04a4:
 	text "Attach Energy cards to your Pokémon"
 	line "to give them the energy they need to"
 	line "attack. Choose an Energy card from "
@@ -140,11 +140,11 @@ Text04a4: ; 4464d (11:464d)
 	line "one Energy card per turn."
 	done
 
-Text04a5: ; 44710 (11:4710)
+Text04a5:
 	text "Cards, Vol. 3: Trainer Cards"
 	done
 
-Text04a6: ; 4472e (11:472e)
+Text04a6:
 	text "Trainer cards are one-shot cards"
 	line "that can be used once and are "
 	line "then discarded. You can play as "
@@ -152,11 +152,11 @@ Text04a6: ; 4472e (11:472e)
 	line "during your turn."
 	done
 
-Text04a7: ; 447c2 (11:47c2)
+Text04a7:
 	text "Win or Loss of a Match, Vol. 1"
 	done
 
-Text04a8: ; 447e2 (11:47e2)
+Text04a8:
 	text "When a Pokémon loses all of "
 	line "its HP, the Pokémon is knocked out. "
 	line "Place it and all attached Energy "
@@ -169,22 +169,22 @@ Text04a8: ; 447e2 (11:47e2)
 	line "of your prizes, you win the game."
 	done
 
-Text04a9: ; 4490f (11:490f)
+Text04a9:
 	text "Win or Loss of a Match, Vol. 2"
 	done
 
-Text04aa: ; 4492f (11:492f)
+Text04aa:
 	text "You also win if your opponent's"
 	line "deck is out of cards at the start"
 	line "of your opponent's turn. Be "
 	line "careful not to run out of cards!"
 	done
 
-Text04ab: ; 449b0 (11:49b0)
+Text04ab:
 	text "Win or Loss of a Match, Vol. 3"
 	done
 
-Text04ac: ; 449d0 (11:49d0)
+Text04ac:
 	text "You also win if your opponent has"
 	line "no Pokémon left on the bench"
 	line "after you have knocked out his or"
@@ -192,11 +192,11 @@ Text04ac: ; 449d0 (11:49d0)
 	line "keep enough Pokémon on your bench."
 	done
 
-Text04ad: ; 44a75 (11:4a75)
+Text04ad:
 	text "Combos"
 	done
 
-Text04ae: ; 44a7d (11:4a7d)
+Text04ae:
 	text "You can create powerful combos by"
 	line "combining the abilities of 2 cards."
 	line "Pokémon Powers and Trainer Cards "
@@ -205,11 +205,11 @@ Text04ae: ; 44a7d (11:4a7d)
 	line "create your own powerful combos."
 	done
 
-Text04af: ; 44b48 (11:4b48)
+Text04af:
 	text "Energy Trans"
 	done
 
-Text04b0: ; 44b56 (11:4b56)
+Text04b0:
 	text "What if you place Exeggutor in the"
 	line "arena, but you don't have any Energy"
 	line "cards? In this case, use Venusaur's"
@@ -219,22 +219,22 @@ Text04b0: ; 44b56 (11:4b56)
 	line "give your opponent up to 160 damage."
 	done
 
-Text04b1: ; 44c4d (11:4c4d)
+Text04b1:
 	text "Toxic Gas"
 	done
 
-Text04b2: ; 44c58 (11:4c58)
+Text04b2:
 	text "Muk's Toxic Gas is very powerful!"
 	line "It can block all Pokémon Powers!"
 	line "But be careful because it also"
 	line "blocks your own Pokémon's Powers!"
 	done
 
-Text04b3: ; 44cdd (11:4cdd)
+Text04b3:
 	text "Rain Dance"
 	done
 
-Text04b4: ; 44ce9 (11:4ce9)
+Text04b4:
 	text "Blastoise's Pokémon Power, Rain "
 	line "Dance, is a great boon for your"
 	line "Water Pokémon! You can attach "
@@ -243,11 +243,11 @@ Text04b4: ; 44ce9 (11:4ce9)
 	line "Power up your Pokémon and attack!"
 	done
 
-Text04b5: ; 44dab (11:4dab)
+Text04b5:
 	text "Selfdestruct"
 	done
 
-Text04b6: ; 44db9 (11:4db9)
+Text04b6:
 	text "It's a good idea to use Defender"
 	line "when attacking with Selfdestruct."
 	line "That way, you'll be able to give"
@@ -256,11 +256,11 @@ Text04b6: ; 44db9 (11:4db9)
 	line "your Pokémon getting knocked out."
 	done
 
-Text04b7: ; 44e85 (11:4e85)
+Text04b7:
 	text "Damage Swap"
 	done
 
-Text04b8: ; 44e92 (11:4e92)
+Text04b8:
 	text "You can use Alakazam's Damage Swap"
 	line "to move damage counters off of a"
 	line "Pokémon that is almost knocked out,"
@@ -273,11 +273,11 @@ Text04b8: ; 44e92 (11:4e92)
 	line "will have lost all damage counters!"
 	done
 
-Text04b9: ; 44fe1 (11:4fe1)
+Text04b9:
 	text "Hyper Beam"
 	done
 
-Text04ba: ; 44fed (11:4fed)
+Text04ba:
 	text "Hyper Beam is extremely powerful!"
 	line "You can remove the Energy cards "
 	line "attached to your opponent's"
@@ -285,11 +285,11 @@ Text04ba: ; 44fed (11:4fed)
 	line "be able to Attack or Retreat!"
 	done
 
-Text04bb: ; 4508f (11:508f)
+Text04bb:
 	text "Prehistoric Power"
 	done
 
-Text04bc: ; 450a2 (11:50a2)
+Text04bc:
 	text "Use Aerodactyl's Prehistoric Power"
 	line "to block your opponent's Pokémon"
 	line "from evolving. Your own Pokémon "
@@ -300,11 +300,11 @@ Text04bc: ; 450a2 (11:50a2)
 	line "be able to evolve your Pokémon!"
 	done
 
-Text04bd: ; 451a1 (11:51a1)
+Text04bd:
 	text "Phantom Cards"
 	done
 
-Text04be: ; 451b0 (11:51b0)
+Text04be:
 	text "It is rumored that there is a"
 	line "Phantom Card that can only be "
 	line "gotten by using Card Pop!"
@@ -316,11 +316,11 @@ Text04be: ; 451b0 (11:51b0)
 	line "                        ISHIHARA"
 	done
 
-Text04bf: ; 452bb (11:52bb)
+Text04bf:
 	text "Weakness and Resistance"
 	done
 
-Text04c0: ; 452d4 (11:52d4)
+Text04c0:
 	text "If a Pokémon has a Weakness,"
 	line "it takes double damage when attacked"
 	line "by Pokémon of a certain type!"
@@ -336,22 +336,22 @@ Text04c0: ; 452d4 (11:52d4)
 	line "and Resistances of your Pokémon!"
 	done
 
-Text04c1: ; 45474 (11:5474)
+Text04c1:
 	text "Drawing Desired Cards"
 	done
 
-Text04c2: ; 4548b (11:548b)
+Text04c2:
 	text "The Trainer card, Computer Search,"
 	line "is useful when you want to draw a"
 	line "certain card! Item Finder and"
 	line "Poké Ball will also help!"
 	done
 
-Text04c3: ; 45509 (11:5509)
+Text04c3:
 	text "Retreating"
 	done
 
-Text04c4: ; 45515 (11:5515)
+Text04c4:
 	text "Retreating your Active Pokémon to"
 	line "the Bench is a good strategy in"
 	line "certain situations! Retreating a "
@@ -362,11 +362,11 @@ Text04c4: ; 45515 (11:5515)
 	line "your Pokémon won't get knocked out!"
 	done
 
-Text04c5: ; 45628 (11:5628)
+Text04c5:
 	text "Fighting Pokémon"
 	done
 
-Text04c6: ; 4563a (11:563a)
+Text04c6:
 	text "Fighting Pokémon Characteristics:"
 	line "Strong against Lightning Pokémon."
 	line "Weak against Psychic Pokémon."
@@ -374,11 +374,11 @@ Text04c6: ; 4563a (11:563a)
 	line "to Attack."
 	done
 
-Text04c7: ; 456c7 (11:56c7)
+Text04c7:
 	text "Fighting Pokémon and Combos"
 	done
 
-Text04c8: ; 456e4 (11:56e4)
+Text04c8:
 	text "It is difficult to create combos"
 	line "with a Fighting Pokémon, since"
 	line "not many Fighting Pokémon have "
@@ -386,11 +386,11 @@ Text04c8: ; 456e4 (11:56e4)
 	line "strong attacks make up for this."
 	done
 
-Text04c9: ; 45785 (11:5785)
+Text04c9:
 	text "Double Colorless Energy"
 	done
 
-Text04ca: ; 4579e (11:579e)
+Text04ca:
 	text "Double Colorless Energy is a"
 	line "very useful card. By using this "
 	line "single card, you are able to"
@@ -399,11 +399,11 @@ Text04ca: ; 4579e (11:579e)
 	line "energy is colorless."
 	done
 
-Text04cb: ; 45846 (11:5846)
+Text04cb:
 	text "Rock Pokémon"
 	done
 
-Text04cc: ; 45854 (11:5854)
+Text04cc:
 	text "Rock Pokémon Characteristics:"
 	line "Strong against Lightning Pokémon."
 	line "Weak against Grass Pokémon."
@@ -411,11 +411,11 @@ Text04cc: ; 45854 (11:5854)
 	line "to Attack."
 	done
 
-Text04cd: ; 458da (11:58da)
+Text04cd:
 	text "Winning with Fighting Pokémon"
 	done
 
-Text04ce: ; 458f9 (11:58f9)
+Text04ce:
 	text "Fighting Pokémon will have a hard"
 	line "time against Stage 2 Pokémon,"
 	line "as many Stage 2 Pokémon are"
@@ -424,11 +424,11 @@ Text04ce: ; 458f9 (11:58f9)
 	line "Pokémon before they evolve."
 	done
 
-Text04cf: ; 459b2 (11:59b2)
+Text04cf:
 	text "Basic Pokémon"
 	done
 
-Text04d0: ; 459c1 (11:59c1)
+Text04d0:
 	text "Basic Pokémon are a must in the"
 	line "Pokémon Trading Card Game!"
 	line "Basic Pokémon are the only Pokémon"
@@ -440,11 +440,11 @@ Text04d0: ; 459c1 (11:59c1)
 	line "Basic Pokémon in your deck!"
 	done
 
-Text04d1: ; 45ad5 (11:5ad5)
+Text04d1:
 	text "Water Pokémon"
 	done
 
-Text04d2: ; 45ae4 (11:5ae4)
+Text04d2:
 	text "Water Pokémon Characteristics:"
 	line "Strong against Fire Pokémon."
 	line "Weak against Lightning Pokémon."
@@ -453,11 +453,11 @@ Text04d2: ; 45ae4 (11:5ae4)
 	line "Energy cards to attack."
 	done
 
-Text04d3: ; 45b94 (11:5b94)
+Text04d3:
 	text "Water Pokémon Attacks"
 	done
 
-Text04d4: ; 45bab (11:5bab)
+Text04d4:
 	text "Water Gun and Hydro Pump are"
 	line "attacks which have variable damage."
 	line "The more Water Energy you attach,"
@@ -466,11 +466,11 @@ Text04d4: ; 45bab (11:5bab)
 	line "damage in this way."
 	done
 
-Text04d5: ; 45c65 (11:5c65)
+Text04d5:
 	text "Paralyze"
 	done
 
-Text04d6: ; 45c6f (11:5c6f)
+Text04d6:
 	text "When a Pokémon is paralyzed, it"
 	line "is unable to do anything."
 	line "It cannot retreat, attack or use"
@@ -482,11 +482,11 @@ Text04d6: ; 45c6f (11:5c6f)
 	line "Full Heal and Evolution cards."
 	done
 
-Text04d7: ; 45d8b (11:5d8b)
+Text04d7:
 	text "Lightning Pokémon"
 	done
 
-Text04d8: ; 45d9e (11:5d9e)
+Text04d8:
 	text "Lightning Pokémon Characteristics:"
 	line "Strong against Water Pokémon."
 	line "Weak against Fighting Pokémon."
@@ -494,11 +494,11 @@ Text04d8: ; 45d9e (11:5d9e)
 	line "to attack."
 	done
 
-Text04d9: ; 45e29 (11:5e29)
+Text04d9:
 	text "Energy Cards"
 	done
 
-Text04da: ; 45e37 (11:5e37)
+Text04da:
 	text "There are 6 Basic Energy cards:"
 	line "Grass, Fire, Water, Lightning,"
 	line "Fighting and Psychic!"
@@ -510,11 +510,11 @@ Text04da: ; 45e37 (11:5e37)
 	line "Double Colorless Energy cards."
 	done
 
-Text04db: ; 45f37 (11:5f37)
+Text04db:
 	text "Card Pop!"
 	done
 
-Text04dc: ; 45f42 (11:5f42)
+Text04dc:
 	text "When you and a friend Card Pop!,"
 	line "you will each receive a new card."
 	line "After you Pop! with a friend, you "
@@ -525,11 +525,11 @@ Text04dc: ; 45f42 (11:5f42)
 	line "friends to get different cards!"
 	done
 
-Text04dd: ; 46054 (11:6054)
+Text04dd:
 	text "Grass Pokémon"
 	done
 
-Text04de: ; 46063 (11:6063)
+Text04de:
 	text "Grass Pokémon Characteristics:"
 	line "Strong against Rock Pokémon."
 	line "Weak against Fire Pokémon."
@@ -538,11 +538,11 @@ Text04de: ; 46063 (11:6063)
 	line "Grass Energy cards to attack."
 	done
 
-Text04df: ; 46115 (11:6115)
+Text04df:
 	text "Poison"
 	done
 
-Text04e0: ; 4611d (11:611d)
+Text04e0:
 	text "When your Pokémon is poisoned, it"
 	line "will continue to lose HP."
 	line "The poisoned Pokémon will lose"
@@ -554,11 +554,11 @@ Text04e0: ; 4611d (11:611d)
 	line "are other ways of healing it."
 	done
 
-Text04e1: ; 46243 (11:6243)
+Text04e1:
 	text "Grass Pokémon & Pokémon Breeder"
 	done
 
-Text04e2: ; 46264 (11:6264)
+Text04e2:
 	text "Many Grass Pokémon are capable of"
 	line "evolving to Stage 2 Pokémon."
 	line "Use the Trainer Card, Pokémon"
@@ -567,11 +567,11 @@ Text04e2: ; 46264 (11:6264)
 	line "attacks early in the game."
 	done
 
-Text04e3: ; 46320 (11:6320)
+Text04e3:
 	text "Psychic Pokémon"
 	done
 
-Text04e4: ; 46331 (11:6331)
+Text04e4:
 	text "Psychic Pokémon Characteristics:"
 	line "Weak against Psychic Pokémon."
 	line "Some Colorless Pokémon are strong "
@@ -579,11 +579,11 @@ Text04e4: ; 46331 (11:6331)
 	line "Psychic Energy cards to attack."
 	done
 
-Text04e5: ; 463d5 (11:63d5)
+Text04e5:
 	text "Sleep"
 	done
 
-Text04e6: ; 463dc (11:63dc)
+Text04e6:
 	text "When a Pokémon is asleep,"
 	line "it is unable to do anything."
 	line "It cannot attack, retreat or use"
@@ -595,11 +595,11 @@ Text04e6: ; 463dc (11:63dc)
 	line "Use Full Heal to wake it up!"
 	done
 
-Text04e7: ; 464fe (11:64fe)
+Text04e7:
 	text "Pokémon Power"
 	done
 
-Text04e8: ; 4650d (11:650d)
+Text04e8:
 	text "Some Pokémon have special "
 	line "abilities called Pokémon Power."
 	line "They are very powerful abilities!"
@@ -610,11 +610,11 @@ Text04e8: ; 4650d (11:650d)
 	line "Powers, so check your cards!"
 	done
 
-Text04e9: ; 46611 (11:6611)
+Text04e9:
 	text "Science Club Pokémon"
 	done
 
-Text04ea: ; 46627 (11:6627)
+Text04ea:
 	text "Characteristics of Pokémon used"
 	line "in the Science Club:"
 	line "Strong against Rock Pokémon."
@@ -625,11 +625,11 @@ Text04ea: ; 46627 (11:6627)
 	line "to attack."
 	done
 
-Text04eb: ; 466f6 (11:66f6)
+Text04eb:
 	text "Confusion"
 	done
 
-Text04ec: ; 46701 (11:6701)
+Text04ec:
 	text "It's big trouble if your Pokémon"
 	line "gets Confused!"
 	line "When a Confused Pokémon tries to"
@@ -640,11 +640,11 @@ Text04ec: ; 46701 (11:6701)
 	line "for 20 damage!"
 	done
 
-Text04ed: ; 467dc (11:67dc)
+Text04ed:
 	text "Useful Buttons"
 	done
 
-Text04ee: ; 467ec (11:67ec)
+Text04ee:
 	text "While pressing the B Button,"
 	line "use the + Control Pad to view"
 	line "your own or your opponent's "
@@ -656,11 +656,11 @@ Text04ee: ; 467ec (11:67ec)
 	line "Remember these handy functions!"
 	done
 
-Text04ef: ; 468f9 (11:68f9)
+Text04ef:
 	text "Fire Pokémon"
 	done
 
-Text04f0: ; 46907 (11:6907)
+Text04f0:
 	text "Fire Pokémon Characteristics:"
 	line "Strong against Grass Pokémon."
 	line "Weak against Water Pokémon."
@@ -670,11 +670,11 @@ Text04f0: ; 46907 (11:6907)
 	line "to attack."
 	done
 
-Text04f1: ; 469bb (11:69bb)
+Text04f1:
 	text "Fire Pokémon Attacks"
 	done
 
-Text04f2: ; 469d1 (11:69d1)
+Text04f2:
 	text "Many Fire Pokémon attacks require"
 	line "that an Energy card be removed."
 	line "Be sure to include many Energy"
@@ -683,11 +683,11 @@ Text04f2: ; 469d1 (11:69d1)
 	line "Energy Retrieval in your deck."
 	done
 
-Text04f3: ; 46a95 (11:6a95)
+Text04f3:
 	text "Original Game Boy Cards"
 	done
 
-Text04f4: ; 46aae (11:6aae)
+Text04f4:
 	text "The Pokémon Trading Card Game"
 	line "for Game Boy includes many "
 	line "original cards, like the "
@@ -697,11 +697,11 @@ Text04f4: ; 46aae (11:6aae)
 	line "so go search them out!"
 	done
 
-Text04f5: ; 46b5d (11:6b5d)
+Text04f5:
 	text "Colorless Pokémon"
 	done
 
-Text04f6: ; 46b70 (11:6b70)
+Text04f6:
 	text "Colorless Pokémon are very easy"
 	line "to use. They can attack with "
 	line "any type of Energy card, so"
@@ -710,11 +710,11 @@ Text04f6: ; 46b70 (11:6b70)
 	line "Pokémon, so check them all out!"
 	done
 
-Text04f7: ; 46c2f (11:6c2f)
+Text04f7:
 	text "Dragon Pokémon"
 	done
 
-Text04f8: ; 46c3f (11:6c3f)
+Text04f8:
 	text "Colorless Dragon Pokémon cards"
 	line "have resistance to Psychic"
 	line "Pokémon and have no weaknesses."
@@ -723,11 +723,11 @@ Text04f8: ; 46c3f (11:6c3f)
 	line "worthy of the name ”dragon!”"
 	done
 
-Text04f9: ; 46cf5 (11:6cf5)
+Text04f9:
 	text "Bird Pokémon"
 	done
 
-Text04fa: ; 46d03 (11:6d03)
+Text04fa:
 	text "Colorless Bird Pokémon cards"
 	line "have resistance to Fighting"
 	line "Pokémon but are weak against"
@@ -737,11 +737,11 @@ Text04fa: ; 46d03 (11:6d03)
 	line "they are flying."
 	done
 
-Text04fb: ; 46dcb (11:6dcb)
+Text04fb:
 	text "Legendary Pokémon Cards, Vol. 1"
 	done
 
-Text04fc: ; 46dec (11:6dec)
+Text04fc:
 	text "The first of the Legendary Pokémon"
 	line "Cards is <Lv>37 Moltres. With"
 	line "Firegiver, you can place Fire"
@@ -751,11 +751,11 @@ Text04fc: ; 46dec (11:6dec)
 	line "Queen, owns this card!"
 	done
 
-Text04fd: ; 46ec2 (11:6ec2)
+Text04fd:
 	text "Legendary Pokémon Cards, Vol. 2"
 	done
 
-Text04fe: ; 46ee3 (11:6ee3)
+Text04fe:
 	text "The second Legendary Pokémon Card"
 	line "is <Lv>68 Zapdos. With Peal of"
 	line "Thunder, just putting this card on"
@@ -765,11 +765,11 @@ Text04fe: ; 46ee3 (11:6ee3)
 	line "Steve, owns this card!"
 	done
 
-Text04ff: ; 46fb8 (11:6fb8)
+Text04ff:
 	text "Legendary Pokémon Cards, Vol. 3"
 	done
 
-Text0500: ; 46fd9 (11:6fd9)
+Text0500:
 	text "The third Legendary Pokémon Card"
 	line "is <Lv>37 Articuno. Its Quickfreeze"
 	line "will paralyze opponents' Pokémon"
@@ -779,11 +779,11 @@ Text0500: ; 46fd9 (11:6fd9)
 	line "the Ice-man, owns this card!"
 	done
 
-Text0501: ; 470b3 (11:70b3)
+Text0501:
 	text "Legendary Pokémon Cards, Vol. 4"
 	done
 
-Text0502: ; 470d4 (11:70d4)
+Text0502:
 	text "The fourth Legendary Pokémon Card"
 	line "is <Lv>41 Dragonite. Its Healing"
 	line "Wind will heal damage done to "
@@ -793,11 +793,11 @@ Text0502: ; 470d4 (11:70d4)
 	line "owns this card!"
 	done
 
-Text0503: ; 471aa (11:71aa)
+Text0503:
 	text "The Grand Masters"
 	done
 
-Text0504: ; 471bd (11:71bd)
+Text0504:
 	text "Courtney, Steve, Jack and Rod -"
 	line "the 4 Grand Masters who defend"
 	line "the Legendary Pokémon Cards - "
@@ -805,11 +805,11 @@ Text0504: ; 471bd (11:71bd)
 	line "Pokémon Trading Card Game!"
 	done
 
-Text0505: ; 47256 (11:7256)
+Text0505:
 	text "Master Medals"
 	done
 
-Text0506: ; 47265 (11:7265)
+Text0506:
 	text "There are a total of 8 Master Medals"
 	line "owned by the Club Masters. It is "
 	line "said that the secret of their Club's"
@@ -818,11 +818,11 @@ Text0506: ; 47265 (11:7265)
 	line "a gift from the Grand Masters."
 	done
 
-Text0507: ; 47334 (11:7334)
+Text0507:
 	text "Plate of Legends"
 	done
 
-Text0508: ; 47346 (11:7346)
+Text0508:
 	text "”Those in search of the Legendary"
 	line " Pokémon Cards..."
 	line " Defeat the Masters of the 8 Clubs"
@@ -833,11 +833,11 @@ Text0508: ; 47346 (11:7346)
 	line " the Legendary Pokémon Cards.”"
 	done
 
-Text0509: ; 47430 (11:7430)
+Text0509:
 	text "Mysterious Voice"
 	done
 
-Text050a: ; 47442 (11:7442)
+Text050a:
 	text "Greetings! Welcome to the "
 	line "Challenge Hall! The Challenge Cup "
 	line "will begin soon. If you win the "
@@ -846,7 +846,7 @@ Text050a: ; 47442 (11:7442)
 	line "us for this competition."
 	done
 
-Text050b: ; 474fd (11:74fd)
+Text050b:
 	text "Greetings! Welcome to the "
 	line "Challenge Hall! This is where the"
 	line "the Challenge Cup is held. The "
@@ -855,7 +855,7 @@ Text050b: ; 474fd (11:74fd)
 	line "Challenge Hall often."
 	done
 
-Text050c: ; 475ab (11:75ab)
+Text050c:
 	text "Greetings! Welcome to the "
 	line "Challenge Hall! Defeat 3 "
 	line "opponents here, and you shall be "
@@ -863,67 +863,67 @@ Text050c: ; 475ab (11:75ab)
 	line "Please join in the competition!"
 	done
 
-Text050d: ; 47644 (11:7644)
+Text050d:
 	text "Most unfortunate, <RAMNAME>."
 	line "Once you enter, you won't be able"
 	line "to re-enter for some time. "
 	line "Please try again another day."
 	done
 
-Text050e: ; 476b6 (11:76b6)
+Text050e:
 	text "Congratulations, <RAMNAME>!"
 	line "You received a card!"
 	line "Please join us for the next "
 	line "Challenge Cup, too."
 	done
 
-Text050f: ; 47711 (11:7711)
+Text050f:
 	text "I won't lose to any"
 	line "whipper-snapper!"
 	line "I'm going to win this "
 	line "Challenge Cup!"
 	done
 
-Text0510: ; 4775d (11:775d)
+Text0510:
 	text "I work at the Challenge Cup"
 	line "as the HOST."
 	line "I can't wait to get up on stage!"
 	done
 
-Text0511: ; 477a8 (11:77a8)
+Text0511:
 	text "The time has come to see if all"
 	line "my training has paid off!"
 	line "I'm going to win the Challenge Cup"
 	line "and become a Grand Master!"
 	done
 
-Text0512: ; 47821 (11:7821)
+Text0512:
 	text "Hey now! It's the Challenge Cup!"
 	line "Hey now! Gonna give it a try!"
 	line "Hey now! Gonna beat 3 people!"
 	line "Hey now! Watch me win the prize!"
 	done
 
-Text0513: ; 478a0 (11:78a0)
+Text0513:
 	text "I'm good enough to compete in"
 	line "the Challenge Cup! Girls are just"
 	line "as good at the Pokémon Trading"
 	line "Card Game as boys!"
 	done
 
-Text0514: ; 47913 (11:7913)
+Text0514:
 	text "What's that? Oh! The Challenge "
 	line "Cup isn't being held right now."
 	line "Me? I'm waiting for the Challenge"
 	line "Cup to begin."
 	done
 
-Text0515: ; 47984 (11:7984)
+Text0515:
 	text "Hi, <RAMNAME>."
 	line "Are you competing, too?"
 	done
 
-Text0516: ; 479a4 (11:79a4)
+Text0516:
 	text "I'm the one who's going to"
 	line "defeat 3 opponents! The prize, "
 	line ""
@@ -932,12 +932,12 @@ Text0516: ; 479a4 (11:79a4)
 	line "See Ya! Ha ha ha ha ha ha!"
 	done
 
-Text0517: ; 47a3d (11:7a3d)
+Text0517:
 	text "Hey, it's <RAMNAME> - the loser"
 	line "of the Challenge Cup!"
 	done
 
-Text0518: ; 47a6c (11:7a6c)
+Text0518:
 	text "What? You're asking if I won?"
 	line "I lost to the third opponent!"
 	line "I just lost my concentration."
@@ -946,24 +946,24 @@ Text0518: ; 47a6c (11:7a6c)
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
-Text0519: ; 47b25 (11:7b25)
+Text0519:
 	text "Hey <RAMNAME>, too bad "
 	line "you're too late!"
 	done
 
-Text051a: ; 47b47 (11:7b47)
+Text051a:
 	text "The Challenge Cup is over! I"
 	line "defeated 3 opponents and won"
 	line "the prize - <Lv>60 Mewtwo!"
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
-Text051b: ; 47bb6 (11:7bb6)
+Text051b:
 	text "Hi, <RAMNAME>."
 	line "What are you doing here?"
 	done
 
-Text051c: ; 47bd7 (11:7bd7)
+Text051c:
 	text "The Challenge Cup is over! I"
 	line "defeated 3 opponents and won"
 	line "the prize - <Lv>60 Mewtwo!"
@@ -974,12 +974,12 @@ Text051c: ; 47bd7 (11:7bd7)
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
-Text051d: ; 47cb9 (11:7cb9)
+Text051d:
 	text "Hey, <RAMNAME>."
 	line "We meet again."
 	done
 
-Text051e: ; 47cd1 (11:7cd1)
+Text051e:
 	text "No matter who enters the Challenge"
 	line "Cup, I'll be the winner! "
 	line ""
@@ -989,12 +989,12 @@ Text051e: ; 47cd1 (11:7cd1)
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
-Text051f: ; 47d82 (11:7d82)
+Text051f:
 	text "Hey, it's <RAMNAME> - the"
 	line "loser of the Challenge Cup!"
 	done
 
-Text0520: ; 47db1 (11:7db1)
+Text0520:
 	text "That was a close one for me!"
 	line "I lost to the third opponent!"
 	line "But I'll win the next Challenge "
@@ -1002,12 +1002,12 @@ Text0520: ; 47db1 (11:7db1)
 	line "you! See ya! Ha ha ha ha ha!"
 	done
 
-Text0521: ; 47e4f (11:7e4f)
+Text0521:
 	text "Hey, isn't that <RAMNAME>?"
 	line "Late as always!"
 	done
 
-Text0522: ; 47e73 (11:7e73)
+Text0522:
 	text "The Challenge Cup is already"
 	line "over! What? Who won?"
 	line "Who do you expect!?! Me, of "
@@ -1016,7 +1016,7 @@ Text0522: ; 47e73 (11:7e73)
 	line "Ha ha ha ha ha ha!"
 	done
 
-Text0523: ; 47f08 (11:7f08)
+Text0523:
 	text "Hey, <RAMNAME>!"
 	line "What are you doing here?"
 	done

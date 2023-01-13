@@ -1,4 +1,4 @@
-Text0405: ; 40000 (10:4000)
+Text0405:
 	text "<RAMNAME>,"
 	line "It's me, Doctor Mason."
 	line "I have some information about"
@@ -13,14 +13,14 @@ Text0405: ; 40000 (10:4000)
 	line "Here's a Booster Pack for you!"
 	done
 
-Text0406: ; 4014a (10:414a)
+Text0406:
 	text "<RAMNAME>! Go defeat Gene,"
 	line "the Master of the Rock Club!"
 	line "Mason Laboratory"
 	line "      Doctor Mason  ;)"
 	done
 
-Text0407: ; 401a3 (10:41a3)
+Text0407:
 	text "<RAMNAME>,"
 	line "It's me, Doctor Mason."
 	line "I have some information for you"
@@ -40,14 +40,14 @@ Text0407: ; 401a3 (10:41a3)
 	line "Here's a Booster Pack for you."
 	done
 
-Text0408: ; 4033e (10:433e)
+Text0408:
 	text "<RAMNAME>!"
 	line "Keep at it, and don't give up!"
 	line "Mason Laboratory"
 	line "      Doctor Mason  ;)"
 	done
 
-Text0409: ; 40389 (10:4389)
+Text0409:
 	text "How's it going, <RAMNAME>?"
 	line "It's me, Doctor Mason."
 	line "I have some information for you"
@@ -69,14 +69,14 @@ Text0409: ; 40389 (10:4389)
 	line "Pokémon in this Booster Pack!"
 	done
 
-Text040a: ; 40598 (10:4598)
+Text040a:
 	text "Did you find the Pokémon you were"
 	line "looking for in the Booster Pack?"
 	line "Mason Laboratory"
 	line "      Doctor Mason  ;)"
 	done
 
-Text040b: ; 40604 (10:4604)
+Text040b:
 	text "It's me, Doctor Mason."
 	line "Have you won many Master Medals?"
 	line "I have some information for you "
@@ -94,14 +94,14 @@ Text040b: ; 40604 (10:4604)
 	line "Fire Pokémon."
 	done
 
-Text040c: ; 407b0 (10:47b0)
+Text040c:
 	text "Did it have a lot of Fire Pokémon"
 	line "(the weakness of Grass Pokémon)?"
 	line "Mason Laboratory"
 	line "      Dr. Mason  ;)"
 	done
 
-Text040d: ; 40819 (10:4819)
+Text040d:
 	text "Are you getting any closer to"
 	line "inheriting the Legendary Pokémon "
 	line "Cards? Murray of the Psychic Club -"
@@ -119,7 +119,7 @@ Text040d: ; 40819 (10:4819)
 	line "Here, take this!"
 	done
 
-Text040e: ; 409c6 (10:49c6)
+Text040e:
 	text "Fight to the end, "
 	text "<RAMNAME>,"
 	line "and don't give up!"
@@ -127,7 +127,7 @@ Text040e: ; 409c6 (10:49c6)
 	line "      Dr. Mason  ;)"
 	done
 
-Text040f: ; 40a15 (10:4a15)
+Text040f:
 	text "It's me, Dr. Mason."
 	line "How are you doing, <RAMNAME>?"
 	line "I have some information for you"
@@ -146,7 +146,7 @@ Text040f: ; 40a15 (10:4a15)
 	line "assistance..."
 	done
 
-Text0410: ; 40bea (10:4bea)
+Text0410:
 	text "Win all 8 Master Medals, "
 	line ""
 	text "<RAMNAME>!"
@@ -154,7 +154,7 @@ Text0410: ; 40bea (10:4bea)
 	line "      Dr. Mason  ;)"
 	done
 
-Text0411: ; 40c2e (10:4c2e)
+Text0411:
 	text "It's me, Dr. Mason."
 	line "Have you collected many cards?"
 	line "I have some information about"
@@ -173,7 +173,7 @@ Text0411: ; 40c2e (10:4c2e)
 	line "Booster Pack!"
 	done
 
-Text0412: ; 40dc1 (10:4dc1)
+Text0412:
 	text "Look closely at the cards "
 	line "you just received."
 	line "You should be able to come up"
@@ -182,7 +182,7 @@ Text0412: ; 40dc1 (10:4dc1)
 	line "      Dr. Mason  ;)"
 	done
 
-Text0413: ; 40e4c (10:4e4c)
+Text0413:
 	text "It's me, Dr. Mason."
 	line "It looks like you've won"
 	line "quite a few medals."
@@ -201,7 +201,7 @@ Text0413: ; 40e4c (10:4e4c)
 	line "you get 2 Booster Packs!"
 	done
 
-Text0414: ; 40fca (10:4fca)
+Text0414:
 	text "Did you try building your own deck?"
 	line "This time, I'll give you tips on"
 	line "the types and number of cards you"
@@ -226,7 +226,7 @@ Text0414: ; 40fca (10:4fca)
 	line "Packs again!"
 	done
 
-Text0415: ; 4123d (10:523d)
+Text0415:
 	text "<RAMNAME>,"
 	line "It's me, Dr. Mason."
 	line "You're finally going to be dueling"
@@ -247,7 +247,7 @@ Text0415: ; 4123d (10:523d)
 	line "Keep up the good work!"
 	done
 
-Text0416: ; 413f1 (10:53f1)
+Text0416:
 	text "<RAMNAME>,"
 	line "It's me, Dr. Mason!"
 	line "Grand Master Steve uses"
@@ -272,7 +272,7 @@ Text0416: ; 413f1 (10:53f1)
 	line "3 more to go!"
 	done
 
-Text0417: ; 415cf (10:55cf)
+Text0417:
 	text "It's me, Dr. Mason!"
 	line "2 more Grand Masters to go!"
 	line "Grand Master Jack uses"
@@ -291,7 +291,7 @@ Text0417: ; 415cf (10:55cf)
 	line "      Dr. Mason  ;)"
 	done
 
-Text0418: ; 4174c (10:574c)
+Text0418:
 	text "It's me, Dr. Mason!"
 	line "The final duel is here!"
 	line "I have some information on Rod,"
@@ -315,20 +315,20 @@ Text0418: ; 4174c (10:574c)
 	line "for you."
 	done
 
-Text0419: ; 41965 (10:5965)
+Text0419:
 	text "You have already received the"
 	line "attached Booster Pack."
 	done
 
-PokemonTradingCards101Text: ; 4199b (10:599b)
+PokemonTradingCards101Text:
 	text "”Pokémon Trading Cards 101”"
 	done
 
-PlaceholderMessageText: ; 419b8 (10:59b8)
+PlaceholderMessageText:
 	text "This message is not in yet!"
 	done
 
-Text041c: ; 419d5 (10:59d5)
+Text041c:
 	text "Hello!"
 	line "Welcome to the Water Club!"
 	line "This is a Club devoted to"
@@ -338,7 +338,7 @@ Text041c: ; 419d5 (10:59d5)
 	line "just to collect them."
 	done
 
-Gal1WantToTrade1Text: ; 41a74 (10:5a74)
+Gal1WantToTrade1Text:
 	text "We don't use Fire Pokémon cards"
 	line "here at the Water Club."
 	line "I have this rare Arcanine, but"
@@ -347,17 +347,17 @@ Gal1WantToTrade1Text: ; 41a74 (10:5a74)
 	line "mind trading it for my Arcanine?"
 	done
 
-Gal1WantToTrade2Text: ; 41b1d (10:5b1d)
+Gal1WantToTrade2Text:
 	text "Hi! We meet again!"
 	line "Have you decided to trade your"
 	line "Lapras for my rare Arcanine?"
 	done
 
-Gal1WouldYouLikeToTradeText: ; 41b6d (10:5b6d)
+Gal1WouldYouLikeToTradeText:
 	text "Would you like to trade?"
 	done
 
-Gal1DeclinedTradeText: ; 41b87 (10:5b87)
+Gal1DeclinedTradeText:
 	text "Aw, you're not going to"
 	line "trade with me?"
 	line "Well, that's too bad..."
@@ -365,13 +365,13 @@ Gal1DeclinedTradeText: ; 41b87 (10:5b87)
 	line "come look for me."
 	done
 
-Gal1DontOwnCardText: ; 41bf6 (10:5bf6)
+Gal1DontOwnCardText:
 	text "Hey! What are you trying to pull?"
 	line "You don't have a Lapras!?!"
 	line "Come see me when you get a Lapras."
 	done
 
-Gal1CardInDeckText: ; 41c57 (10:5c57)
+Gal1CardInDeckText:
 	text "OK! Let's trade your Lapras"
 	line "for my Arcanine..."
 	line "Oh! I see your Lapras"
@@ -382,30 +382,30 @@ Gal1CardInDeckText: ; 41c57 (10:5c57)
 	line ""
 	done
 
-Gal1LetsTradeText: ; 41cf7 (10:5cf7)
+Gal1LetsTradeText:
 	text "OK then, let's trade your"
 	line "Lapras for my Arcanine."
 	done
 
-Gal1TradeCompleteText: ; 41d2a (10:5d2a)
+Gal1TradeCompleteText:
 	text "<RAMNAME> traded a Lapras"
 	line "for an Arcanine!"
 	done
 
-Gal1ThanksText: ; 41d4e (10:5d4e)
+Gal1ThanksText:
 	text "Thanks, <RAMNAME>!"
 	line "I'll take good care"
 	line "of this Lapras."
 	done
 
-Gal1AfterTradeText: ; 41d7e (10:5d7e)
+Gal1AfterTradeText:
 	text "Hey! You're the one who"
 	line "gave me your Lapras!"
 	line "I'm taking good care of"
 	line "your Lapras."
 	done
 
-Text0427: ; 41dd1 (10:5dd1)
+Text0427:
 	text "Do you know Imakuni??"
 	line "He's a suspicious-looking guy"
 	line "dressed all in black!"
@@ -416,14 +416,14 @@ Text0427: ; 41dd1 (10:5dd1)
 	line "maybe you shouldn't go near him!"
 	done
 
-Text0428: ; 41ebd (10:5ebd)
+Text0428:
 	text "Look! That's Imakuni? over there!"
 	line "Doesn't he look strange?"
 	line "You'll find him even stranger"
 	line "when you talk to him."
 	done
 
-Text0429: ; 41f2d (10:5f2d)
+Text0429:
 	text "What a strange guy Imakuni? is!"
 	line "Have you found him yet?"
 	line "It's rumored that he has really"
@@ -432,104 +432,104 @@ Text0429: ; 41f2d (10:5f2d)
 	line "might want to duel him."
 	done
 
-Text042a: ; 41fc7 (10:5fc7)
+Text042a:
 	text "All Amy, the Master of this Club,"
 	line "does lately is sleep."
 	line "She's bored because she doesn't"
 	line "have anybody to duel."
 	done
 
-Text042b: ; 42036 (10:6036)
+Text042b:
 	text "Sara and Amanda of the"
 	line "Water Club are twins."
 	line "No wonder they look"
 	line "so much alike!"
 	done
 
-Text042c: ; 42087 (10:6087)
+Text042c:
 	text "It feels so good to swim"
 	line "in the pool!"
 	line "Do you want to take a swim?"
 	line "Or would you rather duel?"
 	done
 
-Text042d: ; 420e4 (10:60e4)
+Text042d:
 	text "Would you like to duel Sara?"
 	done
 
-Text042e: ; 42102 (10:6102)
+Text042e:
 	text "No?"
 	line "Then maybe I'll go for a dip."
 	done
 
-Text042f: ; 42125 (10:6125)
+Text042f:
 	text "There will be 2 Prizes."
 	line "The duel will be 1 match."
 	line "OK, let's start!"
 	done
 
-Text0430: ; 42169 (10:6169)
+Text0430:
 	text "Uh-oh! I guess I lost..."
 	line "Maybe I shouldn't have been"
 	line "swimming so much."
 	done
 
-Text0431: ; 421b1 (10:61b1)
+Text0431:
 	text "I guess I have to practice more"
 	line "to improve my Pokémon card game."
 	done
 
-Text0432: ; 421f3 (10:61f3)
+Text0432:
 	text "It might look like all I can"
 	line "do is swim, but I play a pretty"
 	line "mean game of Pokémon Trading Cards!"
 	line "Do you want to join the Water Club?"
 	done
 
-Text0433: ; 42279 (10:6279)
+Text0433:
 	text "Doesn't it feel good to relax"
 	line "by the pool?"
 	line "Isn't it wonderful to duel"
 	line "in a place like this?"
 	done
 
-Text0434: ; 422d6 (10:62d6)
+Text0434:
 	text "Would you like to duel Amanda?"
 	done
 
-Text0435: ; 422f6 (10:62f6)
+Text0435:
 	text "Why..."
 	line "How boring!"
 	done
 
-Text0436: ; 4230a (10:630a)
+Text0436:
 	text "OK, we'll play with 3 Prizes."
 	line "It'll be a 1-match duel!"
 	done
 
-Text0437: ; 42342 (10:6342)
+Text0437:
 	text "Oops, I lost!"
 	line "Now I'm in trouble!"
 	done
 
-Text0438: ; 42365 (10:6365)
+Text0438:
 	text "Losing kind of destroys the"
 	line "atmosphere of the place."
 	done
 
-Text0439: ; 4239b (10:639b)
+Text0439:
 	text "Winning in such nice surroundings"
 	line "makes it all the more pleasurable!"
 	done
 
-Text043a: ; 423e1 (10:63e1)
+Text043a:
 	text "Hey! Stop!"
 	line "This is a restricted area!"
 	line "Amy, the Club Master,"
 	line "is resting!"
 	done
 
-Text043b: ; 4242a (10:642a)
+Text043b:
 	text "The person resting over there"
 	line "is Amy, the Club Master."
 	line "If you wish to duel Amy,"
@@ -540,12 +540,12 @@ Text043b: ; 4242a (10:642a)
 	line "the Club Master!"
 	done
 
-Text043c: ; 42508 (10:6508)
+Text043c:
 	text "What?"
 	line "You defeated Sara and Amanda?"
 	done
 
-Text043d: ; 4252d (10:652d)
+Text043d:
 	text "You must be pretty good if you"
 	line "defeated Sara and Amanda..."
 	line "As promised, I'll test your skills."
@@ -553,15 +553,15 @@ Text043d: ; 4252d (10:652d)
 	line "to Amy..."
 	done
 
-Text043e: ; 425b8 (10:65b8)
+Text043e:
 	text "You wish to duel against me?"
 	done
 
-Text043f: ; 425d6 (10:65d6)
+Text043f:
 	text "Would you like to duel Joshua?"
 	done
 
-Text0440: ; 425f6 (10:65f6)
+Text0440:
 	text "You don't want to duel?"
 	line "Are you afraid you won't be able"
 	line "to defeat me?"
@@ -569,7 +569,7 @@ Text0440: ; 425f6 (10:65f6)
 	line "meet Amy is by going through me!"
 	done
 
-Text0441: ; 42680 (10:6680)
+Text0441:
 	text "You don't want to duel?"
 	line "Are you afraid you won't be able"
 	line "to defeat me?"
@@ -577,141 +577,141 @@ Text0441: ; 42680 (10:6680)
 	line "very good!"
 	done
 
-Text0442: ; 426f3 (10:66f3)
+Text0442:
 	text "OK, this will be a 1-match duel"
 	line "with 4 Prizes!"
 	done
 
-Text0443: ; 42723 (10:6723)
+Text0443:
 	text "How's that! I win!"
 	line "I'm sorry, but unless you defeat "
 	line "me, I can't let you meet Amy."
 	done
 
-Text0444: ; 42777 (10:6777)
+Text0444:
 	text "How's that! I win!"
 	line "Too bad for you, but I'm"
 	line "the second best player"
 	line "after Amy!"
 	done
 
-Text0445: ; 427c6 (10:67c6)
+Text0445:
 	text "What!?!"
 	line "How could I lose?"
 	done
 
-Text0446: ; 427e1 (10:67e1)
+Text0446:
 	text "What!?!"
 	line "How could I lose again?"
 	done
 
-Text0447: ; 42802 (10:6802)
+Text0447:
 	text "Well, since I promised..."
 	line "I'll introduce you to Amy."
 	done
 
-Text0448: ; 42838 (10:6838)
+Text0448:
 	text "How could this be?"
 	line "It must be luck!"
 	line "Yeah, that's what it was!"
 	done
 
-Text0449: ; 42877 (10:6877)
+Text0449:
 	text "Don't think you're that good"
 	line "just because you defeated me."
 	line "We still have Amy here"
 	line "at the Water Club."
 	done
 
-Text044a: ; 428dd (10:68dd)
+Text044a:
 	text "Amy!"
 	line "Please wake up!!"
 	done
 
-Text044b: ; 428f4 (10:68f4)
+Text044b:
 	text "Huh? What's going on?"
 	line "I was enjoying my little nap..."
 	done
 
-Text044c: ; 4292b (10:692b)
+Text044c:
 	text "Well, um..."
 	line "(psst, psst, psst)"
 	done
 
-Text044d: ; 4294b (10:694b)
+Text044d:
 	text "What? You lost?"
 	line "How could you!?!"
 	done
 
-Text044e: ; 4296d (10:696d)
+Text044e:
 	text "Was it <RAMNAME>?"
 	line "I will be your next opponent."
 	line "I, Amy, the Master of the "
 	line "Water Club!"
 	done
 
-Text044f: ; 429bd (10:69bd)
+Text044f:
 	text "Aren't you <RAMNAME>?"
 	line "So you decided you want to"
 	line "duel me?"
 	done
 
-Text0450: ; 429f0 (10:69f0)
+Text0450:
 	text "Would you like to duel Amy?"
 	done
 
-Text0451: ; 42a0d (10:6a0d)
+Text0451:
 	text "No? How boring!"
 	line "I was looking forward to"
 	line "a game of Pokémon Trading Cards."
 	line "Well, come see me again!"
 	done
 
-Text0452: ; 42a71 (10:6a71)
+Text0452:
 	text "OK! A 1-Match Duel with 6 Prizes!"
 	line "Let's do it!"
 	done
 
-Text0453: ; 42aa1 (10:6aa1)
+Text0453:
 	text "Oh, no! I lost!?!"
 	done
 
-Text0454: ; 42ab4 (10:6ab4)
+Text0454:
 	text "Well, since I lost, you can have"
 	line "this Water Medal."
 	line "This should get you a step closer"
 	line "to inheriting the Legendary Cards!"
 	done
 
-Text0455: ; 42b2d (10:6b2d)
+Text0455:
 	text "Here, you can also have these!"
 	line "They should come in handy!"
 	done
 
-Text0456: ; 42b68 (10:6b68)
+Text0456:
 	text "Come see me again! I'd like"
 	line "to duel you again sometime!"
 	done
 
-Text0457: ; 42ba1 (10:6ba1)
+Text0457:
 	text "Hah! I'm the best!"
 	line "Come see me again sometime! "
 	line "I'd like another duel!"
 	done
 
-Text0458: ; 42be9 (10:6be9)
+Text0458:
 	text "Hi, <RAMNAME>."
 	line "Nice to see you again!!!"
 	line "Did you come to play the"
 	line "Pokémon Trading Card Game?"
 	done
 
-Text0459: ; 42c3e (10:6c3e)
+Text0459:
 	text "OK, same rules as before!"
 	line "A 1-match duel with 6 Prizes!"
 	done
 
-Text045a: ; 42c77 (10:6c77)
+Text045a:
 	text "Hello."
 	line "Welcome to the Fighting Club!"
 	line "Here at this Club, we duel using"
@@ -721,7 +721,7 @@ Text045a: ; 42c77 (10:6c77)
 	line "in this Club."
 	done
 
-Text045b: ; 42d1e (10:6d1e)
+Text045b:
 	text "I see you play the Pokémon Trading"
 	line "Card Game. I'm not into dueling."
 	line "I prefer collecting the cards."
@@ -732,14 +732,14 @@ Text045b: ; 42d1e (10:6d1e)
 	line "How about it?"
 	done
 
-Text045c: ; 42df7 (10:6df7)
+Text045c:
 	text "Hi! It's you!"
 	line "What's up?"
 	line "Did you decide to give me"
 	line "your <RAMTEXT>?"
 	done
 
-Text045d: ; 42e33 (10:6e33)
+Text045d:
 	text "Hi! I see you're playing with"
 	line "the cards again."
 	line "By the way, I'm looking for"
@@ -748,17 +748,17 @@ Text045d: ; 42e33 (10:6e33)
 	line "would you mind giving it to me?"
 	done
 
-Text045e: ; 42ece (10:6ece)
+Text045e:
 	text "Give away your <RAMTEXT>?"
 	done
 
-Text045f: ; 42ee1 (10:6ee1)
+Text045f:
 	text "OK. I understand."
 	line "But if you should change your "
 	line "mind, please come see me."
 	done
 
-Text0460: ; 42f2d (10:6f2d)
+Text0460:
 	text "But you don't have <RAMTEXT>!"
 	line "I appreciate your generosity, but "
 	line "you can't give me what you don't "
@@ -766,7 +766,7 @@ Text0460: ; 42f2d (10:6f2d)
 	line "you get <RAMTEXT>."
 	done
 
-Text0461: ; 42fb3 (10:6fb3)
+Text0461:
 	text "You're going to give it to me?"
 	line "Thank you!"
 	line "But your <RAMTEXT>"
@@ -775,7 +775,7 @@ Text0461: ; 42fb3 (10:6fb3)
 	line "playing with!"
 	done
 
-Text0462: ; 43028 (10:7028)
+Text0462:
 	text "You're going to give it to me?"
 	line "I'll put it in my collection"
 	line "right away."
@@ -783,7 +783,7 @@ Text0462: ; 43028 (10:7028)
 	line "Thank you! Thank you!!!"
 	done
 
-Text0463: ; 430ab (10:70ab)
+Text0463:
 	text "Since you've been so kind and given"
 	line "me so many cards,"
 	line "please accept this card as a gift"
@@ -792,26 +792,26 @@ Text0463: ; 430ab (10:70ab)
 	line "Please take good care of it!"
 	done
 
-Text0464: ; 43146 (10:7146)
+Text0464:
 	text "Thank you for being so kind and"
 	line "giving me all these cards!"
 	done
 
-Text0465: ; 43182 (10:7182)
+Text0465:
 	text "Hi!"
 	line "Thanks for being so kind!"
 	line "I'm taking good care"
 	line "of all the cards you gave me!"
 	done
 
-Text0466: ; 431d4 (10:71d4)
+Text0466:
 	text "Hi!"
 	line "Is the card I gave you"
 	line "coming in handy?"
 	line "Thanks again for being so kind!"
 	done
 
-Text0467: ; 43221 (10:7221)
+Text0467:
 	text "Huh? W..Who are you?"
 	line "Who? Me? You don't know who I am?"
 	line "I am the super musical star,"
@@ -829,56 +829,56 @@ Text0467: ; 43221 (10:7221)
 	line "OK, but if I win, you dance!"
 	done
 
-Text0468: ; 43325 (10:7325)
+Text0468:
 	text "What? You're still here?"
 	line "OK, sit over there."
 	line "What? You're already sitting?"
 	line "OK, OK! Then let's get started!"
 	done
 
-Text0469: ; 43391 (10:7391)
+Text0469:
 	text "Would you like to duel Imakuni??"
 	done
 
-Text046a: ; 433b3 (10:73b3)
+Text046a:
 	text "Come on, don't be cruel!"
 	line "You're going to make me cry!"
 	done
 
-Text046b: ; 433ea (10:73ea)
+Text046b:
 	text "OK, a 1-match duel with 6 Prizes!"
 	line "...Whatever that means..."
 	done
 
-Text046c: ; 43427 (10:7427)
+Text046c:
 	text "Hey! You're pretty good!"
 	line "I'll give you this Booster Pack,"
 	line "so don't tell anyone I lost, OK?"
 	done
 
-Text046d: ; 43483 (10:7483)
+Text046d:
 	text "You won 3 times against me!"
 	line "Does that make you happy? Does it?"
 	done
 
-Text046e: ; 434c3 (10:74c3)
+Text046e:
 	text "I can't believe I lost 6 times!"
 	line "...Seriously!"
 	done
 
-Text046f: ; 434f2 (10:74f2)
+Text046f:
 	text "I don't really want to give you "
 	line "this, but here. Take care of it."
 	done
 
-Text0470: ; 43535 (10:7535)
+Text0470:
 	text "In both Cards and Dance,"
 	line "soul and rhythm are the secret."
 	line "Hey, that sounds pretty cool!"
 	line "Maybe I'll become a poet!"
 	done
 
-Text0471: ; 435a7 (10:75a7)
+Text0471:
 	text "Hmm...I win."
 	line "You weren't too bad, but since "
 	line "I won...Let's see you shake it!"
@@ -891,37 +891,37 @@ Text0471: ; 435a7 (10:75a7)
 	line "... You dance weird!"
 	done
 
-Text0472: ; 4364c (10:764c)
+Text0472:
 	text "I was just saying which "
 	line "Grand Master is the best."
 	line "I think Steve is the best player."
 	done
 
-Text0473: ; 436a2 (10:76a2)
+Text0473:
 	text "I can't believe Steve the Grand"
 	line "Master could lose!"
 	line "Who could have defeated Steve?"
 	done
 
-Text0474: ; 436f5 (10:76f5)
+Text0474:
 	text "The best player among the Grand"
 	line "Masters is Rod, since he's the"
 	line "leader of the Grand Masters."
 	done
 
-Text0475: ; 43752 (10:7752)
+Text0475:
 	text "I can't believe Rod, the leader of"
 	line "the Grand Masters, was defeated!?!"
 	line "Could this mean the Legendary"
 	line "Pokémon Cards have been passed on?"
 	done
 
-Text0476: ; 437da (10:77da)
+Text0476:
 	text "If I were just a few years younger,"
 	line "I'd be dueling with you kids, too."
 	done
 
-Text0477: ; 43822 (10:7822)
+Text0477:
 	text "I am Mitch, Master of the"
 	line "Fighting Club!"
 	line "I have to warn you that you will"
@@ -934,7 +934,7 @@ Text0477: ; 43822 (10:7822)
 	line "3 of my pupils!"
 	done
 
-Text0478: ; 43918 (10:7918)
+Text0478:
 	text "If you wish to duel me, you "
 	line "must defeat my pupils first!"
 	line "My pupils are training at the"
@@ -943,7 +943,7 @@ Text0478: ; 43918 (10:7918)
 	line "3 of my pupils!"
 	done
 
-Text0479: ; 439af (10:79af)
+Text0479:
 	text "So, you've defeated 1 of my pupils."
 	line "You must be a pretty good player."
 	line "But you're not good enough!"
@@ -951,14 +951,14 @@ Text0479: ; 439af (10:79af)
 	line "must defeat my 2 remaining pupils!"
 	done
 
-Text047a: ; 43a51 (10:7a51)
+Text047a:
 	text "So, you've defeated 2 of my pupils!"
 	line "You are pretty good."
 	line "But there's still the last one..."
 	line "Can you defeat my last pupil?"
 	done
 
-Text047b: ; 43acb (10:7acb)
+Text047b:
 	text "So, you have defeated"
 	line "all of my pupils!"
 	line "Let's see if you have "
@@ -967,23 +967,23 @@ Text047b: ; 43acb (10:7acb)
 	line "OK! Are you ready?"
 	done
 
-Text047c: ; 43b54 (10:7b54)
+Text047c:
 	text "Would you like to Duel Mitch?"
 	done
 
-Text047d: ; 43b73 (10:7b73)
+Text047d:
 	text "What?"
 	line "Are you getting cold feet?"
 	line "Come see me again when you"
 	line "finally work up enough nerves!"
 	done
 
-Text047e: ; 43bcf (10:7bcf)
+Text047e:
 	text "Come on! Show me what you've got!"
 	line "We'll play with 6 Prizes!"
 	done
 
-Text047f: ; 43c0c (10:7c0c)
+Text047f:
 	text "Wonderful! Great Match!"
 	line "You're very good."
 	line "Here, take this."
@@ -992,54 +992,54 @@ Text047f: ; 43c0c (10:7c0c)
 	line "of this Club encrypted in it."
 	done
 
-Text0480: ; 43ca3 (10:7ca3)
+Text0480:
 	text "Here, take this, too. It's a"
 	line "LABORATORY Booster Pack."
 	done
 
-Text0481: ; 43cda (10:7cda)
+Text0481:
 	text "I hope to duel someone "
 	line "like you again someday!"
 	done
 
-Text0482: ; 43d0b (10:7d0b)
+Text0482:
 	text "You may have been able to defeat"
 	line "my pupils, but you still are not"
 	line "experienced enough to defeat me!"
 	line "Come back after you've trained more!"
 	done
 
-Text0483: ; 43d94 (10:7d94)
+Text0483:
 	text "You wish to duel the"
 	line "Fighting Club Master again?"
 	done
 
-Text0484: ; 43dc6 (10:7dc6)
+Text0484:
 	text "Oh, OK."
 	line "I'd like to duel again, though."
 	done
 
-Text0485: ; 43def (10:7def)
+Text0485:
 	text "As before, we'll play with 6 Prizes."
 	line "Come show me what you've got!"
 	done
 
-Text0486: ; 43e33 (10:7e33)
+Text0486:
 	text "Another utter defeat!"
 	line "Here, take this!"
 	done
 
-Text0487: ; 43e5b (10:7e5b)
+Text0487:
 	text "I'd like to duel someone "
 	line "like you again!"
 	done
 
-Text0488: ; 43e86 (10:7e86)
+Text0488:
 	text "You must train harder!"
 	line "I'll be waiting!"
 	done
 
-Text0489: ; 43eaf (10:7eaf)
+Text0489:
 	text "I lost to you before at the Rock"
 	line "Club, but not this time!"
 	line "I'm going to train to become"
@@ -1048,14 +1048,14 @@ Text0489: ; 43eaf (10:7eaf)
 	line "again, I must defeat you first!"
 	done
 
-Text048a: ; 43f61 (10:7f61)
+Text048a:
 	text "I'm going to train to become"
 	line "an even better player!"
 	line "But before I can start my training"
 	line "again, I must defeat you first!"
 	done
 
-Text048b: ; 43fd9 (10:7fd9)
+Text048b:
 	text "Would you like to duel Chris?"
 	done
 

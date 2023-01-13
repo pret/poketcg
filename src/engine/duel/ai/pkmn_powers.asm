@@ -144,7 +144,7 @@ HandleAIEnergyTrans:
 ; checks if the Arena card needs energy for its second attack,
 ; and if it does, return carry if transferring Grass energy from Bench
 ; would be enough to use it. Outputs number of energy cards needed in a.
-.CheckEnoughGrassEnergyCardsForAttack ; 22246 (8:6246)
+.CheckEnoughGrassEnergyCardsForAttack
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
@@ -203,7 +203,7 @@ HandleAIEnergyTrans:
 
 ; outputs in a the number of Grass energy cards
 ; currently attached to Bench cards.
-.CountGrassEnergyInBench ; 22286 (8:6286)
+.CountGrassEnergyInBench
 	lb de, 0, 0
 .count_loop
 	ld a, DUELVARS_CARD_LOCATIONS
@@ -233,7 +233,7 @@ HandleAIEnergyTrans:
 ; returns carry if there are enough Grass energy cards in Bench
 ; to satisfy the retreat cost of the Arena card.
 ; if so, output the number of energy cards still needed in a.
-.CheckEnoughGrassEnergyCardsForRetreatCost ; 222a9 (8:62a9)
+.CheckEnoughGrassEnergyCardsForRetreatCost
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
@@ -529,7 +529,7 @@ HandleAIHeal:
 ; cannot KO it after Heal is used.
 ; returns carry if target was found and outputs
 ; in a the Play Area location of that card.
-.CheckHealTarget ; 22422 (8:6422)
+.CheckHealTarget
 ; check if Arena card has any damage counters,
 ; if not, check Bench instead.
 	ld e, PLAY_AREA_ARENA
@@ -666,7 +666,7 @@ HandleAIShift:
 
 ; returns carry if turn Duelist has a Pokemon
 ; with same color as wAIDefendingPokemonWeakness.
-.CheckWhetherTurnDuelistHasColor ; 224c6 (8:64c6)
+.CheckWhetherTurnDuelistHasColor
 	ld a, [wAIDefendingPokemonWeakness]
 	ld b, a
 	ld a, DUELVARS_ARENA_CARD
@@ -1000,7 +1000,7 @@ HandleAICowardice:
 ; return carry if Pkmn Power was used.
 ; input:
 ;	c = Play Area location (PLAY_AREA_*) of Tentacool.
-.CheckWhetherToUseCowardice ; 22671 (8:6671)
+.CheckWhetherToUseCowardice
 	ld a, c
 	ldh [hTemp_ffa0], a
 	ld e, a
@@ -1140,7 +1140,7 @@ HandleAIDamageSwap:
 
 ; looks for a target in the bench to receive damage counters.
 ; returns carry if one is found, and outputs remaining HP in a.
-.CheckForDamageSwapTargetInBench ; 2273c (8:673c)
+.CheckForDamageSwapTargetInBench
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld b, a

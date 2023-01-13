@@ -1,14 +1,14 @@
-HorseaDescription: ; 5c000 (17:4000)
+HorseaDescription:
 	text "Known to shoot down flying bugs with"
 	line "precision blasts of ink from the"
 	line "surface of the water."
 	done
 
-SeadraName: ; 5c05d (17:405d)
+SeadraName:
 	text "Seadra"
 	done
 
-SeadrasWaterGunDescription: ; 5c065 (17:4065)
+SeadrasWaterGunDescription:
 	text "Does 20 damage plus 10 more damage"
 	line "for each <WATER> Energy attached to"
 	line "Seadra but not used to pay for this"
@@ -16,148 +16,148 @@ SeadrasWaterGunDescription: ; 5c065 (17:4065)
 	line "more than 20 damage in this way."
 	done
 
-SeadrasAgilityDescription: ; 5c111 (17:4111)
+SeadrasAgilityDescription:
 	text "Flip a coin. If heads, during your"
 	line "opponent's next turn, prevent all "
 	line "effects of attacks, including"
 	line "damage, done to Seadra."
 	done
 
-SeadraDescription: ; 5c18e (17:418e)
+SeadraDescription:
 	text "Capable of swimming backward by"
 	line "rapidly flapping its wing-like"
 	line "pectoral fins and stout tail."
 	done
 
-GoldeenName: ; 5c1ec (17:41ec)
+GoldeenName:
 	text "Goldeen"
 	done
 
-HornAttackName: ; 5c1f5 (17:41f5)
+HornAttackName:
 	text "Horn Attack"
 	done
 
-GoldfishName: ; 5c202 (17:4202)
+GoldfishName:
 	text "Goldfish"
 	done
 
-GoldeenDescription: ; 5c20c (17:420c)
+GoldeenDescription:
 	text "Its tail fin billows like an elegant"
 	line "ballroom dress, giving it the"
 	line "nickname ”Water Queen.”"
 	done
 
-SeakingName: ; 5c268 (17:4268)
+SeakingName:
 	text "Seaking"
 	done
 
-WaterfallName: ; 5c271 (17:4271)
+WaterfallName:
 	text "Waterfall"
 	done
 
-SeakingDescription: ; 5c27c (17:427c)
+SeakingDescription:
 	text "In the autumn spawning season, they"
 	line "can be seen swimming powerfully up"
 	line "rivers and creeks."
 	done
 
-StaryuName: ; 5c2d7 (17:42d7)
+StaryuName:
 	text "Staryu"
 	done
 
-SlapName: ; 5c2df (17:42df)
+SlapName:
 	text "Slap"
 	done
 
-StarshapeName: ; 5c2e5 (17:42e5)
+StarshapeName:
 	text "Starshape"
 	done
 
-StaryuDescription: ; 5c2f0 (17:42f0)
+StaryuDescription:
 	text "An enigmatic Pokémon that can"
 	line "effortlessly regenerate any"
 	line "appendage it loses in battle."
 	done
 
-StarmieName: ; 5c349 (17:4349)
+StarmieName:
 	text "Starmie"
 	done
 
-RecoverName: ; 5c352 (17:4352)
+RecoverName:
 	text "Recover"
 	done
 
-StarmiesRecoverDescription: ; 5c35b (17:435b)
+StarmiesRecoverDescription:
 	text "Discard 1 <WATER> Energy card attached to"
 	line "Starmie in order to use this attack."
 	line "Remove all damage counters from"
 	line "Starmie."
 	done
 
-StarFreezeName: ; 5c3cf (17:43cf)
+StarFreezeName:
 	text "Star Freeze"
 	done
 
-MysteriousName: ; 5c3dc (17:43dc)
+MysteriousName:
 	text "Mysterious"
 	done
 
-StarmieDescription: ; 5c3e8 (17:43e8)
+StarmieDescription:
 	text "Its central core glows with the"
 	line "seven colors of the rainbow. Some"
 	line "people value this core as a gem."
 	done
 
-MagikarpName: ; 5c44c (17:444c)
+MagikarpName:
 	text "Magikarp"
 	done
 
-TackleName: ; 5c456 (17:4456)
+TackleName:
 	text "Tackle"
 	done
 
-MagikarpsFlailDescription: ; 5c45e (17:445e)
+MagikarpsFlailDescription:
 	text "Does 10 damage times the number of"
 	line "damage counters on Magikarp."
 	done
 
-FishName: ; 5c49f (17:449f)
+FishName:
 	text "Fish"
 	done
 
-MagikarpDescription: ; 5c4a5 (17:44a5)
+MagikarpDescription:
 	text "In the distant past, it was stronger"
 	line "than its horribly weak descendants"
 	line "that exist today."
 	done
 
-GyaradosName: ; 5c500 (17:4500)
+GyaradosName:
 	text "Gyarados"
 	done
 
-DragonRageName: ; 5c50a (17:450a)
+DragonRageName:
 	text "Dragon Rage"
 	done
 
-BubblebeamName: ; 5c517 (17:4517)
+BubblebeamName:
 	text "Bubblebeam"
 	done
 
-AtrociousName: ; 5c523 (17:4523)
+AtrociousName:
 	text "Atrocious"
 	done
 
-GyaradosDescription: ; 5c52e (17:452e)
+GyaradosDescription:
 	text "Rarely seen in the wild. Huge and"
 	line "vicious, it is capable of destroying"
 	line "entire cities in a rage."
 	done
 
-LaprasName: ; 5c58f (17:458f)
+LaprasName:
 	text "Lapras"
 	done
 
-LaprasWaterGunDescription: ; 5c597 (17:4597)
+LaprasWaterGunDescription:
 	text "Does 10 damage plus 10 more damage"
 	line "for each <WATER> Energy attached to"
 	line "Lapras but not used to pay for this"
@@ -165,41 +165,41 @@ LaprasWaterGunDescription: ; 5c597 (17:4597)
 	line "more than 20 damage in this way."
 	done
 
-TransportName: ; 5c643 (17:4643)
+TransportName:
 	text "Transport"
 	done
 
-LaprasDescription: ; 5c64e (17:464e)
+LaprasDescription:
 	text "A Pokémon that has been overhunted"
 	line "almost to extinction. It can ferry"
 	line "people across water."
 	done
 
-VaporeonName: ; 5c6aa (17:46aa)
+VaporeonName:
 	text "Vaporeon"
 	done
 
-FocusEnergyName: ; 5c6b4 (17:46b4)
+FocusEnergyName:
 	text "Focus Energy"
 	done
 
-FocusEnergyDescription: ; 5c6c2 (17:46c2)
+FocusEnergyDescription:
 	text "During your next turn, Vaporeon's"
 	line "Bite attack's base damage is"
 	line "doubled."
 	done
 
-BubbleJetName: ; 5c70b (17:470b)
+BubbleJetName:
 	text "Bubble Jet"
 	done
 
-VaporeonLv29Description: ; 5c717 (17:4717)
+VaporeonLv29Description:
 	text "Its cell structure is similar to"
 	line "water molecules. It will melt away"
 	line "and become invisible in water."
 	done
 
-VaporeonsWaterGunDescription: ; 5c77b (17:477b)
+VaporeonsWaterGunDescription:
 	text "Does 30 damage plus 10 more damage"
 	line "for each <WATER> Energy attached to"
 	line "Vaporeon but not used to pay for"
@@ -207,32 +207,32 @@ VaporeonsWaterGunDescription: ; 5c77b (17:477b)
 	line "add more than 20 damage in this way."
 	done
 
-VaporeonLv42Description: ; 5c829 (17:4829)
+VaporeonLv42Description:
 	text "Lives close to water. Its long tail"
 	line "is ridged with a fin that is often"
 	line "mistaken for a mermaid's."
 	done
 
-OmanyteName: ; 5c88b (17:488b)
+OmanyteName:
 	text "Omanyte"
 	done
 
-MysteriousFossilName: ; 5c894 (17:4894)
+MysteriousFossilName:
 	text "Mysterious Fossil"
 	done
 
-ClairvoyanceName: ; 5c8a7 (17:48a7)
+ClairvoyanceName:
 	text "Clairvoyance"
 	done
 
-ClairvoyanceDescription: ; 5c8b5 (17:48b5)
+ClairvoyanceDescription:
 	text "Your opponent plays with his or her"
 	line "hand face up. This power stops"
 	line "working while Omanyte is Asleep,"
 	line "Confused, or Paralyzed."
 	done
 
-OmanytesWaterGunDescription: ; 5c932 (17:4932)
+OmanytesWaterGunDescription:
 	text "Does 10 damage plus 10 more damage"
 	line "for each <WATER> Energy attached to"
 	line "Omanyte but not used to pay for this"
@@ -240,21 +240,21 @@ OmanytesWaterGunDescription: ; 5c932 (17:4932)
 	line "more than 20 damage in this way."
 	done
 
-SpiralName: ; 5c9df (17:49df)
+SpiralName:
 	text "Spiral"
 	done
 
-OmanyteDescription: ; 5c9e7 (17:49e7)
+OmanyteDescription:
 	text "Although long extinct, in rare"
 	line "cases, it can be genetically"
 	line "resurrected from fossils."
 	done
 
-OmastarName: ; 5ca3e (17:4a3e)
+OmastarName:
 	text "Omastar"
 	done
 
-OmastarsWaterGunDescription: ; 5ca47 (17:4a47)
+OmastarsWaterGunDescription:
 	text "Does 20 damage plus 10 more damage"
 	line "for each <WATER> Energy attached to"
 	line "Omastar but not used to pay for this"
@@ -262,25 +262,25 @@ OmastarsWaterGunDescription: ; 5ca47 (17:4a47)
 	line "more than 20 damage in this way."
 	done
 
-OmastarDescription: ; 5caf4 (17:4af4)
+OmastarDescription:
 	text "A prehistoric Pokémon that died out"
 	line "when its heavy shell made it"
 	line "impossible for it to catch prey."
 	done
 
-ArticunoName: ; 5cb57 (17:4b57)
+ArticunoName:
 	text "Articuno"
 	done
 
-FreezeDryName: ; 5cb61 (17:4b61)
+FreezeDryName:
 	text "Freeze Dry"
 	done
 
-BlizzardName: ; 5cb6d (17:4b6d)
+BlizzardName:
 	text "Blizzard"
 	done
 
-BlizzardDescription: ; 5cb77 (17:4b77)
+BlizzardDescription:
 	text "Flip a coin. If heads, this attack"
 	line "does 10 damage to each of your"
 	line "opponent's Benched Pokémon."
@@ -290,32 +290,32 @@ BlizzardDescription: ; 5cb77 (17:4b77)
 	line "for Benched Pokémon.)"
 	done
 
-FreezeName: ; 5cc5b (17:4c5b)
+FreezeName:
 	text "Freeze"
 	done
 
-ArticunoLv35Description: ; 5cc63 (17:4c63)
+ArticunoLv35Description:
 	text "A legendary bird Pokémon that is"
 	line "said to appear to doomed people who"
 	line "are lost in icy mountains."
 	done
 
-QuickfreezeName: ; 5ccc4 (17:4cc4)
+QuickfreezeName:
 	text "Quickfreeze"
 	done
 
-QuickfreezeDescription: ; 5ccd1 (17:4cd1)
+QuickfreezeDescription:
 	text "When you put Articuno into play"
 	line "during your turn (not during"
 	line "set-up), flip a coin. If heads, the"
 	line "Defending Pokémon is now Paralyzed."
 	done
 
-IceBreathName: ; 5cd57 (17:4d57)
+IceBreathName:
 	text "Ice Breath"
 	done
 
-IceBreathDescription: ; 5cd63 (17:4d63)
+IceBreathDescription:
 	text "Does 40 damage to 1 of your"
 	line "opponent's Pokémon chosen at random."
 	line "Don't apply Weakness and Resistance"
@@ -325,44 +325,44 @@ IceBreathDescription: ; 5cd63 (17:4d63)
 	line "happen.)"
 	done
 
-ArticunoLv37Description: ; 5ce35 (17:4e35)
+ArticunoLv37Description:
 	text "A legendary bird Pokémon. It freezes"
 	line "water that is contained in winter"
 	line "air and makes it snow."
 	done
 
-PikachuName: ; 5ce94 (17:4e94)
+PikachuName:
 	text "Pikachu"
 	done
 
-GnawName: ; 5ce9d (17:4e9d)
+GnawName:
 	text "Gnaw"
 	done
 
-ThunderJoltName: ; 5cea3 (17:4ea3)
+ThunderJoltName:
 	text "Thunder Jolt"
 	done
 
-ThunderJoltDescription: ; 5ceb1 (17:4eb1)
+ThunderJoltDescription:
 	text "Flip a coin. If tails, Pikachu does"
 	line "10 damage to itself."
 	done
 
-MouseName: ; 5ceeb (17:4eeb)
+MouseName:
 	text "Mouse"
 	done
 
-PikachuLv12Description: ; 5cef2 (17:4ef2)
+PikachuLv12Description:
 	text "When several of these Pokémon"
 	line "gather, their electricity can cause"
 	line "lightning storms."
 	done
 
-SparkName: ; 5cf47 (17:4f47)
+SparkName:
 	text "Spark"
 	done
 
-SparkDescription: ; 5cf4e (17:4f4e)
+SparkDescription:
 	text "If your opponent has any Benched"
 	line "Pokémon, choose 1 of them and this"
 	line "attack does 10 damage to it. (Don't"
@@ -370,17 +370,17 @@ SparkDescription: ; 5cf4e (17:4f4e)
 	line "Benched Pokémon.)"
 	done
 
-PikachuLv14Description: ; 5cfeb (17:4feb)
+PikachuLv14Description:
 	text "When several of these Pokémon"
 	line "gather, their electricity can build"
 	line "and cause lightning storms."
 	done
 
-GrowlName: ; 5d04a (17:504a)
+GrowlName:
 	text "Growl"
 	done
 
-GrowlDescription: ; 5d051 (17:5051)
+GrowlDescription:
 	text "If the Defending Pokémon attacks"
 	line "Pikachu during your opponent's next"
 	line "turn, any damage done by the attack"
@@ -390,25 +390,25 @@ GrowlDescription: ; 5d051 (17:5051)
 	line "ends this effect.)"
 	done
 
-ThundershockName: ; 5d12f (17:512f)
+ThundershockName:
 	text "Thundershock"
 	done
 
-PikachuLv16Description: ; 5d13d (17:513d)
+PikachuLv16Description:
 	text "When several of these Pokémon"
 	line "gather, their electricity could"
 	line "build and cause lightning storms."
 	done
 
-FlyingPikachuName: ; 5d19e (17:519e)
+FlyingPikachuName:
 	text "Flying Pikachu"
 	done
 
-FlyName: ; 5d1ae (17:51ae)
+FlyName:
 	text "Fly"
 	done
 
-FlyDescription: ; 5d1b3 (17:51b3)
+FlyDescription:
 	text "Flip a coin. If heads, during your"
 	line "opponent's next turn, prevent all"
 	line "effects of attacks, including"
@@ -417,57 +417,57 @@ FlyDescription: ; 5d1b3 (17:51b3)
 	line "(not even damage)."
 	done
 
-FlyingPikachuDescription: ; 5d26f (17:526f)
+FlyingPikachuDescription:
 	text "By learning how to fly, Pikachu"
 	line "overcame its weakness to Fighting"
 	line "Pokémon."
 	done
 
-SurfingPikachuName: ; 5d2bb (17:52bb)
+SurfingPikachuName:
 	text "Surfing Pikachu"
 	done
 
-SurfName: ; 5d2cc (17:52cc)
+SurfName:
 	text "Surf"
 	done
 
-SurfingPikachuDescription: ; 5d2d2 (17:52d2)
+SurfingPikachuDescription:
 	text "One summer, a group of Pikachu"
 	line "was found riding the waves at the"
 	line "local beach."
 	done
 
-RaichuName: ; 5d321 (17:5321)
+RaichuName:
 	text "Raichu"
 	done
 
-RaichusAgilityDescription: ; 5d329 (17:5329)
+RaichusAgilityDescription:
 	text "Flip a coin. If heads, during your"
 	line "opponent's next turn, prevent all"
 	line "effects of attacks, including"
 	line "damage, done to Raichu."
 	done
 
-ThunderName: ; 5d3a5 (17:53a5)
+ThunderName:
 	text "Thunder"
 	done
 
-RaichusThunderDescription: ; 5d3ae (17:53ae)
+RaichusThunderDescription:
 	text "Flip a coin. If tails, Raichu does"
 	line "30 damage to itself."
 	done
 
-RaichuLv40Description: ; 5d3e7 (17:53e7)
+RaichuLv40Description:
 	text "Its long tail serves as a ground to"
 	line "protect itself from its own"
 	line "high-voltage power."
 	done
 
-GigashockName: ; 5d43c (17:543c)
+GigashockName:
 	text "Gigashock"
 	done
 
-GigashockDescription: ; 5d447 (17:5447)
+GigashockDescription:
 	text "Choose 3 of your opponent's Benched"
 	line "Pokémon and this attack does 10"
 	line "damage to each of them. (Don't apply"
@@ -477,21 +477,21 @@ GigashockDescription: ; 5d447 (17:5447)
 	line "damage to each of them."
 	done
 
-RaichuLv45Description: ; 5d531 (17:5531)
+RaichuLv45Description:
 	text "Its long tail serves as a ground to"
 	line "protect itself from its own high"
 	line "voltage power."
 	done
 
-MagnemiteName: ; 5d586 (17:5586)
+MagnemiteName:
 	text "Magnemite"
 	done
 
-ThunderWaveName: ; 5d591 (17:5591)
+ThunderWaveName:
 	text "Thunder Wave"
 	done
 
-MagnemitesSelfdestructDescription: ; 5d59f (17:559f)
+MagnemitesSelfdestructDescription:
 	text "Does 10 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
@@ -499,37 +499,37 @@ MagnemitesSelfdestructDescription: ; 5d59f (17:559f)
 	line "to itself."
 	done
 
-MagnetName: ; 5d636 (17:5636)
+MagnetName:
 	text "Magnet"
 	done
 
-MagnemiteLv13Description: ; 5d63e (17:563e)
+MagnemiteLv13Description:
 	text "Uses anti-gravity to stay suspended."
 	line "Appears without warning and uses"
 	line "attacks like Thunder Wave."
 	done
 
-MagneticStormName: ; 5d6a0 (17:56a0)
+MagneticStormName:
 	text "Magnetic Storm"
 	done
 
-MagneticStormDescription: ; 5d6b0 (17:56b0)
+MagneticStormDescription:
 	text "Remove all Energy cards attached to"
 	line "all of your Pokémon, then randomly"
 	line "reattach each of them."
 	done
 
-MagnemiteLv15Description: ; 5d70f (17:570f)
+MagnemiteLv15Description:
 	text "It is born with the ability to defy"
 	line "gravity. Floats in air on powerful"
 	line "electromagnetic waves."
 	done
 
-MagnetonName: ; 5d76e (17:576e)
+MagnetonName:
 	text "Magneton"
 	done
 
-MagnetonLv28sSelfdestructDescription: ; 5d778 (17:5778)
+MagnetonLv28sSelfdestructDescription:
 	text "Does 20 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
@@ -537,17 +537,17 @@ MagnetonLv28sSelfdestructDescription: ; 5d778 (17:5778)
 	line "Magneton does 80 damage to itself."
 	done
 
-MagnetonLv28Description: ; 5d80e (17:580e)
+MagnetonLv28Description:
 	text "Formed by several Magnemites linked"
 	line "together. It frequently appears when"
 	line "sunspots flare up."
 	done
 
-SonicboomName: ; 5d86b (17:586b)
+SonicboomName:
 	text "Sonicboom"
 	done
 
-SonicboomDescription: ; 5d876 (17:5876)
+SonicboomDescription:
 	text "Don't apply Weakness and Resistance"
 	line "for this attack. (Any other effects"
 	line "that would happen after applying"
@@ -555,7 +555,7 @@ SonicboomDescription: ; 5d876 (17:5876)
 	line "happen.)"
 	done
 
-MagnetonLv35sSelfdestructDescription: ; 5d907 (17:5907)
+MagnetonLv35sSelfdestructDescription:
 	text "Does 20 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
@@ -563,52 +563,52 @@ MagnetonLv35sSelfdestructDescription: ; 5d907 (17:5907)
 	line "to itself."
 	done
 
-MagnetonLv35Description: ; 5d99e (17:599e)
+MagnetonLv35Description:
 	text "Formed by several Magnemites linked"
 	line "together. They frequently appear"
 	line "when sunspots flare up."
 	done
 
-VoltorbName: ; 5d9fc (17:59fc)
+VoltorbName:
 	text "Voltorb"
 	done
 
-BallName: ; 5da05 (17:5a05)
+BallName:
 	text "Ball"
 	done
 
-VoltorbDescription: ; 5da0b (17:5a0b)
+VoltorbDescription:
 	text "Usually found in power plants."
 	line "Easily mistaken for a Poke Ball, it"
 	line "has zapped many people."
 	done
 
-ElectrodeName: ; 5da67 (17:5a67)
+ElectrodeName:
 	text "Electrode"
 	done
 
-EnergySpikeName: ; 5da72 (17:5a72)
+EnergySpikeName:
 	text "Energy Spike"
 	done
 
-EnergySpikeDescription: ; 5da80 (17:5a80)
+EnergySpikeDescription:
 	text "Search your deck for a basic Energy"
 	line "card and attach it to 1 of your"
 	line "Pokémon. Shuffle your deck"
 	line "afterward."
 	done
 
-ElectrodeLv35Description: ; 5daeb (17:5aeb)
+ElectrodeLv35Description:
 	text "Stores electrical energy inside its"
 	line "body. Even the slightest shock could"
 	line "trigger a huge explosion."
 	done
 
-ChainLightningName: ; 5db4f (17:5b4f)
+ChainLightningName:
 	text "Chain Lightning"
 	done
 
-ChainLightningDescription: ; 5db60 (17:5b60)
+ChainLightningDescription:
 	text "If the Defending Pokémon isn't"
 	line "Colorless, this attack does 10"
 	line "damage to each Benched Pokémon of"
@@ -616,22 +616,22 @@ ChainLightningDescription: ; 5db60 (17:5b60)
 	line "Pokémon (including your own)."
 	done
 
-ElectrodeLv42Description: ; 5dbfe (17:5bfe)
+ElectrodeLv42Description:
 	text "It stores electrical energy under"
 	line "very high pressure. It often"
 	line "explodes with little or no"
 	line "provocation."
 	done
 
-ElectabuzzName: ; 5dc66 (17:5c66)
+ElectabuzzName:
 	text "Electabuzz"
 	done
 
-LightScreenName: ; 5dc72 (17:5c72)
+LightScreenName:
 	text "Light Screen"
 	done
 
-LightScreenDescription: ; 5dc80 (17:5c80)
+LightScreenDescription:
 	text "Whenever an attack does damage to"
 	line "Electabuzz (after applying Weakness"
 	line "and Resistance) during your"
@@ -641,33 +641,33 @@ LightScreenDescription: ; 5dc80 (17:5c80)
 	line "nearest 10)."
 	done
 
-LightScreenDescriptionCont: ; 5dd4f (17:5d4f)
+LightScreenDescriptionCont:
 	text "(Any other effects of attacks still"
 	line "happen.)"
 	done
 
-ElectabuzzsQuickAttackDescription: ; 5dd7d (17:5d7d)
+ElectabuzzsQuickAttackDescription:
 	text "Flip a coin. If heads, this attack"
 	line "does 10 damage plus 20 more damage; "
 	line "if tails, this attack does"
 	line "10 damage."
 	done
 
-ElectricName: ; 5ddec (17:5dec)
+ElectricName:
 	text "Electric"
 	done
 
-ElectabuzzLv20Description: ; 5ddf6 (17:5df6)
+ElectabuzzLv20Description:
 	text "A wild Pokémon with a short temper."
 	line "It is able to distinguish colors"
 	line "and likes the color red."
 	done
 
-ThunderpunchName: ; 5de55 (17:5e55)
+ThunderpunchName:
 	text "Thunderpunch"
 	done
 
-ThunderpunchDescription: ; 5de63 (17:5e63)
+ThunderpunchDescription:
 	text "Flip a coin. If heads, this attack"
 	line "does 30 damage plus 10 more damage;"
 	line "if tails, this attack does 30 damage"
@@ -675,59 +675,59 @@ ThunderpunchDescription: ; 5de63 (17:5e63)
 	line "itself."
 	done
 
-ElectabuzzLv35Description: ; 5def9 (17:5ef9)
+ElectabuzzLv35Description:
 	text "Normally found near power plants,"
 	line "it can wander away and cause major"
 	line "blackouts in cities."
 	done
 
-JolteonName: ; 5df54 (17:5f54)
+JolteonName:
 	text "Jolteon"
 	done
 
-DoubleAttackX20Description: ; 5df5d (17:5f5d)
+DoubleAttackX20Description:
 	text "Flip 2 coins. This attack does 20"
 	line "damage times the number of heads."
 	done
 
-StunNeedleName: ; 5dfa2 (17:5fa2)
+StunNeedleName:
 	text "Stun Needle"
 	done
 
-LightningName: ; 5dfaf (17:5faf)
+LightningName:
 	text "Lightning"
 	done
 
-JolteonLv24Description: ; 5dfba (17:5fba)
+JolteonLv24Description:
 	text "A sensitive Pokémon that easily"
 	line "becomes sad or angry. Every time"
 	line "its mood changes, it charges power."
 	done
 
-PinMissileName: ; 5e020 (17:6020)
+PinMissileName:
 	text "Pin Missile"
 	done
 
-QuadrupleAttackX20Description: ; 5e02d (17:602d)
+QuadrupleAttackX20Description:
 	text "Flip 4 coins. This attack does 20"
 	line "damage times the number of heads."
 	done
 
-JolteonLv29Description: ; 5e072 (17:6072)
+JolteonLv29Description:
 	text "It accumulates negative ions from"
 	line "the atmosphere to blast out 10,000-"
 	line "volt lightning bolts."
 	done
 
-ZapdosName: ; 5e0cf (17:60cf)
+ZapdosName:
 	text "Zapdos"
 	done
 
-ThunderstormName: ; 5e0d7 (17:60d7)
+ThunderstormName:
 	text "Thunderstorm"
 	done
 
-ThunderstormDescription: ; 5e0e5 (17:60e5)
+ThunderstormDescription:
 	text "For each of your opponent's Benched"
 	line "Pokémon, flip a coin. If heads,"
 	line "this attack does 20 damage to that"
@@ -737,38 +737,38 @@ ThunderstormDescription: ; 5e0e5 (17:60e5)
 	line "the number of tails to itself."
 	done
 
-ZapdosLv40Description: ; 5e1d2 (17:61d2)
+ZapdosLv40Description:
 	text "A legendary thunderbird Pokémon"
 	line "whose anger is said to cause storms."
 	line "Some say it has lived above the"
 	line "clouds for thousands of years."
 	done
 
-ZapdosThunderDescription: ; 5e257 (17:6257)
+ZapdosThunderDescription:
 	text "Flip a coin. If tails, Zapdos does"
 	line "30 damage to itself."
 	done
 
-ThunderboltName: ; 5e290 (17:6290)
+ThunderboltName:
 	text "Thunderbolt"
 	done
 
-ThunderboltDescription: ; 5e29d (17:629d)
+ThunderboltDescription:
 	text "Discard all Energy cards attached to"
 	line "Zapdos in order to use this attack."
 	done
 
-ZapdosLv64Description: ; 5e2e7 (17:62e7)
+ZapdosLv64Description:
 	text "A legendary bird Pokémon said to"
 	line "appear from clouds while wielding"
 	line "enormous lightning bolts."
 	done
 
-PealOfThunderName: ; 5e345 (17:6345)
+PealOfThunderName:
 	text "Peal of Thunder"
 	done
 
-PealOfThunderDescription: ; 5e356 (17:6356)
+PealOfThunderDescription:
 	text "When you put Zapdos into play during"
 	line "your turn (not during set-up), do"
 	line "30 damage to a Pokémon other than"
@@ -776,11 +776,11 @@ PealOfThunderDescription: ; 5e356 (17:6356)
 	line "apply Weakness and Resistance.)"
 	done
 
-BigThunderName: ; 5e400 (17:6400)
+BigThunderName:
 	text "Big Thunder"
 	done
 
-BigThunderDescription: ; 5e40d (17:640d)
+BigThunderDescription:
 	text "Choose a Pokémon other than Zapdos"
 	line "at random. This attack does 70"
 	line "damage to that Pokémon. Don't apply"
@@ -790,93 +790,93 @@ BigThunderDescription: ; 5e40d (17:640d)
 	line "and Resistance still happen.)"
 	done
 
-ZapdosLv68Description: ; 5e4f8 (17:64f8)
+ZapdosLv68Description:
 	text "This legendary bird Pokémon is said"
 	line "to appear when the sky turns dark"
 	line "and lightning showers down."
 	done
 
-SandshrewName: ; 5e55b (17:655b)
+SandshrewName:
 	text "Sandshrew"
 	done
 
-SandAttackName: ; 5e566 (17:6566)
+SandAttackName:
 	text "Sand-attack"
 	done
 
-SandshrewDescription: ; 5e573 (17:6573)
+SandshrewDescription:
 	text "Burrows deep underground in arid"
 	line "locations far from water. It only"
 	line "emerges to hunt for food."
 	done
 
-SandslashName: ; 5e5d1 (17:65d1)
+SandslashName:
 	text "Sandslash"
 	done
 
-TripleAttackX20Description: ; 5e5dc (17:65dc)
+TripleAttackX20Description:
 	text "Flip 3 coins. This attack does 20"
 	line "damage times the number of heads."
 	done
 
-SandslashDescription: ; 5e621 (17:6621)
+SandslashDescription:
 	text "Curls up into a spiny ball when"
 	line "threatened. It can roll while curled"
 	line "up to attack or escape."
 	done
 
-DiglettName: ; 5e67f (17:667f)
+DiglettName:
 	text "Diglett"
 	done
 
-DigName: ; 5e688 (17:6688)
+DigName:
 	text "Dig"
 	done
 
-MudSlapName: ; 5e68d (17:668d)
+MudSlapName:
 	text "Mud Slap"
 	done
 
-MoleName: ; 5e697 (17:6697)
+MoleName:
 	text "Mole"
 	done
 
-DiglettDescription: ; 5e69d (17:669d)
+DiglettDescription:
 	text "Lives about three feet underground,"
 	line "where it feeds on plant roots. It"
 	line "sometimes appears above ground."
 	done
 
-DugtrioName: ; 5e704 (17:6704)
+DugtrioName:
 	text "Dugtrio"
 	done
 
-EarthquakeName: ; 5e70d (17:670d)
+EarthquakeName:
 	text "Earthquake"
 	done
 
-EarthquakeDescription: ; 5e719 (17:6719)
+EarthquakeDescription:
 	text "Does 10 damage to each of your own"
 	line "Benched Pokémon. (Don't apply"
 	line "Weakness and Resistance for Benched"
 	line "Pokémon.)"
 	done
 
-DugtrioDescription: ; 5e789 (17:6789)
+DugtrioDescription:
 	text "A team of Diglett triplets."
 	line "It triggers huge earthquakes by"
 	line "burrowing 60 miles underground."
 	done
 
-MankeyName: ; 5e7e6 (17:67e6)
+MankeyName:
 	text "Mankey"
 	done
 
-PeekName: ; 5e7ee (17:67ee)
+PeekName:
 	text "Peek"
 	done
 
-PeekDescription: ; 5e7f4 (17:67f4)
+PeekDescription:
 	text "Once during your turn (before your"
 	line "attack), you may look at one of the"
 	line "following: the top card of either"
@@ -885,95 +885,95 @@ PeekDescription: ; 5e7f4 (17:67f4)
 	line "either player's Prizes."
 	done
 
-PeekDescriptionCont: ; 5e8b8 (17:68b8)
+PeekDescriptionCont:
 	text "This power can't be used if Mankey"
 	line "is Asleep, Confused, or Paralyzed."
 	done
 
-PigMonkeyName: ; 5e8ff (17:68ff)
+PigMonkeyName:
 	text "Pig Monkey"
 	done
 
-MankeyDescription: ; 5e90b (17:690b)
+MankeyDescription:
 	text "Extremely quick to anger. It could"
 	line "be docile one moment, then thrashing"
 	line "away the next."
 	done
 
-PrimeapeName: ; 5e963 (17:6963)
+PrimeapeName:
 	text "Primeape"
 	done
 
-TantrumName: ; 5e96d (17:696d)
+TantrumName:
 	text "Tantrum"
 	done
 
-TantrumDescription: ; 5e976 (17:6976)
+TantrumDescription:
 	text "Flip a coin. If tails, Primeape is"
 	line "now Confused (after doing damage)."
 	done
 
-PrimeapeDescription: ; 5e9bd (17:69bd)
+PrimeapeDescription:
 	text "Always furious and tenacious to"
 	line "boot. It will not abandon chasing"
 	line "its quarry until its quarry is"
 	line "caught."
 	done
 
-MachopName: ; 5ea27 (17:6a27)
+MachopName:
 	text "Machop"
 	done
 
-LowKickName: ; 5ea2f (17:6a2f)
+LowKickName:
 	text "Low Kick"
 	done
 
-SuperpowerName: ; 5ea39 (17:6a39)
+SuperpowerName:
 	text "Superpower"
 	done
 
-MachopDescription: ; 5ea45 (17:6a45)
+MachopDescription:
 	text "Loves to build its muscles. It"
 	line "trains in all styles of martial arts"
 	line "to become even stronger."
 	done
 
-MachokeName: ; 5eaa3 (17:6aa3)
+MachokeName:
 	text "Machoke"
 	done
 
-KarateChopName: ; 5eaac (17:6aac)
+KarateChopName:
 	text "Karate Chop"
 	done
 
-KarateChopDescription: ; 5eab9 (17:6ab9)
+KarateChopDescription:
 	text "Does 50 damage minus 10 damage for"
 	line "each damage counter on Machoke."
 	done
 
-SubmissionName: ; 5eafd (17:6afd)
+SubmissionName:
 	text "Submission"
 	done
 
-SubmissionDescription: ; 5eb09 (17:6b09)
+SubmissionDescription:
 	text "Machoke does 20 damage to itself."
 	done
 
-MachokeDescription: ; 5eb2c (17:6b2c)
+MachokeDescription:
 	text "Its muscular body is so powerful"
 	line "that it must wear a power-save belt"
 	line "to help regulate its motions."
 	done
 
-MachampName: ; 5eb90 (17:6b90)
+MachampName:
 	text "Machamp"
 	done
 
-StrikesBackName: ; 5eb99 (17:6b99)
+StrikesBackName:
 	text "Strikes Back"
 	done
 
-StrikesBackDescription: ; 5eba7 (17:6ba7)
+StrikesBackDescription:
 	text "Whenever your opponent's attack"
 	line "damages Machamp (even if Machamp is"
 	line "Knocked Out), this power does 10"
@@ -982,56 +982,56 @@ StrikesBackDescription: ; 5eba7 (17:6ba7)
 	line "Resistance.) "
 	done
 
-StrikesBackDescriptionCont: ; 5ec56 (17:6c56)
+StrikesBackDescriptionCont:
 	text "This power can't be used if Machamp"
 	line "is already Asleep, Confused, or"
 	line "Paralyzed when your opponent"
 	line "attacks."
 	done
 
-SeismicTossName: ; 5ecc1 (17:6cc1)
+SeismicTossName:
 	text "Seismic Toss"
 	done
 
-MachampDescription: ; 5eccf (17:6ccf)
+MachampDescription:
 	text "Using its amazing muscles, it throws"
 	line "powerful punches that can knock its"
 	line "victim clear over the horizon."
 	done
 
-GeodudeName: ; 5ed38 (17:6d38)
+GeodudeName:
 	text "Geodude"
 	done
 
-StoneBarrageName: ; 5ed41 (17:6d41)
+StoneBarrageName:
 	text "Stone Barrage"
 	done
 
-StoneBarrageDescription: ; 5ed50 (17:6d50)
+StoneBarrageDescription:
 	text "Flip a coin until you get tails."
 	line "This attack does 10 damage times"
 	line "the number of heads."
 	done
 
-RockName: ; 5eda8 (17:6da8)
+RockName:
 	text "Rock"
 	done
 
-GeodudeDescription: ; 5edae (17:6dae)
+GeodudeDescription:
 	text "Found in fields and mountains."
 	line "Mistaking them for boulders, people"
 	line "often step or trip on them."
 	done
 
-GravelerName: ; 5ee0e (17:6e0e)
+GravelerName:
 	text "Graveler"
 	done
 
-HardenName: ; 5ee18 (17:6e18)
+HardenName:
 	text "Harden"
 	done
 
-GravelersHardenDescription: ; 5ee20 (17:6e20)
+GravelersHardenDescription:
 	text "During your opponent's next turn,"
 	line "whenever 30 or less damage is done"
 	line "to Graveler (after applying"
@@ -1040,25 +1040,25 @@ GravelersHardenDescription: ; 5ee20 (17:6e20)
 	line "attacks still happen.)"
 	done
 
-RockThrowName: ; 5eede (17:6ede)
+RockThrowName:
 	text "Rock Throw"
 	done
 
-GravelerDescription: ; 5eeea (17:6eea)
+GravelerDescription:
 	text "Rolls down slopes to move. It rolls"
 	line "over any obstacle without slowing"
 	line "or changing its direction."
 	done
 
-GolemName: ; 5ef4c (17:6f4c)
+GolemName:
 	text "Golem"
 	done
 
-AvalancheName: ; 5ef53 (17:6f53)
+AvalancheName:
 	text "Avalanche"
 	done
 
-GolemsSelfdestructDescription: ; 5ef5e (17:6f5e)
+GolemsSelfdestructDescription:
 	text "Does 20 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
@@ -1066,21 +1066,21 @@ GolemsSelfdestructDescription: ; 5ef5e (17:6f5e)
 	line "itself."
 	done
 
-MegatonName: ; 5eff2 (17:6ff2)
+MegatonName:
 	text "Megaton"
 	done
 
-GolemDescription: ; 5effb (17:6ffb)
+GolemDescription:
 	text "Its boulder-like body is extremely"
 	line "hard. It can easily withstand"
 	line "dynamite blasts without damage."
 	done
 
-OnixName: ; 5f05d (17:705d)
+OnixName:
 	text "Onix"
 	done
 
-OnixsHardenDescription: ; 5f063 (17:7063)
+OnixsHardenDescription:
 	text "During your opponent's next turn,"
 	line "whenever 30 or less damage is done"
 	line "to Onix (after applying Weakness and"
@@ -1089,25 +1089,25 @@ OnixsHardenDescription: ; 5f063 (17:7063)
 	line "happen.)"
 	done
 
-RockSnakeName: ; 5f11d (17:711d)
+RockSnakeName:
 	text "Rock Snake"
 	done
 
-OnixDescription: ; 5f129 (17:7129)
+OnixDescription:
 	text "As it grows, the stone portions of"
 	line "its body harden to become similar"
 	line "to a diamond, though colored black."
 	done
 
-CuboneName: ; 5f193 (17:7193)
+CuboneName:
 	text "Cubone"
 	done
 
-SnivelName: ; 5f19b (17:719b)
+SnivelName:
 	text "Snivel"
 	done
 
-SnivelDescription: ; 5f1a3 (17:71a3)
+SnivelDescription:
 	text "If the Defending Pokémon attacks"
 	line "Cubone during your opponent's next"
 	line "turn, any damage done by the attack"
@@ -1117,34 +1117,34 @@ SnivelDescription: ; 5f1a3 (17:71a3)
 	line "effect.)"
 	done
 
-CubonesRageDescription: ; 5f27f (17:727f)
+CubonesRageDescription:
 	text "Does 10 damage plus 10 more damage"
 	line "for each damage counter on Cubone."
 	done
 
-LonelyName: ; 5f2c6 (17:72c6)
+LonelyName:
 	text "Lonely"
 	done
 
-CuboneDescription: ; 5f2ce (17:72ce)
+CuboneDescription:
 	text "Because it never removes its skull"
 	line "helmet, no one has ever seen this"
 	line "Pokémon's real face."
 	done
 
-MarowakName: ; 5f329 (17:7329)
+MarowakName:
 	text "Marowak"
 	done
 
-BonemerangName: ; 5f332 (17:7332)
+BonemerangName:
 	text "Bonemerang"
 	done
 
-CallforFriendName: ; 5f33e (17:733e)
+CallforFriendName:
 	text "Call for Friend"
 	done
 
-CallforFriendDescription: ; 5f34f (17:734f)
+CallforFriendDescription:
 	text "Search your deck for a <FIGHTING> Basic"
 	line "Pokémon card and put it onto your"
 	line "Bench. Shuffle your deck afterward."
@@ -1152,31 +1152,31 @@ CallforFriendDescription: ; 5f34f (17:734f)
 	line "Bench is full.)"
 	done
 
-BonekeeperName: ; 5f3e9 (17:73e9)
+BonekeeperName:
 	text "Bonekeeper"
 	done
 
-MarowakLv26Description: ; 5f3f5 (17:73f5)
+MarowakLv26Description:
 	text "The bone it holds is its key weapon."
 	line "It throws the bone skillfully like"
 	line "a boomerang to K.O. targets."
 	done
 
-BoneAttackName: ; 5f45b (17:745b)
+BoneAttackName:
 	text "Bone Attack"
 	done
 
-BoneAttackDescription: ; 5f468 (17:7468)
+BoneAttackDescription:
 	text "Flip a coin. If heads, the Defending"
 	line "Pokémon can't attack during your"
 	line "opponent's next turn."
 	done
 
-WailName: ; 5f4c5 (17:74c5)
+WailName:
 	text "Wail"
 	done
 
-WailDescription: ; 5f4cb (17:74cb)
+WailDescription:
 	text "Each player fills his or her Bench"
 	line "with Basic Pokémon chosen at random"
 	line "from his or her deck. If a player"
@@ -1186,21 +1186,21 @@ WailDescription: ; 5f4cb (17:74cb)
 	line "or her deck afterward."
 	done
 
-MarowakLv32Description: ; 5f5b6 (17:75b6)
+MarowakLv32Description:
 	text "Small and weak, this Pokémon is"
 	line "adept with its bone club. It has"
 	line "grown more vicious over the ages."
 	done
 
-HitmonleeName: ; 5f61a (17:761a)
+HitmonleeName:
 	text "Hitmonlee"
 	done
 
-StretchKickName: ; 5f625 (17:7625)
+StretchKickName:
 	text "Stretch Kick"
 	done
 
-StretchKickDescription: ; 5f633 (17:7633)
+StretchKickDescription:
 	text "If your opponent has any Benched"
 	line "Pokémon, choose 1 of them and this"
 	line "attack does 20 damage to it."
@@ -1208,51 +1208,51 @@ StretchKickDescription: ; 5f633 (17:7633)
 	line "Resistance for Benched Pokémon.)"
 	done
 
-HighJumpKickName: ; 5f6d0 (17:76d0)
+HighJumpKickName:
 	text "High Jump Kick"
 	done
 
-KickingName: ; 5f6e0 (17:76e0)
+KickingName:
 	text "Kicking"
 	done
 
-HitmonleeDescription: ; 5f6e9 (17:76e9)
+HitmonleeDescription:
 	text "When in a hurry, its legs lengthen"
 	line "progressively. It runs smoothly with"
 	line "extra long, loping strides."
 	done
 
-HitmonchanName: ; 5f74e (17:774e)
+HitmonchanName:
 	text "Hitmonchan"
 	done
 
-JabName: ; 5f75a (17:775a)
+JabName:
 	text "Jab"
 	done
 
-SpecialPunch: ; 5f75f (17:775f)
+SpecialPunch:
 	text "Special Punch"
 	done
 
-PunchingName: ; 5f76e (17:776e)
+PunchingName:
 	text "Punching"
 	done
 
-HitmonchanDescription: ; 5f778 (17:7778)
+HitmonchanDescription:
 	text "While seeming to do nothing, it"
 	line "fires punches in lightning-fast"
 	line "volleys that are impossible to see."
 	done
 
-RhyhornName: ; 5f7dd (17:77dd)
+RhyhornName:
 	text "Rhyhorn"
 	done
 
-LeerName: ; 5f7e6 (17:77e6)
+LeerName:
 	text "Leer"
 	done
 
-LeerDescription: ; 5f7ec (17:77ec)
+LeerDescription:
 	text "Flip a coin. If heads, the Defending"
 	line "Pokémon can't attack Rhyhorn during"
 	line "your opponent's next turn."
@@ -1260,25 +1260,25 @@ LeerDescription: ; 5f7ec (17:77ec)
 	line "ends this effect.)"
 	done
 
-SpikeName: ; 5f889 (17:7889)
+SpikeName:
 	text "Spike"
 	done
 
-RhyhornDescription: ; 5f890 (17:7890)
+RhyhornDescription:
 	text "Its massive bones are 1,000 times"
 	line "harder than human bones. It can"
 	line "easily knock a trailer flying."
 	done
 
-RhydonName: ; 5f8f2 (17:78f2)
+RhydonName:
 	text "Rhydon"
 	done
 
-RamName: ; 5f8fa (17:78fa)
+RamName:
 	text "Ram"
 	done
 
-RamDescription: ; 5f8ff (17:78ff)
+RamDescription:
 	text "Rhydon does 20 damage to itself."
 	line "If your opponent has any Benched"
 	line "Pokémon, he or she chooses 1 of them"
@@ -1287,26 +1287,26 @@ RamDescription: ; 5f8ff (17:78ff)
 	line "switching the Pokémon."
 	done
 
-RamDescriptionCont: ; 5f9bf (17:79bf)
+RamDescriptionCont:
 	text "Switch the Pokémon even if Rhydon"
 	line "is Knocked Out.)"
 	done
 
-RhydonDescription: ; 5f9f3 (17:79f3)
+RhydonDescription:
 	text "Protected by an armor-like hide, it"
 	line "is capable of living in molten lava"
 	line "of 3600 degrees."
 	done
 
-KabutoName: ; 5fa4d (17:7a4d)
+KabutoName:
 	text "Kabuto"
 	done
 
-KabutoArmorName: ; 5fa55 (17:7a55)
+KabutoArmorName:
 	text "Kabuto Armor"
 	done
 
-KabutoArmorDescription: ; 5fa63 (17:7a63)
+KabutoArmorDescription:
 	text "Whenever an attack (even your own)"
 	line "does damage to Kabuto (after"
 	line "applying Weakness and Resistance),"
@@ -1315,32 +1315,32 @@ KabutoArmorDescription: ; 5fa63 (17:7a63)
 	line "the nearest 10)."
 	done
 
-KabutoArmorDescriptionCont: ; 5fb19 (17:7b19)
+KabutoArmorDescriptionCont:
 	text "(Any other effects of attacks still"
 	line "happen.) This power stops working"
 	line "while Kabuto is Asleep, Confused,"
 	line "or Paralyzed."
 	done
 
-KabutoDescription: ; 5fb90 (17:7b90)
+KabutoDescription:
 	text "A Pokémon that was resurrected from"
 	line "a fossil found in what was once the"
 	line "ocean floor eons ago."
 	done
 
-KabutopsName: ; 5fbef (17:7bef)
+KabutopsName:
 	text "Kabutops"
 	done
 
-SharpSickleName: ; 5fbf9 (17:7bf9)
+SharpSickleName:
 	text "Sharp Sickle"
 	done
 
-AbsorbName: ; 5fc07 (17:7c07)
+AbsorbName:
 	text "Absorb"
 	done
 
-AbsorbDescription: ; 5fc0f (17:7c0f)
+AbsorbDescription:
 	text "Remove a number of damage counters"
 	line "from Kabutops equal to half the"
 	line "damage done to the Defending"
@@ -1349,83 +1349,83 @@ AbsorbDescription: ; 5fc0f (17:7c0f)
 	line "(rounded up to the nearest 10)."
 	done
 
-AbsorbDescriptionCont: ; 5fcc1 (17:7cc1)
+AbsorbDescriptionCont:
 	text "If Kabutops has fewer damage"
 	line "counters than that, remove all of"
 	line "them."
 	done
 
-KabutopsDescription: ; 5fd07 (17:7d07)
+KabutopsDescription:
 	text "Its sleek shape is perfect for"
 	line "swimming. It slashes prey with its"
 	line "claws and drains the body fluids."
 	done
 
-AerodactylName: ; 5fd6c (17:7d6c)
+AerodactylName:
 	text "Aerodactyl"
 	done
 
-PrehistoricPowerName: ; 5fd78 (17:7d78)
+PrehistoricPowerName:
 	text "Prehistoric Power"
 	done
 
-PrehistoricPowerDescription: ; 5fd8b (17:7d8b)
+PrehistoricPowerDescription:
 	text "No more Evolution cards can be"
 	line "played. This power stops working"
 	line "while Aerodactyl is Asleep,"
 	line "Confused, or Paralyzed."
 	done
 
-FossilName: ; 5fe00 (17:7e00)
+FossilName:
 	text "Fossil"
 	done
 
-AerodactylDescription: ; 5fe08 (17:7e08)
+AerodactylDescription:
 	text "A ferocious prehistoric Pokémon that"
 	line "goes for the enemy's throat with its"
 	line "serrated saw-like fangs."
 	done
 
-AbraName: ; 5fe6c (17:7e6c)
+AbraName:
 	text "Abra"
 	done
 
-PsiName: ; 5fe72 (17:7e72)
+PsiName:
 	text "Psi"
 	done
 
-AbraDescription: ; 5fe77 (17:7e77)
+AbraDescription:
 	text "Using its ability to read minds, it"
 	line "will identify impending danger and"
 	line "teleport to safety."
 	done
 
-KadabraName: ; 5fed3 (17:7ed3)
+KadabraName:
 	text "Kadabra"
 	done
 
-KadabrasRecoverDescription: ; 5fedc (17:7edc)
+KadabrasRecoverDescription:
 	text "Discard 1 <PSYCHIC> Energy card attached to"
 	line "Kadabra in order to use this attack."
 	line "Remove all damage counters from"
 	line "Kadabra."
 	done
 
-SuperPsiName: ; 5ff50 (17:7f50)
+SuperPsiName:
 	text "Super Psy"
 	done
 
-KadabraDescription: ; 5ff5b (17:7f5b)
+KadabraDescription:
 	text "It emits special alpha waves from"
 	line "its body that induce headaches even"
 	line "to those just nearby."
 	done
 
-AlakazamName: ; 5ffb8 (17:7fb8)
+AlakazamName:
 	text "Alakazam"
 	done
 
-DamageSwapName: ; 5ffc2 (17:7fc2)
+DamageSwapName:
 	text "Damage Swap"
 	done
 

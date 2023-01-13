@@ -20,7 +20,7 @@ ENDM
 ; the type of that card are reduced by the original average of all 8 types (capping the result at 1).
 ; This average always outputs 17 (except for the energy-only packs).
 
-BoosterPack_ColosseumNeutral:: ; 1e4e4 (7:64e4)
+BoosterPack_ColosseumNeutral::
 	booster_set COLOSSEUM ; booster pack set
 	dw GenerateRandomEnergy ; energy or energy generation function
 
@@ -35,7 +35,7 @@ BoosterPack_ColosseumNeutral:: ; 1e4e4 (7:64e4)
 	db 20 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_ColosseumGrass:: ; 1e4f0 (7:64f0)
+BoosterPack_ColosseumGrass::
 	booster_set COLOSSEUM ; booster pack set
 	dw GRASS_ENERGY ; energy or energy generation function
 
@@ -50,7 +50,7 @@ BoosterPack_ColosseumGrass:: ; 1e4f0 (7:64f0)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_ColosseumFire:: ; 1e4fc (7:64fc)
+BoosterPack_ColosseumFire::
 	booster_set COLOSSEUM ; booster pack set
 	dw FIRE_ENERGY ; energy or energy generation function
 
@@ -65,7 +65,7 @@ BoosterPack_ColosseumFire:: ; 1e4fc (7:64fc)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_ColosseumWater:: ; 1e508 (7:6508)
+BoosterPack_ColosseumWater::
 	booster_set COLOSSEUM ; booster pack set
 	dw WATER_ENERGY ; energy or energy generation function
 
@@ -80,7 +80,7 @@ BoosterPack_ColosseumWater:: ; 1e508 (7:6508)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_ColosseumLightning:: ; 1e514 (7:6514)
+BoosterPack_ColosseumLightning::
 	booster_set COLOSSEUM ; booster pack set
 	dw LIGHTNING_ENERGY ; energy or energy generation function
 
@@ -95,7 +95,7 @@ BoosterPack_ColosseumLightning:: ; 1e514 (7:6514)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_ColosseumFighting:: ; 1e520 (7:6520)
+BoosterPack_ColosseumFighting::
 	booster_set COLOSSEUM ; booster pack set
 	dw FIGHTING_ENERGY ; energy or energy generation function
 
@@ -110,7 +110,7 @@ BoosterPack_ColosseumFighting:: ; 1e520 (7:6520)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_ColosseumTrainer:: ; 1e52c (7:652c)
+BoosterPack_ColosseumTrainer::
 	booster_set COLOSSEUM ; booster pack set
 	dw GenerateRandomEnergy ; energy or energy generation function
 
@@ -125,7 +125,7 @@ BoosterPack_ColosseumTrainer:: ; 1e52c (7:652c)
 	db 48 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_EvolutionNeutral:: ; 1e538 (7:6538)
+BoosterPack_EvolutionNeutral::
 	booster_set EVOLUTION ; booster pack set
 	dw GenerateRandomEnergy ; energy or energy generation function
 
@@ -140,7 +140,7 @@ BoosterPack_EvolutionNeutral:: ; 1e538 (7:6538)
 	db 20 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_EvolutionGrass:: ; 1e544 (7:6544)
+BoosterPack_EvolutionGrass::
 	booster_set EVOLUTION ; booster pack set
 	dw GRASS_ENERGY ; energy or energy generation function
 
@@ -155,7 +155,7 @@ BoosterPack_EvolutionGrass:: ; 1e544 (7:6544)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_EvolutionNeutralFireEnergy:: ; 1e550 (7:6550)
+BoosterPack_EvolutionNeutralFireEnergy::
 	booster_set EVOLUTION ; booster pack set
 	dw FIRE_ENERGY ; energy or energy generation function
 
@@ -170,7 +170,7 @@ BoosterPack_EvolutionNeutralFireEnergy:: ; 1e550 (7:6550)
 	db 20 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_EvolutionWater:: ; 1e55c (7:655c)
+BoosterPack_EvolutionWater::
 	booster_set EVOLUTION ; booster pack set
 	dw WATER_ENERGY ; energy or energy generation function
 
@@ -185,7 +185,7 @@ BoosterPack_EvolutionWater:: ; 1e55c (7:655c)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_EvolutionFighting:: ; 1e568 (7:6568)
+BoosterPack_EvolutionFighting::
 	booster_set EVOLUTION ; booster pack set
 	dw FIGHTING_ENERGY ; energy or energy generation function
 
@@ -200,7 +200,7 @@ BoosterPack_EvolutionFighting:: ; 1e568 (7:6568)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_EvolutionPsychic:: ; 1e574 (7:6574)
+BoosterPack_EvolutionPsychic::
 	booster_set EVOLUTION ; booster pack set
 	dw PSYCHIC_ENERGY ; energy or energy generation function
 
@@ -215,7 +215,7 @@ BoosterPack_EvolutionPsychic:: ; 1e574 (7:6574)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_EvolutionTrainer:: ; 1e580 (7:6580)
+BoosterPack_EvolutionTrainer::
 	booster_set EVOLUTION ; booster pack set
 	dw GenerateRandomEnergy ; energy or energy generation function
 
@@ -230,7 +230,7 @@ BoosterPack_EvolutionTrainer:: ; 1e580 (7:6580)
 	db 48 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_MysteryNeutral:: ; 1e58c (7:658c)
+BoosterPack_MysteryNeutral::
 	booster_set MYSTERY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -245,7 +245,7 @@ BoosterPack_MysteryNeutral:: ; 1e58c (7:658c)
 	db 17 ; Trainer Card Chance
 	db 17 ; Energy Card Chance
 
-BoosterPack_MysteryGrassColorless:: ; 1e598 (7:6598)
+BoosterPack_MysteryGrassColorless::
 	booster_set MYSTERY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -260,7 +260,7 @@ BoosterPack_MysteryGrassColorless:: ; 1e598 (7:6598)
 	db 12 ; Trainer Card Chance
 	db 12 ; Energy Card Chance
 
-BoosterPack_MysteryWaterColorless:: ; 1e5a4 (7:65a4)
+BoosterPack_MysteryWaterColorless::
 	booster_set MYSTERY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -275,7 +275,7 @@ BoosterPack_MysteryWaterColorless:: ; 1e5a4 (7:65a4)
 	db 12 ; Trainer Card Chance
 	db 12 ; Energy Card Chance
 
-BoosterPack_MysteryLightningColorless:: ; 1e5b0 (7:65b0)
+BoosterPack_MysteryLightningColorless::
 	booster_set MYSTERY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -290,7 +290,7 @@ BoosterPack_MysteryLightningColorless:: ; 1e5b0 (7:65b0)
 	db 12 ; Trainer Card Chance
 	db 12 ; Energy Card Chance
 
-BoosterPack_MysteryFightingColorless:: ; 1e5bc (7:65bc)
+BoosterPack_MysteryFightingColorless::
 	booster_set MYSTERY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -305,7 +305,7 @@ BoosterPack_MysteryFightingColorless:: ; 1e5bc (7:65bc)
 	db 12 ; Trainer Card Chance
 	db 12 ; Energy Card Chance
 
-BoosterPack_MysteryTrainerColorless:: ; 1e5c8 (7:65c8)
+BoosterPack_MysteryTrainerColorless::
 	booster_set MYSTERY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -320,7 +320,7 @@ BoosterPack_MysteryTrainerColorless:: ; 1e5c8 (7:65c8)
 	db 48 ; Trainer Card Chance
 	db 12 ; Energy Card Chance
 
-BoosterPack_LaboratoryMostlyNeutral:: ; 1e5d4 (7:65d4)
+BoosterPack_LaboratoryMostlyNeutral::
 	booster_set LABORATORY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -335,7 +335,7 @@ BoosterPack_LaboratoryMostlyNeutral:: ; 1e5d4 (7:65d4)
 	db 24 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_LaboratoryGrass:: ; 1e5e0 (7:65e0)
+BoosterPack_LaboratoryGrass::
 	booster_set LABORATORY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -350,7 +350,7 @@ BoosterPack_LaboratoryGrass:: ; 1e5e0 (7:65e0)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_LaboratoryWater:: ; 1e5ec (7:65ec)
+BoosterPack_LaboratoryWater::
 	booster_set LABORATORY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -365,7 +365,7 @@ BoosterPack_LaboratoryWater:: ; 1e5ec (7:65ec)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_LaboratoryPsychic:: ; 1e5f8 (7:65f8)
+BoosterPack_LaboratoryPsychic::
 	booster_set LABORATORY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -380,7 +380,7 @@ BoosterPack_LaboratoryPsychic:: ; 1e5f8 (7:65f8)
 	db 16 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_LaboratoryTrainer:: ; 1e604 (7:6604)
+BoosterPack_LaboratoryTrainer::
 	booster_set LABORATORY ; booster pack set
 	dw NULL ; energy or energy generation function
 
@@ -395,7 +395,7 @@ BoosterPack_LaboratoryTrainer:: ; 1e604 (7:6604)
 	db 48 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_EnergyLightningFire:: ; 1e610 (7:6610)
+BoosterPack_EnergyLightningFire::
 	booster_set COLOSSEUM ; booster pack set
 	dw GenerateEnergyBoosterLightningFire ; energy or energy generation function
 
@@ -410,7 +410,7 @@ BoosterPack_EnergyLightningFire:: ; 1e610 (7:6610)
 	db  0 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_EnergyWaterFighting:: ; 1e61c (7:661c)
+BoosterPack_EnergyWaterFighting::
 	booster_set COLOSSEUM ; booster pack set
 	dw GenerateEnergyBoosterWaterFighting ; energy or energy generation function
 
@@ -425,7 +425,7 @@ BoosterPack_EnergyWaterFighting:: ; 1e61c (7:661c)
 	db  0 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_EnergyGrassPsychic:: ; 1e628 (7:6628)
+BoosterPack_EnergyGrassPsychic::
 	booster_set COLOSSEUM ; booster pack set
 	dw GenerateEnergyBoosterGrassPsychic ; energy or energy generation function
 
@@ -440,7 +440,7 @@ BoosterPack_EnergyGrassPsychic:: ; 1e628 (7:6628)
 	db  0 ; Trainer Card Chance
 	db  0 ; Energy Card Chance
 
-BoosterPack_RandomEnergies:: ; 1e634 (7:6634)
+BoosterPack_RandomEnergies::
 	booster_set COLOSSEUM ; booster pack set
 	dw GenerateRandomEnergyBooster ; energy or energy generation function
 

@@ -1,5 +1,5 @@
 ; data for each animation ID (see src/constants/sprite_constants.asm)
-Animations: ; 1ce32 (7:4e32)
+Animations:
 	table_width 6, Animations
 	; DUEL_ANIM_NONE
 	db $00 ; sprite ID

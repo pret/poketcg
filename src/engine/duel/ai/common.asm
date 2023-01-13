@@ -36,7 +36,7 @@ CheckIfPlayerHasPokemonOtherThanMewtwoLv53:
 ; will process some Trainer cards in hand (namely Energy Removals).
 ; this is used to check whether to skip some normal AI routines
 ; this turn and jump right to the attacking phase.
-HandleAIAntiMewtwoDeckStrategy: ; 227d3 (8:67d3)
+HandleAIAntiMewtwoDeckStrategy:
 ; return carry if Player is not playing MewtwoLv53 mill deck
 	ld a, [wAIBarrierFlagCounter]
 	bit AI_MEWTWO_MILL_F, a
@@ -79,7 +79,7 @@ HandleAIAntiMewtwoDeckStrategy: ; 227d3 (8:67d3)
 ;   a = CARD_LOCATION_* to look
 ; output:
 ;   a = number of cards found
-FindBasicEnergyCardsInLocation: ; 227f6 (8:67f6)
+FindBasicEnergyCardsInLocation:
 	ld [wTempAI], a
 	lb de, 0, 0
 	ld hl, wDuelTempList
@@ -144,7 +144,7 @@ FindBasicEnergyCardsInLocation: ; 227f6 (8:67f6)
 ;	a = PLAY_AREA_* constant of card
 ; output:
 ;	a = deck index of attached energy card chosen
-AIPickEnergyCardToDiscard: ; 2282e (8:682e)
+AIPickEnergyCardToDiscard:
 ; load Pokémon's attached energy cards.
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CreateArenaOrBenchEnergyCardList
@@ -202,7 +202,7 @@ AIPickEnergyCardToDiscard: ; 2282e (8:682e)
 ;   a = Play Area location to check
 ; output:
 ;   a = deck index of attached energy card
-PickAttachedEnergyCardToRemove: ; 22875 (8:6875)
+PickAttachedEnergyCardToRemove:
 ; construct energy list and check if there are any energy cards attached
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CreateArenaOrBenchEnergyCardList
@@ -282,7 +282,7 @@ PickAttachedEnergyCardToRemove: ; 22875 (8:6875)
 ; output:
 ;   [wTempAI] = deck index of attached energy card
 ;   [wCurCardCanAttack] = deck index of attached energy card
-PickTwoAttachedEnergyCards: ; 228d1 (8:68d1)
+PickTwoAttachedEnergyCards:
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CreateArenaOrBenchEnergyCardList
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -392,7 +392,7 @@ PickTwoAttachedEnergyCards: ; 228d1 (8:68d1)
 	ret
 
 ; copies $ff terminated buffer from hl to de
-CopyBuffer: ; 2297b (8:697b)
+CopyBuffer:
 	ld a, [hli]
 	ld [de], a
 	cp $ff
@@ -401,7 +401,7 @@ CopyBuffer: ; 2297b (8:697b)
 	jr CopyBuffer
 
 ; zeroes a bytes starting at hl
-ClearMemory_Bank8: ; 22983 (8:6983)
+ClearMemory_Bank8:
 	push af
 	push bc
 	push hl
@@ -421,7 +421,7 @@ ClearMemory_Bank8: ; 22983 (8:6983)
 ; sets carry if none are found
 ; output:
 ;	a = number of energy cards found
-CountOppEnergyCardsInHand: ; 22990 (8:6990)
+CountOppEnergyCardsInHand:
 	farcall CreateEnergyCardListFromHand
 	ret c
 	ld b, -1
@@ -440,7 +440,7 @@ CountOppEnergyCardsInHand: ; 22990 (8:6990)
 ;	a = HP
 ; output:
 ;	a = number of damage counters
-ConvertHPToCounters: ; 229a3 (8:69a3)
+ConvertHPToCounters:
 	push bc
 	ld c, 0
 .loop
@@ -454,7 +454,7 @@ ConvertHPToCounters: ; 229a3 (8:69a3)
 	ret
 
 ; calculates floor(hl / 10)
-CalculateWordTensDigit: ; 229b0 (8:69b0)
+CalculateWordTensDigit:
 	push bc
 	push de
 	lb bc, $ff, -10
@@ -470,7 +470,7 @@ CalculateWordTensDigit: ; 229b0 (8:69b0)
 	ret
 
 ; returns in a division of b by a
-CalculateBDividedByA_Bank8: ; 229c1 (8:69c1)
+CalculateBDividedByA_Bank8:
 	push bc
 	ld c, a
 	ld a, b
@@ -493,7 +493,7 @@ CalculateBDividedByA_Bank8: ; 229c1 (8:69c1)
 ; input:
 ;   a = CARD_LOCATION_*
 ;   e = card ID to look for
-LookForCardIDInLocation: ; 229d0 (8:69d0)
+LookForCardIDInLocation:
 	ld b, a
 	ld c, e
 	lb de, $00, 0 ; d is never used
@@ -531,7 +531,7 @@ LookForCardIDInLocation: ; 229d0 (8:69d0)
 ; output:
 ;	a = card deck index, if found
 ;	carry set if found
-LookForCardIDInHandList_Bank8: ; 229f3 (8:69f3)
+LookForCardIDInHandList_Bank8:
 	ld [wTempCardIDToLook], a
 	call CreateHandCardList
 	ld hl, wDuelTempList
@@ -562,7 +562,7 @@ LookForCardIDInHandList_Bank8: ; 229f3 (8:69f3)
 ;   b = card ID 2
 ; output:
 ;   a = index of card ID 1 in deck
-LookForCardIDInDeck_GivenCardIDInHandAndPlayArea: ; 22a10 (8:6a10)
+LookForCardIDInDeck_GivenCardIDInHandAndPlayArea:
 ; store a in wCurCardCanAttack
 ; and b in wTempAI
 	ld c, a
@@ -605,7 +605,7 @@ LookForCardIDInDeck_GivenCardIDInHandAndPlayArea: ; 22a10 (8:6a10)
 ; is found in Play Area or in hand
 ; input:
 ;	a = card ID
-LookForCardIDInHandAndPlayArea: ; 22a39 (8:6a39)
+LookForCardIDInHandAndPlayArea:
 	ld b, a
 	push bc
 	call LookForCardIDInHandList_Bank8
@@ -629,7 +629,7 @@ LookForCardIDInHandAndPlayArea: ; 22a39 (8:6a39)
 ;   b = card ID 2
 ; output:
 ;   a = index of card ID 1 in deck
-LookForCardIDInDeck_GivenCardIDInHand: ; 22a49 (8:6a49)
+LookForCardIDInDeck_GivenCardIDInHand:
 ; store a in wCurCardCanAttack
 ; and b in wTempAI
 	ld c, a
@@ -676,7 +676,7 @@ LookForCardIDInDeck_GivenCardIDInHand: ; 22a49 (8:6a49)
 ; output:
 ;	a = PLAY_AREA_* of found card
 ;	carry set if found
-LookForCardIDInPlayArea_Bank8: ; 22a72 (8:6a72)
+LookForCardIDInPlayArea_Bank8:
 	ld [wTempCardIDToLook], a
 .loop
 	ld a, DUELVARS_ARENA_CARD
@@ -714,7 +714,7 @@ LookForCardIDInPlayArea_Bank8: ; 22a72 (8:6a72)
 ;   e = card deck index to avoid removing
 ; output:
 ;   a = card index of removed card
-RemoveFromListDifferentCardOfGivenType: ; 22a95 (8:6a95)
+RemoveFromListDifferentCardOfGivenType:
 	push hl
 	push de
 	push bc
@@ -794,7 +794,7 @@ RemoveFromListDifferentCardOfGivenType: ; 22a95 (8:6a95)
 ; output:
 ;   a = deck index of card ID 1 found in deck
 ;   e = deck index of Pokemon card in hand different than card ID 2
-LookForCardIDToTradeWithDifferentHandCard: ; 22ae0 (8:6ae0)
+LookForCardIDToTradeWithDifferentHandCard:
 	ld hl, wCurCardCanAttack
 	ld [hl], e
 	ld [wTempAI], a
@@ -849,7 +849,7 @@ LookForCardIDToTradeWithDifferentHandCard: ; 22ae0 (8:6ae0)
 ;   a = card ID to look for
 ; output:
 ;   a = deck index of card in hand found
-CheckIfHasCardIDInHand: ; 22b1f (8:6b1f)
+CheckIfHasCardIDInHand:
 	ld [wTempCardIDToLook], a
 	call CreateHandCardList
 	ld hl, wDuelTempList
@@ -878,7 +878,7 @@ CheckIfHasCardIDInHand: ; 22b1f (8:6b1f)
 
 ; outputs in a total number of Pokemon cards in hand
 ; plus Pokemon in Turn Duelist's Play Area.
-CountPokemonCardsInHandAndInPlayArea: ; 22b45 (8:6b45)
+CountPokemonCardsInHandAndInPlayArea:
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld [wTempAI], a
@@ -902,7 +902,7 @@ CountPokemonCardsInHandAndInPlayArea: ; 22b45 (8:6b45)
 
 ; returns carry if a duplicate Pokemon card is found in hand.
 ; outputs in a the deck index of one of them.
-FindDuplicatePokemonCards: ; 22b6f (8:6b6f)
+FindDuplicatePokemonCards:
 	ld a, $ff
 	ld [wTempAI], a
 	call CreateHandCardList
@@ -955,7 +955,7 @@ FindDuplicatePokemonCards: ; 22b6f (8:6b6f)
 	ret
 
 ; return carry flag if attack is not high recoil.
-AICheckIfAttackIsHighRecoil: ; 22bad (8:6bad)
+AICheckIfAttackIsHighRecoil:
 	farcall AIProcessButDontUseAttack
 	ret nc
 	ld a, [wSelectedAttack]

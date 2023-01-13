@@ -1,6 +1,6 @@
 INCLUDE "macros/intro_sequence.asm"
 
-IntroSequence: ; 1d59d (7:559d)
+IntroSequence:
 	intro_seq_load_charizard_scene
 	intro_seq_play_sfx SFX_58
 	intro_seq_set_orbs_coordinates IntroOrbCoordinates_CharizardScene

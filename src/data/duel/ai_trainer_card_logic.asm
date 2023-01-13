@@ -5,7 +5,7 @@ MACRO ai_trainer_card_logic
 	dw \4 ; function for AI playing the card
 ENDM
 
-AITrainerCardLogic: ; 20000 (8:4000)
+AITrainerCardLogic:
 	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_07, POTION,                 AIDecide_Potion1,                        AIPlay_Potion
 	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_10, POTION,                 AIDecide_Potion2,                        AIPlay_Potion
 	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_08, SUPER_POTION,           AIDecide_SuperPotion1,                   AIPlay_SuperPotion

@@ -114,7 +114,7 @@ LoadTilemap:
 ; prepares the pointers for decompressing BG Map
 ; and calls InitDataDecompression
 ; then decompresses the data
-.InitAndDecompressBGMap ; 800bd (20:40bd)
+.InitAndDecompressBGMap
 	push hl
 	push bc
 	push de
@@ -138,7 +138,7 @@ LoadTilemap:
 
 ; wTempBank:wTempPointer = source of compressed data
 ; wVRAMPointer = destination of decompressed data
-.Decompress ; 800e0 (20:40e0)
+.Decompress
 ; if wBGMapCGBMode is true, then use double wBGMapWidth
 ; since one "width" length goes to VRAM0
 ; and the other "width" length goes to VRAM1
@@ -527,7 +527,7 @@ LoadTilesetGfx:
 	ret
 
 ; loads gfx data from wTempPointerBank:wTempPointer
-.LoadTileGfx ; 802e8 (20:42e8)
+.LoadTileGfx
 	push hl
 	push bc
 	push de
@@ -580,7 +580,7 @@ LoadTilesetGfx:
 ; b must match with VRAM bank in wd4cb
 ; prepares next call to this routine if data wasn't fully copied
 ; so that it copies to the right VRAM section
-.CopyGfxData ; 80336 (20:4336)
+.CopyGfxData
 	push hl
 	push bc
 	push de
@@ -1338,7 +1338,7 @@ Func_80c64: ; unreferenced
 	call InitializeMenuParameters
 	ret
 
-.menu_parameters ; 80cbb (20:4cbb)
+.menu_parameters
 	db 1, 13 ; cursor x, cursor y
 	db 1 ; y displacement between items
 	db 2 ; number of items

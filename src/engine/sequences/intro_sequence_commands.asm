@@ -1,4 +1,4 @@
-ExecuteIntroSequenceCmd: ; 1d408 (7:5408)
+ExecuteIntroSequenceCmd:
 	ld a, [wSequenceDelay]
 	or a
 	jr z, .call_function
@@ -28,19 +28,19 @@ ExecuteIntroSequenceCmd: ; 1d408 (7:5408)
 	jr c, ExecuteIntroSequenceCmd
 	ret
 
-AdvanceIntroSequenceCmdPtrBy2: ; 1d42e (7:542e)
+AdvanceIntroSequenceCmdPtrBy2:
 	ld a, 2
 	jr AdvanceIntroSequenceCmdPtr
 
-AdvanceIntroSequenceCmdPtrBy3: ; 1d432 (7:5432)
+AdvanceIntroSequenceCmdPtrBy3:
 	ld a, 3
 	jr AdvanceIntroSequenceCmdPtr
 
-AdvanceIntroSequenceCmdPtrBy4: ; 1d436 (7:5436)
+AdvanceIntroSequenceCmdPtrBy4:
 	ld a, 4
 ;	fallthrough
 
-AdvanceIntroSequenceCmdPtr: ; 1d438 (7:5438)
+AdvanceIntroSequenceCmdPtr:
 	push hl
 	ld hl, wSequenceCmdPtr
 	add [hl]
@@ -51,7 +51,7 @@ AdvanceIntroSequenceCmdPtr: ; 1d438 (7:5438)
 	pop hl
 	ret
 
-IntroSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
+IntroSequenceCmd_WaitOrbsAnimation:
 	ld c, $7
 	ld de, wTitleScreenSprites
 .loop
@@ -71,14 +71,14 @@ IntroSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
 	or a
 	ret
 
-IntroSequenceCmd_Wait: ; 1d460 (7:5460)
+IntroSequenceCmd_Wait:
 	ld a, c
 	ld [wSequenceDelay], a
 	call AdvanceIntroSequenceCmdPtrBy3
 	scf
 	ret
 
-IntroSequenceCmd_SetOrbsAnimations: ; 1d469 (7:5469)
+IntroSequenceCmd_SetOrbsAnimations:
 	ld l, c
 	ld h, b
 
@@ -101,7 +101,7 @@ IntroSequenceCmd_SetOrbsAnimations: ; 1d469 (7:5469)
 	scf
 	ret
 
-IntroSequenceCmd_SetOrbsCoordinates: ; 1d486 (7:5486)
+IntroSequenceCmd_SetOrbsCoordinates:
 	ld l, c
 	ld h, b
 
@@ -135,7 +135,7 @@ IntroSequenceCmd_SetOrbsCoordinates: ; 1d486 (7:5486)
 	scf
 	ret
 
-IntroOrbAnimations_CharizardScene: ; 1d4b0 (7:54b0)
+IntroOrbAnimations_CharizardScene:
 	db SPRITE_ANIM_192 ; GRASS
 	db SPRITE_ANIM_193 ; FIRE
 	db SPRITE_ANIM_193 ; WATER
@@ -144,7 +144,7 @@ IntroOrbAnimations_CharizardScene: ; 1d4b0 (7:54b0)
 	db SPRITE_ANIM_192 ; PSYCHIC
 	db SPRITE_ANIM_193 ; FIGHTING
 
-IntroOrbCoordinates_CharizardScene: ; 1d4b7 (7:54b7)
+IntroOrbCoordinates_CharizardScene:
 	; x coord, y coord
 	db 240,  28 ; GRASS
 	db 160, 120 ; FIRE
@@ -154,7 +154,7 @@ IntroOrbCoordinates_CharizardScene: ; 1d4b7 (7:54b7)
 	db 240, 100 ; PSYCHIC
 	db 160,  44 ; FIGHTING
 
-IntroOrbAnimations_ScytherScene: ; 1d4c5 (7:54c5)
+IntroOrbAnimations_ScytherScene:
 	db SPRITE_ANIM_193 ; GRASS
 	db SPRITE_ANIM_192 ; FIRE
 	db SPRITE_ANIM_192 ; WATER
@@ -163,7 +163,7 @@ IntroOrbAnimations_ScytherScene: ; 1d4c5 (7:54c5)
 	db SPRITE_ANIM_193 ; PSYCHIC
 	db SPRITE_ANIM_192 ; FIGHTING
 
-IntroOrbCoordinates_ScytherScene: ; 1d4cc (7:54cc)
+IntroOrbCoordinates_ScytherScene:
 	; x coord, y coord
 	db 160,  28 ; GRASS
 	db 240, 120 ; FIRE
@@ -173,7 +173,7 @@ IntroOrbCoordinates_ScytherScene: ; 1d4cc (7:54cc)
 	db 160, 100 ; PSYCHIC
 	db 240,  44 ; FIGHTING
 
-IntroOrbAnimations_AerodactylScene: ; 1d4da (7:54da)
+IntroOrbAnimations_AerodactylScene:
 	db SPRITE_ANIM_194 ; GRASS
 	db SPRITE_ANIM_197 ; FIRE
 	db SPRITE_ANIM_200 ; WATER
@@ -182,7 +182,7 @@ IntroOrbAnimations_AerodactylScene: ; 1d4da (7:54da)
 	db SPRITE_ANIM_209 ; PSYCHIC
 	db SPRITE_ANIM_212 ; FIGHTING
 
-IntroOrbCoordinates_AerodactylScene: ; 1d4e1 (7:54e1)
+IntroOrbCoordinates_AerodactylScene:
 	; x coord, y coord
 	db 240,  32 ; GRASS
 	db 160, 112 ; FIRE
@@ -192,7 +192,7 @@ IntroOrbCoordinates_AerodactylScene: ; 1d4e1 (7:54e1)
 	db 240,  96 ; PSYCHIC
 	db 160,  48 ; FIGHTING
 
-IntroOrbAnimations_InitialTitleScreen: ; 1d4ef (7:54ef)
+IntroOrbAnimations_InitialTitleScreen:
 	db SPRITE_ANIM_195 ; GRASS
 	db SPRITE_ANIM_198 ; FIRE
 	db SPRITE_ANIM_201 ; WATER
@@ -201,7 +201,7 @@ IntroOrbAnimations_InitialTitleScreen: ; 1d4ef (7:54ef)
 	db SPRITE_ANIM_210 ; PSYCHIC
 	db SPRITE_ANIM_213 ; FIGHTING
 
-IntroOrbCoordinates_InitialTitleScreen: ; 1d4f6 (7:54f6)
+IntroOrbCoordinates_InitialTitleScreen:
 	; x coord, y coord
 	db 112, 144 ; GRASS
 	db  12, 144 ; FIRE
@@ -211,7 +211,7 @@ IntroOrbCoordinates_InitialTitleScreen: ; 1d4f6 (7:54f6)
 	db 132, 144 ; PSYCHIC
 	db  72, 144 ; FIGHTING
 
-IntroOrbAnimations_InTitleScreen: ; 1d504 (7:5504)
+IntroOrbAnimations_InTitleScreen:
 	db SPRITE_ANIM_196 ; GRASS
 	db SPRITE_ANIM_199 ; FIRE
 	db SPRITE_ANIM_202 ; WATER
@@ -220,7 +220,7 @@ IntroOrbAnimations_InTitleScreen: ; 1d504 (7:5504)
 	db SPRITE_ANIM_211 ; PSYCHIC
 	db SPRITE_ANIM_214 ; FIGHTING
 
-IntroOrbCoordinates_InTitleScreen: ; 1d50b (7:550b)
+IntroOrbCoordinates_InTitleScreen:
 	; x coord, y coord
 	db 112,  76 ; GRASS
 	db   0,  28 ; FIRE
@@ -230,14 +230,14 @@ IntroOrbCoordinates_InTitleScreen: ; 1d50b (7:550b)
 	db 144,  28 ; PSYCHIC
 	db  72,  76 ; FIGHTING
 
-IntroSequenceCmd_PlayTitleScreenMusic: ; 1d519 (7:5519)
+IntroSequenceCmd_PlayTitleScreenMusic:
 	ld a, MUSIC_TITLESCREEN
 	call PlaySong
 	call AdvanceIntroSequenceCmdPtrBy2
 	scf
 	ret
 
-IntroSequenceCmd_WaitSFX: ; 1d523 (7:5523)
+IntroSequenceCmd_WaitSFX:
 	call AssertSFXFinished
 	or a
 	jr nz, .no_carry
@@ -249,21 +249,21 @@ IntroSequenceCmd_WaitSFX: ; 1d523 (7:5523)
 	or a
 	ret
 
-IntroSequenceCmd_PlaySFX: ; 1d530 (7:5530)
+IntroSequenceCmd_PlaySFX:
 	ld a, c
 	call PlaySFX
 	call AdvanceIntroSequenceCmdPtrBy3
 	scf
 	ret
 
-IntroSequenceCmd_FadeIn: ; 1d539 (7:5539)
+IntroSequenceCmd_FadeIn:
 	ld a, TRUE
 	ld [wIntroSequencePalsNeedUpdate], a
 	call AdvanceIntroSequenceCmdPtrBy2
 	scf
 	ret
 
-IntroSequenceCmd_FadeOut: ; 1d543 (7:5543)
+IntroSequenceCmd_FadeOut:
 	farcall Func_10d50
 	ld a, TRUE
 	ld [wIntroSequencePalsNeedUpdate], a
@@ -271,22 +271,22 @@ IntroSequenceCmd_FadeOut: ; 1d543 (7:5543)
 	scf
 	ret
 
-IntroSequenceCmd_LoadCharizardScene: ; 1d551 (7:5551)
+IntroSequenceCmd_LoadCharizardScene:
 	lb bc, 6, 3
 	ld a, SCENE_CHARIZARD_INTRO
 	jr LoadOpeningSceneAndUpdateSGBBorder
 
-IntroSequenceCmd_LoadScytherScene: ; 1d558 (7:5558)
+IntroSequenceCmd_LoadScytherScene:
 	lb bc, 6, 3
 	ld a, SCENE_SCYTHER_INTRO
 	jr LoadOpeningSceneAndUpdateSGBBorder
 
-IntroSequenceCmd_LoadAerodactylScene: ; 1d55f (7:555f)
+IntroSequenceCmd_LoadAerodactylScene:
 	lb bc, 6, 3
 	ld a, SCENE_AERODACTYL_INTRO
 ;	fallthrough
 
-LoadOpeningSceneAndUpdateSGBBorder: ; 1d564 (7:5564)
+LoadOpeningSceneAndUpdateSGBBorder:
 	call LoadOpeningScene
 	ld l, %001010
 	lb bc, 0, 0
@@ -295,7 +295,7 @@ LoadOpeningSceneAndUpdateSGBBorder: ; 1d564 (7:5564)
 	scf
 	ret
 
-IntroSequenceCmd_LoadTitleScreenScene: ; 1d575 (7:5575)
+IntroSequenceCmd_LoadTitleScreenScene:
 	lb bc, 0, 0
 	ld a, SCENE_TITLE_SCREEN
 	call LoadOpeningScene
@@ -305,7 +305,7 @@ IntroSequenceCmd_LoadTitleScreenScene: ; 1d575 (7:5575)
 
 ; a = scene ID
 ; bc = coordinates for scene
-LoadOpeningScene: ; 1d582 (7:5582)
+LoadOpeningScene:
 	push af
 	push bc
 	call DisableLCD
@@ -321,7 +321,7 @@ LoadOpeningScene: ; 1d582 (7:5582)
 	call EnableLCD
 	ret
 
-IntroSequenceEmptyFunc: ; 1d59c (7:559c)
+IntroSequenceEmptyFunc:
 	ret
 
 INCLUDE "data/sequences/intro.asm"

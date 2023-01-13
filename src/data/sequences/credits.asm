@@ -1,6 +1,6 @@
 INCLUDE "macros/credits_sequence.asm"
 
-CreditsSequence: ; 1daef (7:5aef)
+CreditsSequence:
 	credits_seq_disable_lcd
 	credits_seq_load_ow_map 0, 0, OVERWORLD_MAP
 	credits_seq_init_volcano_sprite
