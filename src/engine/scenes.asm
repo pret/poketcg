@@ -257,7 +257,7 @@ _DrawPortrait::
 	ld a, e
 	ld [wd291], a
 	farcall LoadTilemap_ToVRAM
-	ld a, [wd61e]
+	ld a, [wCurPortrait]
 	add a
 	add a
 	ld c, a
@@ -291,137 +291,7 @@ _DrawPortrait::
 	ld [wd291], a
 	ret
 
-PortraitGfxData:
-	table_width 4, PortraitGfxData
-	db TILESET_PLAYER, PALETTE_119
-	dw SGBData_PlayerPortraitPals
-
-	db TILESET_PLAYER, PALETTE_119
-	dw SGBData_PlayerPortraitPals
-
-	db TILESET_RONALD, PALETTE_121
-	dw SGBData_RonaldPortraitPals
-
-	db TILESET_SAM, PALETTE_122
-	dw SGBData_SamPortraitPals
-
-	db TILESET_IMAKUNI, PALETTE_123
-	dw SGBData_ImakuniPortraitPals
-
-	db TILESET_NIKKI, PALETTE_124
-	dw SGBData_NikkiPortraitPals
-
-	db TILESET_RICK, PALETTE_125
-	dw SGBData_RickPortraitPals
-
-	db TILESET_KEN, PALETTE_126
-	dw SGBData_KenPortraitPals
-
-	db TILESET_AMY, PALETTE_127
-	dw SGBData_AmyPortraitPals
-
-	db TILESET_ISAAC, PALETTE_128
-	dw SGBData_IsaacPortraitPals
-
-	db TILESET_MITCH, PALETTE_129
-	dw SGBData_MitchPortraitPals
-
-	db TILESET_GENE, PALETTE_130
-	dw SGBData_GenePortraitPals
-
-	db TILESET_MURRAY, PALETTE_131
-	dw SGBData_MurrayPortraitPals
-
-	db TILESET_COURTNEY, PALETTE_132
-	dw SGBData_CourtneyPortraitPals
-
-	db TILESET_STEVE, PALETTE_133
-	dw SGBData_StevePortraitPals
-
-	db TILESET_JACK, PALETTE_134
-	dw SGBData_JackPortraitPals
-
-	db TILESET_ROD, PALETTE_135
-	dw SGBData_RodPortraitPals
-
-	db TILESET_JOSEPH, PALETTE_136
-	dw SGBData_JosephPortraitPals
-
-	db TILESET_DAVID, PALETTE_137
-	dw SGBData_DavidPortraitPals
-
-	db TILESET_ERIK, PALETTE_138
-	dw SGBData_ErikPortraitPals
-
-	db TILESET_JOHN, PALETTE_139
-	dw SGBData_JohnPortraitPals
-
-	db TILESET_ADAM, PALETTE_140
-	dw SGBData_AdamPortraitPals
-
-	db TILESET_JONATHAN, PALETTE_141
-	dw SGBData_JonathanPortraitPals
-
-	db TILESET_JOSHUA, PALETTE_142
-	dw SGBData_JoshuaPortraitPals
-
-	db TILESET_NICHOLAS, PALETTE_143
-	dw SGBData_NicholasPortraitPals
-
-	db TILESET_BRANDON, PALETTE_144
-	dw SGBData_BrandonPortraitPals
-
-	db TILESET_MATTHEW, PALETTE_145
-	dw SGBData_MatthewPortraitPals
-
-	db TILESET_RYAN, PALETTE_146
-	dw SGBData_RyanPortraitPals
-
-	db TILESET_ANDREW, PALETTE_147
-	dw SGBData_AndrewPortraitPals
-
-	db TILESET_CHRIS, PALETTE_148
-	dw SGBData_ChrisPortraitPals
-
-	db TILESET_MICHAEL, PALETTE_149
-	dw SGBData_MichaelPortraitPals
-
-	db TILESET_DANIEL, PALETTE_150
-	dw SGBData_DanielPortraitPals
-
-	db TILESET_ROBERT, PALETTE_151
-	dw SGBData_RobertPortraitPals
-
-	db TILESET_BRITTANY, PALETTE_152
-	dw SGBData_BrittanyPortraitPals
-
-	db TILESET_KRISTIN, PALETTE_153
-	dw SGBData_KristinPortraitPals
-
-	db TILESET_HEATHER, PALETTE_154
-	dw SGBData_HeatherPortraitPals
-
-	db TILESET_SARA, PALETTE_155
-	dw SGBData_SaraPortraitPals
-
-	db TILESET_AMANDA, PALETTE_156
-	dw SGBData_AmandaPortraitPals
-
-	db TILESET_JENNIFER, PALETTE_157
-	dw SGBData_JenniferPortraitPals
-
-	db TILESET_JESSICA, PALETTE_158
-	dw SGBData_JessicaPortraitPals
-
-	db TILESET_STEPHANIE, PALETTE_159
-	dw SGBData_StephaniePortraitPals
-
-	db TILESET_AARON, PALETTE_160
-	dw SGBData_AaronPortraitPals
-
-	db TILESET_PLAYER, PALETTE_120
-	dw SGBData_LinkOpponentPortraitPals
-	assert_table_length NUM_PICS
+INCLUDE "data/duel/portraits.asm"
 
 LoadBoosterGfx:
 	push hl

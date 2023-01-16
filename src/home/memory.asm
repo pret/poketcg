@@ -1,7 +1,7 @@
 ; decompresses data from a given bank
 ; uses values initialized by InitDataDecompression
 ; input:
-; bc = row width
+; bc = buffer length
 ; de = buffer to place decompressed data
 DecompressDataFromBank::
 	ldh a, [hBankROM]

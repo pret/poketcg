@@ -1487,10 +1487,10 @@ Func_16f6::
 	call SwapTurn
 	xor a
 	ld [wccec], a
-	ld [wEffectFunctionsFeedbackIndex], a
+	ld [wStatusConditionQueueIndex], a
 	ld [wEffectFailed], a
 	ld [wIsDamageToSelf], a
-	ld [wccef], a
+	ld [wDefendingWasForcedToSwitch], a
 	ld [wMetronomeEnergyCost], a
 	ld [wNoEffectFromWhichStatus], a
 	bank1call ClearNonTurnTemporaryDuelvars_CopyStatus
@@ -1560,7 +1560,7 @@ PlayAttackAnimation_DealAttackDamage::
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ld b, $0
+	ld b, PLAY_AREA_ARENA
 	ld a, [wDamageEffectiveness]
 	ld c, a
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -1568,7 +1568,7 @@ PlayAttackAnimation_DealAttackDamage::
 	push de
 	push hl
 	call PlayAttackAnimation
-	call Func_741a
+	call PlayStatusConditionQueueAnimations
 	call WaitAttackAnimation
 	pop hl
 	pop de
@@ -1581,8 +1581,9 @@ PlayAttackAnimation_DealAttackDamage::
 	pop hl
 .skip_draw_huds
 	call PrintKnockedOutIfHLZero
-	jr Func_17fb
+	jr HandleAfterDamageEffects
 
+; unreferenced
 Func_17ed::
 	call DrawWideTextBox_WaitForInput
 	xor a
@@ -1593,7 +1594,7 @@ Func_17ed::
 	ld [wNoDamageOrEffect], a
 ;	fallthrough
 
-Func_17fb::
+HandleAfterDamageEffects::
 	ld a, [wTempNonTurnDuelistCardID]
 	push af
 	ld a, EFFECTCMDTYPE_AFTER_DAMAGE
@@ -1601,9 +1602,9 @@ Func_17fb::
 	pop af
 	ld [wTempNonTurnDuelistCardID], a
 	call HandleStrikesBack_AgainstResidualAttack
-	bank1call Func_6df1
+	bank1call ApplyStatusConditionQueue
 	call Func_1bb4
-	bank1call Func_7195
+	bank1call UpdateArenaCardLastTurnDamage
 	call Func_6e49
 	or a
 	ret
@@ -1705,7 +1706,7 @@ Func_189d::
 	call GetNonTurnDuelistVariable
 	or a
 	jr nz, .asm_18b9
-	ld a, [wEffectFunctionsFeedbackIndex]
+	ld a, [wStatusConditionQueueIndex]
 	or a
 	ret z
 .asm_18b9
@@ -1829,7 +1830,7 @@ DealConfusionDamageToSelf::
 	bank1call ApplyDamageModifiers_DamageToSelf ; this is at bank 0
 	ld a, [wDamageEffectiveness]
 	ld c, a
-	ld b, $0
+	ld b, PLAY_AREA_ARENA
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	bank1call PlayAttackAnimation_DealAttackDamageSimple
@@ -2212,19 +2213,19 @@ PrintPokemonsAttackText::
 	ret
 
 Func_1bb4::
-	call Func_3b31
+	call FinishQueuedAnimations
 	bank1call DrawDuelMainScene
 	call DrawDuelHUDs
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
-	call Func_1bca
+	call PrintFailedEffectText
 	call WaitForWideTextBoxInput
 	call ExchangeRNG
 	ret
 
 ; prints one of the ThereWasNoEffectFrom*Text if wEffectFailed contains EFFECT_FAILED_NO_EFFECT,
 ; and prints WasUnsuccessfulText if wEffectFailed contains EFFECT_FAILED_UNSUCCESSFUL
-Func_1bca::
+PrintFailedEffectText::
 	ld a, [wEffectFailed]
 	or a
 	ret z

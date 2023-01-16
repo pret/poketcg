@@ -2,7 +2,7 @@
 ; or until Start button is pressed
 UnusedCopyrightScreen: ; unreferenced
 	call DisableLCD
-	farcall Func_10a9b
+	farcall LoadConsolePaletteData
 	farcall InitMenuScreen
 	ld bc, $0
 	ld a, SCENE_COPYRIGHT

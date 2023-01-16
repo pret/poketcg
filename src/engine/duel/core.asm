@@ -84,7 +84,7 @@ MainDuelLoop:
 	jr nz, .duel_finished
 	call UpdateSubstatusConditions_EndOfTurn
 	call HandleBetweenTurnsEvents
-	call Func_3b31
+	call FinishQueuedAnimations
 	call ExchangeRNG
 	ld a, [wDuelFinished]
 	or a
@@ -179,7 +179,7 @@ MainDuelLoop:
 	jr z, .tied_duel
 	call PlayDefaultSong
 	call WaitForWideTextBoxInput
-	call Func_3b31
+	call FinishQueuedAnimations
 	call ResetSerial
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
@@ -187,7 +187,7 @@ MainDuelLoop:
 
 .tied_duel
 	call WaitForWideTextBoxInput
-	call Func_3b31
+	call FinishQueuedAnimations
 	ld a, [wDuelTheme]
 	call PlaySong
 	ldtx hl, StartSuddenDeathMatchText
@@ -741,13 +741,13 @@ PlayPokemonCard:
 
 ; triggered by selecting the "Check" item in the duel menu
 DuelMenu_Check:
-	call Func_3b31
+	call FinishQueuedAnimations
 	call OpenDuelCheckMenu
 	jp DuelMainInterface
 
 ; triggered by pressing SELECT in the duel menu
 DuelMenuShortcut_BothActivePokemon:
-	call Func_3b31
+	call FinishQueuedAnimations
 	call Func_4597
 	jp DuelMainInterface
 
@@ -892,11 +892,11 @@ DisplayRetreatScreen:
 ; card's information and a menu to select the attached energy cards to discard.
 ; input: a = PLAY_AREA_* of the Pokemon trying to discard energies from.
 DisplayEnergyDiscardScreen:
-	ld [wcbe0], a
+	ld [wEnergyDiscardPlayAreaLocation], a
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
 	call LoadDuelFaceDownCardTiles
-	ld a, [wcbe0]
+	ld a, [wEnergyDiscardPlayAreaLocation]
 	ld hl, wCurPlayAreaSlot
 	ld [hli], a
 	ld [hl], 0 ; wCurPlayAreaY
@@ -1061,7 +1061,7 @@ OpenAttackPage:
 	xor a
 	ld [wCurPlayAreaSlot], a
 	call EmptyScreen
-	call Func_3b31
+	call FinishQueuedAnimations
 	ld de, v0Tiles1 + $20 tiles
 	call LoadLoaded1CardGfx
 	call SetOBP1OrSGB3ToCardPalette
@@ -1477,7 +1477,7 @@ PlayTurnDuelistDrawAnimation:
 	jr c, .loop_anim
 
 .done_anim
-	call Func_3b31
+	call FinishQueuedAnimations
 	ret
 
 ; prints, for each duelist, the number of cards in the hand along with the
@@ -2204,7 +2204,7 @@ PlayShuffleAndDrawCardsAnimation:
 	call CheckAnyAnimationPlaying
 	jr c, .loop_shuffle_anim
 .done_shuffle
-	call Func_3b31
+	call FinishQueuedAnimations
 
 .print_deck_info
 	xor a
@@ -2252,7 +2252,7 @@ PlayShuffleAndDrawCardsAnimation:
 	jr nz, .wait_loop
 
 .done
-	call Func_3b31
+	call FinishQueuedAnimations
 	pop bc
 	ret
 
@@ -2304,7 +2304,7 @@ Func_4f2d:
 	jr c, .loop_anim
 
 .done_anim
-	call Func_3b31
+	call FinishQueuedAnimations
 	ld a, $01
 	ret
 
@@ -3488,7 +3488,7 @@ OpenCardPage:
 	ld [wCardPageType], a
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
-	call Func_3b31
+	call FinishQueuedAnimations
 	; load the graphics and display the card image of wLoadedCard1
 	call LoadDuelCardSymbolTiles
 	ld de, v0Tiles1 + $20 tiles
@@ -3568,7 +3568,7 @@ DrawWholeScreenTextBox:
 	ret
 
 Func_5805:
-	call Func_3b31
+	call FinishQueuedAnimations
 	ld a, [wNumberPrizeCardsToTake]
 	ld l, a
 	ld h, $00
@@ -5054,7 +5054,7 @@ Func_60dd:
 	ret z
 	ld a, [wcbd4]
 	cp $02
-	jr z, .asm_6121
+	jr z, .return_carry
 	xor a
 	ld [wCurrentDuelMenuItem], a
 .asm_60f2
@@ -5079,9 +5079,10 @@ Func_60dd:
 	call HasAlivePokemonInBench
 	ld a, $01
 	ld [wcbd4], a
-.asm_6121
+.return_carry
 	scf
 	ret
+
 .a_pressed
 	ld a, [wCurrentDuelMenuItem]
 	cp 2
@@ -6370,7 +6371,7 @@ Func_6862:
 	jr .return_carry
 
 Func_68c6:
-	call Func_3b31
+	call FinishQueuedAnimations
 	ld hl, sp+$00
 	ld a, l
 	ld [wcbf7], a
@@ -7146,54 +7147,62 @@ ConvertSpecialTrainerCardToPokemon::
 	db UNABLE_RETREAT     ; CARD_DATA_RETREAT_COST
 	ds $0d                ; PKMN_CARD_DATA_LENGTH - (CARD_DATA_RETREAT_COST + 1)
 
-; this function applies status conditions to the defending Pokemon,
-; returned by the effect functions in wEffectFunctionsFeedback
-Func_6df1::
+; this function applies all status conditions in order
+; that have been added to the wStatusConditionQueue
+; return carry if any status conditions were applied
+; and the defending Pokemon didn't have "No Damage or Effect" status
+ApplyStatusConditionQueue::
 	xor a
 	ld [wPlayerArenaCardLastTurnStatus], a
 	ld [wOpponentArenaCardLastTurnStatus], a
-	ld hl, wEffectFunctionsFeedbackIndex
+	ld hl, wStatusConditionQueueIndex
 	ld a, [hl]
 	or a
 	ret z
 	ld e, [hl]
 	ld d, $00
-	ld hl, wEffectFunctionsFeedback
+	ld hl, wStatusConditionQueue
 	add hl, de
-	ld [hl], $00
+	ld [hl], $00 ; terminator byte
 	call CheckNoDamageOrEffect
 	jr c, .no_damage_or_effect
-	ld hl, wEffectFunctionsFeedback
+
+; apply all status conditions unconditionally
+	ld hl, wStatusConditionQueue
 .apply_status_loop
 	ld a, [hli]
 	or a
-	jr z, .done
-	ld d, a
+	jr z, .done_apply_all
+	ld d, a ; which duelist side
 	call ApplyStatusConditionToArenaPokemon
 	jr .apply_status_loop
-.done
+.done_apply_all
 	scf
 	ret
+
 .no_damage_or_effect
 	ld a, l
 	or h
 	call nz, DrawWideTextBox_PrintText
-	ld hl, wEffectFunctionsFeedback
-.asm_6e23
+
+; if no damage or effect to defending Pokemon,
+; we will just apply the conditions to turn duelist's Pokemon
+	ld hl, wStatusConditionQueue
+.apply_own_status_loop
 	ld a, [hli]
 	or a
-	jr z, .asm_6e37
+	jr z, .done_apply_own
 	ld d, a
 	ld a, [wWhoseTurn]
 	cp d
-	jr z, .asm_6e32
+	jr z, .apply_own_condition
 	inc hl
 	inc hl
-	jr .asm_6e23
-.asm_6e32
+	jr .apply_own_status_loop
+.apply_own_condition
 	call ApplyStatusConditionToArenaPokemon
-	jr .asm_6e23
-.asm_6e37
+	jr .apply_own_status_loop
+.done_apply_own
 	ret
 
 ; apply the status condition at hl+1 to the arena Pokemon
@@ -7382,7 +7391,7 @@ ReplaceKnockedOutPokemon:
 
 ; replace the arena Pokemon with the one at location [hTempPlayAreaLocation_ff9d]
 .replace_pokemon
-	call Func_3b31
+	call FinishQueuedAnimations
 	ld a, PRACTICEDUEL_REPLACE_KNOCKED_OUT_POKEMON
 	call DoPracticeDuelAction
 	jr c, .select_pokemon
@@ -7786,12 +7795,12 @@ ClearNonTurnTemporaryDuelvars_CopyStatus::
 	ret
 
 ; update non-turn holder's DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
-; if wccef == 0: set to [wDealtDamage]
-; if wceef != 0: set to 0
-Func_7195::
+; if wDefendingWasForcedToSwitch == 0: set to [wDealtDamage]
+; if wDefendingWasForcedToSwitch != 0: set to 0
+UpdateArenaCardLastTurnDamage::
 	ld a, DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
 	call GetNonTurnDuelistVariable
-	ld a, [wccef]
+	ld a, [wDefendingWasForcedToSwitch]
 	or a
 	jr nz, .zero
 	ld a, [wDealtDamage]
@@ -8005,13 +8014,13 @@ _TossCoin::
 	call Func_72ff
 
 .asm_72e2
-	call Func_3b31
+	call FinishQueuedAnimations
 	ld a, [wCoinTossNumTossed]
 	ld hl, wCoinTossTotalNum
 	cp [hl]
 	jp c, .print_coin_tally
 	call ExchangeRNG
-	call Func_3b31
+	call FinishQueuedAnimations
 	call ResetAnimationQueue
 
 ; return carry if at least 1 heads
@@ -8073,7 +8082,7 @@ Func_7344:
 	pop af
 	ret
 .asm_734d
-	call Func_3b31
+	call FinishQueuedAnimations
 	call DuelTransmissionError
 	ret
 
@@ -8200,24 +8209,25 @@ Func_7415::
 	ld [wce7e], a
 	ret
 
-Func_741a::
-	ld hl, wEffectFunctionsFeedbackIndex
+; plays all animations that are queued in wStatusConditionQueue
+PlayStatusConditionQueueAnimations::
+	ld hl, wStatusConditionQueueIndex
 	ld a, [hl]
 	or a
 	ret z
 	ld e, a
 	ld d, $00
-	ld hl, wEffectFunctionsFeedback
+	ld hl, wStatusConditionQueue
 	add hl, de
 	ld [hl], $00
-	ld hl, wEffectFunctionsFeedback
+	ld hl, wStatusConditionQueue
 .loop
 	ld a, [hli]
 	or a
 	jr z, .done
 	ld d, a
 	inc hl
-	ld a, [hli]
+	ld a, [hli] ; which condition to inflict
 	ld e, ATK_ANIM_SLEEP
 	cp ASLEEP
 	jr z, .got_anim
@@ -8236,7 +8246,9 @@ Func_741a::
 	ldh a, [hWhoseTurn]
 	cp d
 	jr nz, .got_anim
-	ld e, ATK_ANIM_IMAKUNI_CONFUSION
+	; if it's applied to the turn duelist
+	; then load the own confusion animation instead
+	ld e, ATK_ANIM_OWN_CONFUSION
 .got_anim
 	ld a, e
 	ld [wLoadedAttackAnimation], a
@@ -8287,6 +8299,7 @@ WaitAttackAnimation::
 ; input:
 ; - [wLoadedAttackAnimation]: animation to play
 ; - de: damage dealt by the attack (to display the animation with the number)
+; - b: PLAY_AREA_* location, if applicable
 ; - c: a wDamageEffectiveness constant (to print WEAK or RESIST if necessary)
 PlayAttackAnimation::
 	ldh a, [hWhoseTurn]
@@ -8297,19 +8310,19 @@ PlayAttackAnimation::
 	ld a, [wWhoseTurn]
 	ldh [hWhoseTurn], a
 	ld a, c
-	ld [wce81], a
+	ld [wDamageAnimEffectiveness], a
 	ldh a, [hWhoseTurn]
 	cp h
-	jr z, .asm_74aa
+	jr z, .got_location
 	set 7, b
-.asm_74aa
+.got_location
 	ld a, b
-	ld [wce82], a
+	ld [wDamageAnimPlayAreaLocation], a
 	ld a, [wWhoseTurn]
-	ld [wce83], a
+	ld [wDamageAnimPlayAreaSide], a
 	ld a, [wTempNonTurnDuelistCardID]
-	ld [wce84], a
-	ld hl, wce7f
+	ld [wDamageAnimCardID], a
+	ld hl, wDamageAnimAmount
 	ld [hl], e
 	inc hl
 	ld [hl], d

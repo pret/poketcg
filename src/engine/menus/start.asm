@@ -17,14 +17,14 @@ HandleTitleScreen:
 	call LoadTitleScreenSprites
 
 	xor a
-	ld [wd635], a
+	ld [wTitleScreenOrbCounter], a
 	ld a, $3c
 	ld [wTitleScreenIgnoreInputCounter], a
 .loop
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
 	call AnimateRandomTitleScreenOrb
-	ld hl, wd635
+	ld hl, wTitleScreenOrbCounter
 	inc [hl]
 	call AssertSongFinished
 	or a
@@ -402,7 +402,7 @@ ShowCardPopCGBDisclaimer:
 
 DrawPlayerPortraitAndPrintNewGameText:
 	call DisableLCD
-	farcall Func_10a9b
+	farcall LoadConsolePaletteData
 	farcall InitMenuScreen
 	call EnableAndClearSpriteAnimations
 	ld hl, HandleAllSpriteAnimations

@@ -32,7 +32,7 @@ GiftCenterMenu:
 	ld a, 1 << AUTO_CLOSE_TEXTBOX
 	farcall SetOverworldNPCFlags
 	ld a, [wSelectedGiftCenterMenuItem]
-	ld hl, Unknown_10e17
+	ld hl, .GiftCenterMenuParams
 	farcall InitAndPrintMenu
 .loop_input
 	call DoFrameIfLCDEnabled
@@ -42,35 +42,34 @@ GiftCenterMenu:
 	ld [wSelectedGiftCenterMenuItem], a
 	ldh a, [hCurMenuItem]
 	cp e
-	jr z, .asm_10ddd
-	ld a, $4
-
-.asm_10ddd
-	ld [wd10e], a
+	jr z, .got_choice
+	ld a, GIFT_CENTER_MENU_EXIT
+.got_choice
+	ld [wGiftCenterChoice], a
 	push af
-	ld hl, Unknown_10df0
+	ld hl, .LoadTextPointerFunctionTable
 	call JumpToFunctionInTable
 	farcall CloseTextBox
 	call DoFrameIfLCDEnabled
 	pop af
 	ret
 
-Unknown_10df0:
-	dw Func_10dfb
-	dw Func_10dfb
-	dw Func_10dfb
-	dw Func_10dfb
-	dw Func_10dfa
+.LoadTextPointerFunctionTable:
+	dw .LoadChoiceTextPointer ; GIFT_CENTER_MENU_SEND_CARD
+	dw .LoadChoiceTextPointer ; GIFT_CENTER_MENU_RECEIVE_CARD
+	dw .LoadChoiceTextPointer ; GIFT_CENTER_MENU_SEND_DECK
+	dw .LoadChoiceTextPointer ; GIFT_CENTER_MENU_RECEIVE_DECK
+	dw .stub                  ; GIFT_CENTER_MENU_EXIT
 
-Func_10dfa:
+.stub
 	ret
 
-Func_10dfb:
-	ld a, [wd10e]
+.LoadChoiceTextPointer:
+	ld a, [wGiftCenterChoice]
 	add a
 	ld c, a
 	ld b, $00
-	ld hl, Unknown_10e0f
+	ld hl, .GiftCenterTextPointers
 	add hl, bc
 	ld a, [hli]
 	ld [wTxRam2], a
@@ -78,13 +77,13 @@ Func_10dfb:
 	ld [wTxRam2 + 1], a
 	ret
 
-Unknown_10e0f:
-	tx SendCardText
-	tx ReceiveCardText
-	tx SendDeckConfigurationText
-	tx ReceiveDeckConfigurationText
+.GiftCenterTextPointers:
+	tx SendCardText                 ; GIFT_CENTER_MENU_SEND_CARD
+	tx ReceiveCardText              ; GIFT_CENTER_MENU_RECEIVE_CARD
+	tx SendDeckConfigurationText    ; GIFT_CENTER_MENU_SEND_DECK
+	tx ReceiveDeckConfigurationText ; GIFT_CENTER_MENU_RECEIVE_DECK
 
-Unknown_10e17:
+.GiftCenterMenuParams:
 	db  4,  0 ; start menu coords
 	db 16, 12 ; start menu text box dimensions
 

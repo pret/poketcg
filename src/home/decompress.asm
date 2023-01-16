@@ -34,7 +34,7 @@ InitDataDecompression::
 ; uses values initialized by InitDataDecompression
 ; wDecompSourcePosPtr holds the pointer for compressed source
 ; input:
-; bc = row width
+; bc = buffer length
 ; de = buffer to place decompressed data
 DecompressData::
 	push hl

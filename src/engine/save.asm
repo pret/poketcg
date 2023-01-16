@@ -489,7 +489,7 @@ WRAMToSRAMMapper:
 	wram_sram_map wMastersBeatenList,                10, $00, $ff ; sMastersBeatenList
 	wram_sram_map wNPCDuelistDirection,               1, $00, $ff ; sNPCDuelistDirection
 	wram_sram_map wMultichoiceTextboxResult_ChooseDeckToDuelAgainst, 1, $00, $ff ; sMultichoiceTextboxResult_ChooseDeckToDuelAgainst
-	wram_sram_map wd10e,                              1, $00, $ff ; sb84b
+	wram_sram_map wGiftCenterChoice,                  1, $00, $ff ; sGiftCenterChoice
 	wram_sram_map .EmptySRAMSlot,                    15, $00, $ff ; sb84c
 	wram_sram_map .EmptySRAMSlot,                    16, $00, $ff ; sb85b
 	wram_sram_map .EmptySRAMSlot,                    16, $00, $ff ; sb86b

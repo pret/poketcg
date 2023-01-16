@@ -1,6 +1,6 @@
 PlayIntroSequence:
 	call DisableLCD
-	farcall Func_10a9b
+	farcall LoadConsolePaletteData
 	farcall InitMenuScreen
 	call EnableAndClearSpriteAnimations
 	ld hl, HandleAllSpriteAnimations

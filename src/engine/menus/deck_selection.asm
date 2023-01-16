@@ -24,11 +24,11 @@ WriteCardListsTerminatorBytes:
 	ld hl, wFilteredCardList
 	ld bc, DECK_SIZE
 	add hl, bc
-	ld [hl], a ; wcf16
+	ld [hl], a ; terminator byte
 	ld hl, wCurDeckCards
 	ld bc, DECK_CONFIG_BUFFER_SIZE
 	add hl, bc
-	ld [hl], a ; wCurDeckCardsTerminator
+	ld [hl], a ; terminator byte
 	ret
 
 ; inits some SRAM addresses

@@ -523,7 +523,7 @@ wCardListItemSelectionMenuType:: ; cbde
 wSortCardListByID:: ; cbdf
 	ds $1
 
-wcbe0:: ; cbe0
+wEnergyDiscardPlayAreaLocation:: ; cbe0
 	ds $1
 
 wOpponentTurnEnded:: ; cbe1
@@ -781,13 +781,16 @@ wGotHeadsFromConfusionCheck:: ; ccc9
 wAllStagesIndices:: ; ccca
 	ds $3
 
-wEffectFunctionsFeedbackIndex:: ; cccd
+wStatusConditionQueueIndex:: ; cccd
 	ds $1
 
-; some array used in effect functions with wEffectFunctionsFeedbackIndex
-; as the index, used to return feedback. unknown length.
-wEffectFunctionsFeedback:: ; ccce
-	ds $18
+; 3-byte array used in effect functions with wStatusConditionQueueIndex as the index,
+; used to inflict a variable number of status conditions to Arena Pokemon (max 8)
+; byte 1: which duelist side
+; byte 2: conditions to remove (e.g. paralysis removes poison condition)
+; byte 3: conditions to inflict
+wStatusConditionQueue:: ; ccce
+	ds 3 * 8
 
 ; this is 1 (non-0) if dealing damage to self due to confusion
 ; or a self-destruct type attack
@@ -819,9 +822,10 @@ wEffectFailed:: ; cced
 wPreEvolutionPokemonCard:: ; ccee
 	ds $1
 
-; flag to determine whether DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
+; whether Defending Pokemon was forced to switch due to an attack
+; determines whether DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
 ; gets zeroed or gets updated with wDealtDamage
-wccef:: ; ccef
+wDefendingWasForcedToSwitch:: ; ccef
 	ds $1
 
 ; stores the energy cost of the Metronome attack being used.
@@ -943,7 +947,7 @@ wNumListItems:: ; cd1b
 wListItemNameMaxLength:: ; cd1c
 	ds $1
 
-; if non-$0000, the function loaded here is called once per frame by CardListMenuFunction,
+; if not NULL, the function loaded here is called once per frame by CardListMenuFunction,
 ; which is the function loaded to wMenuFunctionPointer for card lists
 wListFunctionPointer:: ; cd1d
 	ds $2
@@ -1271,7 +1275,9 @@ wce0f:: ; ce0f
 wAITrainerCardToPlay:: ; ce16
 	ds $1
 
-wce17:: ; ce17
+; temporarily stores the card ID from AITrainerCardLogic
+; to compare with the card in AI's hand
+wAITrainerLogicCard:: ; ce17
 	ds $1
 
 wAITrainerCardPhase:: ; ce18
@@ -1494,7 +1500,7 @@ wce6c:: ; ce6c
 wce6d:: ; ce6d
 	ds $1
 
-wce6e:: ; ce6e
+wSerialTransferData:: ; ce6e
 	ds $1
 
 wPrinterStatus:: ; ce6f
@@ -1505,7 +1511,9 @@ wPrinterStatus:: ; ce6f
 wSerialDataPtr:: ; ce70
 	ds $2
 
-wce72:: ; ce72
+; keeps track of which Bench Pokemon is pointed
+; by the cursor during Gigashock selection screen
+wCurGigashockItem:: ; ce72
 	ds $1
 
 ; card index and its attack index chosen
@@ -1517,7 +1525,7 @@ wMetronomeSelectedAttack:: ; ce73
 wNumberOfCardsToOrder:: ; ce75
 	ds $1
 
-wce76:: ; ce76
+wBackupPlayerAreaHP:: ; ce76
 	ds MAX_PLAY_AREA_POKEMON
 
 ; used in CountPokemonIDInPlayArea
@@ -1529,19 +1537,20 @@ wTempPokemonID_ce7c:: ; ce7c
 wce7e:: ; ce7e
 	ds $1
 
-wce7f:: ; ce7f
+wDamageAnimAmount:: ; ce7f
 	ds $2
 
-wce81:: ; ce81
+wDamageAnimEffectiveness:: ; ce81
 	ds $1
 
-wce82:: ; ce82
+wDamageAnimPlayAreaLocation:: ; ce82
 	ds $1
 
-wce83:: ; ce83
+; this value is never read
+wDamageAnimPlayAreaSide:: ; ce83
 	ds $1
 
-wce84:: ; ce84
+wDamageAnimCardID:: ; ce84
 	ds $1
 
 ; buffer to store data that will be sent/received through IR
@@ -1551,7 +1560,7 @@ wIRDataBuffer:: ; ce85
 wVBlankFunctionTrampolineBackup:: ; ce8d
 	ds $2
 
-wce8f:: ; ce8f
+wTempPrinterSRAM:: ; ce8f
 	ds $1
 
 wPrinterHorizontalOffset:: ; ce90
@@ -1778,18 +1787,12 @@ wFilteredCardList:: ; ceda
 
 ; stores AI temporary hand card list
 wHandTempList:: ; ceda
-	ds DECK_SIZE
-
-; terminator for wceda
-wcf16:: ; cf16
-	ds $1
+	ds DECK_SIZE + 1
 
 ; holds cards for the current deck
 wCurDeckCards:: ; cf17
-	ds DECK_CONFIG_BUFFER_SIZE
+	ds DECK_CONFIG_BUFFER_SIZE + 1
 
-wCurDeckCardsTerminator:: ; cf67
-	ds $1
 wCurDeckCardsEnd::
 
 
@@ -2060,7 +2063,7 @@ wOBP0Backup:: ; d10c
 wOBP1Backup:: ; d10d
 	ds $1
 
-wd10e:: ; d10e
+wGiftCenterChoice:: ; d10e
 	ds $1
 
 wReloadOverworldCallbackPtr:: ; d10f
@@ -2185,7 +2188,7 @@ wBGMapPermissionDataPtr:: ; d23a
 wBGMapCGBMode:: ; d23c
 	ds $1
 
-wd23d:: ; d23d
+wBGMapBank:: ; d23d
 	ds $1
 
 UNION
@@ -2220,7 +2223,9 @@ wd291:: ; d291
 wWriteBGMapToSRAM:: ; d292
 	ds $1
 
-wd293:: ; d293
+; console-dependent palette data
+; for BGP and OBP
+wConsolePaletteData:: ; d293
 	ds $1
 
 wTempBGP:: ; d294
@@ -2582,7 +2587,8 @@ wDuelAnimLocationParam:: ; d4b0
 wDuelAnimDamage:: ; d4b1
 	ds $2
 
-wd4b3:: ; d4b3
+wDuelAnimSetScreen:: ; d4b3
+wDuelAnimEffectiveness:: ; d4b3
 	ds $1
 
 ; stores the character symbols of some
@@ -2591,10 +2597,10 @@ wd4b3:: ; d4b3
 wDecimalChars:: ; d4b4
 	ds $3
 
-wd4b7:: ; d4b7
+wDamageCharIndex:: ; d4b7
 	ds $1
 
-wd4b8:: ; d4b8
+wDamageCharAnimDelay:: ; d4b8
 	ds $1
 
 ; pointer to a function to update
@@ -2606,7 +2612,8 @@ wScreenAnimUpdatePtr:: ; d4b9
 wScreenAnimDuration:: ; d4bb
 	ds $1
 
-wd4bc:: ; d4bc
+wScreenShakeOffsetsPtr:: ; d4bc
+wTempWhiteFlashBGP:: ; d4bc
 	ds $2
 
 ; bank number to return to after processing animation
@@ -2697,7 +2704,7 @@ wCurrSpriteRightEdgeCheck:: ; d5d4
 wCurrSpriteBottomEdgeCheck:: ; d5d5
 	ds $1
 
-wd5d6:: ; d5d6
+wCurrSpriteFrameBank:: ; d5d6
 	ds $1
 
 ; when non-0, skips all routines
@@ -2746,7 +2753,7 @@ wSceneBaseX:: ; d61c
 wSceneBaseY:: ; d61d
 	ds $1
 
-wd61e:: ; d61e
+wCurPortrait:: ; d61e
 	ds $1
 
 wd61f:: ; d61f
@@ -2804,7 +2811,9 @@ wSequenceDelay:: ; d633
 wIntroSequencePalsNeedUpdate:: ; d634
 	ds $1
 
-wd635:: ; d635
+; counter that increments each frame in the Title screen
+; if bottom 6 bits are 0, then spawn a new orb
+wTitleScreenOrbCounter:: ; d635
 	ds $1
 
 ; has parameters used for the Start Menu

@@ -33,7 +33,8 @@ DEF const_value = const_value+1
 	const NPC_DATA_MATCH_START_ID
 DEF NPC_DATA_LENGTH EQU const_value
 
-	const_def 1
+	const_def
+	const INVALID_PIC   ; $00
 	const PLAYER_PIC    ; $01
 	const RONALD_PIC    ; $02
 	const SAM_PIC       ; $03

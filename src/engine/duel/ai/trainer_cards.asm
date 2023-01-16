@@ -31,7 +31,7 @@ _AIProcessHandTrainerCards:
 	jp nz, .inc_hl_by_5
 
 	ld a, [hli]
-	ld [wce17], a
+	ld [wAITrainerLogicCard], a
 	ld a, [wAITrainerCardToPlay]
 	call LoadCardDataToBuffer1_FromDeckIndex
 
@@ -47,7 +47,7 @@ _AIProcessHandTrainerCards:
 .skip_switch_check
 ; compare hand card to second byte in data and continue if equal.
 	ld b, a
-	ld a, [wce17]
+	ld a, [wAITrainerLogicCard]
 	cp b
 	jr nz, .inc_hl_by_4
 
@@ -357,7 +357,7 @@ AIPlay_SuperPotion:
 	ret
 
 ; if AI doesn't decide to retreat this card and card has
-; any energy cards attached,  check if defending Pokémon can KO
+; any energy cards attached, check if defending Pokémon can KO
 ; active card next turn after using Super Potion.
 ; if it cannot, return carry.
 ; also take into account whether attack is high recoil.

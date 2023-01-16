@@ -164,7 +164,7 @@ HandleDeckMissingCardsList:
 	call ProcessText
 	ret
 
-Func_af1d:
+GiftCenter_SendCard:
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -221,7 +221,7 @@ Func_af1d:
 	scf
 	ret
 
-Func_af98:
+GiftCenter_ReceiveCard:
 	xor a
 	ld [wDuelTempList], a
 	ld [wNameBuffer], a
@@ -482,9 +482,9 @@ EmptyScreenAndDrawTextBox:
 	ret
 
 Func_b177::
-	ld a, [wd10e]
-	and $03
-	ld hl, .FunctionTable
+	ld a, [wGiftCenterChoice]
+	and $3
+	ld hl, .GiftCenterFunctionTable
 	call JumpToFunctionInTable
 	jr c, .asm_b18f
 	or a
@@ -495,14 +495,14 @@ Func_b177::
 	ret
 .asm_b18f
 	ld a, $ff
-	ld [wd10e], a
+	ld [wGiftCenterChoice], a
 	ret
 
-.FunctionTable
-	dw Func_af1d
-	dw Func_af98
-	dw Func_bc04
-	dw Func_bc7a
+.GiftCenterFunctionTable
+	dw GiftCenter_SendCard    ; GIFT_CENTER_MENU_SEND_CARD
+	dw GiftCenter_ReceiveCard ; GIFT_CENTER_MENU_RECEIVE_CARD
+	dw GiftCenter_SendDeck    ; GIFT_CENTER_MENU_SEND_DECK
+	dw GiftCenter_ReceiveDeck ; GIFT_CENTER_MENU_RECEIVE_DECK
 
 HandleDeckSaveMachineMenu:
 	xor a
@@ -2149,7 +2149,7 @@ HandleAutoDeckMenu:
 	jr nz, .loop
 	ret
 
-Func_bc04:
+GiftCenter_SendDeck:
 	xor a
 	ld [wCardListVisibleOffset], a
 	ldtx de, DeckSaveMachineText
@@ -2210,7 +2210,7 @@ Func_bc04:
 	or a
 	ret
 
-Func_bc7a:
+GiftCenter_ReceiveDeck:
 	xor a
 	ld [wCardListVisibleOffset], a
 	ldtx de, DeckSaveMachineText

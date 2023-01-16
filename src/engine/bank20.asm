@@ -87,7 +87,7 @@ LoadTilemap:
 ; get pointer and bank for BG Map
 	call Func_803b9
 	ld a, [wTempPointerBank]
-	ld [wd23d], a
+	ld [wBGMapBank], a
 
 ; store header data
 	ld de, wDecompressionBuffer
@@ -1186,7 +1186,7 @@ Func_80baa:
 	ld c, a
 	ld a, [wCurTilemap]
 	push af
-	ld a, [wd23d]
+	ld a, [wBGMapBank]
 	push af
 	ld a, [wBGMapWidth]
 	push af
@@ -1248,7 +1248,7 @@ Func_80baa:
 	pop af
 	ld [wBGMapWidth], a
 	pop af
-	ld [wd23d], a
+	ld [wBGMapBank], a
 	pop af
 	ld [wCurTilemap], a
 	pop de

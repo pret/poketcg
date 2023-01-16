@@ -36,7 +36,7 @@ Func_fc7a:
 	print_text_quit_fully Text06d2
 
 Func_fcad:
-	ld a, [wd10e]
+	ld a, [wGiftCenterChoice]
 	ld c, a
 	set_event_value EVENT_GIFT_CENTER_MENU_CHOICE
 

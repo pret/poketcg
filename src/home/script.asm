@@ -152,12 +152,12 @@ ResetAnimationQueue::
 	call BankswitchROM
 	ret
 
-Func_3b31::
+FinishQueuedAnimations::
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_1cb18)
+	ld a, BANK(ClearAndDisableQueuedAnimations)
 	call BankswitchROM
-	call Func_1cb18
+	call ClearAndDisableQueuedAnimations
 	jr c, .skip_clear_frame_func
 	xor a
 	ld [wDoFrameFunction + 0], a

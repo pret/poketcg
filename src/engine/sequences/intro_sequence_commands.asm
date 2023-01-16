@@ -332,8 +332,8 @@ AnimateRandomTitleScreenOrb:
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	call z, .UpdateSpriteAttributes
-	ld a, [wd635]
-	and 63
+	ld a, [wTitleScreenOrbCounter]
+	and %111111
 	ret nz ; don't pick an orb now
 
 .pick_orb

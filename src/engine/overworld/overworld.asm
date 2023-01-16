@@ -9,7 +9,7 @@ LoadMap::
 	ld [wReloadOverworldCallbackPtr], a
 	ld [wReloadOverworldCallbackPtr + 1], a
 	ld [wMatchStartTheme], a
-	farcall Func_10a9b
+	farcall LoadConsolePaletteData
 	call WhiteOutDMGPals
 	call ZeroObjectPositions
 	xor a
@@ -507,7 +507,7 @@ DecompressPermissionMap:
 	push hl
 	ld b, HIGH(wDecompressionSecondaryBuffer)
 	call InitDataDecompression
-	ld a, [wd23d]
+	ld a, [wBGMapBank]
 	ld [wTempPointerBank], a
 	ld a, [wBGMapHeight]
 	inc a

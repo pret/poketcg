@@ -49,7 +49,7 @@ SendPrinterPacket::
 	or c
 	jr nz, .asm_316c
 
-	ld a, [wce6e]
+	ld a, [wSerialTransferData]
 	cp $81
 	jr nz, .asm_3182
 	ld a, [wPrinterStatus]
@@ -139,7 +139,7 @@ Func_31e5::
 
 Func_31ea::
 	ldh a, [rSB]
-	ld [wce6e], a
+	ld [wSerialTransferData], a
 Func_31ef::
 	xor a
 	jr Func_31e0
