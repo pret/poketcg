@@ -212,7 +212,7 @@ PrinterMenu_CardList:
 	call EnableLCD
 	lb de, 1, 1
 	call InitTextPrinting
-	ld hl, EnableLCD
+	ldtx hl, Text0277
 	call ProcessTextFromID
 	ld a, $01
 	ld hl, Data_ad05

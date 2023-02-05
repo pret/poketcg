@@ -588,7 +588,7 @@ HandleDeckSaveMachineMenu:
 	jr .return_to_list
 
 .is_empty
-	ld hl, WaitForVBlank
+	ldtx hl, Text0264
 	call DrawWideTextBox_WaitForInput
 	ld a, [wTempDeckMachineCursorPos]
 	jp .wait_input
