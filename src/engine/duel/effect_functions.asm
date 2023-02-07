@@ -10439,7 +10439,7 @@ PokeBall_DeckCheck:
 	ret
 
 PokeBall_PlayerSelection:
-	ld de, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	ldtx de, TrainerCardSuccessCheckText
 	call Func_2c08a
 	ldh [hTempList], a ; store coin result
 	ret nc
@@ -10524,7 +10524,7 @@ Recycle_DiscardPileCheck:
 	ret
 
 Recycle_PlayerSelection:
-	ld de, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	ldtx de, TrainerCardSuccessCheckText
 	call Func_2c08a
 	jr nc, .tails
 
