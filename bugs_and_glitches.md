@@ -23,6 +23,7 @@ Fixes are written in the `diff` format.
 - [AI never uses Energy Trans in order to retreat Arena card](#ai-never-uses-energy-trans-in-order-to-retreat-arena-card)
 - [Sam's practice deck does wrong card ID check](#sams-practice-deck-does-wrong-card-id-check)
 - [AI does not account for Mysterious Fossil or Clefairy Doll when using Shift Pkmn Power](#ai-does-not-account-for-mysterious-fossil-or-clefairy-doll-when-using-shift-pkmn-power)
+- [Challenge host uses wrong name for the first rival](#challenge-host-uses-wrong-name-for-the-first-rival)
 
 ## AI wrongfully adds score twice for attaching energy to Arena card
 
@@ -262,6 +263,13 @@ A missing line in AI logic might result in strange behavior when executing the e
 ```diff
 AIDecide_PokemonTrader_PowerGenerator: ; 2200b (8:600b)
  	...
+	    ld a, RAICHU_LV40
+        call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+-       jr c, .find_duplicates
++       jp c, .find_duplicates
+        ld a, PIKACHU_LV14
+        ld b, RAICHU_LV40
+   ...
 	call LookForCardIDInDeck_GivenCardIDInHand
 	jr c, .find_duplicates
 -	; bug, missing jr .no_carry
@@ -277,6 +285,12 @@ AIDecide_PokemonTrader_PowerGenerator: ; 2200b (8:600b)
 ; a card in deck was found to look for,
 ; check if there are duplicates in hand to trade with.
  	...
+	.set_carry
+		scf
++; fallthrough
++	.no_carry
+		ret
+
 ```
 
 ## AI never uses Energy Trans in order to retreat Arena card
@@ -326,7 +340,7 @@ There is a mistake in the AI logic for deciding which Pokémon for Sam to switch
 	inc a ; PLAY_AREA_BENCH_2
 ```
 
-**Fix:** Edit `AIDecide_PokemonTrader_PowerGenerator` in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
+**Fix:** Edit `AIDecide_PokemonTrader_PowerGenerator` in [src/engine/duel/ai/decks/sams_practice.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/decks/sams_practice.asm):
 ```diff
 AIPerformScriptedTurn: ; 1483a (5:483a)
  	...
@@ -398,4 +412,11 @@ HandleAIShift: ; 22476 (8:6476)
 	or a
 	ret
  	...
+```
+## Challenge host uses wrong name for the first rival
+When playing the challenge cup, player name is used instead of rival name before the first fight, as seen here: https://www.youtube.com/watch?v=1igDbNxRfUw&t=17310s
+**Fix:** Edit `Text0533` in `text6.asm`: 
+```
+-	text "Presently, <RAMNAME> is still"
++	text "Presently, <RAMTEXT> is still"
 ```
