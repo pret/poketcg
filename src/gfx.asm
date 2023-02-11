@@ -554,13 +554,13 @@ PlayerGfx::
 	dw 36
 	INCBIN "gfx/duelists/player.2bpp"
 
-Duel55Gfx::
+DuelStarGfx::
 	dw $2
-	INCBIN "gfx/duel/anims/55.2bpp"
+	INCBIN "gfx/duel/anims/star.2bpp"
 
-Duel56Gfx::
+DuelPowderGfx::
 	dw $1
-	INCBIN "gfx/duel/anims/56.2bpp"
+	INCBIN "gfx/duel/anims/powder.2bpp"
 
 AnimData12::
 	frame_table AnimFrameTable3
@@ -605,9 +605,9 @@ OWPlayerGfx::
 	dw $14
 	INCBIN "gfx/overworld_sprites/player.2bpp"
 
-Duel57Gfx::
+DuelPetalGfx::
 	dw $1
-	INCBIN "gfx/duel/anims/57.2bpp"
+	INCBIN "gfx/duel/anims/petal.2bpp"
 
 AnimData2::
 	frame_table AnimFrameTable0
@@ -657,10 +657,10 @@ HallOfHonorTilesetGfx::
 
 MedalGfx::
 	dw 72
-	INCBIN "gfx/medals.2bpp", $0, $c0
+	INCBIN "gfx/medals.2bpp",   $0, $c0
 	INCBIN "gfx/medals.2bpp", $240, $30
 	INCBIN "gfx/medals.2bpp", $340, $10
-	INCBIN "gfx/medals.2bpp", $c0, $c0
+	INCBIN "gfx/medals.2bpp",  $c0, $c0
 	INCBIN "gfx/medals.2bpp", $300, $30
 	INCBIN "gfx/medals.2bpp", $350, $10
 	INCBIN "gfx/medals.2bpp", $180, $c0
@@ -680,9 +680,9 @@ NintendoGfx::
 	dw 24
 	INCBIN "gfx/nintendo.2bpp"
 
-Duel58Gfx::
+DuelPoisonGfx::
 	dw $4
-	INCBIN "gfx/duel/anims/58.2bpp"
+	INCBIN "gfx/duel/anims/poison.2bpp"
 
 AnimData3::
 	frame_table AnimFrameTable0
@@ -699,15 +699,15 @@ SECTION "Gfx 6", ROMX
 
 CardPopGfx::
 	dw 189
-	INCBIN "gfx/link/cardpop.2bpp"
+	INCBIN "gfx/link/card_pop_scene.2bpp"
 
 GameBoyLinkGfx::
 	dw 109
-	INCBIN "gfx/link/gameboylink.2bpp"
+	INCBIN "gfx/link/link_scene.2bpp"
 
 GameBoyPrinterGfx::
 	dw 93
-	INCBIN "gfx/link/gameboyprinter.2bpp"
+	INCBIN "gfx/link/printer_scene.2bpp"
 
 Colosseum1Gfx::
 	dw 96
@@ -745,13 +745,13 @@ OWClerkGfx::
 	dw $8
 	INCBIN "gfx/overworld_sprites/clerk.2bpp"
 
-Duel59Gfx::
+DuelSparkGfx::
 	dw $3
-	INCBIN "gfx/duel/anims/59.2bpp"
+	INCBIN "gfx/duel/anims/spark.2bpp"
 
-Duel60Gfx::
+DuelHealGfx::
 	dw $2
-	INCBIN "gfx/duel/anims/60.2bpp"
+	INCBIN "gfx/duel/anims/heal.2bpp"
 
 SECTION "Gfx 7", ROMX
 
@@ -835,13 +835,13 @@ OverworldMapOAMGfx::
 	dw $8
 	INCBIN "gfx/overworld_map_oam.2bpp"
 
-Duel61Gfx::
+DuelWaterDropGfx::
 	dw $3
-	INCBIN "gfx/duel/anims/61.2bpp"
+	INCBIN "gfx/duel/anims/water_drop.2bpp"
 
-Duel62Gfx::
+DuelSnowGfx::
 	dw $1
-	INCBIN "gfx/duel/anims/62.2bpp"
+	INCBIN "gfx/duel/anims/snow.2bpp"
 
 SECTION "Gfx 9", ROMX
 
@@ -957,13 +957,13 @@ MichaelGfx::
 	dw 36
 	INCBIN "gfx/duelists/michael.2bpp"
 
-Duel63Gfx::
+OWLegendaryCardGfx::
 	dw $a
-	INCBIN "gfx/duel/anims/63.2bpp"
+	INCBIN "gfx/overworld_sprites/legendary_card.2bpp"
 
-Duel64Gfx::
+DuelDrainGfx::
 	dw $2
-	INCBIN "gfx/duel/anims/64.2bpp"
+	INCBIN "gfx/duel/anims/drain.2bpp"
 
 SECTION "Gfx 10", ROMX
 
@@ -1135,9 +1135,9 @@ DuelGlowGfx::
 	dw $b
 	INCBIN "gfx/duel/anims/glow.2bpp"
 
-Duel66Gfx::
+DuelSmallStarGfx::
 	dw $4
-	INCBIN "gfx/duel/anims/66.2bpp"
+	INCBIN "gfx/duel/anims/small_star.2bpp"
 
 Palette117::
 	db 0
@@ -1162,189 +1162,189 @@ OWGrannyGfx::
 	dw $14
 	INCBIN "gfx/overworld_sprites/granny.2bpp"
 
-Duel0Gfx::
+OWTorchGfx::
 	dw $16
-	INCBIN "gfx/duel/anims/0.2bpp"
+	INCBIN "gfx/overworld_sprites/torch.2bpp"
 
-Duel1Gfx::
+DuelParalysisGfx::
 	dw $06
-	INCBIN "gfx/duel/anims/1.2bpp"
+	INCBIN "gfx/duel/anims/paralysis.2bpp"
 
-Duel2Gfx::
+DuelSleepGfx::
 	dw $08
-	INCBIN "gfx/duel/anims/2.2bpp"
+	INCBIN "gfx/duel/anims/sleep.2bpp"
 
-Duel3Gfx::
+DuelHitGfx::
 	dw $09
-	INCBIN "gfx/duel/anims/3.2bpp"
+	INCBIN "gfx/duel/anims/hit.2bpp"
 
-Duel4Gfx::
+DuelDamageGfx::
 	dw $12
-	INCBIN "gfx/duel/anims/4.2bpp"
+	INCBIN "gfx/duel/anims/damage.2bpp"
 
-Duel5Gfx::
+DuelThunderGfx::
 	dw $09
-	INCBIN "gfx/duel/anims/5.2bpp"
+	INCBIN "gfx/duel/anims/thunder.2bpp"
 
-Duel6Gfx::
+DuelLightningGfx::
 	dw $11
-	INCBIN "gfx/duel/anims/6.2bpp"
+	INCBIN "gfx/duel/anims/lightning.2bpp"
 
-Duel7Gfx::
+DuelBigLightningGfx::
 	dw $2d
-	INCBIN "gfx/duel/anims/7.2bpp"
+	INCBIN "gfx/duel/anims/big_lightning.2bpp"
 
-Duel8Gfx::
+DuelFlameGfx::
 	dw $0d
-	INCBIN "gfx/duel/anims/8.2bpp"
+	INCBIN "gfx/duel/anims/flame.2bpp"
 
-Duel9Gfx::
+DuelFireSpinGfx::
 	dw $1c
-	INCBIN "gfx/duel/anims/9.2bpp"
+	INCBIN "gfx/duel/anims/fire_spin.2bpp"
 
-Duel10Gfx::
+DuelFireBirdGfx::
 	dw $4c
-	INCBIN "gfx/duel/anims/10.2bpp"
+	INCBIN "gfx/duel/anims/fire_bird.2bpp"
 
-Duel11Gfx::
+DuelWaterGunGfx::
 	dw $1b
-	INCBIN "gfx/duel/anims/11.2bpp"
+	INCBIN "gfx/duel/anims/water_gun.2bpp"
 
-Duel12Gfx::
+DuelWhirlpoolGfx::
 	dw $07
-	INCBIN "gfx/duel/anims/12.2bpp"
+	INCBIN "gfx/duel/anims/whirlpool.2bpp"
 
-Duel13Gfx::
+DuelHydroPumpGfx::
 	dw $0c
-	INCBIN "gfx/duel/anims/13.2bpp"
+	INCBIN "gfx/duel/anims/hydro_pump.2bpp"
 
-Duel14Gfx::
+DuelPsychicGfx::
 	dw $22
-	INCBIN "gfx/duel/anims/14.2bpp"
+	INCBIN "gfx/duel/anims/psychic.2bpp"
 
-Duel15Gfx::
+DuelLeerGfx::
 	dw $20
-	INCBIN "gfx/duel/anims/15.2bpp"
+	INCBIN "gfx/duel/anims/leer.2bpp"
 
-Duel16Gfx::
+DuelBeamGfx::
 	dw $0a
-	INCBIN "gfx/duel/anims/16.2bpp"
+	INCBIN "gfx/duel/anims/beam.2bpp"
 
-Duel17Gfx::
+DuelHyperBeamGfx::
 	dw $25
-	INCBIN "gfx/duel/anims/17.2bpp"
+	INCBIN "gfx/duel/anims/hyper_beam.2bpp"
 
-Duel18Gfx::
+DuelRockThrowGfx::
 	dw $18
-	INCBIN "gfx/duel/anims/18.2bpp"
+	INCBIN "gfx/duel/anims/rock_throw.2bpp"
 
-Duel19Gfx::
+DuelPunchGfx::
 	dw $1b
-	INCBIN "gfx/duel/anims/19.2bpp"
+	INCBIN "gfx/duel/anims/punch.2bpp"
 
-Duel20Gfx::
+DuelStretchKickGfx::
 	dw $08
-	INCBIN "gfx/duel/anims/20.2bpp"
+	INCBIN "gfx/duel/anims/stretch_kick.2bpp"
 
-Duel21Gfx::
+DuelSlashGfx::
 	dw $0d
-	INCBIN "gfx/duel/anims/21.2bpp"
+	INCBIN "gfx/duel/anims/slash.2bpp"
 
-Duel22Gfx::
+DuelWhipGfx::
 	dw $22
-	INCBIN "gfx/duel/anims/22.2bpp"
+	INCBIN "gfx/duel/anims/whip.2bpp"
 
-Duel23Gfx::
+DuelSonicboomGfx::
 	dw $0c
-	INCBIN "gfx/duel/anims/23.2bpp"
+	INCBIN "gfx/duel/anims/sonicboom.2bpp"
 
-Duel24Gfx::
+DuelDrillGfx::
 	dw $25
-	INCBIN "gfx/duel/anims/24.2bpp"
+	INCBIN "gfx/duel/anims/drill.2bpp"
 
-Duel25Gfx::
+DuelPotGfx::
 	dw $22
-	INCBIN "gfx/duel/anims/25.2bpp"
+	INCBIN "gfx/duel/anims/pot.2bpp"
 
-Duel26Gfx::
+DuelBoneGfx::
 	dw $0c
-	INCBIN "gfx/duel/anims/26.2bpp"
+	INCBIN "gfx/duel/anims/bone.2bpp"
 
-Duel27Gfx::
+DuelPlanetGfx::
 	dw $4c
-	INCBIN "gfx/duel/anims/27.2bpp"
+	INCBIN "gfx/duel/anims/planet.2bpp"
 
-Duel28Gfx::
+DuelNeedlesGfx::
 	dw $08
-	INCBIN "gfx/duel/anims/28.2bpp"
+	INCBIN "gfx/duel/anims/needles.2bpp"
 
-Duel29Gfx::
+DuelGasGfx::
 	dw $07
-	INCBIN "gfx/duel/anims/29.2bpp"
+	INCBIN "gfx/duel/anims/gas.2bpp"
 
-Duel30Gfx::
+DuelGooGfx::
 	dw $1a
-	INCBIN "gfx/duel/anims/30.2bpp"
+	INCBIN "gfx/duel/anims/goo.2bpp"
 
-Duel31Gfx::
+DuelBubbleGfx::
 	dw $0a
-	INCBIN "gfx/duel/anims/31.2bpp"
+	INCBIN "gfx/duel/anims/bubble.2bpp"
 
-Duel32Gfx::
+DuelStringGfx::
 	dw $2e
-	INCBIN "gfx/duel/anims/32.2bpp"
+	INCBIN "gfx/duel/anims/string.2bpp"
 
-Duel33Gfx::
+DuelHeartGfx::
 	dw $08
-	INCBIN "gfx/duel/anims/33.2bpp"
+	INCBIN "gfx/duel/anims/heart.2bpp"
 
-Duel34Gfx::
+DuelLureGfx::
 	dw $07
-	INCBIN "gfx/duel/anims/34.2bpp"
+	INCBIN "gfx/duel/anims/lure.2bpp"
 
-Duel35Gfx::
+DuelSkullGfx::
 	dw $1c
-	INCBIN "gfx/duel/anims/35.2bpp"
+	INCBIN "gfx/duel/anims/skull.2bpp"
 
-Duel36Gfx::
+DuelNoteGfx::
 	dw $08
-	INCBIN "gfx/duel/anims/36.2bpp"
+	INCBIN "gfx/duel/anims/note.2bpp"
 
-Duel37Gfx::
+DuelSoundGfx::
 	dw $0b
-	INCBIN "gfx/duel/anims/37.2bpp"
+	INCBIN "gfx/duel/anims/sound.2bpp"
 
-Duel38Gfx::
+DuelProtectGfx::
 	dw $1c
-	INCBIN "gfx/duel/anims/38.2bpp"
+	INCBIN "gfx/duel/anims/protect.2bpp"
 
-Duel39Gfx::
+DuelBarrierGfx::
 	dw $16
-	INCBIN "gfx/duel/anims/39.2bpp"
+	INCBIN "gfx/duel/anims/barrier.2bpp"
 
-Duel40Gfx::
+DuelSpeedGfx::
 	dw $10
-	INCBIN "gfx/duel/anims/40.2bpp"
+	INCBIN "gfx/duel/anims/speed.2bpp"
 
-Duel41Gfx::
+DuelWhirlwindGfx::
 	dw $0f
-	INCBIN "gfx/duel/anims/41.2bpp"
+	INCBIN "gfx/duel/anims/whirlwind.2bpp"
 
-Duel42Gfx::
+DuelCryGfx::
 	dw $07
-	INCBIN "gfx/duel/anims/42.2bpp"
+	INCBIN "gfx/duel/anims/cry.2bpp"
 
-Duel43Gfx::
+DuelQuestionMarkGfx::
 	dw $0a
-	INCBIN "gfx/duel/anims/43.2bpp"
+	INCBIN "gfx/duel/anims/question_mark.2bpp"
 
-Duel44Gfx::
+DuelExplosionGfx::
 	dw $09
-	INCBIN "gfx/duel/anims/44.2bpp"
+	INCBIN "gfx/duel/anims/explosion.2bpp"
 
-Duel45Gfx::
+DuelSmallGlowGfx::
 	dw $03
-	INCBIN "gfx/duel/anims/45.2bpp"
+	INCBIN "gfx/duel/anims/small_glow.2bpp"
 
 AnimData6::
 	frame_table AnimFrameTable1
@@ -1356,41 +1356,41 @@ AnimData6::
 
 SECTION "Gfx 12", ROMX
 
-Duel46Gfx::
+DuelBallGfx::
 	dw $08
-	INCBIN "gfx/duel/anims/46.2bpp"
+	INCBIN "gfx/duel/anims/ball.2bpp"
 
-Duel47Gfx::
+DuelCatPawGfx::
 	dw $0f
-	INCBIN "gfx/duel/anims/47.2bpp"
+	INCBIN "gfx/duel/anims/cat_paw.2bpp"
 
-Duel48Gfx::
+DuelWaveGfx::
 	dw $03
-	INCBIN "gfx/duel/anims/48.2bpp"
+	INCBIN "gfx/duel/anims/wave.2bpp"
 
-Duel49Gfx::
+DuelCardGfx::
 	dw $05
-	INCBIN "gfx/duel/anims/49.2bpp"
+	INCBIN "gfx/duel/anims/card.2bpp"
 
-Duel50Gfx::
+DuelCoinGfx::
 	dw $17
-	INCBIN "gfx/duel/anims/50.2bpp"
+	INCBIN "gfx/duel/anims/coin.2bpp"
 
-Duel51Gfx::
+DuelResultGfx::
 	dw $36
-	INCBIN "gfx/duel/anims/51.2bpp"
+	INCBIN "gfx/duel/anims/result.2bpp"
 
-Duel52Gfx::
+LinkOAMGfx::
 	dw $0b
-	INCBIN "gfx/duel/anims/52.2bpp"
+	INCBIN "gfx/link/link_oam.2bpp"
 
-Duel53Gfx::
+PrinterOAMGfx::
 	dw $06
-	INCBIN "gfx/duel/anims/53.2bpp"
+	INCBIN "gfx/link/printer_oam.2bpp"
 
-Duel54Gfx::
+CardPopOAMGfx::
 	dw $16
-	INCBIN "gfx/duel/anims/54.2bpp"
+	INCBIN "gfx/link/card_pop_oam.2bpp"
 
 BoosterPackOAMGfx::
 	dw $20

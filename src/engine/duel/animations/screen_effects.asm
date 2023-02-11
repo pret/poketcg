@@ -92,10 +92,9 @@ ShakeScreenX_Big:
 
 ShakeScreenX:
 	ld a, l
-	ld [wd4bc], a
+	ld [wScreenShakeOffsetsPtr], a
 	ld a, h
-	ld [wd4bc + 1], a
-
+	ld [wScreenShakeOffsetsPtr + 1], a
 	ld hl, wScreenAnimUpdatePtr
 	ld [hl], LOW(.Update)
 	inc hl
@@ -121,9 +120,9 @@ ShakeScreenY_Big:
 
 ShakeScreenY:
 	ld a, l
-	ld [wd4bc], a
+	ld [wScreenShakeOffsetsPtr], a
 	ld a, h
-	ld [wd4bc + 1], a
+	ld [wScreenShakeOffsetsPtr + 1], a
 	ld hl, wScreenAnimUpdatePtr
 	ld [hl], LOW(.Update)
 	inc hl
@@ -143,7 +142,7 @@ ShakeScreenY:
 ; depending on the value of wScreenAnimDuration
 ; returns carry if displacement was updated
 UpdateShakeOffset:
-	ld hl, wd4bc
+	ld hl, wScreenShakeOffsetsPtr
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -154,14 +153,15 @@ UpdateShakeOffset:
 	push hl
 	inc hl
 	ld a, l
-	ld [wd4bc], a
+	ld [wScreenShakeOffsetsPtr], a
 	ld a, h
-	ld [wd4bc + 1], a
+	ld [wScreenShakeOffsetsPtr + 1], a
 	pop hl
 	scf
 	ret
 
 SmallShakeOffsets:
+; timer, offset
 	db 21,  2
 	db 17, -2
 	db 13,  2
@@ -170,6 +170,7 @@ SmallShakeOffsets:
 	db  1, -1
 
 BigShakeOffsets:
+; timer, offset
 	db 29,  4
 	db 25, -4
 	db 21,  4
@@ -190,7 +191,7 @@ WhiteFlashScreen:
 	inc hl
 	ld [hl], HIGH(.Update)
 	ld a, [wBGP]
-	ld [wd4bc], a
+	ld [wTempWhiteFlashBGP], a
 	; backup the current background pals
 	ld hl, wBackgroundPalettesCGB
 	ld de, wTempBackgroundPalettesCGB
@@ -214,7 +215,7 @@ WhiteFlashScreen:
 	ld de, wBackgroundPalettesCGB
 	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
-	ld a, [wd4bc]
+	ld a, [wTempWhiteFlashBGP]
 	call SetBGP
 	call FlushAllPalettes
 	jp DefaultScreenAnimationUpdate

@@ -23,11 +23,11 @@ HandleAllSpriteAnimations::
 	ret
 
 ; hl - pointer to animation frame
-; wd5d6 - bank of animation frame
+; wCurrSpriteFrameBank - bank of animation frame
 DrawSpriteAnimationFrame::
 	ldh a, [hBankROM]
 	push af
-	ld a, [wd5d6]
+	ld a, [wCurrSpriteFrameBank]
 	call BankswitchROM
 	ld a, [wCurrSpriteXPos]
 	cp $f0
@@ -265,8 +265,8 @@ LoadScene::
 
 ; draws player's portrait at b,c
 DrawPlayerPortrait::
-	ld a, $1
-	ld [wd61e], a
+	ld a, PLAYER_PIC
+	ld [wCurPortrait], a
 	ld a, TILEMAP_PLAYER
 ;	fallthrough
 
@@ -285,7 +285,7 @@ DrawPortrait::
 
 ; draws opponent's portrait given in a at b,c
 DrawOpponentPortrait::
-	ld [wd61e], a
+	ld [wCurPortrait], a
 	ld a, TILEMAP_OPPONENT
 	jr DrawPortrait
 

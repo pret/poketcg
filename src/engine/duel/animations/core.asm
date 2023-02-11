@@ -18,7 +18,7 @@ _ResetAnimationQueue::
 	xor a
 	ld [wDuelAnimBufferCurPos], a
 	ld [wDuelAnimBufferSize], a
-	ld [wd4b3], a
+	ld [wDuelAnimSetScreen], a
 	call DefaultScreenAnimationUpdate
 	call EnableAndClearSpriteAnimations
 	pop bc
@@ -303,7 +303,7 @@ LoadDuelAnimationToBuffer::
 	ld [hli], a
 	ld a, [wDuelAnimDamage + 1]
 	ld [hli], a
-	ld a, [wd4b3]
+	ld a, [wDuelAnimSetScreen]
 	ld [hli], a
 	ld a, [wDuelAnimReturnBank]
 	ld [hl], a
@@ -346,7 +346,7 @@ PlayBufferedDuelAnimations:
 	ld a, [hli]
 	ld [wDuelAnimDamage + 1], a
 	ld a, [hli]
-	ld [wd4b3], a
+	ld [wDuelAnimSetScreen], a
 	ld a, [hl]
 	ld [wDuelAnimReturnBank], a
 
@@ -435,7 +435,7 @@ _UpdateQueuedAnimations::
 	ld [wd4c0], a
 	jr .asm_1cafb ; will play buffered animations
 
-Func_1cb18::
+ClearAndDisableQueuedAnimations::
 	push hl
 	push bc
 	push de
@@ -491,71 +491,73 @@ Func_1cb5e:
 	jp nc, Func_1ce03
 	cp $8c
 	jp nz, InitScreenAnimation
-	jr .asm_1cb6a ; redundant
-.asm_1cb6a
+	jr .damage ; redundant
+.damage
 	ld a, [wDuelAnimDamage + 1]
-	cp $03
-	jr nz, .asm_1cb76
+	cp HIGH(1000)
+	jr nz, .return_on_overflow
 	ld a, [wDuelAnimDamage]
-	cp $e8
-.asm_1cb76
+	cp LOW(1000)
+.return_on_overflow
 	ret nc
 
 	xor a
-	ld [wd4b8], a
+	ld [wDamageCharAnimDelay], a
 	ld [wVRAMTileOffset], a
 	ld [wd4cb], a
 
 	ld a, PALETTE_37
 	farcall LoadPaletteData
-	call Func_1cba6
 
-	ld hl, wd4b3
-	bit 0, [hl]
-	call nz, Func_1cc3e
-
-	ld a, $12
-	ld [wd4b8], a
-	bit 1, [hl]
-	call nz, Func_1cc4e
-
+	call DrawDamageAnimationNumbers
+	ld hl, wDuelAnimEffectiveness
+	bit 0, [hl] ; weak
+	call nz, DrawDamageAnimationWeak
+	ld a, 18
+	ld [wDamageCharAnimDelay], a
+	bit 1, [hl] ; resistant
+	call nz, DrawDamageAnimationResist
 	bit 2, [hl]
-	call nz, Func_1cc66
+	call nz, DrawDamageAnimationArrow
 
 	xor a
-	ld [wd4b3], a
+	ld [wDuelAnimEffectiveness], a
 	ret
 
-Func_1cba6:
-	call Func_1cc03
+DrawDamageAnimationNumbers:
+	call GetDamageNumberChars
 	xor a
-	ld [wd4b7], a
-
+	ld [wDamageCharIndex], a
 	ld hl, wDecimalChars
 	ld de, wAnimationQueue + 1
-.asm_1cbb3
+.loop_num_chars
 	push hl
 	push de
 	ld a, [hl]
 	or a
-	jr z, .asm_1cbbc
-	call Func_1cbcc
-
-.asm_1cbbc
+	jr z, .no_char
+	call CreateDamageCharSprite
+.no_char
 	pop de
 	pop hl
 	inc hl
 	inc de
-	ld a, [wd4b7]
+	ld a, [wDamageCharIndex]
 	inc a
-	ld [wd4b7], a
-	cp $03
-	jr c, .asm_1cbb3
+	ld [wDamageCharIndex], a
+	cp 3
+	jr c, .loop_num_chars
 	ret
 
-Func_1cbcc:
+; creates a character sprite
+; given index in wDamageCharIndex
+; the relative x-positions for each index are:
+; index:  0   1   2   3   4   5
+; rel x: -16 -8   0   8  -8  -16
+; indices 0, 1 and 2 are for number chars
+CreateDamageCharSprite:
 	push af
-	ld a, SPRITE_DUEL_4
+	ld a, SPRITE_DUEL_DAMAGE
 	farcall CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [de], a
@@ -565,28 +567,26 @@ Func_1cbcc:
 	call GetSpriteAnimBufferProperty
 	call GetAnimCoordsAndFlags
 
-	ld a, [wd4b7]
-	add LOW(Unknown_1cbfd)
+	ld a, [wDamageCharIndex]
+	add LOW(.RelativeXPos)
 	ld e, a
-	ld a, HIGH(Unknown_1cbfd)
+	ld a, HIGH(.RelativeXPos)
 	adc 0
 	ld d, a
 	ld a, [de]
 	add b
-
 	ld [hli], a ; SPRITE_ANIM_COORD_X
 	ld [hl], c ; SPRITE_ANIM_COORD_Y
-
-	ld a, [wd4b8]
+	ld a, [wDamageCharAnimDelay]
 	ld c, a
 	pop af
 	farcall Func_12ac9
 	ret
 
-Unknown_1cbfd:
-	db -$10, -$8, $0, $8, -$8, -$10
+.RelativeXPos:
+	db -16, -8, 0, 8, -8, -16
 
-Func_1cc03:
+GetDamageNumberChars:
 	ld a, [wDuelAnimDamage]
 	ld l, a
 	ld a, [wDuelAnimDamage + 1]
@@ -594,35 +594,36 @@ Func_1cc03:
 
 	ld de, wDecimalChars
 	ld bc, -100
-	call .Func_1cc2f
+	call .ConvertDigitToCharTile
 	ld bc, -10
-	call .Func_1cc2f
-
+	call .ConvertDigitToCharTile
 	ld a, l
-	add $4f
+	add SPRITE_ANIM_79
 	ld [de], a
+
+	; remove left padding zeroes
 	ld hl, wDecimalChars
 	ld c, 2
-.asm_1cc23
+.loop_check_zeroes
 	ld a, [hl]
-	cp $4f
-	jr nz, .asm_1cc2e
+	cp SPRITE_ANIM_79 ; 0 char
+	jr nz, .done
 	ld [hl], $00
 	inc hl
 	dec c
-	jr nz, .asm_1cc23
-.asm_1cc2e
+	jr nz, .loop_check_zeroes
+.done
 	ret
 
-.Func_1cc2f
-	ld a, $4e
-.loop
+.ConvertDigitToCharTile
+	ld a, SPRITE_ANIM_79 - 1
+.loop_sub
 	inc a
 	add hl, bc
-	jr c, .loop
-
+	jr c, .loop_sub
 	ld [de], a
 	inc de
+	; get remaining amount
 	ld a, l
 	sub c
 	ld l, a
@@ -631,35 +632,35 @@ Func_1cc03:
 	ld h, a
 	ret
 
-Func_1cc3e:
+DrawDamageAnimationWeak:
 	push hl
-	ld a, $03
-	ld [wd4b7], a
+	ld a, 3
+	ld [wDamageCharIndex], a
 	ld de, wAnimationQueue + 4
 	ld a, SPRITE_ANIM_91
-	call Func_1cbcc
+	call CreateDamageCharSprite
 	pop hl
 	ret
 
-Func_1cc4e:
+DrawDamageAnimationResist:
 	push hl
-	ld a, $04
-	ld [wd4b7], a
+	ld a, 4
+	ld [wDamageCharIndex], a
 	ld de, wAnimationQueue + 5
 	ld a, SPRITE_ANIM_90
-	call Func_1cbcc
-	ld a, [wd4b8]
-	add $12
-	ld [wd4b8], a
+	call CreateDamageCharSprite
+	ld a, [wDamageCharAnimDelay]
+	add 18
+	ld [wDamageCharAnimDelay], a
 	pop hl
 	ret
 
-Func_1cc66:
+DrawDamageAnimationArrow:
 	push hl
-	ld a, $05
-	ld [wd4b7], a
+	ld a, 5
+	ld [wDamageCharIndex], a
 	ld de, wAnimationQueue + 6
 	ld a, SPRITE_ANIM_89
-	call Func_1cbcc
+	call CreateDamageCharSprite
 	pop hl
 	ret

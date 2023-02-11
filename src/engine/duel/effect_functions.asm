@@ -5,11 +5,11 @@ Poison50PercentEffect:
 
 PoisonEffect:
 	lb bc, CNF_SLP_PRZ, POISONED
-	jr ApplyStatusEffect
+	jr QueueStatusCondition
 
 DoublePoisonEffect:
 	lb bc, CNF_SLP_PRZ, DOUBLE_POISONED
-	jr ApplyStatusEffect
+	jr QueueStatusCondition
 
 Paralysis50PercentEffect:
 	ldtx de, ParalysisCheckText
@@ -18,7 +18,7 @@ Paralysis50PercentEffect:
 
 ParalysisEffect:
 	lb bc, PSN_DBLPSN, PARALYZED
-	jr ApplyStatusEffect
+	jr QueueStatusCondition
 
 Confusion50PercentEffect:
 	ldtx de, ConfusionCheckText
@@ -27,7 +27,7 @@ Confusion50PercentEffect:
 
 ConfusionEffect:
 	lb bc, PSN_DBLPSN, CONFUSED
-	jr ApplyStatusEffect
+	jr QueueStatusCondition
 
 Sleep50PercentEffect:
 	ldtx de, SleepCheckText
@@ -36,9 +36,9 @@ Sleep50PercentEffect:
 
 SleepEffect:
 	lb bc, PSN_DBLPSN, ASLEEP
-	jr ApplyStatusEffect
+	jr QueueStatusCondition
 
-ApplyStatusEffect:
+QueueStatusCondition:
 	ldh a, [hWhoseTurn]
 	ld hl, wWhoseTurn
 	cp [hl]
@@ -66,11 +66,11 @@ ApplyStatusEffect:
 	ret
 
 .can_induce_status
-	ld hl, wEffectFunctionsFeedbackIndex
+	ld hl, wStatusConditionQueueIndex
 	push hl
 	ld e, [hl]
 	ld d, $0
-	ld hl, wEffectFunctionsFeedback
+	ld hl, wStatusConditionQueue
 	add hl, de
 	call SwapTurn
 	ldh a, [hWhoseTurn]
@@ -80,7 +80,7 @@ ApplyStatusEffect:
 	inc hl
 	ld [hl], c ; status condition to inflict to the target
 	pop hl
-	; advance wEffectFunctionsFeedbackIndex
+	; advance wStatusConditionQueueIndex
 	inc [hl]
 	inc [hl]
 	inc [hl]
@@ -435,7 +435,7 @@ HandleSwitchDefendingPokemonEffect:
 	ld [wccc5], a
 	ld [wDuelDisplayedScreen], a
 	inc a
-	ld [wccef], a
+	ld [wDefendingWasForcedToSwitch], a
 	ret
 
 ; returns carry if Defending has No Damage or Effect
@@ -472,7 +472,7 @@ ApplyAndAnimateHPRecovery:
 	push de
 	ld a, ATK_ANIM_HEAL
 	ld [wLoadedAttackAnimation], a
-	ld bc, $01 ; arrow
+	lb bc, PLAY_AREA_ARENA, $1 ; arrow
 	bank1call PlayAttackAnimation
 
 ; compare HP to be restored with max HP
@@ -3453,7 +3453,7 @@ Quickfreeze_Paralysis50PercentEffect:
 ; tails
 	call SetWasUnsuccessful
 	bank1call DrawDuelMainScene
-	bank1call Func_1bca
+	bank1call PrintFailedEffectText
 	call WaitForWideTextBoxInput
 	ret
 
@@ -3465,11 +3465,11 @@ Quickfreeze_Paralysis50PercentEffect:
 	ldh a, [hWhoseTurn]
 	ld h, a
 	bank1call PlayAttackAnimation
-	bank1call Func_741a
+	bank1call PlayStatusConditionQueueAnimations
 	bank1call WaitAttackAnimation
-	bank1call Func_6df1
+	bank1call ApplyStatusConditionQueue
 	bank1call DrawDuelHUDs
-	bank1call Func_1bca
+	bank1call PrintFailedEffectText
 	call c, WaitForWideTextBoxInput
 	ret
 
@@ -4182,7 +4182,7 @@ Firegiver_AddToHandEffect:
 .loop_energy
 	push hl
 	push bc
-	ld bc, $0
+	lb bc, PLAY_AREA_ARENA, $0
 	ldh a, [hWhoseTurn]
 	ld h, a
 	bank1call PlayAttackAnimation
@@ -4211,10 +4211,10 @@ Firegiver_AddToHandEffect:
 	sub [hl]
 	ld c, e
 	bank1call WriteTwoDigitNumberInTxSymbolFormat
-
-; load Fire Energy card index and add to hand
 	pop bc
 	pop hl
+
+; load Fire Energy card index and add to hand
 	ld a, [hli]
 	call SearchCardInDeckAndAddToHand
 	call AddCardToHand
@@ -6253,7 +6253,7 @@ Peek_SelectEffect:
 	jr nz, .ai_opp
 
 ; player
-	call Func_3b31
+	call FinishQueuedAnimations
 	call HandlePeekSelection
 	ldh [hAIPkmnPowerEffectParam], a
 	call SerialSend8Bytes
@@ -6288,7 +6288,7 @@ Peek_SelectEffect:
 .prize_or_deck
 ; AI chose either a prize card or Player's top deck card,
 ; so show Play Area and draw cursor appropriately.
-	call Func_3b31
+	call FinishQueuedAnimations
 	call SwapTurn
 	ldh a, [hAIPkmnPowerEffectParam]
 	xor $80
@@ -6796,12 +6796,12 @@ Gigashock_PlayerSelectEffect:
 ; init number of items in list and cursor position
 	xor a
 	ldh [hCurSelectionItem], a
-	ld [wce72], a
+	ld [wCurGigashockItem], a
 	bank1call Func_61a1
 .start
 	bank1call PrintPlayAreaCardList_EnableLCD
 	push af
-	ld a, [wce72]
+	ld a, [wCurGigashockItem]
 	ld hl, BenchSelectionMenuParameters
 	call InitializeMenuParameters
 	pop af
@@ -6817,7 +6817,7 @@ Gigashock_PlayerSelectEffect:
 	cp -1
 	jr z, .try_cancel
 
-	ld [wce72], a
+	ld [wCurGigashockItem], a
 	call .CheckIfChosenAlready
 	jr nc, .not_chosen
 	; play SFX
@@ -6882,7 +6882,7 @@ Gigashock_PlayerSelectEffect:
 	pop af
 
 	dec a
-	ld [wce72], a
+	ld [wCurGigashockItem], a
 	jr .start
 
 ; returns carry if Bench Pokemon
@@ -8530,28 +8530,26 @@ DragoniteLv41Slam_MultiplierEffect:
 	call SetDefiniteDamage
 	ret
 
-; possibly unreferenced
-Func_2efbc:
+CopyPlayAreaHPToBackup_Unreferenced:
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld c, a
 	ld l, DUELVARS_ARENA_CARD_HP
-	ld de, wce76
-.asm_2efc7
+	ld de, wBackupPlayerAreaHP
+.loop_play_area
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .asm_2efc7
+	jr nz, .loop_play_area
 	ret
 
-; possibly unreferenced
-Func_2efce:
+CopyPlayAreaHPFromBackup_Unreferenced:
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld c, a
 	ld l, DUELVARS_ARENA_CARD_HP
-	ld de, wce76
+	ld de, wBackupPlayerAreaHP
 .asm_2efd9
 	ld a, [de]
 	inc de
@@ -8959,7 +8957,7 @@ ImakuniEffect:
 
 .failed
 ; play confusion animation and print failure text
-	ld a, ATK_ANIM_IMAKUNI_CONFUSION
+	ld a, ATK_ANIM_OWN_CONFUSION
 	call Func_2fea9
 	ldtx hl, ThereWasNoEffectText
 	call DrawWideTextBox_WaitForInput
@@ -8967,7 +8965,7 @@ ImakuniEffect:
 
 .success
 ; play confusion animation and confuse card
-	ld a, ATK_ANIM_IMAKUNI_CONFUSION
+	ld a, ATK_ANIM_OWN_CONFUSION
 	call Func_2fea9
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
@@ -11138,7 +11136,7 @@ GustOfWind_SwitchEffect:
 Func_2fea9:
 	ld [wLoadedAttackAnimation], a
 	bank1call Func_7415
-	ld bc, $0
+	lb bc, PLAY_AREA_ARENA, $0
 	ldh a, [hWhoseTurn]
 	ld h, a
 	bank1call PlayAttackAnimation

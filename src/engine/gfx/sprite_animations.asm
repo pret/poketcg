@@ -196,7 +196,7 @@ LoadSpriteDataForAnimationFrame:
 	ld bc, SPRITE_ANIM_FRAME_BANK - SPRITE_ANIM_FLAGS
 	add hl, bc
 	ld a, [hli]
-	ld [wd5d6], a
+	ld [wCurrSpriteFrameBank], a
 	or a
 	jr z, .quit
 	ld a, [hli]

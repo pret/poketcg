@@ -17,7 +17,7 @@ ChallengeMachine_Reset:
 ChallengeMachine_Start::
 	ld a, 0
 	ld [wLineSeparation], a
-	call Func_10a9b
+	call LoadConsolePaletteData
 	call ChallengeMachine_Initialize
 
 	call EnableSRAM

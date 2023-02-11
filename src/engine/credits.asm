@@ -35,7 +35,7 @@ PlayCreditsSequence::
 
 Func_1d705:
 	call DisableLCD
-	farcall Func_10a9b
+	farcall LoadConsolePaletteData
 	call EnableAndClearSpriteAnimations
 	farcall InitMenuScreen
 	call Func_1d7ee

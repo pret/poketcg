@@ -19,15 +19,14 @@ PlayAttackAnimationCommands:
 	ld a, [hl]
 	or a
 	jr nz, .read_command
-	ld [hl], $01
+	ld [hl], $01 ; wce7e
 	call ResetAnimationQueue
 	pop de
-
 	push de
 	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
 	ld [wDuelAnimationScreen], a
-	ld a, $01
-	ld [wd4b3], a
+	ld a, SET_ANIM_SCREEN_MAIN
+	ld [wDuelAnimSetScreen], a
 	xor a
 	ld [wDuelAnimLocationParam], a
 	ld a, [de]
@@ -70,8 +69,8 @@ AnimationCommand_AnimOpponent:
 	ld [wDuelAnimDuelistSide], a
 	jr AnimationCommand_AnimNormal
 
-AnimationCommand_AnimUnknown2:
-	ld a, [wce82]
+AnimationCommand_AnimPlayArea:
+	ld a, [wDamageAnimPlayAreaLocation]
 	and $7f
 	ld [wDuelAnimLocationParam], a
 	jr AnimationCommand_AnimNormal
@@ -98,11 +97,11 @@ AnimationCommand_AnimNormal:
 .show_damage
 	ld a, DUEL_ANIM_PRINT_DAMAGE
 	call PlayDuelAnimation
-	ld a, [wce81]
-	ld [wd4b3], a
+	ld a, [wDamageAnimEffectiveness]
+	ld [wDuelAnimEffectiveness], a
 
 	push de
-	ld hl, wce7f
+	ld hl, wDamageAnimAmount
 	ld de, wDuelAnimDamage
 	ld a, [hli]
 	ld [de], a
@@ -149,11 +148,11 @@ AnimationCommand_AnimNormal:
 	ld a, b
 	jr .play_anim
 
-AnimationCommand_AnimUnknown:
+AnimationCommand_AnimScreen:
 	ld a, [de]
 	inc de
-	ld [wd4b3], a
-	ld a, [wce82]
+	ld [wDuelAnimSetScreen], a
+	ld a, [wDamageAnimPlayAreaLocation]
 	ld [wDuelAnimLocationParam], a
 	call SetDuelAnimationScreen
 	ld a, DUEL_ANIM_150
@@ -165,18 +164,18 @@ AnimationCommandPointerTable:
 	dw AnimationCommand_AnimNormal   ; anim_normal
 	dw AnimationCommand_AnimPlayer   ; anim_player
 	dw AnimationCommand_AnimOpponent ; anim_opponent
-	dw AnimationCommand_AnimUnknown  ; anim_unknown
-	dw AnimationCommand_AnimUnknown2 ; anim_unknown2
+	dw AnimationCommand_AnimScreen   ; anim_screen
+	dw AnimationCommand_AnimPlayArea ; anim_play_area
 	dw AnimationCommand_AnimEnd2     ; anim_end2 (unused)
 
-; sets wDuelAnimationScreen according to wd4b3
-; if wd4b3 == $01, set it to Main Scene
-; if wd4b3 == $04, st it to Play Area scene
+; sets wDuelAnimationScreen according to wDuelAnimSetScreen
+; if SET_ANIM_SCREEN_MAIN,      set it to Main Scene
+; if SET_ANIM_SCREEN_PLAY_AREA, set it to Play Area scene
 SetDuelAnimationScreen:
-	ld a, [wd4b3]
-	cp $04
+	ld a, [wDuelAnimSetScreen]
+	cp SET_ANIM_SCREEN_PLAY_AREA
 	jr z, .set_play_area_screen
-	cp $01
+	cp SET_ANIM_SCREEN_MAIN
 	ret nz
 	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
 	ld [wDuelAnimationScreen], a
@@ -235,13 +234,13 @@ SetDuelAnimationScreen:
 	ret
 
 Func_190f4:
-	ld a, [wd4b3]
-	cp $04
+	ld a, [wDuelAnimSetScreen]
+	cp SET_ANIM_SCREEN_PLAY_AREA
 	jr z, Func_1910f
 	; fallthrough
 
 Func_190fb:
-	cp $01
+	cp SET_ANIM_SCREEN_MAIN
 	jr nz, .done
 	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
 	ld [wDuelAnimationScreen], a
@@ -297,7 +296,7 @@ PrintDamageText:
 	xor a
 	ld [hli], a
 	ld [hl], a
-	ld hl, wce7f
+	ld hl, wDamageAnimAmount
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -318,7 +317,7 @@ GetDamageText:
 	or h
 	jr z, .no_damage
 	call LoadTxRam3
-	ld a, [wce81]
+	ld a, [wDamageAnimEffectiveness]
 	ldtx hl, AttackDamageText
 	and (1 << RESISTANCE) | (1 << WEAKNESS)
 	ret z ; not weak or resistant
@@ -335,7 +334,7 @@ GetDamageText:
 	call CheckNoDamageOrEffect
 	ret c
 	ldtx hl, NoDamageText
-	ld a, [wce81]
+	ld a, [wDamageAnimEffectiveness]
 	and (1 << RESISTANCE)
 	ret z ; not resistant
 	ldtx hl, ResistanceNoDamageText

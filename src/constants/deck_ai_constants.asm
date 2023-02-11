@@ -23,21 +23,73 @@ DEF AI_ENERGY_FLAG_SKIP_ARENA_CARD EQU 1 << 7 ; whether to include Arena card in
 ; if Professor Oak is played, all other Trainer card phases
 ; are processed again except AI_TRAINER_CARD_PHASE_15.
 	const_def 1
+
 	const AI_TRAINER_CARD_PHASE_01 ; $1
+	; Imakuni?
+	; Gambler
+
 	const AI_TRAINER_CARD_PHASE_02 ; $2
+	; Maintenance
+	; Poké Ball
+	; Computer Search
+	; Pokémon Trader
+
 	const AI_TRAINER_CARD_PHASE_03 ; $3
+	; Pokédex
+	; Recycle
+
 	const AI_TRAINER_CARD_PHASE_04 ; $4
+	; Bill
+	; Item Finder
+
 	const AI_TRAINER_CARD_PHASE_05 ; $5
+	; (Super) Energy Removal
+	; Revive
+	; Clefairy Doll
+	; Mysterious Fossil
+
 	const AI_TRAINER_CARD_PHASE_06 ; $6
+	; Pokémon Center
+
 	const AI_TRAINER_CARD_PHASE_07 ; $7
+	; Potion
+	; Gust of Wind
+	; Pokémon Breeder
+	; Imposter Professor Oak
+	; Full Heal
+
 	const AI_TRAINER_CARD_PHASE_08 ; $8
+	; Super Potion
+
 	const AI_TRAINER_CARD_PHASE_09 ; $9
+	; Switch
+
 	const AI_TRAINER_CARD_PHASE_10 ; $a
+	; Potion
+	; Gust of Wind
+	; Energy Retrieval
+	; Mr Fuji
+	; Scoop Up
+
 	const AI_TRAINER_CARD_PHASE_11 ; $b
+	; Super Potion
+	; Super Energy Retrieval
+
 	const AI_TRAINER_CARD_PHASE_12 ; $c
+	; Energy Search
+
 	const AI_TRAINER_CARD_PHASE_13 ; $d
-	const AI_TRAINER_CARD_PHASE_14 ; $e, just before attack
-	const AI_TRAINER_CARD_PHASE_15 ; $f, for Professor Oak
+	; Defender
+	; Pluspower
+	; Lass
+	; Pokémon Flute
+
+	const AI_TRAINER_CARD_PHASE_14 ; $e
+	; Defender
+	; Pluspower
+
+	const AI_TRAINER_CARD_PHASE_15 ; $f
+	; Professor Oak
 
 ; used by wAIBarrierFlagCounter to determine
 ; whether Player is running MewtwoLv53 mill deck.

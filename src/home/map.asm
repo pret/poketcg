@@ -70,13 +70,13 @@ GameEvent_GiftCenter::
 	call PlaySong
 	ld a, GAME_EVENT_GIFT_CENTER
 	ld [wActiveGameEvent], a
-	ld a, [wd10e]
+	ld a, [wGiftCenterChoice]
 	or $10
-	ld [wd10e], a
+	ld [wGiftCenterChoice], a
 	farcall Func_b177
-	ld a, [wd10e]
+	ld a, [wGiftCenterChoice]
 	and $ef
-	ld [wd10e], a
+	ld [wGiftCenterChoice], a
 	call ResumeSong
 	pop af
 	call BankswitchROM

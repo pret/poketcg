@@ -232,7 +232,7 @@ sNPCDuelistDirection:: ; b849
 sMultichoiceTextboxResult_ChooseDeckToDuelAgainst:: ; b84a
 	ds $1
 
-sb84b:: ; b84b
+sGiftCenterChoice:: ; b84b
 	ds $1
 
 sb84c:: ; b84c

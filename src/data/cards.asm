@@ -2261,7 +2261,7 @@ PinsirCard:
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db ATK_ANIM_TEAR ; animation
+	db ATK_ANIM_SONICBOOM ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -5358,7 +5358,7 @@ MagnetonLv35Card:
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db ATK_ANIM_TEAR ; animation
+	db ATK_ANIM_SONICBOOM ; animation
 
 	; attack 2
 	energy LIGHTNING, 4 ; energies
@@ -5460,7 +5460,7 @@ ElectrodeLv35Card:
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db ATK_ANIM_TEAR ; animation
+	db ATK_ANIM_SONICBOOM ; animation
 
 	; attack 2
 	energy LIGHTNING, 3 ; energies
@@ -6990,7 +6990,7 @@ KabutopsCard:
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db ATK_ANIM_TEAR ; animation
+	db ATK_ANIM_SONICBOOM ; animation
 
 	; attack 2
 	energy FIGHTING, 4 ; energies

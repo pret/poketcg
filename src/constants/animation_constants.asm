@@ -243,7 +243,7 @@ DEF NUM_SPRITE_ANIMS EQU const_value
 	const DUEL_ANIM_SLEEP              ; $03
 	const DUEL_ANIM_CONFUSION          ; $04
 	const DUEL_ANIM_POISON             ; $05
-	const DUEL_ANIM_6                  ; $06
+	const DUEL_ANIM_SINGLE_HIT         ; $06
 	const DUEL_ANIM_HIT                ; $07
 	const DUEL_ANIM_BIG_HIT            ; $08
 	const DUEL_ANIM_SHOW_DAMAGE        ; $09
@@ -261,7 +261,7 @@ DEF NUM_SPRITE_ANIMS EQU const_value
 	const DUEL_ANIM_HYDRO_PUMP         ; $15
 	const DUEL_ANIM_BLIZZARD           ; $16
 	const DUEL_ANIM_PSYCHIC            ; $17
-	const DUEL_ANIM_GLARE              ; $18
+	const DUEL_ANIM_LEER               ; $18
 	const DUEL_ANIM_BEAM               ; $19
 	const DUEL_ANIM_HYPER_BEAM         ; $1a
 	const DUEL_ANIM_ROCK_THROW         ; $1b
@@ -272,7 +272,7 @@ DEF NUM_SPRITE_ANIMS EQU const_value
 	const DUEL_ANIM_STRETCH_KICK       ; $20
 	const DUEL_ANIM_SLASH              ; $21
 	const DUEL_ANIM_WHIP               ; $22
-	const DUEL_ANIM_TEAR               ; $23
+	const DUEL_ANIM_SONICBOOM          ; $23
 	const DUEL_ANIM_FURY_SWIPES        ; $24
 	const DUEL_ANIM_DRILL              ; $25
 	const DUEL_ANIM_POT_SMASH          ; $26
@@ -293,7 +293,7 @@ DEF NUM_SPRITE_ANIMS EQU const_value
 	const DUEL_ANIM_PETAL_DANCE        ; $35
 	const DUEL_ANIM_PROTECT            ; $36
 	const DUEL_ANIM_BARRIER            ; $37
-	const DUEL_ANIM_QUICK_ATTACK       ; $38
+	const DUEL_ANIM_SPEED              ; $38
 	const DUEL_ANIM_WHIRLWIND          ; $39
 	const DUEL_ANIM_CRY                ; $3a
 	const DUEL_ANIM_QUESTION_MARK      ; $3b
@@ -303,25 +303,25 @@ DEF NUM_SPRITE_ANIMS EQU const_value
 	const DUEL_ANIM_DRAIN              ; $3f
 	const DUEL_ANIM_DARK_GAS           ; $40
 	const DUEL_ANIM_BIG_SELFDESTRUCT_2 ; $41
-	const DUEL_ANIM_66                 ; $42
-	const DUEL_ANIM_67                 ; $43
-	const DUEL_ANIM_68                 ; $44
-	const DUEL_ANIM_69                 ; $45
-	const DUEL_ANIM_70                 ; $46
-	const DUEL_ANIM_71                 ; $47
-	const DUEL_ANIM_72                 ; $48
-	const DUEL_ANIM_73                 ; $49
-	const DUEL_ANIM_74                 ; $4a
+	const DUEL_ANIM_UNUSED_42          ; $42
+	const DUEL_ANIM_UNUSED_43          ; $43
+	const DUEL_ANIM_BENCH_THUNDER      ; $44
+	const DUEL_ANIM_QUICKFREEZE        ; $45
+	const DUEL_ANIM_BENCH_GLOW         ; $46
+	const DUEL_ANIM_FIREGIVER_START    ; $47
+	const DUEL_ANIM_UNUSED_48          ; $48
+	const DUEL_ANIM_HEALING_WIND       ; $49
+	const DUEL_ANIM_BENCH_WHIRLWIND    ; $4a
 	const DUEL_ANIM_EXPAND             ; $4b
-	const DUEL_ANIM_76                 ; $4c
+	const DUEL_ANIM_CAT_PUNCH          ; $4c
 	const DUEL_ANIM_THUNDER_WAVE       ; $4d
-	const DUEL_ANIM_78                 ; $4e
-	const DUEL_ANIM_79                 ; $4f
-	const DUEL_ANIM_80                 ; $50
+	const DUEL_ANIM_FIREGIVER_PLAYER   ; $4e
+	const DUEL_ANIM_FIREGIVER_OPP      ; $4f
+	const DUEL_ANIM_UNUSED_50          ; $50
 	const DUEL_ANIM_PLAYER_SHUFFLE     ; $51
 	const DUEL_ANIM_OPP_SHUFFLE        ; $52
 	const DUEL_ANIM_BOTH_SHUFFLE       ; $53
-	const DUEL_ANIM_84                 ; $54
+	const DUEL_ANIM_UNUSED_54          ; $54
 	const DUEL_ANIM_BOTH_DRAW          ; $55
 	const DUEL_ANIM_PLAYER_DRAW        ; $56
 	const DUEL_ANIM_OPP_DRAW           ; $57
@@ -333,7 +333,7 @@ DEF NUM_SPRITE_ANIMS EQU const_value
 	const DUEL_ANIM_DUEL_WIN           ; $5d
 	const DUEL_ANIM_DUEL_LOSS          ; $5e
 	const DUEL_ANIM_DUEL_DRAW          ; $5f
-	const DUEL_ANIM_96                 ; $60
+	const DUEL_ANIM_UNUSED_60          ; $60
 
 DEF NUM_REGULAR_DUEL_ANIMS EQU const_value
 
@@ -390,3 +390,6 @@ DEF const_value = const_value + 1
 DEF OW_FRAME_STRUCT_SIZE EQU const_value
 
 DEF NUM_OW_FRAMESET_SUBGROUPS EQU 3
+
+DEF SET_ANIM_SCREEN_MAIN      EQU $1
+DEF SET_ANIM_SCREEN_PLAY_AREA EQU $4
