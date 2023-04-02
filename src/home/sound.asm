@@ -19,7 +19,7 @@ AssertSFXFinished::
 	ret
 
 Func_3794::
-	ld a, $04
+	ld a, SFX_04
 PlaySFX::
 	farcall _PlaySFX
 	ret

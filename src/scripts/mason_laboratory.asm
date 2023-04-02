@@ -269,7 +269,7 @@ Func_d703:
 	get_event_value EVENT_RECEIVED_LEGENDARY_CARDS
 	or a
 	ret z
-	ld a, $0a
+	ld a, MAP_EVENT_CHALLENGE_MACHINE
 	farcall Func_80ba4
 	ret
 
