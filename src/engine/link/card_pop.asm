@@ -87,13 +87,13 @@ HandleCardPopCommunications:
 
 	ld a, IRPARAM_CARD_POP
 	call InitIRCommunications
-.asm_19cc9
+.loop_request
 	call TryReceiveIRRequest ; receive request
-	jr nc, .asm_19d05
+	jr nc, .execute_commands
 	bit 1, a
 	jr nz, .fail
 	call TrySendIRRequest ; send request
-	jr c, .asm_19cc9
+	jr c, .loop_request
 
 ; do the player name search, then transmit the result
 	call ExchangeIRCommunicationParameters
@@ -115,7 +115,9 @@ HandleCardPopCommunications:
 	jr c, .fail
 	jr .check_search_result
 
-.asm_19d05
+.execute_commands
+; will receive commands to send card pop name list,
+; and to receive the result of the name list search
 	call ExecuteReceivedIRCommands
 	ld a, [wIRCommunicationErrorCode]
 	or a
@@ -235,10 +237,10 @@ LookUpNameInCardPopNameList:
 	ret
 
 ; loads in wLoadedCard1 a random card to be received
-; this selection is done based on the rarity that is
+; this selection is done based on the rarity
 ; decided from the names of both participants
-; the card will always be a Pokemon card that is not
-; from a Promotional set, with the exception
+; the result will always be a non-Energy card that
+; is not from a Promotional set, with the exception
 ; of VenusaurLv64 and MewLv15
 ; output:
 ; - e = card ID chosen
@@ -315,6 +317,12 @@ DecideCardToReceiveFromCardPop:
 ; choose either VenusaurLv64 or MewLv15
 ; depending on whether the lower
 ; bit of d is unset or set, respectively
+
+; since the parameters for this decision is
+; based on the cumulative xoring and addition
+; of the players' names, they have the same parity
+; and thus, the lower bit in d will always be 1
+; as a result, VenusaurLv64 is functionally unobtainable
 	ld a, MUSIC_MEDAL
 	ld [wCardPopCardObtainSong], a
 	ld e, VENUSAUR_LV64
@@ -325,7 +333,7 @@ DecideCardToReceiveFromCardPop:
 	jr .got_card_id
 
 ; lists in wCardPopCardCandidates all cards that:
-; - are Pokemon cards;
+; - are not Energy cards;
 ; - have the same rarity as input register a;
 ; - are not from Promotional set.
 ; input:
