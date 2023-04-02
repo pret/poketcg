@@ -6372,8 +6372,8 @@
 06:5c7c _DoCardPop.wait_sfx
 06:5c9b _DoCardPop.error
 06:5cb2 HandleCardPopCommunications
-06:5cc9 HandleCardPopCommunications.asm_19cc9
-06:5d05 HandleCardPopCommunications.asm_19d05
+06:5cc9 HandleCardPopCommunications.loop_request
+06:5d05 HandleCardPopCommunications.execute_commands
 06:5d13 HandleCardPopCommunications.check_search_result
 06:5d1e HandleCardPopCommunications.success
 06:5d39 HandleCardPopCommunications.loop_write_name
