@@ -50,7 +50,7 @@ INCLUDE "engine/save.asm"
 
 SECTION "Map Scripts", ROMX
 INCLUDE "data/map_scripts.asm"
-INCLUDE "engine/overworld/npcs.asm"
+INCLUDE "engine/overworld/npc_data.asm"
 INCLUDE "data/duel/duel_configurations.asm"
 INCLUDE "data/script_table.asm"
 INCLUDE "data/multichoice.asm"
@@ -124,7 +124,12 @@ SECTION "Auto Deck Machines", ROMX
 INCLUDE "engine/auto_deck_machines.asm"
 
 SECTION "Bank 7", ROMX
-INCLUDE "engine/bank07.asm"
+INCLUDE "engine/overworld/debug_player_coordinates.asm"
+INCLUDE "engine/overworld/warp.asm"
+INCLUDE "engine/overworld/load_map_header.asm"
+INCLUDE "engine/overworld/npc_core.asm"
+INCLUDE "engine/masters_beaten_list.asm"
+INCLUDE "engine/debug_sprites.asm"
 
 SECTION "Duel Animations", ROMX
 INCLUDE "engine/duel/animations/core.asm"
