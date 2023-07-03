@@ -72,6 +72,7 @@ Script_Tech1:
 	start_script
 	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Tech1MasterMedalExplanationText, Tech1AutoDeckMachineExplanationText
+	give_booster_packs BOOSTER_LABORATORY_PSYCHIC, BOOSTER_MYSTERY_WATER_COLORLESS, NO_BOOSTER
 	quit_script_fully
 
 .low_on_energies

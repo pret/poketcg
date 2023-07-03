@@ -938,7 +938,7 @@ ItsTheChallengeMachineText:
 	done
 
 Tech1MasterMedalExplanationText:
-	text "The 8 Club Masters each own a"
+	text "The 8 Mert Masters each own a"
 	line "Master Medal."
 	line "The secret of each Club's deck is"
 	line "encrypted in its Master Medal."
