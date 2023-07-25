@@ -1,4 +1,4 @@
-BoosterSetRarityAmountsTable: ; 1e4d4 (7::64d4)
+BoosterSetRarityAmountsTable:
 ;	db energies, commons, uncommons, rares
 ; commons + uncommons + rares needs to be equal to 10 minus the number of energy cards
 ; defined in the pack's data below; otherwise, the number of cards in the pack won't be 10.

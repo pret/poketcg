@@ -532,9 +532,6 @@ DetermineAIScoreOfAttackEnergyRequirement:
 ; this is possibly a bug.
 ; this is an identical check as above to test whether this card is active.
 ; in case it is active, the score gets added 10 more points,
-; in addition to the 20 points already added above.
-; what was probably intended was to add 20 points
-; plus 10 in case it is the Arena card.
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	jr nz, .check_evolution

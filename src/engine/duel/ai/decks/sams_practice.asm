@@ -171,16 +171,6 @@ AIPerformScriptedTurn:
 	ld e, FIGHTING_ENERGY
 	call AIAttachEnergyInHandToCardInBench
 
-; this is a bug, it's attempting to compare a card ID with a deck index.
-; the intention was to change the card to switch to depending on whether
-; the first Machop was KO'd at this point in the Duel or not.
-; because of the buggy comparison, this will always jump the
-; 'inc a' instruction and switch to PLAY_AREA_BENCH_1.
-; in a normal Practice Duel following Dr. Mason's instructions,
-; this will always lead to the AI correctly switching Raticate with Machop,
-; but in case of a "Free" Duel where the first Machop is not KO'd,
-; the intention was to switch to PLAY_AREA_BENCH_2 instead.
-; but due to 'inc a' always being skipped, it will switch to Raticate.
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp MACHOP ; wrong
