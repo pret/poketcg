@@ -20,9 +20,13 @@ Fixes are written in the `diff` format.
 - [Rick uses wrong Pokédex AI subroutine](#rick-uses-wrong-pokédex-ai-subroutine)
 - [Chris never uses Revive on Kangaskhan](#chris-never-uses-revive-on-kangaskhan)
 - [AI Pokemon Trader may result in unintended effects](#ai-pokemon-trader-may-result-in-unintended-effects)
+- [AI Full Heal has flawed logic for sleep](#ai-full-heal-has-flawed-logic-for-sleep)
+- [AI Full Heal has flawed logic for paralysis](#ai-full-heal-has-flawed-logic-for-paralysis)
+- [AI might use a Pkmn Power as an attack](#ai-might-use-a-pkmn-power-as-an-attack)
 - [AI never uses Energy Trans in order to retreat Arena card](#ai-never-uses-energy-trans-in-order-to-retreat-arena-card)
 - [Sam's practice deck does wrong card ID check](#sams-practice-deck-does-wrong-card-id-check)
-- [AI does not use Shift Pkmn Power properly](#ai-does-not-use-shift-pkmn-power-properly)
+- [AI does not use Shift properly](#ai-does-not-use-shift-properly)
+- [AI does not use Cowardice properly](#ai-does-not-use-cowardice-properly)
 - [Challenge host uses wrong name for the first rival](#challenge-host-uses-wrong-name-for-the-first-rival)
 
 ## AI wrongfully adds score twice for attaching energy to Arena card
@@ -274,6 +278,143 @@ AIDecide_PokemonTrader_PowerGenerator:
 	ret
 ```
 
+## AI Full Heal has flawed logic for sleep
+
+The AI has the following checks when it is deciding whether to play Full Heal and its Active card is asleep in in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
+
+```
+.asleep
+; set carry if any of the following
+; cards are in the Play Area.
+	ld a, GASTLY_LV8
+	ld b, PLAY_AREA_ARENA
+	call LookForCardIDInPlayArea_Bank8
+	jr c, .set_carry
+	ld a, GASTLY_LV17
+	ld b, PLAY_AREA_ARENA
+	call LookForCardIDInPlayArea_Bank8
+	jr c, .set_carry
+	ld a, HAUNTER_LV22
+	ld b, PLAY_AREA_ARENA
+	call LookForCardIDInPlayArea_Bank8
+	jr c, .set_carry
+```
+
+The intention was to use Full Heal when their Active card is asleep and the player has either GastlyLv8, GastlyLv17 or HaunterLv22 as their Active Pokémon. But actually, `LookForCardIDInPlayArea_Bank8` is checking its own Play Area, and not the player's
+
+**Fix:** Edit `AIDecide_FullHeal` in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
+```diff
+AIDecide_FullHeal:
+	...
+.asleep
+; set carry if any of the following
+; cards are in the Play Area.
+	ld a, GASTLY_LV8
+-	ld b, PLAY_AREA_ARENA
+-	call LookForCardIDInPlayArea_Bank8
++	call .CheckPlayerArenaCard
+	jr c, .set_carry
+	ld a, GASTLY_LV17
+-	ld b, PLAY_AREA_ARENA
+-	call LookForCardIDInPlayArea_Bank8
++	call .CheckPlayerArenaCard
+	jr c, .set_carry
+	ld a, HAUNTER_LV22
+-	ld b, PLAY_AREA_ARENA
+-	call LookForCardIDInPlayArea_Bank8
++	call .CheckPlayerArenaCard
+	jr c, .set_carry
++	jr .paralyzed
++
++; returns carry if player's Arena card
++; is card in register a
++.CheckPlayerArenaCard:
++	call SwapTurn
++	ld b, PLAY_AREA_ARENA
++	call LookForCardIDInPlayArea_Bank8
++	jp SwapTurn
+
+-	; otherwise fallthrough
+.paralyzed
+	...
+```
+
+## AI Full Heal has flawed logic for paralysis
+
+The AI does some incorrect checks when analysing whether to heal paralysis with a Full Heal in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm). Firstly it incorrectly calls `CheckIfCanDamageDefendingPokemon` to determine whether the Arena card can damage the defending card, but it will always return no carry (because it is paralyzed). Then it does some retreating checks, which don't make sense after determining that the card can damage. The intention was to use Full Heal in case it is able to damage, otherwise to use Full Heal if the Ai is planning on retreating it.
+
+**Fix:** One way to fix would be to temporarily set the status of the card to NO_STATUS to perform these checks. Edit `AIDecide_FullHeal` in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
+```diff
+AIDecide_FullHeal:
+	...
+.no_scoop_up_prz
+-; return no carry if Arena card
+-; cannot damage the defending Pokémon
++; return carry if Arena card
++; can damage the defending Pokémon
+
+-; this is a bug, since CheckIfCanDamageDefendingPokemon
+-; also takes into account whether card is paralyzed
++; temporarily remove status effect for damage checking
++	ld a, DUELVARS_ARENA_CARD_STATUS
++	call GetTurnDuelistVariable
++	ld b, [hl]
++	ld [hl], NO_STATUS
++	push hl
++	push bc
+	xor a ; PLAY_AREA_ARENA
+	farcall CheckIfCanDamageDefendingPokemon
++	pop bc
++	pop hl
++	ld [hl], b
+-	jr nc, .no_carry
++	jr c, .set_carry
+
+; if it can play an energy card to retreat, set carry.
+	ld a, [wAIPlayEnergyCardForRetreat]
+	or a
+	jr nz, .set_carry
+
+; if not, check whether it's a card it would rather retreat,
+; and if it isn't, set carry.
+	farcall AIDecideWhetherToRetreat
+	jr nc, .set_carry
+	...
+```
+
+## AI might use a Pkmn Power as an attack
+
+Under very specific conditions, the AI might attempt to use its Arena card's Pkmn Power as an attack. This is because when the AI plays Pluspower, it is hardcoding which attack to use when it finally decides to attack. This does not account for the case where afterwards, for example, the AI plays a Professor Oak and obtains an evolution of that card, and then evolves that card. If the new evolved Pokémon has Pkmn Power on the first "attack slot", and the AI hardcoded to use that attack, then it will be used. This specific combination can be seen when playing with John, since his deck contains Professor Oak, Pluspower, and Doduo and its evolution Dodrio (which has the Pkmn Power Retreat Aid).
+
+**Fix:** Edit `AIDecideEvolution` in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
+```diff
+AIDecideEvolution:
+	...
+; if AI score >= 133, go through with the evolution
+.check_score
+	ld a, [wAIScore]
+	cp 133
+	jr c, .done_bench_pokemon
+	ld a, [wTempAI]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, [wTempAIPokemonCard]
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_EVOLVE_PKMN
+	bank1call AIMakeDecision
++
++	; disregard PlusPower attack choice
++	; in case the Arena card evolved
++	ld a, [wTempAI]
++	or a
++	jr nz, .skip_reset_pluspower_atk
++	ld hl, wPreviousAIFlags
++	res 0, [hl] ; AI_FLAG_USED_PLUSPOWER
++.skip_reset_pluspower_atk
+	pop bc
+	jr .done_hand_card
+	...
+```
+
 ## AI never uses Energy Trans in order to retreat Arena card
 
 There is a mistake in the AI retreat logic, in [src/engine/duel/ai/decks/general.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/decks/general.asm). HandleAIEnergyTrans for retreating doesn't make sense being at the end, since at this point Switch Trainer card was already used to retreat the Pokemon. What the routine will do is just transfer Energy cards to the Arena Pokemon for the purpose of retreating, and then not actually retreat, resulting in unusual behaviour. This would only work placed right after the AI checks whether they have Switch card in hand to use and doesn't have one (and probably that was the original intention).
@@ -326,7 +467,7 @@ AIPerformScriptedTurn:
 	...
 ```
 
-## AI does not use Shift Pkmn Power properly
+## AI does not use Shift properly
 
 The AI misuses the Shift Pkmn Power. It reads garbage data if there is a Clefairy Doll or Mysterious Fossil in play and also does not account for already changed types (including its own Shift effect).
 
@@ -363,6 +504,26 @@ HandleAIShift:
 .false
 	or a
 	ret
+	...
+```
+
+## AI does not use Cowardice properly
+
+The AI does not respect the rule in Cowardice which states it cannot be used on the same turn as when Tentacool was played.
+
+**Fix:** Edit `HandleAICowardice` in [src/engine/duel/ai/pkmn_powers.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/pkmn_powers.asm):
+```diff
+; handles AI logic for Cowardice
+HandleAICowardice:
+	...
+.CheckWhetherToUseCowardice
+	ld a, c
+	ldh [hTemp_ffa0], a
+	ld e, a
++	add DUELVARS_ARENA_CARD_FLAGS
++	call GetTurnDuelistVariable
++	and CAN_EVOLVE_THIS_TURN
++	ret z ; return if was played this turn
 	...
 ```
 

@@ -3823,11 +3823,16 @@ AIDecide_FullHeal:
 	jr c, .no_carry
 
 .no_scoop_up_prz
-; if card can damage defending Pokemon...
+; return no carry if Arena card
+; cannot damage the defending Pokémon
+
+; this is a bug, since CheckIfCanDamageDefendingPokemon
+; also takes into account whether card is paralyzed
 	xor a ; PLAY_AREA_ARENA
 	farcall CheckIfCanDamageDefendingPokemon
 	jr nc, .no_carry
-; ...and can play an energy card to retreat, set carry.
+
+; if it can play an energy card to retreat, set carry.
 	ld a, [wAIPlayEnergyCardForRetreat]
 	or a
 	jr nz, .set_carry

@@ -174,7 +174,7 @@ HandleSpecialAIAttacks:
 	ret
 
 ; checks player's active card color, then
-; loops through bench looking for a Pokémon
+; loops through own bench looking for a Pokémon
 ; with that same color.
 ; if none are found, returns score of $80 + 2.
 .ChainLightning:
