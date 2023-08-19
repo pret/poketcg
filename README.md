@@ -15,32 +15,32 @@ This will output a file named "poketcg.gbc".
 ## See also
 
 - [**Symbols**][symbols]
-- **Discord:** [pret][discord]
-- **IRC:** [libera#pret][irc]
+- 
+Other disassembly and/or decompilation projects:
+* [**Pokémon Red and Blue**](https://github.com/pret/pokered)
+* [**Pokémon Gold and Silver (Space World '97 demo)**](https://github.com/pret/pokegold-spaceworld)
+* [**Pokémon Yellow**](https://github.com/pret/pokeyellow)
+* [**Pokémon Pinball**](https://github.com/pret/pokepinball)
+* [**Pokémon Stadium**](https://github.com/pret/pokestadium)
+* [**Pokémon Gold and Silver**](https://github.com/pret/pokegold)
+* [**Pokémon Crystal**](https://github.com/pret/pokecrystal)
+* [**Pokémon Ruby and Sapphire**](https://github.com/pret/pokeruby)
+* [**Pokémon Pinball: Ruby & Sapphire**](https://github.com/pret/pokepinballrs)
+* [**Pokémon FireRed and LeafGreen**](https://github.com/pret/pokefirered)
+* [**Pokémon Emerald**](https://github.com/pret/pokeemerald)
+* [**Pokémon Mystery Dungeon: Red Rescue Team**](https://github.com/pret/pmd-red)
+* [**Pokémon Diamond and Pearl**](https://github.com/pret/pokediamond)
+* [**Pokémon Platinum**](https://github.com/pret/pokeplatinum) 
+* [**Pokémon HeartGold and SoulSilver**](https://github.com/pret/pokeheartgold)
+* [**Pokémon Mystery Dungeon: Explorers of Sky**](https://github.com/pret/pmd-sky)
 
-Other disassembly projects:
+## Contacts
 
-- [**Pokémon TCG 2**][poketcg2]
-- [**Pokémon Red/Blue**][pokered]
-- [**Pokémon Yellow**][pokeyellow]
-- [**Pokémon Gold/Silver**][pokegold]
-- [**Pokémon Crystal**][pokecrystal]
-- [**Pokémon Pinball**][pokepinball]
-- [**Pokémon Ruby**][pokeruby]
-- [**Pokémon FireRed**][pokefirered]
-- [**Pokémon Emerald**][pokeemerald]
+You can find us on:
 
-[poketcg2]: https://github.com/pret/poketcg2
-[pokered]: https://github.com/pret/pokered
-[pokeyellow]: https://github.com/pret/pokeyellow
-[pokegold]: https://github.com/pret/pokegold
-[pokecrystal]: https://github.com/pret/pokecrystal
-[pokepinball]: https://github.com/pret/pokepinball
-[pokeruby]: https://github.com/pret/pokeruby
-[pokefirered]: https://github.com/pret/pokefirered
-[pokeemerald]: https://github.com/pret/pokeemerald
+* [Discord (PRET, #poketcg)](https://discord.gg/d5dubZ3)
+* [IRC](https://web.libera.chat/?#pret)
+
 [symbols]: https://github.com/pret/poketcg/tree/symbols
-[discord]: https://discord.gg/d5dubZ3
-[irc]: https://web.libera.chat/?#pret
 [ci]: https://github.com/pret/poketcg/actions
 [ci-badge]: https://github.com/pret/poketcg/actions/workflows/main.yml/badge.svg
