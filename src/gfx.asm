@@ -2152,11 +2152,11 @@ PidgeottoCardGfx::
 	INCBIN "gfx/cards/pidgeotto.2bpp"
 	INCBIN "gfx/cards/pidgeotto.pal"
 
-Pidgeot1CardGfx::
+PidgeotLv38CardGfx::
 	INCBIN "gfx/cards/pidgeot1.2bpp"
 	INCBIN "gfx/cards/pidgeot1.pal"
 
-Pidgeot2CardGfx::
+PidgeotLv40CardGfx::
 	INCBIN "gfx/cards/pidgeot2.2bpp"
 	INCBIN "gfx/cards/pidgeot2.pal"
 
