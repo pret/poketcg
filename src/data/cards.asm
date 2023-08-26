@@ -168,8 +168,8 @@ CardPointers::
 	dw MewLv23Card
 	dw PidgeyCard
 	dw PidgeottoCard
-	dw Pidgeot1Card
-	dw Pidgeot2Card
+	dw PidgeotLv38Card
+	dw PidgeotLv40Card
 	dw RattataCard
 	dw RaticateCard
 	dw SpearowCard
@@ -8242,9 +8242,9 @@ PidgeottoCard:
 	tx PidgeottoDescription ; description
 	db 16
 
-Pidgeot1Card:
+PidgeotLv38Card:
 	db TYPE_PKMN_COLORLESS ; type
-	gfx Pidgeot1CardGfx ; gfx
+	gfx PidgeotLv38CardGfx ; gfx
 	tx PidgeotName ; name
 	db STAR ; rarity
 	db LABORATORY | GB ; sets
@@ -8293,9 +8293,9 @@ Pidgeot1Card:
 	tx Pidgeot1Description ; description
 	db 0
 
-Pidgeot2Card:
+PidgeotLv40Card:
 	db TYPE_PKMN_COLORLESS ; type
-	gfx Pidgeot2CardGfx ; gfx
+	gfx PidgeotLv40CardGfx ; gfx
 	tx PidgeotName ; name
 	db STAR ; rarity
 	db EVOLUTION | JUNGLE ; sets
