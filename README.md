@@ -17,7 +17,7 @@ This will output a file named "poketcg.gbc".
 - [**Symbols**][symbols]
 
 Other disassembly and/or decompilation projects:
-* [**Pokémon Trading Card Game 2**][https://github.com/pret/poketcg2]
+* [**Pokémon Trading Card Game 2**](https://github.com/pret/poketcg2)
 * [**Pokémon Red and Blue**](https://github.com/pret/pokered)
 * [**Pokémon Gold and Silver (Space World '97 demo)**](https://github.com/pret/pokegold-spaceworld)
 * [**Pokémon Yellow**](https://github.com/pret/pokeyellow)
