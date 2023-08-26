@@ -9189,8 +9189,8 @@
 0c:7542 MewLv23Card
 0c:7583 PidgeyCard
 0c:75c4 PidgeottoCard
-0c:7605 Pidgeot1Card
-0c:7646 Pidgeot2Card
+0c:7605 PidgeotLv38Card
+0c:7646 PidgeotLv40Card
 0c:7687 RattataCard
 0c:76c8 RaticateCard
 0c:7709 SpearowCard
@@ -14433,8 +14433,8 @@
 38:6a70 MewLv23CardGfx
 38:6d78 PidgeyCardGfx
 38:7080 PidgeottoCardGfx
-38:7388 Pidgeot1CardGfx
-38:7690 Pidgeot2CardGfx
+38:7388 PidgeotLv38CardGfx
+38:7690 PidgeotLv40CardGfx
 38:7998 RattataCardGfx
 38:7ca0 RaticateCardGfx
 39:4000 SpearowCardGfx
