@@ -1,105 +1,105 @@
-Text048c:
+ChrisFightingClubDeclinedDuelText:
 	text "You're just going to turn "
 	line "and run!?! You chicken!"
 	done
 
-Text048d:
+ChrisFightingClubDuelStartText:
 	text "A 1-match duel with 4 prizes!"
 	line "Let's do it!"
 	done
 
-Text048e:
+ChrisFightingClubPlayerWon1Text:
 	text "No! I lost again!"
 	line "I can't start training, yet!"
 	done
 
-Text048f:
+ChrisFightingClubPlayerWon2Text:
 	text "Shoot! I'm going to "
 	line "become a better player!"
 	done
 
-Text0490:
+ChrisFightingClubPlayerLostText:
 	text "Yeah! I won!"
 	line "I've gotten pretty good, haven't I?"
 	line "I think I'll start training again."
 	done
 
-Text0491:
+MichaelFightingClubWantsToDuelText:
 	text "I've been training since I lost"
 	line "to you at the Grass Club."
 	line "How about a rematch?"
 	done
 
-Text0492:
+MichaelFightingClubWouldYouLikeToDuelText:
 	text "Would you like to duel Michael?"
 	done
 
-Text0493:
+MichaelFightingClubDeclinedDuelText:
 	text "OK. But do duel me "
 	line "again sometime."
 	done
 
-Text0494:
+MichaelFightingClubDuelStartText:
 	text "OK, a 1-match duel with 4 prizes!"
 	line "Let's do it!"
 	done
 
-Text0495:
+MichaelFightingClubPlayerWon1Text:
 	text "I guess I need to train more..."
 	done
 
-Text0496:
+MichaelFightingClubPlayerWon2Text:
 	text "Duel me again another time."
 	line "See ya!"
 	done
 
-Text0497:
+MichaelFightingClubPlayerLostText:
 	text "I guess my training has paid off!"
 	line "Duel me again sometime. See ya!"
 	done
 
-Text0498:
+JessicaFightingClubWantsToDuelText:
 	text "Training is so boring..."
 	line "Why anyone would want to?"
 	line "Hey, it's you!"
 	line "Do you want to duel me again?"
 	done
 
-Text0499:
+JessicaFightingClubWouldYouLikeToDuelText:
 	text "Would you like to duel Jessica?"
 	done
 
-Text049a:
+JessicaFightingClubDeclinedDuelText:
 	text "Well, OK."
 	line "I'm busy anyway!"
 	done
 
-Text049b:
+JessicaFightingClubDuelStartText:
 	text "OK! A 1-match duel with 4 prizes!"
 	line "Let's go to it!"
 	done
 
-Text049c:
+JessicaFightingClubPlayerWon1Text:
 	text "Oops! I lost..."
 	line "Here! You can have this!"
 	done
 
-Text049d:
+JessicaFightingClubPlayerWon2Text:
 	text "Don't talk to me, I'm busy!"
 	done
 
-Text049e:
+JessicaFightingClubPlayerLostText:
 	text "Hey, I won!"
 	line "Could this also be due to my "
 	line "natural ability? "
 	line "Well, I hope I see you around!"
 	done
 
-WhatIsADeckText:
+WhatIsADeckBookName:
 	text "What is a deck?"
 	done
 
-Text04a0:
+WhatIsADeckBookText:
 	text "A deck is the set of Pokémon cards"
 	line "used in duels."
 	line "A deck consists of 60 cards."
@@ -110,11 +110,11 @@ Text04a0:
 	line "Pokémon Trading Card Game."
 	done
 
-Text04a1:
+CardsVol1BookName:
 	text "Cards, Vol. 1: Pokémon Cards"
 	done
 
-Text04a2:
+CardsVol1BookText:
 	text "There are 2 types of Pokémon cards "
 	line "in the Pokémon Trading Card Game:"
 	line "Basic Pokémon and Evolution "
@@ -127,11 +127,11 @@ Text04a2:
 	line "Pokémon on top of Stage 1 Pokémon."
 	done
 
-Text04a3:
+CardsVol2BookName:
 	text "Cards, Vol. 2: Energy Cards"
 	done
 
-Text04a4:
+CardsVol2BookText:
 	text "Attach Energy cards to your Pokémon"
 	line "to give them the energy they need to"
 	line "attack. Choose an Energy card from "
@@ -140,11 +140,11 @@ Text04a4:
 	line "one Energy card per turn."
 	done
 
-Text04a5:
+CardsVol3BookName:
 	text "Cards, Vol. 3: Trainer Cards"
 	done
 
-Text04a6:
+CardsVol3BookText:
 	text "Trainer cards are one-shot cards"
 	line "that can be used once and are "
 	line "then discarded. You can play as "
@@ -152,11 +152,11 @@ Text04a6:
 	line "during your turn."
 	done
 
-Text04a7:
+WinOrLossOfAMatchVol1BookName:
 	text "Win or Loss of a Match, Vol. 1"
 	done
 
-Text04a8:
+WinOrLossOfAMatchVol1BookText:
 	text "When a Pokémon loses all of "
 	line "its HP, the Pokémon is knocked out. "
 	line "Place it and all attached Energy "
@@ -169,22 +169,22 @@ Text04a8:
 	line "of your prizes, you win the game."
 	done
 
-Text04a9:
+WinOrLossOfAMatchVol2BookName:
 	text "Win or Loss of a Match, Vol. 2"
 	done
 
-Text04aa:
+WinOrLossOfAMatchVol2BookText:
 	text "You also win if your opponent's"
 	line "deck is out of cards at the start"
 	line "of your opponent's turn. Be "
 	line "careful not to run out of cards!"
 	done
 
-Text04ab:
+WinOrLossOfAMatchVol3BookName:
 	text "Win or Loss of a Match, Vol. 3"
 	done
 
-Text04ac:
+WinOrLossOfAMatchVol3BookText:
 	text "You also win if your opponent has"
 	line "no Pokémon left on the bench"
 	line "after you have knocked out his or"
@@ -192,11 +192,11 @@ Text04ac:
 	line "keep enough Pokémon on your bench."
 	done
 
-Text04ad:
+CombosBookName:
 	text "Combos"
 	done
 
-Text04ae:
+CombosBookText:
 	text "You can create powerful combos by"
 	line "combining the abilities of 2 cards."
 	line "Pokémon Powers and Trainer Cards "
@@ -205,11 +205,11 @@ Text04ae:
 	line "create your own powerful combos."
 	done
 
-Text04af:
+EnergyTransBookName:
 	text "Energy Trans"
 	done
 
-Text04b0:
+EnergyTransBookText:
 	text "What if you place Exeggutor in the"
 	line "arena, but you don't have any Energy"
 	line "cards? In this case, use Venusaur's"
@@ -219,22 +219,22 @@ Text04b0:
 	line "give your opponent up to 160 damage."
 	done
 
-Text04b1:
+ToxicGasBookName:
 	text "Toxic Gas"
 	done
 
-Text04b2:
+ToxicGasBookText:
 	text "Muk's Toxic Gas is very powerful!"
 	line "It can block all Pokémon Powers!"
 	line "But be careful because it also"
 	line "blocks your own Pokémon's Powers!"
 	done
 
-Text04b3:
+RainDanceBookName:
 	text "Rain Dance"
 	done
 
-Text04b4:
+RainDanceBookText:
 	text "Blastoise's Pokémon Power, Rain "
 	line "Dance, is a great boon for your"
 	line "Water Pokémon! You can attach "
@@ -243,11 +243,11 @@ Text04b4:
 	line "Power up your Pokémon and attack!"
 	done
 
-Text04b5:
+SelfdestructBookName:
 	text "Selfdestruct"
 	done
 
-Text04b6:
+SelfdestructBookText:
 	text "It's a good idea to use Defender"
 	line "when attacking with Selfdestruct."
 	line "That way, you'll be able to give"
@@ -256,11 +256,11 @@ Text04b6:
 	line "your Pokémon getting knocked out."
 	done
 
-Text04b7:
+DamageSwapBookName:
 	text "Damage Swap"
 	done
 
-Text04b8:
+DamageSwapBookText:
 	text "You can use Alakazam's Damage Swap"
 	line "to move damage counters off of a"
 	line "Pokémon that is almost knocked out,"
@@ -273,11 +273,11 @@ Text04b8:
 	line "will have lost all damage counters!"
 	done
 
-Text04b9:
+HyperBeamBookName:
 	text "Hyper Beam"
 	done
 
-Text04ba:
+HyperBeamBookText:
 	text "Hyper Beam is extremely powerful!"
 	line "You can remove the Energy cards "
 	line "attached to your opponent's"
@@ -285,11 +285,11 @@ Text04ba:
 	line "be able to Attack or Retreat!"
 	done
 
-Text04bb:
+PrehistoricPowerBookName:
 	text "Prehistoric Power"
 	done
 
-Text04bc:
+PrehistoricPowerBookText:
 	text "Use Aerodactyl's Prehistoric Power"
 	line "to block your opponent's Pokémon"
 	line "from evolving. Your own Pokémon "
@@ -300,11 +300,11 @@ Text04bc:
 	line "be able to evolve your Pokémon!"
 	done
 
-Text04bd:
+PhantomCardsBookName:
 	text "Phantom Cards"
 	done
 
-Text04be:
+PhantomCardsBookText:
 	text "It is rumored that there is a"
 	line "Phantom Card that can only be "
 	line "gotten by using Card Pop!"
@@ -316,11 +316,11 @@ Text04be:
 	line "                        ISHIHARA"
 	done
 
-Text04bf:
+WeaknessAndResistanceBookName:
 	text "Weakness and Resistance"
 	done
 
-Text04c0:
+WeaknessAndResistanceBookText:
 	text "If a Pokémon has a Weakness,"
 	line "it takes double damage when attacked"
 	line "by Pokémon of a certain type!"
@@ -336,22 +336,22 @@ Text04c0:
 	line "and Resistances of your Pokémon!"
 	done
 
-Text04c1:
+DrawingDesiredCardsBookName:
 	text "Drawing Desired Cards"
 	done
 
-Text04c2:
+DrawingDesiredCardsBookText:
 	text "The Trainer card, Computer Search,"
 	line "is useful when you want to draw a"
 	line "certain card! Item Finder and"
 	line "Poké Ball will also help!"
 	done
 
-Text04c3:
+RetreatingBookName:
 	text "Retreating"
 	done
 
-Text04c4:
+RetreatingBookText:
 	text "Retreating your Active Pokémon to"
 	line "the Bench is a good strategy in"
 	line "certain situations! Retreating a "
@@ -362,11 +362,11 @@ Text04c4:
 	line "your Pokémon won't get knocked out!"
 	done
 
-Text04c5:
+FightingPokemonBookName:
 	text "Fighting Pokémon"
 	done
 
-Text04c6:
+FightingPokemonBookText:
 	text "Fighting Pokémon Characteristics:"
 	line "Strong against Lightning Pokémon."
 	line "Weak against Psychic Pokémon."
@@ -374,11 +374,11 @@ Text04c6:
 	line "to Attack."
 	done
 
-Text04c7:
+FightingPokemonAndCombosBookName:
 	text "Fighting Pokémon and Combos"
 	done
 
-Text04c8:
+FightingPokemonAndCombosBookText:
 	text "It is difficult to create combos"
 	line "with a Fighting Pokémon, since"
 	line "not many Fighting Pokémon have "
@@ -386,11 +386,11 @@ Text04c8:
 	line "strong attacks make up for this."
 	done
 
-Text04c9:
+DoubleColorlessEnergyBookName:
 	text "Double Colorless Energy"
 	done
 
-Text04ca:
+DoubleColorlessEnergyBookText:
 	text "Double Colorless Energy is a"
 	line "very useful card. By using this "
 	line "single card, you are able to"
@@ -399,11 +399,11 @@ Text04ca:
 	line "energy is colorless."
 	done
 
-Text04cb:
+RockPokemonBookName:
 	text "Rock Pokémon"
 	done
 
-Text04cc:
+RockPokemonBookText:
 	text "Rock Pokémon Characteristics:"
 	line "Strong against Lightning Pokémon."
 	line "Weak against Grass Pokémon."
@@ -411,11 +411,11 @@ Text04cc:
 	line "to Attack."
 	done
 
-Text04cd:
+WinningWithFightingPokemonBookName:
 	text "Winning with Fighting Pokémon"
 	done
 
-Text04ce:
+WinningWithFightingPokemonBookText:
 	text "Fighting Pokémon will have a hard"
 	line "time against Stage 2 Pokémon,"
 	line "as many Stage 2 Pokémon are"
@@ -424,11 +424,11 @@ Text04ce:
 	line "Pokémon before they evolve."
 	done
 
-Text04cf:
+BasicPokemonBookName:
 	text "Basic Pokémon"
 	done
 
-Text04d0:
+BasicPokemonBookText:
 	text "Basic Pokémon are a must in the"
 	line "Pokémon Trading Card Game!"
 	line "Basic Pokémon are the only Pokémon"
@@ -440,11 +440,11 @@ Text04d0:
 	line "Basic Pokémon in your deck!"
 	done
 
-Text04d1:
+WaterPokemonBookName:
 	text "Water Pokémon"
 	done
 
-Text04d2:
+WaterPokemonBookText:
 	text "Water Pokémon Characteristics:"
 	line "Strong against Fire Pokémon."
 	line "Weak against Lightning Pokémon."
@@ -453,11 +453,11 @@ Text04d2:
 	line "Energy cards to attack."
 	done
 
-Text04d3:
+WaterPokemonAttacksBookName:
 	text "Water Pokémon Attacks"
 	done
 
-Text04d4:
+WaterPokemonAttacksBookText:
 	text "Water Gun and Hydro Pump are"
 	line "attacks which have variable damage."
 	line "The more Water Energy you attach,"
@@ -466,11 +466,11 @@ Text04d4:
 	line "damage in this way."
 	done
 
-Text04d5:
+ParalyzeBookName:
 	text "Paralyze"
 	done
 
-Text04d6:
+ParalyzeBookText:
 	text "When a Pokémon is paralyzed, it"
 	line "is unable to do anything."
 	line "It cannot retreat, attack or use"
@@ -482,11 +482,11 @@ Text04d6:
 	line "Full Heal and Evolution cards."
 	done
 
-Text04d7:
+LightningPokemonBookName:
 	text "Lightning Pokémon"
 	done
 
-Text04d8:
+LightningPokemonBookText:
 	text "Lightning Pokémon Characteristics:"
 	line "Strong against Water Pokémon."
 	line "Weak against Fighting Pokémon."
@@ -494,11 +494,11 @@ Text04d8:
 	line "to attack."
 	done
 
-Text04d9:
+EnergyCardsBookName:
 	text "Energy Cards"
 	done
 
-Text04da:
+EnergyCardsBookText:
 	text "There are 6 Basic Energy cards:"
 	line "Grass, Fire, Water, Lightning,"
 	line "Fighting and Psychic!"
@@ -510,11 +510,11 @@ Text04da:
 	line "Double Colorless Energy cards."
 	done
 
-Text04db:
+CardPopBookName:
 	text "Card Pop!"
 	done
 
-Text04dc:
+CardPopBookText:
 	text "When you and a friend Card Pop!,"
 	line "you will each receive a new card."
 	line "After you Pop! with a friend, you "
@@ -525,11 +525,11 @@ Text04dc:
 	line "friends to get different cards!"
 	done
 
-Text04dd:
+GrassPokemonBookName:
 	text "Grass Pokémon"
 	done
 
-Text04de:
+GrassPokemonBookText:
 	text "Grass Pokémon Characteristics:"
 	line "Strong against Rock Pokémon."
 	line "Weak against Fire Pokémon."
@@ -538,11 +538,11 @@ Text04de:
 	line "Grass Energy cards to attack."
 	done
 
-Text04df:
+PoisonBookName:
 	text "Poison"
 	done
 
-Text04e0:
+PoisonBookText:
 	text "When your Pokémon is poisoned, it"
 	line "will continue to lose HP."
 	line "The poisoned Pokémon will lose"
@@ -554,11 +554,11 @@ Text04e0:
 	line "are other ways of healing it."
 	done
 
-Text04e1:
+GrassPokemonPokemonBreederBookName:
 	text "Grass Pokémon & Pokémon Breeder"
 	done
 
-Text04e2:
+GrassPokemonPokemonBreederBookText:
 	text "Many Grass Pokémon are capable of"
 	line "evolving to Stage 2 Pokémon."
 	line "Use the Trainer Card, Pokémon"
@@ -567,11 +567,11 @@ Text04e2:
 	line "attacks early in the game."
 	done
 
-Text04e3:
+PsychicPokemonBookName:
 	text "Psychic Pokémon"
 	done
 
-Text04e4:
+PsychicPokemonBookText:
 	text "Psychic Pokémon Characteristics:"
 	line "Weak against Psychic Pokémon."
 	line "Some Colorless Pokémon are strong "
@@ -579,11 +579,11 @@ Text04e4:
 	line "Psychic Energy cards to attack."
 	done
 
-Text04e5:
+SleepBookName:
 	text "Sleep"
 	done
 
-Text04e6:
+SleepBookText:
 	text "When a Pokémon is asleep,"
 	line "it is unable to do anything."
 	line "It cannot attack, retreat or use"
@@ -595,11 +595,11 @@ Text04e6:
 	line "Use Full Heal to wake it up!"
 	done
 
-Text04e7:
+PokemonPowerBookName:
 	text "Pokémon Power"
 	done
 
-Text04e8:
+PokemonPowerBookText:
 	text "Some Pokémon have special "
 	line "abilities called Pokémon Power."
 	line "They are very powerful abilities!"
@@ -610,11 +610,11 @@ Text04e8:
 	line "Powers, so check your cards!"
 	done
 
-Text04e9:
+ScienceClubPokemonBookName:
 	text "Science Club Pokémon"
 	done
 
-Text04ea:
+ScienceClubPokemonBookText:
 	text "Characteristics of Pokémon used"
 	line "in the Science Club:"
 	line "Strong against Rock Pokémon."
@@ -625,11 +625,11 @@ Text04ea:
 	line "to attack."
 	done
 
-Text04eb:
+ConfusionBookName:
 	text "Confusion"
 	done
 
-Text04ec:
+ConfusionBookText:
 	text "It's big trouble if your Pokémon"
 	line "gets Confused!"
 	line "When a Confused Pokémon tries to"
@@ -640,11 +640,11 @@ Text04ec:
 	line "for 20 damage!"
 	done
 
-Text04ed:
+UsefulButtonsBookName:
 	text "Useful Buttons"
 	done
 
-Text04ee:
+UsefulButtonsBookText:
 	text "While pressing the B Button,"
 	line "use the + Control Pad to view"
 	line "your own or your opponent's "
@@ -656,11 +656,11 @@ Text04ee:
 	line "Remember these handy functions!"
 	done
 
-Text04ef:
+FirePokemonBookName:
 	text "Fire Pokémon"
 	done
 
-Text04f0:
+FirePokemonBookText:
 	text "Fire Pokémon Characteristics:"
 	line "Strong against Grass Pokémon."
 	line "Weak against Water Pokémon."
@@ -670,11 +670,11 @@ Text04f0:
 	line "to attack."
 	done
 
-Text04f1:
+FirePokemonAttacksBookName:
 	text "Fire Pokémon Attacks"
 	done
 
-Text04f2:
+FirePokemonAttacksBookText:
 	text "Many Fire Pokémon attacks require"
 	line "that an Energy card be removed."
 	line "Be sure to include many Energy"
@@ -683,11 +683,11 @@ Text04f2:
 	line "Energy Retrieval in your deck."
 	done
 
-Text04f3:
+OriginalGameBoyCardsBookName:
 	text "Original Game Boy Cards"
 	done
 
-Text04f4:
+OriginalGameBoyCardsBookText:
 	text "The Pokémon Trading Card Game"
 	line "for Game Boy includes many "
 	line "original cards, like the "
@@ -697,11 +697,11 @@ Text04f4:
 	line "so go search them out!"
 	done
 
-Text04f5:
+ColorlessPokemonBookName:
 	text "Colorless Pokémon"
 	done
 
-Text04f6:
+ColorlessPokemonBookText:
 	text "Colorless Pokémon are very easy"
 	line "to use. They can attack with "
 	line "any type of Energy card, so"
@@ -710,11 +710,11 @@ Text04f6:
 	line "Pokémon, so check them all out!"
 	done
 
-Text04f7:
+DragonPokemonBookName:
 	text "Dragon Pokémon"
 	done
 
-Text04f8:
+DragonPokemonBookText:
 	text "Colorless Dragon Pokémon cards"
 	line "have resistance to Psychic"
 	line "Pokémon and have no weaknesses."
@@ -723,11 +723,11 @@ Text04f8:
 	line "worthy of the name ”dragon!”"
 	done
 
-Text04f9:
+BirdPokemonBookName:
 	text "Bird Pokémon"
 	done
 
-Text04fa:
+BirdPokemonBookText:
 	text "Colorless Bird Pokémon cards"
 	line "have resistance to Fighting"
 	line "Pokémon but are weak against"
@@ -737,11 +737,11 @@ Text04fa:
 	line "they are flying."
 	done
 
-Text04fb:
+LegendaryPokemonCardsVol1BookName:
 	text "Legendary Pokémon Cards, Vol. 1"
 	done
 
-Text04fc:
+LegendaryPokemonCardsVol1BookText:
 	text "The first of the Legendary Pokémon"
 	line "Cards is <Lv>37 Moltres. With"
 	line "Firegiver, you can place Fire"
@@ -751,11 +751,11 @@ Text04fc:
 	line "Queen, owns this card!"
 	done
 
-Text04fd:
+LegendaryPokemonCardsVol2BookName:
 	text "Legendary Pokémon Cards, Vol. 2"
 	done
 
-Text04fe:
+LegendaryPokemonCardsVol2BookText:
 	text "The second Legendary Pokémon Card"
 	line "is <Lv>68 Zapdos. With Peal of"
 	line "Thunder, just putting this card on"
@@ -765,11 +765,11 @@ Text04fe:
 	line "Steve, owns this card!"
 	done
 
-Text04ff:
+LegendaryPokemonCardsVol3BookName:
 	text "Legendary Pokémon Cards, Vol. 3"
 	done
 
-Text0500:
+LegendaryPokemonCardsVol3BookText:
 	text "The third Legendary Pokémon Card"
 	line "is <Lv>37 Articuno. Its Quickfreeze"
 	line "will paralyze opponents' Pokémon"
@@ -779,11 +779,11 @@ Text0500:
 	line "the Ice-man, owns this card!"
 	done
 
-Text0501:
+LegendaryPokemonCardsVol4BookName:
 	text "Legendary Pokémon Cards, Vol. 4"
 	done
 
-Text0502:
+LegendaryPokemonCardsVol4BookText:
 	text "The fourth Legendary Pokémon Card"
 	line "is <Lv>41 Dragonite. Its Healing"
 	line "Wind will heal damage done to "
@@ -793,11 +793,11 @@ Text0502:
 	line "owns this card!"
 	done
 
-Text0503:
+TheGrandMastersBookName:
 	text "The Grand Masters"
 	done
 
-Text0504:
+TheGrandMastersBookText:
 	text "Courtney, Steve, Jack and Rod -"
 	line "the 4 Grand Masters who defend"
 	line "the Legendary Pokémon Cards - "
@@ -805,11 +805,11 @@ Text0504:
 	line "Pokémon Trading Card Game!"
 	done
 
-Text0505:
+MasterMedalsBookName:
 	text "Master Medals"
 	done
 
-Text0506:
+MasterMedalsBookText:
 	text "There are a total of 8 Master Medals"
 	line "owned by the Club Masters. It is "
 	line "said that the secret of their Club's"
@@ -818,11 +818,11 @@ Text0506:
 	line "a gift from the Grand Masters."
 	done
 
-Text0507:
+PlateOfLegendsName:
 	text "Plate of Legends"
 	done
 
-Text0508:
+PlateOfLegendsText:
 	text "”Those in search of the Legendary"
 	line " Pokémon Cards..."
 	line " Defeat the Masters of the 8 Clubs"
@@ -833,7 +833,7 @@ Text0508:
 	line " the Legendary Pokémon Cards.”"
 	done
 
-Text0509:
+MysteriousVoiceDoorName:
 	text "Mysterious Voice"
 	done
 

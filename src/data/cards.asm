@@ -8290,7 +8290,7 @@ PidgeotLv38Card:
 	db 38 ; level
 	db 4, 11 ; length
 	dw 87 * 10 ; weight
-	tx Pidgeot1Description ; description
+	tx PidgeotLv38Description ; description
 	db 0
 
 PidgeotLv40Card:
@@ -8341,7 +8341,7 @@ PidgeotLv40Card:
 	db 40 ; level
 	db 4, 11 ; length
 	dw 87 * 10 ; weight
-	tx Pidgeot2Description ; description
+	tx PidgeotLv40Description ; description
 	db 0
 
 RattataCard:

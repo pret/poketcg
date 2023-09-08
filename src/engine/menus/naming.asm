@@ -59,7 +59,7 @@ Unknown_12908:
 	db 10, 6 ; start menu text box dimensions
 
 	db 12, 2 ; text alignment for InitTextPrinting
-	tx Text037b
+	tx DebugDuelModeMenuText
 	db $ff
 
 	db 11, 2 ; cursor x, cursor y

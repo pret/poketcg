@@ -36,7 +36,7 @@ SamNormalMultichoice_ConfigurationTable:
 	db $0a, $00     ; x, y to start drawing box
 	db $0a, $0a     ; width, height of box
 	db $0c, $02     ; x, y coordinate to start printing next text
-	tx Text03ff     ; text id to print next
+	tx SamNormalMenuText     ; text id to print next
 	db $ff          ; marker byte -- end text entries
 	db $0b, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
@@ -49,7 +49,7 @@ SamRulesMultichoice_ConfigurationTable:
 	db $06, $00     ; x, y to start drawing box
 	db $0e, $12     ; width, height of box
 	db $08, $02     ; x coordinate to start printing text
-	tx Text0400     ; text id to print next
+	tx SamRulesMenuText     ; text id to print next
 	db $ff          ; marker byte -- end text entries
 	db $07, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle

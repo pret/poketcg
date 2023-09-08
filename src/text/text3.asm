@@ -43,7 +43,7 @@ PrintThisDeckText:
 	text "Print this Deck?"
 	done
 
-Text0277:
+PrintTheCardListText:
 	text "Print the card list?"
 	line "      Yes     No"
 	done
@@ -120,7 +120,7 @@ PleaseChooseASaveSlotText:
 	text "Please choose a Save Slot."
 	done
 
-Text0286:
+Unused0286: ; Unused
 	text "Receive configuration."
 	done
 
@@ -902,7 +902,7 @@ RetreatingDescriptionText:
 	line "of the retreating Pokémon."
 	done
 
-Text031e:
+Unused031e: ; Unused
 	text "Modify Deck"
 	line "Card List"
 	line "Album List"
@@ -913,7 +913,7 @@ Text031e:
 	line "Name Input"
 	done
 
-Text031f:
+Unused031f: ; Unused
 	text "Fighting Machine"
 	line "Rock Machine"
 	line "Water Machine"
@@ -926,18 +926,18 @@ Text031f:
 	line "Legendary Machine"
 	done
 
-Text0320:
+Unused0320: ; Unused
 	text "Send a Card"
 	line "Receive a Card"
 	line "Give Deck Instructions"
 	line "Receive Deck Instructions"
 	done
 
-Text0321:
+Unused0321: ; Unused
 	text "Lecture Duel"
 	done
 
-Text0322:
+Unused0322: ; Unused
 	text "First Strike Deck"
 	line ""
 	done
@@ -994,55 +994,55 @@ OverworldMapMysteryHouseText:
 	text "     ??'s House     "
 	done
 
-MasonLaboratoryMapNameText:
+MasonLaboratoryMapName:
 	text "Mason Laboratory"
 	done
 
-MrIshiharasHouseMapNameText:
+MrIshiharasHouseMapName:
 	text "Mr Ishihara's House"
 	done
 
-FightingClubMapNameText:
+FightingClubMapName:
 	text "Fighting"
 	done
 
-RockClubMapNameText:
+RockClubMapName:
 	text "Rock"
 	done
 
-WaterClubMapNameText:
+WaterClubMapName:
 	text "Water"
 	done
 
-LightningClubMapNameText:
+LightningClubMapName:
 	text "Lightning"
 	done
 
-GrassClubMapNameText:
+GrassClubMapName:
 	text "Grass"
 	done
 
-PsychicClubMapNameText:
+PsychicClubMapName:
 	text "Psychic"
 	done
 
-ScienceClubMapNameText:
+ScienceClubMapName:
 	text "Science"
 	done
 
-FireClubMapNameText:
+FireClubMapName:
 	text "Fire"
 	done
 
-ChallengeHallMapNameText:
+ChallengeHallMapName:
 	text "Challenge Hall"
 	done
 
-PokemonDomeMapNameText:
+PokemonDomeMapName:
 	text "Pokémon Dome"
 	done
 
-Text033c:
+Unused033c: ; Unused
 	text "??'s House"
 	done
 
@@ -1127,7 +1127,7 @@ ConfigMenuExitText:
 	text "   Exit Settings"
 	done
 
-Text034c:
+Unused034c: ; Unused
 	text "Duel           [<RAMTEXT>]"
 	line "SELECT         [<RAMTEXT>]"
 	line "Receive many cards"
@@ -1135,23 +1135,23 @@ Text034c:
 	line "To Pokémon Dome 2"
 	done
 
-Text034d:
+Unused034d: ; Unused
 	text "Normal Duel"
 	done
 
-Text034e:
+Unused034e: ; Unused
 	text "Skip"
 	done
 
-Text034f:
+Unused034f: ; Unused
 	text "Normal"
 	done
 
-Text0350:
+Unused0350: ; Unused
 	text "Freeze Screen"
 	done
 
-Text0351:
+PCMenuOptionsText:
 	text "Card Album"
 	line "Read Mail"
 	line "Glossary"
@@ -1388,7 +1388,7 @@ DebugMenuText:
 	line "QUIT"
 	done
 
-Text037b:
+DebugDuelModeMenuText:
 	text "NORMAL DUEL"
 	line "SKIP"
 	done
@@ -1435,18 +1435,18 @@ DebugBoosterPackEnergyMenuText:
 	line "4"
 	done
 
-Text0381:
+Unused0381: ; Unused
 	text "A                   TIME"
 	line "     TO      (Change with Start)"
 	line "            A+B: Stop Animation"
 	line "            Select: Exit"
 	done
 
-Text0382:
+Unused0382: ; Unused
 	text "Left"
 	done
 
-Text0383:
+Unused0383: ; Unused
 	text "Right"
 	done
 
@@ -1478,7 +1478,7 @@ CheckedCardsInBoosterPackText:
 	line "in the Booster Pack!!"
 	done
 
-Text038a:
+Unused038a: ; Unused
 	text "Substitute screen for"
 	line "receiving cards."
 	done
@@ -1488,44 +1488,44 @@ WonTheMedalText:
 	line "Won the <RAMTEXT> Medal!"
 	done
 
-Text038c:
+Unused038c: ; Unused
 	text "Substitute screen for sending"
 	line "cards by Link cable."
 	done
 
-Text038d:
+Unused038d: ; Unused
 	text "Substitute screen for receiving"
 	line "cards by Link cable."
 	done
 
-Text038e:
+Unused038e: ; Unused
 	text "Substitute screen for sending"
 	line "a Deck design."
 	done
 
-Text038f:
+Unused038f: ; Unused
 	text "Substitute screen for receiving"
 	line "a Deck design."
 	done
 
-Text0390:
+Unused0390: ; Unused
 	text "????"
 	done
 
-Text0391:
+Unused0391: ; Unused
 	text "Ending Screen"
 	line "THE END"
 	done
 
-Text0392:
+Unused0392: ; Unused
 	text "Was the data transfer successful?"
 	done
 
-Text0393:
+Unused0393: ; Unused
 	text "(Person transferring data to)"
 	done
 
-Text0394:
+Unused0394: ; Unused
 	text "(Name of Deck transferring)"
 	done
 
@@ -1954,14 +1954,14 @@ HowCanIHelpText:
 	line "How can I help you?"
 	done
 
-Text03ff:
+SamNormalMenuText:
 	text "Normal Duel"
 	line "Practice"
 	line "Rules"
 	line "Nothing"
 	done
 
-Text0400:
+SamRulesMenuText:
 	text "Energy"
 	line "Attacking"
 	line "Retreating"
@@ -1972,7 +1972,7 @@ Text0400:
 	line "Nothing to Ask"
 	done
 
-Text0401:
+Mail1Part1Text:
 	text "<RAMNAME>,"
 	line "It's me, Doctor Mason."
 	line "Are you getting the hang of"
@@ -1999,7 +1999,7 @@ Text0401:
 	line "Oh, here's something for you..."
 	done
 
-Text0402:
+Mail1Part2Text:
 	text "I'll be sending you useful"
 	line "information by e-mail."
 	line "I'll also attach a Booster Pack"
@@ -2009,7 +2009,7 @@ Text0402:
 	line "      Doctor Mason  ;)"
 	done
 
-Text0403:
+Mail2Part1Text:
 	text "<RAMNAME>,"
 	line "It's me, Doctor Mason."
 	line "I have some information for you"
@@ -2024,7 +2024,7 @@ Text0403:
 	line "Here's a Booster Pack for you..."
 	done
 
-Text0404:
+Mail2Part2Text:
 	text "<RAMNAME>, I know you can do it!"
 	line "Go win the Fighting Medal!"
 	line "Mason Laboratory"

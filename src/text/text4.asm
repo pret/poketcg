@@ -1,4 +1,4 @@
-Text0405:
+Mail3Part1Text:
 	text "<RAMNAME>,"
 	line "It's me, Doctor Mason."
 	line "I have some information about"
@@ -13,14 +13,14 @@ Text0405:
 	line "Here's a Booster Pack for you!"
 	done
 
-Text0406:
+Mail3Part2Text:
 	text "<RAMNAME>! Go defeat Gene,"
 	line "the Master of the Rock Club!"
 	line "Mason Laboratory"
 	line "      Doctor Mason  ;)"
 	done
 
-Text0407:
+Mail4Part1Text:
 	text "<RAMNAME>,"
 	line "It's me, Doctor Mason."
 	line "I have some information for you"
@@ -40,14 +40,14 @@ Text0407:
 	line "Here's a Booster Pack for you."
 	done
 
-Text0408:
+Mail4Part2Text:
 	text "<RAMNAME>!"
 	line "Keep at it, and don't give up!"
 	line "Mason Laboratory"
 	line "      Doctor Mason  ;)"
 	done
 
-Text0409:
+Mail5Part1Text:
 	text "How's it going, <RAMNAME>?"
 	line "It's me, Doctor Mason."
 	line "I have some information for you"
@@ -69,14 +69,14 @@ Text0409:
 	line "Pokémon in this Booster Pack!"
 	done
 
-Text040a:
+Mail5Part2Text:
 	text "Did you find the Pokémon you were"
 	line "looking for in the Booster Pack?"
 	line "Mason Laboratory"
 	line "      Doctor Mason  ;)"
 	done
 
-Text040b:
+Mail6Part1Text:
 	text "It's me, Doctor Mason."
 	line "Have you won many Master Medals?"
 	line "I have some information for you "
@@ -94,14 +94,14 @@ Text040b:
 	line "Fire Pokémon."
 	done
 
-Text040c:
+Mail6Part2Text:
 	text "Did it have a lot of Fire Pokémon"
 	line "(the weakness of Grass Pokémon)?"
 	line "Mason Laboratory"
 	line "      Dr. Mason  ;)"
 	done
 
-Text040d:
+Mail7Part1Text:
 	text "Are you getting any closer to"
 	line "inheriting the Legendary Pokémon "
 	line "Cards? Murray of the Psychic Club -"
@@ -119,7 +119,7 @@ Text040d:
 	line "Here, take this!"
 	done
 
-Text040e:
+Mail7Part2Text:
 	text "Fight to the end, "
 	text "<RAMNAME>,"
 	line "and don't give up!"
@@ -127,7 +127,7 @@ Text040e:
 	line "      Dr. Mason  ;)"
 	done
 
-Text040f:
+Mail8Part1Text:
 	text "It's me, Dr. Mason."
 	line "How are you doing, <RAMNAME>?"
 	line "I have some information for you"
@@ -146,7 +146,7 @@ Text040f:
 	line "assistance..."
 	done
 
-Text0410:
+Mail8Part2Text:
 	text "Win all 8 Master Medals, "
 	line ""
 	text "<RAMNAME>!"
@@ -154,7 +154,7 @@ Text0410:
 	line "      Dr. Mason  ;)"
 	done
 
-Text0411:
+Mail9Part1Text:
 	text "It's me, Dr. Mason."
 	line "Have you collected many cards?"
 	line "I have some information about"
@@ -173,7 +173,7 @@ Text0411:
 	line "Booster Pack!"
 	done
 
-Text0412:
+Mail9Part2Text:
 	text "Look closely at the cards "
 	line "you just received."
 	line "You should be able to come up"
@@ -182,7 +182,7 @@ Text0412:
 	line "      Dr. Mason  ;)"
 	done
 
-Text0413:
+Mail10Part1Text:
 	text "It's me, Dr. Mason."
 	line "It looks like you've won"
 	line "quite a few medals."
@@ -201,7 +201,7 @@ Text0413:
 	line "you get 2 Booster Packs!"
 	done
 
-Text0414:
+Mail11Part1Text:
 	text "Did you try building your own deck?"
 	line "This time, I'll give you tips on"
 	line "the types and number of cards you"
@@ -226,7 +226,7 @@ Text0414:
 	line "Packs again!"
 	done
 
-Text0415:
+Mail12Part1Text:
 	text "<RAMNAME>,"
 	line "It's me, Dr. Mason."
 	line "You're finally going to be dueling"
@@ -247,7 +247,7 @@ Text0415:
 	line "Keep up the good work!"
 	done
 
-Text0416:
+Mail13Part1Text:
 	text "<RAMNAME>,"
 	line "It's me, Dr. Mason!"
 	line "Grand Master Steve uses"
@@ -272,7 +272,7 @@ Text0416:
 	line "3 more to go!"
 	done
 
-Text0417:
+Mail14Part1Text:
 	text "It's me, Dr. Mason!"
 	line "2 more Grand Masters to go!"
 	line "Grand Master Jack uses"
@@ -291,7 +291,7 @@ Text0417:
 	line "      Dr. Mason  ;)"
 	done
 
-Text0418:
+Mail15Part1Text:
 	text "It's me, Dr. Mason!"
 	line "The final duel is here!"
 	line "I have some information on Rod,"
@@ -315,7 +315,7 @@ Text0418:
 	line "for you."
 	done
 
-Text0419:
+MailBoosterPackAlreadyOpenedText:
 	text "You have already received the"
 	line "attached Booster Pack."
 	done
@@ -328,7 +328,7 @@ PlaceholderMessageText:
 	text "This message is not in yet!"
 	done
 
-Text041c:
+Clerk3Text:
 	text "Hello!"
 	line "Welcome to the Water Club!"
 	line "This is a Club devoted to"
@@ -405,7 +405,7 @@ Gal1AfterTradeText:
 	line "your Lapras."
 	done
 
-Text0427:
+Lass1NormalText:
 	text "Do you know Imakuni??"
 	line "He's a suspicious-looking guy"
 	line "dressed all in black!"
@@ -416,14 +416,14 @@ Text0427:
 	line "maybe you shouldn't go near him!"
 	done
 
-Text0428:
+Lass1ImakuniHereText:
 	text "Look! That's Imakuni? over there!"
 	line "Doesn't he look strange?"
 	line "You'll find him even stranger"
 	line "when you talk to him."
 	done
 
-Text0429:
+Lass1ImakuniLeftText:
 	text "What a strange guy Imakuni? is!"
 	line "Have you found him yet?"
 	line "It's rumored that he has really"
@@ -432,104 +432,104 @@ Text0429:
 	line "might want to duel him."
 	done
 
-Text042a:
+Man2Text:
 	text "All Amy, the Master of this Club,"
 	line "does lately is sleep."
 	line "She's bored because she doesn't"
 	line "have anybody to duel."
 	done
 
-Text042b:
+Pappy2Text:
 	text "Sara and Amanda of the"
 	line "Water Club are twins."
 	line "No wonder they look"
 	line "so much alike!"
 	done
 
-Text042c:
+SaraWantsToDuelText:
 	text "It feels so good to swim"
 	line "in the pool!"
 	line "Do you want to take a swim?"
 	line "Or would you rather duel?"
 	done
 
-Text042d:
+SaraWouldYouLikeToDuelText:
 	text "Would you like to duel Sara?"
 	done
 
-Text042e:
+SaraDeclinedDuelText:
 	text "No?"
 	line "Then maybe I'll go for a dip."
 	done
 
-Text042f:
+SaraStartDuelText:
 	text "There will be 2 Prizes."
 	line "The duel will be 1 match."
 	line "OK, let's start!"
 	done
 
-Text0430:
+SaraPlayerWon1Text:
 	text "Uh-oh! I guess I lost..."
 	line "Maybe I shouldn't have been"
 	line "swimming so much."
 	done
 
-Text0431:
+SaraPlayerWon2Text:
 	text "I guess I have to practice more"
 	line "to improve my Pokémon card game."
 	done
 
-Text0432:
+SaraPlayerLostText:
 	text "It might look like all I can"
 	line "do is swim, but I play a pretty"
 	line "mean game of Pokémon Trading Cards!"
 	line "Do you want to join the Water Club?"
 	done
 
-Text0433:
+AmandaWantsToDuelText:
 	text "Doesn't it feel good to relax"
 	line "by the pool?"
 	line "Isn't it wonderful to duel"
 	line "in a place like this?"
 	done
 
-Text0434:
+AmandaWouldYouLikeToDuelText:
 	text "Would you like to duel Amanda?"
 	done
 
-Text0435:
+AmandaDeclinedDuelText:
 	text "Why..."
 	line "How boring!"
 	done
 
-Text0436:
+AmandaDuelStartText:
 	text "OK, we'll play with 3 Prizes."
 	line "It'll be a 1-match duel!"
 	done
 
-Text0437:
+AmandaPlayerWon1Text:
 	text "Oops, I lost!"
 	line "Now I'm in trouble!"
 	done
 
-Text0438:
+AmandaPlayerWon2Text:
 	text "Losing kind of destroys the"
 	line "atmosphere of the place."
 	done
 
-Text0439:
+AmandaPlayerLostText:
 	text "Winning in such nice surroundings"
 	line "makes it all the more pleasurable!"
 	done
 
-Text043a:
+JoshuaAmyIsRestingText:
 	text "Hey! Stop!"
 	line "This is a restricted area!"
 	line "Amy, the Club Master,"
 	line "is resting!"
 	done
 
-Text043b:
+JoshuaGoDefeatSaraAndAmandaText:
 	text "The person resting over there"
 	line "is Amy, the Club Master."
 	line "If you wish to duel Amy,"
@@ -540,12 +540,12 @@ Text043b:
 	line "the Club Master!"
 	done
 
-Text043c:
+JoshuaSaraAndAmandaDefeatedText:
 	text "What?"
 	line "You defeated Sara and Amanda?"
 	done
 
-Text043d:
+JoshuaWantsToDuelInitialText:
 	text "You must be pretty good if you"
 	line "defeated Sara and Amanda..."
 	line "As promised, I'll test your skills."
@@ -553,15 +553,15 @@ Text043d:
 	line "to Amy..."
 	done
 
-Text043e:
+JoshuaWantsToDuelRepeatText:
 	text "You wish to duel against me?"
 	done
 
-Text043f:
+JoshuaWouldYouLikeToDuelText:
 	text "Would you like to duel Joshua?"
 	done
 
-Text0440:
+JoshuaDeclinedDuelInitialText:
 	text "You don't want to duel?"
 	line "Are you afraid you won't be able"
 	line "to defeat me?"
@@ -569,7 +569,7 @@ Text0440:
 	line "meet Amy is by going through me!"
 	done
 
-Text0441:
+JoshuaDeclinedDuelRepeatText:
 	text "You don't want to duel?"
 	line "Are you afraid you won't be able"
 	line "to defeat me?"
@@ -577,141 +577,141 @@ Text0441:
 	line "very good!"
 	done
 
-Text0442:
+JoshuaDuelStartText:
 	text "OK, this will be a 1-match duel"
 	line "with 4 Prizes!"
 	done
 
-Text0443:
+JoshuaPlayerLostInitialText:
 	text "How's that! I win!"
 	line "I'm sorry, but unless you defeat "
 	line "me, I can't let you meet Amy."
 	done
 
-Text0444:
+JoshuaPlayerLostRepeatText:
 	text "How's that! I win!"
 	line "Too bad for you, but I'm"
 	line "the second best player"
 	line "after Amy!"
 	done
 
-Text0445:
+JoshuaPlayerWonInitial1Text:
 	text "What!?!"
 	line "How could I lose?"
 	done
 
-Text0446:
+JoshuaPlayerWonRepeat1Text:
 	text "What!?!"
 	line "How could I lose again?"
 	done
 
-Text0447:
+JoshuaPlayerWonInitial2Text:
 	text "Well, since I promised..."
 	line "I'll introduce you to Amy."
 	done
 
-Text0448:
+JoshuaPlayerWonRepeat2Text:
 	text "How could this be?"
 	line "It must be luck!"
 	line "Yeah, that's what it was!"
 	done
 
-Text0449:
+JoshuaWakesAmy1Text:
 	text "Don't think you're that good"
 	line "just because you defeated me."
 	line "We still have Amy here"
 	line "at the Water Club."
 	done
 
-Text044a:
+JoshuaWakesAmy2Text:
 	text "Amy!"
 	line "Please wake up!!"
 	done
 
-Text044b:
+AmyMeetsPlayer1Text:
 	text "Huh? What's going on?"
 	line "I was enjoying my little nap..."
 	done
 
-Text044c:
+JoshuaWakesAmy3Text:
 	text "Well, um..."
 	line "(psst, psst, psst)"
 	done
 
-Text044d:
+AmyMeetsPlayer2Text:
 	text "What? You lost?"
 	line "How could you!?!"
 	done
 
-Text044e:
+AmyMeetsPlayer3Text:
 	text "Was it <RAMNAME>?"
 	line "I will be your next opponent."
 	line "I, Amy, the Master of the "
 	line "Water Club!"
 	done
 
-Text044f:
+AmyWantsToDuelInitialText:
 	text "Aren't you <RAMNAME>?"
 	line "So you decided you want to"
 	line "duel me?"
 	done
 
-Text0450:
+AmyWouldYouLikeToDuelText:
 	text "Would you like to duel Amy?"
 	done
 
-Text0451:
+AmyDeclinedDuelInitialText:
 	text "No? How boring!"
 	line "I was looking forward to"
 	line "a game of Pokémon Trading Cards."
 	line "Well, come see me again!"
 	done
 
-Text0452:
+AmyDuelStartInitialText:
 	text "OK! A 1-Match Duel with 6 Prizes!"
 	line "Let's do it!"
 	done
 
-Text0453:
+AmyPlayerWon1Text:
 	text "Oh, no! I lost!?!"
 	done
 
-Text0454:
+AmyGivesMedel1Text:
 	text "Well, since I lost, you can have"
 	line "this Water Medal."
 	line "This should get you a step closer"
 	line "to inheriting the Legendary Cards!"
 	done
 
-Text0455:
+AmyGivesMedel2Text:
 	text "Here, you can also have these!"
 	line "They should come in handy!"
 	done
 
-Text0456:
+AmyPlayerWon2Text:
 	text "Come see me again! I'd like"
 	line "to duel you again sometime!"
 	done
 
-Text0457:
+AmyPlayerLostText:
 	text "Hah! I'm the best!"
 	line "Come see me again sometime! "
 	line "I'd like another duel!"
 	done
 
-Text0458:
+AmyWantsToDuelRepeatText:
 	text "Hi, <RAMNAME>."
 	line "Nice to see you again!!!"
 	line "Did you come to play the"
 	line "Pokémon Trading Card Game?"
 	done
 
-Text0459:
+AmyDuelStartRepeatText:
 	text "OK, same rules as before!"
 	line "A 1-match duel with 6 Prizes!"
 	done
 
-Text045a:
+Clerk1Text:
 	text "Hello."
 	line "Welcome to the Fighting Club!"
 	line "Here at this Club, we duel using"
@@ -721,7 +721,7 @@ Text045a:
 	line "in this Club."
 	done
 
-Text045b:
+Man1FirstRequestCardText:
 	text "I see you play the Pokémon Trading"
 	line "Card Game. I'm not into dueling."
 	line "I prefer collecting the cards."
@@ -732,14 +732,14 @@ Text045b:
 	line "How about it?"
 	done
 
-Text045c:
+Man1WaitingForCardText:
 	text "Hi! It's you!"
 	line "What's up?"
 	line "Did you decide to give me"
 	line "your <RAMTEXT>?"
 	done
 
-Text045d:
+Man1NewRequestCardText:
 	text "Hi! I see you're playing with"
 	line "the cards again."
 	line "By the way, I'm looking for"
@@ -748,17 +748,17 @@ Text045d:
 	line "would you mind giving it to me?"
 	done
 
-Text045e:
+Man1GiveAwayCardText:
 	text "Give away your <RAMTEXT>?"
 	done
 
-Text045f:
+Man1DeclineText:
 	text "OK. I understand."
 	line "But if you should change your "
 	line "mind, please come see me."
 	done
 
-Text0460:
+Man1DontHaveText:
 	text "But you don't have <RAMTEXT>!"
 	line "I appreciate your generosity, but "
 	line "you can't give me what you don't "
@@ -766,7 +766,7 @@ Text0460:
 	line "you get <RAMTEXT>."
 	done
 
-Text0461:
+Man1CardInDeckText:
 	text "You're going to give it to me?"
 	line "Thank you!"
 	line "But your <RAMTEXT>"
@@ -775,7 +775,7 @@ Text0461:
 	line "playing with!"
 	done
 
-Text0462:
+Man1GiveCardText:
 	text "You're going to give it to me?"
 	line "I'll put it in my collection"
 	line "right away."
@@ -783,7 +783,7 @@ Text0462:
 	line "Thank you! Thank you!!!"
 	done
 
-Text0463:
+Man1PlayerRecivePikachuAltLv16Text:
 	text "Since you've been so kind and given"
 	line "me so many cards,"
 	line "please accept this card as a gift"
@@ -792,26 +792,26 @@ Text0463:
 	line "Please take good care of it!"
 	done
 
-Text0464:
+Man1ThankYouText:
 	text "Thank you for being so kind and"
 	line "giving me all these cards!"
 	done
 
-Text0465:
+Man1GaveCardText:
 	text "Hi!"
 	line "Thanks for being so kind!"
 	line "I'm taking good care"
 	line "of all the cards you gave me!"
 	done
 
-Text0466:
+Man1GaveAllCardsText:
 	text "Hi!"
 	line "Is the card I gave you"
 	line "coming in handy?"
 	line "Thanks again for being so kind!"
 	done
 
-Text0467:
+ImakuniWouldLikeToDuelInitialText:
 	text "Huh? W..Who are you?"
 	line "Who? Me? You don't know who I am?"
 	line "I am the super musical star,"
@@ -829,56 +829,56 @@ Text0467:
 	line "OK, but if I win, you dance!"
 	done
 
-Text0468:
+ImakuniWouldLikeToDuelRepeatText:
 	text "What? You're still here?"
 	line "OK, sit over there."
 	line "What? You're already sitting?"
 	line "OK, OK! Then let's get started!"
 	done
 
-Text0469:
+ImakuniWouldYouLikeToDuelText:
 	text "Would you like to duel Imakuni??"
 	done
 
-Text046a:
+ImakuniDeclinedDuelText:
 	text "Come on, don't be cruel!"
 	line "You're going to make me cry!"
 	done
 
-Text046b:
+ImakuniDuelStartText:
 	text "OK, a 1-match duel with 6 Prizes!"
 	line "...Whatever that means..."
 	done
 
-Text046c:
+ImakuniPlayerWonNormalText:
 	text "Hey! You're pretty good!"
 	line "I'll give you this Booster Pack,"
 	line "so don't tell anyone I lost, OK?"
 	done
 
-Text046d:
+ImakuniPlayerWonThreeWinsText:
 	text "You won 3 times against me!"
 	line "Does that make you happy? Does it?"
 	done
 
-Text046e:
+ImakuniPlayerWonSixWinsText:
 	text "I can't believe I lost 6 times!"
 	line "...Seriously!"
 	done
 
-Text046f:
+ImakuniGivesImakuniText:
 	text "I don't really want to give you "
 	line "this, but here. Take care of it."
 	done
 
-Text0470:
+ImakuniPlayerWonEndText:
 	text "In both Cards and Dance,"
 	line "soul and rhythm are the secret."
 	line "Hey, that sounds pretty cool!"
 	line "Maybe I'll become a poet!"
 	done
 
-Text0471:
+ImakuniPlayerLostText:
 	text "Hmm...I win."
 	line "You weren't too bad, but since "
 	line "I won...Let's see you shake it!"
@@ -891,37 +891,37 @@ Text0471:
 	line "... You dance weird!"
 	done
 
-Text0472:
+Specs1NormalText:
 	text "I was just saying which "
 	line "Grand Master is the best."
 	line "I think Steve is the best player."
 	done
 
-Text0473:
+Specs1PlayerIsChampionText:
 	text "I can't believe Steve the Grand"
 	line "Master could lose!"
 	line "Who could have defeated Steve?"
 	done
 
-Text0474:
+ButchNormalText:
 	text "The best player among the Grand"
 	line "Masters is Rod, since he's the"
 	line "leader of the Grand Masters."
 	done
 
-Text0475:
+ButchPlayerIsChampionText:
 	text "I can't believe Rod, the leader of"
 	line "the Grand Masters, was defeated!?!"
 	line "Could this mean the Legendary"
 	line "Pokémon Cards have been passed on?"
 	done
 
-Text0476:
+Granny1Text:
 	text "If I were just a few years younger,"
 	line "I'd be dueling with you kids, too."
 	done
 
-Text0477:
+MitchFirstInterationText:
 	text "I am Mitch, Master of the"
 	line "Fighting Club!"
 	line "I have to warn you that you will"
@@ -934,7 +934,7 @@ Text0477:
 	line "3 of my pupils!"
 	done
 
-Text0478:
+Mitch3PupilsRemainingText:
 	text "If you wish to duel me, you "
 	line "must defeat my pupils first!"
 	line "My pupils are training at the"
@@ -943,7 +943,7 @@ Text0478:
 	line "3 of my pupils!"
 	done
 
-Text0479:
+Mitch2PupilsRemainingText:
 	text "So, you've defeated 1 of my pupils."
 	line "You must be a pretty good player."
 	line "But you're not good enough!"
@@ -951,14 +951,14 @@ Text0479:
 	line "must defeat my 2 remaining pupils!"
 	done
 
-Text047a:
+Mitch1PupilRemainingText:
 	text "So, you've defeated 2 of my pupils!"
 	line "You are pretty good."
 	line "But there's still the last one..."
 	line "Can you defeat my last pupil?"
 	done
 
-Text047b:
+MitchWouldLikeToDuelInitialText:
 	text "So, you have defeated"
 	line "all of my pupils!"
 	line "Let's see if you have "
@@ -967,23 +967,23 @@ Text047b:
 	line "OK! Are you ready?"
 	done
 
-Text047c:
+MitchWouldYouLikeToDuelText:
 	text "Would you like to Duel Mitch?"
 	done
 
-Text047d:
+MitchDeclinedInitialText:
 	text "What?"
 	line "Are you getting cold feet?"
 	line "Come see me again when you"
 	line "finally work up enough nerves!"
 	done
 
-Text047e:
+MitchDuelStartInitialText:
 	text "Come on! Show me what you've got!"
 	line "We'll play with 6 Prizes!"
 	done
 
-Text047f:
+MitchPlayerWonInitial1Text:
 	text "Wonderful! Great Match!"
 	line "You're very good."
 	line "Here, take this."
@@ -992,54 +992,54 @@ Text047f:
 	line "of this Club encrypted in it."
 	done
 
-Text0480:
+MitchPlayerWonInitial2Text:
 	text "Here, take this, too. It's a"
 	line "LABORATORY Booster Pack."
 	done
 
-Text0481:
+MitchPlayerWonInitial3Text:
 	text "I hope to duel someone "
 	line "like you again someday!"
 	done
 
-Text0482:
+MitchPlayerLostInitialText:
 	text "You may have been able to defeat"
 	line "my pupils, but you still are not"
 	line "experienced enough to defeat me!"
 	line "Come back after you've trained more!"
 	done
 
-Text0483:
+MitchWouldLikeToDuelRepeatText:
 	text "You wish to duel the"
 	line "Fighting Club Master again?"
 	done
 
-Text0484:
+MitchDeclinedDuelRepeatText:
 	text "Oh, OK."
 	line "I'd like to duel again, though."
 	done
 
-Text0485:
+MitchDuelStartRepeatText:
 	text "As before, we'll play with 6 Prizes."
 	line "Come show me what you've got!"
 	done
 
-Text0486:
+MitchPlayerWonRepeat1Text:
 	text "Another utter defeat!"
 	line "Here, take this!"
 	done
 
-Text0487:
+MitchPlayerWonRepeat2Text:
 	text "I'd like to duel someone "
 	line "like you again!"
 	done
 
-Text0488:
+MitchPlayerLostRepeatText:
 	text "You must train harder!"
 	line "I'll be waiting!"
 	done
 
-Text0489:
+ChrisFightingClubWantsToDuelInitialText:
 	text "I lost to you before at the Rock"
 	line "Club, but not this time!"
 	line "I'm going to train to become"
@@ -1048,14 +1048,14 @@ Text0489:
 	line "again, I must defeat you first!"
 	done
 
-Text048a:
+ChrisFightingClubWantsToDuelRepeatText:
 	text "I'm going to train to become"
 	line "an even better player!"
 	line "But before I can start my training"
 	line "again, I must defeat you first!"
 	done
 
-Text048b:
+ChrisFightingClubWouldYouLikeToDuelText:
 	text "Would you like to duel Chris?"
 	done
 

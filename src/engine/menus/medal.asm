@@ -51,12 +51,12 @@ ShowMedalReceivedScreen:
 
 MasterMedalNames:
 	table_width 2, MasterMedalNames
-	tx GrassClubMapNameText
-	tx ScienceClubMapNameText
-	tx FireClubMapNameText
-	tx WaterClubMapNameText
-	tx LightningClubMapNameText
-	tx PsychicClubMapNameText
-	tx RockClubMapNameText
-	tx FightingClubMapNameText
+	tx GrassClubMapName
+	tx ScienceClubMapName
+	tx FireClubMapName
+	tx WaterClubMapName
+	tx LightningClubMapName
+	tx PsychicClubMapName
+	tx RockClubMapName
+	tx FightingClubMapName
 	assert_table_length NUM_MEDALS

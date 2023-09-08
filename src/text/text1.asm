@@ -38,7 +38,7 @@ PKMNPWRText:
 	text "PKMN PWR"
 	done
 
-Text000b:
+Unused000b: ; Unused (Pokemon Card)
 	textfw0 "ポケモンカ—ド"
 	done
 
@@ -130,7 +130,7 @@ DeckPrinterText:
 	text "Deck"
 	done
 
-Text0022:
+Unused0022: ; Unused
 	text "Attack"
 	done
 
@@ -199,7 +199,7 @@ IncompleteText:
 	text "Incomplete"
 	done
 
-Text0032:
+Unused0032: ; Unused
 	text "Damage"
 	done
 
@@ -207,7 +207,7 @@ UsedText:
 	text "Used <RAMTEXT>."
 	done
 
-Text0034:
+Unused0034: ; Unused
 	text "Received damage"
 	done
 
@@ -601,7 +601,7 @@ SelectCheckText:
 	line "  Check"
 	done
 
-Text0087:
+Unused0087: ; Unused
 	textfw3 "B"
 	textfw0 "<RAMNUM>"
 	textfw3 "S"
@@ -624,27 +624,27 @@ NumberOfPrizesText:
 	text "Number of Prizes"
 	done
 
-Text008c:
+Unused008c: ; Unused
 	text "Random 1"
 	done
 
-Text008d:
+Unused008d: ; Unused
 	text "Random 2"
 	done
 
-Text008e:
+Unused008e: ; Unused
 	text "Random 3"
 	done
 
-Text008f:
+Unused008f: ; Unused
 	text "Random 4"
 	done
 
-Text0090:
+Unused0090: ; Unused
 	text "Training COM"
 	done
 
-Text0091:
+Unused0091: ; Unused
 	text "Player 1"
 	done
 
@@ -652,21 +652,21 @@ Player2Text:
 	text "Player 2"
 	done
 
-Text0093:
+Unused0093: ; Unused
 	text "Left to Right"
 	done
 
-Text0094:
+Unused0094: ; Unused
 	text "Right to Left"
 	done
 
-Text0095:
+Unused0095: ; Unused
 	text "START: Change"
 	line "    A: Execute"
 	line "    B: End"
 	done
 
-Text0096:
+Unused0096: ; Unused
 	text "Other"
 	line "Poison"
 	line "Sleep"
@@ -687,7 +687,7 @@ Text0096:
 	line "Change Card"
 	done
 
-Text0097:
+Unused0097: ; Unused
 	text "WIN GAME"
 	line "LOSE GAME"
 	line "DRAW GAME"
@@ -700,11 +700,11 @@ Text0097:
 	line "LOAD FILE"
 	done
 
-Text0098:
+Unused0098: ; Unused
 	text "Save File"
 	done
 
-Text0099:
+Unused0099: ; Unused
 	text "Load File"
 	line "  "
 	half2full
@@ -712,24 +712,24 @@ Text0099:
 	text "  Last Saved File"
 	done
 
-Text009a:
+Unused009a: ; Unused
 	text "Pause Mode is ON"
 	line "Press SELECT to Pause"
 	done
 
-Text009b:
+Unused009b: ; Unused
 	text "Pause Mode is OFF"
 	done
 
-Text009c:
+Unused009c: ; Unused
 	text "Computer Mode is OFF"
 	done
 
-Text009d:
+Unused009d: ; Unused
 	text "Computer Mode is ON"
 	done
 
-Text009e:
+Unused009e: ; Unused
 	text "<GRASS> Pokémon"
 	line ""
 	text "<FIRE> Pokémon"
@@ -747,15 +747,15 @@ Text009e:
 	line "Energy Card"
 	done
 
-Text009f:
+Unused009f: ; Unused
 	text "Card List"
 	done
 
-Text00a0:
+Unused00a0: ; Unused
 	text "Test Coin Flip"
 	done
 
-Text00a1:
+Unused00a1: ; Unused
 	text "End without Prizes?"
 	done
 
@@ -994,7 +994,7 @@ UnableDueToToxicGasText:
 	line "effects of Toxic Gas."
 	done
 
-Text00d5:
+Unused00d5: ; Unused
 	text "A Transmission Error occured."
 	done
 
@@ -1138,7 +1138,7 @@ IfHeadsNoDamageNextTurnText:
 	line "damage during opponent's next turn!"
 	done
 
-Text00f2:
+Unused00f2: ; Unused
 	text "Damage check"
 	done
 

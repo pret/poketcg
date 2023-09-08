@@ -310,7 +310,7 @@ Text0557:
 	line "Give it up, already! See ya!"
 	done
 
-Text0558:
+MysteriousVoiceDoorNotEnoughMedalsText:
 	text "Only those who have won all 8 "
 	line "Master Medals may enter the Grand "
 	line "Hall. You have not won all the "

@@ -18,7 +18,7 @@ Unknown_10da9:
 	db 10, 12 ; start menu text box dimensions
 
 	db 12, 2 ; text alignment for InitTextPrinting
-	tx Text0351
+	tx PCMenuOptionsText
 	db $ff
 
 	db 11, 2 ; cursor x, cursor y

@@ -138,14 +138,14 @@ Func_d96c:
 	ret
 
 ClubMapNames:
-	tx FightingClubMapNameText
-	tx RockClubMapNameText
-	tx WaterClubMapNameText
-	tx LightningClubMapNameText
-	tx GrassClubMapNameText
-	tx PsychicClubMapNameText
-	tx ScienceClubMapNameText
-	tx FireClubMapNameText
+	tx FightingClubMapName
+	tx RockClubMapName
+	tx WaterClubMapName
+	tx LightningClubMapName
+	tx GrassClubMapName
+	tx PsychicClubMapName
+	tx ScienceClubMapName
+	tx FireClubMapName
 
 Script_d995:
 	ld a, $03

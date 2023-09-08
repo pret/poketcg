@@ -18,42 +18,42 @@ Script_Man1:
 	max_out_event_value EVENT_MAN1_TALKED
 	pick_next_man1_requested_card
 	load_man1_requested_card_into_txram_slot 0
-	print_npc_text Text045b
+	print_npc_text Man1FirstRequestCardText
 	max_out_event_value EVENT_MAN1_WAITING_FOR_CARD
 	script_jump .ows_dca5
 
 .ows_dc91
 	jump_if_event_false EVENT_MAN1_WAITING_FOR_CARD, .ows_dc9d
 	load_man1_requested_card_into_txram_slot 0
-	print_npc_text Text045c
+	print_npc_text Man1WaitingForCardText
 	script_jump .ows_dca5
 
 .ows_dc9d
 	pick_next_man1_requested_card
 	load_man1_requested_card_into_txram_slot 0
-	print_npc_text Text045d
+	print_npc_text Man1NewRequestCardText
 	max_out_event_value EVENT_MAN1_WAITING_FOR_CARD
 .ows_dca5
 	load_man1_requested_card_into_txram_slot 0
-	ask_question_jump Text045e, .ows_dcaf
-	print_text_quit_fully Text045f
+	ask_question_jump Man1GiveAwayCardText, .ows_dcaf
+	print_text_quit_fully Man1DeclineText
 
 .ows_dcaf
 	jump_if_man1_requested_card_owned .ows_dcb9
 	load_man1_requested_card_into_txram_slot 0
 	load_man1_requested_card_into_txram_slot 1
-	print_text_quit_fully Text0460
+	print_text_quit_fully Man1DontHaveText
 
 .ows_dcb9
 	jump_if_man1_requested_card_in_collection .ows_dcc3
 	load_man1_requested_card_into_txram_slot 0
 	load_man1_requested_card_into_txram_slot 1
-	print_text_quit_fully Text0461
+	print_text_quit_fully Man1CardInDeckText
 
 .ows_dcc3
 	load_man1_requested_card_into_txram_slot 0
 	load_man1_requested_card_into_txram_slot 1
-	print_npc_text Text0462
+	print_npc_text Man1GiveCardText
 	remove_man1_requested_card_from_collection
 	max_out_event_value EVENT_TEMP_GIFTED_TO_MAN1
 	zero_out_event_value EVENT_MAN1_WAITING_FOR_CARD
@@ -62,18 +62,18 @@ Script_Man1:
 	quit_script_fully
 
 .ows_dcd7
-	print_npc_text Text0463
+	print_npc_text Man1PlayerRecivePikachuAltLv16Text
 	give_card PIKACHU_ALT_LV16
 	show_card_received_screen PIKACHU_ALT_LV16
-	print_npc_text Text0464
+	print_npc_text Man1ThankYouText
 	set_event EVENT_MAN1_GIFT_SEQUENCE_STATE, MAN1_GIFT_SEQUENCE_COMPLETE
 	quit_script_fully
 
 .ows_dce5
-	print_text_quit_fully Text0465
+	print_text_quit_fully Man1GaveCardText
 
 .ows_dce8
-	print_text_quit_fully Text0466
+	print_text_quit_fully Man1GaveAllCardsText
 
 Preload_ImakuniInFightingClubLobby:
 	get_event_value EVENT_IMAKUNI_STATE
@@ -100,14 +100,14 @@ Script_Imakuni:
 	start_script
 	set_event EVENT_IMAKUNI_STATE, IMAKUNI_TALKED
 	test_if_event_false EVENT_TEMP_TALKED_TO_IMAKUNI
-	print_variable_npc_text Text0467, Text0468
+	print_variable_npc_text ImakuniWouldLikeToDuelInitialText, ImakuniWouldLikeToDuelRepeatText
 	max_out_event_value EVENT_TEMP_TALKED_TO_IMAKUNI
-	ask_question_jump Text0469, .start_duel
-	print_npc_text Text046a
+	ask_question_jump ImakuniWouldYouLikeToDuelText, .start_duel
+	print_npc_text ImakuniDeclinedDuelText
 	quit_script_fully
 
 .start_duel
-	print_npc_text Text046b
+	print_npc_text ImakuniDuelStartText
 	start_duel PRIZES_6, IMAKUNI_DECK_ID, MUSIC_IMAKUNI
 	quit_script_fully
 
@@ -118,27 +118,27 @@ Script_BeatImakuni:
 	jump_if_event_equal EVENT_IMAKUNI_WIN_COUNT, 3, .three_wins
 	jump_if_event_equal EVENT_IMAKUNI_WIN_COUNT, 6, .six_wins
 .give_boosters
-	print_npc_text Text046c
+	print_npc_text ImakuniPlayerWonNormalText
 	give_one_of_each_trainer_booster
 	script_jump .done
 
 .three_wins
-	print_npc_text Text046d
+	print_npc_text ImakuniPlayerWonThreeWinsText
 	script_jump .give_imakuni_card
 
 .six_wins
-	print_npc_text Text046e
+	print_npc_text ImakuniPlayerWonSixWinsText
 .give_imakuni_card
-	print_npc_text Text046f
+	print_npc_text ImakuniGivesImakuniText
 	give_card IMAKUNI_CARD
 	show_card_received_screen IMAKUNI_CARD
 .done
-	print_npc_text Text0470
+	print_npc_text ImakuniPlayerWonEndText
 	script_jump Script_LostToImakuni.imakuni_common
 
 Script_LostToImakuni:
 	start_script
-	print_npc_text Text0471
+	print_npc_text ImakuniPlayerLostText
 .imakuni_common
 	close_text_box
 	jump_if_player_coords_match 18, 4, .ows_dd69
@@ -170,13 +170,13 @@ NPCMovement_dd78:
 Script_Specs1:
 	start_script
 	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
-	print_variable_npc_text Text0472, Text0473
+	print_variable_npc_text Specs1NormalText, Specs1PlayerIsChampionText
 	quit_script_fully
 
 Script_Butch:
 	start_script
 	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
-	print_variable_npc_text Text0474, Text0475
+	print_variable_npc_text ButchNormalText, ButchPlayerIsChampionText
 	quit_script_fully
 
 Preload_Granny1:
@@ -186,4 +186,4 @@ Preload_Granny1:
 
 Script_Granny1:
 	start_script
-	print_text_quit_fully Text0476
+	print_text_quit_fully Granny1Text

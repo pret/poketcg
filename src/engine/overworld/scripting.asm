@@ -1389,18 +1389,18 @@ ScriptCommand_LoadCurrentMapNameIntoTxRamSlot:
 	jp IncreaseScriptPointerBy2
 
 MapNames:
-	tx MasonLaboratoryMapNameText
-	tx MrIshiharasHouseMapNameText
-	tx FightingClubMapNameText
-	tx RockClubMapNameText
-	tx WaterClubMapNameText
-	tx LightningClubMapNameText
-	tx GrassClubMapNameText
-	tx PsychicClubMapNameText
-	tx ScienceClubMapNameText
-	tx FireClubMapNameText
-	tx ChallengeHallMapNameText
-	tx PokemonDomeMapNameText
+	tx MasonLaboratoryMapName
+	tx MrIshiharasHouseMapName
+	tx FightingClubMapName
+	tx RockClubMapName
+	tx WaterClubMapName
+	tx LightningClubMapName
+	tx GrassClubMapName
+	tx PsychicClubMapName
+	tx ScienceClubMapName
+	tx FireClubMapName
+	tx ChallengeHallMapName
+	tx PokemonDomeMapName
 
 ScriptCommand_LoadChallengeHallNPCIntoTxRamSlot:
 	ld hl, wCurrentNPCNameTx

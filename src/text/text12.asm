@@ -509,7 +509,7 @@ GaleDescription:
 	line "switching the Pokémon.)"
 	done
 
-Pidgeot1Description:
+PidgeotLv38Description:
 	text "This Pokémon flies at Mach 2 speed,"
 	line "seeking prey. Its large talons are"
 	line "feared as wicked weapons."
@@ -527,7 +527,7 @@ HurricaneDescription:
 	line "hand."
 	done
 
-Pidgeot2Description:
+PidgeotLv40Description:
 	text "When hunting, it skims the surface"
 	line "of water at high speed to pick off"
 	line "unwary prey such as Magikarp."
