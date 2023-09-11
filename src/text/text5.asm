@@ -846,7 +846,7 @@ Clerk9DefualtText:
 	line "us for this competition."
 	done
 
-Clerk9ChallangeCupOverText:
+Clerk9ChallengeCupOverText:
 	text "Greetings! Welcome to the "
 	line "Challenge Hall! This is where the"
 	line "the Challenge Cup is held. The "
@@ -855,7 +855,7 @@ Clerk9ChallangeCupOverText:
 	line "Challenge Hall often."
 	done
 
-Clerk9ChallangeCupReadyText:
+Clerk9ChallengeCupReadyText:
 	text "Greetings! Welcome to the "
 	line "Challenge Hall! Defeat 3 "
 	line "opponents here, and you shall be "
@@ -863,14 +863,14 @@ Clerk9ChallangeCupReadyText:
 	line "Please join in the competition!"
 	done
 
-Clerk9ChallangeCupLostText:
+Clerk9ChallengeCupLostText:
 	text "Most unfortunate, <RAMNAME>."
 	line "Once you enter, you won't be able"
 	line "to re-enter for some time. "
 	line "Please try again another day."
 	done
 
-Clerk9ChallangeCupWonText:
+Clerk9ChallengeCupWonText:
 	text "Congratulations, <RAMNAME>!"
 	line "You received a card!"
 	line "Please join us for the next "

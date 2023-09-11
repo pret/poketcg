@@ -94,13 +94,13 @@ Script_Clerk9:
 	print_text_quit_fully Clerk9DefualtText
 
 .ows_f069
-	print_text_quit_fully Clerk9ChallangeCupOverText
+	print_text_quit_fully Clerk9ChallengeCupOverText
 
 .ows_f06c
-	print_text_quit_fully Clerk9ChallangeCupReadyText
+	print_text_quit_fully Clerk9ChallengeCupReadyText
 
 .ows_f06f
-	print_text_quit_fully Clerk9ChallangeCupLostText
+	print_text_quit_fully Clerk9ChallengeCupLostText
 
 .ows_f072
-	print_text_quit_fully Clerk9ChallangeCupWonText
+	print_text_quit_fully Clerk9ChallengeCupWonText

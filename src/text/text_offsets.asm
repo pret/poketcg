@@ -1292,10 +1292,10 @@ TextOffsets::
 	textpointer PlateOfLegendsText                                 ; 0x0508
 	textpointer MysteriousVoiceDoorName                            ; 0x0509
 	textpointer Clerk9DefualtText                                  ; 0x050a
-	textpointer Clerk9ChallangeCupOverText                         ; 0x050b
-	textpointer Clerk9ChallangeCupReadyText                        ; 0x050c
-	textpointer Clerk9ChallangeCupLostText                         ; 0x050d
-	textpointer Clerk9ChallangeCupWonText                          ; 0x050e
+	textpointer Clerk9ChallengeCupOverText                         ; 0x050b
+	textpointer Clerk9ChallengeCupReadyText                        ; 0x050c
+	textpointer Clerk9ChallengeCupLostText                         ; 0x050d
+	textpointer Clerk9ChallengeCupWonText                          ; 0x050e
 	textpointer Pappy3Text                                         ; 0x050f
 	textpointer Gal4Text                                           ; 0x0510
 	textpointer ChampText                                          ; 0x0511
