@@ -287,12 +287,12 @@ Script_BeatAmy:
 	start_script
 	print_npc_text AmyPlayerWon1Text
 	jump_if_event_true EVENT_BEAT_AMY, .give_booster_packs
-	print_npc_text AmyGivesMedel1Text
+	print_npc_text AmyGivesMedal1Text
 	max_out_event_value EVENT_BEAT_AMY
 	try_give_medal_pc_packs
 	show_medal_received_screen EVENT_BEAT_AMY
 	record_master_win $03
-	print_npc_text AmyGivesMedel2Text
+	print_npc_text AmyGivesMedal2Text
 .give_booster_packs
 	give_booster_packs BOOSTER_LABORATORY_WATER, BOOSTER_LABORATORY_WATER, NO_BOOSTER
 	print_npc_text AmyPlayerWon2Text

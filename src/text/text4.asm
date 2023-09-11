@@ -676,14 +676,14 @@ AmyPlayerWon1Text:
 	text "Oh, no! I lost!?!"
 	done
 
-AmyGivesMedel1Text:
+AmyGivesMedal1Text:
 	text "Well, since I lost, you can have"
 	line "this Water Medal."
 	line "This should get you a step closer"
 	line "to inheriting the Legendary Cards!"
 	done
 
-AmyGivesMedel2Text:
+AmyGivesMedal2Text:
 	text "Here, you can also have these!"
 	line "They should come in handy!"
 	done
@@ -783,7 +783,7 @@ Man1GiveCardText:
 	line "Thank you! Thank you!!!"
 	done
 
-Man1PlayerRecivePikachuAltLv16Text:
+Man1PlayerReceivePikachuAltLv16Text:
 	text "Since you've been so kind and given"
 	line "me so many cards,"
 	line "please accept this card as a gift"
@@ -921,7 +921,7 @@ Granny1Text:
 	line "I'd be dueling with you kids, too."
 	done
 
-MitchFirstInterationText:
+MitchFirstInteractionText:
 	text "I am Mitch, Master of the"
 	line "Fighting Club!"
 	line "I have to warn you that you will"

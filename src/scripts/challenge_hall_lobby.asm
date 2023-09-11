@@ -1,9 +1,9 @@
-Preload_ChallengeHallNPCs2:
+Preload_ChallengeHallNPCs2: ; Challenge Cup Iniactive
 	call Preload_ChallengeHallNPCs1
 	ccf
 	ret
 
-Preload_ChallengeHallNPCs1:
+Preload_ChallengeHallNPCs1: ; Challenge Cup Active
 	get_event_value EVENT_CHALLENGE_CUP_STARTING
 	or a
 	jr z, .quit
@@ -23,29 +23,29 @@ ChallengeHallLobbyLoadMap:
 	ld bc, Script_f166
 	jp SetNextNPCAndScript
 
-Script_Pappy3:
+Script_Pappy3: ; Preload_ChallengeHallNPCs1
 	start_script
-	print_text_quit_fully Text050f
+	print_text_quit_fully Pappy3Text
 
-Script_Gal4:
+Script_Gal4: ; Preload_ChallengeHallNPCs1
 	start_script
-	print_text_quit_fully Text0510
+	print_text_quit_fully Gal4Text
 
-Script_Champ:
+Script_Champ: ; Preload_ChallengeHallNPCs1
 	start_script
-	print_text_quit_fully Text0511
+	print_text_quit_fully ChampText
 
-Script_Hood2:
+Script_Hood2: ; Preload_ChallengeHallNPCs1
 	start_script
-	print_text_quit_fully Text0512
+	print_text_quit_fully Hood2Text
 
-Script_Lass5:
+Script_Lass5: ; Preload_ChallengeHallNPCs2
 	start_script
-	print_text_quit_fully Text0513
+	print_text_quit_fully Lass5Text
 
-Script_Chap5:
+Script_Chap5: ; Preload_ChallengeHallNPCs2
 	start_script
-	print_text_quit_fully Text0514
+	print_text_quit_fully Chap5Text
 
 Preload_ChallengeHallLobbyRonald1:
 	set_event_zero EVENT_RONALD_CHALLENGE_HALL_LOBBY_STATE

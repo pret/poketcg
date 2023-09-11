@@ -120,7 +120,7 @@ PleaseChooseASaveSlotText:
 	text "Please choose a Save Slot."
 	done
 
-Unused0286: ; Unused
+UnusedText0286: ; Unused
 	text "Receive configuration."
 	done
 
@@ -902,7 +902,7 @@ RetreatingDescriptionText:
 	line "of the retreating Pokémon."
 	done
 
-Unused031e: ; Unused
+UnusedText031e: ; Unused
 	text "Modify Deck"
 	line "Card List"
 	line "Album List"
@@ -913,7 +913,7 @@ Unused031e: ; Unused
 	line "Name Input"
 	done
 
-Unused031f: ; Unused
+UnusedText031f: ; Unused
 	text "Fighting Machine"
 	line "Rock Machine"
 	line "Water Machine"
@@ -926,18 +926,18 @@ Unused031f: ; Unused
 	line "Legendary Machine"
 	done
 
-Unused0320: ; Unused
+UnusedText0320: ; Unused
 	text "Send a Card"
 	line "Receive a Card"
 	line "Give Deck Instructions"
 	line "Receive Deck Instructions"
 	done
 
-Unused0321: ; Unused
+UnusedText0321: ; Unused
 	text "Lecture Duel"
 	done
 
-Unused0322: ; Unused
+UnusedText0322: ; Unused
 	text "First Strike Deck"
 	line ""
 	done
@@ -1042,7 +1042,7 @@ PokemonDomeMapName:
 	text "Pokémon Dome"
 	done
 
-Unused033c: ; Unused
+UnusedText033c: ; Unused
 	text "??'s House"
 	done
 
@@ -1127,7 +1127,7 @@ ConfigMenuExitText:
 	text "   Exit Settings"
 	done
 
-Unused034c: ; Unused
+UnusedText034c: ; Unused
 	text "Duel           [<RAMTEXT>]"
 	line "SELECT         [<RAMTEXT>]"
 	line "Receive many cards"
@@ -1135,19 +1135,19 @@ Unused034c: ; Unused
 	line "To Pokémon Dome 2"
 	done
 
-Unused034d: ; Unused
+UnusedText034d: ; Unused
 	text "Normal Duel"
 	done
 
-Unused034e: ; Unused
+UnusedText034e: ; Unused
 	text "Skip"
 	done
 
-Unused034f: ; Unused
+UnusedText034f: ; Unused
 	text "Normal"
 	done
 
-Unused0350: ; Unused
+UnusedText0350: ; Unused
 	text "Freeze Screen"
 	done
 
@@ -1435,18 +1435,18 @@ DebugBoosterPackEnergyMenuText:
 	line "4"
 	done
 
-Unused0381: ; Unused
+UnusedText0381: ; Unused
 	text "A                   TIME"
 	line "     TO      (Change with Start)"
 	line "            A+B: Stop Animation"
 	line "            Select: Exit"
 	done
 
-Unused0382: ; Unused
+UnusedText0382: ; Unused
 	text "Left"
 	done
 
-Unused0383: ; Unused
+UnusedText0383: ; Unused
 	text "Right"
 	done
 
@@ -1478,7 +1478,7 @@ CheckedCardsInBoosterPackText:
 	line "in the Booster Pack!!"
 	done
 
-Unused038a: ; Unused
+UnusedText038a: ; Unused
 	text "Substitute screen for"
 	line "receiving cards."
 	done
@@ -1488,44 +1488,44 @@ WonTheMedalText:
 	line "Won the <RAMTEXT> Medal!"
 	done
 
-Unused038c: ; Unused
+UnusedText038c: ; Unused
 	text "Substitute screen for sending"
 	line "cards by Link cable."
 	done
 
-Unused038d: ; Unused
+UnusedText038d: ; Unused
 	text "Substitute screen for receiving"
 	line "cards by Link cable."
 	done
 
-Unused038e: ; Unused
+UnusedText038e: ; Unused
 	text "Substitute screen for sending"
 	line "a Deck design."
 	done
 
-Unused038f: ; Unused
+UnusedText038f: ; Unused
 	text "Substitute screen for receiving"
 	line "a Deck design."
 	done
 
-Unused0390: ; Unused
+UnusedText0390: ; Unused
 	text "????"
 	done
 
-Unused0391: ; Unused
+UnusedText0391: ; Unused
 	text "Ending Screen"
 	line "THE END"
 	done
 
-Unused0392: ; Unused
+UnusedText0392: ; Unused
 	text "Was the data transfer successful?"
 	done
 
-Unused0393: ; Unused
+UnusedText0393: ; Unused
 	text "(Person transferring data to)"
 	done
 
-Unused0394: ; Unused
+UnusedText0394: ; Unused
 	text "(Name of Deck transferring)"
 	done
 

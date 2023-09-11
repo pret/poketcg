@@ -837,7 +837,7 @@ MysteriousVoiceDoorName:
 	text "Mysterious Voice"
 	done
 
-Text050a:
+Clerk9DefualtText:
 	text "Greetings! Welcome to the "
 	line "Challenge Hall! The Challenge Cup "
 	line "will begin soon. If you win the "
@@ -846,7 +846,7 @@ Text050a:
 	line "us for this competition."
 	done
 
-Text050b:
+Clerk9ChallangeCupOverText:
 	text "Greetings! Welcome to the "
 	line "Challenge Hall! This is where the"
 	line "the Challenge Cup is held. The "
@@ -855,7 +855,7 @@ Text050b:
 	line "Challenge Hall often."
 	done
 
-Text050c:
+Clerk9ChallangeCupReadyText:
 	text "Greetings! Welcome to the "
 	line "Challenge Hall! Defeat 3 "
 	line "opponents here, and you shall be "
@@ -863,55 +863,55 @@ Text050c:
 	line "Please join in the competition!"
 	done
 
-Text050d:
+Clerk9ChallangeCupLostText:
 	text "Most unfortunate, <RAMNAME>."
 	line "Once you enter, you won't be able"
 	line "to re-enter for some time. "
 	line "Please try again another day."
 	done
 
-Text050e:
+Clerk9ChallangeCupWonText:
 	text "Congratulations, <RAMNAME>!"
 	line "You received a card!"
 	line "Please join us for the next "
 	line "Challenge Cup, too."
 	done
 
-Text050f:
+Pappy3Text:
 	text "I won't lose to any"
 	line "whipper-snapper!"
 	line "I'm going to win this "
 	line "Challenge Cup!"
 	done
 
-Text0510:
+Gal4Text:
 	text "I work at the Challenge Cup"
 	line "as the HOST."
 	line "I can't wait to get up on stage!"
 	done
 
-Text0511:
+ChampText:
 	text "The time has come to see if all"
 	line "my training has paid off!"
 	line "I'm going to win the Challenge Cup"
 	line "and become a Grand Master!"
 	done
 
-Text0512:
+Hood2Text:
 	text "Hey now! It's the Challenge Cup!"
 	line "Hey now! Gonna give it a try!"
 	line "Hey now! Gonna beat 3 people!"
 	line "Hey now! Watch me win the prize!"
 	done
 
-Text0513:
+Lass5Text:
 	text "I'm good enough to compete in"
 	line "the Challenge Cup! Girls are just"
 	line "as good at the Pokémon Trading"
 	line "Card Game as boys!"
 	done
 
-Text0514:
+Chap5Text:
 	text "What's that? Oh! The Challenge "
 	line "Cup isn't being held right now."
 	line "Me? I'm waiting for the Challenge"

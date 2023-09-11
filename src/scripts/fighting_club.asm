@@ -32,7 +32,7 @@ Script_Mitch:
 	fight_club_pupil_jump .first_interaction, .three_pupils_remaining, \
 		.two_pupils_remaining, .one_pupil_remaining, .all_pupils_defeated
 .first_interaction
-	print_npc_text MitchFirstInterationText
+	print_npc_text MitchFirstInteractionText
 	set_event EVENT_PUPIL_MICHAEL_STATE, PUPIL_ACTIVE
 	set_event EVENT_PUPIL_CHRIS_STATE, PUPIL_ACTIVE
 	set_event EVENT_PUPIL_JESSICA_STATE, PUPIL_ACTIVE

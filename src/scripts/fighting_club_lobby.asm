@@ -62,7 +62,7 @@ Script_Man1:
 	quit_script_fully
 
 .ows_dcd7
-	print_npc_text Man1PlayerRecivePikachuAltLv16Text
+	print_npc_text Man1PlayerReceivePikachuAltLv16Text
 	give_card PIKACHU_ALT_LV16
 	show_card_received_screen PIKACHU_ALT_LV16
 	print_npc_text Man1ThankYouText
