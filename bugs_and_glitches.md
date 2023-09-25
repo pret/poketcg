@@ -415,7 +415,7 @@ HandleAIShift: ; 22476 (8:6476)
 ## Challenge host uses wrong name for the first rival
 When playing the challenge cup, player name is used instead of rival name before the first fight, as seen here: https://www.youtube.com/watch?v=1igDbNxRfUw&t=17310s
 
-**Fix:** Edit `Text0533` in `text6.asm`: 
+**Fix:** Edit `Clerk12ChallengeCupContenderText` in `text6.asm`: 
 ```diff
 -	text "Presently, <RAMNAME> is still"
 +	text "Presently, <RAMTEXT> is still"

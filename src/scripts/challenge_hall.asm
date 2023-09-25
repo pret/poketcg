@@ -31,7 +31,7 @@ ChallengeHallLoadMap:
 
 Script_Clerk13:
 	start_script
-	print_text_quit_fully Text0525
+	print_text_quit_fully Clerk13Text
 
 Preload_Guide:
 	get_event_value EVENT_CHALLENGE_CUP_STARTING
@@ -48,14 +48,14 @@ Preload_Guide:
 Script_Guide:
 	start_script
 	jump_if_event_false EVENT_CHALLENGE_CUP_STARTING, .ows_f28b
-	print_text_quit_fully Text0526
+	print_text_quit_fully GuideChallengeCupActiveText
 
 .ows_f28b
 	jump_if_event_zero EVENT_CHALLENGE_CUP_1_STATE, .ows_f292
-	print_text_quit_fully Text0527
+	print_text_quit_fully GuideChallengeCupOverText
 
 .ows_f292
-	print_text_quit_fully Text0528
+	print_text_quit_fully GuideChallengeCupPreparingText
 
 Script_Clerk12:
 	start_script
@@ -70,29 +70,29 @@ Script_Clerk12:
 	script_jump .ows_f2c7
 
 .ows_f2c1
-	print_text_quit_fully Text0529
+	print_text_quit_fully Clerk12ChallengeCupWonText
 
 .ows_f2c4
-	print_text_quit_fully Text052a
+	print_text_quit_fully Clerk12ChallengeCupLostText
 
 .ows_f2c7
-	print_npc_text Text052b
+	print_npc_text Clerk12ChallengeCup1ActiveText
 	script_jump .ows_f2d6
 
 .ows_f2cd
-	print_npc_text Text052c
+	print_npc_text Clerk12ChallengeCup2ActiveText
 	script_jump .ows_f2d6
 
 .ows_f2d3
-	print_npc_text Text052d
+	print_npc_text Clerk12ChallengeCup3ActiveText
 .ows_f2d6
-	print_npc_text Text052e
-	ask_question_jump Text052f, .ows_f2e1
-	print_text_quit_fully Text0530
+	print_npc_text Clerk12ChallengeCupInviteText
+	ask_question_jump Clerk12WillYouEnterText, .ows_f2e1
+	print_text_quit_fully Clerk12DeclinedText
 
 .ows_f2e1
 	max_out_event_value EVENT_PLAYER_ENTERED_CHALLENGE_CUP
-	print_npc_text Text0531
+	print_npc_text Clerk12AcceptedText
 	close_text_box
 	move_active_npc NPCMovement_f349
 	jump_if_player_coords_match 8, 18, .ows_f2fa
@@ -162,16 +162,16 @@ Script_f353:
 	do_frames 20
 	move_active_npc NPCMovement_f390
 	load_challenge_hall_npc_into_txram_slot 0
-	print_npc_text Text0532
+	print_npc_text Clerk12ChallengeCupIntroText
 	close_text_box
 	move_active_npc NPCMovement_f37f
-	print_npc_text Text0533
+	print_npc_text Clerk12ChallengeCupContenderText
 	close_text_box
 	move_active_npc NPCMovement_f388
-	print_npc_text Text0534
+	print_npc_text Clerk12ChallengeCupRound1ChallengerText
 	close_text_box
 	move_active_npc NPCMovement_f38e
-	print_npc_text Text0535
+	print_npc_text Clerk12ChallengeCupRound1DuelStartText
 	start_challenge_hall_duel PRIZES_4, SAMS_PRACTICE_DECK_ID, MUSIC_STOP
 	quit_script_fully
 
@@ -218,11 +218,11 @@ Script_LostAtChallengeHall:
 	jump_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 3, Script_f410.ows_f41a
 	load_challenge_hall_npc_into_txram_slot 0
 	load_challenge_hall_npc_into_txram_slot 1
-	print_npc_text Text0536
+	print_npc_text Clerk12ChallengeCupRound2PlayerLostText
 .ows_f3ae
 	close_text_box
 	move_active_npc NPCMovement_f38b
-	print_npc_text Text0537
+	print_npc_text Clerk12ChallengeCupLostContinuedText
 	close_text_box
 	move_active_npc NPCMovement_f38e
 	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 2, .ows_f3ce
@@ -277,15 +277,15 @@ NPCMovement_f40d:
 Script_f410:
 	load_challenge_hall_npc_into_txram_slot 0
 	load_challenge_hall_npc_into_txram_slot 1
-	print_npc_text Text0538
+	print_npc_text Clerk12ChallengeCupRound1PlayerLostText
 	script_jump Script_LostAtChallengeHall.ows_f3ae
 
 .ows_f41a
-	print_npc_text Text0539
+	print_npc_text Clerk12ChallengeCupPlayerLostToRonaldText
 	set_dialog_npc NPC_RONALD1
 	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 3, .ows_f42e
 	test_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1
-	print_variable_npc_text Text053a, Text053b
+	print_variable_npc_text RonaldChallengeCup2Or3PlayerLostText, RonaldChallengeCup1PlayerLostText
 .ows_f42e
 	set_dialog_npc NPC_HOST
 	script_jump Script_LostAtChallengeHall.ows_f3ae
@@ -308,43 +308,43 @@ Script_WonAtChallengeHall:
 	jump_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 2, .ows_f456
 .ows_f456
 	test_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 1
-	print_variable_npc_text Text053c, Text053d
+	print_variable_npc_text Clerk12ChallengeCupRound1PlayerWonText, Clerk12ChallengeCupRound2PlayerWonText
 	move_active_npc NPCMovement_f37f
 	load_challenge_hall_npc_into_txram_slot 0
-	print_npc_text Text053e
+	print_npc_text Clerk12ChallengeCupPlayerWonContinuedText
 	close_text_box
 	move_challenge_hall_npc NPCMovement_f4c8
 	unload_challenge_hall_npc
-	print_npc_text Text053f
+	print_npc_text Clerk12ChallengeCupNextChallengerText
 	close_text_box
 	pick_challenge_hall_opponent
 	set_challenge_hall_npc_coords 20, 20
 	move_challenge_hall_npc NPCMovement_f4d0
 	load_challenge_hall_npc_into_txram_slot 0
 	test_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 2
-	print_variable_npc_text Text0540, Text0541
+	print_variable_npc_text Clerk12ChallengeCupRound2ChallengerText, Clerk12ChallengeCupRound3ChallengerText
 	move_active_npc NPCMovement_f383
 	jump_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 2, .ows_f4a4
 	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 3, .ows_f4a1
 	close_text_box
 	set_dialog_npc NPC_RONALD1
 	test_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1
-	print_variable_npc_text Text0542, Text0543
+	print_variable_npc_text RonaldChallengeCup2BeforeDuelText, RonaldChallengeCup1BeforeDuelText
 	set_dialog_npc NPC_HOST
 	close_text_box
 .ows_f4a1
-	print_npc_text Text0544
+	print_npc_text Clerk12ChallengeCupRound3DuelReadyText
 .ows_f4a4
 	zero_out_event_value EVENT_CHALLENGE_CUP_IN_MENU
-	print_npc_text Text0545
-	ask_question_jump_default_yes Text0546, .ows_f4bd
+	print_npc_text Clerk12AreYourDecksReadyText
+	ask_question_jump_default_yes Clerk12PrepareYourDeckText, .ows_f4bd
 	test_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 2
-	print_variable_npc_text Text0547, Text0548
+	print_variable_npc_text Clerk12ChallengeCupRound2DuelStartText, Clerk12ChallengeCupRound3DuelStartText
 	start_challenge_hall_duel PRIZES_4, SAMS_PRACTICE_DECK_ID, MUSIC_STOP
 	quit_script_fully
 
 .ows_f4bd
-	print_npc_text Text0549
+	print_npc_text Clerk12MakeYourPreparationsText
 	close_text_box
 	max_out_event_value EVENT_CHALLENGE_CUP_IN_MENU
 	open_menu
@@ -378,20 +378,20 @@ NPCMovement_f4d8:
 	db $ff
 
 Script_f4db:
-	print_npc_text Text054a
+	print_npc_text Clerk12ChallengeCupRound3PlayerWon1Text
 	move_active_npc NPCMovement_f37f
 	load_challenge_hall_npc_into_txram_slot 0
-	print_npc_text Text054b
+	print_npc_text Clerk12ChallengeCupRound3PlayerWon2Text
 	close_text_box
 	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 3, .ows_f513
 	set_dialog_npc NPC_RONALD1
 	test_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1
-	print_variable_npc_text Text054c, Text054d
+	print_variable_npc_text RonaldChallengeCup1PlayerWon1Text, RonaldChallengeCup2Or3PlayerWon1Text
 	move_challenge_hall_npc NPCMovement_f4d8
 	do_frames 40
 	move_challenge_hall_npc NPCMovement_f34c
 	test_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1
-	print_variable_npc_text Text054e, Text054f
+	print_variable_npc_text RonaldChallengeCup1PlayerWon2Text, RonaldChallengeCup2Or3PlayerWon2Text
 	set_dialog_npc NPC_HOST
 	close_text_box
 	move_challenge_hall_npc NPCMovement_f4c9
@@ -402,14 +402,14 @@ Script_f4db:
 .ows_f516
 	unload_challenge_hall_npc
 	move_active_npc NPCMovement_f383
-	print_npc_text Text0550
+	print_npc_text Clerk12ChallengeCupRound3PlayerWon3Text
 	close_text_box
 	move_active_npc NPCMovement_f38b
 	pick_challenge_cup_prize_card
-	print_npc_text Text0551
+	print_npc_text Clerk12ChallengeCupRound3PlayerWon4Text
 	give_card VARIABLE_CARD
 	show_card_received_screen VARIABLE_CARD
-	print_npc_text Text0552
+	print_npc_text Clerk12ChallengeCupRound3PlayerWon5Text
 	close_text_box
 	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 2, .ows_f540
 	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 3, .ows_f549

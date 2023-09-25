@@ -918,12 +918,12 @@ Chap5Text:
 	line "Cup to begin."
 	done
 
-Text0515:
+RonaldChallengeCup1NotStarted1Text:
 	text "Hi, <RAMNAME>."
 	line "Are you competing, too?"
 	done
 
-Text0516:
+RonaldChallengeCup1NotStarted2Text:
 	text "I'm the one who's going to"
 	line "defeat 3 opponents! The prize, "
 	line ""
@@ -932,12 +932,12 @@ Text0516:
 	line "See Ya! Ha ha ha ha ha ha!"
 	done
 
-Text0517:
+RonaldChallengeCup1LostActive1Text:
 	text "Hey, it's <RAMNAME> - the loser"
 	line "of the Challenge Cup!"
 	done
 
-Text0518:
+RonaldChallengeCup1LostActive2Text:
 	text "What? You're asking if I won?"
 	line "I lost to the third opponent!"
 	line "I just lost my concentration."
@@ -946,24 +946,24 @@ Text0518:
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
-Text0519:
+RonaldChallengeCup1LostInactive1Text:
 	text "Hey <RAMNAME>, too bad "
 	line "you're too late!"
 	done
 
-Text051a:
+RonaldChallengeCup1LostInactive2Text:
 	text "The Challenge Cup is over! I"
 	line "defeated 3 opponents and won"
 	line "the prize - <Lv>60 Mewtwo!"
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
-Text051b:
+RonaldChallengeCup1Missed1Text:
 	text "Hi, <RAMNAME>."
 	line "What are you doing here?"
 	done
 
-Text051c:
+RonaldChallengeCup1Missed2Text:
 	text "The Challenge Cup is over! I"
 	line "defeated 3 opponents and won"
 	line "the prize - <Lv>60 Mewtwo!"
@@ -974,12 +974,12 @@ Text051c:
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
-Text051d:
+RonaldChallengeCup2NotStarted1Text:
 	text "Hey, <RAMNAME>."
 	line "We meet again."
 	done
 
-Text051e:
+RonaldChallengeCup2NotStarted2Text:
 	text "No matter who enters the Challenge"
 	line "Cup, I'll be the winner! "
 	line ""
@@ -989,12 +989,12 @@ Text051e:
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
-Text051f:
+RonaldChallengeCup2LostActive1Text:
 	text "Hey, it's <RAMNAME> - the"
 	line "loser of the Challenge Cup!"
 	done
 
-Text0520:
+RonaldChallengeCup2LostActive2Text:
 	text "That was a close one for me!"
 	line "I lost to the third opponent!"
 	line "But I'll win the next Challenge "
@@ -1002,12 +1002,12 @@ Text0520:
 	line "you! See ya! Ha ha ha ha ha!"
 	done
 
-Text0521:
+RonaldChallengeCup2LostInactive1Text:
 	text "Hey, isn't that <RAMNAME>?"
 	line "Late as always!"
 	done
 
-Text0522:
+RonaldChallengeCup2LostInactive2Text:
 	text "The Challenge Cup is already"
 	line "over! What? Who won?"
 	line "Who do you expect!?! Me, of "
@@ -1016,7 +1016,7 @@ Text0522:
 	line "Ha ha ha ha ha ha!"
 	done
 
-Text0523:
+RonaldChallengeCup2Missed1Text:
 	text "Hey, <RAMNAME>!"
 	line "What are you doing here?"
 	done

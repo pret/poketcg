@@ -1,4 +1,4 @@
-Text0524:
+RonaldChallengeCup2Missed2Text:
 	text "The Challenge Cup is over already! "
 	line "Too bad you couldn't enter!"
 	line "The prize belongs to me! <Lv>8 Mew!"
@@ -9,19 +9,19 @@ Text0524:
 	line "Ha ha ha ha ha ha!"
 	done
 
-Text0525:
+Clerk13Text:
 	text "We do not accept entrants at"
 	line "this reception area."
 	line "Please go to the reception area"
 	line "to the left."
 	done
 
-Text0526:
+GuideChallengeCupActiveText:
 	text "You can't go past this point!"
 	line "It's restricted!"
 	done
 
-Text0527:
+GuideChallengeCupOverText:
 	text "The last Challenge Cup was "
 	line "a blast! The prize was really"
 	line "cool too! Challenge Cups are "
@@ -29,7 +29,7 @@ Text0527:
 	line "next one will be?"
 	done
 
-Text0528:
+GuideChallengeCupPreparingText:
 	text "The Challenge Cup is held here,"
 	line "at the Challenge Hall."
 	line "We're still preparing for the "
@@ -37,82 +37,82 @@ Text0528:
 	line "Please visit us another time."
 	done
 
-Text0529:
+Clerk12ChallengeCupWonText:
 	text "Someone who entered a Challenge"
 	line "Cup once cannot re-enter the "
 	line "same Challenge Cup again. Please"
 	line "wait for the next Challenge Cup."
 	done
 
-Text052a:
+Clerk12ChallengeCupLostText:
 	text "Someone who entered a Challenge"
 	line "Cup once cannot re-enter for"
 	line "a while. Please visit us another"
 	line "time."
 	done
 
-Text052b:
+Clerk12ChallengeCup1ActiveText:
 	text "The first Challenge Cup is"
 	line "now underway!"
 	line "Defeat 3 opponents to win the"
 	line "wonderful prize of <Lv>60 Mewtwo!"
 	done
 
-Text052c:
+Clerk12ChallengeCup2ActiveText:
 	text "The second Challenge Cup is"
 	line "now under way!"
 	line "Defeat 3 opponents to win the"
 	line "wonderful prize of <Lv>8 Mew!"
 	done
 
-Text052d:
+Clerk12ChallengeCup3ActiveText:
 	text "The Challenge Cup is now "
 	line "underway!"
 	line "Defeat 3 opponents to win a"
 	line "fabulous prize!"
 	done
 
-Text052e:
+Clerk12ChallengeCupInviteText:
 	text "The game will be a 1-match "
 	line "duel with 4 prizes! We are "
 	line "now accepting entrants here."
 	line "Wouldn't you like to enter?"
 	done
 
-Text052f:
+Clerk12WillYouEnterText:
 	text "Will you enter?"
 	done
 
-Text0530:
+Clerk12DeclinedText:
 	text "Oh, that's too bad."
 	line "Please do visit us again."
 	done
 
-Text0531:
+Clerk12AcceptedText:
 	text "Then please proceed to the stage!"
 	done
 
-Text0532:
+Clerk12ChallengeCupIntroText:
 	text "Well, things are heating up"
 	line "here at the Challenge Cup!"
 	done
 
-Text0533:
+Clerk12ChallengeCupContenderText:
 	text "Presently, <RAMNAME> is still"
 	line "a contender!"
 	done
 
-Text0534:
+Clerk12ChallengeCupRound1ChallengerText:
 	text "<RAMNAME> is the new challenger!"
 	done
 
-Text0535:
+Clerk12ChallengeCupRound1DuelStartText:
 	text "There will be 4 Prizes!"
 	line "OK!!"
 	line "Let the duel begin!"
 	done
 
-Text0536:
+Clerk12ChallengeCupRound2PlayerLostText:
 	text "The winner is <RAMTEXT>!!"
 	line ""
 	text "<RAMTEXT> has defeated 2 opponents!"
@@ -120,12 +120,12 @@ Text0536:
 	line "before winning the prize!"
 	done
 
-Text0537:
+Clerk12ChallengeCupLostContinuedText:
 	text "Too bad, <RAMNAME>."
 	line "Have a safe trip home!"
 	done
 
-Text0538:
+Clerk12ChallengeCupRound1PlayerLostText:
 	text "The Winner is <RAMTEXT>!!!"
 	line ""
 	text "<RAMTEXT> has defeated 1 opponent!"
@@ -133,27 +133,27 @@ Text0538:
 	line "before winning the prize!"
 	done
 
-Text0539:
+Clerk12ChallengeCupPlayerLostToRonaldText:
 	text "How unfortunate!"
 	line "Unable to defeat the last opponent!"
 	line "It was close, but <RAMNAME> was "
 	line "defeated by the third opponent!"
 	done
 
-Text053a:
+RonaldChallengeCup2Or3PlayerLostText:
 	text "You see! I'm the better player?"
 	line "Two more opponents to go"
 	line "to win the Challenge Cup!!"
 	done
 
-Text053b:
+RonaldChallengeCup1PlayerLostText:
 	text "Ha ha ha! How about that!?!"
 	line "I win!!"
 	line "2 more opponents to go and"
 	line "the <Lv>8 Mew belongs to me!"
 	done
 
-Text053c:
+Clerk12ChallengeCupRound1PlayerWonText:
 	text "Congratulations!"
 	line "The Winner is <RAMNAME>!"
 	line ""
@@ -161,118 +161,118 @@ Text053c:
 	line "1 opponent!!!"
 	done
 
-Text053d:
+Clerk12ChallengeCupRound2PlayerWonText:
 	text "Way to go, <RAMNAME>!"
 	line "That's 2 wins!!!"
 	line "One more opponent to go before"
 	line "winning the Challenge Cup!"
 	done
 
-Text053e:
+Clerk12ChallengeCupPlayerWonContinuedText:
 	text "Most unfortunate, <RAMTEXT>."
 	line "Have a safe trip home!"
 	done
 
-Text053f:
+Clerk12ChallengeCupNextChallengerText:
 	text "Let's meet our next challenger!"
 	done
 
-Text0540:
+Clerk12ChallengeCupRound2ChallengerText:
 	text "Our new challenger is..."
 	line ""
 	text "<RAMTEXT>!"
 	done
 
-Text0541:
+Clerk12ChallengeCupRound3ChallengerText:
 	text "The third opponent is"
 	line ""
 	text "<RAMTEXT>!"
 	done
 
-Text0542:
+RonaldChallengeCup2BeforeDuelText:
 	text "Hey, <RAMNAME>!"
 	line "I'm not gonna lose to you!"
 	line ""
 	text "<Lv>60 Mewtwo belongs to me!!!"
 	done
 
-Text0543:
+RonaldChallengeCup1BeforeDuelText:
 	text "<RAMNAME>!"
 	line "I'm going to defeat you!"
 	line ""
 	text "<Lv>8 Mew belongs to me!!!"
 	done
 
-Text0544:
+Clerk12ChallengeCupRound3DuelReadyText:
 	text "With that, let the third match "
 	line "begin!"
 	done
 
-Text0545:
+Clerk12AreYourDecksReadyText:
 	text "Are your decks ready?"
 	done
 
-Text0546:
+Clerk12PrepareYourDeckText:
 	text "Prepare your deck?"
 	done
 
-Text0547:
+Clerk12ChallengeCupRound2DuelStartText:
 	text "Well then, <RAMNAME>!"
 	line "Let the second match begin!"
 	done
 
-Text0548:
+Clerk12ChallengeCupRound3DuelStartText:
 	text "Well, <RAMNAME>, let the third,"
 	line "and final, match begin!"
 	done
 
-Text0549:
+Clerk12MakeYourPreparationsText:
 	text "Now then, please make "
 	line "your preparations!"
 	done
 
-Text054a:
+Clerk12ChallengeCupRound3PlayerWon1Text:
 	text "Congratulations!"
 	line "You've defeated 3 opponents!"
 	done
 
-Text054b:
+Clerk12ChallengeCupRound3PlayerWon2Text:
 	text "Most unfortunate, <RAMTEXT>."
 	line "Do try again in the next"
 	line "Challenge Cup."
 	done
 
-Text054c:
+RonaldChallengeCup1PlayerWon1Text:
 	text "That was luck!"
 	line "But a loss is a loss..."
 	done
 
-Text054d:
+RonaldChallengeCup2Or3PlayerWon1Text:
 	text "Shoot! I got a bad deal!"
 	done
 
-Text054e:
+RonaldChallengeCup1PlayerWon2Text:
 	text "<RAMNAME>!"
 	line "I won't lose next time!"
 	done
 
-Text054f:
+RonaldChallengeCup2Or3PlayerWon2Text:
 	text "<RAMNAME>!"
 	line "I'll win next time!"
 	done
 
-Text0550:
+Clerk12ChallengeCupRound3PlayerWon3Text:
 	text "The Winner of this Challenge Cup "
 	line "is "
 	text "<RAMNAME>!!!"
 	done
 
-Text0551:
+Clerk12ChallengeCupRound3PlayerWon4Text:
 	text "<RAMNAME>, your prize"
 	line "is <RAMTEXT>!"
 	done
 
-Text0552:
+Clerk12ChallengeCupRound3PlayerWon5Text:
 	text "Congratulations, "
 	text "<RAMNAME>!!!"
 	done

@@ -155,75 +155,75 @@ Script_f166:
 	jump_if_event_equal EVENT_RONALD_CHALLENGE_HALL_LOBBY_STATE, 7, .ows_f204
 	jump_if_event_equal EVENT_RONALD_CHALLENGE_HALL_LOBBY_STATE, 8, .ows_f217
 .ows_f192
-	print_npc_text Text0515
+	print_npc_text RonaldChallengeCup1NotStarted1Text
 	close_text_box
 	move_player WEST, 1
 	move_player WEST, 1
 	move_player WEST, 1
-	print_npc_text Text0516
+	print_npc_text RonaldChallengeCup1NotStarted2Text
 	script_jump .ows_f227
 
 .ows_f1a5
-	print_npc_text Text0517
+	print_npc_text RonaldChallengeCup1LostActive1Text
 	close_text_box
 	move_player WEST, 1
 	move_player WEST, 1
 	move_player WEST, 1
-	print_npc_text Text0518
+	print_npc_text RonaldChallengeCup1LostActive2Text
 	script_jump .ows_f227
 
 .ows_f1b8
-	print_npc_text Text0519
+	print_npc_text RonaldChallengeCup1LostInactive1Text
 	close_text_box
 	move_player WEST, 1
 	move_player WEST, 1
 	move_player WEST, 1
-	print_npc_text Text051a
+	print_npc_text RonaldChallengeCup1LostInactive2Text
 	script_jump .ows_f227
 
 .ows_f1cb
-	print_npc_text Text051b
+	print_npc_text RonaldChallengeCup1Missed1Text
 	close_text_box
 	move_player WEST, 1
 	move_player WEST, 1
 	move_player WEST, 1
-	print_npc_text Text051c
+	print_npc_text RonaldChallengeCup1Missed2Text
 	script_jump .ows_f227
 
 .ows_f1de
-	print_npc_text Text051d
+	print_npc_text RonaldChallengeCup2NotStarted1Text
 	close_text_box
 	move_player WEST, 1
 	move_player WEST, 1
 	move_player WEST, 1
-	print_npc_text Text051e
+	print_npc_text RonaldChallengeCup2NotStarted2Text
 	script_jump .ows_f227
 
 .ows_f1f1
-	print_npc_text Text051f
+	print_npc_text RonaldChallengeCup2LostActive1Text
 	close_text_box
 	move_player WEST, 1
 	move_player WEST, 1
 	move_player WEST, 1
-	print_npc_text Text0520
+	print_npc_text RonaldChallengeCup2LostActive2Text
 	script_jump .ows_f227
 
 .ows_f204
-	print_npc_text Text0521
+	print_npc_text RonaldChallengeCup2LostInactive1Text
 	close_text_box
 	move_player WEST, 1
 	move_player WEST, 1
 	move_player WEST, 1
-	print_npc_text Text0522
+	print_npc_text RonaldChallengeCup2LostInactive2Text
 	script_jump .ows_f227
 
 .ows_f217
-	print_npc_text Text0523
+	print_npc_text RonaldChallengeCup2Missed1Text
 	close_text_box
 	move_player WEST, 1
 	move_player WEST, 1
 	move_player WEST, 1
-	print_npc_text Text0524
+	print_npc_text RonaldChallengeCup2Missed2Text
 .ows_f227
 	close_text_box
 	set_player_direction SOUTH
