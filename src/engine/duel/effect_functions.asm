@@ -3368,7 +3368,7 @@ Blizzard_BenchDamageEffect:
 	call SwapTurn
 	ret
 
-; return carry if can use Cowardice
+; return carry if can't use Cowardice
 Cowardice_Check:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTemp_ffa0], a

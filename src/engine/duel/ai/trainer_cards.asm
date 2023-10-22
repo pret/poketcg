@@ -2365,11 +2365,6 @@ AIDecide_ProfessorOak:
 	add $0a
 	ld [wce06], a
 
-; this part seems buggy
-; the AI loops through all the cards in hand and checks
-; if any of them is not a Pokemon card and has Basic stage.
-; it seems like the intention was that if there was
-; any Basic Pokemon still in hand, the AI would add to the score.
 .check_hand
 	call CreateHandCardList
 	ld hl, wDuelTempList
@@ -3828,11 +3823,16 @@ AIDecide_FullHeal:
 	jr c, .no_carry
 
 .no_scoop_up_prz
-; if card can damage defending Pokemon...
+; return no carry if Arena card
+; cannot damage the defending Pokémon
+
+; this is a bug, since CheckIfCanDamageDefendingPokemon
+; also takes into account whether card is paralyzed
 	xor a ; PLAY_AREA_ARENA
 	farcall CheckIfCanDamageDefendingPokemon
 	jr nc, .no_carry
-; ...and can play an energy card to retreat, set carry.
+
+; if it can play an energy card to retreat, set carry.
 	ld a, [wAIPlayEnergyCardForRetreat]
 	or a
 	jr nz, .set_carry
@@ -4634,15 +4634,6 @@ AIDecide_Revive:
 	jr z, .no_carry
 	ld b, a
 	call LoadCardDataToBuffer1_FromDeckIndex
-
-; these checks have a bug.
-; it works fine for Hitmonchan and Hitmonlee,
-; but in case it's a Tauros card, the routine will fallthrough
-; into the Kangaskhan check. since it will never be equal to Kangaskhan,
-; it will fallthrough into the set carry branch.
-; in case it's a Kangaskhan card, the check will fail in the Tauros check
-; and jump back into the loop. so just by accident the Tauros check works,
-; but Kangaskhan will never be correctly checked because of this.
 	cp HITMONCHAN
 	jr z, .set_carry
 	cp HITMONLEE
@@ -5905,13 +5896,6 @@ AIDecide_PokemonTrader_PowerGenerator:
 	call LookForCardIDInDeck_GivenCardIDInHand
 	jr c, .find_duplicates
 	; bug, missing jr .no_carry
-
-; since this last check falls through regardless of result,
-; register a might hold an invalid deck index,
-; which might lead to hilarious results like Brandon
-; trading a Pikachu with a Grass Energy from the deck.
-; however, since it's deep in a tower of conditionals,
-; reaching here is extremely unlikely.
 
 ; a card in deck was found to look for,
 ; check if there are duplicates in hand to trade with.

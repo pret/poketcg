@@ -133,9 +133,7 @@ SetUpBossStartingHandAndDeck:
 
 ; expectation: return carry if card ID corresponding
 ; to the input deck index is listed in wAICardListAvoidPrize;
-; reality: always returns no carry because when checking terminating
-; byte in wAICardListAvoidPrize ($00), it wrongfully uses 'cp a' instead of 'or a',
-; so it always ends up returning in the first item in list.
+; reality: always returns no carry
 ; input:
 ;	- a = deck index of card to check
 .CheckIfIDIsInList
