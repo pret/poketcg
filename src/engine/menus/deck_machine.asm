@@ -587,8 +587,9 @@ HandleDeckSaveMachineMenu:
 	jp c, .wait_input
 	jr .return_to_list
 
+; Empty Deck
 .is_empty
-	ldtx hl, Text0264
+	ldtx hl, NoDeckIsSavedText
 	call DrawWideTextBox_WaitForInput
 	ld a, [wTempDeckMachineCursorPos]
 	jp .wait_input

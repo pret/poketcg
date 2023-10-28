@@ -65,7 +65,7 @@ Script_Gal1:
 Script_Lass1:
 	start_script
 	jump_if_event_equal EVENT_LASS1_MENTIONED_IMAKUNI, TRUE, .ows_e121
-	print_npc_text Text0427
+	print_npc_text Lass1NormalText
 	set_event EVENT_LASS1_MENTIONED_IMAKUNI, TRUE
 	set_event EVENT_IMAKUNI_STATE, IMAKUNI_MENTIONED
 	quit_script_fully
@@ -73,10 +73,10 @@ Script_Lass1:
 .ows_e121
 	jump_if_event_not_equal EVENT_IMAKUNI_ROOM, IMAKUNI_WATER_CLUB, .ows_e12d
 	jump_if_event_true EVENT_TEMP_DUELED_IMAKUNI, .ows_e12d
-	print_text_quit_fully Text0428
+	print_text_quit_fully Lass1ImakuniHereText
 
 .ows_e12d
-	print_text_quit_fully Text0429
+	print_text_quit_fully Lass1ImakuniLeftText
 
 Preload_Man2:
 	get_event_value EVENT_JOSHUA_STATE
@@ -85,8 +85,8 @@ Preload_Man2:
 
 Script_Man2:
 	start_script
-	print_text_quit_fully Text042a
+	print_text_quit_fully Man2Text
 
 Script_Pappy2:
 	start_script
-	print_text_quit_fully Text042b
+	print_text_quit_fully Pappy2Text

@@ -39,51 +39,51 @@ WaterClubAfterDuel:
 
 Script_Sara:
 	start_script
-	print_npc_text Text042c
-	ask_question_jump Text042d, .start_duel
-	print_npc_text Text042e
+	print_npc_text SaraWantsToDuelText
+	ask_question_jump SaraWouldYouLikeToDuelText, .start_duel
+	print_npc_text SaraDeclinedDuelText
 	quit_script_fully
 
 .start_duel
-	print_npc_text Text042f
+	print_npc_text SaraStartDuelText
 	start_duel PRIZES_2, WATERFRONT_POKEMON_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
 
 Script_BeatSara:
 	start_script
 	max_out_event_value EVENT_BEAT_SARA
-	print_npc_text Text0430
+	print_npc_text SaraPlayerWon1Text
 	give_booster_packs BOOSTER_COLOSSEUM_WATER, BOOSTER_COLOSSEUM_WATER, NO_BOOSTER
-	print_npc_text Text0431
+	print_npc_text SaraPlayerWon2Text
 	quit_script_fully
 
 Script_LostToSara:
 	start_script
-	print_text_quit_fully Text0432
+	print_text_quit_fully SaraPlayerLostText
 
 Script_Amanda:
 	start_script
-	print_npc_text Text0433
-	ask_question_jump Text0434, .start_duel
-	print_npc_text Text0435
+	print_npc_text AmandaWantsToDuelText
+	ask_question_jump AmandaWouldYouLikeToDuelText, .start_duel
+	print_npc_text AmandaDeclinedDuelText
 	quit_script_fully
 
 .start_duel
-	print_npc_text Text0436
+	print_npc_text AmandaDuelStartText
 	start_duel PRIZES_3, LONELY_FRIENDS_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
 
 Script_BeatAmanda:
 	start_script
 	max_out_event_value EVENT_BEAT_AMANDA
-	print_npc_text Text0437
+	print_npc_text AmandaPlayerWon1Text
 	give_booster_packs BOOSTER_MYSTERY_LIGHTNING_COLORLESS, BOOSTER_MYSTERY_LIGHTNING_COLORLESS, NO_BOOSTER
-	print_npc_text Text0438
+	print_npc_text AmandaPlayerWon2Text
 	quit_script_fully
 
 Script_LostToAmanda:
 	start_script
-	print_text_quit_fully Text0439
+	print_text_quit_fully AmandaPlayerLostText
 
 Script_NotReadyToSeeAmy:
 	start_script
@@ -93,7 +93,7 @@ Script_NotReadyToSeeAmy:
 .ows_e1d5
 	move_player SOUTH, 4
 	move_active_npc NPCMovement_e213
-	print_npc_text Text043a
+	print_npc_text JoshuaAmyIsRestingText
 	jump_if_player_coords_match 18, 10, .ows_e1fe
 	jump_if_player_coords_match 20, 10, .ows_e202
 	move_active_npc NPCMovement_e215
@@ -162,24 +162,24 @@ Script_Joshua:
 
 .sara_and_amanda_not_beaten
 	set_event EVENT_JOSHUA_STATE, JOSHUA_TALKED
-	print_npc_text Text043b
+	print_npc_text JoshuaGoDefeatSaraAndAmandaText
 	quit_script_fully
 
 .beat_sara_and_amanda
 	jump_if_event_nonzero EVENT_JOSHUA_STATE, .already_talked
 	set_event EVENT_JOSHUA_STATE, JOSHUA_TALKED
-	print_npc_text Text043b
-	print_npc_text Text043c
+	print_npc_text JoshuaGoDefeatSaraAndAmandaText
+	print_npc_text JoshuaSaraAndAmandaDefeatedText
 .already_talked
 	test_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED
-	print_variable_npc_text Text043d, Text043e
-	ask_question_jump Text043f, .start_duel
+	print_variable_npc_text JoshuaWantsToDuelInitialText, JoshuaWantsToDuelRepeatText
+	ask_question_jump JoshuaWouldYouLikeToDuelText, .start_duel
 	test_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED
-	print_variable_npc_text Text0440, Text0441
+	print_variable_npc_text JoshuaDeclinedDuelInitialText, JoshuaDeclinedDuelRepeatText
 	quit_script_fully
 
 .start_duel
-	print_npc_text Text0442
+	print_npc_text JoshuaDuelStartText
 	try_give_pc_pack $04
 	start_duel PRIZES_4, SOUND_OF_THE_WAVES_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
@@ -187,25 +187,25 @@ Script_Joshua:
 Script_LostToJoshua:
 	start_script
 	test_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED
-	print_variable_npc_text Text0443, Text0444
+	print_variable_npc_text JoshuaPlayerLostInitialText, JoshuaPlayerLostRepeatText
 	quit_script_fully
 
 Script_BeatJoshua:
 	start_script
 	test_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED
-	print_variable_npc_text Text0445, Text0446
+	print_variable_npc_text JoshuaPlayerWonInitial1Text, JoshuaPlayerWonRepeat1Text
 	give_booster_packs BOOSTER_MYSTERY_WATER_COLORLESS, BOOSTER_MYSTERY_WATER_COLORLESS, NO_BOOSTER
 	test_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED
-	print_variable_npc_text Text0447, Text0448
+	print_variable_npc_text JoshuaPlayerWonInitial2Text, JoshuaPlayerWonRepeat2Text
 	jump_if_event_not_equal EVENT_JOSHUA_STATE, JOSHUA_DEFEATED, .first_joshua_win
 	quit_script_fully
 
 .first_joshua_win
 	set_event EVENT_JOSHUA_STATE, JOSHUA_DEFEATED
-	print_npc_text Text0449
+	print_npc_text JoshuaWakesAmy1Text
 	close_text_box
 	move_active_npc_by_direction NPCMovementTable_e2a1
-	print_npc_text Text044a
+	print_npc_text JoshuaWakesAmy2Text
 	set_active_npc_direction NORTH
 	close_advanced_text_box
 	set_next_npc_and_script NPC_AMY, Script_MeetAmy
@@ -248,11 +248,11 @@ Preload_Amy:
 
 Script_MeetAmy:
 	start_script
-	print_npc_text Text044b
+	print_npc_text AmyMeetsPlayer1Text
 	set_dialog_npc NPC_JOSHUA
-	print_npc_text Text044c
+	print_npc_text JoshuaWakesAmy3Text
 	set_dialog_npc NPC_AMY
-	print_npc_text Text044d
+	print_npc_text AmyMeetsPlayer2Text
 	close_text_box
 	set_sprite_attributes $09, $2f, $10
 	do_frames 32
@@ -264,44 +264,44 @@ Script_MeetAmy:
 	move_player NORTH, 1
 	move_player NORTH, 1
 	move_npc NPC_JOSHUA, NPCMovement_e2ab
-	print_npc_text Text044e
+	print_npc_text AmyMeetsPlayer3Text
 	script_jump Script_Amy.ask_for_duel
 
 Script_Amy:
 	start_script
 	jump_if_event_true EVENT_BEAT_AMY, Script_Amy_AlreadyHaveMedal
-	print_npc_text Text044f
+	print_npc_text AmyWantsToDuelInitialText
 .ask_for_duel
-	ask_question_jump Text0450, .start_duel
+	ask_question_jump AmyWouldYouLikeToDuelText, .start_duel
 .deny_duel
-	print_npc_text Text0451
+	print_npc_text AmyDeclinedDuelInitialText
 	jump_if_active_npc_coords_match 20, 4, Script_LostToAmy.ows_e34e
 	quit_script_fully
 
 .start_duel
-	print_npc_text Text0452
+	print_npc_text AmyDuelStartInitialText
 	start_duel PRIZES_6, GO_GO_RAIN_DANCE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 
 Script_BeatAmy:
 	start_script
-	print_npc_text Text0453
+	print_npc_text AmyPlayerWon1Text
 	jump_if_event_true EVENT_BEAT_AMY, .give_booster_packs
-	print_npc_text Text0454
+	print_npc_text AmyGivesMedal1Text
 	max_out_event_value EVENT_BEAT_AMY
 	try_give_medal_pc_packs
 	show_medal_received_screen EVENT_BEAT_AMY
 	record_master_win $03
-	print_npc_text Text0455
+	print_npc_text AmyGivesMedal2Text
 .give_booster_packs
 	give_booster_packs BOOSTER_LABORATORY_WATER, BOOSTER_LABORATORY_WATER, NO_BOOSTER
-	print_npc_text Text0456
+	print_npc_text AmyPlayerWon2Text
 	jump_if_active_npc_coords_match 20, 4, Script_LostToAmy.ows_e34e
 	quit_script_fully
 
 Script_LostToAmy:
 	start_script
-	print_npc_text Text0457
+	print_npc_text AmyPlayerLostText
 	jump_if_active_npc_coords_match 20, 4, .ows_e34e
 	quit_script_fully
 
@@ -311,11 +311,11 @@ Script_LostToAmy:
 	quit_script_fully
 
 Script_Amy_AlreadyHaveMedal:
-	print_npc_text Text0458
-	ask_question_jump Text0450, .start_duel
+	print_npc_text AmyWantsToDuelRepeatText
+	ask_question_jump AmyWouldYouLikeToDuelText, .start_duel
 	script_jump Script_Amy.deny_duel
 
 .start_duel
-	print_npc_text Text0459
+	print_npc_text AmyDuelStartRepeatText
 	start_duel PRIZES_6, GO_GO_RAIN_DANCE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully

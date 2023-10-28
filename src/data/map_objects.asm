@@ -7,38 +7,38 @@
 MasonLabObjects:
 	db NORTH, 18, 2
 	dw PrintInteractableObjectText
-	tx Text04a0
-	tx WhatIsADeckText
+	tx WhatIsADeckBookText
+	tx WhatIsADeckBookName
 
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
-	tx Text04a2
-	tx Text04a1
+	tx CardsVol1BookText
+	tx CardsVol1BookName
 
 	db NORTH, 22, 2
 	dw PrintInteractableObjectText
-	tx Text04a4
-	tx Text04a3
+	tx CardsVol2BookText
+	tx CardsVol2BookName
 
 	db NORTH, 24, 2
 	dw PrintInteractableObjectText
-	tx Text04a6
-	tx Text04a5
+	tx CardsVol3BookText
+	tx CardsVol3BookName
 
 	db NORTH, 20, 14
 	dw PrintInteractableObjectText
-	tx Text04a8
-	tx Text04a7
+	tx WinOrLossOfAMatchVol1BookText
+	tx WinOrLossOfAMatchVol1BookName
 
 	db NORTH, 22, 14
 	dw PrintInteractableObjectText
-	tx Text04aa
-	tx Text04a9
+	tx WinOrLossOfAMatchVol2BookText
+	tx WinOrLossOfAMatchVol2BookName
 
 	db NORTH, 24, 14
 	dw PrintInteractableObjectText
-	tx Text04ac
-	tx Text04ab
+	tx WinOrLossOfAMatchVol3BookText
+	tx WinOrLossOfAMatchVol3BookName
 
 	db NORTH, 2, 2
 	dw PCMenu
@@ -155,63 +155,63 @@ DeckMachineRoomObjects:
 IshiharasHouseObjects:
 	db NORTH, 6, 2
 	dw PrintInteractableObjectText
-	tx Text04ae
-	tx Text04ad
+	tx CombosBookText
+	tx CombosBookName
 
 	db NORTH, 8, 2
 	dw PrintInteractableObjectText
-	tx Text04b0
-	tx Text04af
+	tx EnergyTransBookText
+	tx EnergyTransBookName
 
 	db NORTH, 10, 2
 	dw PrintInteractableObjectText
-	tx Text04b2
-	tx Text04b1
+	tx ToxicGasBookText
+	tx ToxicGasBookName
 
 	db NORTH, 12, 2
 	dw PrintInteractableObjectText
-	tx Text04b4
-	tx Text04b3
+	tx RainDanceBookText
+	tx RainDanceBookName
 
 	db NORTH, 14, 2
 	dw PrintInteractableObjectText
-	tx Text04b6
-	tx Text04b5
+	tx SelfdestructBookText
+	tx SelfdestructBookName
 
 	db NORTH, 16, 2
 	dw PrintInteractableObjectText
-	tx Text04b8
-	tx Text04b7
+	tx DamageSwapBookText
+	tx DamageSwapBookName
 
 	db NORTH, 2, 12
 	dw PrintInteractableObjectText
-	tx Text04ba
-	tx Text04b9
+	tx HyperBeamBookText
+	tx HyperBeamBookName
 
 	db NORTH, 4, 12
 	dw PrintInteractableObjectText
-	tx Text04bc
-	tx Text04bb
+	tx PrehistoricPowerBookText
+	tx PrehistoricPowerBookName
 
 	db NORTH, 6, 12
 	dw PrintInteractableObjectText
-	tx Text04be
-	tx Text04bd
+	tx PhantomCardsBookText
+	tx PhantomCardsBookName
 
 	db NORTH, 12, 12
 	dw PrintInteractableObjectText
-	tx Text04c0
-	tx Text04bf
+	tx WeaknessAndResistanceBookText
+	tx WeaknessAndResistanceBookName
 
 	db NORTH, 14, 12
 	dw PrintInteractableObjectText
-	tx Text04c2
-	tx Text04c1
+	tx DrawingDesiredCardsBookText
+	tx DrawingDesiredCardsBookName
 
 	db NORTH, 16, 12
 	dw PrintInteractableObjectText
-	tx Text04c4
-	tx Text04c3
+	tx RetreatingBookText
+	tx RetreatingBookName
 
 	db $ff
 
@@ -219,18 +219,18 @@ IshiharasHouseObjects:
 FightingClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
-	tx Text04c6
-	tx Text04c5
+	tx FightingPokemonBookText
+	tx FightingPokemonBookName
 
 	db NORTH, 22, 2
 	dw PrintInteractableObjectText
-	tx Text04c8
-	tx Text04c7
+	tx FightingPokemonAndCombosBookText
+	tx FightingPokemonAndCombosBookName
 
 	db NORTH, 24, 2
 	dw PrintInteractableObjectText
-	tx Text04ca
-	tx Text04c9
+	tx DoubleColorlessEnergyBookText
+	tx DoubleColorlessEnergyBookName
 
 	db NORTH, 2, 8
 	dw PCMenu
@@ -253,18 +253,18 @@ FightingClubLobbyObjects:
 RockClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
-	tx Text04cc
-	tx Text04cb
+	tx RockPokemonBookText
+	tx RockPokemonBookName
 
 	db NORTH, 22, 2
 	dw PrintInteractableObjectText
-	tx Text04ce
-	tx Text04cd
+	tx WinningWithFightingPokemonBookText
+	tx WinningWithFightingPokemonBookName
 
 	db NORTH, 24, 2
 	dw PrintInteractableObjectText
-	tx Text04d0
-	tx Text04cf
+	tx BasicPokemonBookText
+	tx BasicPokemonBookName
 
 	db NORTH, 2, 8
 	dw PCMenu
@@ -287,18 +287,18 @@ RockClubLobbyObjects:
 WaterClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
-	tx Text04d2
-	tx Text04d1
+	tx WaterPokemonBookText
+	tx WaterPokemonBookName
 
 	db NORTH, 22, 2
 	dw PrintInteractableObjectText
-	tx Text04d4
-	tx Text04d3
+	tx WaterPokemonAttacksBookText
+	tx WaterPokemonAttacksBookName
 
 	db NORTH, 24, 2
 	dw PrintInteractableObjectText
-	tx Text04d6
-	tx Text04d5
+	tx ParalyzeBookText
+	tx ParalyzeBookName
 
 	db NORTH, 2, 8
 	dw PCMenu
@@ -321,18 +321,18 @@ WaterClubLobbyObjects:
 LightningClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
-	tx Text04d8
-	tx Text04d7
+	tx LightningPokemonBookText
+	tx LightningPokemonBookName
 
 	db NORTH, 22, 2
 	dw PrintInteractableObjectText
-	tx Text04da
-	tx Text04d9
+	tx EnergyCardsBookText
+	tx EnergyCardsBookName
 
 	db NORTH, 24, 2
 	dw PrintInteractableObjectText
-	tx Text04dc
-	tx Text04db
+	tx CardPopBookText
+	tx CardPopBookName
 
 	db NORTH, 2, 8
 	dw PCMenu
@@ -355,18 +355,18 @@ LightningClubLobbyObjects:
 GrassClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
-	tx Text04de
-	tx Text04dd
+	tx GrassPokemonBookText
+	tx GrassPokemonBookName
 
 	db NORTH, 22, 2
 	dw PrintInteractableObjectText
-	tx Text04e0
-	tx Text04df
+	tx PoisonBookText
+	tx PoisonBookName
 
 	db NORTH, 24, 2
 	dw PrintInteractableObjectText
-	tx Text04e2
-	tx Text04e1
+	tx GrassPokemonPokemonBreederBookText
+	tx GrassPokemonPokemonBreederBookName
 
 	db NORTH, 2, 8
 	dw PCMenu
@@ -389,18 +389,18 @@ GrassClubLobbyObjects:
 PsychicClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
-	tx Text04e4
-	tx Text04e3
+	tx PsychicPokemonBookText
+	tx PsychicPokemonBookName
 
 	db NORTH, 22, 2
 	dw PrintInteractableObjectText
-	tx Text04e6
-	tx Text04e5
+	tx SleepBookText
+	tx SleepBookName
 
 	db NORTH, 24, 2
 	dw PrintInteractableObjectText
-	tx Text04e8
-	tx Text04e7
+	tx PokemonPowerBookText
+	tx PokemonPowerBookName
 
 	db NORTH, 2, 8
 	dw PCMenu
@@ -423,18 +423,18 @@ PsychicClubLobbyObjects:
 ScienceClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
-	tx Text04ea
-	tx Text04e9
+	tx ScienceClubPokemonBookText
+	tx ScienceClubPokemonBookName
 
 	db NORTH, 22, 2
 	dw PrintInteractableObjectText
-	tx Text04ec
-	tx Text04eb
+	tx ConfusionBookText
+	tx ConfusionBookName
 
 	db NORTH, 24, 2
 	dw PrintInteractableObjectText
-	tx Text04ee
-	tx Text04ed
+	tx UsefulButtonsBookText
+	tx UsefulButtonsBookName
 
 	db NORTH, 2, 8
 	dw PCMenu
@@ -457,18 +457,18 @@ ScienceClubLobbyObjects:
 FireClubLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
-	tx Text04f0
-	tx Text04ef
+	tx FirePokemonBookText
+	tx FirePokemonBookName
 
 	db NORTH, 22, 2
 	dw PrintInteractableObjectText
-	tx Text04f2
-	tx Text04f1
+	tx FirePokemonAttacksBookText
+	tx FirePokemonAttacksBookName
 
 	db NORTH, 24, 2
 	dw PrintInteractableObjectText
-	tx Text04f4
-	tx Text04f3
+	tx OriginalGameBoyCardsBookText
+	tx OriginalGameBoyCardsBookName
 
 	db NORTH, 2, 8
 	dw PCMenu
@@ -491,18 +491,18 @@ FireClubLobbyObjects:
 ChallengeHallLobbyObjects:
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
-	tx Text04f6
-	tx Text04f5
+	tx ColorlessPokemonBookText
+	tx ColorlessPokemonBookName
 
 	db NORTH, 22, 2
 	dw PrintInteractableObjectText
-	tx Text04f8
-	tx Text04f7
+	tx DragonPokemonBookText
+	tx DragonPokemonBookName
 
 	db NORTH, 24, 2
 	dw PrintInteractableObjectText
-	tx Text04fa
-	tx Text04f9
+	tx BirdPokemonBookText
+	tx BirdPokemonBookName
 
 	db NORTH, 2, 8
 	dw PCMenu
@@ -525,53 +525,53 @@ ChallengeHallLobbyObjects:
 PokemonDomeEntranceObjects:
 	db NORTH, 2, 2
 	dw PrintInteractableObjectText
-	tx Text04fc
-	tx Text04fb
+	tx LegendaryPokemonCardsVol1BookText
+	tx LegendaryPokemonCardsVol1BookName
 
 	db NORTH, 4, 2
 	dw PrintInteractableObjectText
-	tx Text04fe
-	tx Text04fd
+	tx LegendaryPokemonCardsVol2BookText
+	tx LegendaryPokemonCardsVol2BookName
 
 	db NORTH, 6, 2
 	dw PrintInteractableObjectText
-	tx Text0500
-	tx Text04ff
+	tx LegendaryPokemonCardsVol3BookText
+	tx LegendaryPokemonCardsVol3BookName
 
 	db NORTH, 2, 8
 	dw PrintInteractableObjectText
-	tx Text0502
-	tx Text0501
+	tx LegendaryPokemonCardsVol4BookText
+	tx LegendaryPokemonCardsVol4BookName
 
 	db NORTH, 4, 8
 	dw PrintInteractableObjectText
-	tx Text0504
-	tx Text0503
+	tx TheGrandMastersBookText
+	tx TheGrandMastersBookName
 
 	db NORTH, 6, 8
 	dw PrintInteractableObjectText
-	tx Text0506
-	tx Text0505
+	tx MasterMedalsBookText
+	tx MasterMedalsBookName
 
 	db NORTH, 18, 0
 	dw Script_f631
-	tx Text0508
-	tx Text0507
+	tx PlateOfLegendsText
+	tx PlateOfLegendsName
 
 	db NORTH, 20, 0
 	dw Script_f631
-	tx Text0508
-	tx Text0507
+	tx PlateOfLegendsText
+	tx PlateOfLegendsName
 
 	db NORTH, 22, 0
 	dw Script_f6af
-	tx Text0558
-	tx Text0509
+	tx MysteriousVoiceDoorNotEnoughMedalsText
+	tx MysteriousVoiceDoorName
 
 	db NORTH, 24, 0
 	dw Script_f6af
-	tx Text0558
-	tx Text0509
+	tx MysteriousVoiceDoorNotEnoughMedalsText
+	tx MysteriousVoiceDoorName
 
 	db NORTH, 28, 2
 	dw PCMenu

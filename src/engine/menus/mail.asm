@@ -201,63 +201,63 @@ PCMailTextPages:
 	dw NULL
 
 	; mail 1
-	tx Text0401
-	tx Text0402
+	tx Mail1Part1Text
+	tx Mail1Part2Text
 
 	; mail 2
-	tx Text0403
-	tx Text0404
+	tx Mail2Part1Text
+	tx Mail2Part2Text
 
 	; mail 3
-	tx Text0405
-	tx Text0406
+	tx Mail3Part1Text
+	tx Mail3Part2Text
 
 	; mail 4
-	tx Text0407
-	tx Text0408
+	tx Mail4Part1Text
+	tx Mail4Part2Text
 
 	; mail 5
-	tx Text0409
-	tx Text040a
+	tx Mail5Part1Text
+	tx Mail5Part2Text
 
 	; mail 6
-	tx Text040b
-	tx Text040c
+	tx Mail6Part1Text
+	tx Mail6Part2Text
 
 	; mail 7
-	tx Text040d
-	tx Text040e
+	tx Mail7Part1Text
+	tx Mail7Part2Text
 
 	; mail 8
-	tx Text040f
-	tx Text0410
+	tx Mail8Part1Text
+	tx Mail8Part2Text
 
 	; mail 9
-	tx Text0411
-	tx Text0412
+	tx Mail9Part1Text
+	tx Mail9Part2Text
 
 	; mail 10
-	tx Text0413
+	tx Mail10Part1Text
 	dw NULL
 
 	; mail 11
-	tx Text0414
+	tx Mail11Part1Text
 	dw NULL
 
 	; mail 12
-	tx Text0415
+	tx Mail12Part1Text
 	dw NULL
 
 	; mail 13
-	tx Text0416
+	tx Mail13Part1Text
 	dw NULL
 
 	; mail 14
-	tx Text0417
+	tx Mail14Part1Text
 	dw NULL
 
 	; mail 15
-	tx Text0418
+	tx Mail15Part1Text
 	dw NULL
 
 TryOpenPCMailBoosterPack:
@@ -290,7 +290,7 @@ TryOpenPCMailBoosterPack:
 	call InitMenuScreen
 	lb de, $30, $ff
 	call SetupText
-	ldtx hl, Text0419
+	ldtx hl, MailBoosterPackAlreadyOpenedText
 	call PrintScrollableText_NoTextBoxLabel
 	jr .done
 

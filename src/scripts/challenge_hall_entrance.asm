@@ -91,16 +91,16 @@ Script_Clerk9:
 	jump_if_event_equal EVENT_CHALLENGE_CUP_1_STATE, CHALLENGE_CUP_WON, .ows_f072
 	jump_if_event_equal EVENT_CHALLENGE_CUP_1_STATE, CHALLENGE_CUP_READY_TO_START, .ows_f06c
 .ows_f066
-	print_text_quit_fully Text050a
+	print_text_quit_fully Clerk9DefualtText
 
 .ows_f069
-	print_text_quit_fully Text050b
+	print_text_quit_fully Clerk9ChallengeCupOverText
 
 .ows_f06c
-	print_text_quit_fully Text050c
+	print_text_quit_fully Clerk9ChallengeCupReadyText
 
 .ows_f06f
-	print_text_quit_fully Text050d
+	print_text_quit_fully Clerk9ChallengeCupLostText
 
 .ows_f072
-	print_text_quit_fully Text050e
+	print_text_quit_fully Clerk9ChallengeCupWonText

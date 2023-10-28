@@ -18,7 +18,7 @@ PokemonDomeEntranceCloseTextBox:
 
 Script_f631:
 	start_script
-	print_npc_text Text0508
+	print_npc_text PlateOfLegendsText
 	close_advanced_text_box
 	set_next_npc_and_script NPC_RONALD1, .ows_f63c
 	end_script
@@ -99,7 +99,7 @@ Script_f6af:
 	start_script
 	try_give_medal_pc_packs
 	jump_if_event_equal EVENT_MEDAL_COUNT, 8, .ows_f6b9
-	print_text_quit_fully Text0558
+	print_text_quit_fully MysteriousVoiceDoorNotEnoughMedalsText
 
 .ows_f6b9
 	print_npc_text Text0559
