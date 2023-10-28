@@ -91,7 +91,7 @@ Script_Clerk9:
 	jump_if_event_equal EVENT_CHALLENGE_CUP_1_STATE, CHALLENGE_CUP_WON, .ows_f072
 	jump_if_event_equal EVENT_CHALLENGE_CUP_1_STATE, CHALLENGE_CUP_READY_TO_START, .ows_f06c
 .ows_f066
-	print_text_quit_fully Clerk9DefualtText
+	print_text_quit_fully Clerk9DefaultText
 
 .ows_f069
 	print_text_quit_fully Clerk9ChallengeCupOverText

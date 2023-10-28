@@ -837,7 +837,7 @@ MysteriousVoiceDoorName:
 	text "Mysterious Voice"
 	done
 
-Clerk9DefualtText:
+Clerk9DefaultText:
 	text "Greetings! Welcome to the "
 	line "Challenge Hall! The Challenge Cup "
 	line "will begin soon. If you win the "

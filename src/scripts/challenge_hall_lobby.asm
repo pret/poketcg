@@ -1,4 +1,4 @@
-Preload_ChallengeHallNPCs2: ; Challenge Cup Iniactive
+Preload_ChallengeHallNPCs2: ; Challenge Cup Inactive
 	call Preload_ChallengeHallNPCs1
 	ccf
 	ret
