@@ -710,15 +710,15 @@ Func_704c7:
 
 SGBData_BorderDebug4:
 	dw $800 ; length
-	INCBIN "data/sgb_data/border_debug_4.bin"
+	INCBIN "data/sgb_data/border_debug_4.bin.lz"
 
 SGBData_BorderIntro4:
 	dw $800 ; length
-	INCBIN "data/sgb_data/border_intro_4.bin"
+	INCBIN "data/sgb_data/border_intro_4.bin.lz"
 
 SGBData_BorderMedals5:
 	dw $800 ; length
-	INCBIN "data/sgb_data/border_medals_5.bin"
+	INCBIN "data/sgb_data/border_medals_5.bin.lz"
 
 SGBBorderDebugGfxPointers:
 	dw SGBData_BorderDebug1
@@ -726,11 +726,11 @@ SGBBorderDebugGfxPointers:
 
 SGBData_BorderDebug1:
 	dw $1000 ; length
-	INCBIN "data/sgb_data/border_debug_1.bin"
+	INCBIN "data/sgb_data/border_debug_1.bin.lz"
 
 SGBData_BorderDebug2:
 	dw $a0 ; length
-	INCBIN "data/sgb_data/border_debug_2.bin"
+	INCBIN "data/sgb_data/border_debug_2.bin.lz"
 
 SGBBorderIntroGfxPointers:
 	dw SGBData_BorderIntro1
@@ -738,11 +738,13 @@ SGBBorderIntroGfxPointers:
 
 SGBData_BorderIntro1:
 	dw $1000 ; length
-	INCBIN "data/sgb_data/border_intro_1.bin"
+	INCBIN "data/sgb_data/border_intro_1.bin.lz"
 
 SGBData_BorderIntro2:
 	dw $4e0 ; length
-	INCBIN "data/sgb_data/border_intro_2.bin"
+	INCBIN "data/sgb_data/border_intro_2.bin.lz"
+
+	db $00
 
 SGBBorderMedalsGfxPointers:
 	dw SGBData_BorderMedals1
@@ -750,276 +752,276 @@ SGBBorderMedalsGfxPointers:
 
 SGBData_BorderMedals1:
 	dw $1000 ; length
-	INCBIN "data/sgb_data/border_medals_1.bin"
+	INCBIN "data/sgb_data/border_medals_1.bin.lz"
 
 SGBData_BorderMedals2:
 	dw $100 ; length
-	INCBIN "data/sgb_data/border_medals_2.bin"
+	INCBIN "data/sgb_data/border_medals_2.bin.lz"
 
 SGBData_BorderDebug3:
 	dw $60 ; length
-	INCBIN "data/sgb_data/border_debug_3.bin"
+	INCBIN "data/sgb_data/border_debug_3.bin.lz"
 
 SGBData_BorderIntro3:
 	dw $60 ; length
-	INCBIN "data/sgb_data/border_intro_3.bin"
+	INCBIN "data/sgb_data/border_intro_3.bin.lz"
 
 SGBData_BorderMedals3:
 	dw $60 ; length
-	INCBIN "data/sgb_data/border_medals_3.bin"
+	INCBIN "data/sgb_data/border_medals_3.bin.lz"
 
 SGBData_BorderMedals4:
 	dw $60 ; length
-	INCBIN "data/sgb_data/border_medals_4.bin"
+	INCBIN "data/sgb_data/border_medals_4.bin.lz"
 
 SGBData_MapPals1:
 	dw $20 ; length
-	INCBIN "data/sgb_data/map_pals_1.bin"
+	INCBIN "data/sgb_data/map_pals_1.bin.lz"
 
 SGBData_MapPals2:
 	dw $20 ; length
-	INCBIN "data/sgb_data/map_pals_2.bin"
+	INCBIN "data/sgb_data/map_pals_2.bin.lz"
 
 SGBData_MapPals3:
 	dw $20 ; length
-	INCBIN "data/sgb_data/map_pals_3.bin"
+	INCBIN "data/sgb_data/map_pals_3.bin.lz"
 
 SGBData_MapPals4:
 	dw $20 ; length
-	INCBIN "data/sgb_data/map_pals_4.bin"
+	INCBIN "data/sgb_data/map_pals_4.bin.lz"
 
 SGBData_MapPals5:
 	dw $20 ; length
-	INCBIN "data/sgb_data/map_pals_5.bin"
+	INCBIN "data/sgb_data/map_pals_5.bin.lz"
 
 SGBData_MapPals6:
 	dw $20 ; length
-	INCBIN "data/sgb_data/map_pals_6.bin"
+	INCBIN "data/sgb_data/map_pals_6.bin.lz"
 
 SGBData_MapPals7:
 	dw $20 ; length
-	INCBIN "data/sgb_data/map_pals_7.bin"
+	INCBIN "data/sgb_data/map_pals_7.bin.lz"
 
 SGBData_MapPals8:
 	dw $20 ; length
-	INCBIN "data/sgb_data/map_pals_8.bin"
+	INCBIN "data/sgb_data/map_pals_8.bin.lz"
 
 SGBData_MapPals9:
 	dw $20 ; length
-	INCBIN "data/sgb_data/map_pals_9.bin"
+	INCBIN "data/sgb_data/map_pals_9.bin.lz"
 
 SGBData_MapPals10:
 	dw $20 ; length
-	INCBIN "data/sgb_data/map_pals_10.bin"
+	INCBIN "data/sgb_data/map_pals_10.bin.lz"
 
 SGBData_CharizardIntro:
 	dw $20 ; length
-	INCBIN "data/sgb_data/charizard_intro_pals.bin"
+	INCBIN "data/sgb_data/charizard_intro_pals.bin.lz"
 
 SGBData_ScytherIntro:
 	dw $20 ; length
-	INCBIN "data/sgb_data/scyther_intro_pals.bin"
+	INCBIN "data/sgb_data/scyther_intro_pals.bin.lz"
 
 SGBData_AerodactylIntro:
 	dw $20 ; length
-	INCBIN "data/sgb_data/aerodactyl_intro_pals.bin"
+	INCBIN "data/sgb_data/aerodactyl_intro_pals.bin.lz"
 
 SGBData_ColosseumBooster:
 	dw $20 ; length
-	INCBIN "data/sgb_data/colosseum_booster_pals.bin"
+	INCBIN "data/sgb_data/colosseum_booster_pals.bin.lz"
 
 SGBData_EvolutionBooster:
 	dw $20 ; length
-	INCBIN "data/sgb_data/evolution_booster_pals.bin"
+	INCBIN "data/sgb_data/evolution_booster_pals.bin.lz"
 
 SGBData_MysteryBooster:
 	dw $20 ; length
-	INCBIN "data/sgb_data/mystery_booster_pals.bin"
+	INCBIN "data/sgb_data/mystery_booster_pals.bin.lz"
 
 SGBData_LaboratoryBooster:
 	dw $20 ; length
-	INCBIN "data/sgb_data/laboratory_booster_pals.bin"
+	INCBIN "data/sgb_data/laboratory_booster_pals.bin.lz"
 
 SGBData_PlayerPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/player_pals.bin"
+	INCBIN "data/sgb_data/player_pals.bin.lz"
 
 SGBData_LinkOpponentPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/link_opponent_pals.bin"
+	INCBIN "data/sgb_data/link_opponent_pals.bin.lz"
 
 SGBData_RonaldPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/ronald_pals.bin"
+	INCBIN "data/sgb_data/ronald_pals.bin.lz"
 
 SGBData_SamPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/sam_pals.bin"
+	INCBIN "data/sgb_data/sam_pals.bin.lz"
 
 SGBData_ImakuniPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/imakuni_pals.bin"
+	INCBIN "data/sgb_data/imakuni_pals.bin.lz"
 
 SGBData_NikkiPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/nikki_pals.bin"
+	INCBIN "data/sgb_data/nikki_pals.bin.lz"
 
 SGBData_RickPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/rick_pals.bin"
+	INCBIN "data/sgb_data/rick_pals.bin.lz"
 
 SGBData_KenPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/ken_pals.bin"
+	INCBIN "data/sgb_data/ken_pals.bin.lz"
 
 SGBData_AmyPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/amy_pals.bin"
+	INCBIN "data/sgb_data/amy_pals.bin.lz"
 
 SGBData_IsaacPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/isaac_pals.bin"
+	INCBIN "data/sgb_data/isaac_pals.bin.lz"
 
 SGBData_MitchPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/mitch_pals.bin"
+	INCBIN "data/sgb_data/mitch_pals.bin.lz"
 
 SGBData_GenePortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/gene_pals.bin"
+	INCBIN "data/sgb_data/gene_pals.bin.lz"
 
 SGBData_MurrayPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/murray_pals.bin"
+	INCBIN "data/sgb_data/murray_pals.bin.lz"
 
 SGBData_CourtneyPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/courtney_pals.bin"
+	INCBIN "data/sgb_data/courtney_pals.bin.lz"
 
 SGBData_StevePortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/steve_pals.bin"
+	INCBIN "data/sgb_data/steve_pals.bin.lz"
 
 SGBData_JackPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/jack_pals.bin"
+	INCBIN "data/sgb_data/jack_pals.bin.lz"
 
 SGBData_RodPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/rod_pals.bin"
+	INCBIN "data/sgb_data/rod_pals.bin.lz"
 
 SGBData_JosephPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/joseph_pals.bin"
+	INCBIN "data/sgb_data/joseph_pals.bin.lz"
 
 SGBData_DavidPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/david_pals.bin"
+	INCBIN "data/sgb_data/david_pals.bin.lz"
 
 SGBData_ErikPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/erik_pals.bin"
+	INCBIN "data/sgb_data/erik_pals.bin.lz"
 
 SGBData_JohnPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/john_pals.bin"
+	INCBIN "data/sgb_data/john_pals.bin.lz"
 
 SGBData_AdamPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/adam_pals.bin"
+	INCBIN "data/sgb_data/adam_pals.bin.lz"
 
 SGBData_JonathanPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/jonathan_pals.bin"
+	INCBIN "data/sgb_data/jonathan_pals.bin.lz"
 
 SGBData_JoshuaPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/joshua_pals.bin"
+	INCBIN "data/sgb_data/joshua_pals.bin.lz"
 
 SGBData_NicholasPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/nicholas_pals.bin"
+	INCBIN "data/sgb_data/nicholas_pals.bin.lz"
 
 SGBData_BrandonPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/brandon_pals.bin"
+	INCBIN "data/sgb_data/brandon_pals.bin.lz"
 
 SGBData_MatthewPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/matthew_pals.bin"
+	INCBIN "data/sgb_data/matthew_pals.bin.lz"
 
 SGBData_RyanPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/ryan_pals.bin"
+	INCBIN "data/sgb_data/ryan_pals.bin.lz"
 
 SGBData_AndrewPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/andrew_pals.bin"
+	INCBIN "data/sgb_data/andrew_pals.bin.lz"
 
 SGBData_ChrisPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/chris_pals.bin"
+	INCBIN "data/sgb_data/chris_pals.bin.lz"
 
 SGBData_MichaelPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/michael_pals.bin"
+	INCBIN "data/sgb_data/michael_pals.bin.lz"
 
 SGBData_DanielPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/daniel_pals.bin"
+	INCBIN "data/sgb_data/daniel_pals.bin.lz"
 
 SGBData_RobertPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/robert_pals.bin"
+	INCBIN "data/sgb_data/robert_pals.bin.lz"
 
 SGBData_BrittanyPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/brittany_pals.bin"
+	INCBIN "data/sgb_data/brittany_pals.bin.lz"
 
 SGBData_KristinPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/kristin_pals.bin"
+	INCBIN "data/sgb_data/kristin_pals.bin.lz"
 
 SGBData_HeatherPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/heather_pals.bin"
+	INCBIN "data/sgb_data/heather_pals.bin.lz"
 
 SGBData_SaraPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/sara_pals.bin"
+	INCBIN "data/sgb_data/sara_pals.bin.lz"
 
 SGBData_AmandaPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/amanda_pals.bin"
+	INCBIN "data/sgb_data/amanda_pals.bin.lz"
 
 SGBData_JenniferPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/jennifer_pals.bin"
+	INCBIN "data/sgb_data/jennifer_pals.bin.lz"
 
 SGBData_JessicaPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/jessica_pals.bin"
+	INCBIN "data/sgb_data/jessica_pals.bin.lz"
 
 SGBData_StephaniePortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/stephanie_pals.bin"
+	INCBIN "data/sgb_data/stephanie_pals.bin.lz"
 
 SGBData_AaronPortraitPals:
 	dw $20 ; length
-	INCBIN "data/sgb_data/aaron_pals.bin"
+	INCBIN "data/sgb_data/aaron_pals.bin.lz"
 
 SGBData_GameBoyLink:
 	dw $40 ; length
-	INCBIN "data/sgb_data/gameboy_link_pals.bin"
+	INCBIN "data/sgb_data/gameboy_link_pals.bin.lz"
 
 SGBData_CardPop:
 	dw $40 ; length
-	INCBIN "data/sgb_data/card_pop_pals.bin"
+	INCBIN "data/sgb_data/card_pop_pals.bin.lz"
 
 SGBData_GameBoyPrinter:
 	dw $40 ; length
-	INCBIN "data/sgb_data/gameboy_printer_pals.bin"
+	INCBIN "data/sgb_data/gameboy_printer_pals.bin.lz"
 
 SGBData_TitleScreen:
 	dw $40 ; length
-	INCBIN "data/sgb_data/title_screen_pals.bin"
+	INCBIN "data/sgb_data/title_screen_pals.bin.lz"

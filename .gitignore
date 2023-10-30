@@ -22,5 +22,8 @@
 *.2bpp
 *.pal
 
+# compressed data
+*.lz
+
 # *disasm.py output file
 *disasm_output.asm

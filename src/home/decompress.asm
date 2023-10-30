@@ -56,19 +56,19 @@ DecompressData::
 ; decompression works as follows:
 ; first a command byte is read that will dictate how the
 ; following bytes will be copied
-; the position will then move to the next byte (0xXY), and
+; the position will then move to the next byte (0xXX), and
 ; the command byte's bits are read from higher to lower bit
-; - if command bit is set, then copy 0xXY to buffer;
+; - if command bit is set, then copy 0xXX to buffer;
 ; - if command bit is not set, then decompression enters "repeat mode,"
-; which means it stores 0xXY in memory as number of bytes to repeat
+; which means it stores 0xXX in memory as number of bytes to repeat
 ; from a given offset. This offset is in the next byte in the data,
-; 0xZZ, which tells the offset to start repeating. A toggle is switched
+; 0xYZ, which tells the offset to start repeating. A toggle is switched
 ; each time the algorithm hits "repeat mode":
-;  - if off -> on it reads 0xXY and stores it,
-;  then repeats (0x0X + 2) bytes from the offset starting at 0xZZ;
+;  - if off -> on it reads 0xYZ and stores it,
+;  then repeats (0x0Y + 2) bytes from the offset starting at 0xXX;
 ;  - if on -> off, then the data only provides the offset,
-;  and the previous byte read for number of bytes to repeat, 0xXY, is reused
-;  in which case (0x0Y + 2) bytes are repeated starting from the offset.
+;  and the previous byte read for number of bytes to repeat, 0xYZ, is reused
+;  in which case (0x0Z + 2) bytes are repeated starting from the offset.
 .Decompress::
 	ld hl, wDecompNumBytesToRepeat
 	ld a, [hl]
