@@ -19,7 +19,9 @@
 # Denote all files that are truly binary and should not be modified.
 *.png binary diff=hex
 *.bin binary diff=hex
+*.lz.match binary diff=hex
 
 # these are generated but just in case
 *.2bpp binary diff=hex
 *.1bpp binary diff=hex
+*.lz binary diff=hex
