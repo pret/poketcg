@@ -3,7 +3,7 @@
 CC := gcc
 CFLAGS := -O3 -std=c99 -Wall -Wextra -pedantic
 
-tools := scan_includes gfx
+tools := scan_includes gfx compressor
 
 all: $(tools)
 	@:
