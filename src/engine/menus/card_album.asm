@@ -376,7 +376,7 @@ PrintCardSetListEntries:
 	ret
 
 .EmptySlotText
-	textfw0 "-------------"
+	textfw "-------------"
 	done
 
 ; gets the index in the card list and adds it to wCurDeckName

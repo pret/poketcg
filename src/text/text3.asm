@@ -1072,13 +1072,13 @@ PlayerStatusNameText:
 PlayerStatusAlbumText:
 	text "Album           "
 	half2full
-	textfw0 "/"
+	textfw "/"
 	done
 
 PlayerStatusPlayTimeText:
 	text "Play time         "
 	half2full
-	textfw3 ":"
+	textfw ":"
 	done
 
 PlayerDiaryTitleText:
@@ -1206,7 +1206,7 @@ MailNumbersText:
 	done
 
 EmptyMailNameText:
-	textfw0 "     "
+	textfw "     "
 	done
 
 Mail1Text:
@@ -1295,15 +1295,15 @@ ContinueFromDiarySummaryText:
 	text "  <RAMNAME>  <RAMTEXT>"
 	line "      Master Medals Won "
 	half2full
-	textfw0 "<RAMNUM>"
+	textfw "<RAMNUM>"
 	text ""
 	line "      Album           "
 	half2full
-	textfw0 "/"
+	textfw "/"
 	text ""
 	line "      Play time         "
 	half2full
-	textfw3 ":"
+	textfw ":"
 	text ""
 	done
 

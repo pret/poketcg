@@ -1123,59 +1123,59 @@ GrandMasterText:
 	done
 
 ChallengeMachineOpponent1Text:
-	textfw0 "1"
+	textfw "1"
 	done
 
 ChallengeMachineOpponent2Text:
-	textfw0 "2"
+	textfw "2"
 	done
 
 ChallengeMachineOpponent3Text:
-	textfw0 "3"
+	textfw "3"
 	done
 
 ChallengeMachineOpponent4Text:
-	textfw0 "4"
+	textfw "4"
 	done
 
 ChallengeMachineOpponent5Text:
-	textfw0 "5"
+	textfw "5"
 	done
 
 ChallengeMachineNotDuelledIconText:
-	textfw0 " "
+	textfw " "
 	done
 
 ChallengeMachineDuelWonIconText:
-	textfw3 "☆"
+	textfw "☆"
 	done
 
 ChallengeMachineDuelLostIconText:
-	textfw3 "★"
+	textfw "★"
 	done
 
 ChallengeMachineFireIconText:
-	textfw3 "【", "<FIRE>", "】"
+	textfw "【", "<FIRE>", "】"
 	done
 
 ChallengeMachineLightningIconText:
-	textfw3 "【", "<LIGHTNING>", "】"
+	textfw "【", "<LIGHTNING>", "】"
 	done
 
 ChallengeMachineWaterIconText:
-	textfw3 "【", "<WATER>", "】"
+	textfw "【", "<WATER>", "】"
 	done
 
 ChallengeMachineFightingIconText:
-	textfw3 "【", "<FIGHTING>", "】"
+	textfw "【", "<FIGHTING>", "】"
 	done
 
 ChallengeMachinePsychicIconText:
-	textfw3 "【", "<PSYCHIC>", "】"
+	textfw "【", "<PSYCHIC>", "】"
 	done
 
 ChallengeMachineGrassIconText:
-	textfw3 "【", "<GRASS>", "】"
+	textfw "【", "<GRASS>", "】"
 	done
 
 GrassEnergyName:

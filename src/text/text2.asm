@@ -1484,19 +1484,19 @@ RetreatCostText:
 	done
 
 UnusedText0213: ; Unused
-	textfw3 "SWITCH TO UPPER"
+	textfw "SWITCH TO UPPER"
 	done
 
 UnusedText0214: ; Unused
-	textfw3 "SWITCH TO LOWER"
+	textfw "SWITCH TO LOWER"
 	done
 
 FeetText:
-	textfw3 "'"
+	textfw "'"
 	done
 
 InchesText:
-	textfw3 "”"
+	textfw "”"
 	done
 
 YourDiscardPileText:
@@ -1512,15 +1512,15 @@ DeckText:
 	done
 
 UnusedText021a: ; Unused (Hiragana)
-	hiragana "ひらがナ"
+	textfw "ひらがな"
 	done
 
 UnusedText021b: ; Unused (Katakana)
-	textfw0 "カタカナ"
+	textfw "カタカナ"
 	done
 
 UnusedText021c: ; Unused
-	textfw3 "ABC"
+	textfw "ABC"
 	done
 
 EndText:
@@ -1532,71 +1532,39 @@ WhatIsYourNameText:
 	done
 
 UnusedText021f: ; Unused
-	hiragana "あ か さ た な は ま や ら"
-	line ""
-	textfw0 "い き し ち に ひ み ゆ り"
-	line ""
-	textfw0 "う く す つ ぬ ふ む よ る"
-	line ""
-	textfw0 "え け せ て ね へ め わ れ"
-	line ""
-	textfw0 "お こ そ と の ほ も ん ろ"
-	line ""
-	textfw0 "ゃ ゅ ょ っ を "
-	textfw3 "゛ ゜ "
-	textfw0 "—"
+	textfw "あ か さ た な は ま や ら"
+	linefw "い き し ち に ひ み ゆ り"
+	linefw "う く す つ ぬ ふ む よ る"
+	linefw "え け せ て ね へ め わ れ"
+	linefw "お こ そ と の ほ も ん ろ"
+	linefw "ゃ ゅ ょ っ を ゛ ゜ —"
 	done
 
 UnusedText0220: ; Unused
-	textfw0 "ア カ サ タ ナ ハ マ ヤ ラ"
-	line ""
-	textfw0 "イ キ シ チ ニ ヒ ミ ユ リ"
-	line ""
-	textfw0 "ウ ク ス ツ ヌ フ ム ヨ ル"
-	line ""
-	textfw0 "エ ケ セ テ ネ ヘ メ ワ レ"
-	line ""
-	textfw0 "オ コ ソ ト ノ ホ モ ン ロ"
-	line ""
-	textfw0 "ャ ュ ョ ッ ヲ "
-	textfw3 "゛ ゜ "
-	textfw0 "—"
+	textfw "ア カ サ タ ナ ハ マ ヤ ラ"
+	linefw "イ キ シ チ ニ ヒ ミ ユ リ"
+	linefw "ウ ク ス ツ ヌ フ ム ヨ ル"
+	linefw "エ ケ セ テ ネ ヘ メ ワ レ"
+	linefw "オ コ ソ ト ノ ホ モ ン ロ"
+	linefw "ャ ュ ョ ッ ヲ ゛ ゜ —"
 	done
 
 PlayerNameKeyboardText:
-	textfw3 "A B C D E F G H I"
-	line ""
-	textfw3 "J K L M N O P Q R"
-	line ""
-	textfw3 "S T U V W X Y Z "
-	textfw0 "!"
-	line ""
-	textfw0 "? "
-	textfw3 "& "
-	textfw0 "+ - ・ 0 1 2 3"
-	line ""
-	textfw0 "4 5 6 7 8 9 ", "<No>", " ", "<Lv>", "  "
-	line ""
-	textfw0 "                 "
+	textfw "A B C D E F G H I"
+	linefw "J K L M N O P Q R"
+	linefw "S T U V W X Y Z !"
+	linefw "? & + - ・ 0 1 2 3"
+	linefw "4 5 6 7 8 9 ", "<No>", " ", "<Lv>", "  "
+	linefw "                 "
 	done
 
 DeckNameKeyboardText:
-	textfw3 "A B C D E F G H I"
-	line ""
-	textfw3 "J K L M N O P Q R"
-	line ""
-	textfw3 "S T U V W X Y Z "
-	textfw0 "!"
-	line ""
-	textfw0 "? "
-	textfw3 "& "
-	textfw0 "+ - "
-	textfw3 "'"
-	textfw0 " 0 1 2 3"
-	line ""
-	textfw0 "4 5 6 7 8 9      "
-	line ""
-	textfw0 "                 "
+	textfw "A B C D E F G H I"
+	linefw "J K L M N O P Q R"
+	linefw "S T U V W X Y Z !"
+	linefw "? & + - ' 0 1 2 3"
+	linefw "4 5 6 7 8 9      "
+	linefw "                 "
 	done
 
 NewDeckText:
@@ -1633,19 +1601,19 @@ ChosenAsDuelingDeckText:
 	done
 
 Deck1Text:
-	textfw0 "1・"
+	textfw "1・"
 	done
 
 Deck2Text:
-	textfw0 "2・"
+	textfw "2・"
 	done
 
 Deck3Text:
-	textfw0 "3・"
+	textfw "3・"
 	done
 
 Deck4Text:
-	textfw0 "4・"
+	textfw "4・"
 	done
 
 ThereIsNoDeckHereText:
@@ -1788,8 +1756,7 @@ DuelistDiscardPileText:
 	done
 
 EmptyLineText:
-	textfw0 "         "
-	textfw0 "         "
+	textfw "                  "
 	done
 
 BoosterPackTitleText:
@@ -1821,7 +1788,7 @@ ViewWhichCardFileText:
 	done
 
 EmptyPromotionalCardText:
-	textfw0 "----------"
+	textfw "----------"
 	done
 
 SCardsText:
@@ -1829,7 +1796,7 @@ SCardsText:
 	done
 
 EmptyDeckNameText:
-	textfw0 "--------------"
+	textfw "--------------"
 	done
 
 DeckSaveMachineText:

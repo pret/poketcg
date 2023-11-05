@@ -39,7 +39,7 @@ PKMNPWRText:
 	done
 
 UnusedText000b: ; Unused (Pokemon Card)
-	textfw0 "ポケモンカ—ド"
+	textfw "ポケモンカ—ド"
 	done
 
 LengthText:
@@ -55,7 +55,7 @@ PokemonText:
 	done
 
 MetresText:
-	textfw3 "m"
+	textfw "m"
 	done
 
 LbsText:
@@ -63,19 +63,19 @@ LbsText:
 	done
 
 PromostarRarityText:
-	textfw0 " "
+	textfw " "
 	done
 
 CircleRarityText:
-	textfw3 "●"
+	textfw "●"
 	done
 
 DiamondRarityText:
-	textfw3 "◆"
+	textfw "◆"
 	done
 
 StarRarityText:
-	textfw3 "★"
+	textfw "★"
 	done
 
 AllCardsOwnedText:
@@ -304,27 +304,27 @@ ColorListText:
 	done
 
 GrassSymbolText:
-	textfw0 "<GRASS>"
+	textfw "<GRASS>"
 	done
 
 FireSymbolText:
-	textfw0 "<FIRE>"
+	textfw "<FIRE>"
 	done
 
 WaterSymbolText:
-	textfw0 "<WATER>"
+	textfw "<WATER>"
 	done
 
 LightningSymbolText:
-	textfw0 "<LIGHTNING>"
+	textfw "<LIGHTNING>"
 	done
 
 FightingSymbolText:
-	textfw0 "<FIGHTING>"
+	textfw "<FIGHTING>"
 	done
 
 PsychicSymbolText:
-	textfw0 "<PSYCHIC>"
+	textfw "<PSYCHIC>"
 	done
 
 BenchText:
@@ -602,10 +602,7 @@ SelectCheckText:
 	done
 
 UnusedText0087: ; Unused
-	textfw3 "B"
-	textfw0 "<RAMNUM>"
-	textfw3 "S"
-	textfw0 "<RAMNUM>"
+	textfw "B", "<RAMNUM>", "S", "<RAMNUM>"
 	done
 
 DuelistIsThinkingText:
@@ -613,7 +610,7 @@ DuelistIsThinkingText:
 	done
 
 ClearOpponentNameText:
-	textfw0 "          "
+	textfw "          "
 	done
 
 SelectComputerOpponentText:
@@ -708,7 +705,7 @@ UnusedText0099: ; Unused
 	text "Load File"
 	line "  "
 	half2full
-	textfw0 "0"
+	textfw "0"
 	text "  Last Saved File"
 	done
 

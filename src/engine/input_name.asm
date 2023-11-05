@@ -260,7 +260,7 @@ PrintPlayerNameFromInput:
 .char_underbar
 	db $56
 REPT 10
-	textfw3 "_"
+	textfw "_"
 ENDR
 	done
 
@@ -590,7 +590,7 @@ NamingScreen_ProcessInput:
 	ld a, [wd009]
 	cp $02
 	jr z, .read_char
-	ldfw3 bc, "゛"
+	lb bc, TX_FULLWIDTH3, "FW3_゛"
 	ld a, d
 	cp b
 	jr nz, .asm_6af4
@@ -604,7 +604,7 @@ NamingScreen_ProcessInput:
 	jr c, .nothing
 	jr .asm_6b09
 .asm_6af4
-	ldfw3 bc, "゜"
+	lb bc, TX_FULLWIDTH3, "FW3_゜"
 	ld a, d
 	cp b
 	jr nz, .asm_6b1d

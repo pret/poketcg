@@ -819,7 +819,7 @@ ImakuniWouldLikeToDuelInitialText:
 	line "I'll sing the PokéRap - You dance!"
 	line ""
 	half2full
-	textfw3 "♪"
+	textfw "♪"
 	text "La di da la di da"
 	line "  La di da la di da..."
 	line "Hey!"
@@ -885,7 +885,7 @@ ImakuniPlayerLostText:
 	line "Come on, shake it!!!"
 	line ""
 	half2full
-	textfw3 "♪"
+	textfw "♪"
 	text "La di da la di da"
 	line "  La di da la di da..."
 	line "... You dance weird!"
