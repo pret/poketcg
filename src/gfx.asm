@@ -48,495 +48,495 @@ WaterClubTilemap::
 	db $20 ; height
 	dw WaterClubPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/water_club.bin.lz"
+	INCBIN "data/maps/tiles/gb/water_club.bin.lz"
 WaterClubPermissions:
-	INCBIN "data/maps/permissions/water_club.bin.lz"
+	INCBIN "data/maps/permissions/cgb/water_club.bin.lz"
 
 WaterClubCGBTilemap::
 	db $1c ; width
 	db $20 ; height
 	dw WaterClubCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/water_club_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/water_club.bin.lz"
 WaterClubCGBPermissions:
-	INCBIN "data/maps/permissions/water_club_cgb.bin.lz"
+	INCBIN "data/maps/permissions/cgb/water_club.bin.lz"
 
 LightningClubTilemap::
 	db $1c ; width
 	db $20 ; height
 	dw LightningClubPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/lightning_club.bin.lz"
+	INCBIN "data/maps/tiles/gb/lightning_club.bin.lz"
 LightningClubPermissions:
-	INCBIN "data/maps/permissions/lightning_club.bin.lz"
+	INCBIN "data/maps/permissions/cgb/lightning_club.bin.lz"
 
 LightningClubCGBTilemap::
 	db $1c ; width
 	db $20 ; height
 	dw LightningClubCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/lightning_club_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/lightning_club.bin.lz"
 LightningClubCGBPermissions:
-	INCBIN "data/maps/permissions/lightning_club_cgb.bin.lz"
+	INCBIN "data/maps/permissions/cgb/lightning_club.bin.lz"
 
 GrassClubTilemap::
 	db $1c ; width
 	db $20 ; height
 	dw GrassClubPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/grass_club.bin.lz"
+	INCBIN "data/maps/tiles/gb/grass_club.bin.lz"
 GrassClubPermissions:
-	INCBIN "data/maps/permissions/grass_club.bin.lz"
+	INCBIN "data/maps/permissions/cgb/grass_club.bin.lz"
 
 GrassClubCGBTilemap::
 	db $1c ; width
 	db $20 ; height
 	dw GrassClubCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/grass_club_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/grass_club.bin.lz"
 GrassClubCGBPermissions:
-	INCBIN "data/maps/permissions/grass_club_cgb.bin.lz"
+	INCBIN "data/maps/permissions/cgb/grass_club.bin.lz"
 
 PsychicClubTilemap::
 	db $1c ; width
 	db $1c ; height
 	dw PsychicClubPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/psychic_club.bin.lz"
+	INCBIN "data/maps/tiles/gb/psychic_club.bin.lz"
 PsychicClubPermissions:
-	INCBIN "data/maps/permissions/psychic_club.bin.lz"
+	INCBIN "data/maps/permissions/cgb/psychic_club.bin.lz"
 
 PsychicClubCGBTilemap::
 	db $1c ; width
 	db $1c ; height
 	dw PsychicClubCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/psychic_club_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/psychic_club.bin.lz"
 PsychicClubCGBPermissions:
-	INCBIN "data/maps/permissions/psychic_club_cgb.bin.lz"
+	INCBIN "data/maps/permissions/cgb/psychic_club.bin.lz"
 
 ScienceClubTilemap::
 	db $1c ; width
 	db $20 ; height
 	dw ScienceClubPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/science_club.bin.lz"
+	INCBIN "data/maps/tiles/gb/science_club.bin.lz"
 ScienceClubPermissions:
-	INCBIN "data/maps/permissions/science_club.bin.lz"
+	INCBIN "data/maps/permissions/cgb/science_club.bin.lz"
 
 ScienceClubCGBTilemap::
 	db $1c ; width
 	db $20 ; height
 	dw ScienceClubCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/science_club_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/science_club.bin.lz"
 ScienceClubCGBPermissions:
-	INCBIN "data/maps/permissions/science_club_cgb.bin.lz"
+	INCBIN "data/maps/permissions/cgb/science_club.bin.lz"
 
 FireClubTilemap::
 	db $1c ; width
 	db $20 ; height
 	dw FireClubPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/fire_club.bin.lz"
+	INCBIN "data/maps/tiles/gb/fire_club.bin.lz"
 FireClubPermissions:
-	INCBIN "data/maps/permissions/fire_club.bin.lz"
+	INCBIN "data/maps/permissions/cgb/fire_club.bin.lz"
 
 FireClubCGBTilemap::
 	db $1c ; width
 	db $20 ; height
 	dw FireClubCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/fire_club_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/fire_club.bin.lz"
 FireClubCGBPermissions:
-	INCBIN "data/maps/permissions/fire_club_cgb.bin.lz"
+	INCBIN "data/maps/permissions/cgb/fire_club.bin.lz"
 
 ChallengeHallTilemap::
 	db $20 ; width
 	db $20 ; height
 	dw ChallengeHallPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/challenge_hall.bin.lz"
+	INCBIN "data/maps/tiles/gb/challenge_hall.bin.lz"
 ChallengeHallPermissions:
-	INCBIN "data/maps/permissions/challenge_hall.bin.lz"
+	INCBIN "data/maps/permissions/cgb/challenge_hall.bin.lz"
 
 ChallengeHallCGBTilemap::
 	db $20 ; width
 	db $20 ; height
 	dw ChallengeHallCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/challenge_hall_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/challenge_hall.bin.lz"
 ChallengeHallCGBPermissions:
-	INCBIN "data/maps/permissions/challenge_hall_cgb.bin.lz"
+	INCBIN "data/maps/permissions/cgb/challenge_hall.bin.lz"
 
 PokemonDomeEntranceTilemap::
 	db $20 ; width
 	db $12 ; height
 	dw PokemonDomeEntrancePermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/pokemon_dome_entrance.bin.lz"
+	INCBIN "data/maps/tiles/gb/pokemon_dome_entrance.bin.lz"
 PokemonDomeEntrancePermissions:
-	INCBIN "data/maps/permissions/pokemon_dome_entrance.bin.lz"
+	INCBIN "data/maps/permissions/cgb/pokemon_dome_entrance.bin.lz"
 
 PokemonDomeEntranceCGBTilemap::
 	db $20 ; width
 	db $12 ; height
 	dw PokemonDomeEntranceCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/pokemon_dome_entrance_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/pokemon_dome_entrance.bin.lz"
 PokemonDomeEntranceCGBPermissions:
-	INCBIN "data/maps/permissions/pokemon_dome_entrance_cgb.bin.lz"
+	INCBIN "data/maps/permissions/cgb/pokemon_dome_entrance.bin.lz"
 
 PokemonDomeTilemap::
 	db $20 ; width
 	db $20 ; height
 	dw PokemonDomePermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/pokemon_dome.bin.lz"
+	INCBIN "data/maps/tiles/gb/pokemon_dome.bin.lz"
 PokemonDomePermissions:
-	INCBIN "data/maps/permissions/pokemon_dome.bin.lz"
+	INCBIN "data/maps/permissions/cgb/pokemon_dome.bin.lz"
 
 PokemonDomeCGBTilemap::
 	db $20 ; width
 	db $20 ; height
 	dw PokemonDomeCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/pokemon_dome_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/pokemon_dome.bin.lz"
 PokemonDomeCGBPermissions:
-	INCBIN "data/maps/permissions/pokemon_dome_cgb.bin.lz"
+	INCBIN "data/maps/permissions/cgb/pokemon_dome.bin.lz"
 
 HallOfHonorTilemap::
 	db $18 ; width
 	db $1a ; height
 	dw HallOfHonorPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/hall_of_honor.bin.lz"
+	INCBIN "data/maps/tiles/gb/hall_of_honor.bin.lz"
 HallOfHonorPermissions:
-	INCBIN "data/maps/permissions/hall_of_honor.bin.lz"
+	INCBIN "data/maps/permissions/cgb/hall_of_honor.bin.lz"
 
 HallOfHonorCGBTilemap::
 	db $18 ; width
 	db $1a ; height
 	dw HallOfHonorCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/hall_of_honor_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/hall_of_honor.bin.lz"
 HallOfHonorCGBPermissions:
-	INCBIN "data/maps/permissions/hall_of_honor_cgb.bin.lz"
+	INCBIN "data/maps/permissions/cgb/hall_of_honor.bin.lz"
 
 CardPopCGBTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/card_pop_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/card_pop.bin.lz"
 
 CardPopTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/card_pop.bin.lz"
+	INCBIN "data/maps/tiles/gb/card_pop.bin.lz"
 
 ScienceMedalTilemap::
 	db $03 ; width
 	db $03 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/science_medal.bin.lz"
+	INCBIN "data/maps/tiles/gb/science_medal.bin.lz"
 
 FireMedalTilemap::
 	db $03 ; width
 	db $03 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/fire_medal.bin.lz"
+	INCBIN "data/maps/tiles/gb/fire_medal.bin.lz"
 
 WaterMedalTilemap::
 	db $03 ; width
 	db $03 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/water_medal.bin.lz"
+	INCBIN "data/maps/tiles/gb/water_medal.bin.lz"
 
 LightningMedalTilemap::
 	db $03 ; width
 	db $03 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/lightning_medal.bin.lz"
+	INCBIN "data/maps/tiles/gb/lightning_medal.bin.lz"
 
 FightingMedalTilemap::
 	db $03 ; width
 	db $03 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/fighting_medal.bin.lz"
+	INCBIN "data/maps/tiles/gb/fighting_medal.bin.lz"
 
 RockMedalTilemap::
 	db $03 ; width
 	db $03 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/rock_medal.bin.lz"
+	INCBIN "data/maps/tiles/gb/rock_medal.bin.lz"
 
 PsychicMedalTilemap::
 	db $03 ; width
 	db $03 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/psychic_medal.bin.lz"
+	INCBIN "data/maps/tiles/gb/psychic_medal.bin.lz"
 
 GameBoyLinkCGBTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/gameboy_link_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/gameboy_link.bin.lz"
 
 GameBoyLinkTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/gameboy_link.bin.lz"
+	INCBIN "data/maps/tiles/gb/gameboy_link.bin.lz"
 
 GameBoyLinkConnectingCGBTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/gameboy_link_connecting_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/gameboy_link_connecting.bin.lz"
 
 GameBoyLinkConnectingTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/gameboy_link_connecting.bin.lz"
+	INCBIN "data/maps/tiles/gb/gameboy_link_connecting.bin.lz"
 
 GameBoyPrinterCGBTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/gameboy_printer_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/gameboy_printer.bin.lz"
 
 GameBoyPrinterTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/gameboy_printer.bin.lz"
+	INCBIN "data/maps/tiles/gb/gameboy_printer.bin.lz"
 
 ColosseumTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/colosseum.bin.lz"
+	INCBIN "data/maps/tiles/gb/colosseum.bin.lz"
 
 ColosseumCGBTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/colosseum_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/colosseum.bin.lz"
 
 EvolutionTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/evolution.bin.lz"
+	INCBIN "data/maps/tiles/gb/evolution.bin.lz"
 
 EvolutionCGBTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/evolution_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/evolution.bin.lz"
 
 MysteryTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/mystery.bin.lz"
+	INCBIN "data/maps/tiles/gb/mystery.bin.lz"
 
 MysteryCGBTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/mystery_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/mystery.bin.lz"
 
 LaboratoryTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/laboratory.bin.lz"
+	INCBIN "data/maps/tiles/gb/laboratory.bin.lz"
 
 LaboratoryCGBTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/laboratory_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/laboratory.bin.lz"
 
 CharizardIntroTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/charizard_intro.bin.lz"
+	INCBIN "data/maps/tiles/gb/charizard_intro.bin.lz"
 
 CharizardIntroCGBTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/charizard_intro_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/charizard_intro.bin.lz"
 
 ScytherIntroTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/scyther_intro.bin.lz"
+	INCBIN "data/maps/tiles/gb/scyther_intro.bin.lz"
 
 ScytherIntroCGBTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/scyther_intro_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/scyther_intro.bin.lz"
 
 AerodactylIntroTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/aerodactyl_intro.bin.lz"
+	INCBIN "data/maps/tiles/gb/aerodactyl_intro.bin.lz"
 
 AerodactylIntroCGBTilemap::
 	db $08 ; width
 	db $0c ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/aerodactyl_intro_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/aerodactyl_intro.bin.lz"
 
 JapaneseTitleScreenTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/japanese_title_screen.bin.lz"
+	INCBIN "data/maps/tiles/gb/japanese_title_screen.bin.lz"
 
 JapaneseTitleScreenCGBTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/japanese_title_screen_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/japanese_title_screen.bin.lz"
 
 SolidTiles1Tilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/solid_tiles_1.bin.lz"
+	INCBIN "data/maps/tiles/gb/solid_tiles_1.bin.lz"
 
 SolidTiles2Tilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/solid_tiles_2.bin.lz"
+	INCBIN "data/maps/tiles/gb/solid_tiles_2.bin.lz"
 
 SolidTiles3Tilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/solid_tiles_3.bin.lz"
+	INCBIN "data/maps/tiles/gb/solid_tiles_3.bin.lz"
 
 JapaneseTitleScreen2Tilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/japanese_title_screen_2.bin.lz"
+	INCBIN "data/maps/tiles/gb/japanese_title_screen_2.bin.lz"
 
 JapaneseTitleScreen2CGBTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/japanese_title_screen_2_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/japanese_title_screen_2.bin.lz"
 
 SolidTiles4Tilemap::
 	db $08 ; width
 	db $04 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/solid_tiles_4.bin.lz"
+	INCBIN "data/maps/tiles/gb/solid_tiles_4.bin.lz"
 
 PlayerTilemap::
 	db $06 ; width
 	db $06 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/player.bin.lz"
+	INCBIN "data/maps/tiles/gb/player.bin.lz"
 
 OpponentTilemap::
 	db $06 ; width
 	db $06 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/opponent.bin.lz"
+	INCBIN "data/maps/tiles/gb/opponent.bin.lz"
 
 TitleScreenTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/title_screen.bin.lz"
+	INCBIN "data/maps/tiles/gb/title_screen.bin.lz"
 
 TitleScreenCGBTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/title_screen_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/title_screen.bin.lz"
 
 CopyrightTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/copyright.bin.lz"
+	INCBIN "data/maps/tiles/gb/copyright.bin.lz"
 
 CopyrightCGBTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/copyright_cgb.bin.lz"
+	INCBIN "data/maps/tiles/cgb/copyright.bin.lz"
 
 NintendoTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/nintendo.bin.lz"
+	INCBIN "data/maps/tiles/gb/nintendo.bin.lz"
 
 CompaniesTilemap::
 	db $14 ; width
 	db $12 ; height
 	dw NULL
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/companies.bin.lz"
+	INCBIN "data/maps/tiles/gb/companies.bin.lz"
 
 IshiharaTilesetGfx::
 	dw 77
