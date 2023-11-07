@@ -25,3 +25,4 @@
 *.2bpp binary diff=hex
 *.1bpp binary diff=hex
 *.lz binary diff=hex
+*.bgmap binary diff=hex
