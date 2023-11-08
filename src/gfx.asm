@@ -49,7 +49,7 @@ WaterClubTilemap::
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/gb/water_club.bin.lz"
 WaterClubPermissions:
-	INCBIN "data/maps/permissions/cgb/water_club.bin.lz"
+	INCBIN "data/maps/permissions/water_club.bin.lz"
 
 WaterClubCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/water_club.dimensions"
@@ -57,7 +57,7 @@ WaterClubCGBTilemap::
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/cgb/water_club.bgmap.lz"
 WaterClubCGBPermissions:
-	INCBIN "data/maps/permissions/cgb/water_club.bin.lz"
+	INCBIN "data/maps/permissions/water_club.bin.lz"
 
 LightningClubTilemap::
 	INCBIN "data/maps/tiles/gb/lightning_club.dimensions"
@@ -65,7 +65,7 @@ LightningClubTilemap::
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/gb/lightning_club.bin.lz"
 LightningClubPermissions:
-	INCBIN "data/maps/permissions/cgb/lightning_club.bin.lz"
+	INCBIN "data/maps/permissions/lightning_club.bin.lz"
 
 LightningClubCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/lightning_club.dimensions"
@@ -73,7 +73,7 @@ LightningClubCGBTilemap::
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/cgb/lightning_club.bgmap.lz"
 LightningClubCGBPermissions:
-	INCBIN "data/maps/permissions/cgb/lightning_club.bin.lz"
+	INCBIN "data/maps/permissions/lightning_club.bin.lz"
 
 GrassClubTilemap::
 	INCBIN "data/maps/tiles/gb/grass_club.dimensions"
@@ -81,7 +81,7 @@ GrassClubTilemap::
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/gb/grass_club.bin.lz"
 GrassClubPermissions:
-	INCBIN "data/maps/permissions/cgb/grass_club.bin.lz"
+	INCBIN "data/maps/permissions/grass_club.bin.lz"
 
 GrassClubCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/grass_club.dimensions"
@@ -89,7 +89,7 @@ GrassClubCGBTilemap::
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/cgb/grass_club.bgmap.lz"
 GrassClubCGBPermissions:
-	INCBIN "data/maps/permissions/cgb/grass_club.bin.lz"
+	INCBIN "data/maps/permissions/grass_club.bin.lz"
 
 PsychicClubTilemap::
 	INCBIN "data/maps/tiles/gb/psychic_club.dimensions"
@@ -97,7 +97,7 @@ PsychicClubTilemap::
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/gb/psychic_club.bin.lz"
 PsychicClubPermissions:
-	INCBIN "data/maps/permissions/cgb/psychic_club.bin.lz"
+	INCBIN "data/maps/permissions/psychic_club.bin.lz"
 
 PsychicClubCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/psychic_club.dimensions"
@@ -105,7 +105,7 @@ PsychicClubCGBTilemap::
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/cgb/psychic_club.bgmap.lz"
 PsychicClubCGBPermissions:
-	INCBIN "data/maps/permissions/cgb/psychic_club.bin.lz"
+	INCBIN "data/maps/permissions/psychic_club.bin.lz"
 
 ScienceClubTilemap::
 	INCBIN "data/maps/tiles/gb/science_club.dimensions"
@@ -113,7 +113,7 @@ ScienceClubTilemap::
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/gb/science_club.bin.lz"
 ScienceClubPermissions:
-	INCBIN "data/maps/permissions/cgb/science_club.bin.lz"
+	INCBIN "data/maps/permissions/science_club.bin.lz"
 
 ScienceClubCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/science_club.dimensions"
@@ -121,7 +121,7 @@ ScienceClubCGBTilemap::
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/cgb/science_club.bgmap.lz"
 ScienceClubCGBPermissions:
-	INCBIN "data/maps/permissions/cgb/science_club.bin.lz"
+	INCBIN "data/maps/permissions/science_club.bin.lz"
 
 FireClubTilemap::
 	INCBIN "data/maps/tiles/gb/fire_club.dimensions"
@@ -129,7 +129,7 @@ FireClubTilemap::
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/gb/fire_club.bin.lz"
 FireClubPermissions:
-	INCBIN "data/maps/permissions/cgb/fire_club.bin.lz"
+	INCBIN "data/maps/permissions/fire_club.bin.lz"
 
 FireClubCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/fire_club.dimensions"
@@ -137,7 +137,7 @@ FireClubCGBTilemap::
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/cgb/fire_club.bgmap.lz"
 FireClubCGBPermissions:
-	INCBIN "data/maps/permissions/cgb/fire_club.bin.lz"
+	INCBIN "data/maps/permissions/fire_club.bin.lz"
 
 ChallengeHallTilemap::
 	INCBIN "data/maps/tiles/gb/challenge_hall.dimensions"
@@ -145,7 +145,7 @@ ChallengeHallTilemap::
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/gb/challenge_hall.bin.lz"
 ChallengeHallPermissions:
-	INCBIN "data/maps/permissions/cgb/challenge_hall.bin.lz"
+	INCBIN "data/maps/permissions/challenge_hall.bin.lz"
 
 ChallengeHallCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/challenge_hall.dimensions"
@@ -153,7 +153,7 @@ ChallengeHallCGBTilemap::
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/cgb/challenge_hall.bgmap.lz"
 ChallengeHallCGBPermissions:
-	INCBIN "data/maps/permissions/cgb/challenge_hall.bin.lz"
+	INCBIN "data/maps/permissions/challenge_hall.bin.lz"
 
 PokemonDomeEntranceTilemap::
 	INCBIN "data/maps/tiles/gb/pokemon_dome_entrance.dimensions"
@@ -161,7 +161,7 @@ PokemonDomeEntranceTilemap::
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/gb/pokemon_dome_entrance.bin.lz"
 PokemonDomeEntrancePermissions:
-	INCBIN "data/maps/permissions/cgb/pokemon_dome_entrance.bin.lz"
+	INCBIN "data/maps/permissions/pokemon_dome_entrance.bin.lz"
 
 PokemonDomeEntranceCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/pokemon_dome_entrance.dimensions"
@@ -169,7 +169,7 @@ PokemonDomeEntranceCGBTilemap::
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/cgb/pokemon_dome_entrance.bgmap.lz"
 PokemonDomeEntranceCGBPermissions:
-	INCBIN "data/maps/permissions/cgb/pokemon_dome_entrance.bin.lz"
+	INCBIN "data/maps/permissions/pokemon_dome_entrance.bin.lz"
 
 PokemonDomeTilemap::
 	INCBIN "data/maps/tiles/gb/pokemon_dome.dimensions"
@@ -177,7 +177,7 @@ PokemonDomeTilemap::
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/gb/pokemon_dome.bin.lz"
 PokemonDomePermissions:
-	INCBIN "data/maps/permissions/cgb/pokemon_dome.bin.lz"
+	INCBIN "data/maps/permissions/pokemon_dome.bin.lz"
 
 PokemonDomeCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/pokemon_dome.dimensions"
@@ -185,7 +185,7 @@ PokemonDomeCGBTilemap::
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/cgb/pokemon_dome.bgmap.lz"
 PokemonDomeCGBPermissions:
-	INCBIN "data/maps/permissions/cgb/pokemon_dome.bin.lz"
+	INCBIN "data/maps/permissions/pokemon_dome.bin.lz"
 
 HallOfHonorTilemap::
 	INCBIN "data/maps/tiles/gb/hall_of_honor.dimensions"
@@ -193,7 +193,7 @@ HallOfHonorTilemap::
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/gb/hall_of_honor.bin.lz"
 HallOfHonorPermissions:
-	INCBIN "data/maps/permissions/cgb/hall_of_honor.bin.lz"
+	INCBIN "data/maps/permissions/hall_of_honor.bin.lz"
 
 HallOfHonorCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/hall_of_honor.dimensions"
@@ -201,7 +201,7 @@ HallOfHonorCGBTilemap::
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/cgb/hall_of_honor.bgmap.lz"
 HallOfHonorCGBPermissions:
-	INCBIN "data/maps/permissions/cgb/hall_of_honor.bin.lz"
+	INCBIN "data/maps/permissions/hall_of_honor.bin.lz"
 
 CardPopCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/card_pop.dimensions"
