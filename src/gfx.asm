@@ -210,10 +210,10 @@ CardPopCGBTilemap::
 	INCBIN "data/maps/tiles/cgb/card_pop.bgmap.lz"
 
 CardPopTilemap::
-	INCBIN "data/maps/tiles/cgb/card_pop_noncgb.dimensions"
+	INCBIN "data/maps/tiles/gb/card_pop.dimensions"
 	dw NULL
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/cgb/card_pop_noncgb.bgmap.lz"
+	INCBIN "data/maps/tiles/gb/card_pop.bgmap.lz"
 
 ScienceMedalTilemap::
 	INCBIN "data/maps/tiles/cgb/science_medal.dimensions"
