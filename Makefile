@@ -164,8 +164,8 @@ src/gfx/titlescreen/title_screen_cgb.2bpp: rgbgfx += -x 12
 	$(if $(tools/gfx),\
 		tools/gfx $(tools/gfx) -d1 -o $@ $@)
 
-%.bgmap: %.bin
-	tools/bgmap $(tools/bgmap) $< $@
+%.bgmap: %.bin ../dimensions/%.dimensions
+	tools/bgmap $(tools/bgmap) $^ $@
 
 # remove -m if you don't care for matching
 %.lz: %

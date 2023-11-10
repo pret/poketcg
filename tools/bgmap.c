@@ -40,22 +40,16 @@ int *readFileToBuffer(const char *inFilename, unsigned *fileSize)
     return fileBuffer;
 }
 
-struct Dimensions getDimensions(const char *name)
+struct Dimensions getDimensions(const char *dimFilename)
 {
-    char *dimensionsFilename = (char*) malloc((strlen(name) + strlen(".dimensions") + 1) * sizeof(char));
-    strcpy(dimensionsFilename, name);
-    strcat(dimensionsFilename, ".dimensions");
-
     struct Dimensions dimensions;
-    FILE *fd = fopen(dimensionsFilename, "rb");
+    FILE *fd = fopen(dimFilename, "rb");
     if (fd != NULL)
     {
         dimensions.width = fgetc(fd);
         dimensions.height = fgetc(fd);
         fclose(fd);
     }
-
-    free(dimensionsFilename);
     return dimensions;
 }
 
@@ -63,21 +57,17 @@ int main(int argc, char *argv[])
 {
     const char *programName = argv[0];
 
-    if (argc != 3)
+    if (argc != 4)
     {
         usage(programName);
         return 1;
     }
 
     const char *inFilename = argv[1];
-    const char *outFilename = argv[2];
+    const char *dimFilename = argv[2];
+    const char *outFilename = argv[3];
 
-    char *name = (char*) malloc((strlen(inFilename)) * sizeof(char));
-    const size_t nameLen = strcspn(inFilename, ".");
-    strncpy(name, inFilename, nameLen);
-    name[nameLen] = '\0';
-
-    const struct Dimensions dimensions = getDimensions(name);
+    const struct Dimensions dimensions = getDimensions(dimFilename);
 
     unsigned fileSize;
     int *fileBuffer = readFileToBuffer(inFilename, &fileSize);
@@ -110,7 +100,6 @@ int main(int argc, char *argv[])
 
     free(fileBuffer);
     free(outBuffer);
-    free(name);
 
     return 0;
 }
