@@ -22,6 +22,9 @@
 *.2bpp
 *.pal
 
+# intermediate BG map files
+*.bgmap
+
 # compressed data
 *.lz
 
