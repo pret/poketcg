@@ -1537,7 +1537,7 @@ UnusedText021f: ; Unused
 	linefw "う く す つ ぬ ふ む よ る"
 	linefw "え け せ て ね へ め わ れ"
 	linefw "お こ そ と の ほ も ん ろ"
-	linefw "ゃ ゅ ょ っ を ゛ ゜ —"
+	linefw "ゃ ゅ ょ っ を ゛ ゜ ー"
 	done
 
 UnusedText0220: ; Unused
@@ -1546,7 +1546,7 @@ UnusedText0220: ; Unused
 	linefw "ウ ク ス ツ ヌ フ ム ヨ ル"
 	linefw "エ ケ セ テ ネ ヘ メ ワ レ"
 	linefw "オ コ ソ ト ノ ホ モ ン ロ"
-	linefw "ャ ュ ョ ッ ヲ ゛ ゜ —"
+	linefw "ャ ュ ョ ッ ヲ ゛ ゜ ー"
 	done
 
 PlayerNameKeyboardText:

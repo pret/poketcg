@@ -39,7 +39,7 @@ PKMNPWRText:
 	done
 
 UnusedText000b: ; Unused (Pokemon Card)
-	textfw "ポケモンカ—ド"
+	textfw "ポケモンカード"
 	done
 
 LengthText:

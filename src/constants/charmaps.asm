@@ -411,7 +411,7 @@ ENDM
 	fwcharmap TX_FULLWIDTH0, "、", $75
 	fwcharmap TX_FULLWIDTH0, "。", $76
 	fwcharmap TX_FULLWIDTH0, "・", $77
-	fwcharmap TX_FULLWIDTH0, "—", $78
+	fwcharmap TX_FULLWIDTH0, "ー", $78
 	fwcharmap TX_FULLWIDTH0, "~", $79
 
 DEF FW_SPACE EQU $70
