@@ -1,4 +1,6 @@
 OverworldMap_CursorTransitions:
+	table_width 4, OverworldMap_CursorTransitions
+
 	; unused
 	db OWMAP_SCIENCE_CLUB     ; NORTH
 	db OWMAP_SCIENCE_CLUB     ; EAST
@@ -76,3 +78,5 @@ OverworldMap_CursorTransitions:
 	db OWMAP_PSYCHIC_CLUB     ; EAST
 	db OWMAP_FIGHTING_CLUB    ; SOUTH
 	db OWMAP_ROCK_CLUB        ; WEST
+
+	assert_table_length NUM_OWMAPS
