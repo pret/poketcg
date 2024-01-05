@@ -2991,3 +2991,5 @@ TextOffsets::
 	textpointer GamblerDescription                                 ; 0x0bab
 	textpointer RecycleName                                        ; 0x0bac
 	textpointer RecycleDescription                                 ; 0x0bad
+	textpointer NPC_05NPCName                                      ; 0x0bae
+	textpointer NPC_05MertExplanationText                          ; 0x0baf
