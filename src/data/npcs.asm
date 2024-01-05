@@ -8,7 +8,7 @@ NPCHeaderPointers:
 	dw Ronald1NPCHeader
 	dw IshiharaNPCHeader
 	dw ImakuniNPCHeader
-	dw DrMasonNPCHeader
+	dw NPC05NPCHeader
 	dw DrMasonNPCHeader
 	dw SamNPCHeader
 	dw Tech1NPCHeader
@@ -118,7 +118,8 @@ NPCHeaderPointers:
 	dw Murray2NPCHeader
 	dw Ronald2NPCHeader
 	dw Ronald3NPCHeader
-	dw DummyNPCHeader
+	dw NPC05NPCHeader
+	dw MertHeader
 	assert_table_length NUM_NPCS
 
 DrMasonNPCHeader:
@@ -289,6 +290,33 @@ Tech6NPCHeader:
 	db $00
 	db $00
 	db $00
+
+NPC05NPCHeader:
+	db NPC_05
+	db SPRITE_OW_TECH
+	db SPRITE_ANIM_LIGHT_NPC_UP
+	db SPRITE_ANIM_BLUE_NPC_UP
+	db $00
+	dw Script_NPC_05
+	tx NPC_05NPCName
+	db $00
+	db $00
+	db $00
+	db $00
+
+MertHeader:
+	db NPC_MERT
+	db SPRITE_OW_CLERK
+	db SPRITE_ANIM_SGB_CLERK_NPC_UP
+	db SPRITE_ANIM_CGB_CLERK_NPC_UP
+	db $00
+	dw Script_NPC_05
+	tx NPC_05NPCName
+	db $00
+	db $00
+	db $00
+	db $00
+
 
 Clerk1NPCHeader:
 	db NPC_CLERK1

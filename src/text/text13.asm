@@ -183,3 +183,13 @@ RecycleDescription:
 	line "in your discard pile on top of your"
 	line "deck."
 	done
+
+NPC_05MertExplanationText:
+	text "Yesterday Conqueror Mert"
+	line "threw up all over my peonies."
+	line "That cat eats everything."
+	done
+
+NPC_05NPCName:
+	text "Mert"
+	done

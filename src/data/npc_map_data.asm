@@ -15,6 +15,8 @@ MasonLabNPCS:
 	dw NULL
 	db NPC_TECH4, $0a, $16, EAST
 	dw NULL
+	db NPC_MERT, $0a, $08, EAST
+	dw NULL
 	db NPC_TECH5, $06, $04, SOUTH
 	dw Preload_Tech5
 	db $00
@@ -214,6 +216,8 @@ GrassClubLobbyNPCS:
 	db NPC_GAL2, $14, $10, NORTH
 	dw Preload_Gal2
 	db NPC_CLERK10, $06, $04, SOUTH
+	dw NULL
+	db NPC_05, $12, $04, SOUTH
 	dw NULL
 	db NPC_GIFT_CENTER_CLERK, $0a, $04, SOUTH
 	dw Preload_GiftCenterClerk

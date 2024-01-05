@@ -126,6 +126,12 @@ Script_Tech4:
 	print_variable_npc_text Tech4ClubsExplanationText, Tech4DefeatedTheGrandMastersText
 	quit_script_fully
 
+Script_NPC_05:
+	start_script
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
+	print_variable_npc_text NPC_05MertExplanationText, Tech5ChallengeMachineExplanationText
+	quit_script_fully
+
 Preload_Tech5:
 	get_event_value EVENT_RECEIVED_LEGENDARY_CARDS
 	or a
