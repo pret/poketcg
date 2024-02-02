@@ -75,7 +75,7 @@ EmptyScreenAndLoadFontDuelAndHandCardsIcons:
 ; empties screen, zeroes object positions,
 ; loads cursor tile, symbol fonts, duel card symbols
 ; hand card icon and sets default palettes
-Func_8d78:
+PrepareMenuGraphics:
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions

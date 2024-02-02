@@ -400,7 +400,7 @@ PrintCardSetListEntries:
 	add [hl]
 	inc a
 	call CalculateOnesAndTensDigits
-	ld hl, wOnesAndTensPlace
+	ld hl, wDecimalDigitsSymbols
 	ld a, [hli]
 	ld b, a
 	ld a, [hl]
@@ -428,7 +428,7 @@ PrintCardSetListEntries:
 
 .energy_card
 	call CalculateOnesAndTensDigits
-	ld hl, wOnesAndTensPlace
+	ld hl, wDecimalDigitsSymbols
 	ld a, [hli]
 	ld b, a
 	ld hl, wCurDeckName + 2
@@ -503,10 +503,10 @@ HandleCardAlbumCardPage:
 .handle_input
 	ldh a, [hDPadHeld]
 	ld b, a
-	and A_BUTTON | B_BUTTON | SELECT | START
+	and BUTTONS
 	jp nz, .exit
 	xor a ; FALSE
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	ld a, [wCardListNumCursorPositions]
 	ld c, a
 	ld a, [wCardListCursorPos]
@@ -514,8 +514,8 @@ HandleCardAlbumCardPage:
 	jr z, .check_d_down
 
 	push af
-	ld a, TRUE
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	ld a, [wCardListCursorPos]
 	ld hl, wCardListVisibleOffset
 	add [hl]
@@ -540,8 +540,8 @@ HandleCardAlbumCardPage:
 	jr z, .asm_a8d6
 
 	push af
-	ld a, TRUE
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	pop af
 
 	inc a
@@ -572,7 +572,7 @@ HandleCardAlbumCardPage:
 .got_new_pos
 	; loop back to the start
 	ld [wCardListCursorPos], a
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jp z, HandleCardAlbumCardPage
 	call PlaySFX
@@ -623,15 +623,15 @@ GetFirstOwnedCardIndex:
 	ld [wFirstOwnedCardIndex], a
 	ret
 
-HandleCardAlbumScreen:
+CardAlbum:
 	ld a, $01
 	ld [hffb4], a ; should be ldh
 
 	xor a
-.album_card_list
-	ld hl, .MenuParameters
+.booster_pack_menu
+	ld hl, .BoosterPackMenuParams
 	call InitializeMenuParameters
-	call .DrawCardAlbumScreen
+	call .ShowBoosterPackMenu
 .loop_input_1
 	call DoFrame
 	call HandleMenuInput
@@ -669,12 +669,12 @@ HandleCardAlbumScreen:
 	ld a, $ff
 	call PlaySFXConfirmOrCancel
 	ldh a, [hCurMenuItem]
-	jp .album_card_list
+	jp .booster_pack_menu
 
 .asm_a968
 	call .GetNumCardEntries
 	xor a
-	ld hl, .CardSelectionParams
+	ld hl, .BoosterPackCardsMenuParams
 	call InitCardSelectionParams
 	ld a, [wNumEntriesInCurFilter]
 	ld hl, wNumVisibleCardListEntries
@@ -730,7 +730,7 @@ HandleCardAlbumScreen:
 	call .PrintCardCount
 	call PrintCardSetListEntries
 	call EnableLCD
-	ld hl, .CardSelectionParams
+	ld hl, .BoosterPackCardsMenuParams
 	call InitCardSelectionParams
 	ld a, [wTempCardListNumCursorPositions]
 	ld [wCardListNumCursorPositions], a
@@ -746,9 +746,9 @@ HandleCardAlbumScreen:
 	cp $ff
 	jr nz, .open_card_page
 	ldh a, [hCurMenuItem]
-	jp .album_card_list
+	jp .booster_pack_menu
 
-.MenuParameters
+.BoosterPackMenuParams:
 	db 3, 3 ; cursor x, cursor y
 	db 2 ; y displacement between items
 	db 5 ; number of items
@@ -756,7 +756,7 @@ HandleCardAlbumScreen:
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-.CardSelectionParams
+.BoosterPackCardsMenuParams:
 	db 1 ; x pos
 	db 4 ; y pos
 	db 2 ; y spacing
@@ -883,18 +883,19 @@ HandleCardAlbumScreen:
 	ld [wNumOwnedCardsInSet], a
 	ret
 
-.DrawCardAlbumScreen
+.ShowBoosterPackMenu:
 	xor a
 	ld [wTileMapFill], a
 	call EmptyScreen
 	ld a, [hffb4]
 	dec a
-	jr nz, .skip_clear_screen
+	jr nz, .draw_box
 	ld [hffb4], a
 	call Set_OBJ_8x8
 	call ZeroObjectPositions
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
+
 	call LoadCursorTile
 	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
@@ -902,7 +903,7 @@ HandleCardAlbumScreen:
 	lb de, $3c, $ff
 	call SetupText
 
-.skip_clear_screen
+.draw_box
 	lb de, 0, 0
 	lb bc, 20, 13
 	call DrawRegularTextBox

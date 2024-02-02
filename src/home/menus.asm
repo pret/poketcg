@@ -12,9 +12,9 @@ InitializeCardListParameters::
 	add d
 	ldh [hCurMenuItem], a
 	ld a, [hli]
-	ld [wCursorXPosition], a
+	ld [wMenuCursorXOffset], a
 	ld a, [hli]
-	ld [wCursorYPosition], a
+	ld [wMenuCursorYOffset], a
 	ld a, [hli]
 	ld [wListItemXPosition], a
 	ld a, [hli]
@@ -22,9 +22,9 @@ InitializeCardListParameters::
 	ld a, [hli]
 	ld [wNumMenuItems], a
 	ld a, [hli]
-	ld [wCursorTile], a
+	ld [wMenuVisibleCursorTile], a
 	ld a, [hli]
-	ld [wTileBehindCursor], a
+	ld [wMenuInvisibleCursorTile], a
 	ld a, [hli]
 	ld [wListFunctionPointer], a
 	ld a, [hli]
@@ -32,7 +32,7 @@ InitializeCardListParameters::
 	xor a
 	ld [wCursorBlinkCounter], a
 	ld a, 1
-	ld [wYDisplacementBetweenMenuItems], a
+	ld [wMenuYSeparation], a
 	ret
 
 ; similar to HandleMenuInput, but conveniently returns parameters related to the
@@ -52,14 +52,14 @@ HandleCardListInput::
 
 ; initializes parameters for a menu, given the 8 bytes starting at hl,
 ; which are loaded to the following addresses:
-;	wCursorXPosition, wCursorYPosition, wYDisplacementBetweenMenuItems, wNumMenuItems,
-;	wCursorTile, wTileBehindCursor, wMenuFunctionPointer.
+;	wMenuCursorXOffset, wMenuCursorYOffset, wMenuYSeparation, wNumMenuItems,
+;	wMenuVisibleCursorTile, wMenuInvisibleCursorTile, wMenuUpdateFunc.
 ; also sets the current menu item (wCurMenuItem) to the one specified in register a.
 InitializeMenuParameters::
 	ld [wCurMenuItem], a
 	ldh [hCurMenuItem], a
-	ld de, wCursorXPosition
-	ld b, wMenuFunctionPointer + $2 - wCursorXPosition
+	ld de, wMenuCursorXOffset
+	ld b, wMenuParamsEnd - wMenuParams
 .loop
 	ld a, [hli]
 	ld [de], a
@@ -72,7 +72,7 @@ InitializeMenuParameters::
 
 ; returns with the carry flag set if A or B were pressed
 ; returns a = 0 if A was pressed, a = -1 if B was pressed
-; note: return values still subject to those of the function at [wMenuFunctionPointer] if any
+; note: return values still subject to those of the function at [wMenuUpdateFunc] if any
 HandleMenuInput::
 	xor a
 	ld [wRefreshMenuCursorSFX], a
@@ -110,7 +110,7 @@ HandleMenuInput::
 .up_down_done
 	ld a, [wCurMenuItem]
 	ldh [hCurMenuItem], a
-	ld hl, wMenuFunctionPointer ; call the function if non-0 (periodically)
+	ld hl, wMenuUpdateFunc ; call the function if non-0 (periodically)
 	ld a, [hli]
 	or [hl]
 	jr z, .check_A_or_B
@@ -177,26 +177,26 @@ RefreshMenuCursor::
 ; blink the cursor every 16 frames
 	and $f
 	ret nz
-	ld a, [wCursorTile]
+	ld a, [wMenuVisibleCursorTile]
 	bit 4, [hl]
 	jr z, DrawCursor
 ;	fallthrough
 
-; set the tile at [wCursorXPosition],[wCursorYPosition] to [wTileBehindCursor]
+; set the tile at [wMenuCursorXOffset],[wMenuCursorYOffset] to [wMenuInvisibleCursorTile]
 EraseCursor::
-	ld a, [wTileBehindCursor]
+	ld a, [wMenuInvisibleCursorTile]
 ;	fallthrough
 
-; set the tile at [wCursorXPosition],[wCursorYPosition] to a
+; set the tile at [wMenuCursorXOffset],[wMenuCursorYOffset] to a
 DrawCursor::
 	ld c, a
-	ld a, [wYDisplacementBetweenMenuItems]
+	ld a, [wMenuYSeparation]
 	ld l, a
 	ld a, [wCurMenuItem]
 	ld h, a
 	call HtimesL
 	ld a, l
-	ld hl, wCursorXPosition
+	ld hl, wMenuCursorXOffset
 	ld d, [hl]
 	inc hl
 	add [hl]
@@ -209,9 +209,9 @@ DrawCursor::
 	or a
 	ret
 
-; set the tile at [wCursorXPosition],[wCursorYPosition] to [wCursorTile]
+; set the tile at [wMenuCursorXOffset],[wMenuCursorYOffset] to [wMenuVisibleCursorTile]
 DrawCursor2::
-	ld a, [wCursorTile]
+	ld a, [wMenuVisibleCursorTile]
 	jr DrawCursor
 
 ; set wCurMenuItem, and hCurMenuItem to a, and zero wCursorBlinkCounter
@@ -317,13 +317,13 @@ DuelMenuCursorCoords::
   ; hl: 9 bytes with the rest of the parameters
 PrintCardListItems::
 	call InitializeCardListParameters
-	ld hl, wMenuFunctionPointer
+	ld hl, wMenuUpdateFunc
 	ld a, LOW(CardListMenuFunction)
 	ld [hli], a
 	ld a, HIGH(CardListMenuFunction)
 	ld [hli], a
 	ld a, 2
-	ld [wYDisplacementBetweenMenuItems], a
+	ld [wMenuYSeparation], a
 	ld a, 1
 	ld [wCardListIndicatorYPosition], a
 ;	fallthrough
@@ -337,7 +337,7 @@ ReloadCardListItems::
 	jr z, .cant_go_up
 	ld e, SYM_CURSOR_U
 .cant_go_up
-	ld a, [wCursorYPosition]
+	ld a, [wMenuCursorYOffset]
 	dec a
 	ld c, a
 	ld b, 18
@@ -368,7 +368,7 @@ ReloadCardListItems::
 	ld b, a
 	ld a, [wListItemXPosition]
 	ld d, a
-	ld a, [wCursorYPosition]
+	ld a, [wMenuCursorYOffset]
 	ld e, a
 	ld c, $00
 .next_card
@@ -424,7 +424,7 @@ OneByteNumberToTxSymbol_TrimLeadingZerosAndAlign::
 .not_zero
 	ret
 
-; this function is always loaded to wMenuFunctionPointer by PrintCardListItems
+; this function is always loaded to wMenuUpdateFunc by PrintCardListItems
 ; takes care of things like handling page scrolling and calling the function at wListFunctionPointer
 CardListMenuFunction::
 	ldh a, [hDPadHeld]
@@ -736,17 +736,17 @@ SetCursorParametersForTextBox::
 	xor a
 	ld hl, wCurMenuItem
 	ld [hli], a
-	ld [hl], d ; wCursorXPosition
+	ld [hl], d ; wMenuCursorXOffset
 	inc hl
-	ld [hl], e ; wCursorYPosition
+	ld [hl], e ; wMenuCursorYOffset
 	inc hl
-	ld [hl], 0 ; wYDisplacementBetweenMenuItems
+	ld [hl], 0 ; wMenuYSeparation
 	inc hl
 	ld [hl], 1 ; wNumMenuItems
 	inc hl
-	ld [hl], b ; wCursorTile
+	ld [hl], b ; wMenuVisibleCursorTile
 	inc hl
-	ld [hl], c ; wTileBehindCursor
+	ld [hl], c ; wMenuInvisibleCursorTile
 	ld [wCursorBlinkCounter], a
 	ret
 
@@ -941,7 +941,7 @@ HandleYesOrNoMenu::
 	add a
 	add a
 	add c
-	ld [wCursorXPosition], a
+	ld [wMenuCursorXOffset], a
 	xor a
 	ld [wCursorBlinkCounter], a
 	jr .wait_button_loop

@@ -1,6 +1,6 @@
 Func_18661: ; unreferenced
 	xor a
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
 	ld a, [wCheckMenuCursorYPosition]
@@ -30,8 +30,8 @@ Func_18661: ; unreferenced
 	xor $1
 	ld e, a
 .cursor_moved
-	ld a, $1
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	push de
 	call .draw_blank_cursor
 	pop de
@@ -63,7 +63,7 @@ Func_18661: ; unreferenced
 	ret
 
 .check_cursor_moved
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jr z, .check_cursor_blink
 	call PlaySFX

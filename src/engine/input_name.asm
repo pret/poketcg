@@ -268,7 +268,7 @@ ENDR
 ; if pressed, set the carry bit on.
 NamingScreen_CheckButtonState:
 	xor a
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	ldh a, [hDPadHeld]
 	or a
 	jp z, .no_press
@@ -416,8 +416,8 @@ NamingScreen_CheckButtonState:
 	ld a, $06
 	cp d
 	jp z, NamingScreen_CheckButtonState
-	ld a, $01
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 .no_press
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
@@ -433,7 +433,7 @@ NamingScreen_CheckButtonState:
 	scf
 	ret
 .asm_69ef
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jr z, .asm_69f8
 	call PlaySFX
@@ -1143,7 +1143,7 @@ Func_1aec3:
 
 Func_1aefb:
 	xor a
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	ldh a, [hDPadHeld]
 	or a
 	jp z, .asm_6f73
@@ -1216,8 +1216,8 @@ Func_1aefb:
 	ld a, $02
 	cp d
 	jp z, Func_1aefb
-	ld a, $01
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 .asm_6f73
 	ldh a, [hKeysPressed]
 	and $03
@@ -1233,7 +1233,7 @@ Func_1aefb:
 	scf
 	ret
 .asm_6f89
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jr z, .asm_6f92
 	call PlaySFX

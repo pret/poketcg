@@ -375,7 +375,7 @@ OpenInPlayAreaScreen_TransitionTable2:
 
 OpenInPlayAreaScreen_HandleInput:
 	xor a
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	ld hl, wMenuInputTablePointer
 	ld e, [hl]
 	inc hl
@@ -506,8 +506,8 @@ OpenInPlayAreaScreen_HandleInput:
 	add INPLAYAREA_OPP_DISCARD_PILE
 	ld [wInPlayAreaCurPosition], a
 .next
-	ld a, $01
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
 .check_button
@@ -533,7 +533,7 @@ OpenInPlayAreaScreen_HandleInput:
 	ret
 
 .return
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jr z, .skip_sfx
 	call PlaySFX

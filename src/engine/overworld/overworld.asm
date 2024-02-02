@@ -1256,7 +1256,7 @@ PCMenu_CardAlbum:
 	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall SetDefaultPalettes
-	farcall HandleCardAlbumScreen
+	farcall CardAlbum
 	call Set_OBJ_8x8
 	ret
 

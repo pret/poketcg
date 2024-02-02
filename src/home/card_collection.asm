@@ -115,18 +115,18 @@ CreateTempCardCollection::
 	ld bc, CARD_COLLECTION_SIZE
 	call CopyDataHLtoDE
 	ld de, sDeck1Name
-	call AddDeckCardsToTempCardCollection
+	call .AddDeckCards
 	ld de, sDeck2Name
-	call AddDeckCardsToTempCardCollection
+	call .AddDeckCards
 	ld de, sDeck3Name
-	call AddDeckCardsToTempCardCollection
+	call .AddDeckCards
 	ld de, sDeck4Name
-	call AddDeckCardsToTempCardCollection
+	call .AddDeckCards
 	call DisableSRAM
 	ret
 
 ; adds the cards from a deck to wTempCardCollection given de = sDeck*Name
-AddDeckCardsToTempCardCollection::
+.AddDeckCards:
 	ld a, [de]
 	or a
 	ret z ; return if empty name (empty deck)
