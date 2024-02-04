@@ -1,15 +1,15 @@
-C_ EQU $1
-C# EQU $2
-D_ EQU $3
-D# EQU $4
-E_ EQU $5
-F_ EQU $6
-F# EQU $7
-G_ EQU $8
-G# EQU $9
-A_ EQU $a
-A# EQU $b
-B_ EQU $c
+DEF C_ EQU $1
+DEF C# EQU $2
+DEF D_ EQU $3
+DEF D# EQU $4
+DEF E_ EQU $5
+DEF F_ EQU $6
+DEF F# EQU $7
+DEF G_ EQU $8
+DEF G# EQU $9
+DEF A_ EQU $a
+DEF A# EQU $b
+DEF B_ EQU $c
 
 MACRO note
 	dn (\1), (\2) - 1 ; pitch, length

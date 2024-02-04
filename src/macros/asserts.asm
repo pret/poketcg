@@ -1,7 +1,7 @@
 ; Macros to verify assumptions about the data or code
 
 MACRO table_width
-CURRENT_TABLE_WIDTH = \1
+DEF CURRENT_TABLE_WIDTH = \1
 IF _NARG == 2
 REDEF CURRENT_TABLE_START EQUS "\2"
 ELSE
@@ -11,19 +11,19 @@ ENDC
 ENDM
 
 MACRO assert_table_length
-x = \1
+DEF x = \1
 	ASSERT x * CURRENT_TABLE_WIDTH == @ - {CURRENT_TABLE_START}, \
 		"{CURRENT_TABLE_START}: expected {d:x} entries, each {d:CURRENT_TABLE_WIDTH} bytes"
 ENDM
 
 MACRO deck_list_start
-x = 0
+DEF x = 0
 ENDM
 
 ; \1 = card ID
 ; \2 = quantity
 MACRO card_item
-x = x + \2
+DEF x = x + \2
 	db \2, \1
 ENDM
 
