@@ -1990,14 +1990,14 @@
 02:4487 DrawPlayArea_PrizeCards.draw
 02:44ae DrawPlayArea_PrizeCards.not_cgb
 02:44b2 DrawPlayArea_PrizeCards.done
-02:44b4 PrizeCardsCoordinateData_YourOrOppPlayArea.player
 02:44b4 PrizeCardsCoordinateData_YourOrOppPlayArea
+02:44b4 PrizeCardsCoordinateData_YourOrOppPlayArea.player
 02:44c0 PrizeCardsCoordinateData_YourOrOppPlayArea.opponent
-02:44cc PrizeCardsCoordinateData_2.player
 02:44cc PrizeCardsCoordinateData_2
+02:44cc PrizeCardsCoordinateData_2.player
 02:44d8 PrizeCardsCoordinateData_2.opponent
-02:44e4 PrizeCardsCoordinateData_InPlayArea.player
 02:44e4 PrizeCardsCoordinateData_InPlayArea
+02:44e4 PrizeCardsCoordinateData_InPlayArea.player
 02:44f0 PrizeCardsCoordinateData_InPlayArea.opponent
 02:44fc GetDuelInitialPrizesUpperBitsSet
 02:4501 GetDuelInitialPrizesUpperBitsSet.loop
@@ -2016,8 +2016,8 @@
 02:45b5 DrawYourOrOppPlayArea_Icons.draw
 02:45e1 DrawPlayArea_IconWithValue
 02:4608 DrawPlayArea_IconWithValue.skip
-02:4635 PlayAreaIconCoordinates.player1
 02:4635 PlayAreaIconCoordinates
+02:4635 PlayAreaIconCoordinates.player1
 02:463b PlayAreaIconCoordinates.opponent1
 02:4641 PlayAreaIconCoordinates.player2
 02:4647 PlayAreaIconCoordinates.opponent2
@@ -2205,8 +2205,8 @@
 02:52be AppendDeckName
 02:52d8 AppendDeckName.got_len
 02:52f8 AppendDeckName.text_start
-02:5314 CheckIfDeckHasCards
 02:5314 AppendDeckName.text_end
+02:5314 CheckIfDeckHasCards
 02:5324 CheckIfDeckHasCards.max_size
 02:5326 DrawHandCardsTileOnCurDeck
 02:5339 DrawHandCardsTileAtDE
@@ -8613,8 +8613,8 @@
 0b:6985 SpearowMirrorMove_AISelection
 0b:6987 SpearowMirrorMove_BeforeDamage
 0b:6989 SpearowMirrorMove_AfterDamage
-0b:698c MirrorMoveEffects.AIEffect
 0b:698c MirrorMoveEffects
+0b:698c MirrorMoveEffects.AIEffect
 0b:6999 MirrorMoveEffects.InitialEffect1
 0b:69ac MirrorMoveEffects.InitialEffect2
 0b:69be MirrorMoveEffects.PlayerSelection
