@@ -894,7 +894,7 @@ DeckConfigurationMenu_TransitionTable:
 ; where X is the total card count
 DrawCardTypeIconsAndPrintCardCounts:
 	call Set_OBJ_8x8
-	call Func_8d78
+	call PrepareMenuGraphics
 	lb bc, 0, 5
 	ld a, SYM_BOX_TOP
 	call FillBGMapLineWithA
@@ -1296,7 +1296,7 @@ CalculateOnesAndTensDigits:
 .zero1
 ; ones digit
 	add SYM_0
-	ld hl, wOnesAndTensPlace
+	ld hl, wDecimalDigitsSymbols
 	ld [hli], a
 
 ; tens digit
@@ -1319,7 +1319,7 @@ CalculateOnesAndTensDigits:
 ConvertToNumericalDigits:
 	call CalculateOnesAndTensDigits
 	push hl
-	ld hl, wOnesAndTensPlace
+	ld hl, wDecimalDigitsSymbols
 	ld a, [hli]
 	ld b, a
 	ld a, [hl]
@@ -1674,7 +1674,7 @@ InitCardSelectionParams:
 
 HandleCardSelectionInput:
 	xor a ; FALSE
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	ldh a, [hDPadHeld]
 	or a
 	jr z, .handle_ab_btns
@@ -1703,8 +1703,8 @@ HandleCardSelectionInput:
 	xor a
 .got_cursor_pos
 	push af
-	ld a, TRUE
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	call DrawHorizontalListCursor_Invisible
 	pop af
 	ld [wCardListCursorPos], a
@@ -1738,7 +1738,7 @@ ConfirmSelectionAndReturnCarry:
 	ret
 
 HandleCardSelectionCursorBlink:
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jr z, .skip_sfx
 	call PlaySFX
@@ -1791,7 +1791,7 @@ DrawHorizontalListCursor_Visible:
 ; or $ff if operation was cancelled
 HandleDeckCardSelectionList:
 	xor a ; FALSE
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 
 	ldh a, [hDPadHeld]
 	or a
@@ -1804,8 +1804,8 @@ HandleDeckCardSelectionList:
 	bit D_UP_F, b
 	jr z, .check_d_down
 	push af
-	ld a, TRUE
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	pop af
 	dec a
 	bit 7, a
@@ -1821,15 +1821,15 @@ HandleDeckCardSelectionList:
 	jr .asm_9b8f
 .asm_9b5a
 	xor a
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	jr .asm_9b8f
 
 .check_d_down
 	bit D_DOWN_F, b
 	jr z, .asm_9b9d
 	push af
-	ld a, TRUE
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	pop af
 	inc a
 	cp c
@@ -1852,7 +1852,7 @@ HandleDeckCardSelectionList:
 	dec a
 	push af
 	xor a ; FALSE
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	pop af
 
 .asm_9b8f
@@ -1919,7 +1919,7 @@ HandleDeckCardSelectionList:
 	ret
 
 .check_sfx
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jr z, .handle_blink
 	call PlaySFX
@@ -2006,15 +2006,15 @@ OpenCardPageFromCardList:
 ; card that is being shown, given the
 ; order in the current card list
 	xor a ; FALSE
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	ld a, [wCardListNumCursorPositions]
 	ld c, a
 	ld a, [wCardListCursorPos]
 	bit D_UP_F, b
 	jr z, .check_d_down
 	push af
-	ld a, TRUE
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	pop af
 	dec a
 	bit 7, a
@@ -2031,8 +2031,8 @@ OpenCardPageFromCardList:
 	bit D_DOWN_F, b
 	jr z, .handle_regular_card_page_input
 	push af
-	ld a, TRUE
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	pop af
 	inc a
 	cp c
@@ -2061,7 +2061,7 @@ OpenCardPageFromCardList:
 	dec a
 .reopen_card_page
 	ld [wCardListCursorPos], a
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jp z, OpenCardPageFromCardList
 	call PlaySFX
@@ -3446,7 +3446,7 @@ AppendOwnedCardCountNumber:
 ; print header info (card count and player name)
 PrintPlayersCardsHeaderInfo:
 	call Set_OBJ_8x8
-	call Func_8d78
+	call PrepareMenuGraphics
 .skip_empty_screen
 	lb bc, 0, 4
 	ld a, SYM_BOX_TOP
@@ -3499,7 +3499,7 @@ PrintTotalNumberOfCardsInCollection:
 ; hl = total number of cards in collection
 	call .GetTotalCountDigits
 	ld hl, wTempCardCollection
-	ld de, wOnesAndTensPlace
+	ld de, wDecimalDigitsSymbols
 	ld b, $00
 	call .PlaceNumericalChar
 	call .PlaceNumericalChar
@@ -3546,9 +3546,9 @@ PrintTotalNumberOfCardsInCollection:
 
 ; gets the digits in decimal form
 ; of value stored in hl
-; stores the result in wOnesAndTensPlace
+; stores the result in wDecimalDigitsSymbols
 .GetTotalCountDigits
-	ld de, wOnesAndTensPlace
+	ld de, wDecimalDigitsSymbols
 	ld bc, -10000
 	call .GetDigit
 	ld bc, -1000

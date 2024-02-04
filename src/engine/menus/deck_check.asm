@@ -5,7 +5,7 @@
 ; returns a = $ff if B pressed
 HandleCheckMenuInput:
 	xor a
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
 	ld a, [wCheckMenuCursorYPosition]
@@ -41,8 +41,8 @@ HandleCheckMenuInput:
 	ld e, a
 
 .okay
-	ld a, TRUE
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	push de
 	call EraseCheckMenuCursor
 	pop de
@@ -75,7 +75,7 @@ HandleCheckMenuInput:
 	ret
 
 .no_input
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jr z, .check_blink
 	call PlaySFX

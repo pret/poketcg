@@ -1077,7 +1077,7 @@ DrawPlayArea_IconWithValue:
 	ld a, b
 	call CalculateOnesAndTensDigits
 
-	ld hl, wOnesAndTensPlace
+	ld hl, wDecimalDigitsSymbols
 	ld a, [hli]
 	ld b, a
 	ld a, [hl]
@@ -1182,7 +1182,7 @@ DrawPlayArea_HandText:
 ; decimal value
 	ld a, b
 	call CalculateOnesAndTensDigits
-	ld hl, wOnesAndTensPlace
+	ld hl, wDecimalDigitsSymbols
 	ld a, [hli]
 	ld b, a
 	ld a, [hl]
@@ -1214,7 +1214,7 @@ DrawPlayArea_HandText:
 ; returns a = $ff if B pressed
 HandleCheckMenuInput_YourOrOppPlayArea:
 	xor a
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
 	ld a, [wCheckMenuCursorYPosition]
@@ -1281,8 +1281,8 @@ HandleCheckMenuInput_YourOrOppPlayArea:
 	ld e, a
 
 .erase
-	ld a, TRUE
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 	push de
 	call EraseCheckMenuCursor_YourOrOppPlayArea
 	pop de
@@ -1318,7 +1318,7 @@ HandleCheckMenuInput_YourOrOppPlayArea:
 	ret
 
 .sfx
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jr z, .draw_cursor
 	call PlaySFX
@@ -1700,7 +1700,7 @@ LoadCursorTile:
 ; returns -1 in a if B button was pressed
 YourOrOppPlayAreaScreen_HandleInput:
 	xor a
-	ld [wPlaysSfx], a
+	ld [wMenuInputSFX], a
 
 ; get the transition data for the prize card with cursor
 	ld hl, wTransitionTablePtr
@@ -1825,8 +1825,8 @@ YourOrOppPlayAreaScreen_HandleInput:
 	jr .make_bitmask_loop
 
 .next
-	ld a, TRUE
-	ld [wPlaysSfx], a
+	ld a, SFX_01
+	ld [wMenuInputSFX], a
 
 ; reset cursor blink
 	xor a
@@ -1853,7 +1853,7 @@ YourOrOppPlayAreaScreen_HandleInput:
 	ret
 
 .return
-	ld a, [wPlaysSfx]
+	ld a, [wMenuInputSFX]
 	or a
 	jr z, .skip_sfx
 	call PlaySFX

@@ -99,12 +99,12 @@ SerialHandler::
 	push hl
 	push de
 	push bc
-	ld a, [wce63]        ;
-	or a                 ;
-	jr z, .asm_d35       ; if [wce63] nonzero:
-	call Func_3189       ; ?
-	jr .done             ; return
-.asm_d35
+	ld a, [wPrinterPacketSequence] ;
+	or a                           ;
+	jr z, .not_printer_sequence    ; if [wPrinterPacketSequence] nonzero:
+	call ExecutePrinterPacketSequence
+	jr .done                       ; return
+.not_printer_sequence
 	ld a, [wSerialOp]    ;
 	or a                 ;
 	jr z, .asm_d55       ; skip ahead if [wSerialOp] zero

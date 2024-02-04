@@ -35,8 +35,8 @@ PrintCardList:
 	farcall _PrintCardList
 	ret
 
-Func_758a:
-	farcall Func_19eb4
+RequestToPrintCard:
+	farcall _RequestToPrintCard
 	ret
 
 SetUpAndStartLinkDuel::

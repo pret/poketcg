@@ -159,7 +159,7 @@ PrinterMenu_PokemonCards:
 	ld b, $00
 	add hl, bc
 	ld a, [hl]
-	bank1call Func_758a
+	bank1call RequestToPrintCard
 	call PrintPlayersCardsHeaderInfo
 	jp .asm_ac37
 
@@ -200,7 +200,7 @@ Data_ad05:
 PrinterMenu_CardList:
 	call WriteCardListsTerminatorBytes
 	call Set_OBJ_8x8
-	call Func_8d78
+	call PrepareMenuGraphics
 	lb bc, 0, 4
 	ld a, SYM_BOX_TOP
 	call FillBGMapLineWithA

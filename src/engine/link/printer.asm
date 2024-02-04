@@ -2,8 +2,8 @@
 ; if there's an error in connection,
 ; show Printer Not Connected scene with error message
 _PreparePrinterConnection:
-	ld bc, $0
-	lb de, PRINTERPKT_DATA, $0
+	ld bc, 0
+	lb de, PRINTERPKT_DATA, FALSE
 	call SendPrinterPacket
 	ret nc ; return if no error
 
@@ -80,7 +80,7 @@ ShowPrinterConnectionErrorScene:
 	ret
 
 ; main card printer function
-Func_19eb4:
+_RequestToPrintCard:
 	ld e, a
 	ld d, $0
 	call LoadCardDataToBuffer1_FromCardID
@@ -97,9 +97,9 @@ Func_19eb4:
 	call DrawWideTextBox_PrintText
 	call EnableLCD
 	call PrepareForPrinterCommunications
-	call DrawTopCardInfoInSRAMGfxBuffer0
+	call .DrawTopCardInfoInSRAMGfxBuffer0
 	call Func_19f87
-	call DrawCardPicInSRAMGfxBuffer2
+	call .DrawCardPicInSRAMGfxBuffer2
 	call Func_19f99
 	jr c, .error
 	call DrawBottomCardInfoInSRAMGfxBuffer0
@@ -114,14 +114,14 @@ Func_19eb4:
 	call ResetPrinterCommunicationSettings
 	jp HandlePrinterError
 
-DrawCardPicInSRAMGfxBuffer2:
+; draw card's picture in sGfxBuffer2
+.DrawCardPicInSRAMGfxBuffer2:
 	ld hl, wLoadedCard1Gfx
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	ld de, sGfxBuffer2
 	call Func_37a5
-	; draw card's picture in sGfxBuffer2
 	ld a, $40
 	lb hl, 12,  1
 	lb de,  2, 68
@@ -133,7 +133,7 @@ DrawCardPicInSRAMGfxBuffer2:
 ; the card's information in sGfxBuffer0
 ; this includes card's type, lv, HP and attacks if Pokemon card
 ; or otherwise just the card's name and type symbol
-DrawTopCardInfoInSRAMGfxBuffer0:
+.DrawTopCardInfoInSRAMGfxBuffer0:
 	call Func_1a025
 	call Func_212f
 
@@ -187,12 +187,12 @@ DrawTopCardInfoInSRAMGfxBuffer0:
 
 Func_19f87:
 	call TryInitPrinterCommunications
-	ret c
+	ret c ; aborted
 	ld hl, sGfxBuffer0
-	call Func_1a0cc
+	call SendTilesToPrinter
 	ret c
-	call Func_1a0cc
-	call Func_1a111
+	call SendTilesToPrinter
+	call SendPrinterInstructionPacket_1Sheet
 	ret
 
 Func_19f99:
@@ -201,11 +201,11 @@ Func_19f99:
 	ld hl, sGfxBuffer0 + $8 tiles
 	ld c, $06
 .asm_19fa2
-	call Func_1a0cc
+	call SendTilesToPrinter
 	ret c
 	dec c
 	jr nz, .asm_19fa2
-	call Func_1a111
+	call SendPrinterInstructionPacket_1Sheet
 	ret
 
 ; writes the tiles necessary to draw
@@ -267,11 +267,11 @@ Func_1a011:
 	ld hl, sGfxBuffer0
 	ld c, $05
 .asm_1a01a
-	call Func_1a0cc
+	call SendTilesToPrinter
 	ret c
 	dec c
 	jr nz, .asm_1a01a
-	call Func_1a108
+	call SendPrinterInstructionPacket_1Sheet_3LineFeeds
 	ret
 
 ; calls setup text and sets wTilePatternSelector
@@ -291,7 +291,7 @@ PrepareForPrinterCommunications:
 	call SwitchToCGBNormalSpeed
 	call ResetSerial
 	ld a, $10
-	ld [wce9b], a
+	ld [wPrinterNumberLineFeeds], a
 	call EnableSRAM
 	ld a, [sPrinterContrastLevel]
 	ld [wPrinterContrastLevel], a
@@ -331,8 +331,8 @@ ResetPrinterCommunicationSettings:
 
 ; send some bytes through serial
 Func_1a080: ; unreferenced
-	ld bc, $0
-	lb de, PRINTERPKT_NUL, $0
+	ld bc, 0
+	lb de, PRINTERPKT_NUL, FALSE
 	jp SendPrinterPacket
 
 ; tries initiating the communications for
@@ -347,16 +347,16 @@ TryInitPrinterCommunications:
 	ldh a, [hKeysHeld]
 	and B_BUTTON
 	jr nz, .b_button
-	ld bc, $0
-	lb de, PRINTERPKT_NUL, $0
+	ld bc, 0
+	lb de, PRINTERPKT_NUL, FALSE
 	call SendPrinterPacket
 	jr c, .delay
 	and (1 << PRINTER_STATUS_BUSY) | (1 << PRINTER_STATUS_PRINTING)
 	jr nz, .wait_input
 
 .init
-	ld bc, $0
-	lb de, PRINTERPKT_INIT, $0
+	ld bc, 0
+	lb de, PRINTERPKT_INIT, FALSE
 	call SendPrinterPacket
 	jr nc, .no_carry
 	ld hl, wPrinterInitAttempts
@@ -387,7 +387,8 @@ TryInitPrinterCommunications:
 ; loads tiles given by map in hl to sGfxBuffer5
 ; copies first 20 tiles, then offsets by 2 tiles
 ; and copies another 20
-Func_1a0cc:
+; compresses this data and sends it to printer
+SendTilesToPrinter:
 	push bc
 	ld de, sGfxBuffer5
 	call .Copy20Tiles
@@ -438,33 +439,40 @@ Func_1a0cc:
 	pop hl
 	ret
 
-Func_1a108:
+SendPrinterInstructionPacket_1Sheet_3LineFeeds:
 	call GetPrinterContrastSerialData
 	push hl
-	lb hl, $3, $1
+	lb hl, 3, 1
 	jr SendPrinterInstructionPacket
 
-Func_1a111:
+; uses wPrinterNumberLineFeeds to get number
+; of line feeds to insert before print
+SendPrinterInstructionPacket_1Sheet:
 	call GetPrinterContrastSerialData
 	push hl
-	ld hl, wce9b
+	ld hl, wPrinterNumberLineFeeds
 	ld a, [hl]
 	ld [hl], $00
 	ld h, a
-	ld l, $01
+	ld l, 1
 ;	fallthrough
 
+; h = number of line feeds where:
+;     high nybble is number of line feeds before printing
+;     low nybble is number of line feeds after printing
+; l = number of sheets
+; expects printer contrast information to be on stack
 SendPrinterInstructionPacket:
 	push hl
-	ld bc, $0
-	lb de, PRINTERPKT_DATA, $0
+	ld bc, 0
+	lb de, PRINTERPKT_DATA, FALSE
 	call SendPrinterPacket
-	jr c, .asm_1a135
+	jr c, .aborted
 	ld hl, sp+$00 ; contrast level bytes
-	ld bc, $4 ; instruction packets are 4 bytes in size
-	lb de, PRINTERPKT_PRINT_INSTRUCTION, $0
+	ld bc, 4 ; instruction packets are 4 bytes in size
+	lb de, PRINTERPKT_PRINT_INSTRUCTION, FALSE
 	call SendPrinterPacket
-.asm_1a135
+.aborted
 	pop hl
 	pop hl
 	ret
@@ -479,7 +487,7 @@ GetPrinterContrastSerialData:
 	ld hl, .contrast_level_data
 	add hl, de
 	ld h, [hl]
-	ld l, $e4
+	ld l, %11100100 ; palette format
 	ret
 
 .contrast_level_data
@@ -586,9 +594,8 @@ SendCardListToPrinter:
 .skip_load_gfx
 	call TryInitPrinterCommunications
 	ret c
-	call Func_1a108
+	call SendPrinterInstructionPacket_1Sheet_3LineFeeds
 	ret
-; 0z1a1ff
 
 ; increases printer horizontal offset by 2
 AddToPrinterGfxBuffer:
@@ -616,11 +623,11 @@ LoadGfxBufferForPrinter:
 	ld c, a
 	ld hl, sGfxBuffer0
 .loop_gfx_buffer
-	call Func_1a0cc
+	call SendTilesToPrinter
 	jr c, .set_carry
 	dec c
 	jr nz, .loop_gfx_buffer
-	call Func_1a111
+	call SendPrinterInstructionPacket_1Sheet
 	jr c, .set_carry
 
 	call ClearPrinterGfxBuffer
@@ -1030,7 +1037,7 @@ CompressDataForPrinterSerialTransfer:
 	ld c, l
 	ld b, h
 	ld hl, sGfxBuffer5 + $28 tiles
-	lb de, PRINTERPKT_DATA, $1
+	lb de, PRINTERPKT_DATA, TRUE
 	ret
 
 ; checks whether the next byte sequence in hl, up to c bytes, can be compressed

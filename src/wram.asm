@@ -913,27 +913,31 @@ wCursorBlinkCounter:: ; cd0f
 wCurMenuItem:: ; cd10
 	ds $1
 
-wCursorXPosition:: ; cd11
+wMenuParams:: ; cd11
+
+wMenuCursorXOffset:: ; cd11
 	ds $1
 
-wCursorYPosition:: ; cd12
+wMenuCursorYOffset:: ; cd12
 	ds $1
 
-wYDisplacementBetweenMenuItems:: ; cd13
+wMenuYSeparation:: ; cd13
 	ds $1
 
 wNumMenuItems:: ; cd14
 	ds $1
 
-wCursorTile:: ; cd15
+wMenuVisibleCursorTile:: ; cd15
 	ds $1
 
-wTileBehindCursor:: ; cd16
+wMenuInvisibleCursorTile:: ; cd16
 	ds $1
 
-; if non-$0000, the function loaded here is called once per frame by HandleMenuInput
-wMenuFunctionPointer:: ; cd17
+; if non-NULL, the function loaded here is called once per frame by HandleMenuInput
+wMenuUpdateFunc:: ; cd17
 	ds $2
+
+wMenuParamsEnd::
 
 wListScrollOffset:: ; cd19
 	ds $1
@@ -948,7 +952,7 @@ wListItemNameMaxLength:: ; cd1c
 	ds $1
 
 ; if not NULL, the function loaded here is called once per frame by CardListMenuFunction,
-; which is the function loaded to wMenuFunctionPointer for card lists
+; which is the function loaded to wMenuUpdateFunc for card lists
 wListFunctionPointer:: ; cd1d
 	ds $2
 
@@ -1468,37 +1472,28 @@ wPrizeCardCursorTemporaryPosition:: ; ce61
 wGlossaryPageNo:: ; ce62
 	ds $1
 
-wce63:: ; ce63
+; which routine in ExecutePrinterPacketSequence to run
+wPrinterPacketSequence:: ; ce63
 	ds $1
 
-wce64:: ; ce64
-	ds $1
+wPrinterPacket:: ; ce64
 
-wce65:: ; ce65
-	ds $1
+wPrinterPacketPreamble::
+	ds $2
 
-wce66:: ; ce66
-	ds $1
+wPrinterPacketInstructions:: ; ce66
+	ds $2
 
-wce67:: ; ce67
-	ds $1
-
-wce68:: ; ce68
-	ds $1
-
-wce69:: ; ce69
-	ds $1
+wPrinterPacketDataSize:: ; ce68
+	ds $2
 
 ; pointer to memory of data to send
 ; in the data packet to the printer
 wPrinterPacketDataPtr:: ; ce6a
 	ds $2
 
-wce6c:: ; ce6c
-	ds $1
-
-wce6d:: ; ce6d
-	ds $1
+wPrinterPacketChecksum:: ; ce6c
+	ds $2
 
 wSerialTransferData:: ; ce6e
 	ds $1
@@ -1597,7 +1592,7 @@ wPrizeCardSelectionFrameCounter:: ; ce9a
 	ds $1
 
 ; related to printer serial stuff
-wce9b:: ; ce9b
+wPrinterNumberLineFeeds:: ; ce9b
 	ds $1
 
 wPrintOnlyStarRarity:: ; ce9c
@@ -1696,15 +1691,11 @@ wDeck2Valid:: ds $1 ; ceb3
 wDeck3Valid:: ds $1 ; ceb4
 wDeck4Valid:: ds $1 ; ceb5
 
-; used to store the tens digit and
-; ones digit of a value for printing
-; the ones digit is added $20
-; ceb6 = ones digit (+ $20)
-; ceb7 = tens digit
-wOnesAndTensPlace:: ; ceb6
-	ds $2
-
-	ds $3
+; holds symbols for representing a number in decimal
+; goes up in magnitude (first byte is ones place,
+; second byte is tens place, etc) up to 5 digits
+wDecimalDigitsSymbols:: ; ceb6
+	ds $5
 
 ; each of these stores the card count
 ; of each filter in the deck building screen
@@ -1875,8 +1866,9 @@ wNumOwnedCardsInSet:: ; cfe1
 wOwnedPhantomCardFlags:: ; cfe2
 	ds $1
 
-; a flag indicating whether sfx should be played.
-wPlaysSfx:: ; cfe3
+; value containing a SFX to play
+; due to a menu input
+wMenuInputSFX:: ; cfe3
 	ds $1
 
 wSelectedPrinterMenuItem:: ; cfe4

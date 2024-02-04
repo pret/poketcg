@@ -1,57 +1,67 @@
-; serial transfer-related
+; send printer packet:
+; - d = PRINTERPKT_* constant
+; - e = in case of PRINTERPKT_DATA, whether it's compressed
+; - bc = number of bytes in data
 SendPrinterPacket::
 	push hl
-	ld hl, wce64
+	ld hl, wPrinterPacket
 	; Preamble
 	ld a, $88
-	ld [hli], a          ; [wce64] ← $88
+	ld [hli], a          ; [wPrinterPacketPreamble + 0] ← $88
 	ld a, $33
-	ld [hli], a          ; [wce65] ← $33
+	ld [hli], a          ; [wPrinterPacketPreamble + 1] ← $33
 
 	; Header
-	ld [hl], d           ; [wce66] ← d
+	ld [hl], d           ; [wPrinterPacketInstructions + 0] ← d
 	inc hl
-	ld [hl], e           ; [wce67] ← e
+	ld [hl], e           ; [wPrinterPacketInstructions + 1] ← e
 	inc hl
-	ld [hl], c           ; [wce68] ← c
+	ld [hl], c           ; [wPrinterPacketDataSize + 0] ← c
 	inc hl
-	ld [hl], b           ; [wce69] ← b
+	ld [hl], b           ; [wPrinterPacketDataSize + 1] ← b
 	inc hl
 
+	; Data pointer
 	pop de
-	ld [hl], e           ; [wPrinterPacketDataPtr] ← l
+	ld [hl], e           ; [wPrinterPacketDataPtr + 0] ← l
 	inc hl
-	ld [hl], d           ; [wce6b] ← h
+	ld [hl], d           ; [wPrinterPacketDataPtr + 1] ← h
 	inc hl
-	ld de, $ff45
-	ld [hl], e           ; [wce6c] ← $45
+	ld de, -$bb
+	ld [hl], e           ; [wPrinterPacketChecksum + 0] ← $45
 	inc hl
-	ld [hl], d           ; [wce6d] ← $ff
+	ld [hl], d           ; [wPrinterPacketChecksum + 1] ← $ff
+
 	ld hl, wSerialDataPtr
-	ld [hl], LOW(wce64)  ; [wSerialDataPtr] ← $64
+	ld [hl], LOW(wPrinterPacket)  ; [wSerialDataPtr] ← $64
 	inc hl
-	ld [hl], HIGH(wce64) ; [wSerialDataPtr] ← $ce
+	ld [hl], HIGH(wPrinterPacket) ; [wSerialDataPtr] ← $ce
+
 	call Func_0e8e
+
 	ld a, $1
-	ld [wce63], a        ; [wce63] ← 1
-	call Func_31fc
-.asm_315d
+	ld [wPrinterPacketSequence], a        ; [wPrinterPacketSequence] ← 1
+	call SendNextPrinterPacketByte
+.wait_printer_packet_transmission
 	call DoFrame
-	ld a, [wce63]
+	ld a, [wPrinterPacketSequence]
 	or a
-	jr nz, .asm_315d
+	jr nz, .wait_printer_packet_transmission
 	call ResetSerial
 
 	ld bc, 1500
-.asm_316c
+.post_transmission_delay
 	dec bc
 	ld a, b
 	or c
-	jr nz, .asm_316c
+	jr nz, .post_transmission_delay
 
+	; we expect printer to send $81
+	; as the device number, any other value
+	; means that a second device in connected
 	ld a, [wSerialTransferData]
 	cp $81
-	jr nz, .asm_3182
+	jr nz, .unexpected_device_number
 	ld a, [wPrinterStatus]
 	ld l, a
 	and $f1
@@ -60,46 +70,53 @@ SendPrinterPacket::
 	scf
 	ret
 
-.asm_3182
+.unexpected_device_number
 	ld a, $ff
 	ld [wPrinterStatus], a
 	scf
 	ret
 
-Func_3189::
-	ld hl, PointerTable_3190
+; a = which sequence to execute
+ExecutePrinterPacketSequence::
+	ld hl, .SequencePointers
 	dec a
 	jp JumpToFunctionInTable
 
-PointerTable_3190::
-	dw Func_31a8
-	dw Func_31a8
-	dw Func_31a8
-	dw Func_31a8
-	dw Func_31a8
-	dw Func_31b0
-	dw Func_31ca
-	dw Func_31dd
-	dw Func_31e5
-	dw Func_31ef
-	dw Func_31ea
-	dw Func_31f2
+.SequencePointers:
+	; each entry corresponds to value in wPrinterPacketSequence
+	dw .SendPreambleOrHeaderByte   ; 1: send wPrinterPacketPreamble + 1
+	dw .SendPreambleOrHeaderByte   ; 2: send wPrinterPacketInstructions + 0
+	dw .SendPreambleOrHeaderByte   ; 3: send wPrinterPacketInstructions + 1
+	dw .SendPreambleOrHeaderByte   ; 4: send wPrinterPacketDataSize + 0
+	dw .SendPreambleOrHeaderByte   ; 5: send wPrinterPacketDataSize + 1
+	dw .StartDataSection           ; 6
+	dw .SendRestOfDataSection      ; 7
+	dw .SendChecksumByte1          ; 8
+	dw .SendChecksumByte2          ; 9
+	dw .SendDummyByte              ; 10
+	dw .GetDeviceNumber            ; 11
+	dw .GetStatusAndFinishSequence ; 12
 
-Func_31a8::
-	call Func_31fc
-Func_31ab::
-	ld hl, wce63
+; send next byte and increment sequence
+.SendPreambleOrHeaderByte:
+	call SendNextPrinterPacketByte
+.increment_sequence
+	ld hl, wPrinterPacketSequence
 	inc [hl]
 	ret
 
-Func_31b0::
-	call Func_31ab
-	ld hl, wce68
+; check if there is data to send
+; if so, then update serial data pointer
+; otherwise, skip sending data section
+.StartDataSection:
+	call .increment_sequence
+	ld hl, wPrinterPacketDataSize
 	ld a, [hli]
 	or [hl]
 	jr nz, .set_data_ptr
-	call Func_31ab
-	jr Func_31dd
+	; no data to send
+	call .increment_sequence
+	jr .SendChecksumByte1
 
 .set_data_ptr
 	ld hl, wPrinterPacketDataPtr
@@ -111,47 +128,60 @@ Func_31b0::
 	ld [de], a
 ;	fallthrough
 
-Func_31ca::
-	call Func_31fc
-	ld hl, wce68
+; sends next byte in data section
+; only increment sequence when
+; there are no more bytes to send
+.SendRestOfDataSection:
+	call SendNextPrinterPacketByte
+	ld hl, wPrinterPacketDataSize
 	ld a, [hl]
 	dec [hl]
 	or a
-	jr nz, .asm_31d8
+	jr nz, .finish_data_section
 	inc hl
 	dec [hl]
 	dec hl
-.asm_31d8
+.finish_data_section
 	ld a, [hli]
 	or [hl]
-	jr z, Func_31ab
+	jr z, .increment_sequence
 	ret
 
-Func_31dd::
-	ld a, [wce6c]
-Func_31e0::
-	call Func_3212
-	jr Func_31ab
+; sends first byte of checksum
+.SendChecksumByte1:
+	ld a, [wPrinterPacketChecksum + 0]
+.send_byte_and_increment_sequence
+	call SendByteThroughSerialData
+	jr .increment_sequence
 
-Func_31e5::
-	ld a, [wce6d]
-	jr Func_31e0
+; sends second byte of checksum
+.SendChecksumByte2:
+	ld a, [wPrinterPacketChecksum + 1]
+	jr .send_byte_and_increment_sequence
 
-Func_31ea::
+; gets number of device, and sends a dummy byte
+.GetDeviceNumber:
 	ldh a, [rSB]
 	ld [wSerialTransferData], a
-Func_31ef::
-	xor a
-	jr Func_31e0
+;	fallthrough
 
-Func_31f2::
+; sends a dummy byte
+.SendDummyByte:
+	xor a
+	jr .send_byte_and_increment_sequence
+
+; gets the printer status, then finishes sequence
+.GetStatusAndFinishSequence:
 	ldh a, [rSB]
 	ld [wPrinterStatus], a
 	xor a
-	ld [wce63], a
+	ld [wPrinterPacketSequence], a
 	ret
 
-Func_31fc::
+; sends byte pointed by wSerialDataPtr to printer
+; then increments this pointer to point to next byte
+; for next iteration, and adds byte value to checksum
+SendNextPrinterPacketByte::
 	ld hl, wSerialDataPtr
 	ld e, [hl]
 	inc hl
@@ -163,7 +193,7 @@ Func_31fc::
 	ld [hl], e
 	ld e, a
 
-	ld hl, wce6c
+	ld hl, wPrinterPacketChecksum
 	add [hl]
 	ld [hli], a
 	ld a, $0
@@ -172,7 +202,8 @@ Func_31fc::
 	ld a, e
 ;	fallthrough
 
-Func_3212::
+; a = byte to send through serial data transfer
+SendByteThroughSerialData:
 	ldh [rSB], a
 	ld a, SC_INTERNAL
 	ldh [rSC], a

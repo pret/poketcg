@@ -475,7 +475,7 @@ PrintReceivedTheseCardsText:
 
 EmptyScreenAndDrawTextBox:
 	call Set_OBJ_8x8
-	call Func_8d78
+	call PrepareMenuGraphics
 	lb de, 0, 0
 	lb bc, 20, 13
 	call DrawRegularTextBox
@@ -650,15 +650,16 @@ InitDeckMachineDrawingParams:
 ; and returns carry
 ; otherwise, returns no carry and selection made in a
 HandleDeckMachineSelection:
+.start
 	call DoFrame
 	call HandleDeckCardSelectionList
 	jr c, .selection_made
 
 	call .HandleListJumps
-	jr c, HandleDeckMachineSelection ; jump back to start
+	jr c, .start
 	ldh a, [hDPadHeld]
 	and START
-	jr z, HandleDeckMachineSelection ; jump back to start
+	jr z, .start
 
 ; start btn
 	ld a, [wCardListVisibleOffset]
@@ -691,7 +692,7 @@ HandleDeckMachineSelection:
 	call DisableSRAM
 	pop hl
 	or a
-	jr z, HandleDeckMachineSelection ; jump back to start
+	jr z, .start
 
 ; show deck confirmation screen with deck cards
 ; and return carry set
@@ -786,7 +787,7 @@ CheckIfSelectedDeckMachineEntryIsEmpty:
 	or a
 	ret nz ; is valid
 	scf
-	ret; is empty
+	ret ; is empty
 
 ClearScreenAndDrawDeckMachineScreen:
 	call Set_OBJ_8x8
@@ -953,7 +954,7 @@ PrintDeckMachineEntry:
 	pop bc
 	ld hl, wDefaultText
 	jr c, .cannot_build
-	lb de, 3, "FW3_○" ; can build
+	lb de, TX_FULLWIDTH3, "FW3_○" ; can build
 	jr .asm_b4c2
 .cannot_build
 	push bc
@@ -961,11 +962,11 @@ PrintDeckMachineEntry:
 	call CheckIfCanBuildSavedDeck
 	jr c, .cannot_build_at_all
 	pop bc
-	lb de, 3, "FW3_※" ; can build by dismantling
+	lb de, TX_FULLWIDTH3, "FW3_※" ; can build by dismantling
 	jr .asm_b4c2
 
 .cannot_build_at_all
-	lb de, 0, "FW0_×" ; cannot build even by dismantling
+	lb de, TX_FULLWIDTH0, "FW0_×" ; cannot build even by dismantling
 	call Func_22ca
 	pop bc
 	pop de
@@ -979,7 +980,7 @@ PrintDeckMachineEntry:
 	pop bc
 	call .GetNumCardsMissingToBuildDeck
 	call CalculateOnesAndTensDigits
-	ld hl, wOnesAndTensPlace
+	ld hl, wDecimalDigitsSymbols
 	ld a, [hli]
 	ld b, a
 	ld a, [hl]
@@ -1823,7 +1824,7 @@ PrinterMenu_DeckConfiguration:
 	ld [wNumDeckMachineEntries], a
 
 	xor a
-.asm_b99e
+.start_selection
 	ld hl, DeckMachineSelectionParams
 	call InitCardSelectionParams
 	call DrawListScrollArrows
@@ -1832,9 +1833,9 @@ PrinterMenu_DeckConfiguration:
 	call DrawWideTextBox_PrintText
 	ldtx de, PleaseChooseDeckConfigurationToPrintText
 	call InitDeckMachineDrawingParams
-.asm_b9b6
+.loop_input
 	call HandleDeckMachineSelection
-	jr c, .asm_b99e
+	jr c, .start_selection
 	cp $ff
 	ret z
 
@@ -1843,13 +1844,13 @@ PrinterMenu_DeckConfiguration:
 	add b
 	ld [wSelectedDeckMachineEntry], a
 	call CheckIfSelectedDeckMachineEntryIsEmpty
-	jr c, .asm_b9b6
+	jr c, .loop_input
 	call DrawWideTextBox
 	ldtx hl, PrintThisDeckText
 	call YesOrNoMenuWithText
 	jr c, .no
 	call GetSelectedSavedDeckPtr
-	ld hl, $18
+	ld hl, DECK_NAME_SIZE
 	add hl, de
 	ld de, wCurDeckCards
 	ld b, DECK_SIZE
@@ -1866,7 +1867,7 @@ PrinterMenu_DeckConfiguration:
 .no
 	ld a, [wTempDeckMachineCursorPos]
 	ld [wCardListCursorPos], a
-	jp .asm_b99e
+	jp .start_selection
 
 HandleAutoDeckMenu:
 	ld a, [wCurAutoDeckMachine]

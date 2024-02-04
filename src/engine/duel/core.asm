@@ -8388,7 +8388,7 @@ Func_74dc:
 	ret c ; card not found
 	push de
 	ld a, e
-	call Func_758a
+	call RequestToPrintCard
 	pop de
 	inc de
 	jr .card_loop
