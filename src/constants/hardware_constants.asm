@@ -173,6 +173,13 @@ DEF rHDMA4      EQU $ff54 ; CGB Mode Only - New DMA Destination, Low
 DEF rHDMA5      EQU $ff55 ; CGB Mode Only - New DMA Length/Mode/Start
 
 DEF rRP         EQU $ff56 ; CGB Mode Only - Infrared Communications Port
+DEF RPF_ENREAD   EQU %11000000
+DEF RPF_DATAIN   EQU %00000010 ; 0=Receiving IR Signal, 1=Normal
+DEF RPF_WRITE_HI EQU %00000001
+DEF RPF_WRITE_LO EQU %00000000
+
+DEF RPB_LED_ON   EQU 0
+DEF RPB_DATAIN   EQU 1
 
 DEF rBGPI       EQU $ff68 ; CGB Mode Only - Background Palette Index
 DEF rBGPD       EQU $ff69 ; CGB Mode Only - Background Palette Data
