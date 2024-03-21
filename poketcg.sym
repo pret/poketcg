@@ -6266,11 +6266,11 @@
 06:5665 AttackAnimation_GustOfWind
 06:5668 AttackAnimation_HealBothSides
 06:5673 AttackAnimation_Stub2
-06:5674 Func_19674
-06:567c Func_19674.loop_delay_1
-06:5685 Func_19674.loop_delay_2
-06:5689 Func_19674.delay_once
-06:568d Func_19674.loop_delay_3
+06:5674 TransmitIRBit
+06:567c TransmitIRBit.loop_delay_1
+06:5685 TransmitIRBit.loop_delay_2
+06:5689 TransmitIRBit.delay_once
+06:568d TransmitIRBit.loop_delay_3
 06:5692 TransmitByteThroughIR
 06:56a5 TransmitByteThroughIR.loop
 06:56ba ReceiveByteThroughIR_ZeroIfUnsuccessful
@@ -6283,7 +6283,7 @@
 06:56f1 ReceiveByteThroughIR.asm_196f1
 06:5700 ReturnZFlagUnsetAndCarryFlagSet
 06:5705 Func_19705
-06:5708 Func_19705.asm_19708
+06:5708 Func_19705.loop
 06:571e Func_1971e
 06:5721 Func_1971e.asm_19721
 06:5735 ReturnZFlagUnsetAndCarryFlagSet2
