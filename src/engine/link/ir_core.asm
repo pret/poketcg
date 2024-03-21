@@ -1,17 +1,17 @@
 ; if carry flag is set, only delays
 ; if carry not set:
-; - set rRP to $c1, wait;
-; - set rRP to $c0, wait;
+; - set rRP edge up, wait;
+; - set rRP edge down, wait;
 ; - return
-Func_19674:
+TransmitIRBit:
 	jr c, .delay_once
-	ld [hl], $c1
+	ld [hl], RPF_WRITE_HI | RPF_ENREAD
 	ld a, 5
 	jr .loop_delay_1 ; jump to possibly to add more cycles?
 .loop_delay_1
 	dec a
 	jr nz, .loop_delay_1
-	ld [hl], $c0
+	ld [hl], RPF_WRITE_LO | RPF_ENREAD
 	ld a, 14
 	jr .loop_delay_2 ; jump to possibly to add more cycles?
 .loop_delay_2
@@ -36,15 +36,15 @@ TransmitByteThroughIR:
 	push bc
 	ld b, a
 	scf  ; carry set
-	call Func_19674
+	call TransmitIRBit
 	or a ; carry not set
-	call Func_19674
+	call TransmitIRBit
 	ld c, 8
 	ld c, 8 ; number of input bits
 .loop
 	ld a, $00
 	rr b
-	call Func_19674
+	call TransmitIRBit
 	dec c
 	jr nz, .loop
 	pop bc
@@ -65,7 +65,7 @@ ReceiveByteThroughIR_ZeroIfUnsuccessful:
 	ret
 
 ; returns carry if there's some time out
-; and output in register a of $ff
+; and outputs $ff in register a
 ; otherwise returns in a some sequence of bits
 ; related to how rRP sets/unsets bit 1
 ReceiveByteThroughIR:
@@ -78,7 +78,7 @@ ReceiveByteThroughIR:
 	ld b, 0
 	ld hl, rRP
 .wait_ir
-	bit 1, [hl]
+	bit RPB_DATAIN, [hl]
 	jr z, .ok
 	dec b
 	jr nz, .wait_ir
@@ -112,11 +112,11 @@ ReceiveByteThroughIR:
 ; if in any of the checks it is unset,
 ; then a is set to 0
 ; this is done a total of 9 times
-	bit 1, [hl]
+	bit RPB_DATAIN, [hl]
 	jr nz, .asm_196ec
 	xor a
 .asm_196ec
-	bit 1, [hl]
+	bit RPB_DATAIN, [hl]
 	jr nz, .asm_196f1
 	xor a
 .asm_196f1
@@ -143,7 +143,7 @@ ReturnZFlagUnsetAndCarryFlagSet:
 ; called when expecting to transmit data
 Func_19705:
 	ld hl, rRP
-.asm_19708
+.loop
 	ldh a, [rJOYP]
 	bit 1, a
 	jr z, ReturnZFlagUnsetAndCarryFlagSet
@@ -153,7 +153,7 @@ Func_19705:
 	pop hl
 	call ReceiveByteThroughIR_ZeroIfUnsuccessful
 	cp $33 ; acknowledge
-	jr nz, .asm_19708
+	jr nz, .loop
 	xor a
 	ret
 
@@ -244,7 +244,7 @@ StartIRCommunications:
 	call SwitchToCGBNormalSpeed
 	ld a, P14
 	ldh [rJOYP], a
-	ld a, $c0
+	ld a, RPF_ENREAD
 	ldh [rRP], a
 	ret
 
