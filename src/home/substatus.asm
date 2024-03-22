@@ -3,7 +3,7 @@
 HandleDoubleDamageSubstatus::
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetTurnDuelistVariable
-	bit SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE, [hl]
+	bit SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE_F, [hl]
 	call nz, .double_damage_at_de
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
@@ -626,7 +626,7 @@ CheckCantUseTrainerDueToHeadache::
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetTurnDuelistVariable
 	or a
-	bit SUBSTATUS3_HEADACHE, [hl]
+	bit SUBSTATUS3_HEADACHE_F, [hl]
 	ret z
 	ldtx hl, UnableToUseTrainerDueToHeadacheText
 	scf
@@ -677,14 +677,14 @@ UpdateSubstatusConditions_StartOfTurn::
 	ret nz
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetTurnDuelistVariable
-	set SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE, [hl]
+	set SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE_F, [hl]
 	ret
 
 ; clears the SUBSTATUS2, Headache, and updates the double damage condition of the player ending his turn
 UpdateSubstatusConditions_EndOfTurn::
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetTurnDuelistVariable
-	res SUBSTATUS3_HEADACHE, [hl]
+	res SUBSTATUS3_HEADACHE_F, [hl]
 	push hl
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
@@ -695,7 +695,7 @@ UpdateSubstatusConditions_EndOfTurn::
 	pop hl
 	cp SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE
 	ret z
-	res SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE, [hl]
+	res SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE_F, [hl]
 	ret
 
 ; return carry if turn holder has Blastoise and its Rain Dance Pkmn Power is active
@@ -715,14 +715,14 @@ CheckRainDanceScenario::
 	call GetCardIDFromDeckIndex
 	call GetCardType
 	cp TYPE_ENERGY_WATER
-	jr nz, .done
+	jr nz, .no_carry
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	call GetPlayAreaCardColor
 	cp TYPE_PKMN_WATER
-	jr nz, .done
+	jr nz, .no_carry
 	scf
 	ret
-.done
+.no_carry
 	or a
 	ret
 

@@ -484,7 +484,12 @@ wExcludeArenaPokemon:: ; cbd2
 wPlayAreaScreenLoaded:: ; cbd3
 	ds $1
 
-wcbd4:: ; cbd4
+; determines what to do when player presses the Select button
+; while viewing the Play Area:
+; - if $0 or $2: no action
+; - if $1: menu is accessible where player can examine Hand or other screens
+; $2 is reserved for Func_4597
+wPlayAreaSelectAction:: ; cbd4
 	ds $1
 
 ; low byte of the address of the next slot in the hTempRetreatCostCards array to be used
@@ -564,7 +569,9 @@ wTempSerialBuf:: ; cbed
 
 	ds $2
 
-wcbf7:: ; cbf7
+; return address for when the Link Opponent has
+; made a decision on his turn, so that the duel continues
+wLinkOpponentTurnReturnAddress:: ; cbf7
 	ds $2
 
 ; when non-0, AIMakeDecision doesn't wait 60 frames and print DuelistIsThinkingText
@@ -577,7 +584,7 @@ wEnergyDiscardMenuDenominator:: ; cbfa
 wEnergyDiscardMenuNumerator:: ; cbfb
 	ds $1
 
-; used by Func_5805 to store the remaining Prizes, so that if more than that
+; used by TurnDuelistTakePrizes to store the remaining Prizes, so that if more than that
 ; amount would be taken, only the remaining amount is taken
 wTempNumRemainingPrizeCards:: ; cbfc
 	ds $1
@@ -591,7 +598,7 @@ wPlacingInitialBenchPokemon:: ; cbfd
 wPracticeDuelAction:: ; cbfe
 	ds $1
 
-wcbff:: ; cbff
+wDuelMainSceneSelectHotkeyAction:: ; cbff
 	ds $1
 
 wPracticeDuelTurn:: ; cc00
@@ -768,7 +775,7 @@ wSelectedAttack:: ; ccc6
 wNoDamageOrEffect:: ; ccc7
 	ds $1
 
-; used by CountKnockedOutPokemon and Func_5805 to store the amount
+; used by CountKnockedOutPokemon and TurnDuelistTakePrizes to store the amount
 ; of prizes to take (equal to the number of Pokemon knocked out)
 wNumberPrizeCardsToTake:: ; ccc8
 	ds $1
@@ -800,7 +807,7 @@ wIsDamageToSelf:: ; cce6
 wcce7:: ; cce7
 	ds $1
 
-wcce8:: ; cce8
+wDuelFinishParam:: ; cce8
 	ds $1
 
 ; text ID of the name of the deck loaded by CopyDeckData
