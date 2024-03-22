@@ -976,7 +976,7 @@ ClearAllStatusConditions::
 	ld l, DUELVARS_ARENA_CARD_CHANGED_RESISTANCE
 	ld [hl], a
 	ld l, DUELVARS_ARENA_CARD_SUBSTATUS3
-	res SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE, [hl]
+	res SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE_F, [hl]
 	ld l, DUELVARS_ARENA_CARD_DISABLED_ATTACK_INDEX
 	ld [hli], a
 	ld [hli], a
@@ -1337,14 +1337,14 @@ GetNonTurnDuelistVariable::
 ; when playing a Pokemon card, initializes some variables according to the
 ; card played, and checks if the played card has Pokemon Power to show it to
 ; the player, and possibly to use it if it triggers when the card is played.
-Func_161e::
+ProcessPlayedPokemonCard::
 	ldh a, [hTempCardIndex_ff98]
 	call ClearChangedTypesIfMuk
 	ldh a, [hTempCardIndex_ff98]
 	ld d, a
 	ld e, $00
 	call CopyAttackDataAndDamage_FromDeckIndex
-	call Func_16f6
+	call UpdateArenaCardIDsAndClearTwoTurnDuelVars
 	ldh a, [hTempCardIndex_ff98]
 	ldh [hTempCardIndex_ff9f], a
 	call GetCardIDFromDeckIndex
@@ -1471,7 +1471,7 @@ CopyAttackDataAndDamage::
 ; wTempNonTurnDuelistCardID to the non-turn holder's arena card, and zeroes other temp
 ; variables that only last between each two-player turn.
 ; this is called when a Pokemon card is played or when an attack is used
-Func_16f6::
+UpdateArenaCardIDsAndClearTwoTurnDuelVars::
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ldh [hTempCardIndex_ff9f], a
@@ -1507,7 +1507,7 @@ UseAttackOrPokemonPower::
 	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	jp z, UsePokemonPower
-	call Func_16f6
+	call UpdateArenaCardIDsAndClearTwoTurnDuelVars
 	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
 	jp c, DrawWideTextBox_WaitForInput_ReturnCarry

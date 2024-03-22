@@ -1001,7 +1001,7 @@ DuelistSelectForcedSwitch:
 	ld d, a
 	ld a, [wPlayerAttackingCardID]
 	call CopyAttackDataAndDamage_FromCardID
-	call Func_16f6
+	call UpdateArenaCardIDsAndClearTwoTurnDuelVars
 	ret
 
 .player
@@ -1010,7 +1010,7 @@ DuelistSelectForcedSwitch:
 	call SwapTurn
 	bank1call HasAlivePokemonInBench
 	ld a, $01
-	ld [wcbd4], a
+	ld [wPlayAreaSelectAction], a
 .asm_2c4c0
 	bank1call OpenPlayAreaScreenForSelection
 	jr c, .asm_2c4c0
@@ -1774,7 +1774,7 @@ Teleport_PlayerSelectEffect:
 	call DrawWideTextBox_WaitForInput
 	bank1call HasAlivePokemonInBench
 	ld a, $01
-	ld [wcbd4], a
+	ld [wPlayAreaSelectAction], a
 .loop
 	bank1call OpenPlayAreaScreenForSelection
 	jr c, .loop
@@ -2967,7 +2967,7 @@ MagikarpFlail_HPCheck:
 HeadacheEffect:
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetNonTurnDuelistVariable
-	set SUBSTATUS3_HEADACHE, [hl]
+	set SUBSTATUS3_HEADACHE_F, [hl]
 	ret
 
 PsyduckFurySwipes_AIEffect:
@@ -9785,7 +9785,7 @@ PokemonBreeder_EvolveEffect:
 	call PlaySFX
 	ldtx hl, PokemonEvolvedIntoPokemonText
 	call DrawWideTextBox_WaitForInput
-	bank1call Func_161e
+	bank1call ProcessPlayedPokemonCard
 	pop af
 	ldh [hTempCardIndex_ff9f], a
 	ret
