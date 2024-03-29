@@ -491,16 +491,19 @@ Func_0f05::
 	scf
 	ret
 
-Func_0f1d::
+; frame function during Link Opponent's turn
+; if opponent makes a decision, jump directly
+; to the address in wLinkOpponentTurnReturnAddress
+LinkOpponentTurnFrameFunction::
 	ld a, [wSerialFlags]
 	or a
-	jr nz, .asm_f27
+	jr nz, .return
 	call Func_0e32
 	ret nc
-.asm_f27
+.return
 	ld a, $01
 	call BankswitchROM
-	ld hl, wcbf7
+	ld hl, wLinkOpponentTurnReturnAddress
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
