@@ -270,7 +270,7 @@ ApplySubstatus2ToDefendingCard:
 	call GetNonTurnDuelistVariable
 	pop af
 	ld [hl], a
-	ld l, $f6
+	ld l, DUELVARS_ARENA_CARD_LAST_TURN_SUBSTATUS2
 	ld [hl], a
 	ret
 
