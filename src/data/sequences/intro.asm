@@ -2,7 +2,7 @@ INCLUDE "macros/intro_sequence.asm"
 
 IntroSequence:
 	intro_seq_load_charizard_scene
-	intro_seq_play_sfx SFX_58
+	intro_seq_play_sfx SFX_INTRO_ORB
 	intro_seq_set_orbs_coordinates IntroOrbCoordinates_CharizardScene
 	intro_seq_set_orbs_animations IntroOrbAnimations_CharizardScene
 	intro_seq_wait 44
@@ -12,7 +12,7 @@ IntroSequence:
 	intro_seq_wait 30
 
 	intro_seq_load_scyther_scene
-	intro_seq_play_sfx SFX_58
+	intro_seq_play_sfx SFX_INTRO_ORB
 	intro_seq_set_orbs_coordinates IntroOrbCoordinates_ScytherScene
 	intro_seq_set_orbs_animations IntroOrbAnimations_ScytherScene
 	intro_seq_wait 44
@@ -22,7 +22,7 @@ IntroSequence:
 	intro_seq_wait 30
 
 	intro_seq_load_aerodactyl_scene
-	intro_seq_play_sfx SFX_59
+	intro_seq_play_sfx SFX_INTRO_ORB_SWOOP
 	intro_seq_set_orbs_coordinates IntroOrbCoordinates_AerodactylScene
 	intro_seq_set_orbs_animations IntroOrbAnimations_AerodactylScene
 	intro_seq_wait 44
@@ -32,13 +32,13 @@ IntroSequence:
 	intro_seq_wait 60
 
 	intro_seq_load_title_screen_scene
-	intro_seq_play_sfx SFX_5A
+	intro_seq_play_sfx SFX_INTRO_ORB_TITLE
 	intro_seq_set_orbs_coordinates IntroOrbCoordinates_InitialTitleScreen
 	intro_seq_set_orbs_animations IntroOrbAnimations_InitialTitleScreen
 	intro_seq_wait_orbs_animation
 	intro_seq_fade_in
 	intro_seq_wait 16
-	intro_seq_play_sfx SFX_5B
+	intro_seq_play_sfx SFX_INTRO_ORB_SCATTER
 	intro_seq_set_orbs_coordinates IntroOrbCoordinates_InTitleScreen
 	intro_seq_set_orbs_animations IntroOrbAnimations_InTitleScreen
 	intro_seq_wait_sfx

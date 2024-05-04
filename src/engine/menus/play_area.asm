@@ -506,7 +506,7 @@ OpenInPlayAreaScreen_HandleInput:
 	add INPLAYAREA_OPP_DISCARD_PILE
 	ld [wInPlayAreaCurPosition], a
 .next
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a

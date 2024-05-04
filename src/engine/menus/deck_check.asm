@@ -41,7 +41,7 @@ HandleCheckMenuInput:
 	ld e, a
 
 .okay
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	push de
 	call EraseCheckMenuCursor
@@ -132,10 +132,10 @@ PlaySFXConfirmOrCancel:
 	push af
 	inc a
 	jr z, .asm_9103
-	ld a, SFX_02 ; confirmation sfx
+	ld a, SFX_CONFIRM
 	jr .asm_9105
 .asm_9103
-	ld a, SFX_03 ; cancellation sfx
+	ld a, SFX_CANCEL
 .asm_9105
 	call PlaySFX
 	pop af

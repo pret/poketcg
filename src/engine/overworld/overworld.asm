@@ -64,7 +64,7 @@ LoadMap::
 	ld a, [hl]
 	bit 4, [hl]
 	jr z, .no_warp
-	ld a, SFX_0C
+	ld a, SFX_WARP
 	call PlaySFX
 	jp .warp
 .no_warp

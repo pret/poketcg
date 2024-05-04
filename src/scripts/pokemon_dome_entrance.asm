@@ -103,7 +103,7 @@ Script_f6af:
 
 .ows_f6b9
 	print_npc_text Text0559
-	play_sfx SFX_0F
+	play_sfx SFX_POKEMON_DOME_DOORS
 	replace_map_blocks MAP_EVENT_POKEMON_DOME_DOOR
 	do_frames 30
 	move_player NORTH, 1

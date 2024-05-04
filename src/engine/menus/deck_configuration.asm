@@ -1703,7 +1703,7 @@ HandleCardSelectionInput:
 	xor a
 .got_cursor_pos
 	push af
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	call DrawHorizontalListCursor_Invisible
 	pop af
@@ -1804,7 +1804,7 @@ HandleDeckCardSelectionList:
 	bit D_UP_F, b
 	jr z, .check_d_down
 	push af
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	pop af
 	dec a
@@ -1828,7 +1828,7 @@ HandleDeckCardSelectionList:
 	bit D_DOWN_F, b
 	jr z, .asm_9b9d
 	push af
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	pop af
 	inc a
@@ -2013,7 +2013,7 @@ OpenCardPageFromCardList:
 	bit D_UP_F, b
 	jr z, .check_d_down
 	push af
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	pop af
 	dec a
@@ -2031,7 +2031,7 @@ OpenCardPageFromCardList:
 	bit D_DOWN_F, b
 	jr z, .handle_regular_card_page_input
 	push af
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	pop af
 	inc a
@@ -2161,7 +2161,7 @@ TryAddCardToDeck:
 	scf
 	ret z ; cannot add because player doesn't own more copies
 
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	call PlaySFX
 	push de
 	call .AddCardToCurDeck
@@ -2306,7 +2306,7 @@ RemoveCardFromDeck:
 	pop de
 	or a
 	ret z ; card is not in deck
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	call PlaySFX
 	push de
 	call .RemoveCard
@@ -2473,7 +2473,7 @@ HandleLeftRightInCardList:
 	ld [wCardListVisibleOffset], a
 	cp c
 	jr z, .asm_9efa
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	call PlaySFX
 	ld hl, wCardListUpdateFunction
 	call CallIndirect
@@ -2522,7 +2522,7 @@ HandleSelectUpAndDownInList:
 	ld [wCardListVisibleOffset], a
 	cp c
 	jr z, .set_carry
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	call PlaySFX
 	ld hl, wCardListUpdateFunction
 	call CallIndirect

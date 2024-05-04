@@ -514,7 +514,7 @@ HandleCardAlbumCardPage:
 	jr z, .check_d_down
 
 	push af
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	ld a, [wCardListCursorPos]
 	ld hl, wCardListVisibleOffset
@@ -540,7 +540,7 @@ HandleCardAlbumCardPage:
 	jr z, .asm_a8d6
 
 	push af
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	pop af
 

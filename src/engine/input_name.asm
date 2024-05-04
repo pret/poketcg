@@ -39,16 +39,16 @@ ClearMemory:
 	ret
 
 ; play different sfx by a.
-; if a is 0xff play SFX_03 (usually following a B press),
-; else play SFX_02 (usually following an A press).
+; if a is 0xff play SFX_CANCEL (usually following a B press),
+; else play SFX_CONFIRM (usually following an A press).
 PlayAcceptOrDeclineSFX:
 	push af
 	inc a
 	jr z, .sfx_decline
-	ld a, SFX_02
+	ld a, SFX_CONFIRM
 	jr .sfx_accept
 .sfx_decline
-	ld a, SFX_03
+	ld a, SFX_CANCEL
 .sfx_accept
 	call PlaySFX
 	pop af
@@ -416,7 +416,7 @@ NamingScreen_CheckButtonState:
 	ld a, $06
 	cp d
 	jp z, NamingScreen_CheckButtonState
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 .no_press
 	ldh a, [hKeysPressed]
@@ -1216,7 +1216,7 @@ Func_1aefb:
 	ld a, $02
 	cp d
 	jp z, Func_1aefb
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 .asm_6f73
 	ldh a, [hKeysPressed]

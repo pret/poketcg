@@ -47,7 +47,7 @@ HandleTitleScreen:
 	ldh a, [hKeysPressed]
 	and A_BUTTON | START
 	jr z, .loop
-	ld a, SFX_02
+	ld a, SFX_CONFIRM
 	call PlaySFX
 	farcall FadeScreenToWhite
 

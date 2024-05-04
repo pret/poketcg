@@ -553,7 +553,7 @@ Script_BeatRod:
 	print_npc_text Text05a3
 	move_active_npc NPCMovement_fb96
 	set_active_npc_direction SOUTH
-	play_sfx SFX_0F
+	play_sfx SFX_POKEMON_DOME_DOORS
 	replace_map_blocks MAP_EVENT_HALL_OF_HONOR_DOOR
 	set_event EVENT_POKEMON_DOME_STATE, POKEMON_DOME_DEFEATED
 	max_out_event_value EVENT_HALL_OF_HONOR_DOORS_OPEN
@@ -563,7 +563,7 @@ Script_BeatRod:
 	start_script
 	override_song MUSIC_STOP
 	set_event EVENT_RONALD_POKEMON_DOME_STATE, RONALD_CHALLENGED
-	play_sfx SFX_0F
+	play_sfx SFX_POKEMON_DOME_DOORS
 	replace_map_blocks MAP_EVENT_HALL_OF_HONOR_DOOR
 	move_active_npc NPCMovement_fbd2
 	set_default_song MUSIC_RONALD

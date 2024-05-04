@@ -1,5 +1,5 @@
 HallOfHonorLoadMap:
-	ld a, SFX_10
+	ld a, SFX_LEGENDARY_CARDS
 	call PlaySFX
 	ret
 
