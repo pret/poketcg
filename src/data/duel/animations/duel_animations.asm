@@ -718,7 +718,7 @@ Animations:
 	db PALETTE_92 ; palette ID
 	db SPRITE_ANIM_168 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
-	db SFX_TOSSED_COIN ; sfx id
+	db SFX_COIN_TOSS ; sfx id
 	db $00 ; handler function
 
 	; DUEL_ANIM_COIN_TOSS2
@@ -726,7 +726,7 @@ Animations:
 	db PALETTE_92 ; palette ID
 	db SPRITE_ANIM_169 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
-	db SFX_TOSSED_COIN ; sfx id
+	db SFX_COIN_TOSS ; sfx id
 	db $00 ; handler function
 
 	; DUEL_ANIM_COIN_TAILS

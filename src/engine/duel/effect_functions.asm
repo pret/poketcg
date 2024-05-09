@@ -9781,7 +9781,7 @@ PokemonBreeder_EvolveEffect:
 ; display Pokemon picture and play sfx,
 ; print the corresponding card names.
 	bank1call DrawLargePictureOfCard
-	ld a, SFX_EVOLVED_POKEMON
+	ld a, SFX_POKEMON_EVOLUTION
 	call PlaySFX
 	ldtx hl, PokemonEvolvedIntoPokemonText
 	call DrawWideTextBox_WaitForInput

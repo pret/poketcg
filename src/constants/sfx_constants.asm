@@ -10,7 +10,7 @@
 	const SFX_PLACING_PRIZES       ; $08
 	const SFX_UNUSED_09            ; $09
 	const SFX_UNUSED_0A            ; $0a
-	const SFX_TOSSED_COIN          ; $0b
+	const SFX_COIN_TOSS            ; $0b
 	const SFX_WARP                 ; $0c
 	const SFX_UNUSED_0D            ; $0d
 	const SFX_UNUSED_0E            ; $0e
@@ -93,7 +93,7 @@
 	const SFX_INTRO_ORB_SCATTER    ; $5b
 	const SFX_FIREGIVER_START      ; $5c
 	const SFX_CARD_POP_RECEIVED    ; $5d
-	const SFX_EVOLVED_POKEMON      ; $5e
+	const SFX_POKEMON_EVOLUTION    ; $5e
 	const SFX_UNUSED_5F            ; $5f
 
 DEF NUM_SFX EQU const_value

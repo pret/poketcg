@@ -1,4 +1,4 @@
-Sfx_EvolvedPokemon_Ch1:
+Sfx_PokemonEvolution_Ch1:
 	sfx_1 196
 	sfx_8 17
 	sfx_2 8

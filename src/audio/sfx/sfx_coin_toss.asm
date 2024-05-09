@@ -1,4 +1,4 @@
-Sfx_TossedCoin_Ch1:
+Sfx_CoinToss_Ch1:
 	sfx_8 17
 	sfx_1 239
 	sfx_2 0
