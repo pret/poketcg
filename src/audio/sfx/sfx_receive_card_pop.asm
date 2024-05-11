@@ -1,4 +1,4 @@
-Sfx_CardPopReceived_Ch1:
+Sfx_ReceiveCardPop_Ch1:
 	sfx_1 0
 	sfx_5 0
 	sfx_6 6
@@ -70,7 +70,7 @@ Sfx_CardPopReceived_Ch1:
 	sfx_6 1
 	sfx_end
 
-Sfx_CardPopReceived_Ch2:
+Sfx_ReceiveCardPop_Ch2:
 	sfx_1 196
 	sfx_8 17
 	sfx_2 8
@@ -101,7 +101,7 @@ Sfx_CardPopReceived_Ch2:
 	sfx_0 6, 246
 	sfx_end
 
-Sfx_CardPopReceived_Ch3:
+Sfx_ReceiveCardPop_Ch3:
 	sfx_1 119
 	sfx_8 17
 	sfx_0 0, 17

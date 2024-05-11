@@ -7,7 +7,7 @@
 	const SFX_UNUSED_05            ; $05
 	const SFX_UNUSED_06            ; $06
 	const SFX_CARD_SHUFFLE         ; $07
-	const SFX_PLACING_PRIZES       ; $08
+	const SFX_PLACE_PRIZE          ; $08
 	const SFX_UNUSED_09            ; $09
 	const SFX_UNUSED_0A            ; $0a
 	const SFX_COIN_TOSS            ; $0b
@@ -85,14 +85,14 @@
 	const SFX_FIRE_PUNCH           ; $53
 	const SFX_COIN_TOSS_HEADS      ; $54
 	const SFX_COIN_TOSS_TAILS      ; $55
-	const SFX_SAVED_GAME           ; $56
+	const SFX_SAVE_GAME            ; $56
 	const SFX_PLAYER_WALK_MAP      ; $57
 	const SFX_INTRO_ORB            ; $58
 	const SFX_INTRO_ORB_SWOOP      ; $59
 	const SFX_INTRO_ORB_TITLE      ; $5a
 	const SFX_INTRO_ORB_SCATTER    ; $5b
 	const SFX_FIREGIVER_START      ; $5c
-	const SFX_CARD_POP_RECEIVED    ; $5d
+	const SFX_RECEIVE_CARD_POP     ; $5d
 	const SFX_POKEMON_EVOLUTION    ; $5e
 	const SFX_UNUSED_5F            ; $5f
 

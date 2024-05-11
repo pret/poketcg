@@ -1858,7 +1858,7 @@ HandleDuelSetup:
 	call .DrawPrizeTile
 
 	push hl
-	ld a, SFX_PLACING_PRIZES
+	ld a, SFX_PLACE_PRIZE
 	call PlaySFX
 	; print new deck card number
 	lb bc, 3, 5

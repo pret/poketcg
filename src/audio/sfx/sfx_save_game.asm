@@ -1,4 +1,4 @@
-Sfx_SavedGame_Ch1:
+Sfx_SaveGame_Ch1:
 	sfx_1 247
 	sfx_8 17
 	sfx_2 0

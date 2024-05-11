@@ -21,7 +21,7 @@ _PauseMenu_Diary:
 	jr c, .cancel
 	farcall BackupPlayerPosition
 	call SaveAndBackupData
-	ld a, SFX_SAVED_GAME
+	ld a, SFX_SAVE_GAME
 	call PlaySFX
 	ldtx hl, PlayerDiarySaveConfirmText
 	jr .print_result_text

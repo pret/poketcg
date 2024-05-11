@@ -1,4 +1,4 @@
-Sfx_PlacingPrizes_Ch1:
+Sfx_PlacePrize_Ch1:
 	sfx_8 17
 	sfx_1 224
 	sfx_0 0, 64

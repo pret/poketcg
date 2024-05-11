@@ -11,7 +11,7 @@ SFXHeaderPointers:
 	dw Sfx_Unused05
 	dw Sfx_Unused06
 	dw Sfx_CardShuffle
-	dw Sfx_PlacingPrizes
+	dw Sfx_PlacePrize
 	dw Sfx_Unused09
 	dw Sfx_Unused0a
 	dw Sfx_CoinToss
@@ -89,14 +89,14 @@ SFXHeaderPointers:
 	dw Sfx_FirePunch
 	dw Sfx_CoinTossHeads
 	dw Sfx_CoinTossTails
-	dw Sfx_SavedGame
+	dw Sfx_SaveGame
 	dw Sfx_PlayerWalkMap
 	dw Sfx_IntroOrb
 	dw Sfx_IntroOrbSwoop
 	dw Sfx_IntroOrbTitle
 	dw Sfx_IntroOrbScatter
 	dw Sfx_FiregiverStart
-	dw Sfx_CardPopReceived
+	dw Sfx_ReceiveCardPop
 	dw Sfx_PokemonEvolution
 	dw Sfx_Unused5f
 	assert_table_length NUM_SFX
@@ -132,9 +132,9 @@ Sfx_CardShuffle:
 	db %1000
 	dw Sfx_CardShuffle_Ch1
 
-Sfx_PlacingPrizes:
+Sfx_PlacePrize:
 	db %1000
-	dw Sfx_PlacingPrizes_Ch1
+	dw Sfx_PlacePrize_Ch1
 
 Sfx_Unused09:
 	db %1000
@@ -453,9 +453,9 @@ Sfx_CoinTossTails:
 	db %0010
 	dw Sfx_CoinTossTails_Ch1
 
-Sfx_SavedGame:
+Sfx_SaveGame:
 	db %0010
-	dw Sfx_SavedGame_Ch1
+	dw Sfx_SaveGame_Ch1
 
 Sfx_PlayerWalkMap:
 	db %0010
@@ -481,11 +481,11 @@ Sfx_FiregiverStart:
 	db %1000
 	dw Sfx_FiregiverStart_Ch1
 
-Sfx_CardPopReceived:
+Sfx_ReceiveCardPop:
 	db %1011
-	dw Sfx_CardPopReceived_Ch1
-	dw Sfx_CardPopReceived_Ch2
-	dw Sfx_CardPopReceived_Ch3
+	dw Sfx_ReceiveCardPop_Ch1
+	dw Sfx_ReceiveCardPop_Ch2
+	dw Sfx_ReceiveCardPop_Ch3
 
 Sfx_PokemonEvolution:
 	db %0010
