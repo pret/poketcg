@@ -60,7 +60,7 @@ OverworldMap_HandleKeyPress:
 	ldh a, [hKeysPressed]
 	and A_BUTTON
 	jr z, .done
-	ld a, SFX_02
+	ld a, SFX_CONFIRM
 	call PlaySFX
 	call OverworldMap_UpdateCursorAnimation
 	call OverworldMap_BeginPlayerMovement
@@ -87,7 +87,7 @@ OverworldMap_HandleDPad:
 	jr z, .no_transition
 	ld [wOverworldMapSelection], a
 	call OverworldMap_PrintMapName
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	call PlaySFX
 .no_transition
 	pop bc
@@ -264,7 +264,7 @@ OverworldMap_UpdateCursorAnimation:
 ; begin walking the player across the overworld
 ; from wOverworldMapStartingPosition to wOverworldMapSelection
 OverworldMap_BeginPlayerMovement:
-	ld a, SFX_57
+	ld a, SFX_PLAYER_WALK_MAP
 	call PlaySFX
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a

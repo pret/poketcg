@@ -49,7 +49,7 @@ _PCMenu_ReadMail:
 	ldh a, [hKeysPressed]
 	and B_BUTTON
 	jr z, .asm_1079c
-	ld a, SFX_03
+	ld a, SFX_CANCEL
 	call PlaySFX
 	pop af
 	ld [wd291], a
@@ -105,7 +105,7 @@ PCMailHandleDPadInput:
 	ld a, [wPCPackSelection]
 	cp c
 	jr z, .asm_1081d
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	call PlaySFX
 .asm_1081d
 	call ShowMailMenuCursor
@@ -137,7 +137,7 @@ PCMailHandleAInput:
 	ldh a, [hKeysPressed]
 	and A_BUTTON
 	ret z
-	ld a, SFX_02
+	ld a, SFX_CONFIRM
 	call PlaySFX
 	call PrintObtainedPCPacks
 	call ShowMailMenuCursor

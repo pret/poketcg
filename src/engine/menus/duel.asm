@@ -1281,7 +1281,7 @@ HandleCheckMenuInput_YourOrOppPlayArea:
 	ld e, a
 
 .erase
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	push de
 	call EraseCheckMenuCursor_YourOrOppPlayArea
@@ -1825,7 +1825,7 @@ YourOrOppPlayAreaScreen_HandleInput:
 	jr .make_bitmask_loop
 
 .next
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 
 ; reset cursor blink

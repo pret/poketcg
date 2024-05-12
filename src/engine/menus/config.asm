@@ -41,7 +41,7 @@ _PauseMenu_Config:
 	and A_BUTTON
 	jr z, .asm_10588
 .asm_105ab
-	ld a, SFX_02
+	ld a, SFX_CONFIRM
 	call PlaySFX
 	call SaveConfigSettings
 	pop af
@@ -281,7 +281,7 @@ ConfigScreenDPadDown:
 	ld [wCursorBlinkTimer], a
 	ld a, [wConfigCursorYPos]
 	call UpdateConfigMenuCursor
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	call PlaySFX
 	ret
 
@@ -344,7 +344,7 @@ ConfigScreenDPadLeft:
 	ld a, c
 	or a
 	jr z, .skip_sfx
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	call PlaySFX
 .skip_sfx
 	ret

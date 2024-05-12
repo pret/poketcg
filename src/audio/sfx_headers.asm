@@ -3,494 +3,494 @@ NumberOfSFX:
 
 SFXHeaderPointers:
 	table_width 2, SFXHeaderPointers
-	dw SfxStop
-	dw Sfx01
-	dw Sfx02
-	dw Sfx03
-	dw Sfx04
-	dw Sfx05
-	dw Sfx06
-	dw Sfx07
-	dw Sfx08
-	dw Sfx09
-	dw Sfx0a
-	dw Sfx0b
-	dw Sfx0c
-	dw Sfx0d
-	dw Sfx0e
-	dw Sfx0f
-	dw Sfx10
-	dw Sfx11
-	dw Sfx12
-	dw Sfx13
-	dw Sfx14
-	dw Sfx15
-	dw Sfx16
-	dw Sfx17
-	dw Sfx18
-	dw Sfx19
-	dw Sfx1a
-	dw Sfx1b
-	dw Sfx1c
-	dw Sfx1d
-	dw Sfx1e
-	dw Sfx1f
-	dw Sfx20
-	dw Sfx21
-	dw Sfx22
-	dw Sfx23
-	dw Sfx24
-	dw Sfx25
-	dw Sfx26
-	dw Sfx27
-	dw Sfx28
-	dw Sfx29
-	dw Sfx2a
-	dw Sfx2b
-	dw Sfx2c
-	dw Sfx2d
-	dw Sfx2e
-	dw Sfx2f
-	dw Sfx30
-	dw Sfx31
-	dw Sfx32
-	dw Sfx33
-	dw Sfx34
-	dw Sfx35
-	dw Sfx36
-	dw Sfx37
-	dw Sfx38
-	dw Sfx39
-	dw Sfx3a
-	dw Sfx3b
-	dw Sfx3c
-	dw Sfx3d
-	dw Sfx3e
-	dw Sfx3f
-	dw Sfx40
-	dw Sfx41
-	dw Sfx42
-	dw Sfx43
-	dw Sfx44
-	dw Sfx45
-	dw Sfx46
-	dw Sfx47
-	dw Sfx48
-	dw Sfx49
-	dw Sfx4a
-	dw Sfx4b
-	dw Sfx4c
-	dw Sfx4d
-	dw Sfx4e
-	dw Sfx4f
-	dw Sfx50
-	dw Sfx51
-	dw Sfx52
-	dw Sfx53
-	dw Sfx54
-	dw Sfx55
-	dw Sfx56
-	dw Sfx57
-	dw Sfx58
-	dw Sfx59
-	dw Sfx5a
-	dw Sfx5b
-	dw Sfx5c
-	dw Sfx5d
-	dw Sfx5e
-	dw Sfx5f
+	dw Sfx_Stop
+	dw Sfx_Cursor
+	dw Sfx_Confirm
+	dw Sfx_Cancel
+	dw Sfx_Denied
+	dw Sfx_Unused05
+	dw Sfx_Unused06
+	dw Sfx_CardShuffle
+	dw Sfx_PlacePrize
+	dw Sfx_Unused09
+	dw Sfx_Unused0a
+	dw Sfx_CoinToss
+	dw Sfx_Warp
+	dw Sfx_Unused0d
+	dw Sfx_Unused0e
+	dw Sfx_PokemonDomeDoors
+	dw Sfx_LegendaryCards
+	dw Sfx_Glow
+	dw Sfx_Paralysis
+	dw Sfx_Sleep
+	dw Sfx_Confusion
+	dw Sfx_Poison
+	dw Sfx_SingleHit
+	dw Sfx_BigHit
+	dw Sfx_ThunderShock
+	dw Sfx_Lightning
+	dw Sfx_BorderSpark
+	dw Sfx_BigLightning
+	dw Sfx_SmallFlame
+	dw Sfx_BigFlame
+	dw Sfx_FireSpin
+	dw Sfx_DiveBomb
+	dw Sfx_WaterJets
+	dw Sfx_WaterGun
+	dw Sfx_Whirlpool
+	dw Sfx_HydroPump
+	dw Sfx_Blizzard
+	dw Sfx_Psychic
+	dw Sfx_Leer
+	dw Sfx_Beam
+	dw Sfx_HyperBeam
+	dw Sfx_RockThrow
+	dw Sfx_StoneBarrage
+	dw Sfx_Punch
+	dw Sfx_StretchKick
+	dw Sfx_Slash
+	dw Sfx_Sonicboom
+	dw Sfx_FurySwipes
+	dw Sfx_Drill
+	dw Sfx_PotSmash
+	dw Sfx_Bonemerang
+	dw Sfx_SeismicToss
+	dw Sfx_Needles
+	dw Sfx_WhiteGas
+	dw Sfx_Powder
+	dw Sfx_Goo
+	dw Sfx_Bubbles
+	dw Sfx_StringShot
+	dw Sfx_Boyfriends
+	dw Sfx_Lure
+	dw Sfx_Toxic
+	dw Sfx_ConfuseRay
+	dw Sfx_Sing
+	dw Sfx_Supersonic
+	dw Sfx_PetalDance
+	dw Sfx_Protect
+	dw Sfx_Barrier
+	dw Sfx_Speed
+	dw Sfx_Whirlwind
+	dw Sfx_Cry
+	dw Sfx_QuestionMark
+	dw Sfx_Selfdestruct
+	dw Sfx_BigSelfdestruct
+	dw Sfx_Heal
+	dw Sfx_Drain
+	dw Sfx_DarkGas
+	dw Sfx_HealingWind
+	dw Sfx_BenchWhirlwind
+	dw Sfx_Expand
+	dw Sfx_CatPunch
+	dw Sfx_ThunderWave
+	dw Sfx_Firegiver
+	dw Sfx_Thunderpunch
+	dw Sfx_FirePunch
+	dw Sfx_CoinTossHeads
+	dw Sfx_CoinTossTails
+	dw Sfx_SaveGame
+	dw Sfx_PlayerWalkMap
+	dw Sfx_IntroOrb
+	dw Sfx_IntroOrbSwoop
+	dw Sfx_IntroOrbTitle
+	dw Sfx_IntroOrbScatter
+	dw Sfx_FiregiverStart
+	dw Sfx_ReceiveCardPop
+	dw Sfx_PokemonEvolution
+	dw Sfx_Unused5f
 	assert_table_length NUM_SFX
 
-SfxStop:
+Sfx_Stop:
 	db %0000
 
-Sfx01:
+Sfx_Cursor:
 	db %0010
-	dw Sfx01_Ch1
+	dw Sfx_Cursor_Ch1
 
-Sfx02:
+Sfx_Confirm:
 	db %0010
-	dw Sfx02_Ch1
+	dw Sfx_Confirm_Ch1
 
-Sfx03:
+Sfx_Cancel:
 	db %0010
-	dw Sfx03_Ch1
+	dw Sfx_Cancel_Ch1
 
-Sfx04:
+Sfx_Denied:
 	db %0010
-	dw Sfx04_Ch1
+	dw Sfx_Denied_Ch1
 
-Sfx05:
+Sfx_Unused05:
 	db %0010
-	dw Sfx05_Ch1
+	dw Sfx_Unused05_Ch1
 
-Sfx06:
+Sfx_Unused06:
 	db %0010
-	dw Sfx06_Ch1
+	dw Sfx_Unused06_Ch1
 
-Sfx07:
+Sfx_CardShuffle:
 	db %1000
-	dw Sfx07_Ch1
+	dw Sfx_CardShuffle_Ch1
 
-Sfx08:
+Sfx_PlacePrize:
 	db %1000
-	dw Sfx08_Ch1
+	dw Sfx_PlacePrize_Ch1
 
-Sfx09:
+Sfx_Unused09:
 	db %1000
-	dw Sfx09_Ch1
+	dw Sfx_Unused09_Ch1
 
-Sfx0a:
+Sfx_Unused0a:
 	db %0010
-	dw Sfx0a_Ch1
+	dw Sfx_Unused0a_Ch1
 
-Sfx0b:
+Sfx_CoinToss:
 	db %0010
-	dw Sfx0b_Ch1
+	dw Sfx_CoinToss_Ch1
 
-Sfx0c:
+Sfx_Warp:
 	db %1000
-	dw Sfx0c_Ch1
+	dw Sfx_Warp_Ch1
 
-Sfx0d:
+Sfx_Unused0d:
 	db %0010
-	dw Sfx0d_Ch1
+	dw Sfx_Unused0d_Ch1
 
-Sfx0e:
+Sfx_Unused0e:
 	db %0010
-	dw Sfx0e_Ch1
+	dw Sfx_Unused0e_Ch1
 
-Sfx0f:
+Sfx_PokemonDomeDoors:
 	db %1000
-	dw Sfx0f_Ch1
+	dw Sfx_PokemonDomeDoors_Ch1
 
-Sfx10:
+Sfx_LegendaryCards:
 	db %0010
-	dw Sfx10_Ch1
+	dw Sfx_LegendaryCards_Ch1
 
-Sfx11:
+Sfx_Glow:
 	db %0010
-	dw Sfx11_Ch1
+	dw Sfx_Glow_Ch1
 
-Sfx12:
+Sfx_Paralysis:
 	db %0010
-	dw Sfx12_Ch1
+	dw Sfx_Paralysis_Ch1
 
-Sfx13:
+Sfx_Sleep:
 	db %0010
-	dw Sfx13_Ch1
+	dw Sfx_Sleep_Ch1
 
-Sfx14:
+Sfx_Confusion:
 	db %0010
-	dw Sfx14_Ch1
+	dw Sfx_Confusion_Ch1
 
-Sfx15:
+Sfx_Poison:
 	db %0010
-	dw Sfx15_Ch1
+	dw Sfx_Poison_Ch1
 
-Sfx16:
+Sfx_SingleHit:
 	db %1000
-	dw Sfx16_Ch1
+	dw Sfx_SingleHit_Ch1
 
-Sfx17:
+Sfx_BigHit:
 	db %1000
-	dw Sfx17_Ch1
+	dw Sfx_BigHit_Ch1
 
-Sfx18:
+Sfx_ThunderShock:
 	db %1000
-	dw Sfx18_Ch1
+	dw Sfx_ThunderShock_Ch1
 
-Sfx19:
+Sfx_Lightning:
 	db %1000
-	dw Sfx19_Ch1
+	dw Sfx_Lightning_Ch1
 
-Sfx1a:
+Sfx_BorderSpark:
 	db %1000
-	dw Sfx1a_Ch1
+	dw Sfx_BorderSpark_Ch1
 
-Sfx1b:
+Sfx_BigLightning:
 	db %1000
-	dw Sfx1b_Ch1
+	dw Sfx_BigLightning_Ch1
 
-Sfx1c:
+Sfx_SmallFlame:
 	db %1000
-	dw Sfx1c_Ch1
+	dw Sfx_SmallFlame_Ch1
 
-Sfx1d:
+Sfx_BigFlame:
 	db %1000
-	dw Sfx1d_Ch1
+	dw Sfx_BigFlame_Ch1
 
-Sfx1e:
+Sfx_FireSpin:
 	db %1000
-	dw Sfx1e_Ch1
+	dw Sfx_FireSpin_Ch1
 
-Sfx1f:
+Sfx_DiveBomb:
 	db %1000
-	dw Sfx1f_Ch1
+	dw Sfx_DiveBomb_Ch1
 
-Sfx20:
+Sfx_WaterJets:
 	db %1000
-	dw Sfx20_Ch1
+	dw Sfx_WaterJets_Ch1
 
-Sfx21:
+Sfx_WaterGun:
 	db %1000
-	dw Sfx21_Ch1
+	dw Sfx_WaterGun_Ch1
 
-Sfx22:
+Sfx_Whirlpool:
 	db %1000
-	dw Sfx22_Ch1
+	dw Sfx_Whirlpool_Ch1
 
-Sfx23:
+Sfx_HydroPump:
 	db %1000
-	dw Sfx23_Ch1
+	dw Sfx_HydroPump_Ch1
 
-Sfx24:
+Sfx_Blizzard:
 	db %1000
-	dw Sfx24_Ch1
+	dw Sfx_Blizzard_Ch1
 
-Sfx25:
+Sfx_Psychic:
 	db %0010
-	dw Sfx25_Ch1
+	dw Sfx_Psychic_Ch1
 
-Sfx26:
+Sfx_Leer:
 	db %0010
-	dw Sfx26_Ch1
+	dw Sfx_Leer_Ch1
 
-Sfx27:
+Sfx_Beam:
 	db %0010
-	dw Sfx27_Ch1
+	dw Sfx_Beam_Ch1
 
-Sfx28:
+Sfx_HyperBeam:
 	db %1010
-	dw Sfx28_Ch1
-	dw Sfx28_Ch2
+	dw Sfx_HyperBeam_Ch1
+	dw Sfx_HyperBeam_Ch2
 
-Sfx29:
+Sfx_RockThrow:
 	db %1000
-	dw Sfx29_Ch1
+	dw Sfx_RockThrow_Ch1
 
-Sfx2a:
+Sfx_StoneBarrage:
 	db %1000
-	dw Sfx2a_Ch1
+	dw Sfx_StoneBarrage_Ch1
 
-Sfx2b:
+Sfx_Punch:
 	db %0010
-	dw Sfx2b_Ch1
+	dw Sfx_Punch_Ch1
 
-Sfx2c:
+Sfx_StretchKick:
 	db %0010
-	dw Sfx2c_Ch1
+	dw Sfx_StretchKick_Ch1
 
-Sfx2d:
+Sfx_Slash:
 	db %1000
-	dw Sfx2d_Ch1
+	dw Sfx_Slash_Ch1
 
-Sfx2e:
+Sfx_Sonicboom:
 	db %1000
-	dw Sfx2e_Ch1
+	dw Sfx_Sonicboom_Ch1
 
-Sfx2f:
+Sfx_FurySwipes:
 	db %1000
-	dw Sfx2f_Ch1
+	dw Sfx_FurySwipes_Ch1
 
-Sfx30:
+Sfx_Drill:
 	db %1000
-	dw Sfx30_Ch1
+	dw Sfx_Drill_Ch1
 
-Sfx31:
+Sfx_PotSmash:
 	db %0010
-	dw Sfx31_Ch1
+	dw Sfx_PotSmash_Ch1
 
-Sfx32:
+Sfx_Bonemerang:
 	db %1010
-	dw Sfx32_Ch1
-	dw Sfx32_Ch2
+	dw Sfx_Bonemerang_Ch1
+	dw Sfx_Bonemerang_Ch2
 
-Sfx33:
+Sfx_SeismicToss:
 	db %1010
-	dw Sfx33_Ch1
-	dw Sfx33_Ch2
+	dw Sfx_SeismicToss_Ch1
+	dw Sfx_SeismicToss_Ch2
 
-Sfx34:
+Sfx_Needles:
 	db %0010
-	dw Sfx34_Ch1
+	dw Sfx_Needles_Ch1
 
-Sfx35:
+Sfx_WhiteGas:
 	db %1000
-	dw Sfx35_Ch1
+	dw Sfx_WhiteGas_Ch1
 
-Sfx36:
+Sfx_Powder:
 	db %0010
-	dw Sfx36_Ch1
+	dw Sfx_Powder_Ch1
 
-Sfx37:
+Sfx_Goo:
 	db %1010
-	dw Sfx37_Ch1
-	dw Sfx37_Ch2
+	dw Sfx_Goo_Ch1
+	dw Sfx_Goo_Ch2
 
-Sfx38:
+Sfx_Bubbles:
 	db %0010
-	dw Sfx38_Ch1
+	dw Sfx_Bubbles_Ch1
 
-Sfx39:
+Sfx_StringShot:
 	db %1010
-	dw Sfx39_Ch1
-	dw Sfx39_Ch2
+	dw Sfx_StringShot_Ch1
+	dw Sfx_StringShot_Ch2
 
-Sfx3a:
+Sfx_Boyfriends:
 	db %0010
-	dw Sfx3a_Ch1
+	dw Sfx_Boyfriends_Ch1
 
-Sfx3b:
+Sfx_Lure:
 	db %0010
-	dw Sfx3b_Ch1
+	dw Sfx_Lure_Ch1
 
-Sfx3c:
+Sfx_Toxic:
 	db %0010
-	dw Sfx3c_Ch1
+	dw Sfx_Toxic_Ch1
 
-Sfx3d:
+Sfx_ConfuseRay:
 	db %0010
-	dw Sfx3d_Ch1
+	dw Sfx_ConfuseRay_Ch1
 
-Sfx3e:
+Sfx_Sing:
 	db %0010
-	dw Sfx3e_Ch1
+	dw Sfx_Sing_Ch1
 
-Sfx3f:
+Sfx_Supersonic:
 	db %1000
-	dw Sfx3f_Ch1
+	dw Sfx_Supersonic_Ch1
 
-Sfx40:
+Sfx_PetalDance:
 	db %0010
-	dw Sfx40_Ch1
+	dw Sfx_PetalDance_Ch1
 
-Sfx41:
+Sfx_Protect:
 	db %0010
-	dw Sfx41_Ch1
+	dw Sfx_Protect_Ch1
 
-Sfx42:
+Sfx_Barrier:
 	db %0010
-	dw Sfx42_Ch1
+	dw Sfx_Barrier_Ch1
 
-Sfx43:
+Sfx_Speed:
 	db %1000
-	dw Sfx43_Ch1
+	dw Sfx_Speed_Ch1
 
-Sfx44:
+Sfx_Whirlwind:
 	db %1000
-	dw Sfx44_Ch1
+	dw Sfx_Whirlwind_Ch1
 
-Sfx45:
+Sfx_Cry:
 	db %0010
-	dw Sfx45_Ch1
+	dw Sfx_Cry_Ch1
 
-Sfx46:
+Sfx_QuestionMark:
 	db %0010
-	dw Sfx46_Ch1
+	dw Sfx_QuestionMark_Ch1
 
-Sfx47:
+Sfx_Selfdestruct:
 	db %1000
-	dw Sfx47_Ch1
+	dw Sfx_Selfdestruct_Ch1
 
-Sfx48:
+Sfx_BigSelfdestruct:
 	db %1000
-	dw Sfx48_Ch1
+	dw Sfx_BigSelfdestruct_Ch1
 
-Sfx49:
+Sfx_Heal:
 	db %0010
-	dw Sfx49_Ch1
+	dw Sfx_Heal_Ch1
 
-Sfx4a:
+Sfx_Drain:
 	db %0010
-	dw Sfx4a_Ch1
+	dw Sfx_Drain_Ch1
 
-Sfx4b:
+Sfx_DarkGas:
 	db %1000
-	dw Sfx4b_Ch1
+	dw Sfx_DarkGas_Ch1
 
-Sfx4c:
+Sfx_HealingWind:
 	db %0010
-	dw Sfx4c_Ch1
+	dw Sfx_HealingWind_Ch1
 
-Sfx4d:
+Sfx_BenchWhirlwind:
 	db %0010
-	dw Sfx4d_Ch1
+	dw Sfx_BenchWhirlwind_Ch1
 
-Sfx4e:
+Sfx_Expand:
 	db %0010
-	dw Sfx4e_Ch1
+	dw Sfx_Expand_Ch1
 
-Sfx4f:
+Sfx_CatPunch:
 	db %0010
-	dw Sfx4f_Ch1
+	dw Sfx_CatPunch_Ch1
 
-Sfx50:
+Sfx_ThunderWave:
 	db %1010
-	dw Sfx50_Ch1
-	dw Sfx50_Ch2
+	dw Sfx_ThunderWave_Ch1
+	dw Sfx_ThunderWave_Ch2
 
-Sfx51:
+Sfx_Firegiver:
 	db %1010
-	dw Sfx51_Ch1
-	dw Sfx51_Ch2
+	dw Sfx_Firegiver_Ch1
+	dw Sfx_Firegiver_Ch2
 
-Sfx52:
+Sfx_Thunderpunch:
 	db %1010
-	dw Sfx52_Ch1
-	dw Sfx52_Ch2
+	dw Sfx_Thunderpunch_Ch1
+	dw Sfx_Thunderpunch_Ch2
 
-Sfx53:
+Sfx_FirePunch:
 	db %1010
-	dw Sfx53_Ch1
-	dw Sfx53_Ch2
+	dw Sfx_FirePunch_Ch1
+	dw Sfx_FirePunch_Ch2
 
-Sfx54:
+Sfx_CoinTossHeads:
 	db %0010
-	dw Sfx54_Ch1
+	dw Sfx_CoinTossHeads_Ch1
 
-Sfx55:
+Sfx_CoinTossTails:
 	db %0010
-	dw Sfx55_Ch1
+	dw Sfx_CoinTossTails_Ch1
 
-Sfx56:
+Sfx_SaveGame:
 	db %0010
-	dw Sfx56_Ch1
+	dw Sfx_SaveGame_Ch1
 
-Sfx57:
+Sfx_PlayerWalkMap:
 	db %0010
-	dw Sfx57_Ch1
+	dw Sfx_PlayerWalkMap_Ch1
 
-Sfx58:
+Sfx_IntroOrb:
 	db %0010
-	dw Sfx58_Ch1
+	dw Sfx_IntroOrb_Ch1
 
-Sfx59:
+Sfx_IntroOrbSwoop:
 	db %0010
-	dw Sfx59_Ch1
+	dw Sfx_IntroOrbSwoop_Ch1
 
-Sfx5a:
+Sfx_IntroOrbTitle:
 	db %0010
-	dw Sfx5a_Ch1
+	dw Sfx_IntroOrbTitle_Ch1
 
-Sfx5b:
+Sfx_IntroOrbScatter:
 	db %0010
-	dw Sfx5b_Ch1
+	dw Sfx_IntroOrbScatter_Ch1
 
-Sfx5c:
+Sfx_FiregiverStart:
 	db %1000
-	dw Sfx5c_Ch1
+	dw Sfx_FiregiverStart_Ch1
 
-Sfx5d:
+Sfx_ReceiveCardPop:
 	db %1011
-	dw Sfx5d_Ch1
-	dw Sfx5d_Ch2
-	dw Sfx5d_Ch3
+	dw Sfx_ReceiveCardPop_Ch1
+	dw Sfx_ReceiveCardPop_Ch2
+	dw Sfx_ReceiveCardPop_Ch3
 
-Sfx5e:
+Sfx_PokemonEvolution:
 	db %0010
-	dw Sfx5e_Ch1
+	dw Sfx_PokemonEvolution_Ch1
 
-Sfx5f:
+Sfx_Unused5f:
 	db %1000
-	dw Sfx5f_Ch1
+	dw Sfx_Unused5f_Ch1

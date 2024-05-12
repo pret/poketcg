@@ -1858,7 +1858,7 @@ HandleDuelSetup:
 	call .DrawPrizeTile
 
 	push hl
-	ld a, SFX_08
+	ld a, SFX_PLACE_PRIZE
 	call PlaySFX
 	; print new deck card number
 	lb bc, 3, 5
@@ -6429,7 +6429,7 @@ PrintAttachedEnergyToPokemon:
 ; print the PokemonEvolvedIntoPokemonText, given the Pokemon card to evolve in wPreEvolutionPokemonCard,
 ; and the evolved Pokemon card in hTempCardIndex_ff98. also play a sound effect.
 PrintPokemonEvolvedIntoPokemon:
-	ld a, SFX_5E
+	ld a, SFX_POKEMON_EVOLUTION
 	call PlaySFX
 	ld a, [wPreEvolutionPokemonCard]
 	call LoadCardNameToTxRam2
@@ -7978,11 +7978,11 @@ _TossCoin::
 	xor e ; invert result in case it's not Player
 	ld e, a
 .check_sfx
-	ld d, SFX_54
+	ld d, SFX_COIN_TOSS_HEADS
 	ld a, e
 	or a
 	jr nz, .got_sfx
-	ld d, SFX_55
+	ld d, SFX_COIN_TOSS_TAILS
 .got_sfx
 	ld a, d
 	call PlaySFX

@@ -759,7 +759,7 @@ HandleDeckMachineSelection:
 	jr z, .set_carry
 	; play SFX if jump was made
 	; and update UI
-	ld a, SFX_01
+	ld a, SFX_CURSOR
 	call PlaySFX
 	call DrawDeckMachineScreen
 	call PrintNumSavedDecks

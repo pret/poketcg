@@ -110,7 +110,7 @@ Script_d93f:
 	quit_script_fully
 
 .ows_d95a
-	play_sfx SFX_5A
+	play_sfx SFX_INTRO_ORB_TITLE
 	max_out_event_value EVENT_FIGHTING_DECK_MACHINE_ACTIVE
 	replace_map_blocks MAP_EVENT_FIGHTING_DECK_MACHINE
 	print_text Text060a
@@ -163,7 +163,7 @@ Script_d995:
 	quit_script_fully
 
 .ows_d9b0
-	play_sfx SFX_5A
+	play_sfx SFX_INTRO_ORB_TITLE
 	max_out_event_value EVENT_ROCK_DECK_MACHINE_ACTIVE
 	replace_map_blocks MAP_EVENT_ROCK_DECK_MACHINE
 	print_text Text060a
@@ -191,7 +191,7 @@ Script_d9c2:
 	quit_script_fully
 
 .ows_d9dd
-	play_sfx SFX_5A
+	play_sfx SFX_INTRO_ORB_TITLE
 	max_out_event_value EVENT_WATER_DECK_MACHINE_ACTIVE
 	replace_map_blocks MAP_EVENT_WATER_DECK_MACHINE
 	print_text Text060a
@@ -219,7 +219,7 @@ Script_d9ef:
 	quit_script_fully
 
 .ows_da0a
-	play_sfx SFX_5A
+	play_sfx SFX_INTRO_ORB_TITLE
 	max_out_event_value EVENT_LIGHTNING_DECK_MACHINE_ACTIVE
 	replace_map_blocks MAP_EVENT_LIGHTNING_DECK_MACHINE
 	print_text Text060a
@@ -247,7 +247,7 @@ Script_da1c:
 	quit_script_fully
 
 .ows_da37
-	play_sfx SFX_5A
+	play_sfx SFX_INTRO_ORB_TITLE
 	max_out_event_value EVENT_GRASS_DECK_MACHINE_ACTIVE
 	replace_map_blocks MAP_EVENT_GRASS_DECK_MACHINE
 	print_text Text060a
@@ -275,7 +275,7 @@ Script_da49:
 	quit_script_fully
 
 .ows_da64
-	play_sfx SFX_5A
+	play_sfx SFX_INTRO_ORB_TITLE
 	max_out_event_value EVENT_PSYCHIC_DECK_MACHINE_ACTIVE
 	replace_map_blocks MAP_EVENT_PSYCHIC_DECK_MACHINE
 	print_text Text060a
@@ -303,7 +303,7 @@ Script_da76:
 	quit_script_fully
 
 .ows_da91
-	play_sfx SFX_5A
+	play_sfx SFX_INTRO_ORB_TITLE
 	max_out_event_value EVENT_SCIENCE_DECK_MACHINE_ACTIVE
 	replace_map_blocks MAP_EVENT_SCIENCE_DECK_MACHINE
 	print_text Text060a
@@ -331,7 +331,7 @@ Script_daa3:
 	quit_script_fully
 
 .ows_dabe
-	play_sfx SFX_5A
+	play_sfx SFX_INTRO_ORB_TITLE
 	max_out_event_value EVENT_FIRE_DECK_MACHINE_ACTIVE
 	replace_map_blocks MAP_EVENT_FIRE_DECK_MACHINE
 	print_text Text060a

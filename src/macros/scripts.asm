@@ -582,7 +582,7 @@ ENDM
 ; Plays a sound effect
 MACRO play_sfx
 	run_command ScriptCommand_PlaySFX
-	db \1 ; Sound Effect (ex SFX_56)
+	db \1 ; Sound Effect (ex SFX_SAVE_GAME)
 ENDM
 
 ; Pauses the current song

@@ -43,7 +43,7 @@ _DoCardPop:
 	call LoadTxRam2
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	ld a, SFX_5D
+	ld a, SFX_RECEIVE_CARD_POP
 	call PlaySFX
 .wait_sfx
 	call AssertSFXFinished

@@ -27,7 +27,7 @@ Func_fc7a:
 
 .ows_fca0
 	save_game 0
-	play_sfx SFX_56
+	play_sfx SFX_SAVE_GAME
 	print_text Text06d1
 	gift_center 1
 	quit_script_fully
@@ -41,7 +41,7 @@ Func_fcad:
 	set_event_value EVENT_GIFT_CENTER_MENU_CHOICE
 
 	start_script
-	play_sfx SFX_56
+	play_sfx SFX_SAVE_GAME
 	save_game 0
 	jump_if_event_equal EVENT_GIFT_CENTER_MENU_CHOICE, GIFT_CENTER_MENU_SEND_CARD, .ows_fccc
 	jump_if_event_equal EVENT_GIFT_CENTER_MENU_CHOICE, GIFT_CENTER_MENU_SEND_DECK, .ows_fccf
