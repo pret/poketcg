@@ -542,42 +542,9 @@ HandleAICowardice:
 
 ([Video](https://youtu.be/vr8MZwW6gpI?si=qZuMBGRSrMyoGVJj&t=60))
 
-The name-checking routine used by Card Pop! to generate what card the player will receive is flawed, preventing one from ever receiving the Venusaur Phantom Card.
+The routine used by Card Pop! to generate what card the player will receive is flawed, preventing one from ever receiving the Venusaur Phantom Card.
 
-**Fix:** Edit `_DoCardPop` in [card_pop.asm](https://github.com/pret/poketcg/blob/master/src/engine/link/card_pop.asm):
-```diff
-_DoCardPop:
-	...
-; searches for this player's name in the other game's name list
-; this is useless since it discards the result from the name comparisons
-; as a result this loop will always return no carry
-	call EnableSRAM
-	ld hl, wOtherPlayerCardPopNameList
-	ld c, CARDPOP_NAME_LIST_MAX_ELEMS
-.loop_other_card_pop_name_list
-	push hl
-	ld de, sPlayerName
-	call .CompareNames
-	pop hl
--	; bug: discards result from comparison
--	; to fix, uncomment line below
--	; jr nc, .found_name
-+	jr nc, .found_name
-	ld de, NAME_BUFFER_LENGTH
-	add hl, de
-	dec c
-	jr nz, .loop_other_card_pop_name_list
-	xor a
-	jr .no_carry
-
-.found_name
-	ld a, $ff
-	scf
-.no_carry
-	call DisableSRAM
-	ld [wCardPopNameSearchResult], a ; $00 if name was not found, $ff otherwise
-	ret
-```
+**Fix:** TODO
 
 ## Graphics
 
