@@ -27,7 +27,7 @@ Fixes are written in the `diff` format.
   - [Sam's practice deck does wrong card ID check](#sams-practice-deck-does-wrong-card-id-check)
   - [AI does not use Shift properly](#ai-does-not-use-shift-properly)
   - [AI does not use Cowardice properly](#ai-does-not-use-cowardice-properly)
-  - [Phantom Venusaur will never be obtained through Card Pop](#phantom-venusaur-will-never-be-obtained-through-card-pop)
+  - [Phantom Venusaur will never be obtained through Card Pop!](#phantom-venusaur-will-never-be-obtained-through-card-pop!)
 - [Graphics](#graphics)
   - [Water Club master room uses the wrong void color](#water-club-master-room-uses-the-wrong-void-color)
   - [Club entrances use incorrect medal emblem tiling](#club-entrances-use-incorrect-medal-emblem-tiling)
@@ -538,7 +538,7 @@ HandleAICowardice:
 	...
 ```
 
-### Phantom Venusaur will never be obtained through Card Pop
+### Phantom Venusaur will never be obtained through Card Pop!
 
 ([Video](https://youtu.be/vr8MZwW6gpI?si=qZuMBGRSrMyoGVJj&t=60))
 
