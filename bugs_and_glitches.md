@@ -561,7 +561,7 @@ The bottom of Amy's room uses the incorrect void color, causing parts of it to a
 ### Club entrances use incorrect medal emblem tiling
 Each club entrance features a medal emblem, though all but the Fighting Club use incorrect/inconsistent tiling when compared to the actual medals the player can obtain. Despite this, all the required tiles exist, though a handful [ends up unused](https://tcrf.net/Pokémon_Trading_Card_Game/Unused_Graphics#Tileset_03).
 
-![image](https://raw.githubusercontent.com/pret/poketcg/blob/master/src/gfx/medals.png)
+![image](https://raw.githubusercontent.com/pret/poketcg/master/src/gfx/medals.png)
 
 **Fix:** Edit the [XXX_club_entrance.bin](https://github.com/pret/poketcg/blob/master/src/data/maps/tiles/cgb) files with Tilemap Studio, using this chart as a guide for which emblem graphics to replace:
 ```diff
