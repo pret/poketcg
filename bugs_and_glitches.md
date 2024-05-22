@@ -591,7 +591,7 @@ Fire Club:
 	$0:9C, $0:C5, $0:C6, $0:9F
 	$0:AC, $0:C7, $0:C8, $0:C3
 -	$0:BC, $0:BD, $0:BE, $0:BF
-+	$0:BC, $0:BD, $0:BE, $0:BF
++	$0:BC, $0:C9, $0:CA, $0:BF
 
 Science Club:
 	$0:8C, $0:8D, $0:8E, $0:8F
