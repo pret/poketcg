@@ -16,7 +16,7 @@ MACRO dx
 	DEF x = 8 * ((\1) - 1)
 	REPT \1
 		db ((\2) >> x) & $ff
-		DEF x = x - 8
+		DEF x -= 8
 	ENDR
 ENDM
 
@@ -33,18 +33,18 @@ MACRO bigdw ; big-endian word
 ENDM
 
 MACRO sgb
-	db \1 << 3 + \2 ; sgb_command * 8 + length
+	db (\1) << 3 + (\2) ; sgb_command * 8 + length
 ENDM
 
 MACRO rgb
-	dw (\3 << 10 | \2 << 5 | \1)
+	dw ((\3) << 10 | (\2) << 5 | (\1))
 ENDM
 
 ; poketcg specific macros below
 
 MACRO textpointer
-	dw ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) & $ffff
-	db ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
+	dw (((\1) + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) & $ffff
+	db (((\1) + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
 	const \1_
 	EXPORT \1_
 ENDM
@@ -53,14 +53,13 @@ MACRO energy
 	DEF en = 0
 	IF _NARG > 1
 		REPT _NARG / 2
-			DEF x = 4 - 8 * (\1 % 2)
-			DEF en = en + \2 << ((\1 * 4) + x)
-			SHIFT
-			SHIFT
+			DEF x = 4 - 8 * ((\1) % 2)
+			DEF en += \2 << (((\1) * 4) + x)
+			SHIFT 2
 		ENDR
 		REPT NUM_TYPES / 2
 			db LOW(en)
-			DEF en = en >> 8
+			DEF en >>= 8
 		ENDR
 	ELSE
 		db 0, 0, 0, 0
@@ -68,7 +67,7 @@ MACRO energy
 ENDM
 
 MACRO gfx
-	dw ($4000 * (BANK(\1) - BANK(CardGraphics)) + (\1 - $4000)) / 8
+	dw ($4000 * (BANK(\1) - BANK(CardGraphics)) + ((\1) - $4000)) / 8
 ENDM
 
 MACRO frame_table
@@ -96,9 +95,5 @@ ENDM
 ; idx-[direction] means the index to get when the input is in the direction.
 ; its attribute is used for drawing a flipped cursor.
 MACRO cursor_transition
-	db \1, \2, \3
-	REPT 4
-		db \4
-		SHIFT
-	ENDR
+	db \1, \2, \3, \4, \5, \6, \7
 ENDM
