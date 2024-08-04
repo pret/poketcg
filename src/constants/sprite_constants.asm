@@ -11,12 +11,12 @@ DEF SPRITE_ANIM_BUFFER_CAPACITY EQU 16 ; sprites
 	const SPRITE_ANIM_ID
 	const SPRITE_ANIM_BANK
 	const SPRITE_ANIM_POINTER
-DEF const_value = const_value+1 ; pointer
+	const_skip ; pointer
 	const SPRITE_ANIM_FRAME_OFFSET_POINTER
-DEF const_value = const_value+1 ; pointer
+	const_skip ; pointer
 	const SPRITE_ANIM_FRAME_BANK
 	const SPRITE_ANIM_FRAME_DATA_POINTER
-DEF const_value = const_value+1 ; pointer
+	const_skip ; pointer
 	const SPRITE_ANIM_COUNTER
 	const SPRITE_ANIM_FLAGS
 DEF SPRITE_ANIM_LENGTH EQU const_value

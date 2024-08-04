@@ -12,7 +12,7 @@ DEF LOADED_NPC_MAX EQU $08
 	const LOADED_NPC_DIRECTION_BACKUP
 	const LOADED_NPC_MOVEMENT_STEP
 	const LOADED_NPC_MOVEMENT_PTR
-DEF const_value = const_value+1
+	const_skip
 	const LOADED_NPC_FIELD_0B
 DEF LOADED_NPC_LENGTH EQU const_value
 
@@ -24,9 +24,9 @@ DEF LOADED_NPC_LENGTH EQU const_value
 	const NPC_DATA_ANIM_CGB
 	const NPC_DATA_FLAGS
 	const NPC_DATA_SCRIPT_PTR
-DEF const_value = const_value+1
+	const_skip
 	const NPC_DATA_NAME_TEXT
-DEF const_value = const_value+1
+	const_skip
 	const NPC_DATA_DUELIST_PICTURE
 	const NPC_DATA_DECK_ID
 	const NPC_DATA_DUEL_THEME_ID
