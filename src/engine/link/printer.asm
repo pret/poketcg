@@ -179,7 +179,7 @@ _RequestToPrintCard:
 	ld a, SYM_HP
 	lb bc, 15, 66
 	call WriteByteToBGMap0
-	ld a, [wLoadedCard1EffectCommands]
+	ld a, [wLoadedCard1HP]
 	inc b
 	bank1call WriteTwoByteNumberInTxSymbolFormat
 .skip_pokemon_data
@@ -248,7 +248,7 @@ DrawBottomCardInfoInSRAMGfxBuffer0:
 .not_pkmn_card
 	bank1call SetNoLineSeparation
 	lb de, 1, 66
-	ld a, SYM_No
+	ld a, 19
 	call InitTextPrintingInTextbox
 	ld hl, wLoadedCard1NonPokemonDescription
 	call ProcessTextFromPointerToID
