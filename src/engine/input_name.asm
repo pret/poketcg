@@ -109,21 +109,21 @@ InputPlayerName:
 	; the Start button was pressed.
 	ld a, $01
 	call PlaySFXConfirmOrCancel_Bank6
-	call DrawInvisibleCursor_PlayerNamingScreen
+	call PlayerNamingScreen_DrawInvisibleCursor
 	ld a, 6
 	ld [wNamingScreenCursorX], a
 	ld a, 5
 	ld [wNamingScreenCursorY], a
-	call DrawVisibleCursor_PlayerNamingScreen
+	call PlayerNamingScreen_DrawVisibleCursor
 	jr .loop
 
 .else
-	call CheckButtonState_PlayerNamingScreen
+	call PlayerNamingScreen_CheckButtonState
 	jr nc, .loop ; if not pressed, go back to the loop.
 	cp -1
 	jr z, .on_b_button
 	; on A button
-	call ProcessInput_PlayerNamingScreen
+	call PlayerNamingScreen_ProcessInput
 	jr nc, .loop
 	; player selected the "End" button.
 	call FinalizeInputName
@@ -288,8 +288,8 @@ ENDR
 
 ; checks if any buttons were pressed and handles the input.
 ; returns carry if either the A button or the B button were pressed.
-; this function is similar to 'CheckButtonState_DeckNamingScreen'.
-CheckButtonState_PlayerNamingScreen:
+; this function is similar to 'DeckNamingScreen_CheckButtonState'.
+PlayerNamingScreen_CheckButtonState:
 	xor a
 	ld [wMenuInputSFX], a
 	ldh a, [hDPadHeld]
@@ -336,7 +336,7 @@ CheckButtonState_PlayerNamingScreen:
 	push hl
 	push bc
 	push af
-	call GetCharInfoFromPos_PlayerNamingScreen
+	call PlayerNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	inc hl
@@ -378,7 +378,7 @@ CheckButtonState_PlayerNamingScreen:
 	push hl
 	push bc
 	push af
-	call GetCharInfoFromPos_PlayerNamingScreen
+	call PlayerNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	inc hl
@@ -415,7 +415,7 @@ CheckButtonState_PlayerNamingScreen:
 	ld h, a
 .asm_69ab
 	push hl
-	call GetCharInfoFromPos_PlayerNamingScreen
+	call PlayerNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	inc hl
@@ -427,7 +427,7 @@ CheckButtonState_PlayerNamingScreen:
 .asm_69bb
 	ld d, [hl]
 	push de
-	call DrawInvisibleCursor_PlayerNamingScreen
+	call PlayerNamingScreen_DrawInvisibleCursor
 	pop de
 	pop hl
 	ld a, l
@@ -438,7 +438,7 @@ CheckButtonState_PlayerNamingScreen:
 	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $06
 	cp d
-	jp z, CheckButtonState_PlayerNamingScreen
+	jp z, PlayerNamingScreen_CheckButtonState
 	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 .no_press
@@ -452,7 +452,7 @@ CheckButtonState_PlayerNamingScreen:
 .asm_69e5
 	call PlaySFXConfirmOrCancel_Bank6
 	push af
-	call DrawVisibleCursor_PlayerNamingScreen
+	call PlayerNamingScreen_DrawVisibleCursor
 	pop af
 	scf
 	ret
@@ -469,47 +469,47 @@ CheckButtonState_PlayerNamingScreen:
 	ret nz
 	ld a, [wVisibleCursorTile]
 	bit 4, [hl]
-	jr z, DrawCursor_PlayerNamingScreen
+	jr z, PlayerNamingScreen_DrawCursor
 ;	fallthrough
 
-DrawInvisibleCursor_PlayerNamingScreen:
+PlayerNamingScreen_DrawInvisibleCursor:
 	ld a, [wInvisibleCursorTile]
 ;	fallthrough
 
-; this function is very similar to 'DrawCursor_DeckNamingScreen'.
+; this function is very similar to 'DeckNamingScreen_DrawCursor'.
 ; input:
 ;	a = which tile to draw
 ;	[wNamingScreenCursorX] = cursor's x position on the keyboard screen
 ;	[wNamingScreenCursorY] = cursor's y position on the keyboard screen
-DrawCursor_PlayerNamingScreen:
+PlayerNamingScreen_DrawCursor:
 	ld e, a
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call GetCharInfoFromPos_PlayerNamingScreen
+	call PlayerNamingScreen_GetCharInfoFromPos
 	ld a, [hli]
 	ld c, a
 	ld b, [hl]
 	dec b
 	ld a, e
-	call AdjustCursorPosition_PlayerNamingScreen
+	call PlayerNamingScreen_AdjustCursorPosition
 	call WriteByteToBGMap0
 	or a
 	ret
 
-DrawVisibleCursor_PlayerNamingScreen:
+PlayerNamingScreen_DrawVisibleCursor:
 	ld a, [wVisibleCursorTile]
-	jr DrawCursor_PlayerNamingScreen
+	jr PlayerNamingScreen_DrawCursor
 
 ; returns after calling ZeroObjectPositions if a = [wInvisibleCursorTile].
 ; otherwise, uses [wNamingScreenBufferLength], [wNamingScreenBufferMaxLength], and
 ; [wNamingScreenNamePosition] to determine x/y positions and calls SetOneObjectAttributes.
-; this function is similar to 'AdjustCursorPosition_DeckNamingScreen'.
+; this function is similar to 'DeckNamingScreen_AdjustCursorPosition'.
 ; preserves all registers
 ; input:
 ;	a = cursor tile
-AdjustCursorPosition_PlayerNamingScreen:
+PlayerNamingScreen_AdjustCursorPosition:
 	push af
 	push bc
 	push de
@@ -574,12 +574,12 @@ REPT TILE_SIZE
 ENDR
 
 ; returns carry if "End" was selected on the keyboard
-ProcessInput_PlayerNamingScreen:
+PlayerNamingScreen_ProcessInput:
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call GetCharInfoFromPos_PlayerNamingScreen
+	call PlayerNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	; load types into de.
@@ -799,15 +799,15 @@ TransformCharacter:
 	ret
 
 ; given the cursor position, returns the pointer to the character information.
-; this function is very similar to 'GetCharInfoFromPos_DeckNamingScreen',
+; this function is very similar to 'DeckNamingScreen_GetCharInfoFromPos',
 ; except that the data structure has a different unit size (6 bytes instead of 3).
 ; preserves bc and de
 ; input:
 ;	h = x position
 ;	l = y position
 ; output:
-;	hl = KeyboardData_PlayerNamingScreen pointer
-GetCharInfoFromPos_PlayerNamingScreen:
+;	hl = PlayerNamingScreen_KeyboardData pointer
+PlayerNamingScreen_GetCharInfoFromPos:
 	push de
 	; (information index) = (x) * (height) + (y)
 	; (height) = 0x05(Deck) or 0x06(Player)
@@ -818,7 +818,7 @@ GetCharInfoFromPos_PlayerNamingScreen:
 	call HtimesL
 	ld a, l
 	add e
-	ld hl, KeyboardData_PlayerNamingScreen
+	ld hl, PlayerNamingScreen_KeyboardData
 	pop de
 	or a
 	ret z
@@ -851,7 +851,7 @@ MACRO kbitem
 	ENDC
 ENDM
 
-KeyboardData_PlayerNamingScreen:
+PlayerNamingScreen_KeyboardData:
 	kbitem $04, $02, $11, $00, TX_FULLWIDTH3,   "A"
 	kbitem $06, $02, $12, $00, TX_FULLWIDTH3,   "J"
 	kbitem $08, $02, $13, $00, TX_FULLWIDTH3,   "S"
@@ -1030,23 +1030,23 @@ InputDeckName:
 	; the Start button was pressed.
 	ld a, $01
 	call PlaySFXConfirmOrCancel_Bank6
-	call DrawInvisibleCursor_DeckNamingScreen
+	call DeckNamingScreen_DrawInvisibleCursor
 
 	ld a, 6
 	ld [wNamingScreenCursorX], a
 	ld [wNamingScreenCursorY], a
-	call DrawVisibleCursor_DeckNamingScreen
+	call DeckNamingScreen_DrawVisibleCursor
 	jr .loop
 
 .else
-	call CheckButtonState_DeckNamingScreen
+	call DeckNamingScreen_CheckButtonState
 	jr nc, .loop ; if not pressed, go back to the loop.
 
 	cp -1
 	jr z, .on_b_button
 
 	; on A button
-	call ProcessInput_DeckNamingScreen
+	call DeckNamingScreen_ProcessInput
 	jr nc, .loop
 
 	; Player selected the "End" button.
@@ -1183,12 +1183,12 @@ DrawDeckNamingScreenBG:
 	ret
 
 ; returns carry if "End" was selected on the keyboard
-ProcessInput_DeckNamingScreen:
+DeckNamingScreen_ProcessInput:
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call GetCharInfoFromPos_DeckNamingScreen
+	call DeckNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	ld a, [hl]
@@ -1228,8 +1228,8 @@ ProcessInput_DeckNamingScreen:
 
 ; checks if any buttons were pressed and handles the input.
 ; returns carry if either the A button or the B button were pressed.
-; this function is similar to 'CheckButtonState_PlayerNamingScreen'.
-CheckButtonState_DeckNamingScreen:
+; this function is similar to 'PlayerNamingScreen_CheckButtonState'.
+DeckNamingScreen_CheckButtonState:
 	xor a
 	ld [wMenuInputSFX], a
 	ldh a, [hDPadHeld]
@@ -1290,12 +1290,12 @@ CheckButtonState_DeckNamingScreen:
 	ld h, a
 .asm_6f4f
 	push hl
-	call GetCharInfoFromPos_DeckNamingScreen
+	call DeckNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	ld d, [hl]
 	push de
-	call DrawInvisibleCursor_DeckNamingScreen
+	call DeckNamingScreen_DrawInvisibleCursor
 	pop de
 	pop hl
 	ld a, l
@@ -1306,7 +1306,7 @@ CheckButtonState_DeckNamingScreen:
 	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $02
 	cp d
-	jp z, CheckButtonState_DeckNamingScreen
+	jp z, DeckNamingScreen_CheckButtonState
 	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 .asm_6f73
@@ -1320,7 +1320,7 @@ CheckButtonState_DeckNamingScreen:
 .asm_6f7f
 	call PlaySFXConfirmOrCancel_Bank6
 	push af
-	call DrawVisibleCursor_DeckNamingScreen
+	call DeckNamingScreen_DrawVisibleCursor
 	pop af
 	scf
 	ret
@@ -1337,47 +1337,47 @@ CheckButtonState_DeckNamingScreen:
 	ret nz
 	ld a, [wVisibleCursorTile]
 	bit 4, [hl]
-	jr z, DrawCursor_DeckNamingScreen
+	jr z, DeckNamingScreen_DrawCursor
 ;	fallthrough
 
-DrawInvisibleCursor_DeckNamingScreen:
+DeckNamingScreen_DrawInvisibleCursor:
 	ld a, [wInvisibleCursorTile]
 ;	fallthrough
 
-; this function is very similar to 'DrawCursor_PlayerNamingScreen'.
+; this function is very similar to 'PlayerNamingScreen_DrawCursor'.
 ; input:
 ;	a = which tile to draw
 ;	[wNamingScreenCursorX] = cursor's x position on the keyboard screen
 ;	[wNamingScreenCursorY] = cursor's y position on the keyboard screen
-DrawCursor_DeckNamingScreen:
+DeckNamingScreen_DrawCursor:
 	ld e, a
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call GetCharInfoFromPos_DeckNamingScreen
+	call DeckNamingScreen_GetCharInfoFromPos
 	ld a, [hli]
 	ld c, a
 	ld b, [hl]
 	dec b
 	ld a, e
-	call AdjustCursorPosition_DeckNamingScreen
+	call DeckNamingScreen_AdjustCursorPosition
 	call WriteByteToBGMap0
 	or a
 	ret
 
-DrawVisibleCursor_DeckNamingScreen:
+DeckNamingScreen_DrawVisibleCursor:
 	ld a, [wVisibleCursorTile]
-	jr DrawCursor_DeckNamingScreen
+	jr DeckNamingScreen_DrawCursor
 
 ; returns after calling ZeroObjectPositions if a = [wInvisibleCursorTile].
 ; otherwise, uses [wNamingScreenBufferLength], [wNamingScreenBufferMaxLength], and
 ; [wNamingScreenNamePosition] to determine x/y positions and calls SetOneObjectAttributes.
-; this function is similar to 'AdjustCursorPosition_PlayerNamingScreen'.
+; this function is similar to 'PlayerNamingScreen_AdjustCursorPosition'.
 ; preserves all registers
 ; input:
 ;	a = cursor tile
-AdjustCursorPosition_DeckNamingScreen:
+DeckNamingScreen_AdjustCursorPosition:
 	push af
 	push bc
 	push de
@@ -1422,15 +1422,15 @@ AdjustCursorPosition_DeckNamingScreen:
 	ret
 
 ; given the cursor position, returns the pointer to the character information.
-; this function is very similar to 'GetCharInfoFromPos_PlayerNamingScreen',
+; this function is very similar to 'PlayerNamingScreen_GetCharInfoFromPos',
 ; except that the data structure has a different unit size (3 bytes instead of 6).
 ; preserves bc and de
 ; input:
 ;	h = x position
 ;	l = y position
 ; output:
-;	hl = KeyboardData_DeckNamingScreen pointer
-GetCharInfoFromPos_DeckNamingScreen:
+;	hl = DeckNamingScreen_KeyboardData pointer
+DeckNamingScreen_GetCharInfoFromPos:
 	push de
 	; (information index) = (x) * (height) + (y)
 	; (height) = 0x05(Deck) or 0x06(Player)
@@ -1441,7 +1441,7 @@ GetCharInfoFromPos_DeckNamingScreen:
 	call HtimesL
 	ld a, l
 	add e
-	ld hl, KeyboardData_DeckNamingScreen
+	ld hl, DeckNamingScreen_KeyboardData
 	pop de
 	or a
 	ret z
@@ -1456,7 +1456,7 @@ GetCharInfoFromPos_DeckNamingScreen:
 ; a set of keyboard datum
 ; unit: 3 bytes
 ; structure: y position, x position, character code
-KeyboardData_DeckNamingScreen:
+DeckNamingScreen_KeyboardData:
 	db $04, $02, "A"
 	db $06, $02, "J"
 	db $08, $02, "S"
