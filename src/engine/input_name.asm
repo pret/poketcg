@@ -126,7 +126,7 @@ InputPlayerName:
 	call PlayerNamingScreen_ProcessInput
 	jr nc, .loop
 	; player selected the "End" button.
-	call FinalizeInputName
+	call FinalizeInputName ; can be jr (delete ret)
 	ret
 
 .on_b_button
@@ -334,7 +334,7 @@ PlayerNamingScreen_CheckButtonState:
 	ld a, d
 	jr nz, .asm_696b
 	push hl
-	push bc
+	push bc ; unnecessary
 	push af
 	call PlayerNamingScreen_GetCharInfoFromPos
 	inc hl
@@ -346,7 +346,7 @@ PlayerNamingScreen_CheckButtonState:
 	dec a
 	ld d, a
 	pop af
-	pop bc
+	pop bc ; unnecessary
 	pop hl
 	sub d
 	cp $ff
@@ -376,7 +376,7 @@ PlayerNamingScreen_CheckButtonState:
 	ld a, d
 	jr nz, .asm_6990
 	push hl
-	push bc
+	push bc ; unnecessary
 	push af
 	call PlayerNamingScreen_GetCharInfoFromPos
 	inc hl
@@ -387,7 +387,7 @@ PlayerNamingScreen_CheckButtonState:
 	dec a
 	ld d, a
 	pop af
-	pop bc
+	pop bc ; unnecessary
 	pop hl
 	add d
 .asm_6990
@@ -595,15 +595,15 @@ PlayerNamingScreen_ProcessInput:
 	or a
 	jr nz, .asm_6aac
 	ld a, $01
-	jp .asm_6ace
+	jp .asm_6ace ; can be jr
 .asm_6aac
 	dec a
 	jr nz, .asm_6ab4
 	ld a, $02
-	jp .asm_6ace
+	jp .asm_6ace ; can be jr
 .asm_6ab4
 	xor a
-	jp .asm_6ace
+	jp .asm_6ace ; can be jr
 .asm_6ab8
 	cp $08
 	jr nz, .asm_6ad6
@@ -1060,7 +1060,7 @@ InputDeckName:
 
 	ld a, [hl]
 	or a
-	jr nz, .return
+	jr nz, .return ; can be ret nz
 
 	dec hl
 	ld [hl], TX_END
@@ -1084,7 +1084,7 @@ InputDeckName:
 	dec [hl]
 	call PrintDeckNameFromInput
 
-	jp .loop
+	jp .loop ; can be jr
 
 ; loads, to the first tile of v0Tiles0, the graphics for the
 ; blinking black square used in name input screens for inputting half width text.
@@ -1234,7 +1234,7 @@ DeckNamingScreen_CheckButtonState:
 	ld [wMenuInputSFX], a
 	ldh a, [hDPadHeld]
 	or a
-	jp z, .asm_6f73
+	jp z, .asm_6f73 ; can be jr
 	; detected any button press
 	ld b, a
 	ld a, [wNamingScreenKeyboardHeight]
@@ -1306,7 +1306,7 @@ DeckNamingScreen_CheckButtonState:
 	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $02
 	cp d
-	jp z, DeckNamingScreen_CheckButtonState
+	jp z, DeckNamingScreen_CheckButtonState ; can be jr
 	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 .asm_6f73
