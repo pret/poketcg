@@ -22,12 +22,14 @@ Deck4Data:
 	textitem 14, 1, DeckText
 	db $ff
 
-; zeroes b bytes starting from hl.
+; zeroes a bytes starting from hl.
+; this function is identical to 'ClearNBytesFromHL' in Bank $2,
+; as well as ClearMemory_Bank5' and 'ClearMemory_Bank8'.
 ; preserves all registers
 ; input:
-;	b = number of bytes to clear
+;	a = number of bytes to clear
 ;	hl = where to begin erasing
-ClearMemory:
+ClearMemory_Bank6:
 	push af
 	push bc
 	push hl
@@ -174,7 +176,7 @@ InitializeInputName:
 	; clear the name buffer.
 	ld a, NAMING_SCREEN_BUFFER_LENGTH
 	ld hl, wNamingScreenBuffer
-	call ClearMemory
+	call ClearMemory_Bank6
 	ld hl, wNamingScreenBuffer
 	ld a, [wNamingScreenBufferMaxLength]
 	ld b, a
