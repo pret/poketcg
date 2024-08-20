@@ -22,8 +22,14 @@ Deck4Data:
 	textitem 14, 1, DeckText
 	db $ff
 
-; set each byte zero from hl for b bytes.
-ClearMemory:
+; zeroes a bytes starting from hl.
+; this function is identical to 'ClearNBytesFromHL' in Bank $2,
+; as well as ClearMemory_Bank5' and 'ClearMemory_Bank8'.
+; preserves all registers
+; input:
+;	a = number of bytes to clear
+;	hl = where to begin erasing
+ClearMemory_Bank6:
 	push af
 	push bc
 	push hl
@@ -38,24 +44,28 @@ ClearMemory:
 	pop af
 	ret
 
-; play different sfx by a.
-; if a is 0xff play SFX_CANCEL (usually following a B press),
-; else play SFX_CONFIRM (usually following an A press).
-PlayAcceptOrDeclineSFX:
+; plays a sound effect depending on the value in a.
+; this function is identical to 'PlaySFXConfirmOrCancel' in Bank $2.
+; preserves all registers
+; input:
+;	a == -1:  play SFX_CANCEL  (usually following a B press)
+;	a != -1:  play SFX_CONFIRM (usually following an A press)
+PlaySFXConfirmOrCancel_Bank6:
 	push af
 	inc a
-	jr z, .sfx_decline
+	jr z, .cancel_sfx
 	ld a, SFX_CONFIRM
-	jr .sfx_accept
-.sfx_decline
+	jr .play_sfx
+.cancel_sfx
 	ld a, SFX_CANCEL
-.sfx_accept
+.play_sfx
 	call PlaySFX
 	pop af
 	ret
 
-; get player name from the user
-; into hl
+; gets the Player's name from user input and stores it in [hl].
+; input:
+;	hl = where to store the name (wNameBuffer)
 InputPlayerName:
 	ld e, l
 	ld d, h
@@ -76,7 +86,7 @@ InputPlayerName:
 	call LoadTextCursorTile
 	ld a, $02
 	ld [wd009], a
-	call DrawNamingScreenBG
+	call DrawPlayerNamingScreenBG
 	xor a
 	ld [wNamingScreenCursorX], a
 	ld [wNamingScreenCursorY], a
@@ -96,28 +106,29 @@ InputPlayerName:
 	ldh a, [hDPadHeld]
 	and START
 	jr z, .else
-	; if pressed start button.
+	; the Start button was pressed.
 	ld a, $01
-	call PlayAcceptOrDeclineSFX
-	call Func_1aa07
+	call PlaySFXConfirmOrCancel_Bank6
+	call PlayerNamingScreen_DrawInvisibleCursor
 	ld a, 6
 	ld [wNamingScreenCursorX], a
 	ld a, 5
 	ld [wNamingScreenCursorY], a
-	call Func_1aa23
+	call PlayerNamingScreen_DrawVisibleCursor
 	jr .loop
+
 .else
-	call NamingScreen_CheckButtonState
+	call PlayerNamingScreen_CheckButtonState
 	jr nc, .loop ; if not pressed, go back to the loop.
-	cp $ff
+	cp -1
 	jr z, .on_b_button
-	; on A button.
-	call NamingScreen_ProcessInput
+	; on A button
+	call PlayerNamingScreen_ProcessInput
 	jr nc, .loop
-	; if the player selected the end button,
-	; end its naming.
-	call FinalizeInputName
+	; player selected the "End" button.
+	call FinalizeInputName ; can be jr (delete ret)
 	ret
+
 .on_b_button
 	ld a, [wNamingScreenBufferLength]
 	or a
@@ -136,11 +147,12 @@ InputPlayerName:
 	call PrintPlayerNameFromInput
 	jr .loop
 
-; it's called when naming(either player's or deck's) starts.
-; a: maximum length of name(depending on whether player's or deck's).
-; bc: position of name.
-; de: dest. pointer.
-; hl: pointer to text item of the question.
+; called when the Player is asked to name something (either the protagonist or a deck)
+; input:
+;	a = maximum length of a name
+;	bc = coordinates at which to begin printing the name
+;	de = where to store the name
+;	hl = pointer for text items
 InitializeInputName:
 	ld [wNamingScreenBufferMaxLength], a
 	push hl
@@ -164,14 +176,13 @@ InitializeInputName:
 	; clear the name buffer.
 	ld a, NAMING_SCREEN_BUFFER_LENGTH
 	ld hl, wNamingScreenBuffer
-	call ClearMemory
+	call ClearMemory_Bank6
 	ld hl, wNamingScreenBuffer
 	ld a, [wNamingScreenBufferMaxLength]
 	ld b, a
 	inc b
 .loop
-	; copy data from de to hl
-	; for b bytes.
+	; copy b bytes of data from de to hl.
 	ld a, [de]
 	inc de
 	ld [hli], a
@@ -196,9 +207,11 @@ FinalizeInputName:
 	inc b
 	jr InitializeInputName.loop
 
-; draws the keyboard frame
-; and the question if it exists.
-DrawNamingScreenBG:
+; draws the player naming keyboard and prints the question, if it exists.
+; this function is very similar to 'DrawDeckNamingScreenBG'.
+; input:
+;	[wNamingScreenQuestionPointer] = pointer for text data (2 bytes)
+DrawPlayerNamingScreenBG:
 	call DrawTextboxForKeyboard
 	call PrintPlayerNameFromInput
 	ld hl, wNamingScreenQuestionPointer
@@ -216,6 +229,7 @@ DrawNamingScreenBG:
 	; print "End".
 	ld hl, .data
 	call PlaceTextItems
+	; print the keyboard characters.
 	ldtx hl, PlayerNameKeyboardText
 	lb de, 2, 4
 	call InitTextPrinting
@@ -226,12 +240,20 @@ DrawNamingScreenBG:
 	textitem $0f, $10, EndText ; "End"
 	db $ff
 
+; draws the keyboard frame
 DrawTextboxForKeyboard:
 	lb de, 0, 3 ; x, y
 	lb bc, 20, 15 ; w, h
 	call DrawRegularTextBox
 	ret
 
+; this is called when naming the player character.
+; it's similar to 'PrintDeckNameFromInput'.
+; preserves bc
+; input:
+;	[wNamingScreenNamePosition] = screen coordinates for printing (2 bytes)
+;	[wNamingScreenBufferMaxLength] = MAX_PLAYER_NAME_LENGTH
+;	[wNamingScreenBuffer] = name generated from keyboard input (up to 24 bytes)
 PrintPlayerNameFromInput:
 	ld hl, wNamingScreenNamePosition
 	ld d, [hl]
@@ -246,8 +268,7 @@ PrintPlayerNameFromInput:
 	inc a
 	ld e, a
 	ld d, 0
-	; print the underbars
-	; before print the input.
+	; print the underbars before the input information.
 	ld hl, .char_underbar
 	add hl, de
 	call ProcessText
@@ -257,6 +278,7 @@ PrintPlayerNameFromInput:
 	ld hl, wNamingScreenBuffer
 	call ProcessText
 	ret
+
 .char_underbar
 	db $56
 REPT 10
@@ -264,9 +286,10 @@ REPT 10
 ENDR
 	done
 
-; check if button pressed.
-; if pressed, set the carry bit on.
-NamingScreen_CheckButtonState:
+; checks if any buttons were pressed and handles the input.
+; returns carry if either the A button or the B button were pressed.
+; this function is similar to 'DeckNamingScreen_CheckButtonState'.
+PlayerNamingScreen_CheckButtonState:
 	xor a
 	ld [wMenuInputSFX], a
 	ldh a, [hDPadHeld]
@@ -311,9 +334,9 @@ NamingScreen_CheckButtonState:
 	ld a, d
 	jr nz, .asm_696b
 	push hl
-	push bc
+	push bc ; unnecessary
 	push af
-	call GetCharInfoFromPos_Player
+	call PlayerNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	inc hl
@@ -323,7 +346,7 @@ NamingScreen_CheckButtonState:
 	dec a
 	ld d, a
 	pop af
-	pop bc
+	pop bc ; unnecessary
 	pop hl
 	sub d
 	cp $ff
@@ -353,9 +376,9 @@ NamingScreen_CheckButtonState:
 	ld a, d
 	jr nz, .asm_6990
 	push hl
-	push bc
+	push bc ; unnecessary
 	push af
-	call GetCharInfoFromPos_Player
+	call PlayerNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	inc hl
@@ -364,7 +387,7 @@ NamingScreen_CheckButtonState:
 	dec a
 	ld d, a
 	pop af
-	pop bc
+	pop bc ; unnecessary
 	pop hl
 	add d
 .asm_6990
@@ -392,7 +415,7 @@ NamingScreen_CheckButtonState:
 	ld h, a
 .asm_69ab
 	push hl
-	call GetCharInfoFromPos_Player
+	call PlayerNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	inc hl
@@ -404,7 +427,7 @@ NamingScreen_CheckButtonState:
 .asm_69bb
 	ld d, [hl]
 	push de
-	call Func_1aa07
+	call PlayerNamingScreen_DrawInvisibleCursor
 	pop de
 	pop hl
 	ld a, l
@@ -415,7 +438,7 @@ NamingScreen_CheckButtonState:
 	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $06
 	cp d
-	jp z, NamingScreen_CheckButtonState
+	jp z, PlayerNamingScreen_CheckButtonState
 	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 .no_press
@@ -424,11 +447,12 @@ NamingScreen_CheckButtonState:
 	jr z, .asm_69ef
 	and A_BUTTON
 	jr nz, .asm_69e5
-	ld a, $ff
+	; the B button was pressed.
+	ld a, -1
 .asm_69e5
-	call PlayAcceptOrDeclineSFX
+	call PlaySFXConfirmOrCancel_Bank6
 	push af
-	call Func_1aa23
+	call PlayerNamingScreen_DrawVisibleCursor
 	pop af
 	scf
 	ret
@@ -445,32 +469,47 @@ NamingScreen_CheckButtonState:
 	ret nz
 	ld a, [wVisibleCursorTile]
 	bit 4, [hl]
-	jr z, Func_1aa07.asm_6a0a
+	jr z, PlayerNamingScreen_DrawCursor
+;	fallthrough
 
-Func_1aa07:
+PlayerNamingScreen_DrawInvisibleCursor:
 	ld a, [wInvisibleCursorTile]
-.asm_6a0a
+;	fallthrough
+
+; this function is very similar to 'DeckNamingScreen_DrawCursor'.
+; input:
+;	a = which tile to draw
+;	[wNamingScreenCursorX] = cursor's x position on the keyboard screen
+;	[wNamingScreenCursorY] = cursor's y position on the keyboard screen
+PlayerNamingScreen_DrawCursor:
 	ld e, a
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call GetCharInfoFromPos_Player
+	call PlayerNamingScreen_GetCharInfoFromPos
 	ld a, [hli]
 	ld c, a
 	ld b, [hl]
 	dec b
 	ld a, e
-	call Func_1aa28
+	call PlayerNamingScreen_AdjustCursorPosition
 	call WriteByteToBGMap0
 	or a
 	ret
 
-Func_1aa23:
+PlayerNamingScreen_DrawVisibleCursor:
 	ld a, [wVisibleCursorTile]
-	jr Func_1aa07.asm_6a0a
+	jr PlayerNamingScreen_DrawCursor
 
-Func_1aa28:
+; returns after calling ZeroObjectPositions if a = [wInvisibleCursorTile].
+; otherwise, uses [wNamingScreenBufferLength], [wNamingScreenBufferMaxLength], and
+; [wNamingScreenNamePosition] to determine x/y positions and calls SetOneObjectAttributes.
+; this function is similar to 'DeckNamingScreen_AdjustCursorPosition'.
+; preserves all registers
+; input:
+;	a = cursor tile
+PlayerNamingScreen_AdjustCursorPosition:
 	push af
 	push bc
 	push de
@@ -512,9 +551,9 @@ Func_1aa28:
 	pop af
 	ret
 
-; load, to the first tile of v0Tiles0, the graphics for the
-; blinking black square used in name input screens.
-; for inputting full width text.
+; loads, to the first tile of v0Tiles0, the graphics for the blinking black square
+; used in name input screens for inputting full width text.
+; this function is very similar to 'LoadHalfWidthTextCursorTile'.
 LoadTextCursorTile:
 	ld hl, v0Tiles0 + $00 tiles
 	ld de, .data
@@ -534,14 +573,13 @@ REPT TILE_SIZE
 	db $ff
 ENDR
 
-; set the carry bit on,
-; if "End" was selected.
-NamingScreen_ProcessInput:
+; returns carry if "End" was selected on the keyboard
+PlayerNamingScreen_ProcessInput:
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call GetCharInfoFromPos_Player
+	call PlayerNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	; load types into de.
@@ -557,15 +595,15 @@ NamingScreen_ProcessInput:
 	or a
 	jr nz, .asm_6aac
 	ld a, $01
-	jp .asm_6ace
+	jp .asm_6ace ; can be jr
 .asm_6aac
 	dec a
 	jr nz, .asm_6ab4
 	ld a, $02
-	jp .asm_6ace
+	jp .asm_6ace ; can be jr
 .asm_6ab4
 	xor a
-	jp .asm_6ace
+	jp .asm_6ace ; can be jr
 .asm_6ab8
 	cp $08
 	jr nz, .asm_6ad6
@@ -581,11 +619,13 @@ NamingScreen_ProcessInput:
 	jr .asm_6ace
 .asm_6acc
 	ld a, $01
+	; fallthrough
 .asm_6ace
 	ld [wd009], a
-	call DrawNamingScreenBG
+	call DrawPlayerNamingScreenBG
 	or a
 	ret
+
 .asm_6ad6
 	ld a, [wd009]
 	cp $02
@@ -603,6 +643,7 @@ NamingScreen_ProcessInput:
 	pop hl
 	jr c, .nothing
 	jr .asm_6b09
+
 .asm_6af4
 	lb bc, TX_FULLWIDTH3, "FW3_゜"
 	ld a, d
@@ -629,6 +670,7 @@ NamingScreen_ProcessInput:
 	pop de
 	ld a, [hl]
 	jr .asm_6b37
+
 .asm_6b1d
 	ld a, d
 	or a
@@ -641,12 +683,14 @@ NamingScreen_ProcessInput:
 .asm_6b2b
 	ld a, TX_KATAKANA
 	jr .asm_6b37
+
 ; read character code from info. to register.
-; hl: pointer.
+; input:
+;	hl = pointer
 .read_char
 	ld e, [hl]
 	inc hl
-	ld a, [hl] ; a: first byte of the code.
+	ld a, [hl] ; a = first byte of the code.
 	or a
 	; if 2 bytes code, jump.
 	jr nz, .asm_6b37
@@ -655,7 +699,7 @@ NamingScreen_ProcessInput:
 	ld a, $0e
 ; on 2 bytes code.
 .asm_6b37
-	ld d, a ; de: character code.
+	ld d, a ; de = character code
 	ld hl, wNamingScreenBufferLength
 	ld a, [hl]
 	ld c, a
@@ -664,20 +708,22 @@ NamingScreen_ProcessInput:
 	cp [hl]
 	pop hl
 	jr nz, .asm_6b4c
-	; if the buffer is full
-	; just change the last character of it.
+	; if the buffer is full, just change the last character.
 	ld hl, wNamingScreenBuffer
 	dec hl
 	dec hl
 	jr .asm_6b51
-; increase name length before add the character.
+
+; increase name length before adding the character.
 .asm_6b4c
 	inc [hl]
 	inc [hl]
 	ld hl, wNamingScreenBuffer
-; write 2 bytes character codes to the name buffer.
-; de: 2 bytes character codes.
-; hl: dest.
+
+; write 2 byte character codes to the name buffer.
+; input:
+;	de = 2 byte character code
+;	hl = copy destination
 .asm_6b51
 	ld b, 0
 	add hl, bc
@@ -696,9 +742,14 @@ NamingScreen_ProcessInput:
 
 ; this transforms the last japanese character
 ; in the name buffer into its dakuon shape or something.
-; it seems to have been deprecated as the game was translated into english.
+; it seems to have been deprecated as the game was translated into english,
 ; but it can still be applied to english, such as upper-lower case transition.
-; hl: info. pointer.
+; returns carry if there was no conversion
+; preserves bc
+; input:
+;	hl = character conversion data (e.g. TransitionTable1)
+; output:
+;	de = updated 2 byte character code
 TransformCharacter:
 	ld a, [wNamingScreenBufferLength]
 	or a
@@ -713,7 +764,7 @@ TransformCharacter:
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	; de: last character in the buffer,
+	; de = last character in the buffer,
 	; but byte-wise swapped.
 	ld a, TX_KATAKANA
 	cp e
@@ -726,7 +777,7 @@ TransformCharacter:
 .loop
 	ld a, [hli]
 	or a
-	jr z, .return
+	jr z, .return ; reached the end of the table
 	cp d
 	jr nz, .next
 	ld a, [hl]
@@ -747,11 +798,16 @@ TransformCharacter:
 	scf
 	ret
 
-; given the position of the current cursor,
-; it returns the pointer to the proper information.
-; h: position x.
-; l: position y.
-GetCharInfoFromPos_Player:
+; given the cursor position, returns the pointer to the character information.
+; this function is very similar to 'DeckNamingScreen_GetCharInfoFromPos',
+; except that the data structure has a different unit size (6 bytes instead of 3).
+; preserves bc and de
+; input:
+;	h = x position
+;	l = y position
+; output:
+;	hl = PlayerNamingScreen_KeyboardData pointer
+PlayerNamingScreen_GetCharInfoFromPos:
 	push de
 	; (information index) = (x) * (height) + (y)
 	; (height) = 0x05(Deck) or 0x06(Player)
@@ -762,7 +818,7 @@ GetCharInfoFromPos_Player:
 	call HtimesL
 	ld a, l
 	add e
-	ld hl, KeyboardData_Player
+	ld hl, PlayerNamingScreen_KeyboardData
 	pop de
 	or a
 	ret z
@@ -795,7 +851,7 @@ MACRO kbitem
 	ENDC
 ENDM
 
-KeyboardData_Player:
+PlayerNamingScreen_KeyboardData:
 	kbitem $04, $02, $11, $00, TX_FULLWIDTH3,   "A"
 	kbitem $06, $02, $12, $00, TX_FULLWIDTH3,   "J"
 	kbitem $08, $02, $13, $00, TX_FULLWIDTH3,   "S"
@@ -860,63 +916,69 @@ KeyboardData_Player:
 	kbitem $10, $0f, $01, $09, $0000
 	kbitem $00, $00, $00, $00, $0000
 
-; a set of transition datum.
+; a set of transition datum use to apply dakuten to katakana characters.
 ; unit: 4 bytes.
 ; structure:
 ; previous char. code (2) / translated char. code (2)
 ; - the former char. code contains 0x0e in high byte.
 ; - the latter char. code contains only low byte.
 TransitionTable1:
-	dw $0e16, $003e
-	dw $0e17, $003f
-	dw $0e18, $0040
-	dw $0e19, $0041
-	dw $0e1a, $0042
-	dw $0e1b, $0043
-	dw $0e1c, $0044
-	dw $0e1d, $0045
-	dw $0e1e, $0046
-	dw $0e1f, $0047
-	dw $0e20, $0048
-	dw $0e21, $0049
-	dw $0e22, $004a
-	dw $0e23, $004b
-	dw $0e24, $004c
-	dw $0e2a, $004d
-	dw $0e2b, $004e
-	dw $0e2c, $004f
-	dw $0e2d, $0050
-	dw $0e2e, $0051
-	dw $0e52, $004d
-	dw $0e53, $004e
-	dw $0e54, $004f
-	dw $0e55, $0050
-	dw $0e56, $0051
+	dw $0e16, $003e ; ka -> ga
+	dw $0e17, $003f ; ki -> gi
+	dw $0e18, $0040 ; ku -> gu
+	dw $0e19, $0041 ; ke -> ge
+	dw $0e1a, $0042 ; ko -> go
+	dw $0e1b, $0043 ; sa -> za
+	dw $0e1c, $0044 ; shi -> ji
+	dw $0e1d, $0045 ; su -> zu
+	dw $0e1e, $0046 ; se -> ze
+	dw $0e1f, $0047 ; so -> zo
+	dw $0e20, $0048 ; ta -> da
+	dw $0e21, $0049 ; chi -> dji
+	dw $0e22, $004a ; tsu -> dzu
+	dw $0e23, $004b ; te -> de
+	dw $0e24, $004c ; to -> do
+	dw $0e2a, $004d ; ha -> ba
+	dw $0e2b, $004e ; hi -> bi
+	dw $0e2c, $004f ; fu -> bu
+	dw $0e2d, $0050 ; he -> be
+	dw $0e2e, $0051 ; ho -> bo
+	dw $0e52, $004d ; pa -> ba
+	dw $0e53, $004e ; pi -> bi
+	dw $0e54, $004f ; pu -> bu
+	dw $0e55, $0050 ; pe -> be
+	dw $0e56, $0051 ; po -> bo
 	dw $0000
 
+; a set of transition datum use to apply handakuten to katakana characters.
+; it has the same unit size and structure as TransitionTable1.
 TransitionTable2:
-	dw $0e2a, $0052
-	dw $0e2b, $0053
-	dw $0e2c, $0054
-	dw $0e2d, $0055
-	dw $0e2e, $0056
-	dw $0e4d, $0052
-	dw $0e4e, $0053
-	dw $0e4f, $0054
-	dw $0e50, $0055
-	dw $0e51, $0056
+	dw $0e2a, $0052 ; ha -> pa
+	dw $0e2b, $0053 ; hi -> pi
+	dw $0e2c, $0054 ; fu -> pu
+	dw $0e2d, $0055 ; he -> pe
+	dw $0e2e, $0056 ; ho -> po
+	dw $0e4d, $0052 ; ba -> pa
+	dw $0e4e, $0053 ; bi -> pi
+	dw $0e4f, $0054 ; bu -> pu
+	dw $0e50, $0055 ; be -> pe
+	dw $0e51, $0056 ; bo -> po
 	dw $0000
 
-; get deck name from the user into de.
-; function description is similar to the player's.
-; refer to 'InputPlayerName'.
+; gets a deck name from user input and stores it in [de].
+; this function is similar to 'InputPlayerName'.
+; input:
+;	a = maximum length of a name (MAX_DECK_NAME_LENGTH)
+;	bc = coordinates at which to begin printing the name
+;	de = where to store the name (wCurDeckName)
+;	hl = pointer for text items (Deck*Data)
 InputDeckName:
 	push af
 	; check if the buffer is empty.
 	ld a, [de]
 	or a
 	jr nz, .not_empty
-	; this buffer will contain half-width chars.
+	; this buffer will contain half-width characters.
 	ld a, TX_HALFWIDTH
 	ld [de], a
 .not_empty
@@ -940,7 +1002,7 @@ InputDeckName:
 
 	xor a
 	ld [wd009], a
-	call Func_1ae99
+	call DrawDeckNamingScreenBG
 
 	xor a
 	ld [wNamingScreenCursorX], a
@@ -963,28 +1025,31 @@ InputDeckName:
 
 	ldh a, [hDPadHeld]
 	and START
-	jr z, .on_start
+	jr z, .else
 
+	; the Start button was pressed.
 	ld a, $01
-	call PlayAcceptOrDeclineSFX
-	call Func_1afa1
+	call PlaySFXConfirmOrCancel_Bank6
+	call DeckNamingScreen_DrawInvisibleCursor
 
 	ld a, 6
 	ld [wNamingScreenCursorX], a
 	ld [wNamingScreenCursorY], a
-	call Func_1afbd
-
+	call DeckNamingScreen_DrawVisibleCursor
 	jr .loop
-.on_start
-	call Func_1aefb
+
+.else
+	call DeckNamingScreen_CheckButtonState
+	jr nc, .loop ; if not pressed, go back to the loop.
+
+	cp -1
+	jr z, .on_b_button
+
+	; on A button
+	call DeckNamingScreen_ProcessInput
 	jr nc, .loop
 
-	cp $ff
-	jr z, .asm_6e1c
-
-	call Func_1aec3
-	jr nc, .loop
-
+	; Player selected the "End" button.
 	call FinalizeInputName
 
 	ld hl, wNamingScreenDestPointer
@@ -995,17 +1060,19 @@ InputDeckName:
 
 	ld a, [hl]
 	or a
-	jr nz, .return
+	jr nz, .return ; can be ret nz
 
 	dec hl
 	ld [hl], TX_END
 .return
 	ret
-.asm_6e1c
+
+.on_b_button
 	ld a, [wNamingScreenBufferLength]
 	cp $02
 	jr c, .loop
 
+	; erase one character.
 	ld e, a
 	ld d, 0
 	ld hl, wNamingScreenBuffer
@@ -1015,13 +1082,13 @@ InputDeckName:
 
 	ld hl, wNamingScreenBufferLength
 	dec [hl]
-	call ProcessTextWithUnderbar
+	call PrintDeckNameFromInput
 
-	jp .loop
+	jp .loop ; can be jr
 
-; load, to the first tile of v0Tiles0, the graphics for the
-; blinking black square used in name input screens.
-; for inputting half width text.
+; loads, to the first tile of v0Tiles0, the graphics for the
+; blinking black square used in name input screens for inputting half width text.
+; this function is very similar to 'LoadTextCursorTile'.
 LoadHalfWidthTextCursorTile:
 	ld hl, v0Tiles0 + $00 tiles
 	ld de, .data
@@ -1041,8 +1108,13 @@ REPT TILE_SIZE
 	db $f0
 ENDR
 
-; it's only for naming the deck.
-ProcessTextWithUnderbar:
+; this is called when naming a deck.
+; it's similar to 'PrintPlayerNameFromInput'.
+; preserves bc
+; input:
+;	[wNamingScreenNamePosition] = screen coordinates for printing (2 bytes)
+;	[wNamingScreenBuffer] = name generated from keyboard input (up to 24 bytes)
+PrintDeckNameFromInput:
 	ld hl, wNamingScreenNamePosition
 	ld d, [hl]
 	inc hl
@@ -1050,7 +1122,8 @@ ProcessTextWithUnderbar:
 	call InitTextPrinting
 	ld hl, .underbar_data
 	ld de, wDefaultText
-.loop ; copy the underbar string.
+.loop
+; copy the underbar string to wDefaultText
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -1059,17 +1132,20 @@ ProcessTextWithUnderbar:
 
 	ld hl, wNamingScreenBuffer
 	ld de, wDefaultText
-.loop2 ; copy the input from the user.
+.loop2
+; copy the input from the user to wDefaultText
 	ld a, [hli]
 	or a
 	jr z, .print_name
 	ld [de], a
 	inc de
 	jr .loop2
+
 .print_name
 	ld hl, wDefaultText
 	call ProcessText
 	ret
+
 .underbar_data
 	db TX_HALFWIDTH
 REPT MAX_DECK_NAME_LENGTH
@@ -1077,9 +1153,13 @@ REPT MAX_DECK_NAME_LENGTH
 ENDR
 	db TX_END
 
-Func_1ae99:
+; draws the deck naming keyboard and prints the question, if it exists.
+; this function is very similar to 'DrawPlayerNamingScreenBG'.
+; input:
+;	[wNamingScreenQuestionPointer] = pointer for text data (2 bytes)
+DrawDeckNamingScreenBG:
 	call DrawTextboxForKeyboard
-	call ProcessTextWithUnderbar
+	call PrintDeckNameFromInput
 	ld hl, wNamingScreenQuestionPointer
 	ld c, [hl]
 	inc hl
@@ -1091,8 +1171,8 @@ Func_1ae99:
 	ld l, c
 	call PlaceTextItems
 .print
-	; print "End"
-	ld hl, DrawNamingScreenBG.data
+	; print "End".
+	ld hl, DrawPlayerNamingScreenBG.data
 	call PlaceTextItems
 	; print the keyboard characters.
 	ldtx hl, DeckNameKeyboardText ; "A B C D..."
@@ -1102,12 +1182,13 @@ Func_1ae99:
 	call EnableLCD
 	ret
 
-Func_1aec3:
+; returns carry if "End" was selected on the keyboard
+DeckNamingScreen_ProcessInput:
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call GetCharInfoFromPos_Deck
+	call DeckNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	ld a, [hl]
@@ -1115,6 +1196,7 @@ Func_1aec3:
 	jr nz, .asm_6ed7
 	scf
 	ret
+
 .asm_6ed7
 	ld d, a
 	ld hl, wNamingScreenBufferLength
@@ -1125,10 +1207,13 @@ Func_1aec3:
 	cp [hl]
 	pop hl
 	jr nz, .asm_6eeb
+	; if the buffer is full, just change the last character
 	ld hl, wNamingScreenBuffer
 	dec hl
 	jr .asm_6eef
+
 .asm_6eeb
+; increase name length before adding the character
 	inc [hl]
 	ld hl, wNamingScreenBuffer
 .asm_6eef
@@ -1137,16 +1222,20 @@ Func_1aec3:
 	ld [hl], d
 	inc hl
 	ld [hl], TX_END
-	call ProcessTextWithUnderbar
+	call PrintDeckNameFromInput
 	or a
 	ret
 
-Func_1aefb:
+; checks if any buttons were pressed and handles the input.
+; returns carry if either the A button or the B button were pressed.
+; this function is similar to 'PlayerNamingScreen_CheckButtonState'.
+DeckNamingScreen_CheckButtonState:
 	xor a
 	ld [wMenuInputSFX], a
 	ldh a, [hDPadHeld]
 	or a
-	jp z, .asm_6f73
+	jp z, .asm_6f73 ; can be jr
+	; detected any button press
 	ld b, a
 	ld a, [wNamingScreenKeyboardHeight]
 	ld c, a
@@ -1154,17 +1243,19 @@ Func_1aefb:
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	bit 6, b
+	bit D_UP_F, b
 	jr z, .asm_6f1f
+	; up
 	dec a
-	bit 7, a
+	bit D_DOWN_F, a
 	jr z, .asm_6f4b
 	ld a, c
 	dec a
 	jr .asm_6f4b
 .asm_6f1f
-	bit 7, b
+	bit D_DOWN_F, b
 	jr z, .asm_6f2a
+	; down
 	inc a
 	cp c
 	jr c, .asm_6f4b
@@ -1176,16 +1267,16 @@ Func_1aefb:
 	ld a, [wNamingScreenNumColumns]
 	ld c, a
 	ld a, h
-	bit 5, b
+	bit D_LEFT_F, b
 	jr z, .asm_6f40
 	dec a
-	bit 7, a
+	bit D_DOWN_F, a
 	jr z, .asm_6f4e
 	ld a, c
 	dec a
 	jr .asm_6f4e
 .asm_6f40
-	bit 4, b
+	bit D_RIGHT_F, b
 	jr z, .asm_6f73
 	inc a
 	cp c
@@ -1199,12 +1290,12 @@ Func_1aefb:
 	ld h, a
 .asm_6f4f
 	push hl
-	call GetCharInfoFromPos_Deck
+	call DeckNamingScreen_GetCharInfoFromPos
 	inc hl
 	inc hl
 	ld d, [hl]
 	push de
-	call Func_1afa1
+	call DeckNamingScreen_DrawInvisibleCursor
 	pop de
 	pop hl
 	ld a, l
@@ -1215,20 +1306,21 @@ Func_1aefb:
 	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $02
 	cp d
-	jp z, Func_1aefb
+	jp z, DeckNamingScreen_CheckButtonState ; can be jr
 	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 .asm_6f73
 	ldh a, [hKeysPressed]
-	and $03
+	and A_BUTTON | B_BUTTON
 	jr z, .asm_6f89
-	and $01
+	and A_BUTTON
 	jr nz, .asm_6f7f
-	ld a, $ff
+	; B button was pressed
+	ld a, -1
 .asm_6f7f
-	call PlayAcceptOrDeclineSFX
+	call PlaySFXConfirmOrCancel_Bank6
 	push af
-	call Func_1afbd
+	call DeckNamingScreen_DrawVisibleCursor
 	pop af
 	scf
 	ret
@@ -1245,32 +1337,47 @@ Func_1aefb:
 	ret nz
 	ld a, [wVisibleCursorTile]
 	bit 4, [hl]
-	jr z, Func_1afa1.asm_6fa4
+	jr z, DeckNamingScreen_DrawCursor
+;	fallthrough
 
-Func_1afa1:
+DeckNamingScreen_DrawInvisibleCursor:
 	ld a, [wInvisibleCursorTile]
-.asm_6fa4
+;	fallthrough
+
+; this function is very similar to 'PlayerNamingScreen_DrawCursor'.
+; input:
+;	a = which tile to draw
+;	[wNamingScreenCursorX] = cursor's x position on the keyboard screen
+;	[wNamingScreenCursorY] = cursor's y position on the keyboard screen
+DeckNamingScreen_DrawCursor:
 	ld e, a
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call GetCharInfoFromPos_Deck
+	call DeckNamingScreen_GetCharInfoFromPos
 	ld a, [hli]
 	ld c, a
 	ld b, [hl]
 	dec b
 	ld a, e
-	call Func_1afc2
+	call DeckNamingScreen_AdjustCursorPosition
 	call WriteByteToBGMap0
 	or a
 	ret
 
-Func_1afbd:
+DeckNamingScreen_DrawVisibleCursor:
 	ld a, [wVisibleCursorTile]
-	jr Func_1afa1.asm_6fa4
+	jr DeckNamingScreen_DrawCursor
 
-Func_1afc2:
+; returns after calling ZeroObjectPositions if a = [wInvisibleCursorTile].
+; otherwise, uses [wNamingScreenBufferLength], [wNamingScreenBufferMaxLength], and
+; [wNamingScreenNamePosition] to determine x/y positions and calls SetOneObjectAttributes.
+; this function is similar to 'PlayerNamingScreen_AdjustCursorPosition'.
+; preserves all registers
+; input:
+;	a = cursor tile
+DeckNamingScreen_AdjustCursorPosition:
 	push af
 	push bc
 	push de
@@ -1314,15 +1421,19 @@ Func_1afc2:
 	pop af
 	ret
 
-; given the cursor position,
-; returns the character information which the cursor directs.
-; it's similar to "GetCharInfoFromPos_Player",
-; but the data structure is different in its unit size.
-; its unit size is 3, and player's is 6.
-; h: x
-; l: y
-GetCharInfoFromPos_Deck:
+; given the cursor position, returns the pointer to the character information.
+; this function is very similar to 'PlayerNamingScreen_GetCharInfoFromPos',
+; except that the data structure has a different unit size (3 bytes instead of 6).
+; preserves bc and de
+; input:
+;	h = x position
+;	l = y position
+; output:
+;	hl = DeckNamingScreen_KeyboardData pointer
+DeckNamingScreen_GetCharInfoFromPos:
 	push de
+	; (information index) = (x) * (height) + (y)
+	; (height) = 0x05(Deck) or 0x06(Player)
 	ld e, l
 	ld d, h
 	ld a, [wNamingScreenKeyboardHeight]
@@ -1330,8 +1441,7 @@ GetCharInfoFromPos_Deck:
 	call HtimesL
 	ld a, l
 	add e
-	; x * h + y
-	ld hl, KeyboardData_Deck
+	ld hl, DeckNamingScreen_KeyboardData
 	pop de
 	or a
 	ret z
@@ -1343,7 +1453,10 @@ GetCharInfoFromPos_Deck:
 	jr nz, .loop
 	ret
 
-KeyboardData_Deck:
+; a set of keyboard datum
+; unit: 3 bytes
+; structure: y position, x position, character code
+DeckNamingScreen_KeyboardData:
 	db $04, $02, "A"
 	db $06, $02, "J"
 	db $08, $02, "S"
