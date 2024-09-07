@@ -749,10 +749,10 @@ DuelMenu_Check:
 ; triggered by pressing SELECT in the duel menu
 DuelMenuShortcut_BothActivePokemon:
 	call FinishQueuedAnimations
-	call Func_4597
+	call OpenVariousPlayAreaScreens_FromSelectPresses
 	jp DuelMainInterface
 
-Func_4597:
+OpenVariousPlayAreaScreens_FromSelectPresses:
 	call OpenInPlayAreaScreen_FromSelectButton
 	ret c
 	call .Func_45a9
@@ -1676,7 +1676,7 @@ DisplayCardDetailScreen:
 	call _DisplayCardDetailScreen
 	ret
 
-Func_4b38:
+DisplayCardListDetails:
 	ld a, [wDuelTempList]
 	cp $ff
 	ret z
@@ -2257,7 +2257,7 @@ PlayShuffleAndDrawCardsAnimation:
 	pop bc
 	ret
 
-Func_4f2d:
+DeckShuffleAnimation:
 	ld a, [wDuelDisplayedScreen]
 	cp SHUFFLE_DECK
 	jr z, .skip_draw_scene
@@ -3132,7 +3132,7 @@ SetCardListInfoBoxText:
 	ld [wCardListInfoBoxText + 1], a
 	ret
 
-Func_5591:
+InitAndDrawCardListScreenLayout_WithSelectCheckMenu:
 	call InitAndDrawCardListScreenLayout
 	ld a, SELECT_CHECK
 	ld [wCardListItemSelectionMenuType], a
@@ -3184,7 +3184,7 @@ DrawCardListScreenLayout:
 	lb bc, 8, 6
 	call FillRectangle
 	call ApplyBGP6OrSGB3ToCardImage
-	call Func_5744
+	call PrintSortNumberInCardList_CallFromPointer
 	ld a, [wDuelTempList]
 	cp $ff
 	scf
@@ -3417,7 +3417,7 @@ CardListFunction:
 	or a
 	ret
 
-Func_5735:
+PrintSortNumberInCardList_SetPointer:
 	ld hl, wPrintSortNumberInCardListPtr
 	ld de, PrintSortNumberInCardList
 	ld [hl], e
@@ -3427,7 +3427,7 @@ Func_5735:
 	ld [wSortCardListByID], a
 	ret
 
-Func_5744:
+PrintSortNumberInCardList_CallFromPointer:
 	ld hl, wPrintSortNumberInCardListPtr
 	jp CallIndirect
 
@@ -5151,7 +5151,7 @@ Func_616e:
 	call EnableLCD
 ;	fallthrough
 
-Func_6186:
+InitAndPrintPlayAreaCardInformationAndLocation:
 	ld hl, wCurPlayAreaSlot
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld [hli], a
@@ -5162,15 +5162,15 @@ Func_6186:
 	call PrintPlayAreaCardInformationAndLocation
 	ret
 
-Func_6194:
-	call Func_6186
+InitAndPrintPlayAreaCardInformationAndLocation_WithTextBox:
+	call InitAndPrintPlayAreaCardInformationAndLocation
 	ld a, [wCurPlayAreaY]
 	ld e, a
 	ld d, 0
 	call SetCursorParametersForTextBox_Default
 	ret
 
-Func_61a1:
+SetupPlayAreaScreen:
 	xor a
 	ld [wExcludeArenaPokemon], a
 	ld a, [wDuelDisplayedScreen]
@@ -6377,7 +6377,7 @@ HandleSpecialDuelMainSceneHotkeys:
 	call OpenInPlayAreaScreen_FromSelectButton
 	jr .return_carry
 .both_duelist_play_areas
-	call Func_4597
+	call OpenVariousPlayAreaScreens_FromSelectPresses
 	jr .return_carry
 .down_pressed
 	call OpenTurnHolderPlayAreaScreen
@@ -6751,7 +6751,7 @@ OppAction_6b30:
 	push af
 	ldh a, [hTemp_ffa0]
 	ldh [hWhoseTurn], a
-	call Func_4f2d
+	call DeckShuffleAnimation
 	pop af
 	ldh [hWhoseTurn], a
 	ret
@@ -7248,7 +7248,7 @@ ApplyStatusConditionToArenaPokemon:
 	ld [de], a
 	ret
 
-Func_6e49::
+HandleDestinyBondAndBetweenTurnKnockOuts::
 	call HandleDestinyBondSubstatus
 	; fallthrough
 

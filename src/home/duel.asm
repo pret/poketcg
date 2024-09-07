@@ -1555,7 +1555,7 @@ PlayAttackAnimation_DealAttackDamage::
 	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	call ApplyDamageModifiers_DamageToTarget
-	call Func_189d
+	call LastChanceToNegateFinalDamage
 	ld hl, wDealtDamage
 	ld [hl], e
 	inc hl
@@ -1605,7 +1605,7 @@ HandleAfterDamageEffects::
 	bank1call ApplyStatusConditionQueue
 	call Func_1bb4
 	bank1call UpdateArenaCardLastTurnDamage
-	call Func_6e49
+	call HandleDestinyBondAndBetweenTurnKnockOuts
 	or a
 	ret
 
@@ -1641,7 +1641,7 @@ HandleConfusionDamageToSelf::
 	ld a, 20 ; damage
 	call DealConfusionDamageToSelf
 	call Func_1bb4
-	call Func_6e49
+	call HandleDestinyBondAndBetweenTurnKnockOuts
 	bank1call ClearNonTurnTemporaryDuelvars
 	or a
 	ret
@@ -1692,7 +1692,7 @@ SendAttackDataToLinkOpponent::
 	ldh [hTemp_ffa0], a
 	ret
 
-Func_189d::
+LastChanceToNegateFinalDamage::
 	ld a, [wLoadedAttackCategory]
 	bit RESIDUAL_F, a
 	ret nz

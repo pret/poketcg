@@ -98,14 +98,14 @@ TossCoinATimes_BankB:
 CommentedOut_2c086:
 	ret
 
-Func_2c087:
+Serial_TossZeroCoins:
 	xor a
-	jr Func_2c08c
+	jr Serial_TossCoinATimes
 
-Func_2c08a:
+Serial_TossCoin:
 	ld a, $1
 
-Func_2c08c:
+Serial_TossCoinATimes:
 	push de
 	push af
 	ld a, OPPACTION_TOSS_COIN_A_TIMES
@@ -133,16 +133,16 @@ Func_2c0a8:
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_6B30
 	call SetOppAction_SerialSendDuelData
-	bank1call Func_4f2d
+	bank1call DeckShuffleAnimation
 	ld c, a
 	pop af
 	ldh [hTemp_ffa0], a
 	ld a, c
 	ret
 
-Func_2c0bd:
+ShuffleCardsInDeck:
 	call ExchangeRNG
-	bank1call Func_4f2d
+	bank1call DeckShuffleAnimation
 	call ShuffleDeck
 	ret
 
@@ -213,11 +213,11 @@ SetExpectedAIDamage:
 	ld [wAIMaxDamage], a
 	ret
 
-Func_2c10b:
+DrawPlayAreaScreenToShowChanges:
 	ldh [hTempPlayAreaLocation_ff9d], a
-	bank1call Func_61a1
+	bank1call SetupPlayAreaScreen
 	bank1call PrintPlayAreaCardList_EnableLCD
-	bank1call Func_6194
+	bank1call InitAndPrintPlayAreaCardInformationAndLocation_WithTextBox
 	ret
 
 ; deal damage to all the turn holder's benched Pokemon
@@ -240,7 +240,7 @@ DealDamageToAllBenchedPokemon:
 	jr nz, .loop
 	ret
 
-Func_2c12e:
+PlayAttackAnimationOverAttackingPokemon:
 	ld [wLoadedAttackAnimation], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld b, a
@@ -1450,7 +1450,7 @@ TerrorStrike_50PercentSelectSwitchPokemon:
 ; toss coin and store whether it was tails (0) or heads (1) in hTemp_ffa0.
 ; return if it was tails.
 	ldtx de, IfHeadsChangeOpponentsActivePokemonText
-	call Func_2c08a
+	call Serial_TossCoin
 	ldh [hTemp_ffa0], a
 	ret nc
 
@@ -1680,7 +1680,7 @@ Sprout_PlayerSelectEffect:
 	ret c
 
 ; draw Deck list interface and print text
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChooseAnOddishText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
@@ -1701,7 +1701,7 @@ Sprout_PlayerSelectEffect:
 
 .play_sfx
 	; play SFX and loop back
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .loop
 
 .pressed_b
@@ -1758,7 +1758,7 @@ Sprout_PutInPlayAreaEffect:
 	ldtx hl, PlacedOnTheBenchText
 	bank1call DisplayCardDetailScreen
 .shuffle
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 ; returns carry if no Pokemon on Bench
@@ -1940,7 +1940,7 @@ NidoranFCallForFamily_PlayerSelectEffect:
 	ret c
 
 ; draw Deck list interface and print text
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChooseNidoranText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
@@ -1964,7 +1964,7 @@ NidoranFCallForFamily_PlayerSelectEffect:
 
 .play_sfx
 	; play SFX and loop back
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .loop
 
 .pressed_b
@@ -2026,7 +2026,7 @@ NidoranFCallForFamily_PutInPlayAreaEffect:
 	ldtx hl, PlacedOnTheBenchText
 	bank1call DisplayCardDetailScreen
 .shuffle
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 HornHazard_AIEffect:
@@ -2190,14 +2190,14 @@ EnergyTrans_TransferEffect:
 	cp DUELIST_TYPE_PLAYER
 	jr z, .player
 ; not player
-	bank1call Func_61a1
+	bank1call SetupPlayAreaScreen
 	bank1call PrintPlayAreaCardList_EnableLCD
 	ret
 
 .player
 	xor a
 	ldh [hCurSelectionItem], a
-	bank1call Func_61a1
+	bank1call SetupPlayAreaScreen
 
 .draw_play_area
 	bank1call PrintPlayAreaCardList_EnableLCD
@@ -2266,7 +2266,7 @@ EnergyTrans_TransferEffect:
 	jr .draw_play_area
 
 .play_sfx
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .loop_input_take
 
 EnergyTrans_AIEffect:
@@ -2351,7 +2351,7 @@ BellsproutCallForFamily_PlayerSelectEffect:
 	ret c
 
 ; draw Deck list interface and print text
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChooseABellsproutText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
@@ -2372,7 +2372,7 @@ BellsproutCallForFamily_PlayerSelectEffect:
 
 .play_sfx
 	; play SFX and loop back
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .loop
 
 .pressed_b
@@ -2428,7 +2428,7 @@ BellsproutCallForFamily_PutInPlayAreaEffect:
 	ldtx hl, PlacedOnTheBenchText
 	bank1call DisplayCardDetailScreen
 .shuffle
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 WeezingSmog_AIEffect:
@@ -2627,7 +2627,7 @@ Heal_RemoveDamageEffect:
 	add 10 ; remove 1 damage counter
 	ld [hl], a
 	ldh a, [hPlayAreaEffectTarget]
-	call Func_2c10b
+	call DrawPlayAreaScreenToShowChanges
 	call ExchangeRNG
 	ret
 
@@ -2874,7 +2874,7 @@ KrabbyCallForFamily_PlayerSelectEffect:
 	ret c
 
 ; draw Deck list interface and print text
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChooseAKrabbyText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
@@ -2895,7 +2895,7 @@ KrabbyCallForFamily_PlayerSelectEffect:
 
 .play_sfx
 	; play SFX and loop back
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .loop
 
 .pressed_b
@@ -2951,7 +2951,7 @@ KrabbyCallForFamily_PutInPlayAreaEffect:
 	ldtx hl, PlacedOnTheBenchText
 	bank1call DisplayCardDetailScreen
 .shuffle
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 MagikarpFlail_AIEffect:
@@ -4055,7 +4055,7 @@ MixUpEffect:
 	ldtx hl, ThePkmnCardsInHandAndDeckWereShuffledText
 	call DrawWideTextBox_WaitForInput
 
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	call CreateDeckCardList
 	pop bc
 	ldh a, [hCurSelectionItem]
@@ -4147,7 +4147,7 @@ Firegiver_AddToHandEffect:
 	; return if none found
 	ldtx hl, ThereWasNoFireEnergyText
 	call DrawWideTextBox_WaitForInput
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 .found
@@ -4228,7 +4228,7 @@ Firegiver_AddToHandEffect:
 	call LoadTxRam3
 	ldtx hl, DrewFireEnergyFromTheHandText
 	call DrawWideTextBox_WaitForInput
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 MoltresLv37DiveBomb_AIEffect:
@@ -4386,7 +4386,7 @@ Curse_PlayerSelectEffect:
 	call SwapTurn
 	xor a
 	ldh [hCurSelectionItem], a
-	bank1call Func_61a1
+	bank1call SetupPlayAreaScreen
 .start
 	bank1call PrintPlayAreaCardList_EnableLCD
 	push af
@@ -4409,7 +4409,7 @@ Curse_PlayerSelectEffect:
 	or a
 	jr nz, .picked_first ; test if has damage
 	; play sfx
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .loop_input_first
 
 .picked_first
@@ -4487,7 +4487,7 @@ Curse_TransferDamageEffect:
 	jr z, .vs_player
 
 ; vs. opponent
-	bank1call Func_61a1
+	bank1call SetupPlayAreaScreen
 .vs_player
 ; transfer the damage counter to the targets that were selected.
 	ldh a, [hPlayAreaEffectTarget]
@@ -4510,12 +4510,12 @@ Curse_TransferDamageEffect:
 ; vs. opponent
 	ldh a, [hPlayAreaEffectTarget]
 	ldh [hTempPlayAreaLocation_ff9d], a
-	bank1call Func_6194
+	bank1call InitAndPrintPlayAreaCardInformationAndLocation_WithTextBox
 
 .done
 	call SwapTurn
 	call ExchangeRNG
-	bank1call Func_6e49
+	bank1call HandleDestinyBondAndBetweenTurnKnockOuts
 	ret
 
 GengarDarkMind_PlayerSelectEffect:
@@ -4662,7 +4662,7 @@ EnergyConversion_AddToHandEffect:
 .done
 	call IsPlayerTurn
 	ret c
-	bank1call Func_4b38
+	bank1call DisplayCardListDetails
 	ret
 
 ; return carry if Defending Pokemon is not asleep
@@ -4839,7 +4839,7 @@ HandleProphecyScreen:
 	ldtx hl, ChooseTheOrderOfTheCardsText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
-	bank1call Func_5735
+	bank1call PrintSortNumberInCardList_SetPointer
 
 .loop_selection
 	bank1call DisplayCardList
@@ -4862,7 +4862,7 @@ HandleProphecyScreen:
 	ld [hl], a
 	inc a
 	ldh [hCurSelectionItem], a
-	bank1call Func_5744
+	bank1call PrintSortNumberInCardList_CallFromPointer
 	ldh a, [hCurSelectionItem]
 	ld hl, wNumberOfCardsToOrder
 	cp [hl]
@@ -4925,7 +4925,7 @@ HandleProphecyScreen:
 	; clear this byte
 	dec hl
 	ld [hl], $00
-	bank1call Func_5744
+	bank1call PrintSortNumberInCardList_CallFromPointer
 	jr .loop_selection
 
 HypnoDarkMind_PlayerSelectEffect:
@@ -5013,7 +5013,7 @@ DamageSwap_SelectAndSwapEffect:
 	cp DUELIST_TYPE_PLAYER
 	jr z, .player
 ; non-player
-	bank1call Func_61a1
+	bank1call SetupPlayAreaScreen
 	bank1call PrintPlayAreaCardList_EnableLCD
 	ret
 
@@ -5022,7 +5022,7 @@ DamageSwap_SelectAndSwapEffect:
 	bank1call DrawWholeScreenTextBox
 	xor a
 	ldh [hCurSelectionItem], a
-	bank1call Func_61a1
+	bank1call SetupPlayAreaScreen
 
 .start
 	bank1call PrintPlayAreaCardList_EnableLCD
@@ -5095,7 +5095,7 @@ DamageSwap_SelectAndSwapEffect:
 	jr .start
 
 .no_damage
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .loop_input_first
 
 ; tries to give damage counter to hPlayAreaEffectTarget,
@@ -5524,7 +5524,7 @@ StrangeBehavior_SelectAndSwapEffect:
 	jr z, .player
 
 ; not player
-	bank1call Func_61a1
+	bank1call SetupPlayAreaScreen
 	bank1call PrintPlayAreaCardList_EnableLCD
 	ret
 
@@ -5534,7 +5534,7 @@ StrangeBehavior_SelectAndSwapEffect:
 
 	xor a
 	ldh [hCurSelectionItem], a
-	bank1call Func_61a1
+	bank1call SetupPlayAreaScreen
 .start
 	bank1call PrintPlayAreaCardList_EnableLCD
 	push af
@@ -5568,7 +5568,7 @@ StrangeBehavior_SelectAndSwapEffect:
 	jr .start
 
 .play_sfx
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .loop_input
 
 StrangeBehavior_SwapEffect:
@@ -5676,7 +5676,7 @@ Scavenge_DiscardEffect:
 
 Scavenge_PlayerSelectTrainerEffect:
 	call CreateTrainerCardListFromDiscardPile
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, PleaseSelectCardText
 	ldtx de, PlayerDiscardPileText
 	bank1call SetCardListHeaderText
@@ -5986,7 +5986,7 @@ MarowakCallForFamily_PlayerSelectEffect:
 	ret c
 
 ; draw Deck list interface and print text
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChooseBasicFightingPokemonText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
@@ -6009,7 +6009,7 @@ MarowakCallForFamily_PlayerSelectEffect:
 
 .play_sfx
 	; play SFX and loop back
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .loop
 
 .pressed_b
@@ -6073,7 +6073,7 @@ MarowakCallForFamily_PutInPlayAreaEffect:
 	ldtx hl, PlacedOnTheBenchText
 	bank1call DisplayCardDetailScreen
 .shuffle
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 KarateChop_AIEffect:
@@ -6380,7 +6380,7 @@ Wail_FillBenchEffect:
 	jr .check_bench
 
 .done
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 Thunderpunch_AIEffect:
@@ -6797,7 +6797,7 @@ Gigashock_PlayerSelectEffect:
 	xor a
 	ldh [hCurSelectionItem], a
 	ld [wCurGigashockItem], a
-	bank1call Func_61a1
+	bank1call SetupPlayAreaScreen
 .start
 	bank1call PrintPlayAreaCardList_EnableLCD
 	push af
@@ -6821,7 +6821,7 @@ Gigashock_PlayerSelectEffect:
 	call .CheckIfChosenAlready
 	jr nc, .not_chosen
 	; play SFX
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .loop_input
 
 .not_chosen
@@ -6852,7 +6852,7 @@ Gigashock_PlayerSelectEffect:
 .chosen
 	ldh a, [hCurMenuItem]
 	inc a
-	call Func_2c10b
+	call DrawPlayAreaScreenToShowChanges
 	ldh a, [hKeysPressed]
 	and B_BUTTON
 	jr nz, .try_cancel
@@ -7064,7 +7064,7 @@ PealOfThunder_RandomlyDamageEffect:
 	call ExchangeRNG
 	ld de, 30 ; damage to inflict
 	call RandomlyDamagePlayAreaPokemon
-	bank1call Func_6e49
+	bank1call HandleDestinyBondAndBetweenTurnKnockOuts
 	ret
 
 ; randomly damages a Pokemon in play, except
@@ -7243,7 +7243,7 @@ MagneticStormEffect:
 	ldtx hl, TheEnergyCardFromPlayAreaWasMovedText
 	call DrawWideTextBox_WaitForInput
 	xor a
-	call Func_2c10b
+	call DrawPlayAreaScreenToShowChanges
 	ret
 
 ElectrodeSonicboom_UnaffectedByColorEffect:
@@ -7271,7 +7271,7 @@ EnergySpike_PlayerSelectEffect:
 	call LookForCardsInDeck
 	ret c
 
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChooseBasicEnergyCardText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
@@ -7302,7 +7302,7 @@ EnergySpike_PlayerSelectEffect:
 	ret
 
 .play_sfx
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .select_card
 
 .try_cancel
@@ -7372,7 +7372,7 @@ EnergySpike_AttachEnergyEffect:
 	bank1call DisplayCardDetailScreen
 
 .done
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 JolteonDoubleKick_AIEffect:
@@ -8782,9 +8782,9 @@ FriendshipSong_AddToBench50PercentEffect:
 	call PickRandomBasicCardFromDeck
 	jr nc, .put_in_bench
 	ld a, ATK_ANIM_FRIENDSHIP_SONG
-	call Func_2c12e
+	call PlayAttackAnimationOverAttackingPokemon
 	call .none_came_text
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 .put_in_bench
@@ -8792,11 +8792,11 @@ FriendshipSong_AddToBench50PercentEffect:
 	call AddCardToHand
 	call PutHandPokemonCardInPlayArea
 	ld a, ATK_ANIM_FRIENDSHIP_SONG
-	call Func_2c12e
+	call PlayAttackAnimationOverAttackingPokemon
 	ldh a, [hTempCardIndex_ff98]
 	ldtx hl, CameToTheBenchText
 	bank1call DisplayCardDetailScreen
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 ExpandEffect:
@@ -8958,7 +8958,7 @@ ImakuniEffect:
 .failed
 ; play confusion animation and print failure text
 	ld a, ATK_ANIM_OWN_CONFUSION
-	call Func_2fea9
+	call PlayTrainerEffectAnimation
 	ldtx hl, ThereWasNoEffectText
 	call DrawWideTextBox_WaitForInput
 	ret
@@ -8966,7 +8966,7 @@ ImakuniEffect:
 .success
 ; play confusion animation and confuse card
 	ld a, ATK_ANIM_OWN_CONFUSION
-	call Func_2fea9
+	call PlayTrainerEffectAnimation
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and PSN_DBLPSN
@@ -9006,7 +9006,7 @@ EnergyRemoval_DiscardEffect:
 ; show Player which Pokemon was affected
 	call SwapTurn
 	ldh a, [hTemp_ffa0]
-	call Func_2c10b
+	call DrawPlayAreaScreenToShowChanges
 	call SwapTurn
 	ret
 
@@ -9028,7 +9028,7 @@ EnergyRetrieval_PlayerHandSelection:
 	call CreateHandCardList
 	ldh a, [hTempCardIndex_ff9f]
 	call RemoveCardFromDuelTempList
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	bank1call DisplayCardList
 	ldh a, [hTempCardIndex_ff98]
 	ldh [hTempList], a
@@ -9088,7 +9088,7 @@ EnergyRetrieval_DiscardAndAddToHandEffect:
 .done
 	call IsPlayerTurn
 	ret c
-	bank1call Func_4b38
+	bank1call DisplayCardListDetails
 	ret
 
 ; return carry if no cards left in Deck.
@@ -9110,7 +9110,7 @@ EnergySearch_PlayerSelection:
 	call LookForCardsInDeck
 	ret c ; skip showing deck
 
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChooseBasicEnergyCardText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
@@ -9124,7 +9124,7 @@ EnergySearch_PlayerSelection:
 	or a
 	ret
 .play_sfx
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .read_input
 
 .try_exit
@@ -9157,7 +9157,7 @@ EnergySearch_AddToHandEffect:
 	ldtx hl, WasPlacedInTheHandText
 	bank1call DisplayCardDetailScreen
 .done
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 ; check if card index in a is a Basic Energy card.
@@ -9258,7 +9258,7 @@ GamblerEffect:
 	jr .loop_return_deck
 
 .check_coin_toss
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ld c, 8
 	ldh a, [hTemp_ffa0]
 	or a
@@ -9297,7 +9297,7 @@ ItemFinder_PlayerSelection:
 ; cards were selected to discard from hand.
 ; now to choose a Trainer card from Discard Pile.
 	call CreateTrainerCardListFromDiscardPile
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChooseCardToPlaceInHandText
 	ldtx de, PlayerDiscardPileText
 	bank1call SetCardListHeaderText
@@ -9352,7 +9352,7 @@ Defender_AttachDefenderEffect:
 	ret c
 
 	ldh a, [hTemp_ffa0]
-	call Func_2c10b
+	call DrawPlayAreaScreenToShowChanges
 	ret
 
 ; return carry if Bench is full.
@@ -9381,7 +9381,7 @@ FullHeal_StatusCheck:
 
 FullHeal_ClearStatusEffect:
 	ld a, ATK_ANIM_FULL_HEAL
-	call Func_2fea9
+	call PlayTrainerEffectAnimation
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	ld [hl], NO_STATUS
@@ -9405,7 +9405,7 @@ ImposterProfessorOakEffect:
 
 ; then draw 7 cards from the deck.
 .done_return
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ld a, 7
 	bank1call DisplayDrawNCardsScreen
 	ld c, 7
@@ -9440,7 +9440,7 @@ ComputerSearch_PlayerDiscardHandSelection:
 
 ComputerSearch_PlayerDeckSelection:
 	call CreateDeckCardList
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChooseCardToPlaceInHandText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
@@ -9464,7 +9464,7 @@ ComputerSearch_DiscardAddToHandEffect:
 	ld a, [hl]
 	call SearchCardInDeckAndAddToHand
 	call AddCardToHand
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 ; return carry if Bench is full.
@@ -9552,7 +9552,7 @@ MrFuji_ReturnToDeckEffect:
 	ldtx hl, PokemonAndAllAttachedCardsWereReturnedToDeckText
 	call DrawWideTextBox_WaitForInput
 .done
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 PlusPowerEffect:
@@ -9671,7 +9671,7 @@ PokemonFlute_PlayerSelection:
 	call CreateBasicPokemonCardListFromDiscardPile
 
 ; display selection screen and store Player's selection
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChoosePokemonToPlaceInPlayText
 	ldtx de, PlayerDiscardPileText
 	bank1call SetCardListHeaderText
@@ -9714,7 +9714,7 @@ PokemonBreeder_HandPlayAreaCheck:
 PokemonBreeder_PlayerSelection:
 ; create hand list of playable Stage2 cards
 	call CreatePlayableStage2PokemonCardListFromHand
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 
 ; handle Player selection of Stage2 card
 	ldtx hl, PleaseSelectCardText
@@ -9999,7 +9999,7 @@ PokemonTrader_PlayerHandSelection:
 
 ; create list with all Pokemon cards in hand
 	call CreatePokemonCardListFromHand
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 
 ; handle Player selection
 	ldtx hl, ChooseCardToSwitchText
@@ -10020,7 +10020,7 @@ PokemonTrader_PlayerDeckSelection:
 	ldtx hl, ChooseBasicOrEvolutionPokemonCardFromDeckText
 	call DrawWideTextBox_WaitForInput
 	call CreateDeckCardList
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChoosePokemonCardText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
@@ -10065,7 +10065,7 @@ PokemonTrader_TradeCardsEffect:
 	ldtx hl, WasPlacedInTheHandText
 	bank1call DisplayCardDetailScreen
 .done
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 ; makes list in wDuelTempList with all Pokemon cards
@@ -10169,7 +10169,7 @@ Pokedex_PlayerSelection:
 	ldtx hl, ChooseTheOrderOfTheCardsText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
-	bank1call Func_5735
+	bank1call PrintSortNumberInCardList_SetPointer
 
 .read_input
 	bank1call DisplayCardList
@@ -10194,7 +10194,7 @@ Pokedex_PlayerSelection:
 
 ; refresh screen
 	push af
-	bank1call Func_5744
+	bank1call PrintSortNumberInCardList_CallFromPointer
 	pop af
 
 ; check if we're done ordering
@@ -10257,7 +10257,7 @@ Pokedex_PlayerSelection:
 	jr nz, .asm_2f99e
 	dec hl
 	ld [hl], $00 ; overwrite order number with 0
-	bank1call Func_5744
+	bank1call PrintSortNumberInCardList_CallFromPointer
 	jr .read_input
 
 Pokedex_OrderDeckCardsEffect:
@@ -10351,7 +10351,7 @@ LassEffect:
 ; show card list
 	ldh a, [hCurSelectionItem]
 	or a
-	call nz, Func_2c0bd ; only show list if there were any Trainer cards
+	call nz, ShuffleCardsInDeck ; only show list if there were any Trainer cards
 	ret
 
 .DisplayLinkOrCPUHand
@@ -10413,7 +10413,7 @@ Maintenance_ReturnToDeckAndDrawEffect:
 	ldh a, [hTempList + 1]
 	call RemoveCardFromHand
 	call ReturnCardToDeck
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 
 ; draw one card
 	ld a, 1
@@ -10438,7 +10438,7 @@ PokeBall_DeckCheck:
 
 PokeBall_PlayerSelection:
 	ldtx de, TrainerCardSuccessCheckText
-	call Func_2c08a
+	call Serial_TossCoin
 	ldh [hTempList], a ; store coin result
 	ret nc
 
@@ -10451,7 +10451,7 @@ PokeBall_PlayerSelection:
 	jr c, .no_pkmn ; return if Player chose not to check deck
 
 ; handle input
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, ChoosePokemonCardText
 	ldtx de, DuelistDeckText
 	bank1call SetCardListHeaderText
@@ -10475,7 +10475,7 @@ PokeBall_PlayerSelection:
 	ret
 
 .play_sfx
-	call Func_3794
+	call PlaySFX_InvalidChoice
 	jr .read_input
 
 .try_exit
@@ -10510,7 +10510,7 @@ PokeBall_AddToHandEffect:
 	ldtx hl, WasPlacedInTheHandText
 	bank1call DisplayCardDetailScreen
 .done
-	call Func_2c0bd
+	call ShuffleCardsInDeck
 	ret
 
 ; return carry if no cards in the Discard Pile
@@ -10523,11 +10523,11 @@ Recycle_DiscardPileCheck:
 
 Recycle_PlayerSelection:
 	ldtx de, TrainerCardSuccessCheckText
-	call Func_2c08a
+	call Serial_TossCoin
 	jr nc, .tails
 
 	call CreateDiscardPileCardList
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	ldtx hl, PleaseSelectCardText
 	ldtx de, PlayerDiscardPileText
 	bank1call SetCardListHeaderText
@@ -10580,7 +10580,7 @@ Revive_PlayerSelection:
 	ldtx hl, ChooseBasicPokemonToPlaceOnBenchText
 	call DrawWideTextBox_WaitForInput
 	call CreateBasicPokemonCardListFromDiscardPile
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 
 ; display screen to select Pokemon
 	ldtx hl, PleaseSelectCardText
@@ -10722,7 +10722,7 @@ DevolutionSpray_PlayerSelection:
 ; show Play Area screen with static cursor
 ; so that the Player either presses A to do one more devolution
 ; or presses B to finish selection.
-	bank1call Func_6194
+	bank1call InitAndPrintPlayAreaCardInformationAndLocation_WithTextBox
 	jr c, .done_selection ; if B pressed, end selection instead
 	; do one more devolution
 	bank1call GetCardOneStageBelow
@@ -10809,7 +10809,7 @@ DevolutionSpray_DevolutionEffect:
 	call PrintDevolvedCardNameAndLevelText
 	ldh a, [hTempList]
 	call PrintPlayAreaCardKnockedOutIfNoHP
-	bank1call Func_6e49
+	bank1call HandleDestinyBondAndBetweenTurnKnockOuts
 	ret
 
 ; returns carry if neither duelist has any energy cards attached
@@ -10932,13 +10932,13 @@ SuperEnergyRemoval_DiscardEffect:
 ; ...otherwise show Play Area of affected Pokemon
 ; in opponent's Play Area
 	ldh a, [hTemp_ffa0]
-	call Func_2c10b
+	call DrawPlayAreaScreenToShowChanges
 ; in player's Play Area
 	xor a
 	ld [wDuelDisplayedScreen], a
 	call SwapTurn
 	ldh a, [hPlayAreaEffectTarget]
-	call Func_2c10b
+	call DrawPlayAreaScreenToShowChanges
 	call SwapTurn
 	ret
 
@@ -11024,7 +11024,7 @@ SuperEnergyRetrieval_DiscardAndAddToHandEffect:
 	call IsPlayerTurn
 	ret c
 ; if not, show card list selected by Opponent
-	bank1call Func_4b38
+	bank1call DisplayCardListDetails
 	ret
 
 ; outputs in hl the next position
@@ -11074,7 +11074,7 @@ HandlePlayerSelection2HandCards:
 	pop hl
 .loop
 	push hl
-	bank1call Func_5591
+	bank1call InitAndDrawCardListScreenLayout_WithSelectCheckMenu
 	pop hl
 	bank1call SetCardListInfoBoxText
 	push hl
@@ -11118,7 +11118,7 @@ GustOfWind_PlayerSelection:
 GustOfWind_SwitchEffect:
 ; play whirlwind animation
 	ld a, ATK_ANIM_GUST_OF_WIND
-	call Func_2fea9
+	call PlayTrainerEffectAnimation
 
 ; switch Arena card
 	call SwapTurn
@@ -11133,7 +11133,7 @@ GustOfWind_SwitchEffect:
 
 ; input:
 ;	a = attack animation to play
-Func_2fea9:
+PlayTrainerEffectAnimation:
 	ld [wLoadedAttackAnimation], a
 	bank1call Func_7415
 	lb bc, PLAY_AREA_ARENA, $0

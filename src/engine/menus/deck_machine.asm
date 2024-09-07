@@ -481,7 +481,7 @@ EmptyScreenAndDrawTextBox:
 	call DrawRegularTextBox
 	ret
 
-Func_b177::
+HandleGiftCenter::
 	ld a, [wGiftCenterChoice]
 	and $3
 	ld hl, .GiftCenterFunctionTable
