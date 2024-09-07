@@ -1075,7 +1075,7 @@ HandleAIDamageSwap:
 	jr c, .is_in_bench
 
 ; Alakazam is Arena card
-	xor a
+	xor a ; PLAY_AREA_ARENA
 .is_in_bench
 	ld [wce08], a
 	call .CheckForDamageSwapTargetInBench

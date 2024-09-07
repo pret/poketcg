@@ -8,7 +8,7 @@ INCLUDE "engine/duel/ai/decks/unreferenced.asm"
 ; output:
 ;	[wSelectedAttack] = attack index that KOs
 CheckIfAnyAttackKnocksOutDefendingCard:
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	call CheckIfAttackKnocksOutDefendingCard
 	ret c
 	ld a, SECOND_ATTACK
@@ -1348,7 +1348,7 @@ CheckDamageToMrMime:
 ; returns carry if arena card
 ; can knock out defending Pokémon
 CheckIfActiveCardCanKnockOut:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .fail
@@ -1364,10 +1364,10 @@ CheckIfActiveCardCanKnockOut:
 ; outputs carry if any of the active Pokémon attacks
 ; can be used and are not residual
 CheckIfActivePokemonCanUseAnyNonResidualAttack:
-	xor a ; active card
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 ; first atk
-	ld [wSelectedAttack], a
+	ld [wSelectedAttack], a ; FIRST_ATTACK_OR_PKMN_POWER
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .next_atk
 	ld a, [wLoadedAttackCategory]
@@ -1376,7 +1376,7 @@ CheckIfActivePokemonCanUseAnyNonResidualAttack:
 
 .next_atk
 ; second atk
-	ld a, $01
+	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .fail
@@ -1401,7 +1401,7 @@ CheckIfActivePokemonCanUseAnyNonResidualAttack:
 ; input:
 ;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
 LookForEnergyNeededInHand:
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
 	call CheckEnergyNeededForAttack
 	ld a, b
@@ -1899,7 +1899,7 @@ CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondAttack:
 	jr c, .no_carry
 
 .check_second_attack
-	xor a ; active card
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
@@ -2042,7 +2042,7 @@ AISelectSpecialAttackParameters:
 	or a
 	jp z, .no_carry ; can be jr
 
-	ld a, $01
+	ld a, $01 ; always target the Player's play area
 	ldh [hTemp_ffa0], a
 	call LookForCardThatIsKnockedOutOnDevolution
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -2293,11 +2293,11 @@ INCLUDE "engine/duel/ai/boss_deck_set_up.asm"
 ;	a = location of card to check
 CheckIfCanDamageDefendingPokemon:
 	ldh [hTempPlayAreaLocation_ff9d], a
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .second_attack
-	xor a
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
@@ -2308,7 +2308,7 @@ CheckIfCanDamageDefendingPokemon:
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .no_carry
-	ld a, $01
+	ld a, SECOND_ATTACK
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
@@ -2374,7 +2374,7 @@ CheckIfDefendingPokemonCanKnockOutWithAttack:
 	ld [wSelectedAttack], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	push af
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call SwapTurn
 	call CheckIfSelectedAttackIsUnusable

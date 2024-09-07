@@ -414,7 +414,7 @@ CheckWhetherToSwitchToFirstAttack:
 ; in case it can't, the AI keeps it as the attack to be used.
 ; (possibly due to the assumption that if the
 ; second attack cannot KO, the first attack can't KO as well.)
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -441,11 +441,11 @@ CheckWhetherToSwitchToFirstAttack:
 	call CheckLoadedAttackFlag
 	jr c, .keep_second_attack
 ; switch to first attack
-	xor a
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
 	ret
 .keep_second_attack
-	ld a, $01
+	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
 	ret
 

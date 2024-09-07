@@ -223,7 +223,7 @@ HandleStrikesBack_AgainstDamagingAttack::
 	pop af
 	or a
 	jr z, .not_knocked_out
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	call PrintPlayAreaCardKnockedOutIfNoHP
 .not_knocked_out
 	call SwapTurn
@@ -814,7 +814,7 @@ ApplyStrikesBack_AgainstResidualAttack::
 	or a
 	ret z
 	call WaitForWideTextBoxInput
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	call PrintPlayAreaCardKnockedOutIfNoHP
 	call DrawDuelHUDs
 	scf

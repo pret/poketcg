@@ -215,7 +215,7 @@ Func_19f99:
 ; or otherwise just the card's description.
 DrawBottomCardInfoInSRAMGfxBuffer0:
 	call Func_1a025
-	xor a
+	xor a ; CARDPAGETYPE_NOT_PLAY_AREA
 	ld [wCardPageType], a
 	ld hl, sGfxBuffer0
 	ld b, 20

@@ -161,7 +161,7 @@ AIProcessRetreat:
 ; store Play Area to retreat to and
 ; set wAIRetreatedThisTurn to true
 	ld [wAIPlayAreaCardToSwitch], a
-	ld a, $01
+	ld a, TRUE
 	ld [wAIRetreatedThisTurn], a
 
 ; if AI can use Switch from hand, use it instead...

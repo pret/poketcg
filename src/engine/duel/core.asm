@@ -813,7 +813,7 @@ CheckAbleToRetreat:
 CheckIfEnoughEnergiesToRetreat:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
 	ld [wEnergyCardsRequiredToRetreat], a
@@ -843,7 +843,7 @@ DisplayRetreatScreen:
 	call SortCardsInDuelTempListByID
 	ld a, LOW(hTempRetreatCostCards)
 	ld [wTempRetreatCostCardsPos], a
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	call DisplayEnergyDiscardScreen
 	ld a, [wEnergyCardsRequiredToRetreat]
 	ld [wEnergyDiscardMenuDenominator], a
@@ -2929,7 +2929,7 @@ PracticeDuelVerify_Turn2:
 	cp SEAKING
 	jp nz, ReturnWrongAction
 	ld a, [wSelectedAttack]
-	cp 1
+	cp SECOND_ATTACK
 	jp nz, ReturnWrongAction
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
@@ -2962,7 +2962,7 @@ PracticeDuelVerify_Turn4:
 	cp SEAKING
 	jr nz, ReturnWrongAction
 	ld a, [wSelectedAttack]
-	cp 1
+	cp SECOND_ATTACK
 	jr nz, ReturnWrongAction
 	ret
 
@@ -2996,7 +2996,7 @@ PracticeDuelVerify_Turn7Or8:
 	cp STARMIE
 	jr nz, ReturnWrongAction
 	ld a, [wSelectedAttack]
-	cp 1
+	cp SECOND_ATTACK
 	jr nz, ReturnWrongAction
 	ret
 
@@ -4765,7 +4765,7 @@ LargeCardTileData:
 
 ; print lines of text with no separation between them
 SetNoLineSeparation:
-	ld a, $01
+	ld a, $01 ; text isn't double-spaced
 ;	fallthrough
 
 SetLineSeparation:
@@ -4774,7 +4774,7 @@ SetLineSeparation:
 
 ; separate lines of text by an empty line
 SetOneLineSeparation:
-	xor a
+	xor a ; text is double-spaced
 	jr SetLineSeparation
 
 ; given a number in hl, print it divided by 10 at b,c, with decimal part

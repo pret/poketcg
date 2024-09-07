@@ -345,7 +345,7 @@ AIProcessEnergyCards:
 
 ; add AI score for both attacks,
 ; according to their energy requirements.
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	call DetermineAIScoreOfAttackEnergyRequirement
 	ld a, SECOND_ATTACK
 	call DetermineAIScoreOfAttackEnergyRequirement
@@ -803,7 +803,7 @@ AITryToPlayEnergyCard:
 ; if first attack doesn't need, test for the second attack.
 	xor a
 	ld [wTempAI], a
-	ld [wSelectedAttack], a
+	ld [wSelectedAttack], a ; FIRST_ATTACK_OR_PKMN_POWER
 	call CheckEnergyNeededForAttack
 	jr nc, .second_attack
 	ld a, b

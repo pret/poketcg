@@ -1042,7 +1042,7 @@ AIPickEnergyCardToDiscardFromDefendingPokemon:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	call CreateArenaOrBenchEnergyCardList
 	jr nc, .has_energy
 	; no energy, return
@@ -1438,7 +1438,7 @@ SpitPoison_Poison50PercentEffect:
 ; in case it was heads, stores in hTempPlayAreaLocation_ffa1
 ; the PLAY_AREA_* location of the Bench Pokemon that was selected for switch.
 TerrorStrike_50PercentSelectSwitchPokemon:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTemp_ffa0], a
 
 ; return failure if no Pokemon to switch to
@@ -2439,12 +2439,12 @@ WeezingSmog_AIEffect:
 WeezingSelfdestructEffect:
 	ld a, 60
 	call DealRecoilDamageToSelf
-	ld a, $01
+	ld a, TRUE
 	ld [wIsDamageToSelf], a
 	ld a, 10
 	call DealDamageToAllBenchedPokemon
 	call SwapTurn
-	xor a
+	xor a ; FALSE
 	ld [wIsDamageToSelf], a
 	ld a, 10
 	call DealDamageToAllBenchedPokemon
@@ -3355,7 +3355,7 @@ Blizzard_BenchDamageEffect:
 	jr nz, .opp_bench
 
 ; own bench
-	ld a, $01
+	ld a, TRUE
 	ld [wIsDamageToSelf], a
 	ld a, 10
 	call DealDamageToAllBenchedPokemon
@@ -3497,7 +3497,7 @@ FocusEnergyEffect:
 
 PlayerPickFireEnergyCardToDiscard:
 	call CreateListOfFireEnergyAttachedToArena
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	bank1call DisplayEnergyDiscardScreen
 	bank1call HandleEnergyDiscardMenuInput
 	ldh a, [hTempCardIndex_ff98]
@@ -3568,7 +3568,7 @@ FlamesOfRage_PlayerSelectEffect:
 	xor a
 	ldh [hCurSelectionItem], a
 	call CreateListOfFireEnergyAttachedToArena
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	bank1call DisplayEnergyDiscardScreen
 .loop_input
 	bank1call HandleEnergyDiscardMenuInput
@@ -3728,7 +3728,7 @@ Wildfire_PlayerSelectEffect:
 	xor a
 	ldh [hCurSelectionItem], a
 	call CreateListOfFireEnergyAttachedToArena
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	bank1call DisplayEnergyDiscardScreen
 
 ; show list to Player and for each card selected to discard,
@@ -3947,10 +3947,10 @@ FireSpin_PlayerSelectEffect:
 
 	xor a
 	ldh [hCurSelectionItem], a
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	call CreateArenaOrBenchEnergyCardList
 	call SortCardsInDuelTempListByID
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	bank1call DisplayEnergyDiscardScreen
 
 	ld a, 2
@@ -4583,7 +4583,7 @@ DestinyBond_PlayerSelectEffect:
 ; handle input and display of Energy card list
 	ld a, TYPE_ENERGY_PSYCHIC
 	call CreateListOfEnergyAttachedToArena
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	bank1call DisplayEnergyDiscardScreen
 	bank1call HandleEnergyDiscardMenuInput
 	ret c
@@ -6106,12 +6106,12 @@ SubmissionEffect:
 GolemSelfdestructEffect:
 	ld a, 100
 	call DealRecoilDamageToSelf
-	ld a, $01
+	ld a, TRUE
 	ld [wIsDamageToSelf], a
 	ld a, 20
 	call DealDamageToAllBenchedPokemon
 	call SwapTurn
-	xor a
+	xor a ; FALSE
 	ld [wIsDamageToSelf], a
 	ld a, 20
 	call DealDamageToAllBenchedPokemon
@@ -6212,7 +6212,7 @@ SandslashFurySwipes_MultiplierEffect:
 	ret
 
 EarthquakeEffect:
-	ld a, $01
+	ld a, TRUE
 	ld [wIsDamageToSelf], a
 	ld a, 10
 	call DealDamageToAllBenchedPokemon
@@ -6429,13 +6429,13 @@ MagnemiteSelfdestructEffect:
 	ld a, 40
 	call DealRecoilDamageToSelf
 
-	ld a, $01
+	ld a, TRUE
 	ld [wIsDamageToSelf], a
 	ld a, 10
 	call DealDamageToAllBenchedPokemon
 	call SwapTurn
 
-	xor a
+	xor a ; FALSE
 	ld [wIsDamageToSelf], a
 	ld a, 10
 	call DealDamageToAllBenchedPokemon
@@ -6461,7 +6461,7 @@ ZapdosThunder_RecoilEffect:
 	ret
 
 ThunderboltEffect:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	call CreateArenaOrBenchEnergyCardList
 	ld hl, wDuelTempList
 ; put all energy cards in Discard Pile
@@ -6718,7 +6718,7 @@ ChainLightningEffect:
 	call SwapTurn
 
 ; own Bench
-	ld a, $01
+	ld a, TRUE
 	ld [wIsDamageToSelf], a
 	call .DamageSameColorBench
 	ret
@@ -7015,14 +7015,14 @@ MagnetonLv28SelfdestructEffect:
 	call DealRecoilDamageToSelf
 
 ; own bench
-	ld a, $01
+	ld a, TRUE
 	ld [wIsDamageToSelf], a
 	ld a, 20
 	call DealDamageToAllBenchedPokemon
 
 ; opponent's bench
 	call SwapTurn
-	xor a
+	xor a ; FALSE
 	ld [wIsDamageToSelf], a
 	ld a, 20
 	call DealDamageToAllBenchedPokemon
@@ -7042,14 +7042,14 @@ MagnetonLv35SelfdestructEffect:
 	call DealRecoilDamageToSelf
 
 ; own bench
-	ld a, $01
+	ld a, TRUE
 	ld [wIsDamageToSelf], a
 	ld a, 20
 	call DealDamageToAllBenchedPokemon
 
 ; opponent's bench
 	call SwapTurn
-	xor a
+	xor a ; FALSE
 	ld [wIsDamageToSelf], a
 	ld a, 20
 	call DealDamageToAllBenchedPokemon
@@ -7082,7 +7082,7 @@ RandomlyDamagePlayAreaPokemon:
 	jr nz, .opp_play_area
 
 ; own Play Area
-	ld a, $01
+	ld a, TRUE
 	ld [wIsDamageToSelf], a
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -7100,7 +7100,7 @@ RandomlyDamagePlayAreaPokemon:
 	ret
 
 .opp_play_area
-	xor a
+	xor a ; FALSE
 	ld [wIsDamageToSelf], a
 	call SwapTurn
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -8587,7 +8587,7 @@ MorphEffect:
 ; by Clefable's Metronome attack) then first discard
 ; the lower stage card.
 	push hl
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	bank1call GetCardOneStageBelow
 	ld a, d

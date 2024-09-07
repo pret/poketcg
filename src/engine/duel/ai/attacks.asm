@@ -176,7 +176,7 @@ GetAIScoreOfAttack:
 	ld a, $50
 	ld [wAIScore], a
 
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfSelectedAttackIsUnusable
 	jr nc, .usable

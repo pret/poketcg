@@ -45,7 +45,7 @@ AIDecidePlayPokemonCard:
 
 ; if defending Pokémon can KO active card, increase AI score
 .check_defending_can_ko
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_energy_cards
@@ -159,11 +159,11 @@ AIDecideEvolution:
 
 ; check if the card can use any attacks
 ; and if any of those attacks can KO
-	xor a
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr nc, .can_attack
-	ld a, $01
+	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .cant_attack_or_ko
@@ -193,11 +193,11 @@ AIDecideEvolution:
 	push af
 	ld a, [wTempAIPokemonCard]
 	ld [hl], a
-	xor a
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr nc, .evolution_can_attack
-	ld a, $01
+	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .evolution_cant_attack
@@ -248,7 +248,7 @@ AIDecideEvolution:
 	ld a, [wTempAI]
 	or a
 	jr nz, .check_mr_mime
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_mr_mime
@@ -273,7 +273,7 @@ AIDecideEvolution:
 	ld a, [wTempAI]
 	or a
 	jr nz, .check_2nd_stage_hand
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_status

@@ -1550,7 +1550,7 @@ PlayAttackAnimation_DealAttackDamage::
 	call HandleNoDamageOrEffectSubstatus
 	call SwapTurn
 .deal_damage
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
@@ -1712,7 +1712,7 @@ Func_189d::
 .asm_18b9
 	push de
 	call SwapTurn
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ld [wTempPlayAreaLocation_cceb], a
 	call HandleTransparency
 	call SwapTurn
@@ -2216,7 +2216,7 @@ Func_1bb4::
 	call FinishQueuedAnimations
 	bank1call DrawDuelMainScene
 	call DrawDuelHUDs
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call PrintFailedEffectText
 	call WaitForWideTextBoxInput

@@ -176,7 +176,7 @@ AIDecide_Potion1:
 	jr c, .no_carry
 	call AICheckIfAttackIsHighRecoil
 	jr c, .no_carry
-	xor a ; active card
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
 	jr nc, .no_carry
@@ -214,7 +214,7 @@ AIDecide_Potion1:
 ;	a = card to use Potion on;
 ;	carry set if Potion should be used.
 AIDecide_Potion2:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
 	jr nc, .start_from_active
@@ -366,7 +366,7 @@ AIDecide_SuperPotion1:
 	jr c, .no_carry
 	call AICheckIfAttackIsHighRecoil
 	jr c, .no_carry
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld e, a
 	call .check_attached_energy
@@ -414,7 +414,7 @@ AIDecide_SuperPotion1:
 ;	a = card to use Super Potion on;
 ;	carry set if Super Potion should be used.
 AIDecide_SuperPotion2:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
 	jr nc, .start_from_active
@@ -586,10 +586,11 @@ AIDecide_SuperPotion2:
 	scf
 	ret
 
+; AI always attaches a Defender card to the Active Pokémon.
 AIPlay_Defender:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -629,7 +630,7 @@ AIDecide_Defender1:
 ; and check if it is useable.
 	ld a, [wSelectedAttack]
 	ld b, a
-	ld a, $01
+	ld a, SECOND_ATTACK
 	sub b
 	ld [wSelectedAttack], a
 	push de
@@ -655,7 +656,7 @@ AIDecide_Defender1:
 .switch_back
 	ld a, [wSelectedAttack]
 	ld b, a
-	ld a, $01
+	ld a, SECOND_ATTACK
 	sub b
 	ld [wSelectedAttack], a
 	ld a, [wce06]
@@ -771,9 +772,9 @@ AIPlay_Pluspower:
 ; outputs in a the attack to use.
 AIDecide_Pluspower1:
 ; this is mistakenly duplicated
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 
 ; continue if no attack can knock out.
@@ -892,7 +893,7 @@ AIDecide_Pluspower1:
 ; and has a minimum damage > 0.
 ; outputs in a the attack to use.
 AIDecide_Pluspower2:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call .check_can_ko
 	jr nc, .no_carry
@@ -3089,7 +3090,7 @@ AIPlay_PokemonCenter:
 	ret
 
 AIDecide_PokemonCenter:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 
 ; return if active Pokemon can KO player's card.
@@ -3643,7 +3644,7 @@ PickPokedexCards_Unreferenced:
 ; stores the resulting order in wce1a.
 PickPokedexCards:
 	xor a
-	ld [wAIPokedexCounter], a ; reset counter ; reset counter
+	ld [wAIPokedexCounter], a ; reset counter
 
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
@@ -3950,7 +3951,7 @@ AIPlay_ScoopUp:
 	ret
 
 AIDecide_ScoopUp:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 
 ; if only one Pokemon in Play Area, skip.
@@ -3991,7 +3992,7 @@ AIDecide_ScoopUp:
 ; doesn't have a status that prevents retreat.
 ; so check if it has enough energy to retreat.
 ; if not, return no carry.
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
 	ld b, a
