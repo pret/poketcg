@@ -529,7 +529,7 @@ AIDecideBenchPokemonToSwitchTo:
 	ld a, [wSelectedAttack]
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
-	call CalculateByteTensDigit
+	call ConvertHPToDamageCounters_Bank5
 	inc a
 	call AddToAIScore
 	ret
@@ -543,7 +543,7 @@ AIDecideBenchPokemonToSwitchTo:
 	ld a, [wSelectedAttack]
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
-	call CalculateByteTensDigit
+	call ConvertHPToDamageCounters_Bank5
 	srl a
 	call AddToAIScore
 
@@ -671,7 +671,7 @@ AIDecideBenchPokemonToSwitchTo:
 	ld b, a
 	ld a, 4
 	call CalculateBDividedByA_Bank5
-	call CalculateByteTensDigit
+	call ConvertHPToDamageCounters_Bank5
 	call AddToAIScore
 
 ; raise AI score if

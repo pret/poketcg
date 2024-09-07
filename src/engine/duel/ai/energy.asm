@@ -201,7 +201,7 @@ AIProcessEnergyCards:
 ; or if the defending Pokémon can KO
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
-	call CalculateByteTensDigit
+	call ConvertHPToDamageCounters_Bank5
 	cp 3
 	jr nc, .check_defending_can_ko
 	; hp < 30
@@ -245,7 +245,7 @@ AIProcessEnergyCards:
 .bench
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
-	call CalculateByteTensDigit
+	call ConvertHPToDamageCounters_Bank5
 	cp 3
 	jr nc, .ai_score_bonus
 ; hp < 30

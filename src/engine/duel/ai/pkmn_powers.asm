@@ -813,7 +813,7 @@ HandleAIStrangeBehavior:
 	pop af
 
 ; loop counters chosen to transfer and use Pkmn Power
-	call ConvertHPToCounters
+	call ConvertHPToDamageCounters_Bank8
 	ld e, a
 .loop_counters
 	ld d, 30
@@ -1067,7 +1067,7 @@ HandleAIDamageSwap:
 	or a
 	ret z ; return if no damage
 
-	call ConvertHPToCounters
+	call ConvertHPToDamageCounters_Bank8
 	ld [wce06], a
 	ld a, ALAKAZAM
 	ld b, PLAY_AREA_BENCH_1

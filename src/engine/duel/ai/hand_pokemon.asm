@@ -5,7 +5,7 @@ AIDecidePlayPokemonCard:
 	call SortTempHandByIDList
 	ld hl, wDuelTempList
 	ld de, wHandTempList
-	call CopyHandCardList
+	call CopyListWithFFTerminatorFromHLToDE_Bank5
 	ld hl, wHandTempList
 
 .next_hand_card
@@ -105,7 +105,7 @@ AIDecideEvolution:
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld de, wHandTempList
-	call CopyHandCardList
+	call CopyListWithFFTerminatorFromHLToDE_Bank5
 	ld hl, wHandTempList
 
 .next_hand_card
@@ -316,7 +316,7 @@ AIDecideEvolution:
 	jr z, .check_mysterious_fossil
 	srl a
 	srl a
-	call CalculateByteTensDigit
+	call ConvertHPToDamageCounters_Bank5
 	call SubFromAIScore
 
 ; if is Mysterious Fossil or

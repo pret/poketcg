@@ -755,7 +755,6 @@ LookForCardIDInHandList_Bank5:
 ;	carry set if found
 LookForCardIDInPlayArea_Bank5:
 	ld [wTempCardIDToLook], a
-
 .loop
 	ld a, DUELVARS_ARENA_CARD
 	add b
@@ -772,9 +771,11 @@ LookForCardIDInPlayArea_Bank5:
 	cp b
 	jr nz, .loop
 
+; not found
 	ld b, $ff
 	or a
 	ret
+
 .found
 	ld a, b
 	scf
@@ -933,7 +934,13 @@ CheckEnergyNeededForAttackAfterDiscard:
 	scf
 	ret
 
-; zeroes a bytes starting at hl
+; zeroes a bytes starting from hl.
+; this function is identical to 'ClearNBytesFromHL' in Bank $2,
+; as well as ClearMemory_Bank6' and 'ClearMemory_Bank8'.
+; preserves all registers
+; input:
+;	a = number of bytes to clear
+;	hl = where to begin erasing
 ClearMemory_Bank5:
 	push af
 	push bc
@@ -949,8 +956,13 @@ ClearMemory_Bank5:
 	pop af
 	ret
 
-; returns in a the tens digit of value in a
-CalculateByteTensDigit:
+; converts an HP value or amount of damage to the number of equivalent damage counters
+; preserves all registers except af
+; input:
+;	a = HP value to convert
+; output:
+;	a = number of damage counters
+ConvertHPToDamageCounters_Bank5:
 	push bc
 	ld c, 0
 .loop
@@ -1021,14 +1033,15 @@ CountNumberOfEnergyCardsAttached:
 ; returns carry if any card with ID in e is found
 ; in card location in a
 ; input:
-;	a = card location to look in;
-;	e = card ID to look for.
+;	a = CARD_LOCATION_* constant
+;	e = card ID to look for
 ; output:
-;	a = deck index of card found, if any
-CheckIfAnyCardIDinLocation:
+;	a & e = deck index of a matching card, if any
+;	carry set if found
+LookForCardIDInLocation_Bank5:
 	ld b, a
 	ld c, e
-	lb de, 0, 0
+	lb de, 0, 0 ; d is never used
 .loop
 	ld a, DUELVARS_CARD_LOCATIONS
 	add e
@@ -1041,15 +1054,17 @@ CheckIfAnyCardIDinLocation:
 	ld a, e
 	pop de
 	cp c
-	jr z, .set_carry
+	jr z, .found
 .next
 	inc e
 	ld a, DECK_SIZE
 	cp e
 	jr nz, .loop
+
+; not found
 	or a
 	ret
-.set_carry
+.found
 	ld a, e
 	scf
 	ret
@@ -1308,14 +1323,18 @@ Func_15886:
 
 INCLUDE "engine/duel/ai/retreat.asm"
 
-; Copy cards from wDuelTempList in hl to wHandTempList in de
-CopyHandCardList:
+; copies an $ff-terminated list from hl to de.
+; preserves bc
+; input:
+;	hl = address from which to start copying the data
+;	de = where to copy the data
+CopyListWithFFTerminatorFromHLToDE_Bank5:
 	ld a, [hli]
 	ld [de], a
 	cp $ff
 	ret z
 	inc de
-	jr CopyHandCardList
+	jr CopyListWithFFTerminatorFromHLToDE_Bank5
 
 INCLUDE "engine/duel/ai/hand_pokemon.asm"
 
@@ -2065,12 +2084,12 @@ AISelectSpecialAttackParameters:
 ; search for Psychic energy cards in Discard Pile
 	ld e, PSYCHIC_ENERGY
 	ld a, CARD_LOCATION_DISCARD_PILE
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	ldh [hTemp_ffa0], a
 	farcall CreateEnergyCardListFromDiscardPile_AllEnergy
 
 ; find any energy card different from
-; the one found by CheckIfAnyCardIDinLocation.
+; the one found by LookForCardIDInLocation_Bank5.
 ; since using this attack requires a Psychic energy card,
 ; and another one is in hTemp_ffa0,
 ; then any other energy card would account
@@ -2117,7 +2136,7 @@ AISelectSpecialAttackParameters:
 	ld e, LIGHTNING_ENERGY
 
 ; if none were found in Deck, return carry...
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	ldh [hTemp_ffa0], a
 	jp nc, .no_carry  ; can be jr
 
@@ -2718,7 +2737,7 @@ Func_17583:
 	push hl
 	push de
 	call GetCardDamageAndMaxHP
-	call CalculateByteTensDigit
+	call ConvertHPToDamageCounters_Bank5
 	ld b, a
 	push bc
 	call CountNumberOfEnergyCardsAttached
