@@ -133,7 +133,7 @@ Func_2c0a8:
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_6B30
 	call SetOppAction_SerialSendDuelData
-	bank1call DeckShuffleAnimation
+	bank1call PlayDeckShuffleAnimation
 	ld c, a
 	pop af
 	ldh [hTemp_ffa0], a
@@ -142,7 +142,7 @@ Func_2c0a8:
 
 ShuffleCardsInDeck:
 	call ExchangeRNG
-	bank1call DeckShuffleAnimation
+	bank1call PlayDeckShuffleAnimation
 	call ShuffleDeck
 	ret
 

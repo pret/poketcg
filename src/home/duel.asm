@@ -1555,7 +1555,7 @@ PlayAttackAnimation_DealAttackDamage::
 	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	call ApplyDamageModifiers_DamageToTarget
-	call LastChanceToNegateFinalDamage
+	call ApplyTransparencyIsApplicable
 	ld hl, wDealtDamage
 	ld [hl], e
 	inc hl
@@ -1692,7 +1692,7 @@ SendAttackDataToLinkOpponent::
 	ldh [hTemp_ffa0], a
 	ret
 
-LastChanceToNegateFinalDamage::
+ApplyTransparencyIsApplicable::
 	ld a, [wLoadedAttackCategory]
 	bit RESIDUAL_F, a
 	ret nz
