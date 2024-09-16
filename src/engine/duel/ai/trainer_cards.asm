@@ -59,7 +59,7 @@ _AIProcessHandTrainerCards:
 
 ; if Headache effects prevent playing card
 ; move on to the next item in list.
-	bank1call CheckCantUseTrainerDueToHeadache
+	bank1call CheckCantUseTrainerDueToEffect
 	jp c, .next_in_data
 
 	call LoadNonPokemonCardEffectCommands
@@ -2348,12 +2348,12 @@ AIDecide_ProfessorOak:
 
 .handle_blastoise
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .check_hand
 
 ; no Muk in Play Area
 	ld a, BLASTOISE
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	jr nc, .check_hand
 
 ; at least one Blastoise in AI Play Area
@@ -2635,10 +2635,10 @@ AIDecide_EnergyRetrieval:
 	cp GO_GO_RAIN_DANCE_DECK_ID
 	jr nz, .start
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .start
 	ld a, BLASTOISE
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	jp nc, .no_carry
 
 .start
@@ -2897,10 +2897,10 @@ AIDecide_SuperEnergyRetrieval:
 	cp GO_GO_RAIN_DANCE_DECK_ID
 	jr nz, .start
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .start
 	ld a, BLASTOISE
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	jp nc, .no_carry
 
 .start

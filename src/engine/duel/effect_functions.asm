@@ -52,9 +52,9 @@ QueueStatusCondition:
 	cp SNORLAX
 	jr nz, .can_induce_status
 	call SwapTurn
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	; ...unless already so, or if affected by Muk's Toxic Gas
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	call SwapTurn
 	jr c, .can_induce_status
 
@@ -2150,7 +2150,7 @@ EnergyTrans_CheckPlayArea:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTemp_ffa0], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	ret c ; cannot use Pkmn Power
 
 ; search in Play Area for at least 1 Grass Energy type
@@ -2459,7 +2459,7 @@ Shift_OncePerTurnCheck:
 	and USED_PKMN_POWER_THIS_TURN
 	jr nz, .already_used
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	ret
 .already_used
 	ldtx hl, OnlyOncePerTurnText
@@ -2568,7 +2568,7 @@ Heal_OncePerTurnCheck:
 	ret c ; no damage counters to heal
 
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	ret
 
 .already_used
@@ -2666,7 +2666,7 @@ SolarPower_CheckUse:
 	jr nz, .already_used
 
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	ret c ; can't use PKMN due to status or Toxic Gas
 
 ; return carry if none of the Arena cards have status conditions
@@ -3372,7 +3372,7 @@ Blizzard_BenchDamageEffect:
 Cowardice_Check:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTemp_ffa0], a
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	ret c ; return if cannot use
 
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -3997,8 +3997,8 @@ FireSpin_DiscardEffect:
 ; or if Arena card is not Charizard.
 ; this is unused.
 EnergyBurnCheck_Unreferenced:
-	xor a
-	bank1call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	xor a ; PLAY_AREA_ARENA
+	bank1call CheckIsIncapableOfUsingPkmnPower
 	ret c
 	ld a, DUELVARS_ARENA_CARD
 	push de
@@ -4373,7 +4373,7 @@ Curse_CheckDamageAndBench:
 ; return carry if Pkmn Power cannot be used due
 ; to Toxic Gas or status.
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	ret
 
 .set_carry
@@ -5000,7 +5000,7 @@ DamageSwap_CheckDamage:
 	call CheckIfPlayAreaHasAnyDamage
 	jr c, .no_damage
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	ret
 .no_damage
 	ldtx hl, NoPokemonWithDamageCountersText
@@ -5510,7 +5510,7 @@ StrangeBehavior_CheckDamage:
 	jr c, .set_carry
 ; can Pkmn Power be used?
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	ret
 
 .set_carry
@@ -6231,7 +6231,7 @@ Peek_OncePerTurnCheck:
 	and USED_PKMN_POWER_THIS_TURN
 	jr nz, .already_used
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	ret
 .already_used
 	ldtx hl, OnlyOncePerTurnText
@@ -7679,7 +7679,7 @@ StepIn_BenchCheck:
 	jr nz, .set_carry
 
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	ret
 
 .set_carry
@@ -8950,8 +8950,8 @@ ImakuniEffect:
 ; cannot confuse Snorlax if its Pkmn Power is active
 	cp SNORLAX
 	jr nz, .success
-	xor a
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	xor a ; PLAY_AREA_ARENA
+	call CheckIsIncapableOfUsingPkmnPower
 	jr c, .success
 	; fallthrough if Thick Skinned is active
 

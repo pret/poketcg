@@ -168,10 +168,10 @@ AIProcessEnergyCards:
 ; add to AI score
 .check_venusaur
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .check_if_active
 	ld a, VENUSAUR_LV67
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	jr nc, .check_if_active
 	ld a, 1
 	call AddToAIScore

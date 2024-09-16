@@ -110,7 +110,7 @@ AIDoTurn_LegendaryMoltres:
 	cp DECK_SIZE - 9
 	jr nc, .skip_moltres ; skip if cards in deck <= 9
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .skip_moltres ; skip if Muk in play
 	ld a, MOLTRES_LV37
 	call LookForCardIDInHandList_Bank5

@@ -1367,8 +1367,8 @@ ProcessPlayedPokemonCard::
 	ld a, [wLoadedCard1ID]
 	cp MUK
 	jr z, .use_pokemon_power
-	ld a, $01 ; check only Muk
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ld a, PLAY_AREA_BENCH_1 ; don't check status
+	call CheckIsIncapableOfUsingPkmnPower
 	jr nc, .use_pokemon_power
 	call DisplayUsePokemonPowerScreen
 	ldtx hl, UnableToUsePkmnPowerDueToToxicGasText
@@ -1752,7 +1752,7 @@ CheckSelfConfusionDamage::
 ; a trainer card is like an attack effect, with its own effect commands.
 ; return nc if the card was played, carry if it wasn't.
 PlayTrainerCard::
-	call CheckCantUseTrainerDueToHeadache
+	call CheckCantUseTrainerDueToEffect
 	jr c, .cant_use
 	ldh a, [hWhoseTurn]
 	ld h, a

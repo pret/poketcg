@@ -611,7 +611,7 @@ CheckIfCardCanBePlayed:
 	ret
 
 .trainer_card
-	bank1call CheckCantUseTrainerDueToHeadache
+	bank1call CheckCantUseTrainerDueToEffect
 	ret c
 	call LoadNonPokemonCardEffectCommands
 	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1

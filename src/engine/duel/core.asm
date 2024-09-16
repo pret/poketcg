@@ -777,7 +777,7 @@ OpenVariousPlayAreaScreens_FromSelectPresses:
 ; some status condition or due the bench containing no alive Pokemon.
 ; return carry if unable, nc if able.
 CheckAbleToRetreat:
-	call CheckCantRetreatDueToAcid
+	call CheckUnableToRetreatDueToEffect
 	ret c
 	call CheckIfActiveCardParalyzedOrAsleep
 	ret c
