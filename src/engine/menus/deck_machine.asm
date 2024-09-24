@@ -183,10 +183,10 @@ GiftCenter_SendCard:
 	lb de, 1, 3
 	call InitTextPrinting
 	ldtx hl, CardSendingProceduresText
-	ld a, $01 ; text isn't double-spaced
+	ld a, SINGLE_SPACED
 	ld [wLineSeparation], a
 	call ProcessTextFromID
-	xor a ; text is double-spaced
+	xor a ; DOUBLE_SPACED
 	ld [wLineSeparation], a
 	ldtx hl, PleaseReadTheProceduresForSendingCardsText
 	call DrawWideTextBox_WaitForInput

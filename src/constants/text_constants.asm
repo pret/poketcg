@@ -50,3 +50,7 @@ DEF TX_CTRL_END   EQU $10
 ; wFontWidth constants
 DEF FULL_WIDTH EQU $0
 DEF HALF_WIDTH EQU $1 ; non-0
+
+; wLineSeparation constants
+DEF DOUBLE_SPACED EQU 0
+DEF SINGLE_SPACED EQU 1 ; non-0

@@ -15,7 +15,7 @@ ChallengeMachine_Reset:
 ; if a challenge is already in progress, then resume
 ; otherwise, start a new 5 round challenge
 ChallengeMachine_Start::
-	ld a, 0 ; text is double-spaced
+	ld a, DOUBLE_SPACED
 	ld [wLineSeparation], a
 	call LoadConsolePaletteData
 	call ChallengeMachine_Initialize

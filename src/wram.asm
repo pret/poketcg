@@ -882,7 +882,8 @@ wTilePatternSelector:: ; cd06
 wTilePatternSelectorCorrection:: ; cd07
 	ds $1
 
-; if 0, text lines are separated by a blank line
+; if 0 (DOUBLE_SPACED), text lines are separated by a blank line
+; uses constants DOUBLE_SPACED and SINGLE_SPACED
 wLineSeparation:: ; cd08
 	ds $1
 

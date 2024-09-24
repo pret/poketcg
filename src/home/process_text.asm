@@ -111,7 +111,7 @@ ProcessSpecialTextCharacter::
 	call TerminateHalfWidthText
 	ld a, [wLineSeparation]
 	or a
-	call z, .next_line
+	call z, .next_line ; extra line if DOUBLE_SPACED
 .next_line
 	xor a
 	ldh [hTextLineCurPos], a

@@ -4765,7 +4765,7 @@ LargeCardTileData:
 
 ; print lines of text with no separation between them
 SetNoLineSeparation:
-	ld a, $01 ; text isn't double-spaced
+	ld a, SINGLE_SPACED
 ;	fallthrough
 
 SetLineSeparation:
@@ -4774,7 +4774,7 @@ SetLineSeparation:
 
 ; separate lines of text by an empty line
 SetOneLineSeparation:
-	xor a ; text is double-spaced
+	xor a ; DOUBLE_SPACED
 	jr SetLineSeparation
 
 ; given a number in hl, print it divided by 10 at b,c, with decimal part

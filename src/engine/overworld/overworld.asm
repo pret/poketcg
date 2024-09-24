@@ -16,7 +16,7 @@ LoadMap::
 	ld [wTileMapFill], a
 	call LoadSymbolsFont
 	call Set_OBJ_8x8
-	xor a ; text is double-spaced
+	xor a ; DOUBLE_SPACED
 	ld [wLineSeparation], a
 	xor a
 	ld [wd291], a
