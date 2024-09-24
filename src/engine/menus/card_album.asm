@@ -6,10 +6,10 @@ CreateCardSetList:
 	push af
 	ld a, DECK_SIZE
 	ld hl, wFilteredCardList
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	ld a, DECK_SIZE
 	ld hl, wOwnedCardsCountList
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	xor a
 	ld [wOwnedPhantomCardFlags], a
 	pop af
@@ -913,7 +913,7 @@ CardAlbum:
 	; set all Card Sets as available
 	ld a, NUM_CARD_SETS
 	ld hl, wUnavailableAlbumCardSets
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 
 	; check whether player has had promotional cards
 	call EnableSRAM

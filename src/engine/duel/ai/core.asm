@@ -935,8 +935,8 @@ CheckEnergyNeededForAttackAfterDiscard:
 	ret
 
 ; zeroes a bytes starting from hl.
-; this function is identical to 'ClearNBytesFromHL' in Bank $2,
-; as well as ClearMemory_Bank6' and 'ClearMemory_Bank8'.
+; this function is identical to 'ClearMemory_Bank2',
+; 'ClearMemory_Bank6' and 'ClearMemory_Bank8'.
 ; preserves all registers
 ; input:
 ;	a = number of bytes to clear
