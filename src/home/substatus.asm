@@ -537,7 +537,7 @@ CountTurnDuelistPokemonWithActivePkmnPower::
 	ld c, $0
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	cp $ff
+	cp -1
 	jr z, .check_bench
 	call GetCardIDFromDeckIndex
 	ld a, [wTempPokemonID_ce7c]
@@ -553,7 +553,7 @@ CountTurnDuelistPokemonWithActivePkmnPower::
 	call GetTurnDuelistVariable
 .next_bench_slot
 	ld a, [hli]
-	cp $ff
+	cp -1
 	jr z, .done
 	call GetCardIDFromDeckIndex
 	ld a, [wTempPokemonID_ce7c]
@@ -583,7 +583,7 @@ GetLoadedCard1RetreatCost::
 	call GetTurnDuelistVariable
 .check_bench_loop
 	ld a, [hli]
-	cp $ff
+	cp -1
 	jr z, .no_more_bench
 	call GetCardIDFromDeckIndex
 	ld a, e
@@ -741,7 +741,7 @@ HandleDestinyBondSubstatus::
 .check_hp
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
-	cp $ff
+	cp -1
 	ret z
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
