@@ -14,7 +14,7 @@ HandleDeckMissingCardsList:
 
 	ld a, NUM_FILTERS
 	ld hl, wCardFilterCounts
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	ld a, DECK_SIZE
 	ld [wTotalCardCount], a
 	ld hl, wCardFilterCounts
@@ -183,10 +183,10 @@ GiftCenter_SendCard:
 	lb de, 1, 3
 	call InitTextPrinting
 	ldtx hl, CardSendingProceduresText
-	ld a, $01
+	ld a, SINGLE_SPACED
 	ld [wLineSeparation], a
 	call ProcessTextFromID
-	xor a
+	xor a ; DOUBLE_SPACED
 	ld [wLineSeparation], a
 	ldtx hl, PleaseReadTheProceduresForSendingCardsText
 	call DrawWideTextBox_WaitForInput
@@ -341,7 +341,7 @@ ShowReceivedCardsList:
 Func_b088:
 	ld a, CARD_COLLECTION_SIZE - 1
 	ld hl, wTempCardCollection
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	ld de, wDuelTempList
 	call .Func_b0b2
 	ld a, $ff
@@ -379,10 +379,10 @@ Func_b088:
 	push af
 	ld a, DECK_SIZE
 	ld hl, wOwnedCardsCountList
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	ld a, DECK_SIZE
 	ld hl, wFilteredCardList
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	pop af
 	ld hl, $0
 	ld de, $0
@@ -481,7 +481,7 @@ EmptyScreenAndDrawTextBox:
 	call DrawRegularTextBox
 	ret
 
-Func_b177::
+HandleGiftCenter::
 	ld a, [wGiftCenterChoice]
 	and $3
 	ld hl, .GiftCenterFunctionTable
@@ -828,7 +828,7 @@ GetSavedDeckPointers:
 	ld a, NUM_DECK_SAVE_MACHINE_SLOTS
 	add NUM_DECK_SAVE_MACHINE_SLOTS ; add a is better
 	ld hl, wMachineDeckPtrs
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	ld de, wMachineDeckPtrs
 	ld hl, sSavedDecks
 	ld bc, DECK_STRUCT_SIZE
@@ -1376,7 +1376,7 @@ TryDeleteSavedDeck:
 	call CopyDeckName
 	pop hl
 	ld a, DECK_STRUCT_SIZE
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	call DisableSRAM
 	xor a
 	ld [wTxRam2 + 0], a
@@ -1481,7 +1481,7 @@ HandleDismantleDeckToMakeSpace:
 	call AddDeckToCollection
 	pop hl
 	ld a, DECK_STRUCT_SIZE
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	call DisableSRAM
 
 	; redraw deck screen
@@ -1674,7 +1674,7 @@ TryBuildDeckMachineDeck:
 	call AddDeckToCollection
 	pop hl
 	ld a, DECK_STRUCT_SIZE
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	ret
 
 ; collects cards missing from player's collection
@@ -2132,7 +2132,7 @@ HandleAutoDeckMenu:
 .CreateAutoDeckPointerList
 	ld a, 2 * NUM_DECK_MACHINE_SLOTS
 	ld hl, wMachineDeckPtrs
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	ld de, wMachineDeckPtrs
 	ld hl, sAutoDecks
 	ld bc, DECK_STRUCT_SIZE

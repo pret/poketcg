@@ -1,4 +1,4 @@
-Unknown_10d98:
+PauseMenuParams:
 	db 12,  0 ; start menu coords
 	db  8, 14 ; start menu text box dimensions
 
@@ -13,7 +13,7 @@ Unknown_10d98:
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Unknown_10da9:
+PCMenuParams:
 	db 10,  0 ; start menu coords
 	db 10, 12 ; start menu text box dimensions
 

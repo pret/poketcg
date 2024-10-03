@@ -73,7 +73,7 @@ GameEvent_GiftCenter::
 	ld a, [wGiftCenterChoice]
 	or $10
 	ld [wGiftCenterChoice], a
-	farcall Func_b177
+	farcall HandleGiftCenter
 	ld a, [wGiftCenterChoice]
 	and $ef
 	ld [wGiftCenterChoice], a

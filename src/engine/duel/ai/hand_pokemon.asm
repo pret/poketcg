@@ -5,7 +5,7 @@ AIDecidePlayPokemonCard:
 	call SortTempHandByIDList
 	ld hl, wDuelTempList
 	ld de, wHandTempList
-	call CopyHandCardList
+	call CopyListWithFFTerminatorFromHLToDE_Bank5
 	ld hl, wHandTempList
 
 .next_hand_card
@@ -45,7 +45,7 @@ AIDecidePlayPokemonCard:
 
 ; if defending Pokémon can KO active card, increase AI score
 .check_defending_can_ko
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_energy_cards
@@ -105,7 +105,7 @@ AIDecideEvolution:
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld de, wHandTempList
-	call CopyHandCardList
+	call CopyListWithFFTerminatorFromHLToDE_Bank5
 	ld hl, wHandTempList
 
 .next_hand_card
@@ -159,11 +159,11 @@ AIDecideEvolution:
 
 ; check if the card can use any attacks
 ; and if any of those attacks can KO
-	xor a
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr nc, .can_attack
-	ld a, $01
+	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .cant_attack_or_ko
@@ -193,11 +193,11 @@ AIDecideEvolution:
 	push af
 	ld a, [wTempAIPokemonCard]
 	ld [hl], a
-	xor a
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr nc, .evolution_can_attack
-	ld a, $01
+	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .evolution_cant_attack
@@ -248,7 +248,7 @@ AIDecideEvolution:
 	ld a, [wTempAI]
 	or a
 	jr nz, .check_mr_mime
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_mr_mime
@@ -273,7 +273,7 @@ AIDecideEvolution:
 	ld a, [wTempAI]
 	or a
 	jr nz, .check_2nd_stage_hand
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_status
@@ -316,7 +316,7 @@ AIDecideEvolution:
 	jr z, .check_mysterious_fossil
 	srl a
 	srl a
-	call CalculateByteTensDigit
+	call ConvertHPToDamageCounters_Bank5
 	call SubFromAIScore
 
 ; if is Mysterious Fossil or
@@ -501,7 +501,7 @@ AIDecideSpecialEvolutions:
 ; if there's no Muk, raise score
 .check_muk
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .lower_score
 	ld a, 10
 	call AddToAIScore
@@ -590,7 +590,7 @@ AIDecidePlayLegendaryBirds:
 .check_muk_and_snorlax
 	; checks for Muk in both Play Areas
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .subtract
 	; checks if player's active card is Snorlax
 	ld a, DUELVARS_ARENA_CARD
@@ -622,6 +622,6 @@ AIDecidePlayLegendaryBirds:
 .zapdos
 	; checks for Muk in both Play Areas
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .subtract
 	ret

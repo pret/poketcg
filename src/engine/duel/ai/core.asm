@@ -8,7 +8,7 @@ INCLUDE "engine/duel/ai/decks/unreferenced.asm"
 ; output:
 ;	[wSelectedAttack] = attack index that KOs
 CheckIfAnyAttackKnocksOutDefendingCard:
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	call CheckIfAttackKnocksOutDefendingCard
 	ret c
 	ld a, SECOND_ATTACK
@@ -611,7 +611,7 @@ CheckIfCardCanBePlayed:
 	ret
 
 .trainer_card
-	bank1call CheckCantUseTrainerDueToHeadache
+	bank1call CheckCantUseTrainerDueToEffect
 	ret c
 	call LoadNonPokemonCardEffectCommands
 	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
@@ -755,7 +755,6 @@ LookForCardIDInHandList_Bank5:
 ;	carry set if found
 LookForCardIDInPlayArea_Bank5:
 	ld [wTempCardIDToLook], a
-
 .loop
 	ld a, DUELVARS_ARENA_CARD
 	add b
@@ -772,9 +771,11 @@ LookForCardIDInPlayArea_Bank5:
 	cp b
 	jr nz, .loop
 
+; not found
 	ld b, $ff
 	or a
 	ret
+
 .found
 	ld a, b
 	scf
@@ -933,7 +934,13 @@ CheckEnergyNeededForAttackAfterDiscard:
 	scf
 	ret
 
-; zeroes a bytes starting at hl
+; zeroes a bytes starting from hl.
+; this function is identical to 'ClearMemory_Bank2',
+; 'ClearMemory_Bank6' and 'ClearMemory_Bank8'.
+; preserves all registers
+; input:
+;	a = number of bytes to clear
+;	hl = where to begin erasing
 ClearMemory_Bank5:
 	push af
 	push bc
@@ -949,8 +956,13 @@ ClearMemory_Bank5:
 	pop af
 	ret
 
-; returns in a the tens digit of value in a
-CalculateByteTensDigit:
+; converts an HP value or amount of damage to the number of equivalent damage counters
+; preserves all registers except af
+; input:
+;	a = HP value to convert
+; output:
+;	a = number of damage counters
+ConvertHPToDamageCounters_Bank5:
 	push bc
 	ld c, 0
 .loop
@@ -1021,14 +1033,15 @@ CountNumberOfEnergyCardsAttached:
 ; returns carry if any card with ID in e is found
 ; in card location in a
 ; input:
-;	a = card location to look in;
-;	e = card ID to look for.
+;	a = CARD_LOCATION_* constant
+;	e = card ID to look for
 ; output:
-;	a = deck index of card found, if any
-CheckIfAnyCardIDinLocation:
+;	a & e = deck index of a matching card, if any
+;	carry set if found
+LookForCardIDInLocation_Bank5:
 	ld b, a
 	ld c, e
-	lb de, 0, 0
+	lb de, 0, 0 ; d is never used
 .loop
 	ld a, DUELVARS_CARD_LOCATIONS
 	add e
@@ -1041,15 +1054,17 @@ CheckIfAnyCardIDinLocation:
 	ld a, e
 	pop de
 	cp c
-	jr z, .set_carry
+	jr z, .found
 .next
 	inc e
 	ld a, DECK_SIZE
 	cp e
 	jr nz, .loop
+
+; not found
 	or a
 	ret
-.set_carry
+.found
 	ld a, e
 	scf
 	ret
@@ -1308,14 +1323,18 @@ Func_15886:
 
 INCLUDE "engine/duel/ai/retreat.asm"
 
-; Copy cards from wDuelTempList in hl to wHandTempList in de
-CopyHandCardList:
+; copies an $ff-terminated list from hl to de.
+; preserves bc
+; input:
+;	hl = address from which to start copying the data
+;	de = where to copy the data
+CopyListWithFFTerminatorFromHLToDE_Bank5:
 	ld a, [hli]
 	ld [de], a
 	cp $ff
 	ret z
 	inc de
-	jr CopyHandCardList
+	jr CopyListWithFFTerminatorFromHLToDE_Bank5
 
 INCLUDE "engine/duel/ai/hand_pokemon.asm"
 
@@ -1348,7 +1367,7 @@ CheckDamageToMrMime:
 ; returns carry if arena card
 ; can knock out defending Pokémon
 CheckIfActiveCardCanKnockOut:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .fail
@@ -1364,10 +1383,10 @@ CheckIfActiveCardCanKnockOut:
 ; outputs carry if any of the active Pokémon attacks
 ; can be used and are not residual
 CheckIfActivePokemonCanUseAnyNonResidualAttack:
-	xor a ; active card
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 ; first atk
-	ld [wSelectedAttack], a
+	ld [wSelectedAttack], a ; FIRST_ATTACK_OR_PKMN_POWER
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .next_atk
 	ld a, [wLoadedAttackCategory]
@@ -1376,7 +1395,7 @@ CheckIfActivePokemonCanUseAnyNonResidualAttack:
 
 .next_atk
 ; second atk
-	ld a, $01
+	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .fail
@@ -1401,7 +1420,7 @@ CheckIfActivePokemonCanUseAnyNonResidualAttack:
 ; input:
 ;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
 LookForEnergyNeededInHand:
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
 	call CheckEnergyNeededForAttack
 	ld a, b
@@ -1899,7 +1918,7 @@ CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondAttack:
 	jr c, .no_carry
 
 .check_second_attack
-	xor a ; active card
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
@@ -2042,7 +2061,7 @@ AISelectSpecialAttackParameters:
 	or a
 	jp z, .no_carry ; can be jr
 
-	ld a, $01
+	ld a, $01 ; always target the Player's play area
 	ldh [hTemp_ffa0], a
 	call LookForCardThatIsKnockedOutOnDevolution
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -2065,12 +2084,12 @@ AISelectSpecialAttackParameters:
 ; search for Psychic energy cards in Discard Pile
 	ld e, PSYCHIC_ENERGY
 	ld a, CARD_LOCATION_DISCARD_PILE
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	ldh [hTemp_ffa0], a
 	farcall CreateEnergyCardListFromDiscardPile_AllEnergy
 
 ; find any energy card different from
-; the one found by CheckIfAnyCardIDinLocation.
+; the one found by LookForCardIDInLocation_Bank5.
 ; since using this attack requires a Psychic energy card,
 ; and another one is in hTemp_ffa0,
 ; then any other energy card would account
@@ -2117,7 +2136,7 @@ AISelectSpecialAttackParameters:
 	ld e, LIGHTNING_ENERGY
 
 ; if none were found in Deck, return carry...
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	ldh [hTemp_ffa0], a
 	jp nc, .no_carry  ; can be jr
 
@@ -2293,11 +2312,11 @@ INCLUDE "engine/duel/ai/boss_deck_set_up.asm"
 ;	a = location of card to check
 CheckIfCanDamageDefendingPokemon:
 	ldh [hTempPlayAreaLocation_ff9d], a
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .second_attack
-	xor a
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
@@ -2308,7 +2327,7 @@ CheckIfCanDamageDefendingPokemon:
 	ld [wSelectedAttack], a
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .no_carry
-	ld a, $01
+	ld a, SECOND_ATTACK
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
@@ -2374,7 +2393,7 @@ CheckIfDefendingPokemonCanKnockOutWithAttack:
 	ld [wSelectedAttack], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	push af
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call SwapTurn
 	call CheckIfSelectedAttackIsUnusable
@@ -2718,7 +2737,7 @@ Func_17583:
 	push hl
 	push de
 	call GetCardDamageAndMaxHP
-	call CalculateByteTensDigit
+	call ConvertHPToDamageCounters_Bank5
 	ld b, a
 	push bc
 	call CountNumberOfEnergyCardsAttached

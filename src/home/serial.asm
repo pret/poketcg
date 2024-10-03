@@ -527,7 +527,7 @@ DuelTransmissionError::
 	ld h, [hl]
 	ld l, a
 	ld sp, hl
-	xor a
+	xor a ; MUSIC_STOP
 	call PlaySong
 	call ResetSerial
 	ret

@@ -1367,8 +1367,8 @@ ProcessPlayedPokemonCard::
 	ld a, [wLoadedCard1ID]
 	cp MUK
 	jr z, .use_pokemon_power
-	ld a, $01 ; check only Muk
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ld a, PLAY_AREA_BENCH_1 ; don't check status
+	call CheckIsIncapableOfUsingPkmnPower
 	jr nc, .use_pokemon_power
 	call DisplayUsePokemonPowerScreen
 	ldtx hl, UnableToUsePkmnPowerDueToToxicGasText
@@ -1550,12 +1550,12 @@ PlayAttackAnimation_DealAttackDamage::
 	call HandleNoDamageOrEffectSubstatus
 	call SwapTurn
 .deal_damage
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	call ApplyDamageModifiers_DamageToTarget
-	call Func_189d
+	call ApplyTransparencyIfApplicable
 	ld hl, wDealtDamage
 	ld [hl], e
 	inc hl
@@ -1605,7 +1605,7 @@ HandleAfterDamageEffects::
 	bank1call ApplyStatusConditionQueue
 	call Func_1bb4
 	bank1call UpdateArenaCardLastTurnDamage
-	call Func_6e49
+	call HandleDestinyBondAndBetweenTurnKnockOuts
 	or a
 	ret
 
@@ -1641,7 +1641,7 @@ HandleConfusionDamageToSelf::
 	ld a, 20 ; damage
 	call DealConfusionDamageToSelf
 	call Func_1bb4
-	call Func_6e49
+	call HandleDestinyBondAndBetweenTurnKnockOuts
 	bank1call ClearNonTurnTemporaryDuelvars
 	or a
 	ret
@@ -1692,7 +1692,7 @@ SendAttackDataToLinkOpponent::
 	ldh [hTemp_ffa0], a
 	ret
 
-Func_189d::
+ApplyTransparencyIfApplicable::
 	ld a, [wLoadedAttackCategory]
 	bit RESIDUAL_F, a
 	ret nz
@@ -1712,7 +1712,7 @@ Func_189d::
 .asm_18b9
 	push de
 	call SwapTurn
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ld [wTempPlayAreaLocation_cceb], a
 	call HandleTransparency
 	call SwapTurn
@@ -1752,7 +1752,7 @@ CheckSelfConfusionDamage::
 ; a trainer card is like an attack effect, with its own effect commands.
 ; return nc if the card was played, carry if it wasn't.
 PlayTrainerCard::
-	call CheckCantUseTrainerDueToHeadache
+	call CheckCantUseTrainerDueToEffect
 	jr c, .cant_use
 	ldh a, [hWhoseTurn]
 	ld h, a
@@ -2216,7 +2216,7 @@ Func_1bb4::
 	call FinishQueuedAnimations
 	bank1call DrawDuelMainScene
 	call DrawDuelHUDs
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call PrintFailedEffectText
 	call WaitForWideTextBoxInput

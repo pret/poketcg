@@ -251,7 +251,7 @@ EstimateDamage_FromDefendingPokemon:
 	call SwapTurn
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	push af
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, EFFECTCMDTYPE_AI
 	call TryExecuteEffectCommandFunction

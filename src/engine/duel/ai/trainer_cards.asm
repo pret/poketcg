@@ -6,7 +6,7 @@ _AIProcessHandTrainerCards:
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld de, wTempHandCardList
-	call CopyBuffer
+	call CopyListWithFFTerminatorFromHLToDE_Bank8
 	ld hl, wTempHandCardList
 
 .loop_hand
@@ -59,7 +59,7 @@ _AIProcessHandTrainerCards:
 
 ; if Headache effects prevent playing card
 ; move on to the next item in list.
-	bank1call CheckCantUseTrainerDueToHeadache
+	bank1call CheckCantUseTrainerDueToEffect
 	jp c, .next_in_data
 
 	call LoadNonPokemonCardEffectCommands
@@ -118,7 +118,7 @@ _AIProcessHandTrainerCards:
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld de, wTempHandCardList
-	call CopyBuffer
+	call CopyListWithFFTerminatorFromHLToDE_Bank8
 	ld hl, wTempHandCardList
 ; clear the AI_FLAG_MODIFIED_HAND flag
 	ld a, [wPreviousAIFlags]
@@ -176,7 +176,7 @@ AIDecide_Potion1:
 	jr c, .no_carry
 	call AICheckIfAttackIsHighRecoil
 	jr c, .no_carry
-	xor a ; active card
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
 	jr nc, .no_carry
@@ -214,7 +214,7 @@ AIDecide_Potion1:
 ;	a = card to use Potion on;
 ;	carry set if Potion should be used.
 AIDecide_Potion2:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
 	jr nc, .start_from_active
@@ -366,7 +366,7 @@ AIDecide_SuperPotion1:
 	jr c, .no_carry
 	call AICheckIfAttackIsHighRecoil
 	jr c, .no_carry
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld e, a
 	call .check_attached_energy
@@ -414,7 +414,7 @@ AIDecide_SuperPotion1:
 ;	a = card to use Super Potion on;
 ;	carry set if Super Potion should be used.
 AIDecide_SuperPotion2:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
 	jr nc, .start_from_active
@@ -586,10 +586,11 @@ AIDecide_SuperPotion2:
 	scf
 	ret
 
+; AI always attaches a Defender card to the Active Pokémon.
 AIPlay_Defender:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -629,7 +630,7 @@ AIDecide_Defender1:
 ; and check if it is useable.
 	ld a, [wSelectedAttack]
 	ld b, a
-	ld a, $01
+	ld a, SECOND_ATTACK
 	sub b
 	ld [wSelectedAttack], a
 	push de
@@ -655,7 +656,7 @@ AIDecide_Defender1:
 .switch_back
 	ld a, [wSelectedAttack]
 	ld b, a
-	ld a, $01
+	ld a, SECOND_ATTACK
 	sub b
 	ld [wSelectedAttack], a
 	ld a, [wce06]
@@ -771,9 +772,9 @@ AIPlay_Pluspower:
 ; outputs in a the attack to use.
 AIDecide_Pluspower1:
 ; this is mistakenly duplicated
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 
 ; continue if no attack can knock out.
@@ -892,7 +893,7 @@ AIDecide_Pluspower1:
 ; and has a minimum damage > 0.
 ; outputs in a the attack to use.
 AIDecide_Pluspower2:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call .check_can_ko
 	jr nc, .no_carry
@@ -1997,7 +1998,7 @@ AIDecide_PokemonBreeder:
 	ld a, DUELVARS_ARENA_CARD_HP
 	add e
 	call GetTurnDuelistVariable
-	call ConvertHPToCounters
+	call ConvertHPToDamageCounters_Bank8
 	swap a
 	ld b, a
 
@@ -2230,7 +2231,7 @@ AIDecide_PokemonBreeder:
 	push bc
 	call GetCardDamageAndMaxHP
 	pop bc
-	call ConvertHPToCounters
+	call ConvertHPToDamageCounters_Bank8
 	add c
 	ld c, a
 
@@ -2347,12 +2348,12 @@ AIDecide_ProfessorOak:
 
 .handle_blastoise
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .check_hand
 
 ; no Muk in Play Area
 	ld a, BLASTOISE
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	jr nc, .check_hand
 
 ; at least one Blastoise in AI Play Area
@@ -2634,10 +2635,10 @@ AIDecide_EnergyRetrieval:
 	cp GO_GO_RAIN_DANCE_DECK_ID
 	jr nz, .start
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .start
 	ld a, BLASTOISE
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	jp nc, .no_carry
 
 .start
@@ -2896,10 +2897,10 @@ AIDecide_SuperEnergyRetrieval:
 	cp GO_GO_RAIN_DANCE_DECK_ID
 	jr nz, .start
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .start
 	ld a, BLASTOISE
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	jp nc, .no_carry
 
 .start
@@ -3089,7 +3090,7 @@ AIPlay_PokemonCenter:
 	ret
 
 AIDecide_PokemonCenter:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 
 ; return if active Pokemon can KO player's card.
@@ -3123,7 +3124,7 @@ AIDecide_PokemonCenter:
 ; get this Pokemon's current HP in number of counters
 ; and add it to the total.
 	ld a, [wLoadedCard1HP]
-	call ConvertHPToCounters
+	call ConvertHPToDamageCounters_Bank8
 	ld b, a
 	ld a, [wce06]
 	add b
@@ -3132,7 +3133,7 @@ AIDecide_PokemonCenter:
 ; get this Pokemon's current damage counters
 ; and add it to the total.
 	call GetCardDamageAndMaxHP
-	call ConvertHPToCounters
+	call ConvertHPToDamageCounters_Bank8
 	ld b, a
 	ld a, [wce08]
 	add b
@@ -3643,7 +3644,7 @@ PickPokedexCards_Unreferenced:
 ; stores the resulting order in wce1a.
 PickPokedexCards:
 	xor a
-	ld [wAIPokedexCounter], a ; reset counter ; reset counter
+	ld [wAIPokedexCounter], a ; reset counter
 
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
@@ -3905,7 +3906,7 @@ AIDecide_MrFuji:
 
 	; skip if zero damage counters
 	call GetCardDamageAndMaxHP
-	call ConvertHPToCounters
+	call ConvertHPToDamageCounters_Bank8
 	or a
 	jr z, .next
 
@@ -3950,7 +3951,7 @@ AIPlay_ScoopUp:
 	ret
 
 AIDecide_ScoopUp:
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 
 ; if only one Pokemon in Play Area, skip.
@@ -3991,7 +3992,7 @@ AIDecide_ScoopUp:
 ; doesn't have a status that prevents retreat.
 ; so check if it has enough energy to retreat.
 ; if not, return no carry.
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
 	ld b, a
@@ -4010,7 +4011,7 @@ AIDecide_ScoopUp:
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1HP]
-	call ConvertHPToCounters
+	call ConvertHPToDamageCounters_Bank8
 	ld d, a
 
 ; skip if card has no damage counters.
@@ -4833,15 +4834,15 @@ AIDecide_Pokeball:
 .fire_charge
 	ld e, CHANSEY
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, TAUROS
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, JIGGLYPUFF_LV12
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ret
 
@@ -4850,15 +4851,15 @@ AIDecide_Pokeball:
 .hard_pokemon
 	ld e, RHYHORN
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, RHYDON
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, ONIX
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ret
 
@@ -4867,23 +4868,23 @@ AIDecide_Pokeball:
 .pikachu
 	ld e, PIKACHU_LV14
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, PIKACHU_LV16
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, PIKACHU_ALT_LV16
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, PIKACHU_LV12
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, FLYING_PIKACHU
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ret
 
@@ -4905,11 +4906,11 @@ AIDecide_Pokeball:
 	jr c, .lightning
 	ld e, CHARMANDER
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, MAGMAR_LV31
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 
 .lightning
@@ -4924,11 +4925,11 @@ AIDecide_Pokeball:
 	jr c, .fighting
 	ld e, PIKACHU_LV12
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, MAGNEMITE_LV13
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 
 .fighting
@@ -4943,11 +4944,11 @@ AIDecide_Pokeball:
 	jr c, .psychic
 	ld e, DIGLETT
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, MACHOP
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 
 .psychic
@@ -4962,11 +4963,11 @@ AIDecide_Pokeball:
 	jr c, .done_etcetera
 	ld e, GASTLY_LV8
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 	ld e, JYNX
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	ret c
 .done_etcetera
 	or a
@@ -5062,7 +5063,7 @@ AIDecide_ComputerSearch_RockCrusher:
 
 	ld e, PROFESSOR_OAK
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jr c, .find_discard_cards_1
 	; no Professor Oak in deck, fallthrough
 
@@ -5137,7 +5138,7 @@ AIDecide_ComputerSearch_RockCrusher:
 .graveler
 	ld e, GRAVELER
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jr nc, .golem
 	ld [wce06], a
 	ld a, GEODUDE
@@ -5158,7 +5159,7 @@ AIDecide_ComputerSearch_RockCrusher:
 .golem
 	ld e, GOLEM
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jr nc, .dugtrio
 	ld [wce06], a
 	ld a, GRAVELER
@@ -5177,7 +5178,7 @@ AIDecide_ComputerSearch_RockCrusher:
 .dugtrio
 	ld e, DUGTRIO
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jp nc, .no_carry
 	ld [wce06], a
 	ld a, DIGLETT
@@ -5240,7 +5241,7 @@ AIDecide_ComputerSearch_WondersOfScience:
 ; target Professor Oak for Computer Search
 	ld e, PROFESSOR_OAK
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jp nc, .look_in_hand ; can be a jr
 	ld [wce06], a
 	jr .find_discard_cards
@@ -5266,7 +5267,7 @@ AIDecide_ComputerSearch_WondersOfScience:
 .target_grimer
 	ld e, GRIMER
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jp nc, .no_carry ; can be a jr
 	ld [wce06], a
 	jr .find_discard_cards
@@ -5276,7 +5277,7 @@ AIDecide_ComputerSearch_WondersOfScience:
 .target_muk
 	ld e, MUK
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jp nc, .no_carry ; can be a jr
 	ld [wce06], a
 
@@ -5327,21 +5328,21 @@ AIDecide_ComputerSearch_FireCharge:
 .chansey
 	ld e, CHANSEY
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jp nc, .no_carry
 	ld [wce06], a
 	jr .find_discard_cards
 .tauros
 	ld e, TAUROS
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jp nc, .no_carry
 	ld [wce06], a
 	jr .find_discard_cards
 .jigglypuff
 	ld e, JIGGLYPUFF_LV12
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jp nc, .no_carry
 	ld [wce06], a
 
@@ -5500,7 +5501,7 @@ AIDecide_PokemonTrader_LegendaryArticuno:
 
 	ld e, SEEL
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jr nc, .dewgong
 	ld [wce1a], a
 	jr .check_hand
@@ -5511,7 +5512,7 @@ AIDecide_PokemonTrader_LegendaryArticuno:
 	jr c, .no_carry
 	ld e, DEWGONG
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jr nc, .no_carry
 	ld [wce1a], a
 
@@ -5600,7 +5601,7 @@ AIDecide_PokemonTrader_LegendaryDragonite:
 .kangaskhan
 	ld e, KANGASKHAN
 	ld a, CARD_LOCATION_DECK
-	call LookForCardIDInLocation
+	call LookForCardIDInLocation_Bank8
 	jr nc, .no_carry
 
 ; card was found as target in deck,

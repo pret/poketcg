@@ -173,10 +173,10 @@ OpenGlossaryScreen:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, $01
+	ld a, SINGLE_SPACED
 	ld [wLineSeparation], a
 	call ProcessTextFromID
-	xor a
+	xor a ; DOUBLE_SPACED
 	ld [wLineSeparation], a
 	call EnableLCD
 .loop

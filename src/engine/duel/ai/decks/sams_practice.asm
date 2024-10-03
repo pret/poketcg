@@ -102,8 +102,8 @@ AIPerformScriptedTurn:
 ; always attack with Arena card's first attack.
 ; if it's unusable end turn without attacking.
 	xor a
-	ldh [hTempPlayAreaLocation_ff9d], a
-	ld [wSelectedAttack], a
+	ldh [hTempPlayAreaLocation_ff9d], a ; PLAY_AREA_ARENA
+	ld [wSelectedAttack], a ; FIRST_ATTACK_OR_PKMN_POWER
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .unusable
 	call AITryUseAttack

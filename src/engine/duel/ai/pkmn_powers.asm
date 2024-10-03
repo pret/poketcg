@@ -19,11 +19,11 @@ HandleAIEnergyTrans:
 	ret z ; return if no Bench cards
 
 	ld a, VENUSAUR_LV67
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	ret nc ; return if no VenusaurLv67 found in own Play Area
 
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ret c ; return if Muk found in any Play Area
 
 	ld a, [wce06]
@@ -411,7 +411,7 @@ AIEnergyTransTransferEnergyToBench:
 ; returns carry if turn ended.
 HandleAIPkmnPowers:
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ccf
 	ret nc ; return no carry if Muk is in play
 
@@ -813,7 +813,7 @@ HandleAIStrangeBehavior:
 	pop af
 
 ; loop counters chosen to transfer and use Pkmn Power
-	call ConvertHPToCounters
+	call ConvertHPToDamageCounters_Bank8
 	ld e, a
 .loop_counters
 	ld d, 30
@@ -944,7 +944,7 @@ HandleAICurse:
 ; handles AI logic for Cowardice
 HandleAICowardice:
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ret c ; return if there's Muk in play
 
 	farcall AIChooseRandomlyNotToDoAction
@@ -1041,10 +1041,10 @@ HandleAIDamageSwap:
 	ret c
 
 	ld a, ALAKAZAM
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	ret nc ; return if no Alakazam
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ret c ; return if there's Muk in play
 
 ; only take damage off certain cards in Arena
@@ -1067,7 +1067,7 @@ HandleAIDamageSwap:
 	or a
 	ret z ; return if no damage
 
-	call ConvertHPToCounters
+	call ConvertHPToDamageCounters_Bank8
 	ld [wce06], a
 	ld a, ALAKAZAM
 	ld b, PLAY_AREA_BENCH_1
@@ -1075,7 +1075,7 @@ HandleAIDamageSwap:
 	jr c, .is_in_bench
 
 ; Alakazam is Arena card
-	xor a
+	xor a ; PLAY_AREA_ARENA
 .is_in_bench
 	ld [wce08], a
 	call .CheckForDamageSwapTargetInBench
@@ -1207,10 +1207,10 @@ HandleAIGoGoRainDanceEnergy:
 	ret nz ; return if not Go Go Rain Dance deck
 
 	ld a, BLASTOISE
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	ret nc ; return if no Blastoise
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ret c ; return if there's Muk in play
 
 ; play all the energy cards that is needed.

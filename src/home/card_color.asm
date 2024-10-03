@@ -1,6 +1,6 @@
 ; return the turn holder's arena card's color in a, accounting for Venomoth's Shift Pokemon Power if active
 GetArenaCardColor::
-	xor a
+	xor a ; PLAY_AREA_ARENA
 ;	fallthrough
 
 ; input: a = play area location offset (PLAY_AREA_*) of the desired card
@@ -28,7 +28,7 @@ GetPlayAreaCardColor::
 	ret
 .has_changed_color
 	ld a, e
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	jr c, .regular_color ; jump if can't use Shift
 	ld a, e
 	add DUELVARS_ARENA_CARD_CHANGED_TYPE
@@ -97,8 +97,8 @@ HandleEnergyBurn::
 	ld a, e
 	cp CHARIZARD
 	ret nz
-	xor a
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	xor a ; PLAY_AREA_ARENA
+	call CheckIsIncapableOfUsingPkmnPower
 	ret c
 	ld hl, wAttachedEnergies
 	ld c, NUM_COLORED_TYPES

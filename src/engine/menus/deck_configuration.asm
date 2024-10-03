@@ -115,7 +115,7 @@ DrawDecksScreen:
 ; mark all decks as invalid
 	ld a, NUM_DECKS
 	ld hl, wDecksValid
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 
 ; for each deck, check if it has cards and if so
 ; mark is as valid in wDecksValid
@@ -708,11 +708,11 @@ DismantleDeck:
 	or a
 	jr z, .done_dismantle
 	ld a, NAME_BUFFER_LENGTH
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	call GetPointerToDeckCards
 	call AddDeckToCollection
 	ld a, DECK_SIZE
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 .done_dismantle
 	call DisableSRAM
 	add sp, $2
@@ -1050,10 +1050,10 @@ CreateFilteredCardList:
 	push af
 	ld a, DECK_SIZE
 	ld hl, wOwnedCardsCountList
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	ld a, DECK_SIZE
 	ld hl, wFilteredCardList
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	pop af
 
 ; loops all cards in collection
@@ -1175,10 +1175,15 @@ IsCardInAnyDeck:
 	or a
 	ret
 
+
+; zeroes a bytes starting from hl.
+; this function is identical to 'ClearMemory_Bank5',
+; 'ClearMemory_Bank6' and 'ClearMemory_Bank8'.
 ; preserves all registers
-; hl = start of bytes to set to $0
-; a = number of bytes to set to $0
-ClearNBytesFromHL:
+; input:
+;	a = number of bytes to clear
+;	hl = where to begin erasing
+ClearMemory_Bank2:
 	push af
 	push bc
 	push hl
@@ -2981,7 +2986,7 @@ GetCardTypeIconPalette:
 PrepareToBuildDeckConfigurationToSend:
 	ld hl, wCurDeckCards
 	ld a, wCurDeckCardsEnd - wCurDeckCards
-	call ClearNBytesFromHL
+	call ClearMemory_Bank2
 	ld a, $ff
 	ld [wCurDeck], a
 	ld hl, .text

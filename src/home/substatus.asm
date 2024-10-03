@@ -85,7 +85,7 @@ HandleDamageReductionExceptSubstatus2::
 	cp SUBSTATUS1_HALVE_DAMAGE
 	jr z, .halve_damage
 .not_affected_by_substatus1
-	call CheckCannotUseDueToStatus
+	call CheckIsIncapableOfUsingPkmnPower_ArenaCard
 	ret c
 .pkmn_power
 	ld a, [wLoadedAttackCategory]
@@ -155,7 +155,7 @@ HandleDamageReductionOrNoDamageFromPkmnPowerEffects::
 	cp POKEMON_POWER
 	ret z
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ret c
 	ld a, [wTempPlayAreaLocation_cceb]
 	or a
@@ -184,7 +184,7 @@ HandleStrikesBack_AgainstDamagingAttack::
 	cp MACHAMP
 	ret nz
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ret c
 	ld a, [wLoadedAttackCategory] ; category of attack used
 	cp POKEMON_POWER
@@ -192,7 +192,7 @@ HandleStrikesBack_AgainstDamagingAttack::
 	ld a, [wTempPlayAreaLocation_cceb] ; defending Pokemon's PLAY_AREA_*
 	or a ; cp PLAY_AREA_ARENA
 	jr nz, .in_bench
-	call CheckCannotUseDueToStatus
+	call CheckIsIncapableOfUsingPkmnPower_ArenaCard
 	ret c
 .in_bench
 	push hl
@@ -223,7 +223,7 @@ HandleStrikesBack_AgainstDamagingAttack::
 	pop af
 	or a
 	jr z, .not_knocked_out
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	call PrintPlayAreaCardKnockedOutIfNoHP
 .not_knocked_out
 	call SwapTurn
@@ -375,7 +375,7 @@ HandleNoDamageOrEffectSubstatus::
 	ldtx hl, NoDamageOrEffectDueToAgilityText
 	cp SUBSTATUS1_AGILITY
 	jr z, .no_damage_or_effect
-	call CheckCannotUseDueToStatus
+	call CheckIsIncapableOfUsingPkmnPower_ArenaCard
 	ccf
 	ret nc
 .pkmn_power
@@ -420,7 +420,7 @@ HandleTransparency::
 	cp POKEMON_POWER
 	jr z, .done ; Transparency has no effect against Pkmn Powers
 	ld a, [wTempPlayAreaLocation_cceb]
-	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	call CheckIsIncapableOfUsingPkmnPower
 	jr c, .done
 	xor a
 	ld [wDuelDisplayedScreen], a
@@ -471,20 +471,23 @@ NoDamageOrEffectTextIDTable::
 ; return carry if turn holder has Omanyte and its Clairvoyance Pkmn Power is active
 IsClairvoyanceActive::
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ccf
 	ret nc
 	ld a, OMANYTE
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	ret
 
 ; returns carry if turn holder's arena card is paralyzed, asleep, confused,
-; and/or toxic gas in play, meaning that attack and/or pkmn power cannot be used
-CheckCannotUseDueToStatus::
-	xor a
+; and/or toxic gas in play (i.e. its pkmn power cannot be used)
+CheckIsIncapableOfUsingPkmnPower_ArenaCard::
+	xor a ; PLAY_AREA_ARENA
 
-; same as above, but if a is non-0, only toxic gas is checked
-CheckCannotUseDueToStatus_OnlyToxicGasIfANon0::
+; returns carry if Pokemon in turn holder's Play Area location in register a
+; cannot use its Pkmn Power
+; input:
+;	a = play area location offset of the Pokémon to check (PLAY_AREA_* constant)
+CheckIsIncapableOfUsingPkmnPower::
 	or a
 	jr nz, .check_toxic_gas
 	ld a, DUELVARS_ARENA_CARD_STATUS
@@ -495,7 +498,7 @@ CheckCannotUseDueToStatus_OnlyToxicGasIfANon0::
 	jr nz, .done ; return carry
 .check_toxic_gas
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ldtx hl, UnableDueToToxicGasText
 .done
 	ret
@@ -504,14 +507,14 @@ CheckCannotUseDueToStatus_OnlyToxicGasIfANon0::
 ; play area of both duelists. Also return carry if the Pokemon card is at least found once.
 ; if the arena Pokemon is asleep, confused, or paralyzed (Pkmn Power-incapable), it doesn't count.
 ; input: a = Pokemon card ID to search
-CountPokemonIDInBothPlayAreas::
+CountPokemonWithActivePkmnPowerInBothPlayAreas::
 	push bc
 	ld [wTempPokemonID_ce7c], a
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	ld c, a
 	call SwapTurn
 	ld a, [wTempPokemonID_ce7c]
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	call SwapTurn
 	add c
 	or a
@@ -526,7 +529,7 @@ CountPokemonIDInBothPlayAreas::
 ; turn holder's play area. Also return carry if the Pokemon card is at least found once.
 ; if the arena Pokemon is asleep, confused, or paralyzed (Pkmn Power-incapable), it doesn't count.
 ; input: a = Pokemon card ID to search
-CountPokemonIDInPlayArea::
+CountTurnDuelistPokemonWithActivePkmnPower::
 	push hl
 	push de
 	push bc
@@ -598,7 +601,7 @@ GetLoadedCard1RetreatCost::
 	ret
 .dodrio_found
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .muk_found
 	ld a, [wLoadedCard1RetreatCost]
 	sub c ; apply Retreat Aid for each Pkmn Power-capable Dodrio
@@ -607,7 +610,7 @@ GetLoadedCard1RetreatCost::
 	ret
 
 ; return carry if the turn holder's arena Pokemon is affected by Acid and can't retreat
-CheckCantRetreatDueToAcid::
+CheckUnableToRetreatDueToEffect::
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
 	or a
@@ -622,7 +625,7 @@ CheckCantRetreatDueToAcid::
 	ret
 
 ; return carry if the turn holder is affected by Headache and trainer cards can't be used
-CheckCantUseTrainerDueToHeadache::
+CheckCantUseTrainerDueToEffect::
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetTurnDuelistVariable
 	or a
@@ -635,10 +638,10 @@ CheckCantUseTrainerDueToHeadache::
 ; return carry if any duelist has Aerodactyl and its Prehistoric Power Pkmn Power is active
 IsPrehistoricPowerActive::
 	ld a, AERODACTYL
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ret nc
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ldtx hl, UnableToEvolveDueToPrehistoricPowerText
 	ccf
 	ret
@@ -701,10 +704,10 @@ UpdateSubstatusConditions_EndOfTurn::
 ; return carry if turn holder has Blastoise and its Rain Dance Pkmn Power is active
 IsRainDanceActive::
 	ld a, BLASTOISE
-	call CountPokemonIDInPlayArea
+	call CountTurnDuelistPokemonWithActivePkmnPower
 	ret nc ; return if no Pkmn Power-capable Blastoise found in turn holder's play area
 	ld a, MUK
-	call CountPokemonIDInBothPlayAreas
+	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	ccf
 	ret
 
@@ -781,7 +784,7 @@ HandleStrikesBack_AgainstResidualAttack::
 	or a
 	ret z
 	call SwapTurn
-	call CheckCannotUseDueToStatus
+	call CheckIsIncapableOfUsingPkmnPower_ArenaCard
 	call SwapTurn
 	ret c
 	ld hl, 10 ; damage to be dealt to attacker
@@ -814,7 +817,7 @@ ApplyStrikesBack_AgainstResidualAttack::
 	or a
 	ret z
 	call WaitForWideTextBoxInput
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	call PrintPlayAreaCardKnockedOutIfNoHP
 	call DrawDuelHUDs
 	scf

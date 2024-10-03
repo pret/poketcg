@@ -63,7 +63,7 @@ HandleSpecialAIAttacks:
 ; return a score of $80 + slots available in bench.
 .CallForFamily:
 	ld a, CARD_LOCATION_DECK
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	jr nc, .zero_score
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -80,11 +80,11 @@ HandleSpecialAIAttacks:
 .NidoranFCallForFamily:
 	ld e, NIDORANM
 	ld a, CARD_LOCATION_DECK
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	jr c, .found_nidoran
 	ld e, NIDORANF
 	ld a, CARD_LOCATION_DECK
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	jr nc, .zero_score
 .found_nidoran
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -103,19 +103,19 @@ HandleSpecialAIAttacks:
 .CallForFriend:
 	ld e, GEODUDE
 	ld a, CARD_LOCATION_DECK
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	jr c, .found_fighting_card
 	ld e, ONIX
 	ld a, CARD_LOCATION_DECK
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	jr c, .found_fighting_card
 	ld e, CUBONE
 	ld a, CARD_LOCATION_DECK
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	jr c, .found_fighting_card
 	ld e, RHYHORN
 	ld a, CARD_LOCATION_DECK
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	jr c, .found_fighting_card
 	jr .zero_score
 .found_fighting_card
@@ -245,7 +245,7 @@ HandleSpecialAIAttacks:
 .EnergyAbsorption:
 	ld e, PSYCHIC_ENERGY
 	ld a, CARD_LOCATION_DISCARD_PILE
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	jp nc, .zero_score
 	ld a, $82
 	ret
@@ -376,7 +376,7 @@ HandleSpecialAIAttacks:
 .EnergySpike:
 	ld a, CARD_LOCATION_DECK
 	ld e, LIGHTNING_ENERGY
-	call CheckIfAnyCardIDinLocation
+	call LookForCardIDInLocation_Bank5
 	jp nc, .zero_score
 	call AIProcessButDontPlayEnergy_SkipEvolution
 	jp nc, .zero_score
@@ -414,7 +414,7 @@ CheckWhetherToSwitchToFirstAttack:
 ; in case it can't, the AI keeps it as the attack to be used.
 ; (possibly due to the assumption that if the
 ; second attack cannot KO, the first attack can't KO as well.)
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -441,11 +441,11 @@ CheckWhetherToSwitchToFirstAttack:
 	call CheckLoadedAttackFlag
 	jr c, .keep_second_attack
 ; switch to first attack
-	xor a
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
 	ret
 .keep_second_attack
-	ld a, $01
+	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
 	ret
 

@@ -326,7 +326,7 @@ CreditsSequenceCmd_DrawRectangle:
 	jp AdvanceCreditsSequenceCmdPtrBy4
 
 CreditsSequenceCmd_PrintText:
-	ld a, $01
+	ld a, SINGLE_SPACED
 	ld [wLineSeparation], a
 	push de
 	ld d, c
@@ -339,7 +339,7 @@ CreditsSequenceCmd_PrintText:
 	jp AdvanceCreditsSequenceCmdPtrBy6
 
 CreditsSequenceCmd_PrintTextBox:
-	ld a, $01
+	ld a, SINGLE_SPACED
 	ld [wLineSeparation], a
 	push de
 	ld d, c
