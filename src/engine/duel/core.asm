@@ -5649,7 +5649,7 @@ DisplayPlayAreaScreenToUsePkmnPower:
 	ld a, [hl]
 	ldh [hTempCardIndex_ff98], a
 	ld d, a
-	ld e, $00
+	ld e, FIRST_ATTACK_OR_PKMN_POWER
 	call CopyAttackDataAndDamage_FromDeckIndex
 	call DisplayUsePokemonPowerScreen
 	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
@@ -6699,7 +6699,7 @@ OppAction_ForceSwitchActive:
 OppAction_UsePokemonPower:
 	ldh a, [hTempCardIndex_ff9f]
 	ld d, a
-	ld e, $00
+	ld e, FIRST_ATTACK_OR_PKMN_POWER
 	call CopyAttackDataAndDamage_FromDeckIndex
 	ldh a, [hTemp_ffa0]
 	ldh [hTempPlayAreaLocation_ff9d], a

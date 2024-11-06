@@ -254,9 +254,9 @@ Script_MeetAmy:
 	set_dialog_npc NPC_AMY
 	print_npc_text AmyMeetsPlayer2Text
 	close_text_box
-	set_sprite_attributes $09, $2f, $10
+	set_sprite_attributes SPRITE_ANIM_SGB_AMY_STAND, SPRITE_ANIM_CGB_AMY_STAND, NPC_FLAG_DIRECTIONLESS
 	do_frames 32
-	set_sprite_attributes $04, $0e, $00
+	set_sprite_attributes SPRITE_ANIM_DARK_NPC_UP, SPRITE_ANIM_BLUE_NPC_UP, $00
 	set_active_npc_coords 20, 4
 	set_player_direction WEST
 	move_player WEST, 1
@@ -306,7 +306,7 @@ Script_LostToAmy:
 	quit_script_fully
 
 .ows_e34e
-	set_sprite_attributes $08, $2e, $10
+	set_sprite_attributes SPRITE_ANIM_SGB_AMY_LAYING, SPRITE_ANIM_CGB_AMY_LAYING, NPC_FLAG_DIRECTIONLESS
 	set_active_npc_coords 22, 4
 	quit_script_fully
 

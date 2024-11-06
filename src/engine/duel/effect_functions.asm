@@ -3514,7 +3514,7 @@ AIPickFireEnergyCardToDiscard:
 ArcanineFlamethrower_CheckEnergy:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
-	ld a, [wAttachedEnergies]
+	ld a, [wAttachedEnergies + FIRE]
 	ldtx hl, NotEnoughFireEnergyText
 	cp 1
 	ret
@@ -3556,7 +3556,7 @@ ArcanineQuickAttack_DamageBoostEffect:
 FlamesOfRage_CheckEnergy:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
-	ld a, [wAttachedEnergies]
+	ld a, [wAttachedEnergies + FIRE]
 	ldtx hl, NotEnoughFireEnergyText
 	cp 2
 	ret
@@ -3673,7 +3673,7 @@ FireBlast_CheckEnergy:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	ldtx hl, NotEnoughFireEnergyText
-	ld a, [wAttachedEnergies]
+	ld a, [wAttachedEnergies + FIRE]
 	cp 1
 	ret
 
@@ -3695,7 +3695,7 @@ Ember_CheckEnergy:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	ldtx hl, NotEnoughFireEnergyText
-	ld a, [wAttachedEnergies]
+	ld a, [wAttachedEnergies + FIRE]
 	cp 1
 	ret
 
@@ -3717,7 +3717,7 @@ Wildfire_CheckEnergy:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	ldtx hl, NotEnoughFireEnergyText
-	ld a, [wAttachedEnergies]
+	ld a, [wAttachedEnergies + FIRE]
 	cp 1
 	ret
 
@@ -3857,7 +3857,7 @@ FlareonFlamethrower_CheckEnergy:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	ldtx hl, NotEnoughFireEnergyText
-	ld a, [wAttachedEnergies]
+	ld a, [wAttachedEnergies + FIRE]
 	cp 1
 	ret
 
@@ -3879,7 +3879,7 @@ MagmarFlamethrower_CheckEnergy:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	ldtx hl, NotEnoughFireEnergyText
-	ld a, [wAttachedEnergies]
+	ld a, [wAttachedEnergies + FIRE]
 	cp 1
 	ret
 
@@ -3911,7 +3911,7 @@ CharmeleonFlamethrower_CheckEnergy:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	ldtx hl, NotEnoughFireEnergyText
-	ld a, [wAttachedEnergies]
+	ld a, [wAttachedEnergies + FIRE]
 	cp 1
 	ret
 
@@ -8646,8 +8646,7 @@ MorphEffect:
 	ret
 
 ; picks a random Pokemon in the Deck to morph.
-; needs to be a Basic Pokemon that doesn't have
-; the same ID as the Arena card.
+; needs to be a Basic Pokemon that isn't Ditto
 ; returns carry if no Pokemon were found.
 .PickRandomBasicPokemonFromDeck
 	call CreateDeckCardList
@@ -8667,8 +8666,8 @@ MorphEffect:
 	or a
 	jr nz, .loop_deck ; skip non-Basic cards
 	ld a, [wLoadedCard2ID]
-	cp DUELVARS_ARENA_CARD
-	jr z, .loop_deck ; skip cards with same ID as Arena card
+	cp DITTO
+	jr z, .loop_deck ; skip other Ditto cards
 	ldh a, [hTempCardIndex_ff98]
 	or a
 	ret

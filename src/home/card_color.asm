@@ -108,5 +108,5 @@ HandleEnergyBurn::
 	dec c
 	jr nz, .zero_next_energy
 	ld a, [wTotalAttachedEnergies]
-	ld [wAttachedEnergies], a
+	ld [wAttachedEnergies + FIRE], a
 	ret

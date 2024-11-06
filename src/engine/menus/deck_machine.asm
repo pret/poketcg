@@ -71,9 +71,9 @@ HandleDeckMissingCardsList:
 	ld a, [wCardListCursorPos]
 	ld [wced7], a
 
-	; set wOwnedCardsCountList as current card list
+	; set wUniqueDeckCardList as current card list
 	; and show card page screen
-	ld de, wOwnedCardsCountList
+	ld de, wUniqueDeckCardList
 	ld hl, wCurCardListPtr
 	ld [hl], e
 	inc hl

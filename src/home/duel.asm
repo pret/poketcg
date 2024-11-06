@@ -1342,7 +1342,7 @@ ProcessPlayedPokemonCard::
 	call ClearChangedTypesIfMuk
 	ldh a, [hTempCardIndex_ff98]
 	ld d, a
-	ld e, $00
+	ld e, FIRST_ATTACK_OR_PKMN_POWER
 	call CopyAttackDataAndDamage_FromDeckIndex
 	call UpdateArenaCardIDsAndClearTwoTurnDuelVars
 	ldh a, [hTempCardIndex_ff98]
@@ -1861,14 +1861,14 @@ ApplyDamageModifiers_DamageToTarget::
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
-	bit 7, d
-	jr z, .safe
-	res 7, d ; cap at 2^15
+	bit UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, d
+	jr z, .affected_by_wr
+	res UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, d
 	xor a
 	ld [wDamageEffectiveness], a
 	call HandleDoubleDamageSubstatus
 	jr .check_pluspower_and_defender
-.safe
+.affected_by_wr
 	call HandleDoubleDamageSubstatus
 	ld a, e
 	or d
