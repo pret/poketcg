@@ -1,4 +1,4 @@
-If you have plans to contribute to the poketcg disassembly, consider giving this a quick read (and, also, thank you!). But, please, don't be intimidated by it! I think it contains some useful pointers to help make your work as readable and clean as possible for other contributors and eventual users, as well as to make the style consistent accross the repository.
+If you have plans to contribute to the poketcg disassembly, consider giving this a quick read (and, also, thank you!). But, please, don't be intimidated by it! I think it contains some useful pointers to help make your work as readable and clean as possible for other contributors and eventual users, as well as to make the style consistent across the repository.
 
 
 # Table of contents
