@@ -2268,15 +2268,16 @@ GetPlayAreaCardRetreatCost::
 	call GetLoadedCard1RetreatCost
 	ret
 
-; move the turn holder's card with ID at de to the discard pile
-; if it's currently in the arena.
-MoveCardToDiscardPileIfInArena::
+; move all turn holder's card with ID at de to the discard pile
+; that are currently in the Play Area
+; this is used to discard all attached Pluspowers and Defenders
+MoveCardToDiscardPileIfInPlayArea::
 	ld c, e
 	ld b, d
 	ld l, DUELVARS_CARD_LOCATIONS
 .next_card
 	ld a, [hl]
-	and CARD_LOCATION_ARENA
+	and CARD_LOCATION_PLAY_AREA
 	jr z, .skip ; jump if card not in arena
 	ld a, l
 	call GetCardIDFromDeckIndex

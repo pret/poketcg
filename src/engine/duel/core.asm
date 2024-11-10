@@ -6908,7 +6908,7 @@ DiscardAttachedPluspowers:
 	dec e
 	jr nz, .unattach_pluspower_loop
 	ld de, PLUSPOWER
-	jp MoveCardToDiscardPileIfInArena
+	jp MoveCardToDiscardPileIfInPlayArea
 
 ; discard any DEFENDER attached to the turn holder's arena and/or bench Pokemon
 DiscardAttachedDefenders:
@@ -6921,7 +6921,7 @@ DiscardAttachedDefenders:
 	dec e
 	jr nz, .unattach_defender_loop
 	ld de, DEFENDER
-	jp MoveCardToDiscardPileIfInArena
+	jp MoveCardToDiscardPileIfInPlayArea
 
 ; return carry if the turn holder's arena Pokemon card is asleep, poisoned, or double poisoned.
 ; also, if confused, paralyzed, or asleep, return the status condition in a.
@@ -7594,7 +7594,7 @@ GetCardOneStageBelow:
 ; loads deck indices of the stages present in hTempPlayAreaLocation_ff9d.
 ; the three stages are loaded consecutively in wAllStagesIndices.
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	or CARD_LOCATION_ARENA
+	or CARD_LOCATION_PLAY_AREA
 	ld c, a
 	ld a, DUELVARS_CARD_LOCATIONS
 	call GetTurnDuelistVariable
