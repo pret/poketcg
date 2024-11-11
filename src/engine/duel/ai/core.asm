@@ -9,12 +9,10 @@ INCLUDE "engine/duel/ai/decks/unreferenced.asm"
 ;	[wSelectedAttack] = attack index that KOs
 CheckIfAnyAttackKnocksOutDefendingCard:
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
-	call CheckIfAttackKnocksOutDefendingCard
+	call .CheckAttack
 	ret c
 	ld a, SECOND_ATTACK
-;	fallthrough
-
-CheckIfAttackKnocksOutDefendingCard:
+.CheckAttack:
 	call EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
@@ -59,7 +57,7 @@ FindHighestBenchScore:
 	ld e, c
 	ld d, c
 	ld hl, wPlayAreaAIScore + 1
-	jp .next
+	jp .next ; can be jr
 
 .loop
 	ld a, [hli]
@@ -78,23 +76,23 @@ FindHighestBenchScore:
 	ret
 
 ; adds a to wAIScore
-; if there's overflow, it's capped at $ff
+; if there's overflow, it's capped at 255
 ; output:
-;	a = a + wAIScore (capped at $ff)
-AddToAIScore:
+;	a = a + wAIScore (capped at 255)
+AIEncourage:
 	push hl
 	ld hl, wAIScore
 	add [hl]
 	jr nc, .no_cap
-	ld a, $ff
+	ld a, 255
 .no_cap
 	ld [hl], a
 	pop hl
 	ret
 
 ; subs a from wAIScore
-; if there's underflow, it's capped at $00
-SubFromAIScore:
+; if there's underflow, it's capped at 0
+AIDiscourage:
 	push hl
 	push de
 	ld e, a
@@ -105,7 +103,7 @@ SubFromAIScore:
 	sub e
 	ld [hl], a
 	jr nc, .done
-	ld [hl], $00
+	ld [hl], 0
 .done
 	pop de
 	pop hl
@@ -631,7 +629,7 @@ CreateEnergyCardListFromHand:
 	call GetTurnDuelistVariable
 	ld c, a
 	inc c
-	ld l, LOW(wOpponentHand)
+	ld l, DUELVARS_HAND
 	jr .decrease
 
 .loop
@@ -1585,7 +1583,7 @@ SortTempHandByIDList:
 CheckEnergyFlagsNeededInList:
 	ld e, a
 	ld hl, wDuelTempList
-.next_card
+.loop_cards
 	ld a, [hli]
 	cp $ff
 	jr z, .no_carry
@@ -1626,7 +1624,7 @@ CheckEnergyFlagsNeededInList:
 	jr .check_energy
 .colorless
 	cp DOUBLE_COLORLESS_ENERGY
-	jr nz, .next_card
+	jr nz, .loop_cards
 	ld a, COLORLESS_F
 
 ; if energy card matches required energy, return carry
@@ -1634,7 +1632,7 @@ CheckEnergyFlagsNeededInList:
 	ld d, e
 	and e
 	ld e, d
-	jr z, .next_card
+	jr z, .loop_cards
 	scf
 	ret
 .no_carry
@@ -1652,12 +1650,12 @@ CheckEnergyFlagsNeededInList:
 GetAttacksEnergyCostBits:
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld hl, wLoadedCard2Atk1EnergyCost
-	call GetEnergyCostBits
+	call .GetEnergyCostBits
 	ld b, a
 
 	push bc
 	ld hl, wLoadedCard2Atk2EnergyCost
-	call GetEnergyCostBits
+	call .GetEnergyCostBits
 	pop bc
 	or b
 	ret
@@ -1670,7 +1668,7 @@ GetAttacksEnergyCostBits:
 ;	[hl] = Loaded card attack energy cost
 ; output:
 ;	a = bits of each energy requirement
-GetEnergyCostBits:
+.GetEnergyCostBits:
 	ld c, $00
 	ld a, [hli]
 	ld b, a
@@ -1892,10 +1890,9 @@ LookForCardThatIsKnockedOutOnDevolution:
 
 ; returns carry if the following conditions are met:
 ;	- arena card HP >= half max HP
-;	- arena card Unknown2's 4 bit is not set or
-;	  is set but there's no evolution of card in hand/deck
+;	- arena card cannot potentially evolve
 ;	- arena card can use second attack
-CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondAttack:
+CheckIfArenaCardIsFullyPowered:
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld d, a
@@ -1910,8 +1907,8 @@ CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondAttack:
 	pop de
 	jr nc, .no_carry
 
-	ld a, [wLoadedCard1Unknown2]
-	and %00010000
+	ld a, [wLoadedCard1AIInfo]
+	and HAS_EVOLUTION
 	jr z, .check_second_attack
 	ld a, d
 	call CheckCardEvolutionInHandOrDeck
@@ -1981,10 +1978,9 @@ CountNumberOfSetUpBenchPokemon:
 	pop de
 	jr nc, .next
 
-	ld a, [wLoadedCard1Unknown2]
-	and $10
+	ld a, [wLoadedCard1AIInfo]
+	and HAS_EVOLUTION
 	jr z, .check_second_attack
-
 	ld a, d
 	push bc
 	call CheckCardEvolutionInHandOrDeck
@@ -1994,6 +1990,9 @@ CountNumberOfSetUpBenchPokemon:
 .check_second_attack
 	ld a, c
 	ldh [hTempPlayAreaLocation_ff9d], a
+	; bug, there is an assumption that the card
+	; has a second attack, but it may be the case
+	; that it doesn't, which will return carry
 	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
 	push bc
@@ -2107,7 +2106,6 @@ AISelectSpecialAttackParameters:
 ; store the deck index of energy card found
 	ld a, b
 	ldh [hTempPlayAreaLocation_ffa1], a
-	; fallthrough
 
 .set_carry_2
 	scf
@@ -2132,6 +2130,7 @@ AISelectSpecialAttackParameters:
 	or a
 	jp z, .no_carry  ; can be jr
 
+; if none were found in Deck, return carry...
 	ld a, CARD_LOCATION_DECK
 	ld e, LIGHTNING_ENERGY
 
@@ -2356,13 +2355,13 @@ CheckIfDefendingPokemonCanKnockOut:
 	ld [wAISecondAttackDamage], a
 
 	; first attack
-	call CheckIfDefendingPokemonCanKnockOutWithAttack
+	call .CheckAttack
 	jr nc, .second_attack
 	ld a, [wDamage]
 	ld [wAIFirstAttackDamage], a
 .second_attack
 	ld a, SECOND_ATTACK
-	call CheckIfDefendingPokemonCanKnockOutWithAttack
+	call .CheckAttack
 	jr nc, .return_if_neither_kos
 	ld a, [wDamage]
 	ld [wAISecondAttackDamage], a
@@ -2389,7 +2388,7 @@ CheckIfDefendingPokemonCanKnockOut:
 ; input:
 ;	a = attack index
 ;	[hTempPlayAreaLocation_ff9d] = location of card to check
-CheckIfDefendingPokemonCanKnockOutWithAttack:
+.CheckAttack:
 	ld [wSelectedAttack], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	push af
@@ -2411,10 +2410,10 @@ CheckIfDefendingPokemonCanKnockOutWithAttack:
 	call GetTurnDuelistVariable
 	ld hl, wDamage
 	sub [hl]
-	jr z, .set_carry
+	jr z, .can_ko
 	ret
 
-.set_carry
+.can_ko
 	scf
 	ret
 
@@ -2515,7 +2514,7 @@ AIChooseRandomlyNotToDoAction:
 ; output:
 ;	carry set if the above requirements are met
 CheckForBenchIDAtHalfHPAndCanUseSecondAttack:
-	ld [wcdf9], a
+	ld [wSamePokemonCardID], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld d, a
 	ld a, [wSelectedAttack]
@@ -2549,7 +2548,7 @@ CheckForBenchIDAtHalfHPAndCanUseSecondAttack:
 	jr nc, .loop
 	; half max HP < current HP
 	ld a, [wLoadedCard1ID]
-	ld hl, wcdf9
+	ld hl, wSamePokemonCardID
 	cp [hl]
 	jr nz, .loop
 
@@ -2606,107 +2605,106 @@ RaiseAIScoreToAllMatchingIDsInBench:
 	pop hl
 	jr .loop
 
-; goes through each play area Pokémon, and
-; for all cards of the same ID, determine which
-; card has highest value calculated from Func_17583
-; the card with highest value gets increased wPlayAreaEnergyAIScore
-; while all others get decreased wPlayAreaEnergyAIScore
-Func_174f2:
+; used by AI to determine which Pokémon it should favor in the bench
+; in order to attach an energy card from the hand, in case there are repeats
+; if there is repeated Pokémon in bench, then increase wPlayAreaEnergyAIScore
+; from the Pokémon with less damage and more energy cards,
+; and decrease from all others
+HandleAIEnergyScoringForRepeatedBenchPokemon:
+	; clears wSamePokemonEnergyScoreHandled
 	ld a, MAX_PLAY_AREA_POKEMON
-	ld hl, wcdfa
+	ld hl, wSamePokemonEnergyScoreHandled
 	call ClearMemory_Bank5
+
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 	ld e, 0
-
-.loop_play_area
+.loop_bench
+	; clears wSamePokemonEnergyScore
 	push hl
 	ld a, MAX_PLAY_AREA_POKEMON
-	ld hl, wcdea
+	ld hl, wSamePokemonEnergyScore
 	call ClearMemory_Bank5
 	pop hl
+
 	inc e
 	ld a, [hli]
 	cp $ff
-	ret z
+	ret z ; done looping bench
 
-	ld [wcdf9], a
+	ld [wSamePokemonCardID], a ; deck index
+
+; checks wSamePokemonEnergyScoreHandled of location in e
+; if != 0, go to next in play area
 	push de
 	push hl
-
-; checks wcdfa + play area location in e
-; if != 0, go to next in play area
 	ld d, $00
-	ld hl, wcdfa
+	ld hl, wSamePokemonEnergyScoreHandled
 	add hl, de
 	ld a, [hl]
 	or a
 	pop hl
 	pop de
-	jr nz, .loop_play_area
+	jr nz, .loop_bench ; already handled
 
-; loads wcdf9 with card ID
-; and call Func_17583
+	; store this card's ID
 	push de
-	ld a, [wcdf9]
+	ld a, [wSamePokemonCardID]
 	call GetCardIDFromDeckIndex
 	ld a, e
-	ld [wcdf9], a
+	ld [wSamePokemonCardID], a
 	pop de
+
+	; calculate score of this Pokémon
+	; and all cards with same ID
 	push hl
 	push de
-	call Func_17583
-
-; check play area Pokémon ahead
-; if there is a card with the same ID,
-; call Func_17583 for it as well
-.loop_1
+	call .CalculateScore
+.loop_search_same_card_id
 	inc e
 	ld a, [hli]
 	cp $ff
-	jr z, .check_if_repeated_id
+	jr z, .tally_repeated_pokemon
 	push de
 	call GetCardIDFromDeckIndex
-	ld a, [wcdf9]
+	ld a, [wSamePokemonCardID]
 	cp e
 	pop de
-	jr nz, .loop_1
-	call Func_17583
-	jr .loop_1
+	jr nz, .loop_search_same_card_id
+	call .CalculateScore
+	jr .loop_search_same_card_id
 
-; if there are more than 1 of the same ID
-; in play area, iterate bench backwards
-; and determines which card has highest
-; score in wcdea
-.check_if_repeated_id
-	call Func_175a8
+.tally_repeated_pokemon
+	call .CountNumberOfCardsWithSameID
 	jr c, .next
+
+	; has repeated card IDs in bench
+	; find which one has highest score
 	lb bc, 0, 0
-	ld hl, wcdea + MAX_BENCH_POKEMON
-	ld d, MAX_PLAY_AREA_POKEMON
+	ld hl, wSamePokemonEnergyScore + PLAY_AREA_BENCH_5
+	ld d, PLAY_AREA_BENCH_5 + 1
 .loop_2
 	dec d
-	jr z, .asm_17560
+	jr z, .got_highest_score
 	ld a, [hld]
 	cp b
 	jr c, .loop_2
-	ld b, a
-	ld c, d
+	ld b, a ; highest score
+	ld c, d ; play area location
 	jr .loop_2
 
 ; c = play area location of highest score
-; decrease wPlayAreaEnergyAIScore score for all cards with same ID
-; except for the one with highest score
 ; increase wPlayAreaEnergyAIScore score for card with highest ID
-.asm_17560
+; decrease wPlayAreaEnergyAIScore score for all cards with same ID
+.got_highest_score
 	ld hl, wPlayAreaEnergyAIScore
-	ld de, wcdea
+	ld de, wSamePokemonEnergyScore
 	ld b, PLAY_AREA_ARENA
 .loop_3
 	ld a, c
 	cp b
 	jr z, .card_with_highest
-	ld a, [de]
+	ld a, [de] ; score
 	or a
 	jr z, .check_next
 ; decrease score
@@ -2727,13 +2725,13 @@ Func_174f2:
 .next
 	pop de
 	pop hl
-	jp .loop_play_area
+	jp .loop_bench
 
-; loads wcdea + play area location in e
+; loads wSamePokemonEnergyScore + play area location in e
 ; with energy  * 2 + $80 - floor(dam / 10)
-; loads wcdfa + play area location in e
+; loads wSamePokemonEnergyScoreHandled + play area location in e
 ; with $01
-Func_17583:
+.CalculateScore:
 	push hl
 	push de
 	call GetCardDamageAndMaxHP
@@ -2748,21 +2746,21 @@ Func_17583:
 	pop de
 	push de
 	ld d, $00
-	ld hl, wcdea
+	ld hl, wSamePokemonEnergyScore
 	add hl, de
 	ld [hl], a
-	ld hl, wcdfa
+	ld hl, wSamePokemonEnergyScoreHandled
 	add hl, de
 	ld [hl], $01
 	pop de
 	pop hl
 	ret
 
-; counts how many play area locations in wcdea
+; counts how many play area locations in wSamePokemonEnergyScore
 ; are != 0, and outputs result in a
 ; also returns carry if result is < 2
-Func_175a8:
-	ld hl, wcdea
+.CountNumberOfCardsWithSameID:
+	ld hl, wSamePokemonEnergyScore
 	ld d, $00
 	ld e, MAX_PLAY_AREA_POKEMON + 1
 .loop

@@ -347,7 +347,7 @@ HandleSpecialAIAttacks:
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 
-	lb de, 0, 0
+	lb de, 0, PLAY_AREA_BENCH_1 - 1
 .loop_earthquake
 	inc e
 	ld a, [hli]
@@ -355,15 +355,23 @@ HandleSpecialAIAttacks:
 	jr z, .count_prizes
 	ld a, e
 	add DUELVARS_ARENA_CARD_HP
+	; bug, GetTurnDuelistVariable clobbers hl
+	; uncomment the following lines to preserve hl
+	; push hl
 	call GetTurnDuelistVariable
+	; pop hl
 	cp 20
 	jr nc, .loop_earthquake
 	inc d
 	jr .loop_earthquake
 
 .count_prizes
+	; bug, this is supposed to count the player's prize cards
+	; not the opponent's, missing calls to SwapTurn
 	push de
+	; call SwapTurn
 	call CountPrizes
+	; call SwapTurn
 	pop de
 	cp d
 	jp c, .zero_score
@@ -409,25 +417,23 @@ CheckWhetherToSwitchToFirstAttack:
 	cp $50
 	jr c, .keep_second_attack
 
-; first attack has more than minimum score to be used.
-; check if second attack can KO.
-; in case it can't, the AI keeps it as the attack to be used.
-; (possibly due to the assumption that if the
-; second attack cannot KO, the first attack can't KO as well.)
+; first attack has more than minimum score to be used,
+; check if it can KO, in case it can't
+; then the AI keeps second attack as selection.
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
+	; a = FIRST_ATTACK_OR_PKMN_POWER
 	call EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
 	ld hl, wDamage
-	sub [hl]
+	sub [hl] ; HP - damage
 	jr z, .check_flag
-	jr nc, .keep_second_attack
+	jr nc, .keep_second_attack ; cannot KO
 
-; second attack can ko, check its flag.
+; first attack can ko, check flags from second attack
 ; in case its effect is to heal user or nullify/weaken damage
 ; next turn, keep second attack as the option.
-; otherwise switch to the first attack.
 .check_flag
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable

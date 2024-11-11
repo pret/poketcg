@@ -94,13 +94,11 @@ EstimateDamage_VersusDefendingCard:
 ;	[hTempPlayAreaLocation_ff9d] = turn holder's card location as the attacker
 CalculateDamage_VersusDefendingPokemon:
 	ld hl, wAIMinDamage
-	call _CalculateDamage_VersusDefendingPokemon
+	call .Calculate
 	ld hl, wAIMaxDamage
-	call _CalculateDamage_VersusDefendingPokemon
+	call .Calculate
 	ld hl, wDamage
-;	fallthrough
-
-_CalculateDamage_VersusDefendingPokemon:
+.Calculate:
 	ld e, [hl]
 	ld d, $00
 	push hl
@@ -127,7 +125,7 @@ _CalculateDamage_VersusDefendingPokemon:
 	pop de
 	jr nc, .vulnerable
 	; invulnerable to damage
-	ld de, $0
+	ld de, 0
 	jr .done
 .vulnerable
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -177,7 +175,7 @@ _CalculateDamage_VersusDefendingPokemon:
 	; test if de underflowed
 	bit 7, d
 	jr z, .no_underflow
-	ld de, $0
+	ld de, 0
 
 .no_underflow
 	ld a, DUELVARS_ARENA_CARD_STATUS

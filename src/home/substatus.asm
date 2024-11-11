@@ -68,6 +68,7 @@ HandleDamageReductionExceptSubstatus2::
 	call GetTurnDuelistVariable
 	or a
 	jr z, .not_affected_by_substatus1
+
 	cp SUBSTATUS1_NO_DAMAGE_STIFFEN
 	jr z, .no_damage
 	cp SUBSTATUS1_NO_DAMAGE_10
@@ -84,6 +85,7 @@ HandleDamageReductionExceptSubstatus2::
 	jr z, .prevent_less_than_40_damage
 	cp SUBSTATUS1_HALVE_DAMAGE
 	jr z, .halve_damage
+
 .not_affected_by_substatus1
 	call CheckIsIncapableOfUsingPkmnPower_ArenaCard
 	ret c
@@ -93,33 +95,38 @@ HandleDamageReductionExceptSubstatus2::
 	ret z
 	ld a, [wTempNonTurnDuelistCardID]
 	cp MR_MIME
-	jr z, .prevent_less_than_30_damage ; invisible wall
+	jr z, .invisible_wall
 	cp KABUTO
-	jr z, .halve_damage2 ; kabuto armor
+	jr z, .kabuto_armor
 	ret
+
 .no_damage
 	ld de, 0
 	ret
+
 .reduce_damage_by_10
 	ld hl, -10
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
+
 .reduce_damage_by_20
 	ld hl, -20
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
+
 .prevent_less_than_40_damage
 	ld bc, 40
 	call CompareDEtoBC
 	ret nc
 	ld de, 0
 	ret
+
 .halve_damage
-	sla d
+	sla d ; bug, should be sra d
 	rr e
 	bit 0, e
 	ret z
@@ -128,7 +135,8 @@ HandleDamageReductionExceptSubstatus2::
 	ld e, l
 	ld d, h
 	ret
-.prevent_less_than_30_damage
+
+.invisible_wall
 	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	ret z
@@ -137,8 +145,9 @@ HandleDamageReductionExceptSubstatus2::
 	ret c
 	ld de, 0
 	ret
-.halve_damage2
-	sla d
+
+.kabuto_armor
+	sla d ; bug, should be sra d
 	rr e
 	bit 0, e
 	ret z
@@ -331,7 +340,9 @@ HandleSandAttackOrSmokescreenSubstatus::
 	scf
 	ret
 
-; return carry if the turn holder's arena card is under the effects of sand attack or smokescreen
+; return carry if the turn holder's arena card is under
+; the effects of sand attack or smokescreen
+; and got tails on the coin toss
 CheckSandAttackOrSmokescreenSubstatus::
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
@@ -348,7 +359,8 @@ CheckSandAttackOrSmokescreenSubstatus::
 .card_is_affected
 	ld a, [wGotHeadsFromSandAttackOrSmokescreenCheck]
 	or a
-	ret nz
+	ret nz ; got heads
+	; got tails
 	scf
 	ret
 

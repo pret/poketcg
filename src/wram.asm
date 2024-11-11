@@ -652,8 +652,8 @@ wGotHeadsFromSandAttackOrSmokescreenCheck:: ; cc0a
 wAlreadyPlayedEnergy:: ; cc0b
 	ds $1
 
-; set to 1 if the confusion check coin toss in AttemptRetreat is heads
-wGotHeadsFromConfusionCheckDuringRetreat:: ; cc0c
+; set to TRUE if the confusion check coin toss in AttemptRetreat is tails
+wConfusionRetreatCheckWasUnsuccessful:: ; cc0c
 	ds $1
 
 ; DUELIST_TYPE_* of the turn holder
@@ -780,8 +780,8 @@ wNoDamageOrEffect:: ; ccc7
 wNumberPrizeCardsToTake:: ; ccc8
 	ds $1
 
-; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
-wGotHeadsFromConfusionCheck:: ; ccc9
+; set to TRUE if the coin toss in the confusion check is tails (CheckSelfConfusionDamage)
+wConfusionAttackCheckWasUnsuccessful:: ; ccc9
 	ds $1
 
 ; used to store card indices of all stages, in order, of a Play Area Pokémon
@@ -1155,8 +1155,8 @@ wAIPluspowerAttack:: ; cdd6
 
 ; whether AI is allowed to play an energy card
 ; from the hand in order to retreat arena card
-;	$00 = not allowed
-;	$01 = allowed
+;	FALSE = not allowed
+;	TRUE  = allowed
 wAIPlayEnergyCardForRetreat:: ; cdd7
 	ds $1
 
@@ -1172,7 +1172,12 @@ wAIEnergyAttachLogicFlags:: ; cdd8
 wAIExecuteProcessedAttack:: ; cdd9
 	ds $1
 
-wcdda:: ; cdda
+; flags used by AI for retreat logic
+; if bit 0 set, then it means the current Pokémon
+; can KO the defending card with one of its attacks
+; if bit 7 is set, then it means the switch is due
+; to the effect of an attack (not Pkmn Power)
+wAIRetreatFlags:: ; cdda
 	ds $1
 
 wAITriedAttack:: ; cddb
@@ -1194,7 +1199,7 @@ wTempAIScore:: ; cde3
 wPlayAreaEnergyAIScore:: ; cde4
 	ds MAX_PLAY_AREA_POKEMON
 
-wcdea:: ; cdea
+wSamePokemonEnergyScore:: ; cdea
 	ds MAX_PLAY_AREA_POKEMON
 
 ; whether AI cannot inflict damage on player's active Pokémon
@@ -1228,10 +1233,10 @@ wCurCardCanKO:: ; cdf4
 
 	ds $4
 
-wcdf9:: ; cdf9
+wSamePokemonCardID:: ; cdf9
 	ds $1
 
-wcdfa:: ; cdfa
+wSamePokemonEnergyScoreHandled:: ; cdfa
 	ds MAX_PLAY_AREA_POKEMON
 
 wAIFirstAttackDamage:: ; ce00

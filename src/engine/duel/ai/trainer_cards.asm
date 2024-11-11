@@ -171,7 +171,7 @@ AIPlay_Potion:
 ; next turn after using Potion.
 ; if it cannot, return carry.
 ; also take into account whether attack is high recoil.
-AIDecide_Potion1:
+AIDecide_Potion_Phase07:
 	farcall AIDecideWhetherToRetreat
 	jr c, .no_carry
 	call AICheckIfAttackIsHighRecoil
@@ -213,7 +213,7 @@ AIDecide_Potion1:
 ; output:
 ;	a = card to use Potion on;
 ;	carry set if Potion should be used.
-AIDecide_Potion2:
+AIDecide_Potion_Phase10:
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut

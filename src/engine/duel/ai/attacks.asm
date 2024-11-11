@@ -240,7 +240,7 @@ GetAIScoreOfAttack:
 	jr .check_damage
 .can_ko
 	ld a, 20
-	call AddToAIScore
+	call AIEncourage
 
 ; raise AI score by the number of damage counters that this attack deals.
 ; if no damage is dealt, subtract AI score. in case wDamage is zero
@@ -255,17 +255,17 @@ GetAIScoreOfAttack:
 	or a
 	jr z, .no_damage
 	call ConvertHPToDamageCounters_Bank5
-	call AddToAIScore
+	call AIEncourage
 	jr .check_recoil
 .no_damage
 	ld a, $01
 	ld [wAIAttackIsNonDamaging], a
-	call SubFromAIScore
+	call AIDiscourage
 	ld a, [wAIMaxDamage]
 	or a
 	jr z, .no_max_damage
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 	xor a
 	ld [wAIAttackIsNonDamaging], a
 .no_max_damage
@@ -273,7 +273,7 @@ GetAIScoreOfAttack:
 	call CheckLoadedAttackFlag
 	jr nc, .check_recoil
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 
 ; handle recoil attacks (low and high recoil).
 .check_recoil
@@ -293,7 +293,7 @@ GetAIScoreOfAttack:
 	call ApplyDamageModifiers_DamageToSelf
 	ld a, e
 	call ConvertHPToDamageCounters_Bank5
-	call SubFromAIScore
+	call AIDiscourage
 
 	push de
 	ld a, ATTACK_FLAG1_ADDRESS | HIGH_RECOIL_F
@@ -309,7 +309,7 @@ GetAIScoreOfAttack:
 	jp nz, .check_defending_can_ko
 .kos_self
 	ld a, 10
-	call SubFromAIScore
+	call AIDiscourage
 
 .high_recoil
 	; dismiss this attack if no benched Pokémon
@@ -340,7 +340,7 @@ GetAIScoreOfAttack:
 
 .encourage_high_recoil_atk
 	ld a, 20
-	call AddToAIScore
+	call AIEncourage
 	jp .done
 
 ; Zapping Selfdestruct deck only uses this attack
@@ -436,7 +436,7 @@ GetAIScoreOfAttack:
 ; attack causes CPU to draw all prize cards
 .wins_the_duel
 	ld a, 20
-	call AddToAIScore
+	call AIEncourage
 	jp .done
 
 ; subtract from AI score number of own benched Pokémon KO'd
@@ -446,13 +446,13 @@ GetAIScoreOfAttack:
 	or a
 	jr z, .count_player_ko_bench
 	dec a
-	call SubFromAIScore
+	call AIDiscourage
 
 ; add to AI score number of player benched Pokémon KO'd
 .count_player_ko_bench
 	pop bc
 	ld a, b
-	call AddToAIScore
+	call AIEncourage
 	jr .check_defending_can_ko
 
 ; local function that gets called to determine damage to
@@ -515,12 +515,12 @@ GetAIScoreOfAttack:
 	ld [wSelectedAttack], a
 	jr nc, .check_discard
 	ld a, 5
-	call AddToAIScore
+	call AIEncourage
 	ld a, [wAIAttackIsNonDamaging]
 	or a
 	jr z, .check_discard
 	ld a, 5
-	call SubFromAIScore
+	call AIDiscourage
 
 ; subtract from AI score if this attack requires
 ; discarding any energy cards.
@@ -535,16 +535,16 @@ GetAIScoreOfAttack:
 	call CheckLoadedAttackFlag
 	jr nc, .asm_16ca6
 	ld a, 1
-	call SubFromAIScore
+	call AIDiscourage
 	ld a, [wLoadedAttackEffectParam]
-	call SubFromAIScore
+	call AIDiscourage
 
 .asm_16ca6
 	ld a, ATTACK_FLAG2_ADDRESS | FLAG_2_BIT_6_F
 	call CheckLoadedAttackFlag
 	jr nc, .check_nullify_flag
 	ld a, [wLoadedAttackEffectParam]
-	call AddToAIScore
+	call AIEncourage
 
 ; encourage attack if it has a nullify or weaken attack effect.
 .check_nullify_flag
@@ -552,7 +552,7 @@ GetAIScoreOfAttack:
 	call CheckLoadedAttackFlag
 	jr nc, .check_draw_flag
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
 ; encourage attack if it has an effect to draw a card.
 .check_draw_flag
@@ -560,7 +560,7 @@ GetAIScoreOfAttack:
 	call CheckLoadedAttackFlag
 	jr nc, .check_heal_flag
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
 .check_heal_flag
 	ld a, ATTACK_FLAG2_ADDRESS | HEAL_USER_F
@@ -591,11 +591,11 @@ GetAIScoreOfAttack:
 	call GetCardDamageAndMaxHP
 	call ConvertHPToDamageCounters_Bank5
 	pop bc
-	cp b ; wLoadedAttackEffectParam
+	cp b
 	jr c, .add_heal_score
 	ld a, b
 .add_heal_score
-	call AddToAIScore
+	call AIEncourage
 
 .check_status_effect
 	ld a, DUELVARS_ARENA_CARD
@@ -630,11 +630,11 @@ GetAIScoreOfAttack:
 	call CheckLoadedAttackFlag
 	jr nc, .check_sleep
 	ld a, 2
-	call SubFromAIScore
+	call AIDiscourage
 	jr .check_sleep
 .add_poison_score
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 
 ; encourage sleep-inducing attack if other Pokémon isn't asleep.
 .check_sleep
@@ -646,7 +646,7 @@ GetAIScoreOfAttack:
 	cp ASLEEP
 	jr z, .check_paralysis
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
 ; encourage paralysis-inducing attack if other Pokémon isn't asleep.
 ; otherwise, if other Pokémon is asleep, discourage attack.
@@ -659,11 +659,11 @@ GetAIScoreOfAttack:
 	cp ASLEEP
 	jr z, .sub_prz_score
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 	jr .check_confusion
 .sub_prz_score
 	ld a, 1
-	call SubFromAIScore
+	call AIDiscourage
 
 ; encourage confuse-inducing attack if other Pokémon isn't asleep
 ; or confused already.
@@ -682,11 +682,11 @@ GetAIScoreOfAttack:
 	cp CONFUSED
 	jr z, .check_if_confused
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 	jr .check_if_confused
 .sub_cnf_score
 	ld a, 1
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if this Pokémon is confused, subtract from score.
 .check_if_confused
@@ -696,7 +696,7 @@ GetAIScoreOfAttack:
 	cp CONFUSED
 	jr nz, .handle_special_atks
 	ld a, 1
-	call SubFromAIScore
+	call AIDiscourage
 
 ; SPECIAL_AI_HANDLING marks attacks that the AI handles individually.
 ; each attack has its own checks and modifies AI score accordingly.
@@ -708,13 +708,13 @@ GetAIScoreOfAttack:
 	cp $80
 	jr c, .negative_score
 	sub $80
-	call AddToAIScore
+	call AIEncourage
 	jr .done
 .negative_score
 	ld b, a
 	ld a, $80
 	sub b
-	call SubFromAIScore
+	call AIDiscourage
 
 .done
 	ret

@@ -1,7 +1,7 @@
 ; determine AI score for retreating
 ; return carry if AI decides to retreat
 AIDecideWhetherToRetreat:
-	ld a, [wGotHeadsFromConfusionCheckDuringRetreat]
+	ld a, [wConfusionRetreatCheckWasUnsuccessful]
 	or a
 	jp nz, .no_carry
 	xor a
@@ -16,26 +16,26 @@ AIDecideWhetherToRetreat:
 	srl a
 	srl a
 	sla a ; *8
-	call AddToAIScore
+	call AIEncourage
 
 .check_status
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	or a
-	jr z, .check_ko_1 ; no status
+	jr z, .skip_status_check ; no status
 	and DOUBLE_POISONED
 	jr z, .check_cnf ; no poison
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 .check_cnf
 	ld a, [hl]
 	and CNF_SLP_PRZ
 	cp CONFUSED
-	jr nz, .check_ko_1
+	jr nz, .skip_status_check
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
-.check_ko_1
+.skip_status_check
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyAttackKnocksOutDefendingCard
@@ -47,25 +47,25 @@ AIDecideWhetherToRetreat:
 
 .active_cant_use_atk
 	ld a, 5
-	call SubFromAIScore
+	call AIDiscourage
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .active_cant_ko_1
 	ld a, 35
-	call SubFromAIScore
+	call AIDiscourage
 
 .active_cant_ko_1
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .defending_cant_ko
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 
 	call CheckIfNotABossDeckID
 	jr c, .check_resistance_1
 	ld a, [wAIPlayerPrizeCount]
 	cp 2
 	jr nc, .check_prize_count
-	ld a, $01
+	ld a, TRUE
 	ld [wAIPlayEnergyCardForRetreat], a
 
 .defending_cant_ko
@@ -75,14 +75,14 @@ AIDecideWhetherToRetreat:
 	cp 2
 	jr nc, .check_prize_count
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 
 .check_prize_count
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .check_resistance_1
 	ld a, 2
-	call SubFromAIScore
+	call AIDiscourage
 
 .check_resistance_1
 	call GetArenaCardColor
@@ -92,11 +92,11 @@ AIDecideWhetherToRetreat:
 	and b
 	jr z, .check_weakness_1
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
 ; check bench for Pokémon that
 ; the defending card is not resistant to
-; if one is found, skip SubFromAIScore
+; if one is found, skip AIDiscourage
 	ld a, [wAIPlayerResistance]
 	ld b, a
 	ld a, DUELVARS_BENCH
@@ -113,7 +113,7 @@ AIDecideWhetherToRetreat:
 	jr .check_weakness_1
 .exit_loop_resistance_1
 	ld a, 2
-	call SubFromAIScore
+	call AIDiscourage
 
 .check_weakness_1
 	ld a, [wAIPlayerColor]
@@ -122,11 +122,11 @@ AIDecideWhetherToRetreat:
 	and b
 	jr z, .check_resistance_2
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 
 ; check bench for Pokémon that
 ; is not weak to defending Pokémon
-; if one is found, skip SubFromAIScore
+; if one is found, skip AIDiscourage
 	ld a, [wAIPlayerColor]
 	ld b, a
 	ld a, DUELVARS_BENCH
@@ -142,7 +142,7 @@ AIDecideWhetherToRetreat:
 	jr .check_resistance_2
 .exit_loop_weakness_1
 	ld a, 3
-	call SubFromAIScore
+	call AIDiscourage
 
 .check_resistance_2
 	ld a, [wAIPlayerColor]
@@ -151,17 +151,17 @@ AIDecideWhetherToRetreat:
 	and b
 	jr z, .check_weakness_2
 	ld a, 3
-	call SubFromAIScore
+	call AIDiscourage
 
 ; check bench for Pokémon that
 ; is the defending Pokémon's weakness
-; if none is found, skip AddToAIScore
+; if none is found, skip AIEncourage
 .check_weakness_2
 	ld a, [wAIPlayerWeakness]
 	ld b, a
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
-	ld e, $00
+	ld e, PLAY_AREA_BENCH_1 - 1
 .loop_weakness_2
 	inc e
 	ld a, [hli]
@@ -175,7 +175,7 @@ AIDecideWhetherToRetreat:
 	and b
 	jr z, .loop_weakness_2
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 
 	push de
 	ld a, DUELVARS_ARENA_CARD
@@ -191,7 +191,7 @@ AIDecideWhetherToRetreat:
 	call CheckIfCanDamageDefendingPokemon
 	jr nc, .check_weakness_3
 	ld a, 10
-	call AddToAIScore
+	call AIEncourage
 	jr .check_resistance_3
 
 .check_weakness_3
@@ -202,11 +202,11 @@ AIDecideWhetherToRetreat:
 	and b
 	jr z, .check_resistance_3
 	ld a, 3
-	call SubFromAIScore
+	call AIDiscourage
 
 ; check bench for Pokémon that
 ; is resistant to defending Pokémon
-; if none is found, skip AddToAIScore
+; if none is found, skip AIEncourage
 .check_resistance_3
 	ld a, [wAIPlayerColor]
 	ld b, a
@@ -221,11 +221,11 @@ AIDecideWhetherToRetreat:
 	and b
 	jr z, .loop_resistance_2
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
 ; check bench for Pokémon that
 ; can KO defending Pokémon
-; if none is found, skip AddToAIScore
+; if none is found, skip AIEncourage
 .check_ko_2
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
@@ -253,7 +253,7 @@ AIDecideWhetherToRetreat:
 	pop bc
 	pop hl
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 
 ; a bench Pokémon was found that can KO
 ; if this is a boss deck and it's at last prize card
@@ -274,8 +274,8 @@ AIDecideWhetherToRetreat:
 	jp nc, .check_defending_id
 .active_cant_ko_2
 	ld a, 40
-	call AddToAIScore
-	ld a, $01
+	call AIEncourage
+	ld a, TRUE
 	ld [wAIPlayEnergyCardForRetreat], a
 
 .check_defending_id
@@ -287,13 +287,13 @@ AIDecideWhetherToRetreat:
 	ld a, e
 	cp MR_MIME
 	jr z, .mr_mime_or_hitmonlee
-	cp HITMONLEE ; ??
+	cp HITMONLEE
 	jr nz, .check_retreat_cost
 
 ; check bench if there's any Pokémon
 ; that can damage defending Pokémon
 ; this is done because of Mr. Mime's PKMN PWR
-; but why Hitmonlee ($87) as well?
+; and Hitmonlee's ability to attack Bench
 .mr_mime_or_hitmonlee
 	xor a ; PLAY_AREA_ARENA
 	call CheckIfCanDamageDefendingPokemon
@@ -318,8 +318,8 @@ AIDecideWhetherToRetreat:
 	pop bc
 	pop hl
 	ld a, 5
-	call AddToAIScore
-	ld a, $01
+	call AIEncourage
+	ld a, TRUE
 	ld [wAIPlayEnergyCardForRetreat], a
 
 ; subtract from wAIScore if retreat cost is larger than 1
@@ -337,24 +337,24 @@ AIDecideWhetherToRetreat:
 	jr nc, .three_or_more
 	; exactly two
 	ld a, 1
-	call SubFromAIScore
+	call AIDiscourage
 	jr .one_or_none
 
 .three_or_more
 	ld a, 2
-	call SubFromAIScore
+	call AIDiscourage
 
 .one_or_none
-	call CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondAttack
+	call CheckIfArenaCardIsFullyPowered
 	jr c, .check_defending_can_ko
 	call CountNumberOfSetUpBenchPokemon
 	cp 2
 	jr c, .check_defending_can_ko
-	call AddToAIScore
+	call AIEncourage
 
 ; check bench for Pokémon that
 ; the defending Pokémon can't knock out
-; if none is found, skip SubFromAIScore
+; if none is found, skip AIDiscourage
 .check_defending_can_ko
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
@@ -385,7 +385,7 @@ AIDecideWhetherToRetreat:
 	jr .check_active_id
 .exit_loop_ko
 	ld a, 20
-	call SubFromAIScore
+	call AIDiscourage
 
 .check_active_id
 	ld a, DUELVARS_ARENA_CARD
@@ -436,10 +436,10 @@ AIDecideWhetherToRetreat:
 
 ; if player's turn and loaded attack is not a Pokémon Power OR
 ; if opponent's turn and wAITriedAttack == 0
-; set wcdda's bit 7 flag
-Func_15b54:
+; set wAIRetreatFlags's bit 7 flag
+SetAIRetreatFlags:
 	xor a
-	ld [wcdda], a
+	ld [wAIRetreatFlags], a
 	ld a, [wWhoseTurn]
 	cp OPPONENT_TURN
 	jr z, .opponent
@@ -457,7 +457,7 @@ Func_15b54:
 
 .set_flag
 	ld a, %10000000
-	ld [wcdda], a
+	ld [wAIRetreatFlags], a
 	ret
 
 ; calculates AI score for bench Pokémon
@@ -473,7 +473,7 @@ AIDecideBenchPokemonToSwitchTo:
 	ret c
 
 ; has at least 2 Pokémon in Play Area
-	call Func_15b54
+	call SetAIRetreatFlags
 	call LoadDefendingPokemonColorWRAndPrizeCards
 	ld a, 50
 	ld [wAIScore], a
@@ -484,7 +484,7 @@ AIDecideBenchPokemonToSwitchTo:
 	push bc
 	jp .store_score
 
-.next_bench
+.loop_play_area
 	push bc
 	ld a, c
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -499,15 +499,15 @@ AIDecideBenchPokemonToSwitchTo:
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .check_can_use_atks
 	ld a, 10
-	call AddToAIScore
-	ld a, [wcdda]
+	call AIEncourage
+	ld a, [wAIRetreatFlags]
 	or %00000001
-	ld [wcdda], a
+	ld [wAIRetreatFlags], a
 	call CountPrizes
 	cp 2
 	jp nc, .check_defending_weak
 	ld a, 10
-	call AddToAIScore
+	call AIEncourage
 
 ; calculates damage of both attacks
 ; to raise AI score accordingly
@@ -531,7 +531,7 @@ AIDecideBenchPokemonToSwitchTo:
 	ld a, [wDamage]
 	call ConvertHPToDamageCounters_Bank5
 	inc a
-	call AddToAIScore
+	call AIEncourage
 	ret
 
 ; if an energy card that is needed is found in hand
@@ -545,7 +545,7 @@ AIDecideBenchPokemonToSwitchTo:
 	ld a, [wDamage]
 	call ConvertHPToDamageCounters_Bank5
 	srl a
-	call AddToAIScore
+	call AIEncourage
 
 ; if no energies attached to card, lower AI score
 .check_attached_energy
@@ -556,7 +556,7 @@ AIDecideBenchPokemonToSwitchTo:
 	or a
 	jr nz, .check_mr_mime
 	ld a, 1
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if can damage Mr Mime, raise AI score
 .check_mr_mime
@@ -579,7 +579,7 @@ AIDecideBenchPokemonToSwitchTo:
 	jr z, .check_defending_weak
 .can_damage
 	ld a, 5
-	call AddToAIScore
+	call AIEncourage
 
 ; if defending card is weak to this card, raise AI score
 .check_defending_weak
@@ -594,7 +594,7 @@ AIDecideBenchPokemonToSwitchTo:
 	and [hl]
 	jr z, .check_defending_resist
 	ld a, 3
-	call AddToAIScore
+	call AIEncourage
 
 ; if defending card is resistant to this card, lower AI score
 .check_defending_resist
@@ -603,7 +603,7 @@ AIDecideBenchPokemonToSwitchTo:
 	and [hl]
 	jr z, .check_resistance
 	ld a, 2
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if this card is resistant to defending Pokémon, raise AI score
 .check_resistance
@@ -612,7 +612,7 @@ AIDecideBenchPokemonToSwitchTo:
 	and [hl]
 	jr z, .check_weakness
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 
 ; if this card is weak to defending Pokémon, lower AI score
 .check_weakness
@@ -621,7 +621,7 @@ AIDecideBenchPokemonToSwitchTo:
 	and [hl]
 	jr z, .check_retreat_cost
 	ld a, 3
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if this card's retreat cost < 2, raise AI score
 ; if this card's retreat cost > 2, lower AI score
@@ -631,18 +631,18 @@ AIDecideBenchPokemonToSwitchTo:
 	jr c, .one_or_none
 	jr z, .check_player_prize_count
 	ld a, 1
-	call SubFromAIScore
+	call AIDiscourage
 	jr .check_player_prize_count
 .one_or_none
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
-; if wcdda != $81
+; if wAIRetreatFlags != $81
 ; if defending Pokémon can KO this card
 ; if player is not at last prize card, lower 3 from AI score
 ; if player is at last prize card, lower 10 from AI score
 .check_player_prize_count
-	ld a, [wcdda]
+	ld a, [wAIRetreatFlags]
 	cp %10000000 | %00000001
 	jr z, .check_hp
 	call CheckIfDefendingPokemonCanKnockOut
@@ -654,7 +654,7 @@ AIDecideBenchPokemonToSwitchTo:
 	ld e, 10
 .lower_score_1
 	ld a, e
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if this card's HP is 0, make AI score 0
 .check_hp
@@ -672,7 +672,7 @@ AIDecideBenchPokemonToSwitchTo:
 	ld a, 4
 	call CalculateBDividedByA_Bank5
 	call ConvertHPToDamageCounters_Bank5
-	call AddToAIScore
+	call AIEncourage
 
 ; raise AI score if
 ;	- is a Mr Mime OR
@@ -684,24 +684,26 @@ AIDecideBenchPokemonToSwitchTo:
 	cp MR_MIME
 	jr z, .raise_score
 	cp MEW_LV8
-	jr nz, .asm_15cf0
+	jr nz, .check_if_has_bench_utility
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Stage]
 	or a
-	jr z, .asm_15cf0
+	jr z, .check_if_has_bench_utility
 .raise_score
 	ld a, 5
-	call AddToAIScore
+	call AIEncourage
 
-; if wLoadedCard1Unknown2 == $01, lower AI score
-.asm_15cf0
-	ld a, [wLoadedCard1Unknown2]
-	cp $01
+; if wLoadedCard1AIInfo == AI_INFO_BENCH_UTILITY,
+; lower AI score
+.check_if_has_bench_utility
+	ld a, [wLoadedCard1AIInfo]
+	; bug, should mask out HAS_EVOLUTION flag first
+	cp AI_INFO_BENCH_UTILITY
 	jr nz, .mysterious_fossil_or_clefairy_doll
 	ld a, 2
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if card is Mysterious Fossil or Clefairy Doll,
 ; lower AI score
@@ -713,7 +715,7 @@ AIDecideBenchPokemonToSwitchTo:
 	jr nz, .ai_score_bonus
 .lower_score_2
 	ld a, 10
-	call SubFromAIScore
+	call AIDiscourage
 
 .ai_score_bonus
 	ld b, a
@@ -721,7 +723,7 @@ AIDecideBenchPokemonToSwitchTo:
 	or a
 	jr z, .store_score
 	ld h, a
-	ld a, [wAICardListRetreatBonus]
+	ld a, [wAICardListRetreatBonus + 0]
 	ld l, a
 
 .loop_ids
@@ -734,13 +736,13 @@ AIDecideBenchPokemonToSwitchTo:
 	cp $80
 	jr c, .subtract_score
 	sub $80
-	call AddToAIScore
+	call AIEncourage
 	jr .next_id
 .subtract_score
 	ld c, a
 	ld a, $80
 	sub c
-	call SubFromAIScore
+	call AIDiscourage
 .next_id
 	inc hl
 	jr .loop_ids
@@ -756,7 +758,7 @@ AIDecideBenchPokemonToSwitchTo:
 	pop bc
 	inc c
 	dec b
-	jp nz, .next_bench
+	jp nz, .loop_play_area
 
 ; done
 	xor a
