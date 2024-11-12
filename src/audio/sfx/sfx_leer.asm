@@ -1,63 +1,63 @@
 Sfx_Leer_Ch1:
-	sfx_1 255
-	sfx_8 17
-	sfx_2 0
-	sfx_0 4, 22
-	sfx_0 4, 78
-	sfx_0 4, 131
-	sfx_0 4, 181
-	sfx_0 4, 229
-	sfx_0 4, 181
-	sfx_0 4, 131
-	sfx_0 4, 78
-	sfx_0 4, 22
-	sfx_0 4, 131
-	sfx_0 4, 181
-	sfx_0 4, 229
-	sfx_0 5, 17
-	sfx_0 5, 60
-	sfx_0 5, 17
-	sfx_0 4, 229
-	sfx_0 4, 181
-	sfx_0 4, 131
-	sfx_0 4, 229
-	sfx_0 5, 17
-	sfx_0 5, 60
-	sfx_0 5, 99
-	sfx_0 5, 137
-	sfx_0 5, 99
-	sfx_0 5, 60
-	sfx_0 5, 17
-	sfx_0 4, 229
-	sfx_1 143
-	sfx_8 17
-	sfx_2 0
-	sfx_0 5, 17
-	sfx_0 5, 60
-	sfx_0 5, 99
-	sfx_0 5, 137
-	sfx_0 5, 172
-	sfx_0 5, 205
-	sfx_0 5, 172
-	sfx_0 5, 137
-	sfx_0 5, 99
-	sfx_0 5, 60
-	sfx_0 5, 17
-	sfx_1 79
-	sfx_8 17
-	sfx_2 0
-	sfx_0 5, 99
-	sfx_0 5, 137
-	sfx_0 5, 172
-	sfx_0 5, 205
-	sfx_0 5, 237
-	sfx_1 47
-	sfx_8 17
-	sfx_2 0
-	sfx_0 6, 11
-	sfx_0 6, 246
-	sfx_0 6, 231
-	sfx_0 6, 214
-	sfx_0 6, 196
-	sfx_0 6, 178
+	sfx_env 15, -7
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 130.81
+	sfx_freq 138.55
+	sfx_freq 146.78
+	sfx_freq 155.48
+	sfx_freq 164.87
+	sfx_freq 155.48
+	sfx_freq 146.78
+	sfx_freq 138.55
+	sfx_freq 130.81
+	sfx_freq 146.78
+	sfx_freq 155.48
+	sfx_freq 164.87
+	sfx_freq 174.53
+	sfx_freq 185.13
+	sfx_freq 174.53
+	sfx_freq 164.87
+	sfx_freq 155.48
+	sfx_freq 146.78
+	sfx_freq 164.87
+	sfx_freq 174.53
+	sfx_freq 185.13
+	sfx_freq 195.92
+	sfx_freq 207.72
+	sfx_freq 195.92
+	sfx_freq 185.13
+	sfx_freq 174.53
+	sfx_freq 164.87
+	sfx_env 8, -7
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 174.53
+	sfx_freq 185.13
+	sfx_freq 195.92
+	sfx_freq 207.72
+	sfx_freq 219.92
+	sfx_freq 232.81
+	sfx_freq 219.92
+	sfx_freq 207.72
+	sfx_freq 195.92
+	sfx_freq 185.13
+	sfx_freq 174.53
+	sfx_env 4, -7
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 195.92
+	sfx_freq 207.72
+	sfx_freq 219.92
+	sfx_freq 232.81
+	sfx_freq 246.84
+	sfx_env 2, -7
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 261.62
+	sfx_freq 492.75
+	sfx_freq 466.45
+	sfx_freq 439.84
+	sfx_freq 414.78
+	sfx_freq 392.43
 	sfx_end

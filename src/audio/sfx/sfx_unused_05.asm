@@ -1,74 +1,74 @@
 Sfx_Unused05_Ch1:
-	sfx_1 241
-	sfx_8 17
-	sfx_2 8
-	sfx_0 7, 5
-	sfx_0 7, 33
-	sfx_0 7, 57
-	sfx_0 7, 68
-	sfx_0 7, 89
-	sfx_1 241
-	sfx_8 17
-	sfx_2 8
-	sfx_0 7, 131
-	sfx_0 7, 144
-	sfx_0 7, 157
-	sfx_0 7, 162
-	sfx_0 7, 172
-	sfx_1 241
-	sfx_8 17
-	sfx_2 8
-	sfx_0 7, 193
-	sfx_0 7, 200
-	sfx_0 7, 206
-	sfx_0 7, 209
-	sfx_0 7, 214
-	sfx_1 129
-	sfx_8 17
-	sfx_2 4
-	sfx_0 7, 33
-	sfx_0 7, 57
-	sfx_0 7, 68
-	sfx_0 7, 89
-	sfx_0 7, 107
-	sfx_1 129
-	sfx_8 17
-	sfx_2 4
-	sfx_0 7, 144
-	sfx_0 7, 157
-	sfx_0 7, 162
-	sfx_0 7, 172
-	sfx_0 7, 182
-	sfx_1 129
-	sfx_8 17
-	sfx_2 4
-	sfx_0 7, 200
-	sfx_0 7, 206
-	sfx_0 7, 209
-	sfx_0 7, 214
-	sfx_0 7, 219
-	sfx_1 49
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 57
-	sfx_0 7, 68
-	sfx_0 7, 89
-	sfx_0 7, 107
-	sfx_0 7, 123
-	sfx_1 49
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 157
-	sfx_0 7, 162
-	sfx_0 7, 172
-	sfx_0 7, 182
-	sfx_0 7, 190
-	sfx_1 49
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 206
-	sfx_0 7, 209
-	sfx_0 7, 214
-	sfx_0 7, 219
-	sfx_0 7, 223
+	sfx_env 15, 1
+	sfx_pan %00010001
+	sfx_duty 2
+	sfx_freq 522.20
+	sfx_freq 587.77
+	sfx_freq 658.65
+	sfx_freq 697.19
+	sfx_freq 784.86
+	sfx_env 15, 1
+	sfx_pan %00010001
+	sfx_duty 2
+	sfx_freq 1048.58
+	sfx_freq 1170.29
+	sfx_freq 1323.96
+	sfx_freq 1394.38
+	sfx_freq 1560.38
+	sfx_env 15, 1
+	sfx_pan %00010001
+	sfx_duty 2
+	sfx_freq 2080.51
+	sfx_freq 2340.57
+	sfx_freq 2621.44
+	sfx_freq 2788.77
+	sfx_freq 3120.76
+	sfx_env 8, 1
+	sfx_pan %00010001
+	sfx_duty 1
+	sfx_freq 587.77
+	sfx_freq 658.65
+	sfx_freq 697.19
+	sfx_freq 784.86
+	sfx_freq 879.68
+	sfx_env 8, 1
+	sfx_pan %00010001
+	sfx_duty 1
+	sfx_freq 1170.29
+	sfx_freq 1323.96
+	sfx_freq 1394.38
+	sfx_freq 1560.38
+	sfx_freq 1771.24
+	sfx_env 8, 1
+	sfx_pan %00010001
+	sfx_duty 1
+	sfx_freq 2340.57
+	sfx_freq 2621.44
+	sfx_freq 2788.77
+	sfx_freq 3120.76
+	sfx_freq 3542.49
+	sfx_env 3, 1
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 658.65
+	sfx_freq 697.19
+	sfx_freq 784.86
+	sfx_freq 879.68
+	sfx_freq 985.50
+	sfx_env 3, 1
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 1323.96
+	sfx_freq 1394.38
+	sfx_freq 1560.38
+	sfx_freq 1771.24
+	sfx_freq 1985.94
+	sfx_env 3, 1
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 2621.44
+	sfx_freq 2788.77
+	sfx_freq 3120.76
+	sfx_freq 3542.49
+	sfx_freq 3971.88
 	sfx_end

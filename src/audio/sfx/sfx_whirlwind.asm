@@ -1,94 +1,94 @@
 Sfx_Whirlwind_Ch1:
-	sfx_8 17
+	sfx_pan %00010001
 	sfx_loop 2
-	sfx_1 31
-	sfx_0 0, 52
-	sfx_0 0, 52
-	sfx_1 47
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_1 79
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_1 111
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_1 143
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_1 239
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 17
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_0 0, 33
-	sfx_1 143
-	sfx_0 0, 49
-	sfx_0 0, 49
-	sfx_0 0, 49
-	sfx_0 0, 49
-	sfx_1 111
-	sfx_0 0, 49
-	sfx_0 0, 49
-	sfx_0 0, 49
-	sfx_0 0, 49
-	sfx_1 79
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_1 47
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_1 31
-	sfx_0 0, 66
-	sfx_0 0, 66
-	sfx_0 0, 66
+	sfx_env 1, -7
+	sfx_freq 65.67
+	sfx_freq 65.67
+	sfx_env 2, -7
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_env 4, -7
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_env 6, -7
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_env 8, -7
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_env 14, -7
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 64.54
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_freq 65.05
+	sfx_env 8, -7
+	sfx_freq 65.57
+	sfx_freq 65.57
+	sfx_freq 65.57
+	sfx_freq 65.57
+	sfx_env 6, -7
+	sfx_freq 65.57
+	sfx_freq 65.57
+	sfx_freq 65.57
+	sfx_freq 65.57
+	sfx_env 4, -7
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_env 2, -7
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_env 1, -7
+	sfx_freq 66.13
+	sfx_freq 66.13
+	sfx_freq 66.13
 	sfx_end

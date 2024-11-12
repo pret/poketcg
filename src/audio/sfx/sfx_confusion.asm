@@ -1,92 +1,92 @@
 Sfx_Confusion_Ch1:
-	sfx_1 228
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 182
-	sfx_0 7, 186
-	sfx_0 7, 190
-	sfx_0 7, 190
-	sfx_0 7, 162
-	sfx_0 7, 167
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 177
-	sfx_0 7, 182
-	sfx_0 7, 182
-	sfx_1 196
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 182
-	sfx_0 7, 186
-	sfx_0 7, 190
-	sfx_0 7, 190
-	sfx_0 7, 162
-	sfx_0 7, 167
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 177
-	sfx_0 7, 182
-	sfx_0 7, 182
-	sfx_1 164
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 182
-	sfx_0 7, 186
-	sfx_0 7, 190
-	sfx_0 7, 190
-	sfx_0 7, 162
-	sfx_0 7, 167
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 177
-	sfx_0 7, 182
-	sfx_0 7, 182
-	sfx_1 132
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 182
-	sfx_0 7, 186
-	sfx_0 7, 190
-	sfx_0 7, 190
-	sfx_0 7, 162
-	sfx_0 7, 167
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 177
-	sfx_0 7, 182
-	sfx_0 7, 182
-	sfx_1 68
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 182
-	sfx_0 7, 186
-	sfx_0 7, 190
-	sfx_0 7, 190
-	sfx_0 7, 162
-	sfx_0 7, 167
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 177
-	sfx_0 7, 182
-	sfx_0 7, 182
-	sfx_1 20
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 182
-	sfx_0 7, 186
-	sfx_0 7, 190
-	sfx_0 7, 190
-	sfx_0 7, 162
-	sfx_0 7, 167
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 172
-	sfx_0 7, 177
-	sfx_0 7, 182
-	sfx_0 7, 182
+	sfx_env 14, 4
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 1771.24
+	sfx_freq 1872.46
+	sfx_freq 1985.94
+	sfx_freq 1985.94
+	sfx_freq 1394.38
+	sfx_freq 1472.72
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1659.14
+	sfx_freq 1771.24
+	sfx_freq 1771.24
+	sfx_env 12, 4
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 1771.24
+	sfx_freq 1872.46
+	sfx_freq 1985.94
+	sfx_freq 1985.94
+	sfx_freq 1394.38
+	sfx_freq 1472.72
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1659.14
+	sfx_freq 1771.24
+	sfx_freq 1771.24
+	sfx_env 10, 4
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 1771.24
+	sfx_freq 1872.46
+	sfx_freq 1985.94
+	sfx_freq 1985.94
+	sfx_freq 1394.38
+	sfx_freq 1472.72
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1659.14
+	sfx_freq 1771.24
+	sfx_freq 1771.24
+	sfx_env 8, 4
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 1771.24
+	sfx_freq 1872.46
+	sfx_freq 1985.94
+	sfx_freq 1985.94
+	sfx_freq 1394.38
+	sfx_freq 1472.72
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1659.14
+	sfx_freq 1771.24
+	sfx_freq 1771.24
+	sfx_env 4, 4
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 1771.24
+	sfx_freq 1872.46
+	sfx_freq 1985.94
+	sfx_freq 1985.94
+	sfx_freq 1394.38
+	sfx_freq 1472.72
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1659.14
+	sfx_freq 1771.24
+	sfx_freq 1771.24
+	sfx_env 1, 4
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 1771.24
+	sfx_freq 1872.46
+	sfx_freq 1985.94
+	sfx_freq 1985.94
+	sfx_freq 1394.38
+	sfx_freq 1472.72
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1560.38
+	sfx_freq 1659.14
+	sfx_freq 1771.24
+	sfx_freq 1771.24
 	sfx_end

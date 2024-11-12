@@ -1,132 +1,132 @@
 Sfx_FireSpin_Ch1:
-	sfx_8 17
-	sfx_1 111
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 83
-	sfx_0 0, 82
-	sfx_0 0, 83
-	sfx_0 0, 82
-	sfx_0 0, 83
-	sfx_0 0, 82
-	sfx_0 0, 83
-	sfx_0 0, 82
-	sfx_0 0, 84
-	sfx_0 0, 82
-	sfx_0 0, 81
-	sfx_0 0, 83
-	sfx_0 0, 82
-	sfx_0 0, 81
-	sfx_0 0, 83
-	sfx_1 246
-	sfx_0 0, 20
-	sfx_0 0, 20
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_1 198
-	sfx_0 0, 20
-	sfx_0 0, 20
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_1 134
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_1 102
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 52
-	sfx_0 0, 52
-	sfx_0 0, 52
-	sfx_0 0, 68
-	sfx_0 0, 67
-	sfx_0 0, 68
-	sfx_0 0, 67
-	sfx_0 0, 68
-	sfx_0 0, 67
-	sfx_0 0, 68
-	sfx_1 70
-	sfx_0 0, 52
-	sfx_0 0, 52
-	sfx_0 0, 52
-	sfx_0 0, 52
-	sfx_0 0, 52
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 68
-	sfx_0 0, 67
-	sfx_0 0, 68
-	sfx_0 0, 67
-	sfx_0 0, 68
-	sfx_1 54
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_1 38
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_1 22
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
+	sfx_pan %00010001
+	sfx_env 6, -7
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.70
+	sfx_freq 66.67
+	sfx_freq 66.70
+	sfx_freq 66.67
+	sfx_freq 66.70
+	sfx_freq 66.67
+	sfx_freq 66.70
+	sfx_freq 66.67
+	sfx_freq 66.74
+	sfx_freq 66.67
+	sfx_freq 66.64
+	sfx_freq 66.70
+	sfx_freq 66.67
+	sfx_freq 66.64
+	sfx_freq 66.70
+	sfx_env 15, 6
+	sfx_freq 64.63
+	sfx_freq 64.63
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_env 12, 6
+	sfx_freq 64.63
+	sfx_freq 64.63
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_env 8, 6
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_env 6, 6
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.67
+	sfx_freq 65.67
+	sfx_freq 65.67
+	sfx_freq 66.20
+	sfx_freq 66.16
+	sfx_freq 66.20
+	sfx_freq 66.16
+	sfx_freq 66.20
+	sfx_freq 66.16
+	sfx_freq 66.20
+	sfx_env 4, 6
+	sfx_freq 65.67
+	sfx_freq 65.67
+	sfx_freq 65.67
+	sfx_freq 65.67
+	sfx_freq 65.67
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 66.20
+	sfx_freq 66.16
+	sfx_freq 66.20
+	sfx_freq 66.16
+	sfx_freq 66.20
+	sfx_env 3, 6
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_env 2, 6
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_env 1, 6
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
 	sfx_end

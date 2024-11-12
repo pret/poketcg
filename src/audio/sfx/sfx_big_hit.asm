@@ -1,66 +1,66 @@
 Sfx_BigHit_Ch1:
-	sfx_8 17
-	sfx_1 241
-	sfx_0 0, 45
-	sfx_0 0, 77
-	sfx_0 0, 45
-	sfx_0 0, 77
-	sfx_0 0, 45
-	sfx_0 0, 77
-	sfx_1 209
-	sfx_0 0, 69
-	sfx_0 0, 20
-	sfx_0 0, 67
-	sfx_0 0, 51
-	sfx_0 0, 50
-	sfx_0 0, 51
-	sfx_1 193
-	sfx_0 0, 50
-	sfx_0 0, 51
-	sfx_0 0, 50
-	sfx_0 0, 51
-	sfx_0 0, 50
-	sfx_0 0, 49
-	sfx_1 145
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_1 129
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 64
-	sfx_0 0, 65
-	sfx_0 0, 64
-	sfx_0 0, 65
-	sfx_1 113
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_1 97
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_1 65
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 80
-	sfx_1 33
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_1 17
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
+	sfx_pan %00010001
+	sfx_env 15, 1
+	sfx_freq 65.44
+	sfx_freq 66.50
+	sfx_freq 65.44
+	sfx_freq 66.50
+	sfx_freq 65.44
+	sfx_freq 66.50
+	sfx_env 13, 1
+	sfx_freq 66.23
+	sfx_freq 64.63
+	sfx_freq 66.16
+	sfx_freq 65.63
+	sfx_freq 65.60
+	sfx_freq 65.63
+	sfx_env 12, 1
+	sfx_freq 65.60
+	sfx_freq 65.63
+	sfx_freq 65.60
+	sfx_freq 65.63
+	sfx_freq 65.60
+	sfx_freq 65.57
+	sfx_env 9, 1
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_env 8, 1
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.06
+	sfx_freq 66.10
+	sfx_freq 66.06
+	sfx_freq 66.10
+	sfx_env 7, 1
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_env 6, 1
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_env 4, 1
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.60
+	sfx_env 2, 1
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_env 1, 1
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
 	sfx_end

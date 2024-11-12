@@ -1,53 +1,53 @@
 Sfx_ThunderShock_Ch1:
-	sfx_8 17
-	sfx_1 192
-	sfx_0 0, 81
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_0 0, 80
-	sfx_0 0, 81
-	sfx_1 128
-	sfx_0 0, 64
-	sfx_0 0, 65
-	sfx_0 0, 64
-	sfx_0 0, 64
-	sfx_0 0, 65
-	sfx_0 0, 64
-	sfx_0 0, 65
-	sfx_0 0, 64
-	sfx_1 64
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_1 32
-	sfx_0 0, 49
-	sfx_0 0, 49
-	sfx_0 0, 50
-	sfx_0 0, 49
-	sfx_0 0, 50
-	sfx_0 0, 49
-	sfx_1 20
-	sfx_0 0, 50
-	sfx_0 0, 50
-	sfx_0 0, 51
-	sfx_0 0, 50
-	sfx_0 0, 51
-	sfx_0 0, 50
+	sfx_pan %00010001
+	sfx_env 12, 0
+	sfx_freq 66.64
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_freq 66.60
+	sfx_freq 66.64
+	sfx_env 8, 0
+	sfx_freq 66.06
+	sfx_freq 66.10
+	sfx_freq 66.06
+	sfx_freq 66.06
+	sfx_freq 66.10
+	sfx_freq 66.06
+	sfx_freq 66.10
+	sfx_freq 66.06
+	sfx_env 4, 0
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_env 2, 0
+	sfx_freq 65.57
+	sfx_freq 65.57
+	sfx_freq 65.60
+	sfx_freq 65.57
+	sfx_freq 65.60
+	sfx_freq 65.57
+	sfx_env 1, 4
+	sfx_freq 65.60
+	sfx_freq 65.60
+	sfx_freq 65.63
+	sfx_freq 65.60
+	sfx_freq 65.63
+	sfx_freq 65.60
 	sfx_end
