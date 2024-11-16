@@ -1725,10 +1725,10 @@ ApplyTransparencyIfApplicable::
 	ld de, 0
 	ret
 
-; return carry and 1 into wGotHeadsFromConfusionCheck if damage will be dealt to oneself due to confusion
+; return carry and TRUE in wConfusionAttackCheckWasUnsuccessful if damage will be dealt to oneself due to confusion
 CheckSelfConfusionDamage::
-	xor a
-	ld [wGotHeadsFromConfusionCheck], a
+	xor a ; FALSE
+	ld [wConfusionAttackCheckWasUnsuccessful], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and CNF_SLP_PRZ
@@ -1740,8 +1740,8 @@ CheckSelfConfusionDamage::
 	ldtx de, ConfusionCheckDamageText
 	call TossCoin
 	jr c, .no_confusion_damage
-	ld a, 1
-	ld [wGotHeadsFromConfusionCheck], a
+	ld a, TRUE
+	ld [wConfusionAttackCheckWasUnsuccessful], a
 	scf
 	ret
 .no_confusion_damage

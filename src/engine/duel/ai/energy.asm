@@ -153,7 +153,7 @@ AIProcessEnergyCards:
 	jr nc, .no_evolution_in_hand
 	ld [wTempAI], a ; store evolution card found
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 	jr .check_venusaur
 
 .no_evolution_in_hand
@@ -161,7 +161,7 @@ AIProcessEnergyCards:
 	call CheckForEvolutionInDeck
 	jr nc, .check_venusaur
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
 ; if there's no Muk in any Play Area
 ; and there's VenusaurLv67 in own Play Area,
@@ -174,7 +174,7 @@ AIProcessEnergyCards:
 	call CountTurnDuelistPokemonWithActivePkmnPower
 	jr nc, .check_if_active
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
 .check_if_active
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -189,12 +189,12 @@ AIProcessEnergyCards:
 ; subtract from score instead
 ; if Player is running MewtwoLv53 mill deck.
 	ld a, 5
-	call SubFromAIScore
+	call AIDiscourage
 	jr .check_defending_can_ko
 
 .add_to_score
 	ld a, 4
-	call AddToAIScore
+	call AIEncourage
 
 ; lower AI score if poison/double poison
 ; will KO Pokémon between turns
@@ -220,13 +220,13 @@ AIProcessEnergyCards:
 	jr z, .check_defending_can_ko
 .poison_will_ko
 	ld a, 10
-	call SubFromAIScore
+	call AIDiscourage
 	jr .check_bench
 .check_defending_can_ko
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .ai_score_bonus
 	ld a, 10
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if either poison will KO or defending Pokémon can KO,
 ; check if there are bench Pokémon,
@@ -237,7 +237,7 @@ AIProcessEnergyCards:
 	dec a
 	jr nz, .ai_score_bonus
 	ld a, 6
-	call AddToAIScore
+	call AIEncourage
 	jr .ai_score_bonus
 
 ; lower AI score by 3 - (bench HP)/10
@@ -252,7 +252,7 @@ AIProcessEnergyCards:
 	ld b, a
 	ld a, 3
 	sub b
-	call SubFromAIScore
+	call AIDiscourage
 
 ; check list in wAICardListEnergyBonus
 .ai_score_bonus
@@ -290,22 +290,22 @@ AIProcessEnergyCards:
 	jr c, .check_id_score
 	; already reached target number of energy cards
 	ld a, 10
-	call SubFromAIScore
-	jr .store_score
+	call AIDiscourage
+	jr .store_score ; bug, should be jr .check_boss_deck
 
 .check_id_score
 	ld a, [hli]
 	cp $80
 	jr c, .decrease_score_1
 	sub $80
-	call AddToAIScore
+	call AIEncourage
 	jr .check_boss_deck
 
 .decrease_score_1
 	ld d, a
 	ld a, $80
 	sub d
-	call SubFromAIScore
+	call AIDiscourage
 	jr .check_boss_deck
 
 .next_id
@@ -313,14 +313,16 @@ AIProcessEnergyCards:
 	inc hl
 	jr .loop_id_list
 
-; if it's a boss deck, call Func_174f2
+; if it's a boss deck, call HandleAIEnergyScoringForRepeatedBenchPokemon
 ; and apply to the AI score the values
 ; determined for this card
 .check_boss_deck
 	call CheckIfNotABossDeckID
 	jr c, .skip_boss_deck
 
-	call Func_174f2
+	call HandleAIEnergyScoringForRepeatedBenchPokemon
+
+	; applies wPlayAreaEnergyAIScore
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld c, a
 	ld b, $00
@@ -330,18 +332,18 @@ AIProcessEnergyCards:
 	cp $80
 	jr c, .decrease_score_2
 	sub $80
-	call AddToAIScore
+	call AIEncourage
 	jr .skip_boss_deck
 
 .decrease_score_2
 	ld b, a
 	ld a, $80
 	sub b
-	call SubFromAIScore
+	call AIDiscourage
 
 .skip_boss_deck
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
 ; add AI score for both attacks,
 ; according to their energy requirements.
@@ -413,7 +415,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 
 	; is MAX_ENERGY_BOOST_IS_NOT_LIMITED,
 	; which is equal to 3, add to score.
-	call AddToAIScore
+	call AIEncourage
 	jp .check_evolution
 
 .check_surplus_energy
@@ -424,12 +426,12 @@ DetermineAIScoreOfAttackEnergyRequirement:
 
 .asm_166c5
 	ld a, 5
-	call SubFromAIScore
+	call AIDiscourage
 	jp .check_evolution
 
 .asm_166cd
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 
 ; check whether attack has ATTACHED_ENERGY_BOOST flag
 ; and add to AI score if attaching another energy
@@ -457,12 +459,12 @@ DetermineAIScoreOfAttackEnergyRequirement:
 
 .attaching_kos_player
 	ld a, 20
-	call AddToAIScore
+	call AIEncourage
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	jr nz, .check_evolution
 	ld a, 10
-	call AddToAIScore
+	call AIEncourage
 	jr .check_evolution
 
 ; checks if there is surplus energy for attack
@@ -482,7 +484,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	call CheckLoadedAttackFlag
 	jr nc, .check_color_needed
 	ld a, 5
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if the energy card color needed is in hand, increase AI score.
 ; if a colorless card is needed, increase AI score.
@@ -494,14 +496,14 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	call LookForCardIDInHand
 	jr c, .check_colorless_needed
 	ld a, 4
-	call AddToAIScore
+	call AIEncourage
 	jr .check_total_needed
 .check_colorless_needed
 	ld a, c
 	or a
 	jr z, .check_evolution
 	ld a, 3
-	call AddToAIScore
+	call AIEncourage
 
 ; if only one energy card is needed for attack,
 ; encourage playing energy card.
@@ -511,7 +513,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	dec a
 	jr nz, .check_evolution
 	ld a, 3
-	call AddToAIScore
+	call AIEncourage
 
 ; if the attack KOs player and this is the active card, add to AI score.
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -527,7 +529,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	jr nc, .check_evolution
 .atk_kos_defending
 	ld a, 20
-	call AddToAIScore
+	call AIEncourage
 
 ; this is possibly a bug.
 ; this is an identical check as above to test whether this card is active.
@@ -536,7 +538,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	or a
 	jr nz, .check_evolution
 	ld a, 10
-	call AddToAIScore
+	call AIEncourage
 
 .check_evolution
 	ld a, [wTempAI] ; evolution in hand
@@ -567,14 +569,14 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	call LookForCardIDInHand
 	jr c, .check_colorless_needed_evo
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 	jr .done
 .check_colorless_needed_evo
 	ld a, c
 	or a
 	jr z, .done
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
 ; recover the original card in the Play Area location.
 .done
@@ -707,8 +709,8 @@ CheckIfEvolutionNeedsEnergyForAttack:
 ; if it's Charizard's Fire Spin or Exeggutor's Big Eggsplosion
 ; attack, don't return energy card ID, but set carry.
 ; output:
-;	b = 1 if needs color energy, 0 otherwise;
-;	c = 1 if only needs colorless energy, 0 otherwise;
+;	b = TRUE if needs color energy;
+;	c = TRUE if only needs colorless energy;
 ;	carry set if not ZapdosLv64's Thunderbolt attack.
 GetEnergyCardForDiscardOrEnergyBoostAttack:
 ; load card ID and check selected attack index.
@@ -727,7 +729,7 @@ GetEnergyCardForDiscardOrEnergyBoostAttack:
 ; for both attacks, load its energy cost.
 	ld a, b
 	cp ZAPDOS_LV64
-	jr z, .zapdos2
+	jr z, .zapdos
 	cp CHARIZARD
 	jr z, .charizard_or_exeggutor
 	cp EXEGGUTOR
@@ -777,19 +779,19 @@ GetEnergyCardForDiscardOrEnergyBoostAttack:
 	ld e, PSYCHIC_ENERGY
 
 .set_carry
-	lb bc, $01, $00
+	lb bc, TRUE, FALSE
 	scf
 	ret
 
 ; for ZapdosLv64's Thunderbolt attack, return with no carry.
-.zapdos2
+.zapdos
 	or a
 	ret
 
 ; Charizard's Fire Spin and Exeggutor's Big Eggsplosion,
 ; return carry.
 .charizard_or_exeggutor
-	lb bc, $00, $01
+	lb bc, FALSE, TRUE
 	scf
 	ret
 

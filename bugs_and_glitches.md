@@ -63,7 +63,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	jr nc, .check_evolution
 .atk_kos_defending
 	ld a, 20
-	call AddToAIScore
+	call AIEncourage
 
 -; this is possibly a bug.
 -; this is an identical check as above to test whether this card is active.
@@ -72,7 +72,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	or a
 	jr nz, .check_evolution
 	ld a, 10
-	call AddToAIScore
+	call AIEncourage
 	...
 ```
 

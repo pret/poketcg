@@ -37,11 +37,11 @@ AIDecidePlayPokemonCard:
 	cp 4
 	jr c, .has_4_or_fewer
 	ld a, 20
-	call SubFromAIScore
+	call AIDiscourage
 	jr .check_defending_can_ko
 .has_4_or_fewer
 	ld a, 50
-	call AddToAIScore
+	call AIEncourage
 
 ; if defending Pokémon can KO active card, increase AI score
 .check_defending_can_ko
@@ -50,7 +50,7 @@ AIDecidePlayPokemonCard:
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_energy_cards
 	ld a, 20
-	call AddToAIScore
+	call AIEncourage
 
 ; if energy cards are found in hand
 ; for this card's attacks, raise AI score
@@ -60,7 +60,7 @@ AIDecidePlayPokemonCard:
 	call CheckEnergyFlagsNeededInList
 	jr nc, .check_evolution_hand
 	ld a, 20
-	call AddToAIScore
+	call AIEncourage
 
 ; if evolution card is found in hand
 ; for this card, raise AI score
@@ -69,7 +69,7 @@ AIDecidePlayPokemonCard:
 	call CheckForEvolutionInList
 	jr nc, .check_evolution_deck
 	ld a, 20
-	call AddToAIScore
+	call AIEncourage
 
 ; if evolution card is found in deck
 ; for this card, raise AI score
@@ -78,7 +78,7 @@ AIDecidePlayPokemonCard:
 	call CheckForEvolutionInDeck
 	jr nc, .check_score
 	ld a, 10
-	call AddToAIScore
+	call AIEncourage
 
 ; if AI score is >= 180, play card from hand
 .check_score
@@ -203,21 +203,21 @@ AIDecideEvolution:
 	jr c, .evolution_cant_attack
 .evolution_can_attack
 	ld a, 5
-	call AddToAIScore
+	call AIEncourage
 	jr .check_evolution_ko
 .evolution_cant_attack
 	ld a, [wCurCardCanAttack]
 	or a
 	jr z, .check_evolution_ko
 	ld a, 2
-	call SubFromAIScore
+	call AIDiscourage
 	ld a, [wAlreadyPlayedEnergy]
 	or a
 	jr nz, .check_evolution_ko
 	call LookForEnergyNeededInHand
 	jr nc, .check_evolution_ko
 	ld a, 7
-	call AddToAIScore
+	call AIEncourage
 
 ; if it's an active card:
 ; if evolution can't KO but the current card can, lower AI score;
@@ -234,14 +234,14 @@ AIDecideEvolution:
 	call CheckIfSelectedAttackIsUnusable
 	jr c, .evolution_cant_ko
 	ld a, 5
-	call AddToAIScore
+	call AIEncourage
 	jr .check_defending_can_ko_evolution
 .evolution_cant_ko
 	ld a, [wCurCardCanKO]
 	or a
 	jr z, .check_defending_can_ko_evolution
 	ld a, 20
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if defending Pokémon can KO evolution, lower AI score
 .check_defending_can_ko_evolution
@@ -253,7 +253,7 @@ AIDecideEvolution:
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_mr_mime
 	ld a, 5
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if evolution can't damage player's Mr Mime, lower AI score
 .check_mr_mime
@@ -261,7 +261,7 @@ AIDecideEvolution:
 	call CheckDamageToMrMime
 	jr c, .check_defending_can_ko
 	ld a, 20
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if defending Pokémon can KO current card, raise AI score
 .check_defending_can_ko
@@ -278,7 +278,7 @@ AIDecideEvolution:
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_status
 	ld a, 5
-	call AddToAIScore
+	call AIEncourage
 
 ; if current card has a status condition, raise AI score
 .check_status
@@ -287,7 +287,7 @@ AIDecideEvolution:
 	or a
 	jr z, .check_2nd_stage_hand
 	ld a, 4
-	call AddToAIScore
+	call AIEncourage
 
 ; if hand has 2nd stage card to evolve evolution card, raise AI score
 .check_2nd_stage_hand
@@ -295,7 +295,7 @@ AIDecideEvolution:
 	call CheckForEvolutionInList
 	jr nc, .check_2nd_stage_deck
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 	jr .check_damage
 
 ; if deck has 2nd stage card to evolve evolution card, raise AI score
@@ -304,7 +304,7 @@ AIDecideEvolution:
 	call CheckForEvolutionInDeck
 	jr nc, .check_damage
 	ld a, 1
-	call AddToAIScore
+	call AIEncourage
 
 ; decrease AI score proportional to damage
 ; AI score -= floor(Damage / 40)
@@ -317,10 +317,10 @@ AIDecideEvolution:
 	srl a
 	srl a
 	call ConvertHPToDamageCounters_Bank5
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if is Mysterious Fossil or
-; wLoadedCard1Unknown2 is set to $02,
+; wLoadedCard1AIInfo is AI_INFO_ENCOURAGE_EVO,
 ; raise AI score
 .check_mysterious_fossil
 	ld a, [wTempAI]
@@ -330,16 +330,17 @@ AIDecideEvolution:
 	ld a, [wLoadedCard1ID]
 	cp MYSTERIOUS_FOSSIL
 	jr z, .mysterious_fossil
-	ld a, [wLoadedCard1Unknown2]
-	cp $02
+	ld a, [wLoadedCard1AIInfo]
+	; bug, should mask out HAS_EVOLUTION flag first
+	cp AI_INFO_ENCOURAGE_EVO
 	jr nz, .pikachu_deck
 	ld a, 2
-	call AddToAIScore
+	call AIEncourage
 	jr .pikachu_deck
 
 .mysterious_fossil
 	ld a, 5
-	call AddToAIScore
+	call AIEncourage
 
 ; in Pikachu Deck, decrease AI score for evolving Pikachu
 .pikachu_deck
@@ -357,7 +358,7 @@ AIDecideEvolution:
 	jr nz, .check_score
 .pikachu
 	ld a, 3
-	call SubFromAIScore
+	call AIDiscourage
 
 ; if AI score >= 133, go through with the evolution
 .check_score
@@ -424,11 +425,11 @@ AIDecideSpecialEvolutions:
 	cp 6
 	jr c, .not_enough_energy
 	ld a, 3
-	call AddToAIScore
+	call AIEncourage
 	ret
 .not_enough_energy
 	ld a, 10
-	call SubFromAIScore
+	call AIDiscourage
 	ret
 
 ; check if Magikarp is not the active card
@@ -442,7 +443,7 @@ AIDecideSpecialEvolutions:
 	cp 2
 	ret c
 	ld a, 3
-	call AddToAIScore
+	call AIEncourage
 	ret
 
 .invincible_ronald
@@ -457,7 +458,7 @@ AIDecideSpecialEvolutions:
 	or a ; active card
 	ret z
 	ld a, 10
-	call AddToAIScore
+	call AIEncourage
 	ret
 
 .legendary_ronald
@@ -495,7 +496,7 @@ AIDecideSpecialEvolutions:
 	jr c, .check_muk
 .lower_score
 	ld a, 10
-	call SubFromAIScore
+	call AIDiscourage
 	ret
 
 ; if there's no Muk, raise score
@@ -504,7 +505,7 @@ AIDecideSpecialEvolutions:
 	call CountPokemonWithActivePkmnPowerInBothPlayAreas
 	jr c, .lower_score
 	ld a, 10
-	call AddToAIScore
+	call AIEncourage
 	ret
 
 ; if Dragonair is active, check its damage in HP
@@ -604,11 +605,11 @@ AIDecidePlayLegendaryBirds:
 
 ; add
 	ld a, 70
-	call AddToAIScore
+	call AIEncourage
 	ret
 .subtract
 	ld a, 100
-	call SubFromAIScore
+	call AIDiscourage
 	ret
 
 .moltres

@@ -284,7 +284,7 @@ BulbasaurCard:
 	db 2, 4 ; length
 	dw 15 * 10 ; weight
 	tx BulbasaurDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 IvysaurCard:
 	db TYPE_PKMN_GRASS ; type
@@ -335,7 +335,7 @@ IvysaurCard:
 	db 3, 3 ; length
 	dw 29 * 10 ; weight
 	tx IvysaurDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 VenusaurLv64Card:
 	db TYPE_PKMN_GRASS ; type
@@ -386,7 +386,7 @@ VenusaurLv64Card:
 	db 6, 7 ; length
 	dw 221 * 10 ; weight
 	tx VenusaurLv64Description ; description
-	db 0
+	db 0 ; AI info
 
 VenusaurLv67Card:
 	db TYPE_PKMN_GRASS ; type
@@ -437,7 +437,7 @@ VenusaurLv67Card:
 	db 6, 7 ; length
 	dw 221 * 10 ; weight
 	tx VenusaurLv67Description ; description
-	db 0
+	db 0 ; AI info
 
 CaterpieCard:
 	db TYPE_PKMN_GRASS ; type
@@ -488,7 +488,7 @@ CaterpieCard:
 	db 1, 0 ; length
 	dw 6 * 10 ; weight
 	tx CaterpieDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 MetapodCard:
 	db TYPE_PKMN_GRASS ; type
@@ -539,7 +539,7 @@ MetapodCard:
 	db 2, 4 ; length
 	dw 22 * 10 ; weight
 	tx MetapodDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 ButterfreeCard:
 	db TYPE_PKMN_GRASS ; type
@@ -590,7 +590,7 @@ ButterfreeCard:
 	db 3, 7 ; length
 	dw 71 * 10 ; weight
 	tx ButterfreeDescription ; description
-	db 0
+	db 0 ; AI info
 
 WeedleCard:
 	db TYPE_PKMN_GRASS ; type
@@ -641,7 +641,7 @@ WeedleCard:
 	db 1, 0 ; length
 	dw 7 * 10 ; weight
 	tx WeedleDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 KakunaCard:
 	db TYPE_PKMN_GRASS ; type
@@ -692,7 +692,7 @@ KakunaCard:
 	db 2, 0 ; length
 	dw 22 * 10 ; weight
 	tx KakunaDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 BeedrillCard:
 	db TYPE_PKMN_GRASS ; type
@@ -743,7 +743,7 @@ BeedrillCard:
 	db 3, 3 ; length
 	dw 65 * 10 ; weight
 	tx BeedrillDescription ; description
-	db 0
+	db 0 ; AI info
 
 EkansCard:
 	db TYPE_PKMN_GRASS ; type
@@ -794,7 +794,7 @@ EkansCard:
 	db 6, 7 ; length
 	dw 15 * 10 ; weight
 	tx EkansDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 ArbokCard:
 	db TYPE_PKMN_GRASS ; type
@@ -845,7 +845,7 @@ ArbokCard:
 	db 11, 6 ; length
 	dw 143 * 10 ; weight
 	tx ArbokDescription ; description
-	db 0
+	db 0 ; AI info
 
 NidoranFCard:
 	db TYPE_PKMN_GRASS ; type
@@ -896,7 +896,7 @@ NidoranFCard:
 	db 1, 4 ; length
 	dw 15 * 10 ; weight
 	tx NidoranFDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 NidorinaCard:
 	db TYPE_PKMN_GRASS ; type
@@ -947,7 +947,7 @@ NidorinaCard:
 	db 2, 7 ; length
 	dw 44 * 10 ; weight
 	tx NidorinaDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 NidoqueenCard:
 	db TYPE_PKMN_GRASS ; type
@@ -998,7 +998,7 @@ NidoqueenCard:
 	db 4, 3 ; length
 	dw 132 * 10 ; weight
 	tx NidoqueenDescription ; description
-	db 0
+	db 0 ; AI info
 
 NidoranMCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1049,7 +1049,7 @@ NidoranMCard:
 	db 1, 4 ; length
 	dw 15 * 10 ; weight
 	tx NidoranMDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 NidorinoCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1100,7 +1100,7 @@ NidorinoCard:
 	db 2, 11 ; length
 	dw 43 * 10 ; weight
 	tx NidorinoDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 NidokingCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1151,7 +1151,7 @@ NidokingCard:
 	db 4, 7 ; length
 	dw 137 * 10 ; weight
 	tx NidokingDescription ; description
-	db 0
+	db 0 ; AI info
 
 ZubatCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1202,7 +1202,7 @@ ZubatCard:
 	db 2, 7 ; length
 	dw 17 * 10 ; weight
 	tx ZubatDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 GolbatCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1253,7 +1253,7 @@ GolbatCard:
 	db 5, 3 ; length
 	dw 121 * 10 ; weight
 	tx GolbatDescription ; description
-	db 0
+	db 0 ; AI info
 
 OddishCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1304,7 +1304,7 @@ OddishCard:
 	db 1, 8 ; length
 	dw 12 * 10 ; weight
 	tx OddishDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 GloomCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1355,7 +1355,7 @@ GloomCard:
 	db 2, 7 ; length
 	dw 19 * 10 ; weight
 	tx GloomDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 VileplumeCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1406,7 +1406,7 @@ VileplumeCard:
 	db 3, 11 ; length
 	dw 41 * 10 ; weight
 	tx VileplumeDescription ; description
-	db 0
+	db 0 ; AI info
 
 ParasCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1457,7 +1457,7 @@ ParasCard:
 	db 1, 0 ; length
 	dw 12 * 10 ; weight
 	tx ParasDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 ParasectCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1508,7 +1508,7 @@ ParasectCard:
 	db 3, 3 ; length
 	dw 65 * 10 ; weight
 	tx ParasectDescription ; description
-	db 0
+	db 0 ; AI info
 
 VenonatCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1559,7 +1559,7 @@ VenonatCard:
 	db 3, 3 ; length
 	dw 66 * 10 ; weight
 	tx VenonatDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 VenomothCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1610,7 +1610,7 @@ VenomothCard:
 	db 4, 11 ; length
 	dw 28 * 10 ; weight
 	tx VenomothDescription ; description
-	db 0
+	db 0 ; AI info
 
 BellsproutCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1661,7 +1661,7 @@ BellsproutCard:
 	db 2, 4 ; length
 	dw 9 * 10 ; weight
 	tx BellsproutDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 WeepinbellCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1712,7 +1712,7 @@ WeepinbellCard:
 	db 3, 3 ; length
 	dw 14 * 10 ; weight
 	tx WeepinbellDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 VictreebelCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1763,7 +1763,7 @@ VictreebelCard:
 	db 5, 7 ; length
 	dw 34 * 10 ; weight
 	tx VictreebelDescription ; description
-	db 0
+	db 0 ; AI info
 
 GrimerCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1814,7 +1814,7 @@ GrimerCard:
 	db 2, 11 ; length
 	dw 66 * 10 ; weight
 	tx GrimerDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 MukCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1865,7 +1865,7 @@ MukCard:
 	db 3, 11 ; length
 	dw 66 * 10 ; weight
 	tx MukDescription ; description
-	db 0
+	db 0 ; AI info
 
 ExeggcuteCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1916,7 +1916,7 @@ ExeggcuteCard:
 	db 1, 4 ; length
 	dw 6 * 10 ; weight
 	tx ExeggcuteDescription ; description
-	db 18
+	db AI_INFO_ENCOURAGE_EVO | HAS_EVOLUTION ; AI info
 
 ExeggutorCard:
 	db TYPE_PKMN_GRASS ; type
@@ -1967,7 +1967,7 @@ ExeggutorCard:
 	db 6, 7 ; length
 	dw 265 * 10 ; weight
 	tx ExeggutorDescription ; description
-	db 0
+	db 0 ; AI info
 
 KoffingCard:
 	db TYPE_PKMN_GRASS ; type
@@ -2018,7 +2018,7 @@ KoffingCard:
 	db 2, 0 ; length
 	dw 2 * 10 ; weight
 	tx KoffingDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 WeezingCard:
 	db TYPE_PKMN_GRASS ; type
@@ -2069,7 +2069,7 @@ WeezingCard:
 	db 3, 11 ; length
 	dw 21 * 10 ; weight
 	tx WeezingDescription ; description
-	db 0
+	db 0 ; AI info
 
 TangelaLv8Card:
 	db TYPE_PKMN_GRASS ; type
@@ -2120,7 +2120,7 @@ TangelaLv8Card:
 	db 3, 3 ; length
 	dw 77 * 10 ; weight
 	tx TangelaLv8Description ; description
-	db 0
+	db 0 ; AI info
 
 TangelaLv12Card:
 	db TYPE_PKMN_GRASS ; type
@@ -2171,7 +2171,7 @@ TangelaLv12Card:
 	db 3, 3 ; length
 	dw 77 * 10 ; weight
 	tx TangelaLv12Description ; description
-	db 0
+	db 0 ; AI info
 
 ScytherCard:
 	db TYPE_PKMN_GRASS ; type
@@ -2222,7 +2222,7 @@ ScytherCard:
 	db 4, 11 ; length
 	dw 123 * 10 ; weight
 	tx ScytherDescription ; description
-	db 0
+	db 0 ; AI info
 
 PinsirCard:
 	db TYPE_PKMN_GRASS ; type
@@ -2273,7 +2273,7 @@ PinsirCard:
 	db 4, 11 ; length
 	dw 121 * 10 ; weight
 	tx PinsirDescription ; description
-	db 0
+	db 0 ; AI info
 
 CharmanderCard:
 	db TYPE_PKMN_FIRE ; type
@@ -2324,7 +2324,7 @@ CharmanderCard:
 	db 2, 0 ; length
 	dw 19 * 10 ; weight
 	tx CharmanderDescription ; description
-	db 21
+	db AI_INFO_UNK_05 | HAS_EVOLUTION ; AI info
 
 CharmeleonCard:
 	db TYPE_PKMN_FIRE ; type
@@ -2375,7 +2375,7 @@ CharmeleonCard:
 	db 3, 7 ; length
 	dw 42 * 10 ; weight
 	tx CharmeleonDescription ; description
-	db 18
+	db AI_INFO_ENCOURAGE_EVO | HAS_EVOLUTION ; AI info
 
 CharizardCard:
 	db TYPE_PKMN_FIRE ; type
@@ -2426,7 +2426,7 @@ CharizardCard:
 	db 5, 7 ; length
 	dw 200 * 10 ; weight
 	tx CharizardDescription ; description
-	db 0
+	db 0 ; AI info
 
 VulpixCard:
 	db TYPE_PKMN_FIRE ; type
@@ -2477,7 +2477,7 @@ VulpixCard:
 	db 2, 0 ; length
 	dw 22 * 10 ; weight
 	tx VulpixDescription ; description
-	db 18
+	db AI_INFO_ENCOURAGE_EVO | HAS_EVOLUTION ; AI info
 
 NinetalesLv32Card:
 	db TYPE_PKMN_FIRE ; type
@@ -2528,7 +2528,7 @@ NinetalesLv32Card:
 	db 3, 7 ; length
 	dw 44 * 10 ; weight
 	tx NinetalesLv32Description ; description
-	db 0
+	db 0 ; AI info
 
 NinetalesLv35Card:
 	db TYPE_PKMN_FIRE ; type
@@ -2579,7 +2579,7 @@ NinetalesLv35Card:
 	db 3, 7 ; length
 	dw 44 * 10 ; weight
 	tx NinetalesLv35Description ; description
-	db 0
+	db 0 ; AI info
 
 GrowlitheCard:
 	db TYPE_PKMN_FIRE ; type
@@ -2630,7 +2630,7 @@ GrowlitheCard:
 	db 2, 4 ; length
 	dw 42 * 10 ; weight
 	tx GrowlitheDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 ArcanineLv34Card:
 	db TYPE_PKMN_FIRE ; type
@@ -2681,7 +2681,7 @@ ArcanineLv34Card:
 	db 6, 3 ; length
 	dw 342 * 10 ; weight
 	tx ArcanineLv34Description ; description
-	db 0
+	db 0 ; AI info
 
 ArcanineLv45Card:
 	db TYPE_PKMN_FIRE ; type
@@ -2732,7 +2732,7 @@ ArcanineLv45Card:
 	db 6, 3 ; length
 	dw 342 * 10 ; weight
 	tx ArcanineLv45Description ; description
-	db 0
+	db 0 ; AI info
 
 PonytaCard:
 	db TYPE_PKMN_FIRE ; type
@@ -2783,7 +2783,7 @@ PonytaCard:
 	db 3, 3 ; length
 	dw 66 * 10 ; weight
 	tx PonytaDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 RapidashCard:
 	db TYPE_PKMN_FIRE ; type
@@ -2834,7 +2834,7 @@ RapidashCard:
 	db 5, 7 ; length
 	dw 209 * 10 ; weight
 	tx RapidashDescription ; description
-	db 0
+	db 0 ; AI info
 
 MagmarLv24Card:
 	db TYPE_PKMN_FIRE ; type
@@ -2885,7 +2885,7 @@ MagmarLv24Card:
 	db 4, 3 ; length
 	dw 98 * 10 ; weight
 	tx MagmarLv24Description ; description
-	db 0
+	db 0 ; AI info
 
 MagmarLv31Card:
 	db TYPE_PKMN_FIRE ; type
@@ -2936,7 +2936,7 @@ MagmarLv31Card:
 	db 4, 3 ; length
 	dw 98 * 10 ; weight
 	tx MagmarLv31Description ; description
-	db 3
+	db AI_INFO_UNK_03 ; AI info
 
 FlareonLv22Card:
 	db TYPE_PKMN_FIRE ; type
@@ -2987,7 +2987,7 @@ FlareonLv22Card:
 	db 2, 11 ; length
 	dw 55 * 10 ; weight
 	tx FlareonLv22Description ; description
-	db 0
+	db 0 ; AI info
 
 FlareonLv28Card:
 	db TYPE_PKMN_FIRE ; type
@@ -3038,7 +3038,7 @@ FlareonLv28Card:
 	db 2, 11 ; length
 	dw 55 * 10 ; weight
 	tx FlareonLv28Description ; description
-	db 0
+	db 0 ; AI info
 
 MoltresLv35Card:
 	db TYPE_PKMN_FIRE ; type
@@ -3089,7 +3089,7 @@ MoltresLv35Card:
 	db 6, 7 ; length
 	dw 132 * 10 ; weight
 	tx MoltresLv35Description ; description
-	db 0
+	db 0 ; AI info
 
 MoltresLv37Card:
 	db TYPE_PKMN_FIRE ; type
@@ -3140,7 +3140,7 @@ MoltresLv37Card:
 	db 6, 7 ; length
 	dw 132 * 10 ; weight
 	tx MoltresLv37Description ; description
-	db 0
+	db 0 ; AI info
 
 SquirtleCard:
 	db TYPE_PKMN_WATER ; type
@@ -3191,7 +3191,7 @@ SquirtleCard:
 	db 1, 8 ; length
 	dw 20 * 10 ; weight
 	tx SquirtleDescription ; description
-	db 21
+	db AI_INFO_UNK_05 | HAS_EVOLUTION ; AI info
 
 WartortleCard:
 	db TYPE_PKMN_WATER ; type
@@ -3242,7 +3242,7 @@ WartortleCard:
 	db 3, 3 ; length
 	dw 50 * 10 ; weight
 	tx WartortleDescription ; description
-	db 18
+	db AI_INFO_ENCOURAGE_EVO | HAS_EVOLUTION ; AI info
 
 BlastoiseCard:
 	db TYPE_PKMN_WATER ; type
@@ -3293,7 +3293,7 @@ BlastoiseCard:
 	db 5, 3 ; length
 	dw 189 * 10 ; weight
 	tx BlastoiseDescription ; description
-	db 0
+	db 0 ; AI info
 
 PsyduckCard:
 	db TYPE_PKMN_WATER ; type
@@ -3344,7 +3344,7 @@ PsyduckCard:
 	db 2, 7 ; length
 	dw 43 * 10 ; weight
 	tx PsyduckDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 GolduckCard:
 	db TYPE_PKMN_WATER ; type
@@ -3395,7 +3395,7 @@ GolduckCard:
 	db 5, 7 ; length
 	dw 169 * 10 ; weight
 	tx GolduckDescription ; description
-	db 3
+	db AI_INFO_UNK_03 ; AI info
 
 PoliwagCard:
 	db TYPE_PKMN_WATER ; type
@@ -3446,7 +3446,7 @@ PoliwagCard:
 	db 2, 0 ; length
 	dw 27 * 10 ; weight
 	tx PoliwagDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 PoliwhirlCard:
 	db TYPE_PKMN_WATER ; type
@@ -3497,7 +3497,7 @@ PoliwhirlCard:
 	db 3, 4 ; length
 	dw 44 * 10 ; weight
 	tx PoliwhirlsDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 PoliwrathCard:
 	db TYPE_PKMN_WATER ; type
@@ -3548,7 +3548,7 @@ PoliwrathCard:
 	db 4, 3 ; length
 	dw 119 * 10 ; weight
 	tx PoliwrathDescription ; description
-	db 0
+	db 0 ; AI info
 
 TentacoolCard:
 	db TYPE_PKMN_WATER ; type
@@ -3599,7 +3599,7 @@ TentacoolCard:
 	db 2, 11 ; length
 	dw 100 * 10 ; weight
 	tx TentacoolDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 TentacruelCard:
 	db TYPE_PKMN_WATER ; type
@@ -3650,7 +3650,7 @@ TentacruelCard:
 	db 5, 3 ; length
 	dw 121 * 10 ; weight
 	tx TentacruelDescription ; description
-	db 0
+	db 0 ; AI info
 
 SeelCard:
 	db TYPE_PKMN_WATER ; type
@@ -3701,7 +3701,7 @@ SeelCard:
 	db 3, 7 ; length
 	dw 198 * 10 ; weight
 	tx SeelDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 DewgongCard:
 	db TYPE_PKMN_WATER ; type
@@ -3752,7 +3752,7 @@ DewgongCard:
 	db 5, 7 ; length
 	dw 265 * 10 ; weight
 	tx DewgongDescription ; description
-	db 0
+	db 0 ; AI info
 
 ShellderCard:
 	db TYPE_PKMN_WATER ; type
@@ -3803,7 +3803,7 @@ ShellderCard:
 	db 1, 0 ; length
 	dw 9 * 10 ; weight
 	tx ShellderDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 CloysterCard:
 	db TYPE_PKMN_WATER ; type
@@ -3854,7 +3854,7 @@ CloysterCard:
 	db 4, 11 ; length
 	dw 292 * 10 ; weight
 	tx CloysterDescription ; description
-	db 0
+	db 0 ; AI info
 
 KrabbyCard:
 	db TYPE_PKMN_WATER ; type
@@ -3905,7 +3905,7 @@ KrabbyCard:
 	db 1, 4 ; length
 	dw 14 * 10 ; weight
 	tx KrabbyDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 KinglerCard:
 	db TYPE_PKMN_WATER ; type
@@ -3956,7 +3956,7 @@ KinglerCard:
 	db 4, 3 ; length
 	dw 132 * 10 ; weight
 	tx KinglerDescription ; description
-	db 0
+	db 0 ; AI info
 
 HorseaCard:
 	db TYPE_PKMN_WATER ; type
@@ -4007,7 +4007,7 @@ HorseaCard:
 	db 1, 4 ; length
 	dw 18 * 10 ; weight
 	tx HorseaDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 SeadraCard:
 	db TYPE_PKMN_WATER ; type
@@ -4058,7 +4058,7 @@ SeadraCard:
 	db 3, 1 ; length
 	dw 55 * 10 ; weight
 	tx SeadraDescription ; description
-	db 0
+	db 0 ; AI info
 
 GoldeenCard:
 	db TYPE_PKMN_WATER ; type
@@ -4109,7 +4109,7 @@ GoldeenCard:
 	db 2, 0 ; length
 	dw 33 * 10 ; weight
 	tx GoldeenDescription ; description
-	db 21
+	db AI_INFO_UNK_05 | HAS_EVOLUTION ; AI info
 
 SeakingCard:
 	db TYPE_PKMN_WATER ; type
@@ -4160,7 +4160,7 @@ SeakingCard:
 	db 4, 3 ; length
 	dw 86 * 10 ; weight
 	tx SeakingDescription ; description
-	db 0
+	db 0 ; AI info
 
 StaryuCard:
 	db TYPE_PKMN_WATER ; type
@@ -4211,7 +4211,7 @@ StaryuCard:
 	db 2, 7 ; length
 	dw 76 * 10 ; weight
 	tx StaryuDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 StarmieCard:
 	db TYPE_PKMN_WATER ; type
@@ -4262,7 +4262,7 @@ StarmieCard:
 	db 3, 7 ; length
 	dw 176 * 10 ; weight
 	tx StarmieDescription ; description
-	db 0
+	db 0 ; AI info
 
 MagikarpCard:
 	db TYPE_PKMN_WATER ; type
@@ -4313,7 +4313,7 @@ MagikarpCard:
 	db 2, 11 ; length
 	dw 22 * 10 ; weight
 	tx MagikarpDescription ; description
-	db 18
+	db AI_INFO_ENCOURAGE_EVO | HAS_EVOLUTION ; AI info
 
 GyaradosCard:
 	db TYPE_PKMN_WATER ; type
@@ -4364,7 +4364,7 @@ GyaradosCard:
 	db 21, 4 ; length
 	dw 518 * 10 ; weight
 	tx GyaradosDescription ; description
-	db 0
+	db 0 ; AI info
 
 LaprasCard:
 	db TYPE_PKMN_WATER ; type
@@ -4415,7 +4415,7 @@ LaprasCard:
 	db 8, 2 ; length
 	dw 485 * 10 ; weight
 	tx LaprasDescription ; description
-	db 0
+	db 0 ; AI info
 
 VaporeonLv29Card:
 	db TYPE_PKMN_WATER ; type
@@ -4466,7 +4466,7 @@ VaporeonLv29Card:
 	db 3, 3 ; length
 	dw 64 * 10 ; weight
 	tx VaporeonLv29Description ; description
-	db 0
+	db 0 ; AI info
 
 VaporeonLv42Card:
 	db TYPE_PKMN_WATER ; type
@@ -4517,7 +4517,7 @@ VaporeonLv42Card:
 	db 3, 3 ; length
 	dw 64 * 10 ; weight
 	tx VaporeonLv42Description ; description
-	db 0
+	db 0 ; AI info
 
 OmanyteCard:
 	db TYPE_PKMN_WATER ; type
@@ -4568,7 +4568,7 @@ OmanyteCard:
 	db 1, 4 ; length
 	dw 17 * 10 ; weight
 	tx OmanyteDescription ; description
-	db 17
+	db AI_INFO_BENCH_UTILITY | HAS_EVOLUTION ; AI info
 
 OmastarCard:
 	db TYPE_PKMN_WATER ; type
@@ -4619,7 +4619,7 @@ OmastarCard:
 	db 3, 3 ; length
 	dw 77 * 10 ; weight
 	tx OmastarDescription ; description
-	db 0
+	db 0 ; AI info
 
 ArticunoLv35Card:
 	db TYPE_PKMN_WATER ; type
@@ -4670,7 +4670,7 @@ ArticunoLv35Card:
 	db 5, 7 ; length
 	dw 122 * 10 ; weight
 	tx ArticunoLv35Description ; description
-	db 0
+	db 0 ; AI info
 
 ArticunoLv37Card:
 	db TYPE_PKMN_WATER ; type
@@ -4721,7 +4721,7 @@ ArticunoLv37Card:
 	db 5, 7 ; length
 	dw 122 * 10 ; weight
 	tx ArticunoLv37Description ; description
-	db 0
+	db 0 ; AI info
 
 PikachuLv12Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -4772,7 +4772,7 @@ PikachuLv12Card:
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
 	tx PikachuLv12Description ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 PikachuLv14Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -4823,7 +4823,7 @@ PikachuLv14Card:
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
 	tx PikachuLv14Description ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 PikachuLv16Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -4874,7 +4874,7 @@ PikachuLv16Card:
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
 	tx PikachuLv16Description ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 PikachuAltLv16Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -4925,7 +4925,7 @@ PikachuAltLv16Card:
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
 	tx PikachuLv16Description ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 FlyingPikachuCard:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -4976,7 +4976,7 @@ FlyingPikachuCard:
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
 	tx FlyingPikachuDescription ; description
-	db 3
+	db AI_INFO_UNK_03 ; AI info
 
 SurfingPikachuLv13Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5027,7 +5027,7 @@ SurfingPikachuLv13Card:
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
 	tx SurfingPikachuDescription ; description
-	db 0
+	db 0 ; AI info
 
 SurfingPikachuAltLv13Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5078,7 +5078,7 @@ SurfingPikachuAltLv13Card:
 	db 1, 4 ; length
 	dw 13 * 10 ; weight
 	tx SurfingPikachuDescription ; description
-	db 0
+	db 0 ; AI info
 
 RaichuLv40Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5129,7 +5129,7 @@ RaichuLv40Card:
 	db 2, 7 ; length
 	dw 66 * 10 ; weight
 	tx RaichuLv40Description ; description
-	db 0
+	db 0 ; AI info
 
 RaichuLv45Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5180,7 +5180,7 @@ RaichuLv45Card:
 	db 2, 7 ; length
 	dw 66 * 10 ; weight
 	tx RaichuLv45Description ; description
-	db 0
+	db 0 ; AI info
 
 MagnemiteLv13Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5231,7 +5231,7 @@ MagnemiteLv13Card:
 	db 1, 0 ; length
 	dw 13 * 10 ; weight
 	tx MagnemiteLv13Description ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 MagnemiteLv15Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5282,7 +5282,7 @@ MagnemiteLv15Card:
 	db 1, 0 ; length
 	dw 13 * 10 ; weight
 	tx MagnemiteLv15Description ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 MagnetonLv28Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5333,7 +5333,7 @@ MagnetonLv28Card:
 	db 3, 3 ; length
 	dw 132 * 10 ; weight
 	tx MagnetonLv28Description ; description
-	db 0
+	db 0 ; AI info
 
 MagnetonLv35Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5384,7 +5384,7 @@ MagnetonLv35Card:
 	db 3, 3 ; length
 	dw 132 * 10 ; weight
 	tx MagnetonLv35Description ; description
-	db 0
+	db 0 ; AI info
 
 VoltorbCard:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5435,7 +5435,7 @@ VoltorbCard:
 	db 1, 8 ; length
 	dw 23 * 10 ; weight
 	tx VoltorbDescription ; description
-	db 21
+	db AI_INFO_UNK_05 | HAS_EVOLUTION ; AI info
 
 ElectrodeLv35Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5486,7 +5486,7 @@ ElectrodeLv35Card:
 	db 3, 11 ; length
 	dw 147 * 10 ; weight
 	tx ElectrodeLv35Description ; description
-	db 0
+	db 0 ; AI info
 
 ElectrodeLv42Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5537,7 +5537,7 @@ ElectrodeLv42Card:
 	db 3, 11 ; length
 	dw 147 * 10 ; weight
 	tx ElectrodeLv42Description ; description
-	db 0
+	db 0 ; AI info
 
 ElectabuzzLv20Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5588,7 +5588,7 @@ ElectabuzzLv20Card:
 	db 3, 7 ; length
 	dw 66 * 10 ; weight
 	tx ElectabuzzLv20Description ; description
-	db 0
+	db 0 ; AI info
 
 ElectabuzzLv35Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5639,7 +5639,7 @@ ElectabuzzLv35Card:
 	db 3, 7 ; length
 	dw 66 * 10 ; weight
 	tx ElectabuzzLv35Description ; description
-	db 0
+	db 0 ; AI info
 
 JolteonLv24Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5690,7 +5690,7 @@ JolteonLv24Card:
 	db 2, 7 ; length
 	dw 54 * 10 ; weight
 	tx JolteonLv24Description ; description
-	db 0
+	db 0 ; AI info
 
 JolteonLv29Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5741,7 +5741,7 @@ JolteonLv29Card:
 	db 2, 7 ; length
 	dw 54 * 10 ; weight
 	tx JolteonLv29Description ; description
-	db 0
+	db 0 ; AI info
 
 ZapdosLv40Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5792,7 +5792,7 @@ ZapdosLv40Card:
 	db 5, 3 ; length
 	dw 116 * 10 ; weight
 	tx ZapdosLv40Description ; description
-	db 0
+	db 0 ; AI info
 
 ZapdosLv64Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5843,7 +5843,7 @@ ZapdosLv64Card:
 	db 5, 3 ; length
 	dw 116 * 10 ; weight
 	tx ZapdosLv64Description ; description
-	db 0
+	db 0 ; AI info
 
 ZapdosLv68Card:
 	db TYPE_PKMN_LIGHTNING ; type
@@ -5894,7 +5894,7 @@ ZapdosLv68Card:
 	db 5, 3 ; length
 	dw 116 * 10 ; weight
 	tx ZapdosLv68Description ; description
-	db 0
+	db 0 ; AI info
 
 SandshrewCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -5945,7 +5945,7 @@ SandshrewCard:
 	db 2, 0 ; length
 	dw 26 * 10 ; weight
 	tx SandshrewDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 SandslashCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -5996,7 +5996,7 @@ SandslashCard:
 	db 3, 3 ; length
 	dw 65 * 10 ; weight
 	tx SandslashDescription ; description
-	db 0
+	db 0 ; AI info
 
 DiglettCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6047,7 +6047,7 @@ DiglettCard:
 	db 0, 8 ; length
 	dw 2 * 10 ; weight
 	tx DiglettDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 DugtrioCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6098,7 +6098,7 @@ DugtrioCard:
 	db 2, 4 ; length
 	dw 73 * 10 ; weight
 	tx DugtrioDescription ; description
-	db 0
+	db 0 ; AI info
 
 MankeyCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6149,7 +6149,7 @@ MankeyCard:
 	db 1, 8 ; length
 	dw 62 * 10 ; weight
 	tx MankeyDescription ; description
-	db 17
+	db AI_INFO_BENCH_UTILITY | HAS_EVOLUTION ; AI info
 
 PrimeapeCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6200,7 +6200,7 @@ PrimeapeCard:
 	db 3, 3 ; length
 	dw 71 * 10 ; weight
 	tx PrimeapeDescription ; description
-	db 0
+	db 0 ; AI info
 
 MachopCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6251,7 +6251,7 @@ MachopCard:
 	db 2, 7 ; length
 	dw 43 * 10 ; weight
 	tx MachopDescription ; description
-	db 21
+	db AI_INFO_UNK_05 | HAS_EVOLUTION ; AI info
 
 MachokeCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6302,7 +6302,7 @@ MachokeCard:
 	db 4, 11 ; length
 	dw 155 * 10 ; weight
 	tx MachokeDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 MachampCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6353,7 +6353,7 @@ MachampCard:
 	db 5, 3 ; length
 	dw 287 * 10 ; weight
 	tx MachampDescription ; description
-	db 0
+	db 0 ; AI info
 
 GeodudeCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6404,7 +6404,7 @@ GeodudeCard:
 	db 1, 4 ; length
 	dw 44 * 10 ; weight
 	tx GeodudeDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 GravelerCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6455,7 +6455,7 @@ GravelerCard:
 	db 3, 3 ; length
 	dw 232 * 10 ; weight
 	tx GravelerDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 GolemCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6506,7 +6506,7 @@ GolemCard:
 	db 4, 7 ; length
 	dw 662 * 10 ; weight
 	tx GolemDescription ; description
-	db 0
+	db 0 ; AI info
 
 OnixCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6557,7 +6557,7 @@ OnixCard:
 	db 28, 10 ; length
 	dw 463 * 10 ; weight
 	tx OnixDescription ; description
-	db 0
+	db 0 ; AI info
 
 CuboneCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6608,7 +6608,7 @@ CuboneCard:
 	db 1, 4 ; length
 	dw 14 * 10 ; weight
 	tx CuboneDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 MarowakLv26Card:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6659,7 +6659,7 @@ MarowakLv26Card:
 	db 3, 3 ; length
 	dw 99 * 10 ; weight
 	tx MarowakLv26Description ; description
-	db 0
+	db 0 ; AI info
 
 MarowakLv32Card:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6710,7 +6710,7 @@ MarowakLv32Card:
 	db 3, 3 ; length
 	dw 99 * 10 ; weight
 	tx MarowakLv32Description ; description
-	db 0
+	db 0 ; AI info
 
 HitmonleeCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6761,7 +6761,7 @@ HitmonleeCard:
 	db 4, 11 ; length
 	dw 110 * 10 ; weight
 	tx HitmonleeDescription ; description
-	db 0
+	db 0 ; AI info
 
 HitmonchanCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6812,7 +6812,7 @@ HitmonchanCard:
 	db 4, 7 ; length
 	dw 111 * 10 ; weight
 	tx HitmonchanDescription ; description
-	db 0
+	db 0 ; AI info
 
 RhyhornCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6863,7 +6863,7 @@ RhyhornCard:
 	db 3, 3 ; length
 	dw 254 * 10 ; weight
 	tx RhyhornDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 RhydonCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6914,7 +6914,7 @@ RhydonCard:
 	db 6, 3 ; length
 	dw 265 * 10 ; weight
 	tx RhydonDescription ; description
-	db 0
+	db 0 ; AI info
 
 KabutoCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -6965,7 +6965,7 @@ KabutoCard:
 	db 1, 8 ; length
 	dw 25 * 10 ; weight
 	tx KabutoDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 KabutopsCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -7016,7 +7016,7 @@ KabutopsCard:
 	db 4, 3 ; length
 	dw 89 * 10 ; weight
 	tx KabutopsDescription ; description
-	db 0
+	db 0 ; AI info
 
 AerodactylCard:
 	db TYPE_PKMN_FIGHTING ; type
@@ -7067,7 +7067,7 @@ AerodactylCard:
 	db 5, 11 ; length
 	dw 130 * 10 ; weight
 	tx AerodactylDescription ; description
-	db 1
+	db AI_INFO_BENCH_UTILITY ; AI info
 
 AbraCard:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7118,7 +7118,7 @@ AbraCard:
 	db 2, 11 ; length
 	dw 43 * 10 ; weight
 	tx AbraDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 KadabraCard:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7169,7 +7169,7 @@ KadabraCard:
 	db 4, 3 ; length
 	dw 125 * 10 ; weight
 	tx KadabraDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 AlakazamCard:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7220,7 +7220,7 @@ AlakazamCard:
 	db 4, 11 ; length
 	dw 106 * 10 ; weight
 	tx AlakazamDescription ; description
-	db 0
+	db 0 ; AI info
 
 SlowpokeLv9Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7271,7 +7271,7 @@ SlowpokeLv9Card:
 	db 3, 11 ; length
 	dw 79 * 10 ; weight
 	tx SlowpokeLv9Description ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 SlowpokeLv18Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7322,7 +7322,7 @@ SlowpokeLv18Card:
 	db 3, 11 ; length
 	dw 79 * 10 ; weight
 	tx SlowpokeLv9Description ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 SlowbroCard:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7373,7 +7373,7 @@ SlowbroCard:
 	db 5, 3 ; length
 	dw 173 * 10 ; weight
 	tx SlowbroDescription ; description
-	db 1
+	db AI_INFO_BENCH_UTILITY ; AI info
 
 GastlyLv8Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7424,7 +7424,7 @@ GastlyLv8Card:
 	db 4, 3 ; length
 	dw 2 ; weight
 	tx GastlyLv8Description ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 GastlyLv17Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7475,7 +7475,7 @@ GastlyLv17Card:
 	db 4, 3 ; length
 	dw 2 ; weight
 	tx GastlyLv17Description ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 HaunterLv17Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7526,7 +7526,7 @@ HaunterLv17Card:
 	db 5, 3 ; length
 	dw 2 ; weight
 	tx HaunterDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 HaunterLv22Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7577,7 +7577,7 @@ HaunterLv22Card:
 	db 5, 3 ; length
 	dw 2 ; weight
 	tx HaunterDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 GengarCard:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7628,7 +7628,7 @@ GengarCard:
 	db 4, 11 ; length
 	dw 89 * 10 ; weight
 	tx GengarDescription ; description
-	db 1
+	db AI_INFO_BENCH_UTILITY ; AI info
 
 DrowzeeCard:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7679,7 +7679,7 @@ DrowzeeCard:
 	db 3, 3 ; length
 	dw 71 * 10 ; weight
 	tx DrowzeeDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 HypnoCard:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7730,7 +7730,7 @@ HypnoCard:
 	db 5, 3 ; length
 	dw 167 * 10 ; weight
 	tx HypnoDescription ; description
-	db 0
+	db 0 ; AI info
 
 MrMimeCard:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7781,7 +7781,7 @@ MrMimeCard:
 	db 4, 3 ; length
 	dw 120 * 10 ; weight
 	tx MrMimeDescription ; description
-	db 3
+	db AI_INFO_UNK_03 ; AI info
 
 JynxCard:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7832,7 +7832,7 @@ JynxCard:
 	db 4, 7 ; length
 	dw 90 * 10 ; weight
 	tx JynxDescription ; description
-	db 0
+	db 0 ; AI info
 
 MewtwoLv53Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7883,7 +7883,7 @@ MewtwoLv53Card:
 	db 6, 7 ; length
 	dw 269 * 10 ; weight
 	tx MewtwoLv53Description ; description
-	db 0
+	db 0 ; AI info
 
 MewtwoLv60Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7934,7 +7934,7 @@ MewtwoLv60Card:
 	db 6, 7 ; length
 	dw 269 * 10 ; weight
 	tx MewtwoLv60Description ; description
-	db 0
+	db 0 ; AI info
 
 MewtwoAltLV60Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -7985,7 +7985,7 @@ MewtwoAltLV60Card:
 	db 6, 7 ; length
 	dw 269 * 10 ; weight
 	tx MewtwoLv60Description ; description
-	db 0
+	db 0 ; AI info
 
 MewLv8Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -8036,7 +8036,7 @@ MewLv8Card:
 	db 1, 4 ; length
 	dw 9 * 10 ; weight
 	tx MewLv8Description ; description
-	db 3
+	db AI_INFO_UNK_03 ; AI info
 
 MewLv15Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -8087,7 +8087,7 @@ MewLv15Card:
 	db 1, 4 ; length
 	dw 9 * 10 ; weight
 	tx MewLv15Description ; description
-	db 0
+	db 0 ; AI info
 
 MewLv23Card:
 	db TYPE_PKMN_PSYCHIC ; type
@@ -8138,7 +8138,7 @@ MewLv23Card:
 	db 1, 4 ; length
 	dw 9 * 10 ; weight
 	tx MewLv8Description ; description
-	db 8
+	db AI_INFO_UNK_08 ; AI info
 
 PidgeyCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8189,7 +8189,7 @@ PidgeyCard:
 	db 1, 0 ; length
 	dw 4 * 10 ; weight
 	tx PidgeyDescription ; description
-	db 18
+	db AI_INFO_ENCOURAGE_EVO | HAS_EVOLUTION ; AI info
 
 PidgeottoCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8240,7 +8240,7 @@ PidgeottoCard:
 	db 3, 7 ; length
 	dw 66 * 10 ; weight
 	tx PidgeottoDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 PidgeotLv38Card:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8291,7 +8291,7 @@ PidgeotLv38Card:
 	db 4, 11 ; length
 	dw 87 * 10 ; weight
 	tx PidgeotLv38Description ; description
-	db 0
+	db 0 ; AI info
 
 PidgeotLv40Card:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8342,7 +8342,7 @@ PidgeotLv40Card:
 	db 4, 11 ; length
 	dw 87 * 10 ; weight
 	tx PidgeotLv40Description ; description
-	db 0
+	db 0 ; AI info
 
 RattataCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8393,7 +8393,7 @@ RattataCard:
 	db 1, 0 ; length
 	dw 8 * 10 ; weight
 	tx RattataDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 RaticateCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8444,7 +8444,7 @@ RaticateCard:
 	db 2, 4 ; length
 	dw 41 * 10 ; weight
 	tx RaticateDescription ; description
-	db 3
+	db AI_INFO_UNK_03 ; AI info
 
 SpearowCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8495,7 +8495,7 @@ SpearowCard:
 	db 1, 0 ; length
 	dw 4 * 10 ; weight
 	tx SpearowDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 FearowCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8546,7 +8546,7 @@ FearowCard:
 	db 3, 11 ; length
 	dw 84 * 10 ; weight
 	tx FearowDescription ; description
-	db 0
+	db 0 ; AI info
 
 ClefairyCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8597,7 +8597,7 @@ ClefairyCard:
 	db 2, 0 ; length
 	dw 17 * 10 ; weight
 	tx ClefairyDescription ; description
-	db 18
+	db AI_INFO_ENCOURAGE_EVO | HAS_EVOLUTION ; AI info
 
 ClefableCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8648,7 +8648,7 @@ ClefableCard:
 	db 4, 3 ; length
 	dw 88 * 10 ; weight
 	tx ClefableDescription ; description
-	db 0
+	db 0 ; AI info
 
 JigglypuffLv12Card:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8699,7 +8699,7 @@ JigglypuffLv12Card:
 	db 1, 8 ; length
 	dw 12 * 10 ; weight
 	tx JigglypuffLv12Description ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 JigglypuffLv13Card:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8750,7 +8750,7 @@ JigglypuffLv13Card:
 	db 1, 8 ; length
 	dw 12 * 10 ; weight
 	tx JigglypuffLv13Description ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 JigglypuffLv14Card:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8801,7 +8801,7 @@ JigglypuffLv14Card:
 	db 1, 8 ; length
 	dw 12 * 10 ; weight
 	tx JigglypuffLv14Description ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 WigglytuffCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8852,7 +8852,7 @@ WigglytuffCard:
 	db 3, 3 ; length
 	dw 26 * 10 ; weight
 	tx WigglytuffDescription ; description
-	db 0
+	db 0 ; AI info
 
 MeowthLv14Card:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8903,7 +8903,7 @@ MeowthLv14Card:
 	db 1, 4 ; length
 	dw 9 * 10 ; weight
 	tx MeowthLv14Description ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 MeowthLv15Card:
 	db TYPE_PKMN_COLORLESS ; type
@@ -8954,7 +8954,7 @@ MeowthLv15Card:
 	db 1, 4 ; length
 	dw 9 * 10 ; weight
 	tx MeowthLv15Description ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 PersianCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9005,7 +9005,7 @@ PersianCard:
 	db 3, 3 ; length
 	dw 71 * 10 ; weight
 	tx PersianDescription ; description
-	db 0
+	db 0 ; AI info
 
 FarfetchdCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9056,7 +9056,7 @@ FarfetchdCard:
 	db 2, 7 ; length
 	dw 33 * 10 ; weight
 	tx FarfetchdDescription ; description
-	db 3
+	db AI_INFO_UNK_03 ; AI info
 
 DoduoCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9107,7 +9107,7 @@ DoduoCard:
 	db 4, 7 ; length
 	dw 86 * 10 ; weight
 	tx DoduoDescription ; description
-	db 19
+	db AI_INFO_UNK_03 | HAS_EVOLUTION ; AI info
 
 DodrioCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9158,7 +9158,7 @@ DodrioCard:
 	db 5, 11 ; length
 	dw 188 * 10 ; weight
 	tx DodrioDescription ; description
-	db 1
+	db AI_INFO_BENCH_UTILITY ; AI info
 
 LickitungCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9209,7 +9209,7 @@ LickitungCard:
 	db 3, 11 ; length
 	dw 144 * 10 ; weight
 	tx LickitungDescription ; description
-	db 0
+	db 0 ; AI info
 
 ChanseyCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9260,7 +9260,7 @@ ChanseyCard:
 	db 3, 7 ; length
 	dw 76 * 10 ; weight
 	tx ChanseyDescription ; description
-	db 8
+	db AI_INFO_UNK_08 ; AI info
 
 KangaskhanCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9311,7 +9311,7 @@ KangaskhanCard:
 	db 7, 3 ; length
 	dw 176 * 10 ; weight
 	tx KangaskhanDescription ; description
-	db 0
+	db 0 ; AI info
 
 TaurosCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9362,7 +9362,7 @@ TaurosCard:
 	db 4, 7 ; length
 	dw 195 * 10 ; weight
 	tx TaurosDescription ; description
-	db 0
+	db 0 ; AI info
 
 DittoCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9413,7 +9413,7 @@ DittoCard:
 	db 1, 0 ; length
 	dw 9 * 10 ; weight
 	tx DittoDescription ; description
-	db 0
+	db 0 ; AI info
 
 EeveeCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9464,7 +9464,7 @@ EeveeCard:
 	db 1, 0 ; length
 	dw 14 * 10 ; weight
 	tx EeveeDescription ; description
-	db 17
+	db AI_INFO_BENCH_UTILITY | HAS_EVOLUTION ; AI info
 
 PorygonCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9515,7 +9515,7 @@ PorygonCard:
 	db 2, 7 ; length
 	dw 80 * 10 ; weight
 	tx PorygonDescription ; description
-	db 0
+	db 0 ; AI info
 
 SnorlaxCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9566,7 +9566,7 @@ SnorlaxCard:
 	db 6, 11 ; length
 	dw 1014 * 10 ; weight
 	tx SnorlaxDescription ; description
-	db 0
+	db 0 ; AI info
 
 DratiniCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9617,7 +9617,7 @@ DratiniCard:
 	db 5, 11 ; length
 	dw 7 * 10 ; weight
 	tx DratiniDescription ; description
-	db 18
+	db AI_INFO_ENCOURAGE_EVO | HAS_EVOLUTION ; AI info
 
 DragonairCard:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9668,7 +9668,7 @@ DragonairCard:
 	db 13, 1 ; length
 	dw 36 * 10 ; weight
 	tx DragonairDescription ; description
-	db 16
+	db HAS_EVOLUTION ; AI info
 
 DragoniteLv41Card:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9719,7 +9719,7 @@ DragoniteLv41Card:
 	db 7, 3 ; length
 	dw 463 * 10 ; weight
 	tx DragoniteLv41Description ; description
-	db 0
+	db 0 ; AI info
 
 DragoniteLv45Card:
 	db TYPE_PKMN_COLORLESS ; type
@@ -9770,7 +9770,7 @@ DragoniteLv45Card:
 	db 7, 3 ; length
 	dw 463 * 10 ; weight
 	tx DragoniteDescription ; description
-	db 0
+	db 0 ; AI info
 
 GrassEnergyCard:
 	db TYPE_ENERGY_GRASS ; type

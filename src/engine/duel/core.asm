@@ -479,7 +479,7 @@ DuelMenu_Retreat:
 	cp CONFUSED
 	ldh [hTemp_ffa0], a
 	jr nz, .not_confused
-	ld a, [wGotHeadsFromConfusionCheckDuringRetreat]
+	ld a, [wConfusionRetreatCheckWasUnsuccessful]
 	or a
 	jr nz, .unable_due_to_confusion
 	call CheckAbleToRetreat
@@ -5810,16 +5810,16 @@ AttemptRetreat:
 	ldtx de, ConfusionCheckRetreatText
 	call TossCoin
 	jr c, .success
-	ld a, 1
-	ld [wGotHeadsFromConfusionCheckDuringRetreat], a
+	ld a, TRUE
+	ld [wConfusionRetreatCheckWasUnsuccessful], a
 	scf
 	ret
 .success
 	ldh a, [hTempPlayAreaLocation_ffa1]
 	ld e, a
 	call SwapArenaWithBenchPokemon
-	xor a
-	ld [wGotHeadsFromConfusionCheckDuringRetreat], a
+	xor a ; FALSE
+	ld [wConfusionRetreatCheckWasUnsuccessful], a
 	ret
 
 ; given a number between 0-255 in a, converts it to TX_SYMBOL format,
@@ -7149,7 +7149,7 @@ ConvertSpecialTrainerCardToPokemon::
 	ld bc, CARD_DATA_HP
 	add hl, bc
 	ld de, .trainer_to_pkmn_data
-	ld c, CARD_DATA_UNKNOWN2 - CARD_DATA_HP
+	ld c, CARD_DATA_AI_INFO - CARD_DATA_HP
 .loop
 	ld a, [de]
 	inc de
@@ -7677,7 +7677,7 @@ InitVariablesToBeginDuel:
 InitVariablesToBeginTurn:
 	xor a
 	ld [wAlreadyPlayedEnergy], a
-	ld [wGotHeadsFromConfusionCheckDuringRetreat], a
+	ld [wConfusionRetreatCheckWasUnsuccessful], a
 	ld [wGotHeadsFromSandAttackOrSmokescreenCheck], a
 	ldh a, [hWhoseTurn]
 	ld [wWhoseTurn], a
