@@ -1,50 +1,50 @@
 Sfx_DarkGas_Ch1:
-	sfx_8 17
-	sfx_1 47
-	sfx_0 0, 8
-	sfx_0 0, 8
-	sfx_0 0, 8
-	sfx_1 79
-	sfx_0 0, 7
-	sfx_0 0, 7
-	sfx_0 0, 7
-	sfx_1 111
-	sfx_0 0, 6
-	sfx_0 0, 6
-	sfx_0 0, 6
-	sfx_1 143
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
+	sfx_pan %00010001
+	sfx_env 2, -7
+	sfx_freq 64.25
+	sfx_freq 64.25
+	sfx_freq 64.25
+	sfx_env 4, -7
+	sfx_freq 64.22
+	sfx_freq 64.22
+	sfx_freq 64.22
+	sfx_env 6, -7
+	sfx_freq 64.19
+	sfx_freq 64.19
+	sfx_freq 64.19
+	sfx_env 8, -7
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
 	sfx_loop 12
-	sfx_1 207
-	sfx_0 0, 4
-	sfx_0 0, 4
-	sfx_0 0, 4
-	sfx_0 0, 4
-	sfx_0 0, 4
-	sfx_0 0, 4
+	sfx_env 12, -7
+	sfx_freq 64.13
+	sfx_freq 64.13
+	sfx_freq 64.13
+	sfx_freq 64.13
+	sfx_freq 64.13
+	sfx_freq 64.13
 	sfx_endloop
-	sfx_1 143
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_1 111
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_1 79
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_1 47
-	sfx_0 0, 5
-	sfx_0 0, 5
-	sfx_0 0, 5
+	sfx_env 8, -7
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_env 6, -7
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_env 4, -7
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_env 2, -7
+	sfx_freq 64.16
+	sfx_freq 64.16
+	sfx_freq 64.16
 	sfx_end

@@ -1,149 +1,149 @@
 Sfx_Firegiver_Ch1:
-	sfx_1 0
-	sfx_5 0
-	sfx_6 20
-	sfx_5 255
-	sfx_1 1
-	sfx_1 228
-	sfx_8 17
-	sfx_2 0
-	sfx_0 6, 11
-	sfx_5 0
-	sfx_6 1
-	sfx_0 6, 114
-	sfx_6 1
-	sfx_0 6, 66
-	sfx_6 1
-	sfx_0 6, 137
-	sfx_6 1
-	sfx_0 6, 114
-	sfx_6 1
-	sfx_0 6, 178
-	sfx_6 1
-	sfx_0 6, 137
-	sfx_6 1
-	sfx_0 6, 214
-	sfx_6 1
-	sfx_0 6, 178
-	sfx_6 1
-	sfx_0 6, 246
-	sfx_6 1
-	sfx_1 100
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 5
-	sfx_6 1
-	sfx_0 7, 57
-	sfx_6 1
-	sfx_0 7, 33
-	sfx_6 1
-	sfx_0 7, 68
-	sfx_6 1
-	sfx_0 7, 57
-	sfx_6 1
-	sfx_0 7, 89
-	sfx_6 1
-	sfx_0 7, 68
-	sfx_6 1
-	sfx_0 7, 107
-	sfx_6 1
-	sfx_0 7, 89
-	sfx_6 1
-	sfx_0 7, 123
-	sfx_6 1
-	sfx_1 52
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 131
-	sfx_6 1
-	sfx_0 7, 157
-	sfx_6 1
-	sfx_0 7, 144
-	sfx_6 1
-	sfx_0 7, 162
-	sfx_6 1
-	sfx_0 7, 157
-	sfx_6 1
-	sfx_0 7, 172
-	sfx_6 1
-	sfx_0 7, 162
-	sfx_6 1
-	sfx_0 7, 182
-	sfx_6 1
-	sfx_0 7, 172
-	sfx_6 1
-	sfx_0 7, 190
-	sfx_6 1
-	sfx_1 0
-	sfx_5 0
-	sfx_6 10
-	sfx_5 0
-	sfx_1 52
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 20
+	sfx_pitch_offset -1
+	sfx_env 0, 1
+	sfx_env 14, 4
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 261.62
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_freq 329.33
+	sfx_wait 1
+	sfx_freq 293.88
+	sfx_wait 1
+	sfx_freq 349.53
+	sfx_wait 1
+	sfx_freq 329.33
+	sfx_wait 1
+	sfx_freq 392.43
+	sfx_wait 1
+	sfx_freq 349.53
+	sfx_wait 1
+	sfx_freq 439.84
+	sfx_wait 1
+	sfx_freq 392.43
+	sfx_wait 1
+	sfx_freq 492.75
+	sfx_wait 1
+	sfx_env 6, 4
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 522.20
+	sfx_wait 1
+	sfx_freq 658.65
+	sfx_wait 1
+	sfx_freq 587.77
+	sfx_wait 1
+	sfx_freq 697.19
+	sfx_wait 1
+	sfx_freq 658.65
+	sfx_wait 1
+	sfx_freq 784.86
+	sfx_wait 1
+	sfx_freq 697.19
+	sfx_wait 1
+	sfx_freq 879.68
+	sfx_wait 1
+	sfx_freq 784.86
+	sfx_wait 1
+	sfx_freq 985.50
+	sfx_wait 1
+	sfx_env 3, 4
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 1048.58
+	sfx_wait 1
+	sfx_freq 1323.96
+	sfx_wait 1
+	sfx_freq 1170.29
+	sfx_wait 1
+	sfx_freq 1394.38
+	sfx_wait 1
+	sfx_freq 1323.96
+	sfx_wait 1
+	sfx_freq 1560.38
+	sfx_wait 1
+	sfx_freq 1394.38
+	sfx_wait 1
+	sfx_freq 1771.24
+	sfx_wait 1
+	sfx_freq 1560.38
+	sfx_wait 1
+	sfx_freq 1985.94
+	sfx_wait 1
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 10
+	sfx_pitch_offset 0
+	sfx_env 3, 4
 	sfx_loop 6
-	sfx_1 228
-	sfx_8 17
-	sfx_2 0
-	sfx_0 7, 5
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 0
-	sfx_1 228
-	sfx_0 7, 57
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 0
-	sfx_1 228
-	sfx_0 7, 89
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 0
-	sfx_1 228
-	sfx_0 7, 144
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 0
-	sfx_1 228
-	sfx_0 7, 162
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 0
-	sfx_1 228
-	sfx_0 7, 182
-	sfx_1 0
-	sfx_5 0
-	sfx_6 5
-	sfx_5 0
-	sfx_1 228
+	sfx_env 14, 4
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 522.20
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset 0
+	sfx_env 14, 4
+	sfx_freq 658.65
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset 0
+	sfx_env 14, 4
+	sfx_freq 784.86
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset 0
+	sfx_env 14, 4
+	sfx_freq 1170.29
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset 0
+	sfx_env 14, 4
+	sfx_freq 1394.38
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset 0
+	sfx_env 14, 4
+	sfx_freq 1771.24
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 5
+	sfx_pitch_offset 0
+	sfx_env 14, 4
 	sfx_endloop
 	sfx_end
 
 Sfx_Firegiver_Ch2:
 	sfx_loop 65
-	sfx_1 127
-	sfx_8 17
-	sfx_0 0, 82
-	sfx_0 0, 84
-	sfx_0 0, 83
+	sfx_env 7, -7
+	sfx_pan %00010001
+	sfx_freq 66.67
+	sfx_freq 66.74
+	sfx_freq 66.70
 	sfx_endloop
-	sfx_1 95
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_1 79
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_1 47
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_1 31
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
+	sfx_env 5, -7
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_env 4, -7
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_env 2, -7
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_env 1, -7
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
 	sfx_end

@@ -1,52 +1,52 @@
 Sfx_Unused09_Ch1:
-	sfx_8 17
-	sfx_1 224
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 65
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_1 128
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 69
-	sfx_0 0, 65
-	sfx_0 0, 71
-	sfx_0 0, 65
-	sfx_0 0, 71
-	sfx_0 0, 65
-	sfx_0 0, 71
-	sfx_0 0, 65
-	sfx_0 0, 71
-	sfx_0 0, 65
-	sfx_1 64
-	sfx_0 0, 65
-	sfx_0 0, 71
-	sfx_0 0, 65
-	sfx_0 0, 71
-	sfx_0 0, 65
-	sfx_1 32
-	sfx_0 0, 65
-	sfx_0 0, 71
-	sfx_0 0, 65
-	sfx_0 0, 71
-	sfx_0 0, 65
-	sfx_1 16
-	sfx_0 0, 55
-	sfx_0 0, 49
-	sfx_0 0, 55
-	sfx_0 0, 49
-	sfx_0 0, 55
+	sfx_pan %00010001
+	sfx_env 14, 0
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.10
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_env 8, 0
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.23
+	sfx_freq 66.10
+	sfx_freq 66.30
+	sfx_freq 66.10
+	sfx_freq 66.30
+	sfx_freq 66.10
+	sfx_freq 66.30
+	sfx_freq 66.10
+	sfx_freq 66.30
+	sfx_freq 66.10
+	sfx_env 4, 0
+	sfx_freq 66.10
+	sfx_freq 66.30
+	sfx_freq 66.10
+	sfx_freq 66.30
+	sfx_freq 66.10
+	sfx_env 2, 0
+	sfx_freq 66.10
+	sfx_freq 66.30
+	sfx_freq 66.10
+	sfx_freq 66.30
+	sfx_freq 66.10
+	sfx_env 1, 0
+	sfx_freq 65.77
+	sfx_freq 65.57
+	sfx_freq 65.77
+	sfx_freq 65.57
+	sfx_freq 65.77
 	sfx_end
