@@ -573,7 +573,7 @@ AIDecidePlayLegendaryBirds:
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld d, a
-	ld e, $00
+	ld e, FIRST_ATTACK_OR_PKMN_POWER
 	call CopyAttackDataAndDamage_FromDeckIndex
 	call SwapTurn
 	ld a, [wLoadedAttackCategory]
