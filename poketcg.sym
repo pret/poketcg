@@ -415,7 +415,7 @@
 00:195c DealConfusionDamageToSelf
 00:1994 ApplyDamageModifiers_DamageToTarget
 00:19a3 ApplyDamageModifiers_DamageToTarget.non_zero_damage
-00:19b8 ApplyDamageModifiers_DamageToTarget.safe
+00:19b8 ApplyDamageModifiers_DamageToTarget.affected_by_wr
 00:19dc ApplyDamageModifiers_DamageToTarget.not_weak
 00:19f3 ApplyDamageModifiers_DamageToTarget.check_pluspower_and_defender
 00:1a0a ApplyDamageModifiers_DamageToTarget.no_underflow
@@ -450,9 +450,9 @@
 00:1bca PrintFailedEffectText
 00:1bfd PrintFailedEffectText.no_effect_from_status
 00:1c05 GetPlayAreaCardRetreatCost
-00:1c13 MoveCardToDiscardPileIfInArena
-00:1c17 MoveCardToDiscardPileIfInArena.next_card
-00:1c2e MoveCardToDiscardPileIfInArena.skip
+00:1c13 MoveCardToDiscardPileIfInPlayArea
+00:1c17 MoveCardToDiscardPileIfInPlayArea.next_card
+00:1c2e MoveCardToDiscardPileIfInPlayArea.skip
 00:1c35 GetCardDamageAndMaxHP
 00:1c50 CheckLoadedAttackFlag
 00:1c6e CheckLoadedAttackFlag.done
