@@ -1,122 +1,122 @@
 Sfx_SeismicToss_Ch1:
-	sfx_1 255
-	sfx_8 17
-	sfx_2 0
-	sfx_0 5, 237
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 5, 205
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 5, 172
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 5, 137
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 5, 99
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 5, 60
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 5, 17
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 4, 229
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 4, 181
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 4, 131
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 4, 78
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
-	sfx_0 4, 22
-	sfx_1 0
-	sfx_5 0
-	sfx_6 1
-	sfx_5 255
-	sfx_1 255
+	sfx_env 15, -7
+	sfx_pan %00010001
+	sfx_duty 0
+	sfx_freq 246.84
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 232.81
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 219.92
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 207.72
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 195.92
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 185.13
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 174.53
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 164.87
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 155.48
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 146.78
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 138.55
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
+	sfx_freq 130.81
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 1
+	sfx_pitch_offset -1
+	sfx_env 15, -7
 	sfx_end
 
 Sfx_SeismicToss_Ch2:
-	sfx_8 17
-	sfx_1 223
-	sfx_1 0
-	sfx_5 0
-	sfx_6 18
-	sfx_5 255
-	sfx_1 223
-	sfx_0 0, 49
-	sfx_0 0, 55
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_1 143
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_1 79
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_1 47
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
-	sfx_0 0, 68
+	sfx_pan %00010001
+	sfx_env 13, -7
+	sfx_env 0, 0
+	sfx_pitch_offset 0
+	sfx_wait 18
+	sfx_pitch_offset -1
+	sfx_env 13, -7
+	sfx_freq 65.57
+	sfx_freq 65.77
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_env 8, -7
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_env 4, -7
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_env 2, -7
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
+	sfx_freq 66.20
 	sfx_end

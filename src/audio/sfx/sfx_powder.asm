@@ -1,137 +1,137 @@
 Sfx_Powder_Ch1:
-	sfx_8 17
-	sfx_1 255
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 15, -7
+	sfx_duty 0
 	sfx_loop 2
-	sfx_0 7, 190
-	sfx_0 7, 172
-	sfx_0 7, 162
-	sfx_0 7, 182
+	sfx_freq 1985.94
+	sfx_freq 1560.38
+	sfx_freq 1394.38
+	sfx_freq 1771.24
 	sfx_endloop
-	sfx_8 17
-	sfx_1 239
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 14, -7
+	sfx_duty 0
 	sfx_loop 2
-	sfx_0 7, 182
-	sfx_0 7, 162
-	sfx_0 7, 157
-	sfx_0 7, 172
+	sfx_freq 1771.24
+	sfx_freq 1394.38
+	sfx_freq 1323.96
+	sfx_freq 1560.38
 	sfx_endloop
-	sfx_8 17
-	sfx_1 223
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 13, -7
+	sfx_duty 0
 	sfx_loop 2
-	sfx_0 7, 172
-	sfx_0 7, 157
-	sfx_0 7, 144
-	sfx_0 7, 162
+	sfx_freq 1560.38
+	sfx_freq 1323.96
+	sfx_freq 1170.29
+	sfx_freq 1394.38
 	sfx_endloop
-	sfx_8 17
-	sfx_1 207
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 12, -7
+	sfx_duty 0
 	sfx_loop 3
-	sfx_0 7, 182
-	sfx_0 7, 162
-	sfx_0 7, 157
-	sfx_0 7, 172
+	sfx_freq 1771.24
+	sfx_freq 1394.38
+	sfx_freq 1323.96
+	sfx_freq 1560.38
 	sfx_endloop
-	sfx_8 17
-	sfx_1 191
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 11, -7
+	sfx_duty 0
 	sfx_loop 2
-	sfx_0 7, 172
-	sfx_0 7, 157
-	sfx_0 7, 144
-	sfx_0 7, 162
+	sfx_freq 1560.38
+	sfx_freq 1323.96
+	sfx_freq 1170.29
+	sfx_freq 1394.38
 	sfx_endloop
-	sfx_8 17
-	sfx_1 175
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 10, -7
+	sfx_duty 0
 	sfx_loop 3
-	sfx_0 7, 162
-	sfx_0 7, 144
-	sfx_0 7, 131
-	sfx_0 7, 157
+	sfx_freq 1394.38
+	sfx_freq 1170.29
+	sfx_freq 1048.58
+	sfx_freq 1323.96
 	sfx_endloop
-	sfx_8 17
-	sfx_1 159
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 9, -7
+	sfx_duty 0
 	sfx_loop 2
-	sfx_0 7, 172
-	sfx_0 7, 157
-	sfx_0 7, 144
-	sfx_0 7, 162
+	sfx_freq 1560.38
+	sfx_freq 1323.96
+	sfx_freq 1170.29
+	sfx_freq 1394.38
 	sfx_endloop
-	sfx_8 17
-	sfx_1 143
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 8, -7
+	sfx_duty 0
 	sfx_loop 3
-	sfx_0 7, 162
-	sfx_0 7, 144
-	sfx_0 7, 131
-	sfx_0 7, 157
+	sfx_freq 1394.38
+	sfx_freq 1170.29
+	sfx_freq 1048.58
+	sfx_freq 1323.96
 	sfx_endloop
-	sfx_8 17
-	sfx_1 127
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 7, -7
+	sfx_duty 0
 	sfx_loop 2
-	sfx_0 7, 157
-	sfx_0 7, 131
-	sfx_0 7, 123
-	sfx_0 7, 144
+	sfx_freq 1323.96
+	sfx_freq 1048.58
+	sfx_freq 985.50
+	sfx_freq 1170.29
 	sfx_endloop
-	sfx_8 17
-	sfx_1 111
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 6, -7
+	sfx_duty 0
 	sfx_loop 3
-	sfx_0 7, 162
-	sfx_0 7, 144
-	sfx_0 7, 131
-	sfx_0 7, 157
+	sfx_freq 1394.38
+	sfx_freq 1170.29
+	sfx_freq 1048.58
+	sfx_freq 1323.96
 	sfx_endloop
-	sfx_8 17
-	sfx_1 95
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 5, -7
+	sfx_duty 0
 	sfx_loop 2
-	sfx_0 7, 157
-	sfx_0 7, 131
-	sfx_0 7, 123
-	sfx_0 7, 144
+	sfx_freq 1323.96
+	sfx_freq 1048.58
+	sfx_freq 985.50
+	sfx_freq 1170.29
 	sfx_endloop
-	sfx_8 17
-	sfx_1 79
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 4, -7
+	sfx_duty 0
 	sfx_loop 3
-	sfx_0 7, 144
-	sfx_0 7, 123
-	sfx_0 7, 107
-	sfx_0 7, 131
+	sfx_freq 1170.29
+	sfx_freq 985.50
+	sfx_freq 879.68
+	sfx_freq 1048.58
 	sfx_endloop
-	sfx_8 17
-	sfx_1 63
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 3, -7
+	sfx_duty 0
 	sfx_loop 2
-	sfx_0 7, 157
-	sfx_0 7, 131
-	sfx_0 7, 123
-	sfx_0 7, 144
+	sfx_freq 1323.96
+	sfx_freq 1048.58
+	sfx_freq 985.50
+	sfx_freq 1170.29
 	sfx_endloop
-	sfx_8 17
-	sfx_1 47
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 2, -7
+	sfx_duty 0
 	sfx_loop 3
-	sfx_0 7, 144
-	sfx_0 7, 123
-	sfx_0 7, 107
-	sfx_0 7, 131
+	sfx_freq 1170.29
+	sfx_freq 985.50
+	sfx_freq 879.68
+	sfx_freq 1048.58
 	sfx_endloop
-	sfx_8 17
-	sfx_1 31
-	sfx_2 0
+	sfx_pan %00010001
+	sfx_env 1, -7
+	sfx_duty 0
 	sfx_loop 2
-	sfx_0 7, 131
-	sfx_0 7, 107
-	sfx_0 7, 89
-	sfx_0 7, 123
+	sfx_freq 1048.58
+	sfx_freq 879.68
+	sfx_freq 784.86
+	sfx_freq 985.50
 	sfx_endloop
 	sfx_end

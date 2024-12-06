@@ -1,91 +1,91 @@
 Sfx_DiveBomb_Ch1:
-	sfx_8 17
-	sfx_1 111
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_0 0, 83
-	sfx_0 0, 82
-	sfx_0 0, 83
-	sfx_0 0, 82
-	sfx_0 0, 83
-	sfx_0 0, 82
-	sfx_0 0, 83
-	sfx_0 0, 82
-	sfx_0 0, 84
-	sfx_0 0, 82
-	sfx_0 0, 81
-	sfx_0 0, 83
-	sfx_0 0, 82
-	sfx_0 0, 81
-	sfx_0 0, 83
+	sfx_pan %00010001
+	sfx_env 6, -7
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_freq 66.70
+	sfx_freq 66.67
+	sfx_freq 66.70
+	sfx_freq 66.67
+	sfx_freq 66.70
+	sfx_freq 66.67
+	sfx_freq 66.70
+	sfx_freq 66.67
+	sfx_freq 66.74
+	sfx_freq 66.67
+	sfx_freq 66.64
+	sfx_freq 66.70
+	sfx_freq 66.67
+	sfx_freq 66.64
+	sfx_freq 66.70
 	sfx_loop 5
-	sfx_1 246
-	sfx_0 0, 20
-	sfx_0 0, 20
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 36
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
-	sfx_0 0, 51
-	sfx_0 0, 52
+	sfx_env 15, 6
+	sfx_freq 64.63
+	sfx_freq 64.63
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.15
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
+	sfx_freq 65.63
+	sfx_freq 65.67
 	sfx_endloop
-	sfx_1 134
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_1 70
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 66
-	sfx_0 0, 65
-	sfx_0 0, 65
+	sfx_env 8, 6
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_env 4, 6
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.13
+	sfx_freq 66.10
+	sfx_freq 66.10
 	sfx_loop 16
-	sfx_1 255
-	sfx_0 0, 82
-	sfx_0 0, 84
-	sfx_0 0, 83
+	sfx_env 15, -7
+	sfx_freq 66.67
+	sfx_freq 66.74
+	sfx_freq 66.70
 	sfx_endloop
-	sfx_1 143
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_1 79
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_1 47
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
-	sfx_1 31
-	sfx_0 0, 84
-	sfx_0 0, 83
-	sfx_0 0, 85
+	sfx_env 8, -7
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_env 4, -7
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_env 2, -7
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
+	sfx_env 1, -7
+	sfx_freq 66.74
+	sfx_freq 66.70
+	sfx_freq 66.77
 	sfx_end

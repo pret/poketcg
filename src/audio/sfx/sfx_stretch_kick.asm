@@ -1,34 +1,34 @@
 Sfx_StretchKick_Ch1:
-	sfx_1 255
-	sfx_8 17
-	sfx_2 8
-	sfx_0 6, 11
-	sfx_0 6, 66
-	sfx_0 6, 114
-	sfx_0 6, 137
-	sfx_0 6, 178
-	sfx_0 6, 214
-	sfx_0 6, 246
-	sfx_0 7, 5
-	sfx_0 7, 33
-	sfx_0 7, 57
-	sfx_0 7, 68
-	sfx_0 7, 89
-	sfx_0 7, 107
-	sfx_1 255
-	sfx_8 17
-	sfx_2 8
-	sfx_0 7, 123
-	sfx_1 143
-	sfx_8 17
-	sfx_2 8
-	sfx_0 7, 131
-	sfx_1 79
-	sfx_8 17
-	sfx_2 8
-	sfx_0 7, 144
-	sfx_1 31
-	sfx_8 17
-	sfx_2 8
-	sfx_0 7, 157
+	sfx_env 15, -7
+	sfx_pan %00010001
+	sfx_duty 2
+	sfx_freq 261.62
+	sfx_freq 293.88
+	sfx_freq 329.33
+	sfx_freq 349.53
+	sfx_freq 392.43
+	sfx_freq 439.84
+	sfx_freq 492.75
+	sfx_freq 522.20
+	sfx_freq 587.77
+	sfx_freq 658.65
+	sfx_freq 697.19
+	sfx_freq 784.86
+	sfx_freq 879.68
+	sfx_env 15, -7
+	sfx_pan %00010001
+	sfx_duty 2
+	sfx_freq 985.50
+	sfx_env 8, -7
+	sfx_pan %00010001
+	sfx_duty 2
+	sfx_freq 1048.58
+	sfx_env 4, -7
+	sfx_pan %00010001
+	sfx_duty 2
+	sfx_freq 1170.29
+	sfx_env 1, -7
+	sfx_pan %00010001
+	sfx_duty 2
+	sfx_freq 1323.96
 	sfx_end
