@@ -151,9 +151,8 @@ ENDM
 
 ; \1 = frequency value in Hz
 MACRO sfx_freq
-DEF x = $800 - DIV($20000, \1)
-ASSERT x < $800
-	db HIGH(x), LOW(x)
+ASSERT \1 < $800
+	db HIGH(\1), LOW(\1)
 ENDM
 
 MACRO sfx_env
