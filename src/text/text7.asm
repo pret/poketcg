@@ -94,20 +94,22 @@ Text05e2:
 	done
 
 Text05e3:
-	text "Oh! Why the rush, <RAMNAME>?"
-	line "What? "
-	line "You want to learn how to play"
-	line "the Pokémon Trading Card Game?"
-	line "So you, too, finally want to "
-	line "start playing the card game. "
-	line "Well, dueling is more fun than "
-	line "just collecting cards!"
-	line "First, you should try playing "
-	line "with a Practice Deck. "
-	line "Here, I'll give you this Deck. "
-	line "And now you need an opponent..."
-	line "Hey, Sam!"
-	line "Play with him for a while!"
+	text "Hey, <RAMNAME>!"
+	line "Choose your starter deck!"
+;	text "Oh! Why the rush, <RAMNAME>?"
+;	line "What? "
+;	line "You want to learn how to play"
+;	line "the Pokémon Trading Card Game?"
+;	line "So you, too, finally want to "
+;	line "start playing the card game. "
+;	line "Well, dueling is more fun than "
+;	line "just collecting cards!"
+;	line "First, you should try playing "
+;	line "with a Practice Deck. "
+;	line "Here, I'll give you this Deck. "
+;	line "And now you need an opponent..."
+;	line "Hey, Sam!"
+;	line "Play with him for a while!"
 	done
 
 Text05e4:
@@ -225,12 +227,14 @@ Text05f5:
 	done
 
 Text05f6:
-	text "You should duel with many different "
-	line "people. Why don't you go to one of "
-	line "the Card Clubs. There are many "
-	line "people playing at the Clubs."
-	line "Collect new cards and try "
-	line "building a new Deck!"
+	text "Here is the deck!"
+	line "Good luck!"
+;	text "You should duel with many different "
+;	line "people. Why don't you go to one of "
+;	line "the Card Clubs. There are many "
+;	line "people playing at the Clubs."
+;	line "Collect new cards and try "
+;	line "building a new Deck!"
 	done
 
 Text05f7:

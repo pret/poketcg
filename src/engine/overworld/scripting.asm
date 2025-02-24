@@ -2017,6 +2017,13 @@ LoadOverworld:
 	get_event_value EVENT_MASON_LAB_STATE
 	or a
 	ret nz
+; Options settings
+	ld a, 1
+	ld [sAnimationsDisabled], a
+	ld [sSkipDelayAllowed], a
+	xor a
+	ld [sTextSpeed], a
+	ld [wTextSpeed], a
 	ld bc, Script_BeginGame
 	jp SetNextScript
 

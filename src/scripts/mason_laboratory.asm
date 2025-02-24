@@ -2,7 +2,11 @@ Script_BeginGame:
 	start_script
 	do_frames 60
 	walk_player_to_mason_lab
-	do_frames 120
+	do_frames 60 ;half of the vanilla value
+; Activate fighting pupils
+	set_event EVENT_PUPIL_MICHAEL_STATE, PUPIL_ACTIVE
+	set_event EVENT_PUPIL_CHRIS_STATE, PUPIL_ACTIVE
+	set_event EVENT_PUPIL_JESSICA_STATE, PUPIL_ACTIVE
 	enter_map $02, MASON_LABORATORY, 14, 26, NORTH
 	quit_script_fully
 
@@ -210,7 +214,7 @@ Script_Sam:
 Script_BeatSam:
 	start_script
 ;	jump_if_event_equal EVENT_MASON_LAB_STATE, MASON_LAB_IN_PRACTICE_DUEL, Script_EnterLabFirstTime.ows_d82d
-	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_PRACTICE_DUEL, Script_LostToSam.ows_d6ad
+;	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_PRACTICE_DUEL, Script_LostToSam.ows_d6ad
 	print_npc_text Text05d1
 	give_booster_packs BOOSTER_ENERGY_RANDOM, NO_BOOSTER, NO_BOOSTER
 	print_text_quit_fully Text05d2
@@ -218,11 +222,11 @@ Script_BeatSam:
 Script_LostToSam:
 	start_script
 ;	jump_if_event_equal EVENT_MASON_LAB_STATE, MASON_LAB_IN_PRACTICE_DUEL, Script_EnterLabFirstTime.ows_d82d
-	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_PRACTICE_DUEL, .ows_d6ad
+;	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_PRACTICE_DUEL, .ows_d6ad
 	print_text_quit_fully Text05d3
 
-.ows_d6ad
-	print_text_quit_fully Text05d4
+;.ows_d6ad
+;	print_text_quit_fully Text05d4
 
 .ows_d6b0
 	print_npc_text Text05d5
@@ -449,17 +453,20 @@ Script_EnterLabFirstTime:
 .ows_d85f
 	choose_starter_deck
 	close_text_box
-	ask_question_jump Text05f3, .ows_d869
+; Skips extra dialogue after deck selection
+	ask_question_jump Text05f3, .ows_d875
+;	ask_question_jump Text05f3, .ows_d869
 	script_jump .ows_d85f
 
-.ows_d869
-	print_npc_text Text05f4
-	close_text_box
-	pause_song
-	play_song MUSIC_BOOSTER_PACK
-	print_text Text05f5
-	wait_for_song_to_finish
-	resume_song
+;.ows_d869
+;	print_npc_text Text05f4
+;	close_text_box
+;	pause_song
+;	play_song MUSIC_BOOSTER_PACK
+;	print_text Text05f5
+;	wait_for_song_to_finish
+;	resume_song
+.ows_d875 ;AP addition: skipped post-deck-selection text
 	close_text_box
 	set_event EVENT_MASON_LAB_STATE, MASON_LAB_RECEIVED_STARTER_DECK
 	give_stater_deck
