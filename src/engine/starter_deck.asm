@@ -51,9 +51,9 @@ _AddStarterDeck:
 	dec c
 	jr nz, .loop_extra_cards
 ; Add 80 of each energy to collection
-	ld hl, a101 ;sCardCollection, grass energy slot
+	ld hl, $a101 ;sCardCollection, grass energy slot
 .energy_loop
-	ld (hl), 80 ;add 80 of current energy
+	ld [hl], 80 ;add 80 of current energy
 	inc l
 	ld a, l
 	cp 7 ;loops through all 7 basic energies
