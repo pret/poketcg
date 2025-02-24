@@ -143,15 +143,15 @@ Script_Tech5:
 	quit_script_fully
 
 Preload_Sam:
-	get_event_value EVENT_MASON_LAB_STATE
-	cp MASON_LAB_IN_PRACTICE_DUEL
-	jr nc, .sam_at_table
-	ld a, $0a
-	ld [wLoadNPCXPos], a
-	ld a, $08
-	ld [wLoadNPCYPos], a
-	ld a, SOUTH
-	ld [wLoadNPCDirection], a
+;	get_event_value EVENT_MASON_LAB_STATE
+;	cp MASON_LAB_IN_PRACTICE_DUEL
+;	jr nc, .sam_at_table
+;	ld a, $0a
+;	ld [wLoadNPCXPos], a
+;	ld a, $08
+;	ld [wLoadNPCYPos], a
+;	ld a, SOUTH
+;	ld [wLoadNPCDirection], a
 .sam_at_table
 	scf
 	ret
@@ -324,127 +324,128 @@ Script_EnterLabFirstTime:
 	move_player NORTH, 2
 	move_player NORTH, 2
 	print_npc_text Text05e3
-	close_advanced_text_box
-	set_next_npc_and_script NPC_SAM, .ows_d779
-	end_script
-	ret
+; Skip tutorial - go straight to deck selection
+	script_jump .ows_d85f
+;	set_next_npc_and_script NPC_SAM, .ows_d779
+;	end_script
+;	ret
 
-.ows_d779
-	start_script
-	move_active_npc NPCMovement_d880
-	print_npc_text Text05e4
-	set_dialog_npc NPC_DRMASON
-	print_npc_text Text05e5
-	close_text_box
-	move_active_npc NPCMovement_d882
-	set_active_npc_direction EAST
-	set_player_direction WEST
-	close_advanced_text_box
-	set_next_npc_and_script NPC_DRMASON, .ows_d794
-	end_script
-	ret
+;.ows_d779
+;	start_script
+;	move_active_npc NPCMovement_d880
+;	print_npc_text Text05e4
+;	set_dialog_npc NPC_DRMASON
+;	print_npc_text Text05e5
+;	close_text_box
+;	move_active_npc NPCMovement_d882
+;	set_active_npc_direction EAST
+;	set_player_direction WEST
+;	close_advanced_text_box
+;	set_next_npc_and_script NPC_DRMASON, .ows_d794
+;	end_script
+;	ret
 
-.ows_d794
-	start_script
-	move_active_npc NPCMovement_d88b
-	do_frames 40
-	print_npc_text Text05e6
-	close_text_box
-	move_player WEST, 1
-	move_player WEST, 1
-	set_player_direction SOUTH
-	move_player SOUTH, 1
-	move_player SOUTH, 1
-	move_player SOUTH, 1
-	set_player_direction WEST
-	move_active_npc NPCMovement_d894
-	print_npc_text Text05e7
-	set_dialog_npc NPC_SAM
-	print_npc_text Text05e8
-.ows_d7bc
-	close_text_box
-	show_sam_rules_multichoice
-	close_text_box
-	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_NOTHING_TO_ASK, .ows_d80c
-	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_ATTACKING, .ows_d7e8
-	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_RETREATING, .ows_d7ee
-	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_EVOLVING, .ows_d7f4
-	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_POKEMON_POWER, .ows_d7fa
-	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_ENDING_YOUR_TURN, .ows_d800
-	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_WIN_OR_LOSS, .ows_d806
+;.ows_d794
+;	start_script
+;	move_active_npc NPCMovement_d88b
+;	do_frames 40
+;	print_npc_text Text05e6
+;	close_text_box
+;	move_player WEST, 1
+;	move_player WEST, 1
+;	set_player_direction SOUTH
+;	move_player SOUTH, 1
+;	move_player SOUTH, 1
+;	move_player SOUTH, 1
+;	set_player_direction WEST
+;	move_active_npc NPCMovement_d894
+;	print_npc_text Text05e7
+;	set_dialog_npc NPC_SAM
+;	print_npc_text Text05e8
+;.ows_d7bc
+;	close_text_box
+;	show_sam_rules_multichoice
+;	close_text_box
+;	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_NOTHING_TO_ASK, .ows_d80c
+;	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_ATTACKING, .ows_d7e8
+;	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_RETREATING, .ows_d7ee
+;	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_EVOLVING, .ows_d7f4
+;	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_POKEMON_POWER, .ows_d7fa
+;	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_ENDING_YOUR_TURN, .ows_d800
+;	jump_if_event_equal EVENT_SAM_MENU_CHOICE, SAM_MENU_WIN_OR_LOSS, .ows_d806
 ; SAM_MENU_ENERGY
-	print_npc_text Text05d6
-	script_jump .ows_d7bc
+;	print_npc_text Text05d6
+;	script_jump .ows_d7bc
 
-.ows_d7e8
-	print_npc_text Text05d7
-	script_jump .ows_d7bc
+;.ows_d7e8
+;	print_npc_text Text05d7
+;	script_jump .ows_d7bc
+;
+;.ows_d7ee
+;	print_npc_text Text05d8
+;	script_jump .ows_d7bc
+;
+;.ows_d7f4
+;	print_npc_text Text05d9
+;	script_jump .ows_d7bc
+;
+;.ows_d7fa
+;	print_npc_text Text05da
+;	script_jump .ows_d7bc
+;
+;.ows_d800
+;	print_npc_text Text05db
+;	script_jump .ows_d7bc
+;
+;.ows_d806
+;	print_npc_text Text05dc
+;	script_jump .ows_d7bc
+;
+;.ows_d80c
+;	print_npc_text Text05e9
+;	ask_question_jump_default_yes NULL, .ows_d817
+;	script_jump .ows_d7bc
+;
+;.ows_d817
+;	set_dialog_npc NPC_DRMASON
+;	print_npc_text Text05ea
+;	script_nop
+;	set_event EVENT_MASON_LAB_STATE, MASON_LAB_IN_PRACTICE_DUEL
+;	close_advanced_text_box
+;	set_next_npc_and_script NPC_SAM, .ows_d827
+;	end_script
+;	ret
+;
+;.ows_d827
+;	start_script
+;	start_duel PRIZES_2, SAMS_PRACTICE_DECK_ID, MUSIC_DUEL_THEME_1
+;	quit_script_fully
 
-.ows_d7ee
-	print_npc_text Text05d8
-	script_jump .ows_d7bc
+;.ows_d82d
+;	close_advanced_text_box
+;	set_next_npc_and_script NPC_DRMASON, Script_AfterPracticeDuel
+;	end_script
+;	ret
 
-.ows_d7f4
-	print_npc_text Text05d9
-	script_jump .ows_d7bc
-
-.ows_d7fa
-	print_npc_text Text05da
-	script_jump .ows_d7bc
-
-.ows_d800
-	print_npc_text Text05db
-	script_jump .ows_d7bc
-
-.ows_d806
-	print_npc_text Text05dc
-	script_jump .ows_d7bc
-
-.ows_d80c
-	print_npc_text Text05e9
-	ask_question_jump_default_yes NULL, .ows_d817
-	script_jump .ows_d7bc
-
-.ows_d817
-	set_dialog_npc NPC_DRMASON
-	print_npc_text Text05ea
-	script_nop
-	set_event EVENT_MASON_LAB_STATE, MASON_LAB_IN_PRACTICE_DUEL
-	close_advanced_text_box
-	set_next_npc_and_script NPC_SAM, .ows_d827
-	end_script
-	ret
-
-.ows_d827
-	start_script
-	start_duel PRIZES_2, SAMS_PRACTICE_DECK_ID, MUSIC_DUEL_THEME_1
-	quit_script_fully
-
-.ows_d82d
-	close_advanced_text_box
-	set_next_npc_and_script NPC_DRMASON, Script_AfterPracticeDuel
-	end_script
-	ret
-
-Script_AfterPracticeDuel:
-	start_script
-	print_npc_text Text05eb
-	print_npc_text Text05ef
-	close_text_box
-	move_active_npc NPCMovement_d896
-	set_player_direction NORTH
-	move_player NORTH, 1
-	move_player NORTH, 1
-	move_player NORTH, 1
-	set_player_direction EAST
-	move_player EAST, 1
-	move_player EAST, 1
-	set_player_direction NORTH
-	print_npc_text Text05f0
-	close_text_box
-	print_text Text05f1
-	close_text_box
-	print_npc_text Text05f2
+;Script_AfterPracticeDuel:
+;	start_script
+;	print_npc_text Text05eb
+;	print_npc_text Text05ef
+;	close_text_box
+;	move_active_npc NPCMovement_d896
+;	set_player_direction NORTH
+;	move_player NORTH, 1
+;	move_player NORTH, 1
+;	move_player NORTH, 1
+;	set_player_direction EAST
+;	move_player EAST, 1
+;	move_player EAST, 1
+;	set_player_direction NORTH
+;	print_npc_text Text05f0
+;	close_text_box
+;	print_text Text05f1
+;	close_text_box
+;	print_npc_text Text05f2
 .ows_d85f
 	choose_starter_deck
 	close_text_box
