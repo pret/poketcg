@@ -1,6 +1,6 @@
 Sfx_Denied_Ch1:
 	sfx_env 15, 0
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $4e5
 	sfx_freq $4e5

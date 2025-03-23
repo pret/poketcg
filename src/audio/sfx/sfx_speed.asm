@@ -1,5 +1,5 @@
 Sfx_Speed_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_loop 2
 	sfx_env 1, -7
 	sfx_freq $21

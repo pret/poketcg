@@ -1,5 +1,5 @@
 Sfx_Blizzard_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 6, -7
 	sfx_loop 80
 	sfx_freq $70

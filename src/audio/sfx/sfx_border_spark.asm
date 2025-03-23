@@ -1,5 +1,5 @@
 Sfx_BorderSpark_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 6, 1
 	sfx_loop 2
 	sfx_freq $f

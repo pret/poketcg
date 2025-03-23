@@ -5,7 +5,7 @@ Sfx_Firegiver_Ch1:
 	sfx_pitch_offset -1
 	sfx_env 0, 1
 	sfx_env 14, 4
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $60b
 	sfx_pitch_offset 0
@@ -29,7 +29,7 @@ Sfx_Firegiver_Ch1:
 	sfx_freq $6f6
 	sfx_wait 1
 	sfx_env 6, 4
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $705
 	sfx_wait 1
@@ -52,7 +52,7 @@ Sfx_Firegiver_Ch1:
 	sfx_freq $77b
 	sfx_wait 1
 	sfx_env 3, 4
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $783
 	sfx_wait 1
@@ -81,7 +81,7 @@ Sfx_Firegiver_Ch1:
 	sfx_env 3, 4
 	sfx_loop 6
 	sfx_env 14, 4
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $705
 	sfx_env 0, 0
@@ -125,7 +125,7 @@ Sfx_Firegiver_Ch1:
 Sfx_Firegiver_Ch2:
 	sfx_loop 65
 	sfx_env 7, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_freq $52
 	sfx_freq $54
 	sfx_freq $53

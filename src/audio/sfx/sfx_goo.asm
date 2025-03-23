@@ -1,6 +1,6 @@
 Sfx_Goo_Ch1:
 	sfx_env 15, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $77b
 	sfx_env 0, 0
@@ -77,7 +77,7 @@ Sfx_Goo_Ch1:
 	sfx_end
 
 Sfx_Goo_Ch2:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 13, -7
 	sfx_env 0, 0
 	sfx_pitch_offset 0

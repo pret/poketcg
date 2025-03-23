@@ -1,5 +1,5 @@
 Sfx_Needles_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_loop 3
 	sfx_env 7, -7

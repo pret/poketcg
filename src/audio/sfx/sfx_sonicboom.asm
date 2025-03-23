@@ -1,5 +1,5 @@
 Sfx_Sonicboom_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 13, -7
 	sfx_freq $24
 	sfx_freq $24

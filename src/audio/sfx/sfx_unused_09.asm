@@ -1,5 +1,5 @@
 Sfx_Unused09_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 14, 0
 	sfx_freq $41
 	sfx_freq $41

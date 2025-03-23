@@ -1,5 +1,5 @@
 Sfx_PokemonDomeDoors_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 14, 1
 	sfx_freq $52
 	sfx_freq $54

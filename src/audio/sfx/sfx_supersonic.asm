@@ -1,5 +1,5 @@
 Sfx_Supersonic_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_loop 20
 	sfx_env 12, 1
 	sfx_freq $f

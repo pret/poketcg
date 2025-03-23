@@ -1,5 +1,5 @@
 Sfx_BigHit_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 15, 1
 	sfx_freq $2d
 	sfx_freq $4d

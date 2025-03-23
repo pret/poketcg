@@ -1,5 +1,5 @@
 Sfx_WhiteGas_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 2, -7
 	sfx_freq $8
 	sfx_freq $8

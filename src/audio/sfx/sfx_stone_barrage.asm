@@ -1,5 +1,5 @@
 Sfx_StoneBarrage_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 13, -7
 	sfx_loop 4
 	sfx_freq $50

@@ -1,6 +1,6 @@
 Sfx_Bonemerang_Ch1:
 	sfx_env 8, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_freq $790
@@ -16,23 +16,23 @@ Sfx_Bonemerang_Ch1:
 	sfx_freq $7d6
 	sfx_freq $7db
 	sfx_env 6, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $7df
 	sfx_env 4, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_env 2, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $790
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $79d
 	sfx_env 6, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_freq $790
@@ -48,23 +48,23 @@ Sfx_Bonemerang_Ch1:
 	sfx_freq $7d6
 	sfx_freq $7db
 	sfx_env 5, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $7df
 	sfx_env 4, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_env 2, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $790
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $79d
 	sfx_env 4, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_freq $790
@@ -80,23 +80,23 @@ Sfx_Bonemerang_Ch1:
 	sfx_freq $7d6
 	sfx_freq $7db
 	sfx_env 3, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $7df
 	sfx_env 2, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $790
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $79d
 	sfx_env 3, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_freq $790
@@ -112,23 +112,23 @@ Sfx_Bonemerang_Ch1:
 	sfx_freq $7d6
 	sfx_freq $7db
 	sfx_env 3, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $7df
 	sfx_env 2, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_env 2, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $790
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $79d
 	sfx_env 3, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_freq $790
@@ -144,23 +144,23 @@ Sfx_Bonemerang_Ch1:
 	sfx_freq $7d6
 	sfx_freq $7db
 	sfx_env 3, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $7df
 	sfx_env 3, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_env 2, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $790
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $79d
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_freq $790
@@ -176,25 +176,25 @@ Sfx_Bonemerang_Ch1:
 	sfx_freq $7d6
 	sfx_freq $7db
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $7df
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $790
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $79d
 	sfx_end
 
 Sfx_Bonemerang_Ch2:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 13, -7
 	sfx_env 0, 0
 	sfx_pitch_offset 0

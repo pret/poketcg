@@ -1,6 +1,6 @@
 Sfx_IntroOrbTitle_Ch1:
 	sfx_env 12, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $416
 	sfx_freq $60b
@@ -67,20 +67,20 @@ Sfx_IntroOrbTitle_Ch1:
 	sfx_pitch_offset -1
 	sfx_env 2, -7
 	sfx_env 12, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $6f6
 	sfx_freq $77b
 	sfx_freq $7be
 	sfx_freq $7db
 	sfx_env 8, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_loop 10
 	sfx_freq $7db
 	sfx_endloop
 	sfx_env 6, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_loop 10
 	sfx_freq $7db

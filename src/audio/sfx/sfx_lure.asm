@@ -1,5 +1,5 @@
 Sfx_Lure_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 15, -7
 	sfx_duty 0
 	sfx_env 0, 0
@@ -14,7 +14,7 @@ Sfx_Lure_Ch1:
 	sfx_freq $7db
 	sfx_wait 1
 	sfx_endloop
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 8, -7
 	sfx_duty 0
 	sfx_loop 4
@@ -23,7 +23,7 @@ Sfx_Lure_Ch1:
 	sfx_freq $7db
 	sfx_wait 1
 	sfx_endloop
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 4, -7
 	sfx_duty 0
 	sfx_loop 4
@@ -32,7 +32,7 @@ Sfx_Lure_Ch1:
 	sfx_freq $7db
 	sfx_wait 1
 	sfx_endloop
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 1, -7
 	sfx_duty 0
 	sfx_loop 4

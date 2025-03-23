@@ -1,5 +1,5 @@
 Sfx_FurySwipes_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 13, 6
 	sfx_freq $24
 	sfx_freq $24

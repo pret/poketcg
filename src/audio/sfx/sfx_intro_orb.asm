@@ -1,6 +1,6 @@
 Sfx_IntroOrb_Ch1:
 	sfx_env 12, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $7df
 	sfx_freq $7be

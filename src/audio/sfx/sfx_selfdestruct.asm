@@ -1,5 +1,5 @@
 Sfx_Selfdestruct_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 12, -7
 	sfx_freq $71
 	sfx_freq $71

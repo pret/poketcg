@@ -1,6 +1,6 @@
 Sfx_PokemonEvolution_Ch1:
 	sfx_env 12, 4
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $416
 	sfx_pitch_offset 0

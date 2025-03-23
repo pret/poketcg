@@ -1,5 +1,5 @@
 Sfx_Lightning_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 15, 0
 	sfx_freq $62
 	sfx_freq $60

@@ -1,5 +1,5 @@
 Sfx_StringShot_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 9, -7
 	sfx_duty 0
 	sfx_freq $7ce
@@ -50,7 +50,7 @@ Sfx_StringShot_Ch1:
 	sfx_wait 22
 	sfx_pitch_offset -1
 	sfx_env 9, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 9, -7
 	sfx_duty 0
 	sfx_freq $7ce
@@ -99,7 +99,7 @@ Sfx_StringShot_Ch1:
 	sfx_end
 
 Sfx_StringShot_Ch2:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_loop 2
 	sfx_env 12, -7
 	sfx_freq $5

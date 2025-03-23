@@ -189,7 +189,8 @@ MACRO sfx_wave
 ENDM
 
 MACRO sfx_pan
-	db $80, \1
+	db $80
+	dn !!\1, !!\2
 ENDM
 
 MACRO sfx_end

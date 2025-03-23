@@ -1,5 +1,5 @@
 Sfx_HydroPump_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 15, 6
 	sfx_freq $84
 	sfx_freq $81

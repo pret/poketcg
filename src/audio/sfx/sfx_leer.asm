@@ -1,6 +1,6 @@
 Sfx_Leer_Ch1:
 	sfx_env 15, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $416
 	sfx_freq $44e
@@ -30,7 +30,7 @@ Sfx_Leer_Ch1:
 	sfx_freq $511
 	sfx_freq $4e5
 	sfx_env 8, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $511
 	sfx_freq $53c
@@ -44,7 +44,7 @@ Sfx_Leer_Ch1:
 	sfx_freq $53c
 	sfx_freq $511
 	sfx_env 4, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $563
 	sfx_freq $589
@@ -52,7 +52,7 @@ Sfx_Leer_Ch1:
 	sfx_freq $5cd
 	sfx_freq $5ed
 	sfx_env 2, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 0
 	sfx_freq $60b
 	sfx_freq $6f6

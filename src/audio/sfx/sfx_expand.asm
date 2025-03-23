@@ -1,6 +1,6 @@
 Sfx_Expand_Ch1:
 	sfx_env 14, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_env 0, 0
@@ -129,7 +129,7 @@ Sfx_Expand_Ch1:
 	sfx_pitch_offset -1
 	sfx_env 14, -7
 	sfx_env 14, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $60b
 	sfx_freq $628
@@ -139,7 +139,7 @@ Sfx_Expand_Ch1:
 	sfx_freq $721
 	sfx_freq $72d
 	sfx_env 8, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $739
 	sfx_pitch_offset 0
@@ -147,56 +147,56 @@ Sfx_Expand_Ch1:
 	sfx_freq $744
 	sfx_wait 1
 	sfx_env 8, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $74f
 	sfx_wait 1
 	sfx_freq $759
 	sfx_wait 1
 	sfx_env 7, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $762
 	sfx_wait 1
 	sfx_freq $76b
 	sfx_wait 1
 	sfx_env 6, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $76b
 	sfx_wait 1
 	sfx_freq $773
 	sfx_wait 1
 	sfx_env 5, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $77b
 	sfx_wait 1
 	sfx_freq $783
 	sfx_wait 1
 	sfx_env 4, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $783
 	sfx_wait 1
 	sfx_freq $78a
 	sfx_wait 1
 	sfx_env 3, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $790
 	sfx_wait 1
 	sfx_freq $797
 	sfx_wait 1
 	sfx_env 2, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $79d
 	sfx_wait 1
 	sfx_freq $7a2
 	sfx_wait 1
 	sfx_env 1, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_duty 2
 	sfx_freq $7a7
 	sfx_wait 1

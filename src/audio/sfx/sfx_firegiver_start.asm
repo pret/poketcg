@@ -1,7 +1,7 @@
 Sfx_FiregiverStart_Ch1:
 	sfx_loop 30
 	sfx_env 11, -7
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_freq $52
 	sfx_freq $54
 	sfx_freq $53

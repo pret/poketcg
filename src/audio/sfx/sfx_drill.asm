@@ -1,5 +1,5 @@
 Sfx_Drill_Ch1:
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_loop 8
 	sfx_env 8, 1
 	sfx_freq $52

@@ -1,6 +1,6 @@
 Sfx_Unused0d_Ch1:
 	sfx_loop 5
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 9, -7
 	sfx_duty 2
 	sfx_freq $416
@@ -18,7 +18,7 @@ Sfx_Unused0d_Ch1:
 	sfx_wait 1
 	sfx_freq $5ac
 	sfx_wait 1
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 9, -7
 	sfx_duty 2
 	sfx_freq $60b
@@ -28,7 +28,7 @@ Sfx_Unused0d_Ch1:
 	sfx_freq $6b2
 	sfx_freq $6c4
 	sfx_freq $6d6
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 9, -7
 	sfx_duty 1
 	sfx_freq $705
@@ -38,7 +38,7 @@ Sfx_Unused0d_Ch1:
 	sfx_freq $759
 	sfx_freq $762
 	sfx_freq $76b
-	sfx_pan %00010001
+	sfx_pan TRUE, TRUE
 	sfx_env 9, -7
 	sfx_duty 0
 	sfx_freq $783
