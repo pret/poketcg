@@ -473,6 +473,7 @@ ApplyAndAnimateHPRecovery:
 	ld a, ATK_ANIM_HEAL
 	ld [wLoadedAttackAnimation], a
 	lb bc, PLAY_AREA_ARENA, $1 ; arrow
+	; bug, h needs to be set to hWhoseTurn
 	bank1call PlayAttackAnimation
 
 ; compare HP to be restored with max HP
@@ -2693,7 +2694,7 @@ SolarPower_CheckUse:
 SolarPower_RemoveStatusEffect:
 	ld a, ATK_ANIM_HEAL_BOTH_SIDES
 	ld [wLoadedAttackAnimation], a
-	bank1call Func_7415
+	bank1call ResetAttackAnimationIsPlaying
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld b, a
 	ld c, $00
@@ -11134,7 +11135,7 @@ GustOfWind_SwitchEffect:
 ;	a = attack animation to play
 PlayTrainerEffectAnimation:
 	ld [wLoadedAttackAnimation], a
-	bank1call Func_7415
+	bank1call ResetAttackAnimationIsPlaying
 	lb bc, PLAY_AREA_ARENA, $0
 	ldh a, [hWhoseTurn]
 	ld h, a
@@ -11154,7 +11155,7 @@ HealPlayAreaCardHP:
 
 ; play heal animation
 	push de
-	bank1call Func_7415
+	bank1call ResetAttackAnimationIsPlaying
 	ld a, ATK_ANIM_HEALING_WIND_PLAY_AREA
 	ld [wLoadedAttackAnimation], a
 	ldh a, [hTempPlayAreaLocation_ff9d]

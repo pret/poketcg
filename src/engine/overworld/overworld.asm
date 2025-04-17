@@ -822,10 +822,10 @@ Func_c58b:
 	pop af
 	ld a, [hl]
 	jr z, .asm_c5a7
-	or $80
+	or SPRITE_ANIM_FLAG_UNSKIPPABLE
 	jr .asm_c5a9
 .asm_c5a7
-	and $7f
+	and $ff ^ SPRITE_ANIM_FLAG_UNSKIPPABLE
 .asm_c5a9
 	ld [hl], a
 	pop hl
@@ -928,7 +928,7 @@ AttemptPlayerMovement:
 	ld [wd338], a
 	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
-	set 2, [hl]
+	set SPRITE_ANIM_FLAG_CENTERED_F, [hl]
 	ld c, SPRITE_ANIM_COUNTER
 	call GetSpriteAnimBufferProperty
 	ld a, $4
@@ -1058,7 +1058,7 @@ Func_c6f7:
 	ld [wWhichSprite], a
 	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
-	res 2, [hl]
+	res SPRITE_ANIM_FLAG_CENTERED_F, [hl]
 	ld c, SPRITE_ANIM_COUNTER
 	call GetSpriteAnimBufferProperty
 	ld a, $ff
