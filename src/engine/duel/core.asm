@@ -6720,7 +6720,7 @@ OppAction_UsePokemonPower:
 
 ; execute the EFFECTCMDTYPE_BEFORE_DAMAGE command of the used Pokemon Power
 OppAction_ExecutePokemonPowerEffect:
-	call Func_7415
+	call ResetAttackAnimationIsPlaying
 	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	ld a, $01
@@ -7102,7 +7102,7 @@ HandlePoisonDamage:
 	call GetTurnDuelistVariable
 	call SubtractHP
 	push hl
-	ld a, $8c
+	ld a, DUEL_ANIM_DAMAGE_HUD
 	call PlayBetweenTurnsAnimation
 	pop hl
 
@@ -8231,9 +8231,9 @@ SelectComputerOpponentData:
 	textitem  3, 14, SelectComputerOpponentText
 	db $ff
 
-Func_7415::
-	xor a
-	ld [wce7e], a
+ResetAttackAnimationIsPlaying::
+	xor a ; FALSE
+	ld [wAttackAnimationIsPlaying], a
 	ret
 
 ; plays all animations that are queued in wStatusConditionQueue
@@ -8328,6 +8328,7 @@ WaitAttackAnimation::
 ; - de: damage dealt by the attack (to display the animation with the number)
 ; - b: PLAY_AREA_* location, if applicable
 ; - c: a wDamageEffectiveness constant (to print WEAK or RESIST if necessary)
+; - h: which duelist side to play animation
 PlayAttackAnimation::
 	ldh a, [hWhoseTurn]
 	push af
@@ -8341,6 +8342,7 @@ PlayAttackAnimation::
 	ldh a, [hWhoseTurn]
 	cp h
 	jr z, .got_location
+	; on the non-turn duelist's side
 	set 7, b
 .got_location
 	ld a, b

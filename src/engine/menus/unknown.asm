@@ -50,7 +50,7 @@ Func_18661: ; unreferenced
 
 ; b button
 	ld a, -1
-	call Func_190fb
+	call $50fb ; non-existent routine, points to middle of SetScreenForDuelAnimation
 	scf
 	ret
 
@@ -58,7 +58,7 @@ Func_18661: ; unreferenced
 .a_button
 	call .draw_cursor
 	ld a, 1
-	call Func_190fb
+	call $50fb ; non-existent routine, points to middle of SetScreenForDuelAnimation
 	scf
 	ret
 

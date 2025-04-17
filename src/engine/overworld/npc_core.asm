@@ -373,10 +373,10 @@ HandleAllNPCMovement::
 	pop af
 	ld a, [hl]
 	jr z, .reset_flag
-	set SPRITE_ANIM_FLAG_UNSKIPPABLE, [hl]
+	set SPRITE_ANIM_FLAG_UNSKIPPABLE_F, [hl]
 	jr .done
 .reset_flag
-	res SPRITE_ANIM_FLAG_UNSKIPPABLE, [hl]
+	res SPRITE_ANIM_FLAG_UNSKIPPABLE_F, [hl]
 .done
 	pop bc
 	pop hl

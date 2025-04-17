@@ -740,6 +740,7 @@ wAIMinDamage:: ; ccbb
 wAIMaxDamage:: ; ccbc
 	ds $1
 
+; only written, never read
 wccbd:: ; ccbd
 	ds $2
 
@@ -1542,7 +1543,7 @@ wTempPokemonID_ce7c:: ; ce7c
 
 	ds $1
 
-wce7e:: ; ce7e
+wAttackAnimationIsPlaying:: ; ce7e
 	ds $1
 
 wDamageAnimAmount:: ; ce7f
@@ -2524,7 +2525,7 @@ wd420:: ; d420
 	ds $1
 
 ; store settings for animation enabled/disabled
-; 0 means enabled, 1 means disabled
+; FALSE means enabled, TRUE means disabled
 wAnimationsDisabled:: ; d421
 	ds $1
 

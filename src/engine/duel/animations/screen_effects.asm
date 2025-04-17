@@ -12,7 +12,7 @@ InitScreenAnimation:
 	add a
 	ld c, a
 	ld b, $00
-	ld hl, Data_1cc9f
+	ld hl, ScreenAnimationFunctions
 	add hl, bc
 	ld a, [hli]
 	ld [wScreenAnimUpdatePtr], a
@@ -39,7 +39,7 @@ MACRO screen_effect
 	db $00 ; padding
 ENDM
 
-Data_1cc9f:
+ScreenAnimationFunctions:
 ; function pointer, duration
 	screen_effect ShakeScreenX_Small, 24 ; DUEL_ANIM_SMALL_SHAKE_X
 	screen_effect ShakeScreenX_Big,   32 ; DUEL_ANIM_BIG_SHAKE_X
@@ -96,12 +96,12 @@ ShakeScreenX:
 	ld a, h
 	ld [wScreenShakeOffsetsPtr + 1], a
 	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.Update)
+	ld [hl], LOW(.UpdateFunc)
 	inc hl
-	ld [hl], HIGH(.Update)
+	ld [hl], HIGH(.UpdateFunc)
 	ret
 
-.Update
+.UpdateFunc:
 	call DecrementScreenAnimDuration
 	call UpdateShakeOffset
 	jp nc, LoadDefaultScreenAnimationUpdateWhenFinished
@@ -124,12 +124,12 @@ ShakeScreenY:
 	ld a, h
 	ld [wScreenShakeOffsetsPtr + 1], a
 	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.Update)
+	ld [hl], LOW(.UpdateFunc)
 	inc hl
-	ld [hl], HIGH(.Update)
+	ld [hl], HIGH(.UpdateFunc)
 	ret
 
-.Update
+.UpdateFunc:
 	call DecrementScreenAnimDuration
 	call UpdateShakeOffset
 	jp nc, LoadDefaultScreenAnimationUpdateWhenFinished
@@ -187,9 +187,9 @@ DecrementScreenAnimDuration:
 
 WhiteFlashScreen:
 	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.Update)
+	ld [hl], LOW(.UpdateFunc)
 	inc hl
-	ld [hl], HIGH(.Update)
+	ld [hl], HIGH(.UpdateFunc)
 	ld a, [wBGP]
 	ld [wTempWhiteFlashBGP], a
 	; backup the current background pals
@@ -205,7 +205,7 @@ WhiteFlashScreen:
 	call SetBGP
 	call FlushAllPalettes
 
-.Update
+.UpdateFunc:
 	call DecrementScreenAnimDuration
 	ld a, [wScreenAnimDuration]
 	or a
@@ -222,9 +222,9 @@ WhiteFlashScreen:
 
 DistortScreen:
 	ld hl, wScreenAnimUpdatePtr
-	ld [hl], LOW(.Update)
+	ld [hl], LOW(.UpdateFunc)
 	inc hl
-	ld [hl], HIGH(.Update)
+	ld [hl], HIGH(.UpdateFunc)
 	xor a
 	ld [wApplyBGScroll], a
 	ld hl, wLCDCFunctionTrampoline + 1
@@ -235,7 +235,7 @@ DistortScreen:
 	ld [wBGScrollMod], a
 	call EnableInt_LYCoincidence
 
-.Update
+.UpdateFunc:
 	ld a, [wScreenAnimDuration]
 	srl a
 	srl a
@@ -252,11 +252,11 @@ DistortScreen:
 
 ; each value is applied for 8 "ticks" of wScreenAnimDuration
 ; starting from the last and running backwards
-.BGScrollModData
+.BGScrollModData:
 	db 4, 3, 2, 1, 1, 1, 1, 2
 
 Func_1ce03:
-	cp DUEL_ANIM_158
+	cp DUEL_ANIM_158_UNUSED
 	jr z, .asm_1ce17
 	sub $96
 	add a
@@ -277,11 +277,11 @@ Func_1ce03:
 	jp Func_3bb5
 
 .pointer_table
-	dw Func_190f4         ; DUEL_ANIM_150
-	dw PrintDamageText    ; DUEL_ANIM_PRINT_DAMAGE
+	dw SetScreenForDuelAnimation ; DUEL_ANIM_SET_SCREEN
+	dw PrintDamageText    ; DUEL_ANIM_SHOW_DAMAGE
 	dw UpdateMainSceneHUD ; DUEL_ANIM_UPDATE_HUD
-	dw Func_191a3         ; DUEL_ANIM_153
-	dw Func_191a3         ; DUEL_ANIM_154
-	dw Func_191a3         ; DUEL_ANIM_155
-	dw Func_191a3         ; DUEL_ANIM_156
-	dw Func_191a3         ; DUEL_ANIM_157
+	dw DuelAnim153        ; DUEL_ANIM_153_UNUSED
+	dw DuelAnim154        ; DUEL_ANIM_154_UNUSED
+	dw DuelAnim155        ; DUEL_ANIM_155_UNUSED
+	dw DuelAnim156        ; DUEL_ANIM_156_UNUSED
+	dw DuelAnim157        ; DUEL_ANIM_157_UNUSED

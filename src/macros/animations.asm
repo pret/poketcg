@@ -1,0 +1,38 @@
+	const_def
+
+	const ANIMCMD_END ; $0
+MACRO anim_end
+	db ANIMCMD_END
+ENDM
+
+	const ANIMCMD_NORMAL ; $1
+MACRO anim_normal
+	db ANIMCMD_NORMAL, \1
+ENDM
+
+	const ANIMCMD_PLAYER_SIDE ; $2
+MACRO anim_player
+	db ANIMCMD_PLAYER_SIDE, \1
+ENDM
+
+	const ANIMCMD_OPP_SIDE ; $3
+MACRO anim_opponent
+	db ANIMCMD_OPP_SIDE, \1
+ENDM
+
+	const ANIMCMD_SET_SCREEN ; $4
+MACRO anim_screen
+	db ANIMCMD_SET_SCREEN, \1
+ENDM
+
+	const ANIMCMD_PLAY_AREA ; $5
+MACRO anim_play_area
+	db ANIMCMD_PLAY_AREA, \1
+ENDM
+
+	const ANIMCMD_END_UNUSED ; $6
+MACRO anim_end2
+	db ANIMCMD_END_UNUSED
+ENDM
+
+DEF NUM_ANIM_COMMANDS EQU const_value

@@ -1403,7 +1403,7 @@ ProcessPlayedPokemonCard::
 	ldtx hl, WillUseThePokemonPowerText
 	call DrawWideTextBox_WaitForInput
 	call ExchangeRNG
-	call Func_7415
+	call ResetAttackAnimationIsPlaying
 	ld a, EFFECTCMDTYPE_PKMN_POWER_TRIGGER
 	call TryExecuteEffectCommandFunction
 	ret
@@ -1542,7 +1542,7 @@ UseAttackOrPokemonPower::
 ;	fallthrough
 
 PlayAttackAnimation_DealAttackDamage::
-	call Func_7415
+	call ResetAttackAnimationIsPlaying
 	ld a, [wLoadedAttackCategory]
 	and RESIDUAL
 	jr nz, .deal_damage
@@ -1648,7 +1648,7 @@ HandleConfusionDamageToSelf::
 
 ; use Pokemon Power
 UsePokemonPower::
-	call Func_7415
+	call ResetAttackAnimationIsPlaying
 	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
 	call TryExecuteEffectCommandFunction
 	jr c, DisplayUsePokemonPowerScreen_WaitForInput
@@ -1822,7 +1822,7 @@ DealConfusionDamageToSelf::
 	push af
 	xor a
 	ld [wNoDamageOrEffect], a
-	bank1call Func_7415
+	bank1call ResetAttackAnimationIsPlaying
 	ld a, [wTempNonTurnDuelistCardID]
 	push af
 	ld a, [wTempTurnDuelistCardID]
