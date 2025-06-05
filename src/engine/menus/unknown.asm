@@ -50,7 +50,9 @@ Func_18661: ; unreferenced
 
 ; b button
 	ld a, -1
-	call Func_190fb
+	; bug, the following routine is in another bank,
+	; should use PlaySFXConfirmOrCancel_Bank6 instead
+	call PlaySFXConfirmOrCancel
 	scf
 	ret
 
@@ -58,7 +60,9 @@ Func_18661: ; unreferenced
 .a_button
 	call .draw_cursor
 	ld a, 1
-	call Func_190fb
+	; bug, the following routine is in another bank,
+	; should use PlaySFXConfirmOrCancel_Bank6 instead
+	call PlaySFXConfirmOrCancel
 	scf
 	ret
 

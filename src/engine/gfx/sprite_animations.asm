@@ -191,7 +191,7 @@ LoadSpriteDataForAnimationFrame:
 	ld bc, SPRITE_ANIM_FLAGS - SPRITE_ANIM_TILE_ID
 	add hl, bc
 	ld a, [hl]
-	and 1 << SPRITE_ANIM_FLAG_UNSKIPPABLE
+	and SPRITE_ANIM_FLAG_UNSKIPPABLE
 	jr nz, .quit
 	ld bc, SPRITE_ANIM_FRAME_BANK - SPRITE_ANIM_FLAGS
 	add hl, bc
@@ -208,7 +208,7 @@ LoadSpriteDataForAnimationFrame:
 	pop hl
 	ret
 
-; decrements the given sprite's movement counter (2x if SPRITE_ANIM_FLAG_SPEED is set)
+; decrements the given sprite's movement counter (2x if SPRITE_ANIM_FLAG_CENTERED_F is set)
 ; moves to the next animation frame if necessary
 TryHandleSpriteAnimationFrame:
 	push hl
@@ -218,10 +218,10 @@ TryHandleSpriteAnimationFrame:
 	ld d, 1
 	ld bc, SPRITE_ANIM_FLAGS
 	add hl, bc
-	bit SPRITE_ANIM_FLAG_SPEED, [hl]
-	jr z, .skipSpeedIncrease
+	bit SPRITE_ANIM_FLAG_CENTERED_F, [hl]
+	jr z, .got_decrement
 	inc d
-.skipSpeedIncrease
+.got_decrement
 	pop hl
 	ld bc, SPRITE_ANIM_COUNTER
 	add hl, bc
@@ -230,9 +230,9 @@ TryHandleSpriteAnimationFrame:
 	jr z, .exit
 	sub d
 	ld [hl], a
-	jr z, .doNextAnimationFrame
+	jr z, .next_animation_frame
 	jr nc, .exit
-.doNextAnimationFrame
+.next_animation_frame
 	ld bc, SPRITE_ANIM_ENABLED - SPRITE_ANIM_COUNTER
 	add hl, bc
 	call HandleAnimationFrame
@@ -324,7 +324,7 @@ HandleAnimationFrame:
 	push bc
 	push de
 	push hl
-.tryHandlingFrame
+.try_handle_frame
 	push hl
 	ld bc, SPRITE_ANIM_BANK
 	add hl, bc
@@ -352,7 +352,7 @@ HandleAnimationFrame:
 	inc de
 	ld a, [de]
 	call SetAnimationCounterAndLoop
-	jr c, .tryHandlingFrame
+	jr c, .try_handle_frame
 	inc de
 	ld bc, SPRITE_ANIM_COORD_X
 	add hl, bc
@@ -362,20 +362,20 @@ HandleAnimationFrame:
 	ld b, [hl]
 	pop hl
 	ld a, [de]
-	bit SPRITE_ANIM_FLAG_X_SUBTRACT, b
-	jr z, .addXOffset
+	bit SPRITE_ANIM_FLAG_X_INVERTED_F, b
+	jr z, .got_x_offset
 	cpl
 	inc a
-.addXOffset
+.got_x_offset
 	add [hl]
 	ld [hli], a
 	inc de
 	ld a, [de]
-	bit SPRITE_ANIM_FLAG_Y_SUBTRACT, b
-	jr z, .addYOffset
+	bit SPRITE_ANIM_FLAG_Y_INVERTED_F, b
+	jr z, .got_y_offset
 	cpl
 	inc a
-.addYOffset
+.got_y_offset
 	add [hl]
 	ld [hl], a
 	pop hl

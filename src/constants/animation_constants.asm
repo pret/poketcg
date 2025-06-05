@@ -1,11 +1,11 @@
 ; Animation constants
-	const_def
-	const ANIM_SPRITE_ID
-	const ANIM_PALETTE_ID
-	const ANIM_SPRITE_ANIM_ID
-	const ANIM_SPRITE_ANIM_FLAGS
-	const ANIM_SOUND_FX_ID
-	const ANIM_HANDLER_FUNCTION
+RSRESET
+DEF ANIM_SPRITE_ID         RB
+DEF ANIM_PALETTE_ID        RB
+DEF ANIM_SPRITE_ANIM_ID    RB
+DEF ANIM_SPRITE_ANIM_FLAGS RB
+DEF ANIM_SOUND_FX_ID       RB
+DEF ANIM_HANDLER_FUNCTION  RW
 
 ; Sprite animation IDs
 	const_def
@@ -348,16 +348,20 @@ DEF DUEL_SCREEN_ANIMS EQU const_value
 	const DUEL_ANIM_FLASH              ; $65
 	const DUEL_ANIM_DISTORT            ; $66
 
+	; this animation is only played within DUEL_ANIM_PRINT_DAMAGE
+	const_def $8c
+	const DUEL_ANIM_DAMAGE_HUD         ; $8c
+
 	const_def $96
-	const DUEL_ANIM_150                ; $96
+	const DUEL_ANIM_SET_SCREEN         ; $96
 	const DUEL_ANIM_PRINT_DAMAGE       ; $97
 	const DUEL_ANIM_UPDATE_HUD         ; $98
-	const DUEL_ANIM_153                ; $99
-	const DUEL_ANIM_154                ; $9a
-	const DUEL_ANIM_155                ; $9b
-	const DUEL_ANIM_156                ; $9c
-	const DUEL_ANIM_157                ; $9d
-	const DUEL_ANIM_158                ; $9e
+	const DUEL_ANIM_153_UNUSED         ; $99
+	const DUEL_ANIM_154_UNUSED         ; $9a
+	const DUEL_ANIM_155_UNUSED         ; $9b
+	const DUEL_ANIM_156_UNUSED         ; $9c
+	const DUEL_ANIM_157_UNUSED         ; $9d
+	const DUEL_ANIM_158_UNUSED         ; $9e
 
 	; Special animations
 	const_def $fa
@@ -366,28 +370,25 @@ DEF DUEL_SCREEN_ANIMS EQU const_value
 	const DUEL_ANIM_SHAKE3             ; $fc
 
 	; Duel Anim Struct constants
-	const_def
-	const DUEL_ANIM_STRUCT_ID             ; $0
-	const DUEL_ANIM_STRUCT_SCREEN         ; $1
-	const DUEL_ANIM_STRUCT_DUELIST_SIDE   ; $2
-	const DUEL_ANIM_STRUCT_LOCATION_PARAM ; $3
-	const DUEL_ANIM_STRUCT_DAMAGE         ; $4
-	const_skip
-	const DUEL_ANIM_STRUCT_UNKNOWN_2      ; $6
-	const DUEL_ANIM_STRUCT_BANK           ; $7
-DEF DUEL_ANIM_STRUCT_SIZE EQU const_value
+RSRESET
+DEF DUEL_ANIM_STRUCT_ID             RB ; $0
+DEF DUEL_ANIM_STRUCT_SCREEN         RB ; $1
+DEF DUEL_ANIM_STRUCT_DUELIST_SIDE   RB ; $2
+DEF DUEL_ANIM_STRUCT_LOCATION_PARAM RB ; $3
+DEF DUEL_ANIM_STRUCT_DAMAGE         RW ; $4
+DEF DUEL_ANIM_STRUCT_UNKNOWN_2      RB ; $6
+DEF DUEL_ANIM_STRUCT_BANK           RB ; $7
+DEF DUEL_ANIM_STRUCT_SIZE EQU _RS
 
 	; ow_frame struct constants
-	const_def
-	const OW_FRAME_STRUCT_DURATION         ; $0
-	const OW_FRAME_STRUCT_VRAM_TILE_OFFSET ; $1
-	const OW_FRAME_STRUCT_VRAM_BANK        ; $2
-	const OW_FRAME_STRUCT_TILESET_BANK     ; $3
-	const OW_FRAME_STRUCT_TILESET          ; $4
-	const_skip
-	const OW_FRAME_STRUCT_TILESET_OFFSET   ; $6
-	const_skip
-DEF OW_FRAME_STRUCT_SIZE EQU const_value
+RSRESET
+DEF OW_FRAME_STRUCT_DURATION         RB ; $0
+DEF OW_FRAME_STRUCT_VRAM_TILE_OFFSET RB ; $1
+DEF OW_FRAME_STRUCT_VRAM_BANK        RB ; $2
+DEF OW_FRAME_STRUCT_TILESET_BANK     RB ; $3
+DEF OW_FRAME_STRUCT_TILESET          RW ; $4
+DEF OW_FRAME_STRUCT_TILESET_OFFSET   RW ; $6
+DEF OW_FRAME_STRUCT_SIZE EQU _RS
 
 DEF NUM_OW_FRAMESET_SUBGROUPS EQU 3
 
