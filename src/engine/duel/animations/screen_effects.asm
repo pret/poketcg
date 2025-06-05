@@ -278,7 +278,7 @@ Func_1ce03:
 
 .pointer_table
 	dw SetScreenForDuelAnimation ; DUEL_ANIM_SET_SCREEN
-	dw PrintDamageText    ; DUEL_ANIM_SHOW_DAMAGE
+	dw PrintDamageText    ; DUEL_ANIM_PRINT_DAMAGE
 	dw UpdateMainSceneHUD ; DUEL_ANIM_UPDATE_HUD
 	dw DuelAnim153        ; DUEL_ANIM_153_UNUSED
 	dw DuelAnim154        ; DUEL_ANIM_154_UNUSED
