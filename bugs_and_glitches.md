@@ -527,7 +527,7 @@ The AI does not respect the rule in Cowardice which states it cannot be used on 
 ; handles AI logic for Cowardice
 HandleAICowardice:
 	...
-.CheckWhetherToUseCowardice
+.CheckWhetherToUseCowardice:
 	ld a, c
 	ldh [hTemp_ffa0], a
 	ld e, a
@@ -662,7 +662,7 @@ Characters that are assigned the green NPC palette have incorrect profile frame 
 
 One of the bolts from the "big lightning" duel animation has its topmost row of tiles accidentally shifted one tile to the left.
 
-**Fix:** Edit `AnimFrameTable29` in [data/duel/animations/anims1.asm](https://github.com/pret/poketcg/blob/master/src/data/duel/animations/anims1.asm):
+**Fix:** Edit `AnimFrameTable29` in [src/data/duel/animations/anims1.asm](https://github.com/pret/poketcg/blob/master/src/data/duel/animations/anims1.asm):
 ```diff
 .data_ab5fd
 	db 28 ; size
@@ -691,7 +691,7 @@ The base of the lightning being cut-off is addressed below, though that specific
 
 The fire blasts from Dive Bomb's duel animation mistakenly reuse the same tile twice, causing one tile to go unused, and the animation itself to look less refined.
 
-**Fix:** Edit `AnimFrameTable32` in [data/duel/animations/anims2.asm](https://github.com/pret/poketcg/blob/master/src/data/duel/animations/anims2.asm):
+**Fix:** Edit `AnimFrameTable32` in [src/data/duel/animations/anims2.asm](https://github.com/pret/poketcg/blob/master/src/data/duel/animations/anims2.asm):
 ```diff
 .data_ac685
 	db 19 ; size
