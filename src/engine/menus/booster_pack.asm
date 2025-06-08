@@ -12,7 +12,7 @@ _OpenBoosterPack:
 	jr c, .loop_clear
 
 ; fills wDuelTempList with 0, 1, 2, 3, ...
-; up to the number of cards received in Boster Pack
+; up to the number of cards received in Booster Pack
 	xor a
 	ld hl, wBoosterCardsDrawn
 	ld de, wDuelTempList

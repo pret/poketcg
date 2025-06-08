@@ -100,7 +100,7 @@ def reportUnnamedSymbols(symfile, listBankSet, showFunctionBanks, showOtherUnnam
 	unnamedLocalLabelTotal = 0
 	unnamedLabelTotal = 0
 
-	# expecting all lines to be formated as `bank:addr name`
+	# expecting all lines to be formatted as `bank:addr name`
 	for line in data:
 
 		splitline = line.split(":")
