@@ -66,11 +66,11 @@ Here, the first two are "``ProcessText`` with a twist" and the last two do somet
 
 Another common case is functions that are declared in the home bank for accessibility but their code resides somewhere else. In these cases you can prepend ``_`` to the non-home function to suggest that it's not intended to be called directly. For example:
 
-```
-CopyCardNameAndLevel: ; 29f5 (0:29f5)
+```asm
+CopyCardNameAndLevel::
 	farcall _CopyCardNameAndLevel
 	ret
- ```
+```
 ## Data labels
 
 The conventions indicated for function labels also apply to data labels. For example, the following four point to similar data structures:
@@ -84,8 +84,8 @@ The conventions indicated for function labels also apply to data labels. For exa
 
 For text labels, if the text they point to is short, the label should be nearly identical to the text, but with ``Text`` appended to the label. For example:
 
-```
-PleaseSelectHandText: ; 373b5 (d:73b5)
+```asm
+PleaseSelectHandText:
 	text "Please select"
 	line "Hand."
 	done
@@ -111,10 +111,10 @@ In contrast to global label names, local label names should be simpler, since th
 
 After some function has been properly labeled and figured out, you can add a comment header to it just above the function name. This is the most common way to document code:
 
-```
+```asm
 ; draw a 20x6 text box aligned to the bottom of the screen
 ; and print the text at hl without letter delay
-DrawWideTextBox_PrintTextNoDelay: ; 2a36 (0:2a36)
+DrawWideTextBox_PrintTextNoDelay::
 ```
 
 For small or utility functions, it's usually most useful to focus on the "What" and on the "When" (context), rather than on the "How". The goal here is to give as much information about the function as possible so that a viewer doesn't need to get into the function's code itself to find out what the function does, or that just a quick glance at it reveals what there is to know about it. This is particularly useful for tracking down parent routines that call it as a subroutine, so that you only need to give the subroutine's header a quick read before going back to tracking down on the parent routine.
@@ -123,16 +123,16 @@ Another important thing to document in many cases is the input and output parame
 
 More examples below.
 
-```
+```asm
 ; copies b bytes of data to sp-$1f and to hl, and returns hl += BG_MAP_WIDTH
 ; d = value of byte 0
 ; e = value of byte b
 ; a = value of bytes [1, b-1]
 ; b is supposed to be BG_MAP_WIDTH or smaller, else the stack would get corrupted
-CopyLine:
+CopyLine::
 ```
 
-```
+```asm
 ; check if a pokemon card has enough energy attached to it in order to use an attack
 ; input:
 ;   d = deck index of card (0 to 59)
@@ -142,29 +142,29 @@ CopyLine:
 _CheckIfEnoughEnergiesToAttack:
 ```
 
-```
-; return carry if the turn holder's arena Pokemon card is double poisoned or asleep.
+```asm
+; return carry if the turn holder's arena Pokemon card is asleep, poisoned, or double poisoned.
 ; also, if confused, paralyzed, or asleep, return the status condition in a.
-IsArenaPokemonAsleepOrDoublePoisoned:
+IsArenaPokemonAsleepOrPoisoned:
 ```
 
 Function headers can also be effective to highlight the difference between functions that do similar things, but with a twist or an additional feature. For example:
 
-```
+```asm
 ; draw a 12x6 text box aligned to the bottom left of the screen
-DrawNarrowTextBox:
+DrawNarrowTextBox::
 ```
 
-```
+```asm
 ; draw a 12x6 text box aligned to the bottom left of the screen
 ; and print the text at hl without letter delay
-DrawNarrowTextBox_PrintTextNoDelay:
+DrawNarrowTextBox_PrintTextNoDelay::
 ```
 
-```
+```asm
 ; draw a 20x6 text box aligned to the bottom of the screen
 ; and print the text at hl with letter delay
-DrawWideTextBox_PrintText:
+DrawWideTextBox_PrintText::
 ```
 
 Sometimes, a function is large enough that just adding a comment header doesn't cut it. These are usually top level functions that call multiple subroutines themselves. These are usually fully documented last, as they usually require knowing what the smaller pieces inside it do. In these cases, inline comments are very helpful to complement the code when someone is walking through the function. In these cases, writing comments in a new line in-between code lines is usually preferred over comments in the same line as the code, unless it's a very short comment.
@@ -175,7 +175,7 @@ It may be possible that just the use of proper constants and labels (along with 
 
 It's also useful to add comment headers to data structures. This is usually done to explain what they contain and perhaps what function or code uses it and with what purpose. Inline comments are often helpful to highlight the meaning of each unique parameter. For example:
 
-```
+```asm
 BoosterPack_ColosseumNeutral::
 	booster_set COLOSSEUM ; booster pack set
 	dw GenerateRandomEnergy ; energy or energy generation function
@@ -194,7 +194,7 @@ BoosterPack_ColosseumNeutral::
 
 For data structures, the header comments often go below the label, so that it's "closer" to the data that it is describing:
 
-```
+```asm
 DuelHorizontalSeparatorTileData:
 ; x, y, tiles[], 0
 	db 0, 4, $37, $37, $37, $37, $37, $37, $37, $37, $37, $31, $32, 0
@@ -215,7 +215,7 @@ Whenever you figure out the meaning of some RAM address, you should be looking t
 
 When naming WRAM addresses that belong to the same context or feature, try to make them look like so. This is often the case with a block of WRAM addresses that map directly to some data structure that is loaded to memory. Examples of this are ``wLoadedCard1`` and ``wLoadedCard2`` each of which is followed by addresses like ``wLoadedCard1Type``, ``wLoadedCard1Name``, or ``wLoadedCard1Rarity``. These are a group of WRAM addresses allocated to temporarily hold data of a card, following the data structures that define the characteristics of each existing card in the game. These blocks of WRAM addresses are often supported by macros (defined themselves in macros/wram.asm), so that they look like this in wram.asm:
 
-```
+```asm
 wLoadedCard1:: ; cc24
 	card_data_struct wLoadedCard1
 wLoadedCard2:: ; cc65
@@ -226,21 +226,20 @@ Lastly, adding some line of commentary to the memory address is helpful when jus
 
 Some examples:
 
-```
+```asm
 ; 60-byte array that maps each card to its position in the deck or anywhere else
 ; This array is initialized to 00, 01, 02, ..., 59, until deck is shuffled.
 ; Cards in the discard pile go first, cards still in the deck go last, and others go in-between.
-wPlayerDeckCards:: ; c27e
-	ds DECK_SIZE
+\1DeckCards::                    ds DECK_SIZE
 ```
 
-```
+```asm
 ; a DUELTYPE_* constant. note that for a practice duel, wIsPracticeDuel must also be set to $1
 wDuelType:: ; cc09
 	ds $1
 ```
 
-```
+```asm
 ; information about the text being currently processed, including font width,
 ; the rom bank, and the memory address of the next character to be printed.
 ; supports up to four nested texts (used with TX_RAM).
@@ -254,7 +253,7 @@ wTextHeader4:: ; ce3a
 	text_header wTextHeader4
 ```
 
-```
+```asm
 ; selects a PLAY_AREA_* slot in order to display information related to it. used by functions
 ; such as PrintPlayAreaCardLocation, PrintPlayAreaCardInformation and PrintPlayAreaCardHeader
 wCurPlayAreaSlot:: ; cbc9
@@ -282,7 +281,7 @@ Speaking of generic constants, there are multiple constants already defined for 
 
 Constants for WRAM address offsets (i.e. for the likes of ``wAddressN - wAddress``) are sometimes a good idea as well, and typically follow the addresses defined in some WRAM macro. For example, look at the constants defined with the previously seen ``card_data_struct`` macro in mind:
 
-```
+```asm
 DEF CARD_DATA_TYPE                  EQU $00
 DEF CARD_DATA_GFX                   EQU $01
 DEF CARD_DATA_NAME                  EQU $03
@@ -290,12 +289,13 @@ DEF CARD_DATA_RARITY                EQU $05
 (...)
 DEF TRN_CARD_DATA_LENGTH    EQU $0e
 DEF ENERGY_CARD_DATA_LENGTH EQU $0e
-DEF PKMN_CARD_DATA_LENGTH   EQU $41
+(...)
+DEF PKMN_CARD_DATA_LENGTH EQU $41
 ```
 
 Some constants make sense to have as both a value and a flag. Again, button constants are a good example of this. For these, the convention is to use ``CONSTANT_NAME`` for the value, and ``CONSTANT_NAME_F`` for the flag, so you can use either of them depending on the assembly instruction (e.g. ``and CONSTANT_NAME`` or ``bit CONSTANT_NAME_F, a``). For example:
 
-```
+```asm
 DEF A_BUTTON_F EQU 0
 DEF B_BUTTON_F EQU 1
 (...)
@@ -307,7 +307,7 @@ DEF B_BUTTON   EQU 1 << B_BUTTON_F ; $02
 
 Bit mask constants are also useful if they are used multiple times. Buttons again are a simple enough example to illustrate this:
 
-```
+```asm
 DEF BUTTONS    EQU A_BUTTON | B_BUTTON | SELECT | START  ; $0f
 DEF D_PAD      EQU D_RIGHT  | D_LEFT   | D_UP   | D_DOWN ; $f0
 ```
