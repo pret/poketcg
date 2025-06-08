@@ -82,7 +82,7 @@ The conventions indicated for function labels also apply to data labels. For exa
 
 ## Text labels
 
-For text labels, if the text they point to is short, the label should be nearly identical to the text, but with ``Text`` appended to the label. For example: 
+For text labels, if the text they point to is short, the label should be nearly identical to the text, but with ``Text`` appended to the label. For example:
 
 ```
 PleaseSelectHandText: ; 373b5 (d:73b5)
@@ -117,7 +117,7 @@ After some function has been properly labeled and figured out, you can add a com
 DrawWideTextBox_PrintTextNoDelay: ; 2a36 (0:2a36)
 ```
 
-For small or utility functions, it's usually most useful to focus on the "What" and on the "When" (context), rather than on the "How". The goal here is to give as much information about the function as possible so that a viewer doesn't need to get into the function's code itself to find out what the function does, or that just a quick glance at it reveals what there is to know about it. This is particularly useful for tracking down parent routines that call it as a subroutine, so that you only need to give the subroutine's header a quick read before going back to tracking down on the parent routine. 
+For small or utility functions, it's usually most useful to focus on the "What" and on the "When" (context), rather than on the "How". The goal here is to give as much information about the function as possible so that a viewer doesn't need to get into the function's code itself to find out what the function does, or that just a quick glance at it reveals what there is to know about it. This is particularly useful for tracking down parent routines that call it as a subroutine, so that you only need to give the subroutine's header a quick read before going back to tracking down on the parent routine.
 
 Another important thing to document in many cases is the input and output parameters of a function, which is some combination of registers, flags, and/or RAM addresses. For functions that do a specific thing, this is often the most effective manner to tell what comes in and what comes out. Chances are, when you work on understanding some previously undocumented block of code, you are the person in the world that knows most about it, so just document it in the manner that, for you, best expresses what you've understood about it.
 
@@ -167,7 +167,7 @@ DrawNarrowTextBox_PrintTextNoDelay:
 DrawWideTextBox_PrintText:
 ```
 
-Sometimes, a function is large enough that just adding a comment header doesn't cut it. These are usually top level functions that call multiple subroutines themselves. These are usually fully documented last, as they usually require knowing what the smaller pieces inside it do. In these cases, inline comments are very helpful to complement the code when someone is walking through the function. In these cases, writing comments in a new line in-between code lines is usually preferred over comments in the same line as the code, unless it's a very short comment. 
+Sometimes, a function is large enough that just adding a comment header doesn't cut it. These are usually top level functions that call multiple subroutines themselves. These are usually fully documented last, as they usually require knowing what the smaller pieces inside it do. In these cases, inline comments are very helpful to complement the code when someone is walking through the function. In these cases, writing comments in a new line in-between code lines is usually preferred over comments in the same line as the code, unless it's a very short comment.
 
 It may be possible that just the use of proper constants and labels (along with the header comments) suffices and inline comments aren't necessary though. Depends on what you think on each case.
 

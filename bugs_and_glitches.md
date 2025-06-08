@@ -80,7 +80,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 
 Each deck AI lists some card IDs that are not supposed to be placed as Prize cards in the beginning of the duel. If the deck configuration after the initial shuffling results in any of these cards being placed as Prize cards, the game is supposed to reshuffle the deck. An example of such a list, for the Go GO Rain Dance deck, is:
 ```
-.list_prize 
+.list_prize
 	db GAMBLER
 	db ENERGY_RETRIEVAL
 	db SUPER_ENERGY_RETRIEVAL
@@ -88,7 +88,7 @@ Each deck AI lists some card IDs that are not supposed to be placed as Prize car
 	db $00
 ```
 
-However, the routine to iterate these lists and look for these cards is buggy, as it will always return no carry because when checking terminating byte in wAICardListAvoidPrize ($00), it wrongfully uses 'cp a' instead of 'or a'. This results in the game ignoring it completely. 
+However, the routine to iterate these lists and look for these cards is buggy, as it will always return no carry because when checking terminating byte in wAICardListAvoidPrize ($00), it wrongfully uses 'cp a' instead of 'or a'. This results in the game ignoring it completely.
 
 **Fix:** Edit `SetUpBossStartingHandAndDeck` in [src/engine/duel/ai/boss_deck_set_up.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/boss_deck_set_up.asm):
 ```diff

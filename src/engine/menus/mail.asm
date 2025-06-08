@@ -1,4 +1,4 @@
-; clears all PC packs in WRAM 
+; clears all PC packs in WRAM
 ; and then gives the 1st pack
 ; this doesn't clear in SRAM so
 ; it's not done to clear PC pack data
