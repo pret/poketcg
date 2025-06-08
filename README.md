@@ -14,33 +14,17 @@ This will output a file named "poketcg.gbc".
 
 ## See also
 
+- [**Wiki**][wiki] (includes [tutorials][tutorials])
 - [**Symbols**][symbols]
-- **Discord:** [pret][discord]
-- **IRC:** [libera#pret][irc]
+- [**Tools**][tools]
 
-Other disassembly projects:
+You can find us on [Discord (pret, #poketcg)](https://discord.gg/d5dubZ3).
 
-- [**Pokémon TCG 2**][poketcg2]
-- [**Pokémon Red/Blue**][pokered]
-- [**Pokémon Yellow**][pokeyellow]
-- [**Pokémon Gold/Silver**][pokegold]
-- [**Pokémon Crystal**][pokecrystal]
-- [**Pokémon Pinball**][pokepinball]
-- [**Pokémon Ruby**][pokeruby]
-- [**Pokémon FireRed**][pokefirered]
-- [**Pokémon Emerald**][pokeemerald]
+For other pret projects, see [pret.github.io](https://pret.github.io/).
 
-[poketcg2]: https://github.com/pret/poketcg2
-[pokered]: https://github.com/pret/pokered
-[pokeyellow]: https://github.com/pret/pokeyellow
-[pokegold]: https://github.com/pret/pokegold
-[pokecrystal]: https://github.com/pret/pokecrystal
-[pokepinball]: https://github.com/pret/pokepinball
-[pokeruby]: https://github.com/pret/pokeruby
-[pokefirered]: https://github.com/pret/pokefirered
-[pokeemerald]: https://github.com/pret/pokeemerald
+[wiki]: https://github.com/pret/poketcg/wiki
+[tutorials]: https://github.com/pret/poketcg/wiki/Tutorials
 [symbols]: https://github.com/pret/poketcg/tree/symbols
-[discord]: https://discord.gg/d5dubZ3
-[irc]: https://web.libera.chat/?#pret
+[tools]: https://github.com/pret/gb-asm-tools
 [ci]: https://github.com/pret/poketcg/actions
 [ci-badge]: https://github.com/pret/poketcg/actions/workflows/main.yml/badge.svg
