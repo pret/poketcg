@@ -129,7 +129,7 @@ More examples below.
 ; e = value of byte b
 ; a = value of bytes [1, b-1]
 ; b is supposed to be BG_MAP_WIDTH or smaller, else the stack would get corrupted
-CopyLine: ; 1ea5 (0:1ea5)
+CopyLine:
 ```
 
 ```
@@ -139,32 +139,32 @@ CopyLine: ; 1ea5 (0:1ea5)
 ;   e = attack index (0 or 1)
 ;   wAttachedEnergies and wTotalAttachedEnergies
 ; returns: carry if not enough energy, nc if enough energy.
-_CheckIfEnoughEnergiesToAttack: ; 48ac (1:48ac)
+_CheckIfEnoughEnergiesToAttack:
 ```
 
 ```
 ; return carry if the turn holder's arena Pokemon card is double poisoned or asleep.
 ; also, if confused, paralyzed, or asleep, return the status condition in a.
-IsArenaPokemonAsleepOrDoublePoisoned: ; 6c68 (1:6c68)
+IsArenaPokemonAsleepOrDoublePoisoned:
 ```
 
 Function headers can also be effective to highlight the difference between functions that do similar things, but with a twist or an additional feature. For example:
 
 ```
 ; draw a 12x6 text box aligned to the bottom left of the screen
-DrawNarrowTextBox: ; 2a6f (0:2a6f)
+DrawNarrowTextBox:
 ```
 
 ```
 ; draw a 12x6 text box aligned to the bottom left of the screen
 ; and print the text at hl without letter delay
-DrawNarrowTextBox_PrintTextNoDelay: ; 2a3e (0:2a3e)
+DrawNarrowTextBox_PrintTextNoDelay:
 ```
 
 ```
 ; draw a 20x6 text box aligned to the bottom of the screen
 ; and print the text at hl with letter delay
-DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
+DrawWideTextBox_PrintText:
 ```
 
 Sometimes, a function is large enough that just adding a comment header doesn't cut it. These are usually top level functions that call multiple subroutines themselves. These are usually fully documented last, as they usually require knowing what the smaller pieces inside it do. In these cases, inline comments are very helpful to complement the code when someone is walking through the function. In these cases, writing comments in a new line in-between code lines is usually preferred over comments in the same line as the code, unless it's a very short comment. 
@@ -176,7 +176,7 @@ It may be possible that just the use of proper constants and labels (along with 
 It's also useful to add comment headers to data structures. This is usually done to explain what they contain and perhaps what function or code uses it and with what purpose. Inline comments are often helpful to highlight the meaning of each unique parameter. For example:
 
 ```
-BoosterPack_ColosseumNeutral:: ; 1e4e4 (7:64e4)
+BoosterPack_ColosseumNeutral::
 	booster_set COLOSSEUM ; booster pack set
 	dw GenerateRandomEnergy ; energy or energy generation function
 
@@ -195,7 +195,7 @@ BoosterPack_ColosseumNeutral:: ; 1e4e4 (7:64e4)
 For data structures, the header comments often go below the label, so that it's "closer" to the data that it is describing:
 
 ```
-DuelHorizontalSeparatorTileData: ; 5199 (1:5199)
+DuelHorizontalSeparatorTileData:
 ; x, y, tiles[], 0
 	db 0, 4, $37, $37, $37, $37, $37, $37, $37, $37, $37, $31, $32, 0
 	db 9, 5, $33, $34, 0
@@ -270,7 +270,7 @@ The last one is also an example of a single addresses used for multiple well-dif
 
 # Constants
 
-Using constants in place of hardcoded numbers is another of the main pillars for achieving self-documenting code in the disassembly. The format used for constants is SNAKE_UPPERCASE. Normally, they would look like ``SHAREDPREFIX_CONSTANT_NAME``, with ``SHAREDPREFIX_`` shared by all constants belonging to the same group (category). 
+Using constants in place of hardcoded numbers is another of the main pillars for achieving self-documenting code in the disassembly. The format used for constants is SNAKE_UPPERCASE. Normally, they would look like ``SHAREDPREFIX_CONSTANT_NAME``, with ``SHAREDPREFIX_`` shared by all constants belonging to the same group (category).
 
 The way I would approach this is, whenever you see any hardcoded number in the code, as yourself: does it make sense to replace it with some constant? More often than not, the answer would be yes. There are obviously exceptions, such as arithmetic operations or screen coordinates that don't win much by receiving a constant. But as soon as you know what some number stands for, if you think a constant would be appropriate, first look up the constants/ directory in case it already exists, and, if it doesn't, feel free to create it. Put it into a existing constants/ file or create a new file if none fits.
 
@@ -280,7 +280,7 @@ There are, however, other cases where individual constants also help improve the
 
 Speaking of generic constants, there are multiple constants already defined for dealing with close-to-hardware stuff that you should be looking to use when appropriate (button constants such as ``A_BUTTON`` are another good examples of this). The already defined text constants (and macros) help dealing with text-related code and data, and are particularly helpful for distinguishing between the different game fonts.
 
-Constants for WRAM address offsets (i.e. for the likes of ``wAddressN - wAddress``) are sometimes a good idea às well, and typically follow the addresses defined in some WRAM macro. For example, look at the constants defined with the previously seen ``card_data_struct`` macro in mind:
+Constants for WRAM address offsets (i.e. for the likes of ``wAddressN - wAddress``) are sometimes a good idea as well, and typically follow the addresses defined in some WRAM macro. For example, look at the constants defined with the previously seen ``card_data_struct`` macro in mind:
 
 ```
 DEF CARD_DATA_TYPE                  EQU $00
@@ -293,7 +293,7 @@ DEF ENERGY_CARD_DATA_LENGTH EQU $0e
 DEF PKMN_CARD_DATA_LENGTH   EQU $41
 ```
 
-Some constants make sense to have as both a value and a flag. Again, button constants are a good example of this. For these, the convention is to use ``CONSTANT_NAME`` for the value, and ``CONSTANT_NAME_F`` for the flag, so you can use either of them depending on the assembly instruction (e.g. ``and CONSTANT_NAME`` or ``bit CONSTANT_NAME_F, a``. For example:
+Some constants make sense to have as both a value and a flag. Again, button constants are a good example of this. For these, the convention is to use ``CONSTANT_NAME`` for the value, and ``CONSTANT_NAME_F`` for the flag, so you can use either of them depending on the assembly instruction (e.g. ``and CONSTANT_NAME`` or ``bit CONSTANT_NAME_F, a``). For example:
 
 ```
 DEF A_BUTTON_F EQU 0
@@ -325,7 +325,7 @@ Macros are particularly useful for making data structures more readable. If some
 
 When disassembling code and declaring data make sure to have a quick look at the existing macros defined in primarily macros/code/, macros/data/, and macros/text/ for an idea of where to use them. The tcgdisasm script already takes care of using the ``farcall`` and ``bank1call`` macros, but not others.
 
-If a macro is very specific to a feature and you are almost 100% sure that it won't be ever used anywhere else, it's a good idea to put it along with the data structure that uses it (right above it) instead of in the macros/ directory. This makes the macro more immediate to look up. As a more general suggestion, I would advice against creating a macro for a data structure that has not been fully understood. The macro tends to hide its internal structure, which makes it harder to eventually refractor and also to follow the code that travels through said data structure.
+If a macro is very specific to a feature and you are almost 100% sure that it won't be ever used anywhere else, it's a good idea to put it along with the data structure that uses it (right above it) instead of in the macros/ directory. This makes the macro more immediate to look up. As a more general suggestion, I would advice against creating a macro for a data structure that has not been fully understood. The macro tends to hide its internal structure, which makes it harder to eventually refactor and also to follow the code that travels through said data structure.
 
 
 # Refactoring
