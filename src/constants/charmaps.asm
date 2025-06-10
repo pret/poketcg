@@ -33,7 +33,7 @@
 	charmap "9", $39
 	charmap ":", $3a
 	charmap ";", $3b
-	charmap "<", $3c
+	charmap "\\<", $3c
 	charmap "=", $3d
 	charmap ">", $3e
 	charmap "?", $3f
