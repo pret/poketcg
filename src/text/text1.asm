@@ -602,7 +602,7 @@ SelectCheckText:
 	done
 
 UnusedText0087: ; Unused
-	textfw "B", "<RAMNUM>", "S", "<RAMNUM>"
+	textfw "B<RAMNUM>S<RAMNUM>"
 	done
 
 DuelistIsThinkingText:

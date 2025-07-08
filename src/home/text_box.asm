@@ -83,7 +83,7 @@ DrawLabeledTextBox::
 	ld a, SYM_BOX_TOP_L
 	ld [hli], a
 	; white tile before the text
-	ld a, FW_SPACE
+	ldfw a, " "
 	ld [hli], a
 	; text label
 	ld e, l
@@ -97,7 +97,7 @@ DrawLabeledTextBox::
 	; white tile after the text
 	ld a, TX_HALF2FULL
 	ld [hli], a
-	ld a, FW_SPACE
+	ldfw a, " "
 	ld [hli], a
 	pop de
 	push de

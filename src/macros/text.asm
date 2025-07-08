@@ -4,44 +4,36 @@ DEF done EQUS "db TX_END"
 
 DEF half2full EQUS "db TX_HALF2FULL"
 
-MACRO _textfw
-	REPT _NARG
-		IF STRLEN(\1) > 0
-			IF !STRCMP(STRSUB(\1, 1, 1), "<") && STRLEN(\1) > 1
-				db \1
-			ELSE
-				FOR i, 1, STRLEN(\1) + 1
-					REDEF char EQUS STRSUB(\1, i, 1)
-					IF INCHARMAP("FW{x:TX_KATAKANA}_{char}")
-						IF cur_set != TX_KATAKANA
-							DEF cur_set = TX_KATAKANA
-							db cur_set
-						ENDC
-						db "FW{x:TX_KATAKANA}_{char}"
-					ELIF INCHARMAP("FW{x:TX_HIRAGANA}_{char}")
-						IF cur_set != TX_HIRAGANA
-							DEF cur_set = TX_HIRAGANA
-							db cur_set
-						ENDC
-						db "FW{x:TX_HIRAGANA}_{char}"
-					ELIF INCHARMAP("FW0_{char}")
-						db "FW0_{char}"
-					ELIF INCHARMAP("FW1_{char}")
-						db TX_FULLWIDTH1, "FW1_{char}"
-					ELIF INCHARMAP("FW2_{char}")
-						db TX_FULLWIDTH2, "FW2_{char}"
-					ELIF INCHARMAP("FW3_{char}")
-						db TX_FULLWIDTH3, "FW3_{char}"
-					ELIF INCHARMAP("FW4_{char}")
-						db TX_FULLWIDTH4, "FW4_{char}"
-					ELSE
-						FAIL "Unmapped fullwidth character: {char}"
-					ENDC
-				ENDR
-			ENDC
+MACRO get_charset
+	PUSHC katakana
+	IF INCHARMAP(\1)
+		DEF charset = TX_KATAKANA
+	ELSE
+		SETCHARMAP hiragana
+		IF INCHARMAP(\1)
+			DEF charset = TX_HIRAGANA
+		ELSE
+			DEF charset = 0
 		ENDC
+	ENDC
+	POPC
+ENDM
+
+MACRO _textfw
+	PUSHC fullwidth
+	REPT _NARG
+		FOR i, CHARLEN(\1)
+			REDEF char EQUS STRCHAR(\1, i)
+			get_charset "{char}"
+			IF charset != 0 && charset != cur_set
+				DEF cur_set = charset
+				db charset
+			ENDC
+			db "{char}"
+		ENDR
 		SHIFT
 	ENDR
+	POPC
 ENDM
 
 MACRO textfw
@@ -64,4 +56,24 @@ MACRO hiragana
 	DEF cur_set = TX_HIRAGANA
 	db TX_HIRAGANA
 	_textfw \#
+ENDM
+
+MACRO dwfw
+	PUSHC fullwidth
+	IF CHARSIZE(\1) > 1
+		dw CHARVAL(\1, 0) << 8 + CHARVAL(\1, 1)
+	ELSE
+		dw \1
+	ENDC
+	POPC
+ENDM
+
+MACRO ldfw
+	PUSHC fullwidth
+	IF CHARSIZE(\2) > 1
+		ld \1, CHARVAL(\2, 0) << 8 + CHARVAL(\2, 1)
+	ELSE
+		ld \1, \2
+	ENDC
+	POPC
 ENDM

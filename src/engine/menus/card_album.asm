@@ -237,25 +237,25 @@ CreateCardSetListAndInitListCoords:
 	push af
 	cp CARD_SET_PROMOTIONAL
 	jr nz, .laboratory
-	lb de, 3, "FW3_P"
+	ldfw de, "P"
 	jr .got_prefix
 .laboratory
 	cp CARD_SET_LABORATORY
 	jr nz, .mystery
-	lb de, 3, "FW3_D"
+	ldfw de, "D"
 	jr .got_prefix
 .mystery
 	cp CARD_SET_MYSTERY
 	jr nz, .evolution
-	lb de, 3, "FW3_C"
+	ldfw de, "C"
 	jr .got_prefix
 .evolution
 	cp CARD_SET_EVOLUTION
 	jr nz, .colosseum
-	lb de, 3, "FW3_B"
+	ldfw de, "B"
 	jr .got_prefix
 .colosseum
-	lb de, 3, "FW3_A"
+	ldfw de, "A"
 
 .got_prefix
 	ld hl, wCurDeckName
@@ -432,7 +432,7 @@ PrintCardSetListEntries:
 	ld a, [hli]
 	ld b, a
 	ld hl, wCurDeckName + 2
-	lb de, 3, "FW3_E"
+	ldfw de, "E"
 	ld [hl], d
 	inc hl
 	ld [hl], e
@@ -458,9 +458,9 @@ PrintCardSetListEntries:
 .phantom_card
 ; phantom cards get only "××" in their index number
 	ld hl, wCurDeckName + 2
-	ld [hl], "FW0_×"
+	ldfw [hl], "×"
 	inc hl
-	ld [hl], "FW0_×"
+	ldfw [hl], "×"
 	inc hl
 	ld [hl], TX_SYMBOL
 	inc hl

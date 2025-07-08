@@ -482,7 +482,7 @@ CopyTextData::
 	jr c, .fw_text_done
 	push hl
 .fill_fw_loop
-	ld a, FW_SPACE
+	ldfw a, " "
 	ld [hli], a
 	dec d
 	jr nz, .fill_fw_loop

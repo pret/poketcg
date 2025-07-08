@@ -2638,7 +2638,7 @@ PrintCurDeckNumberAndName:
 .got_deck_numeral
 	ld hl, wDefaultText
 	call ConvertToNumericalDigits
-	ld [hl], "FW0_・"
+	ldfw [hl], "・"
 	inc hl
 	ld [hl], TX_END
 	ld hl, wDefaultText

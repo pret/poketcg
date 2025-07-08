@@ -1155,27 +1155,27 @@ ChallengeMachineDuelLostIconText:
 	done
 
 ChallengeMachineFireIconText:
-	textfw "【", "<FIRE>", "】"
+	textfw "【<FIRE>】"
 	done
 
 ChallengeMachineLightningIconText:
-	textfw "【", "<LIGHTNING>", "】"
+	textfw "【<LIGHTNING>】"
 	done
 
 ChallengeMachineWaterIconText:
-	textfw "【", "<WATER>", "】"
+	textfw "【<WATER>】"
 	done
 
 ChallengeMachineFightingIconText:
-	textfw "【", "<FIGHTING>", "】"
+	textfw "【<FIGHTING>】"
 	done
 
 ChallengeMachinePsychicIconText:
-	textfw "【", "<PSYCHIC>", "】"
+	textfw "【<PSYCHIC>】"
 	done
 
 ChallengeMachineGrassIconText:
-	textfw "【", "<GRASS>", "】"
+	textfw "【<GRASS>】"
 	done
 
 GrassEnergyName:
