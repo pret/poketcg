@@ -49,7 +49,7 @@ _CopyCardNameAndLevel::
 	pop hl
 	push hl
 .fill_loop
-	ld a, $70
+	ldfw a, " "
 	ld [hli], a
 	dec c
 	jr nz, .fill_loop
