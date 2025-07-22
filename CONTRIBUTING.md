@@ -124,11 +124,11 @@ Another important thing to document in many cases is the input and output parame
 More examples below.
 
 ```asm
-; copies b bytes of data to sp-$1f and to hl, and returns hl += BG_MAP_WIDTH
+; copies b bytes of data to sp-$1f and to hl, and returns hl += TILEMAP_WIDTH
 ; d = value of byte 0
 ; e = value of byte b
 ; a = value of bytes [1, b-1]
-; b is supposed to be BG_MAP_WIDTH or smaller, else the stack would get corrupted
+; b is supposed to be TILEMAP_WIDTH or smaller, else the stack would get corrupted
 CopyLine::
 ```
 
@@ -277,7 +277,7 @@ A constant almost never comes alone. For example a single ``BULBASAUR`` or ``BUL
 
 There are, however, other cases where individual constants also help improve the readability of the code (or data structure) that is going to use them. Sizes/lengths and maximum values are good examples of this. For example, ``MAX_BENCH_POKEMON``, ``MAX_PLAY_AREA_POKEMON``, ``DECK_SIZE``, or just a generic one like ``SCREEN_WIDTH``. Do this when there are multiple candidates to replace in the code. For example, if a specific feature drew a cursor in screen coordinates 8,9 and nothing else did it, it wouldn't make sense to create a constant like ``FEATURE_X_CURSOR_COORDS`` just to replace those very specific numbers (an inline comment near the instruction might be appropriate instead).
 
-Speaking of generic constants, there are multiple constants already defined for dealing with close-to-hardware stuff that you should be looking to use when appropriate (button constants such as ``A_BUTTON`` are another good examples of this). The already defined text constants (and macros) help dealing with text-related code and data, and are particularly helpful for distinguishing between the different game fonts.
+Speaking of generic constants, there are multiple constants already defined for dealing with close-to-hardware stuff that you should be looking to use when appropriate (button constants such as ``PAD_A`` are another good examples of this). The already defined text constants (and macros) help dealing with text-related code and data, and are particularly helpful for distinguishing between the different game fonts.
 
 Constants for WRAM address offsets (i.e. for the likes of ``wAddressN - wAddress``) are sometimes a good idea as well, and typically follow the addresses defined in some WRAM macro. For example, look at the constants defined with the previously seen ``card_data_struct`` macro in mind:
 
@@ -296,20 +296,19 @@ DEF PKMN_CARD_DATA_LENGTH EQU $41
 Some constants make sense to have as both a value and a flag. Again, button constants are a good example of this. For these, the convention is to use ``CONSTANT_NAME`` for the value, and ``CONSTANT_NAME_F`` for the flag, so you can use either of them depending on the assembly instruction (e.g. ``and CONSTANT_NAME`` or ``bit CONSTANT_NAME_F, a``). For example:
 
 ```asm
-DEF A_BUTTON_F EQU 0
-DEF B_BUTTON_F EQU 1
+	const FIRE        ; $00
+	const GRASS       ; $01
 (...)
 
-DEF A_BUTTON   EQU 1 << A_BUTTON_F ; $01
-DEF B_BUTTON   EQU 1 << B_BUTTON_F ; $02
+DEF FIRE_F      EQU $1 << FIRE      ; $01
+DEF GRASS_F     EQU $1 << GRASS     ; $02
 (...)
 ```
 
-Bit mask constants are also useful if they are used multiple times. Buttons again are a simple enough example to illustrate this:
+Bit mask constants are also useful if they are used multiple times. Palette colors are an example to illustrate this:
 
 ```asm
-DEF BUTTONS    EQU A_BUTTON | B_BUTTON | SELECT | START  ; $0f
-DEF D_PAD      EQU D_RIGHT  | D_LEFT   | D_UP   | D_DOWN ; $f0
+DEF PALRGB_WHITE EQU (31 << B_COLOR_BLUE) | (31 << B_COLOR_GREEN) | (31 << B_COLOR_RED)
 ```
 
 Finally, note that constants that are exclusive to a specific feature or function should generally be local, and thus placed above the code that uses them. This is usually not the case, however, so you should usually be looking to declare them inside the constants/ directory as mentioned before. This kind of refactoring is also more appropriate when the disassembly is in a more advanced state as well.

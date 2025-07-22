@@ -11,7 +11,7 @@ InitMenuScreen:
 	ldh [hSCX], a
 	ldh [hSCY], a
 	ld a, [wLCDC]
-	bit LCDC_ENABLE_F, a
+	bit B_LCDC_ENABLE, a
 	jr nz, .skip_clear_scroll
 	xor a
 	ldh [rSCX], a

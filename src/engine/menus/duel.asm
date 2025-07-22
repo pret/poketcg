@@ -1232,9 +1232,9 @@ HandleCheckMenuInput_YourOrOppPlayArea:
 	and %10000000
 	ldh a, [hDPadHeld]
 	jr nz, .check_vertical
-	bit D_LEFT_F, a ; test left button
+	bit B_PAD_LEFT, a ; test left button
 	jr nz, .horizontal
-	bit D_RIGHT_F, a ; test right button
+	bit B_PAD_RIGHT, a ; test right button
 	jr z, .check_vertical
 
 ; handle horizontal input
@@ -1264,9 +1264,9 @@ HandleCheckMenuInput_YourOrOppPlayArea:
 	jr .erase
 
 .check_vertical
-	bit D_UP_F, a
+	bit B_PAD_UP, a
 	jr nz, .vertical
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr z, .skip
 
 ; handle vertical input
@@ -1299,9 +1299,9 @@ HandleCheckMenuInput_YourOrOppPlayArea:
 
 .skip
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	jr z, .sfx
-	and A_BUTTON
+	and PAD_A
 	jr nz, .a_pressed
 
 ; B pressed
@@ -1722,7 +1722,7 @@ YourOrOppPlayAreaScreen_HandleInput:
 	inc hl
 	inc hl
 
-	bit D_UP_F, a
+	bit B_PAD_UP, a
 	jr z, .else_if_down
 
 	; up
@@ -1731,7 +1731,7 @@ YourOrOppPlayAreaScreen_HandleInput:
 
 .else_if_down
 	inc hl
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr z, .else_if_right
 
 	; down
@@ -1740,7 +1740,7 @@ YourOrOppPlayAreaScreen_HandleInput:
 
 .else_if_right
 	inc hl
-	bit D_RIGHT_F, a
+	bit B_PAD_RIGHT, a
 	jr z, .else_if_left
 
 	; right
@@ -1749,7 +1749,7 @@ YourOrOppPlayAreaScreen_HandleInput:
 
 .else_if_left
 	inc hl
-	bit D_LEFT_F, a
+	bit B_PAD_LEFT, a
 	jr z, .check_button
 
 	; left
@@ -1785,9 +1785,9 @@ YourOrOppPlayAreaScreen_HandleInput:
 ; check if one of the dpad, left or right, is pressed.
 ; if not, just go back to the start.
 	ldh a, [hDPadHeld]
-	bit D_RIGHT_F, a
+	bit B_PAD_RIGHT, a
 	jr nz, .left_or_right
-	bit D_LEFT_F, a
+	bit B_PAD_LEFT, a
 	jr z, YourOrOppPlayAreaScreen_HandleInput
 
 .left_or_right
@@ -1833,10 +1833,10 @@ YourOrOppPlayAreaScreen_HandleInput:
 	ld [wCheckMenuCursorBlinkCounter], a
 .check_button
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	jr z, .return
 
-	and A_BUTTON
+	and PAD_A
 	jr nz, .a_button
 
 	ld a, -1 ; cancel

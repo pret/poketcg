@@ -9,9 +9,9 @@ Func_18661: ; unreferenced
 	or a
 	jr z, .check_button
 ; check input from dpad
-	bit D_LEFT_F, a
+	bit B_PAD_LEFT, a
 	jr nz, .left_or_right
-	bit D_RIGHT_F, a
+	bit B_PAD_RIGHT, a
 	jr z, .check_up_and_down
 .left_or_right
 ; swap the lsb of x position value.
@@ -21,9 +21,9 @@ Func_18661: ; unreferenced
 	jr .cursor_moved
 
 .check_up_and_down
-	bit D_UP_F, a
+	bit B_PAD_UP, a
 	jr nz, .up_or_down
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr z, .check_button
 .up_or_down
 	ld a, e
@@ -43,9 +43,9 @@ Func_18661: ; unreferenced
 	ld [wCheckMenuCursorBlinkCounter], a
 .check_button
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	jr z, .check_cursor_moved
-	and A_BUTTON
+	and PAD_A
 	jr nz, .a_button
 
 ; b button
@@ -78,7 +78,7 @@ Func_18661: ; unreferenced
 	and %00001111
 	ret nz
 	ld a, SYM_CURSOR_R
-	bit D_RIGHT_F, [hl]
+	bit B_PAD_RIGHT, [hl]
 	jr z, .draw_tile
 .draw_blank_cursor
 	ld a, SYM_SPACE

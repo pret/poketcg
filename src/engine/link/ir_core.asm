@@ -5,13 +5,13 @@
 ; - return
 TransmitIRBit:
 	jr c, .delay_once
-	ld [hl], RPF_WRITE_HI | RPF_ENREAD
+	ld [hl], RP_WRITE_HIGH | RP_ENABLE
 	ld a, 5
 	jr .loop_delay_1 ; jump to possibly to add more cycles?
 .loop_delay_1
 	dec a
 	jr nz, .loop_delay_1
-	ld [hl], RPF_WRITE_LO | RPF_ENREAD
+	ld [hl], RP_WRITE_LOW | RP_ENABLE
 	ld a, 14
 	jr .loop_delay_2 ; jump to possibly to add more cycles?
 .loop_delay_2
@@ -78,7 +78,7 @@ ReceiveByteThroughIR:
 	ld b, 0
 	ld hl, rRP
 .wait_ir
-	bit RPB_DATAIN, [hl]
+	bit B_RP_DATA_IN, [hl]
 	jr z, .ok
 	dec b
 	jr nz, .wait_ir
@@ -112,11 +112,11 @@ ReceiveByteThroughIR:
 ; if in any of the checks it is unset,
 ; then a is set to 0
 ; this is done a total of 9 times
-	bit RPB_DATAIN, [hl]
+	bit B_RP_DATA_IN, [hl]
 	jr nz, .asm_196ec
 	xor a
 .asm_196ec
-	bit RPB_DATAIN, [hl]
+	bit B_RP_DATA_IN, [hl]
 	jr nz, .asm_196f1
 	xor a
 .asm_196f1
@@ -244,23 +244,23 @@ StartIRCommunications:
 	call SwitchToCGBNormalSpeed
 	ld a, P14
 	ldh [rJOYP], a
-	ld a, RPF_ENREAD
+	ld a, RP_ENABLE
 	ldh [rRP], a
 	ret
 
 ; reenables interrupts, and switches CGB back to double speed
 CloseIRCommunications:
-	ld a, P14 | P15
+	ld a, JOYP_GET_NONE
 	ldh [rJOYP], a
 .wait_vblank_on
 	ldh a, [rSTAT]
-	and STAT_LCDC_STATUS
-	cp STAT_ON_VBLANK
+	and STAT_MODE
+	cp STAT_VBLANK
 	jr z, .wait_vblank_on
 .wait_vblank_off
 	ldh a, [rSTAT]
-	and STAT_LCDC_STATUS
-	cp STAT_ON_VBLANK
+	and STAT_MODE
+	cp STAT_VBLANK
 	jr nz, .wait_vblank_off
 	call SwitchToCGBDoubleSpeed
 	ei

@@ -5,12 +5,12 @@ HblankCopyDataHLtoDE::
 	ei
 	di
 	ldh a, [rSTAT]       ;
-	and STAT_LCDC_STATUS ;
+	and STAT_MODE ;
 	jr nz, .loop         ; assert hblank
 	ld a, [hl]
 	ld [de], a
 	ldh a, [rSTAT]       ;
-	and STAT_LCDC_STATUS ;
+	and STAT_MODE ;
 	jr nz, .loop         ; assert still in hblank
 	ei
 	inc hl
@@ -27,12 +27,12 @@ HblankCopyDataDEtoHL::
 	ei
 	di
 	ldh a, [rSTAT]       ;
-	and STAT_LCDC_STATUS ;
+	and STAT_MODE ;
 	jr nz, .loop         ; assert hblank
 	ld a, [de]
 	ld [hl], a
 	ldh a, [rSTAT]       ;
-	and STAT_LCDC_STATUS ;
+	and STAT_MODE ;
 	jr nz, .loop         ; assert still in hblank
 	ei
 	inc hl

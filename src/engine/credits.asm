@@ -17,7 +17,7 @@ PlayCreditsSequence::
 	cp $ff
 	jr nz, .loop_cmds
 	call WaitForSongToFinish
-	ld a, START
+	ld a, PAD_START
 	farcall WaitUntilKeysArePressed
 	ld a, MUSIC_STOP
 	call PlaySong
@@ -68,20 +68,20 @@ Func_1d705:
 	ei
 
 	ld hl, rSTAT
-	set STAT_LYC, [hl]
+	set B_STAT_LYC, [hl]
 	xor a
 	ldh [rLYC], a
 	ld hl, rIE
-	set INT_LCD_STAT, [hl]
+	set B_IE_STAT, [hl]
 	pop hl
 	ret
 
 Func_1d758:
 	push hl
 	ld hl, rSTAT
-	res STAT_LYC, [hl]
+	res B_STAT_LYC, [hl]
 	ld hl, rIE
-	res INT_LCD_STAT, [hl]
+	res B_IE_STAT, [hl]
 	pop hl
 	ret
 

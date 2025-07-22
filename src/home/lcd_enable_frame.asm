@@ -1,7 +1,7 @@
 DoFrameIfLCDEnabled::
 	push af
 	ldh a, [rLCDC]
-	bit LCDC_ENABLE_F, a
+	bit B_LCDC_ENABLE, a
 	jr z, .done
 	push bc
 	push de

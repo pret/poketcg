@@ -47,7 +47,7 @@ _PCMenu_ReadMail:
 	call PCMailHandleDPadInput
 	call PCMailHandleAInput
 	ldh a, [hKeysPressed]
-	and B_BUTTON
+	and PAD_B
 	jr z, .asm_1079c
 	ld a, SFX_CANCEL
 	call PlaySFX
@@ -74,7 +74,7 @@ MailScreenLabels:
 
 PCMailHandleDPadInput:
 	ldh a, [hDPadHeld]
-	and D_PAD
+	and PAD_CTRL_PAD
 	ret z
 	farcall GetDirectionFromDPad
 	ld [wPCLastDirectionPressed], a
@@ -135,7 +135,7 @@ PCMailTransitionTable:
 
 PCMailHandleAInput:
 	ldh a, [hKeysPressed]
-	and A_BUTTON
+	and PAD_A
 	ret z
 	ld a, SFX_CONFIRM
 	call PlaySFX

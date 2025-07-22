@@ -56,7 +56,7 @@ DrawSpriteAnimationFrame::
 	dec b
 .beginY
 	ld a, [wCurrSpriteAttributes]
-	bit OAM_Y_FLIP, a
+	bit B_OAM_YFLIP, a
 	jr z, .unflippedY
 	ld a, [hl]
 	add 8 ; size of a tile
@@ -86,7 +86,7 @@ DrawSpriteAnimationFrame::
 	dec b
 .beginX
 	ld a, [wCurrSpriteAttributes]
-	bit OAM_X_FLIP, a
+	bit B_OAM_XFLIP, a
 	jr z, .unflippedX
 	ld a, [hl]
 	add 8 ; size of a tile
@@ -116,11 +116,11 @@ DrawSpriteAnimationFrame::
 	inc hl
 	ld a, [wCurrSpriteAttributes]
 	add [hl]
-	and OAM_PALETTE | (1 << OAM_OBP_NUM)
+	and OAM_PALETTE | OAM_PAL1
 	ld b, a
 	ld a, [wCurrSpriteAttributes]
 	xor [hl]
-	and (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP) | (1 << OAM_PRIORITY)
+	and OAM_XFLIP | OAM_YFLIP | OAM_PRIO
 	or b
 	ld b, a
 	inc hl ; unnecessary

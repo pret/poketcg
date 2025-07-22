@@ -5,7 +5,7 @@ Bankswitch3dTo3f::
 	push af
 	ld a, $3f
 	ldh [hBankROM], a
-	ld [MBC3RomBank], a
+	ld [rROMB], a
 	pop af
 	ld bc, .bankswitch3d
 	push bc
@@ -13,5 +13,5 @@ Bankswitch3dTo3f::
 .bankswitch3d
 	ld a, $3d
 	ldh [hBankROM], a
-	ld [MBC3RomBank], a
+	ld [rROMB], a
 	ret

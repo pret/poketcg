@@ -17,7 +17,7 @@ GameLoop::
 	ei
 	farcall StubbedUnusedSaveDataValidation
 	ldh a, [hKeysHeld]
-	cp A_BUTTON | B_BUTTON
+	cp PAD_A | PAD_B
 	jr z, .ask_erase_backup_ram
 	farcall _GameLoop
 	jr GameLoop

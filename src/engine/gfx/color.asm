@@ -22,7 +22,7 @@ LoadConsolePaletteData:
 
 FadeScreenToWhite:
 	ld a, [wLCDC]
-	bit LCDC_ENABLE_F, a
+	bit B_LCDC_ENABLE, a
 	jr z, .lcd_off
 	ld a, [wConsolePaletteData]
 	ld [wTempBGP], a
@@ -94,7 +94,7 @@ RestoreFirstColorInOBPals:
 	inc de
 	ld a, [hl]
 	ld [de], a
-	ld bc, CGB_PAL_SIZE - 1
+	ld bc, PAL_SIZE - 1
 	add hl, bc
 	ld a, c
 	add e

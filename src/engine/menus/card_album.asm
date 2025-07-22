@@ -503,14 +503,14 @@ HandleCardAlbumCardPage:
 .handle_input
 	ldh a, [hDPadHeld]
 	ld b, a
-	and BUTTONS
+	and PAD_BUTTONS
 	jp nz, .exit
 	xor a ; FALSE
 	ld [wMenuInputSFX], a
 	ld a, [wCardListNumCursorPositions]
 	ld c, a
 	ld a, [wCardListCursorPos]
-	bit D_UP_F, b
+	bit B_PAD_UP, b
 	jr z, .check_d_down
 
 	push af
@@ -536,7 +536,7 @@ HandleCardAlbumCardPage:
 	jr .got_new_pos
 
 .check_d_down
-	bit D_DOWN_F, b
+	bit B_PAD_DOWN, b
 	jr z, .asm_a8d6
 
 	push af
@@ -585,12 +585,12 @@ HandleCardAlbumCardPage:
 	ld a, [wced2]
 	or a
 	jr z, .open_card_page
-	bit D_LEFT_F, b
+	bit B_PAD_LEFT, b
 	jr z, .check_d_right
 	call RemoveCardFromDeck
 	jr .open_card_page
 .check_d_right
-	bit D_RIGHT_F, b
+	bit B_PAD_RIGHT, b
 	jr z, .open_card_page
 	call TryAddCardToDeck
 
@@ -664,7 +664,7 @@ CardAlbum:
 .loop_input_2
 	call DoFrame
 	ldh a, [hKeysPressed]
-	and B_BUTTON
+	and PAD_B
 	jr z, .loop_input_2
 	ld a, $ff
 	call PlaySFXConfirmOrCancel
@@ -698,7 +698,7 @@ CardAlbum:
 	call HandleLeftRightInCardList
 	jr c, .loop_input_3
 	ldh a, [hDPadHeld]
-	and START
+	and PAD_START
 	jr z, .loop_input_3
 .open_card_page
 	ld a, $01

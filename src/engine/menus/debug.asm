@@ -115,7 +115,7 @@ DebugStandardBGCharacter:
 	lb bc, 16, 16
 	lb hl,  1, 16
 	call FillRectangle
-	ld a, BUTTONS | D_PAD
+	ld a, PAD_BUTTONS | PAD_CTRL_PAD
 	call WaitUntilKeysArePressed
 	scf
 	ret

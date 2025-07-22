@@ -73,7 +73,7 @@ FlushPalettesIfRequested::
 	ld a, [wFlushPaletteFlags]
 	bit FLUSH_ALL_PALS_F, a
 	jr nz, FlushAllCGBPalettes
-	ld b, CGB_PAL_SIZE
+	ld b, PAL_SIZE
 	call CopyCGBPalettes
 	jr .done
 
@@ -83,7 +83,7 @@ FlushAllCGBPalettes::
 	ld b, 8 palettes
 	call CopyCGBPalettes
 	; flush 8 OBP palettes
-	ld a, CGB_PAL_SIZE
+	ld a, PAL_SIZE
 	ld b, 8 palettes
 	call CopyCGBPalettes
 	jr FlushPalettesIfRequested.done
@@ -111,7 +111,7 @@ CopyCGBPalettes::
 	inc c
 .wait
 	ldh a, [rSTAT]
-	and 1 << STAT_BUSY ; wait until hblank or vblank
+	and STAT_BUSY ; wait until hblank or vblank
 	jr nz, .wait
 	ld a, [hl]
 	ld [$ff00+c], a

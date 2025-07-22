@@ -812,9 +812,9 @@ HandleDefendingPokemonAttackSelection:
 .loop_input
 	call DoFrame
 	ldh a, [hKeysPressed]
-	bit B_BUTTON_F, a
+	bit B_PAD_B, a
 	jr nz, .set_carry
-	and START
+	and PAD_START
 	jr nz, .open_atk_page
 	call HandleMenuInput
 	jr nc, .loop_input
@@ -4708,7 +4708,7 @@ Prophecy_PlayerSelectEffect:
 	ldtx hl, PleaseSelectTheDeckText
 	call TwoItemHorizontalMenu
 	ldh a, [hKeysHeld]
-	and B_BUTTON
+	and PAD_B
 	jr nz, Prophecy_PlayerSelectEffect ; loop back to start
 
 	ldh a, [hCurMenuItem]
@@ -5163,7 +5163,7 @@ DevolutionBeam_PlayerSelectEffect:
 	ldtx hl, PleaseSelectThePlayAreaText
 	call TwoItemHorizontalMenu
 	ldh a, [hKeysHeld]
-	and B_BUTTON
+	and PAD_B
 	jr nz, .set_carry
 
 ; a Play Area was selected
@@ -6855,7 +6855,7 @@ Gigashock_PlayerSelectEffect:
 	inc a
 	call DrawPlayAreaScreenToShowChanges
 	ldh a, [hKeysPressed]
-	and B_BUTTON
+	and PAD_B
 	jr nz, .try_cancel
 	call SwapTurn
 	call GetNextPositionInTempList
@@ -10382,7 +10382,7 @@ LassEffect:
 	ldtx hl, ChooseTheCardYouWishToExamineText
 	ldtx de, DuelistHandText
 	bank1call SetCardListHeaderText
-	ld a, A_BUTTON | START
+	ld a, PAD_A | PAD_START
 	ld [wNoItemSelectionMenuKeys], a
 	bank1call DisplayCardList
 	ret

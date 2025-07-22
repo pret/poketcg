@@ -22,7 +22,7 @@ PlayIntroSequence:
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
 	ldh a, [hKeysPressed]
-	and A_BUTTON | START
+	and PAD_A | PAD_START
 	jr nz, .jump_to_title_screen
 	ld a, [wIntroSequencePalsNeedUpdate]
 	or a

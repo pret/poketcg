@@ -153,7 +153,7 @@ _SetUpAndStartLinkDuel:
 	ldh a, [hDPadHeld]
 	ld b, a
 	ld a, [wNPCDuelPrizes]
-	bit D_LEFT_F, b
+	bit B_PAD_LEFT, b
 	jr z, .check_d_right
 	dec a
 	cp PRIZES_2
@@ -162,7 +162,7 @@ _SetUpAndStartLinkDuel:
 	jr .got_prize_count
 
 .check_d_right
-	bit D_RIGHT_F, b
+	bit B_PAD_RIGHT, b
 	jr z, .check_a_btn
 	inc a
 	cp PRIZES_6 + 1
@@ -174,6 +174,6 @@ _SetUpAndStartLinkDuel:
 	ld [wPrizeCardSelectionFrameCounter], a
 
 .check_a_btn
-	bit A_BUTTON_F, b
+	bit B_PAD_A, b
 	jr z, .loop_input
 	ret

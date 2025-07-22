@@ -36,7 +36,7 @@ _OpenBoosterPack:
 	ldtx hl, ChooseTheCardYouWishToExamineText
 	ldtx de, BoosterPackText
 	bank1call SetCardListHeaderText
-	ld a, A_BUTTON | START
+	ld a, PAD_A | PAD_START
 	ld [wNoItemSelectionMenuKeys], a
 	bank1call DisplayCardList
 	ret

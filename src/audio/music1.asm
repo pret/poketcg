@@ -106,13 +106,13 @@ Music1_f406f:
 
 Music1_Init:
 	xor a
-	ldh [rNR52], a
-	ld a, $80
-	ldh [rNR52], a
+	ldh [rAUDENA], a
+	ld a, AUDENA_ON
+	ldh [rAUDENA], a
 	ld a, $77
-	ldh [rNR50], a
-	ld a, $ff
-	ldh [rNR51], a
+	ldh [rAUDVOL], a
+	ld a, AUDTERM_1_RIGHT | AUDTERM_2_RIGHT | AUDTERM_3_RIGHT | AUDTERM_4_RIGHT | AUDTERM_1_LEFT | AUDTERM_2_LEFT | AUDTERM_3_LEFT | AUDTERM_4_LEFT
+	ldh [rAUDTERM], a
 	ld a, $3d
 	ld [wCurSongBank], a
 	ld a, $80
@@ -169,7 +169,7 @@ Music1_Update:
 	call Bankswitch3dTo3f
 	ld a, [wCurSongBank]
 	ldh [hBankROM], a
-	ld [MBC3RomBank], a
+	ld [rROMB], a
 	ld a, [wddf2]
 	cp $0
 	jr z, .update_channels
@@ -215,35 +215,35 @@ Music1_StopAllChannels:
 	ld [wMusicIsPlaying], a
 	bit 0, d
 	jr nz, .stop_channel_2
-	ld a, $8
-	ldh [rNR12], a
-	swap a
-	ldh [rNR14], a
+	ld a, AUD1ENV_UP
+	ldh [rAUD1ENV], a
+	swap a ; AUD1HIGH_RESTART
+	ldh [rAUD1HIGH], a
 .stop_channel_2
 	xor a
 	ld [wMusicIsPlaying + 1], a
 	bit 1, d
 	jr nz, .stop_channel_4
-	ld a, $8
-	ldh [rNR22], a
-	swap a
-	ldh [rNR24], a
+	ld a, AUD2ENV_UP
+	ldh [rAUD2ENV], a
+	swap a ; AUD2HIGH_RESTART
+	ldh [rAUD2HIGH], a
 .stop_channel_4
 	xor a
 	ld [wMusicIsPlaying + 3], a
 	bit 3, d
 	jr nz, .stop_channel_3
-	ld a, $8
-	ldh [rNR42], a
-	swap a
-	ldh [rNR44], a
+	ld a, AUD4ENV_UP
+	ldh [rAUD4ENV], a
+	swap a ; AUD4GO_RESTART
+	ldh [rAUD4GO], a
 .stop_channel_3
 	xor a
 	ld [wMusicIsPlaying + 2], a
 	bit 2, d
 	jr nz, .done
-	ld a, $0
-	ldh [rNR32], a
+	ld a, AUD3LEVEL_MUTE
+	ldh [rAUD3LEVEL], a
 .done
 	ret
 
@@ -257,7 +257,7 @@ Music1_BeginSong:
 	ld a, [hl]
 	ld [wCurSongBank], a
 	ldh [hBankROM], a
-	ld [MBC3RomBank], a
+	ld [rROMB], a
 	pop af
 	add a
 	ld c, a
@@ -399,7 +399,7 @@ Music1_UpdateChannel1:
 	ld a, [wdd8c]
 	bit 0, a
 	jr nz, .asm_f42d4
-	ld hl, rNR12
+	ld hl, rAUD1ENV
 	ld a, [wMusicEcho]
 	ld [hli], a
 	inc hl
@@ -428,10 +428,10 @@ Music1_UpdateChannel1:
 	ld a, [wdd8c]
 	bit 0, a
 	jr nz, .asm_f4309
-	ld a, $8
-	ldh [rNR12], a
-	swap a
-	ldh [rNR14], a
+	ld a, AUD1ENV_UP
+	ldh [rAUD1ENV], a
+	swap a ; AUD1HIGH_RESTART
+	ldh [rAUD1HIGH], a
 .asm_f4309
 	ret
 
@@ -452,7 +452,7 @@ Music1_UpdateChannel2:
 	ld a, [wdd8c]
 	bit 1, a
 	jr nz, .asm_f4339
-	ld hl, rNR22
+	ld hl, rAUD2ENV
 	ld a, [wMusicEcho + 1]
 	ld [hli], a
 	inc hl
@@ -481,10 +481,10 @@ Music1_UpdateChannel2:
 	ld a, [wdd8c]
 	bit 1, a
 	jr nz, .asm_f436e
-	ld a, $8
-	ldh [rNR22], a
-	swap a
-	ldh [rNR24], a
+	ld a, AUD2ENV_UP
+	ldh [rAUD2ENV], a
+	swap a ; AUD2HIGH_RESTART
+	ldh [rAUD2HIGH], a
 .asm_f436e
 	ret
 
@@ -506,7 +506,7 @@ Music1_UpdateChannel3:
 	cp $1
 	jr z, .asm_f4398
 	ld a, [wMusicEcho + 2]
-	ldh [rNR32], a
+	ldh [rAUD3LEVEL], a
 .asm_f4398
 	ld a, [wddbb + 2]
 	dec a
@@ -530,10 +530,10 @@ Music1_UpdateChannel3:
 	ld a, [wdd8c]
 	bit 2, a
 	jr nz, .asm_f43cd
-	ld a, $0
-	ldh [rNR32], a
-	ld a, $80
-	ldh [rNR34], a
+	ld a, AUD3LEVEL_MUTE
+	ldh [rAUD3LEVEL], a
+	ld a, AUD3HIGH_RESTART
+	ldh [rAUD3HIGH], a
 .asm_f43cd
 	ret
 
@@ -568,10 +568,10 @@ Music1_UpdateChannel4:
 	jr nz, .asm_f4413
 	xor a
 	ld [wddef], a
-	ld a, $8
-	ldh [rNR42], a
-	swap a
-	ldh [rNR44], a
+	ld a, AUD4ENV_UP
+	ldh [rAUD4ENV], a
+	swap a ; AUD4GO_RESTART
+	ldh [rAUD4GO], a
 .asm_f4413
 	ret
 
@@ -1167,26 +1167,26 @@ Music1_f4714:
 	cp $80
 	jr z, .asm_f4733
 	ld a, [wMusicVolume]
-	ldh [rNR12], a
-	ld d, $80
+	ldh [rAUD1ENV], a
+	ld d, AUD1HIGH_RESTART
 .asm_f4733
 	ld [hl], $2
-	ld a, $8
-	ldh [rNR10], a
+	ld a, AUD1SWEEP_DOWN
+	ldh [rAUD1SWEEP], a
 	ld a, [wMusicDuty1]
-	ldh [rNR11], a
+	ldh [rAUD1LEN], a
 	ld a, [wMusicCh1CurPitch]
-	ldh [rNR13], a
+	ldh [rAUD1LOW], a
 	ld a, [wMusicCh1CurOctave]
 	or d
-	ldh [rNR14], a
+	ldh [rAUD1HIGH], a
 .asm_f4749
 	ret
 .asm_f474a
 	ld hl, wMusicTie
 	ld [hl], $0
-	ld hl, rNR12
-	ld a, $8
+	ld hl, rAUD1ENV
+	ld a, AUD1ENV_UP
 	ld [hli], a
 	inc hl
 	swap a
@@ -1206,24 +1206,24 @@ Music1_f475a:
 	cp $80
 	jr z, .asm_f4779
 	ld a, [wMusicVolume + 1]
-	ldh [rNR22], a
-	ld d, $80
+	ldh [rAUD2ENV], a
+	ld d, AUD2HIGH_RESTART
 .asm_f4779
 	ld [hl], $2
 	ld a, [wMusicDuty2]
-	ldh [rNR21], a
+	ldh [rAUD2LEN], a
 	ld a, [wMusicCh2CurPitch]
-	ldh [rNR23], a
+	ldh [rAUD2LOW], a
 	ld a, [wMusicCh2CurOctave]
 	or d
-	ldh [rNR24], a
+	ldh [rAUD2HIGH], a
 .asm_f478b
 	ret
 .asm_f478c
 	ld hl, wMusicTie + 1
 	ld [hl], $0
-	ld hl, rNR22
-	ld a, $8
+	ld hl, rAUD2ENV
+	ld a, AUD2ENV_UP
 	ld [hli], a
 	inc hl
 	swap a
@@ -1238,8 +1238,8 @@ Music1_f479c:
 	ld a, [wMusicWaveChange]
 	or a
 	jr z, .no_wave_change
-	xor a
-	ldh [rNR30], a
+	xor a ; AUD3ENA_OFF
+	ldh [rAUD3ENA], a
 	call Music1_LoadWaveInstrument
 	ld d, $80
 .no_wave_change
@@ -1251,28 +1251,28 @@ Music1_f479c:
 	cp $80
 	jr z, .asm_f47cc
 	ld a, [wMusicVolume + 2]
-	ldh [rNR32], a
-	xor a
-	ldh [rNR30], a
-	ld d, $80
+	ldh [rAUD3LEVEL], a
+	xor a ; AUD3ENA_OFF
+	ldh [rAUD3ENA], a
+	ld d, AUD3HIGH_RESTART
 .asm_f47cc
 	ld [hl], $2
 	xor a
-	ldh [rNR31], a
+	ldh [rAUD3LEN], a
 	ld a, [wMusicCh3CurPitch]
-	ldh [rNR33], a
-	ld a, $80
-	ldh [rNR30], a
+	ldh [rAUD3LOW], a
+	ld a, AUD3ENA_ON
+	ldh [rAUD3ENA], a
 	ld a, [wMusicCh3CurOctave]
 	or d
-	ldh [rNR34], a
+	ldh [rAUD3HIGH], a
 .asm_f47e0
 	ret
 .asm_f47e1
 	ld hl, wMusicTie
 	ld [hl], $0
-	xor a
-	ldh [rNR30], a
+	xor a ; AUD3ENA_OFF
+	ldh [rAUD3ENA], a
 	ret
 
 Music1_LoadWaveInstrument:
@@ -1306,7 +1306,7 @@ Music1_f480a:
 	ld a, [wddba]
 	cp $0
 	jr z, .asm_f482a
-	ld de, rNR41
+	ld de, rAUD4LEN
 	ld hl, wddab
 	ld a, [hli]
 	ld [de], a
@@ -1324,8 +1324,8 @@ Music1_f480a:
 .asm_f482a
 	xor a
 	ld [wddef], a
-	ld hl, rNR42
-	ld a, $8
+	ld hl, rAUD4ENV
+	ld a, AUD4ENV_UP
 	ld [hli], a
 	inc hl
 	swap a
@@ -1349,7 +1349,7 @@ Music1_f4839:
 	jr nz, .asm_f4853
 	jr Music1_f480a.asm_f482a
 .asm_f4853
-	ldh [rNR43], a
+	ldh [rAUD4POLY], a
 	inc de
 	ld a, d
 	ld [hld], a
@@ -1368,7 +1368,7 @@ Music1_f485a:
 
 Music1_f4866:
 	ld a, [wMusicPanning]
-	ldh [rNR50], a
+	ldh [rAUDVOL], a
 	ld a, [wdd8c]
 	or a
 	ld hl, wMusicStereoPanning
@@ -1397,7 +1397,7 @@ Music1_f4866:
 	swap e
 	or e
 	and d
-	ldh [rNR51], a
+	ldh [rAUDTERM], a
 	ret
 
 Music1_UpdateVibrato:
@@ -1495,13 +1495,13 @@ Music1_f490b:
 	bit 0, a
 	jr nz, .done
 	ld a, e
-	ldh [rNR13], a
-	ldh a, [rNR11]
-	and $c0
-	ldh [rNR11], a
+	ldh [rAUD1LOW], a
+	ldh a, [rAUD1LEN]
+	and ~AUD1LEN_TIMER
+	ldh [rAUD1LEN], a
 	ld a, d
 	and $3f
-	ldh [rNR14], a
+	ldh [rAUD1HIGH], a
 	ret
 .not_channel_1
 	cp $1
@@ -1513,12 +1513,12 @@ Music1_f490b:
 	bit 1, a
 	jr nz, .done
 	ld a, e
-	ldh [rNR23], a
-	ldh a, [rNR21]
-	and $c0
-	ldh [rNR21], a
+	ldh [rAUD2LOW], a
+	ldh a, [rAUD2LEN]
+	and ~AUD2LEN_TIMER
+	ldh [rAUD2LEN], a
 	ld a, d
-	ldh [rNR24], a
+	ldh [rAUD2HIGH], a
 	ret
 .not_channel_2
 	cp $2
@@ -1530,11 +1530,11 @@ Music1_f490b:
 	bit 2, a
 	jr nz, .done
 	ld a, e
-	ldh [rNR33], a
+	ldh [rAUD3LOW], a
 	xor a
-	ldh [rNR31], a
+	ldh [rAUD3LEN], a
 	ld a, d
-	ldh [rNR34], a
+	ldh [rAUD3HIGH], a
 .done
 	ret
 
@@ -1566,29 +1566,29 @@ Music1_f4980:
 	ld d, a
 	bit 0, d
 	jr nz, .asm_f4990
-	ld a, $8
-	ldh [rNR12], a
-	swap a
-	ldh [rNR14], a
+	ld a, AUD1ENV_UP
+	ldh [rAUD1ENV], a
+	swap a ; AUD1HIGH_RESTART
+	ldh [rAUD1HIGH], a
 .asm_f4990
 	bit 1, d
 	jr nz, .asm_f499c
 	swap a
-	ldh [rNR22], a
-	swap a
-	ldh [rNR24], a
+	ldh [rAUD2ENV], a
+	swap a ; AUD2HIGH_RESTART
+	ldh [rAUD2HIGH], a
 .asm_f499c
 	bit 3, d
 	jr nz, .asm_f49a8
 	swap a
-	ldh [rNR42], a
-	swap a
-	ldh [rNR44], a
+	ldh [rAUD4ENV], a
+	swap a ; AUD4GO_RESTART
+	ldh [rAUD4GO], a
 .asm_f49a8
 	bit 2, d
 	jr nz, .asm_f49b0
-	ld a, $0
-	ldh [rNR32], a
+	ld a, AUD3LEVEL_MUTE
+	ldh [rAUD3LEVEL], a
 .asm_f49b0
 	ret
 

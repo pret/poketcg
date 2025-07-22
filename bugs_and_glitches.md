@@ -624,38 +624,38 @@ Characters that are assigned the green NPC palette have incorrect profile frame 
 ```diff
 .data_a9459
 	db 4 ; size
--	db 0, 0, 6, %011 | (1 << OAM_OBP_NUM)
-+	db 0, 0, 12, %011 | (1 << OAM_OBP_NUM)
-	db 0, 8, 13, %011 | (1 << OAM_OBP_NUM)
-	db 8, 0, 14, %011 | (1 << OAM_OBP_NUM)
-	db 8, 8, 15, %011 | (1 << OAM_OBP_NUM)
+-	db 0, 0, 6, %011 | OAM_PAL1
++	db 0, 0, 12, %011 | OAM_PAL1
+	db 0, 8, 13, %011 | OAM_PAL1
+	db 8, 0, 14, %011 | OAM_PAL1
+	db 8, 8, 15, %011 | OAM_PAL1
 
 .data_a946a
 	db 4 ; size
--	db 0, 0, 8, %011 | (1 << OAM_OBP_NUM)
-+	db 0, 0, 16, %011 | (1 << OAM_OBP_NUM)
-	db 0, 8, 17, %011 | (1 << OAM_OBP_NUM)
-	db 8, 0, 18, %011 | (1 << OAM_OBP_NUM)
-	db 8, 8, 19, %011 | (1 << OAM_OBP_NUM)
+-	db 0, 0, 8, %011 | OAM_PAL1
++	db 0, 0, 16, %011 | OAM_PAL1
+	db 0, 8, 17, %011 | OAM_PAL1
+	db 8, 0, 18, %011 | OAM_PAL1
+	db 8, 8, 19, %011 | OAM_PAL1
 
 ...
 
 
 .data_a94ae
 	db 4 ; size
-	db 0, 0, 13, %011 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db 8, 0, 15, %011 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
--	db 0, 8, 6, %011 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-+	db 0, 8, 12, %011 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db 8, 8, 14, %011 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
+	db 0, 0, 13, %011 | OAM_PAL1 | OAM_XFLIP
+	db 8, 0, 15, %011 | OAM_PAL1 | OAM_XFLIP
+-	db 0, 8, 6, %011 | OAM_PAL1 | OAM_XFLIP
++	db 0, 8, 12, %011 | OAM_PAL1 | OAM_XFLIP
+	db 8, 8, 14, %011 | OAM_PAL1 | OAM_XFLIP
 
 .data_a94bf
 	db 4 ; size
-	db 0, 0, 17, %011 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db 8, 0, 19, %011 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
--	db 0, 8, 8, %011 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-+	db 0, 8, 16, %011 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db 8, 8, 18, %011 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
+	db 0, 0, 17, %011 | OAM_PAL1 | OAM_XFLIP
+	db 8, 0, 19, %011 | OAM_PAL1 | OAM_XFLIP
+-	db 0, 8, 8, %011 | OAM_PAL1 | OAM_XFLIP
++	db 0, 8, 16, %011 | OAM_PAL1 | OAM_XFLIP
+	db 8, 8, 18, %011 | OAM_PAL1 | OAM_XFLIP
 ```
 
 ### Big Lightning animation has incorrect frame data
@@ -666,8 +666,8 @@ One of the bolts from the "big lightning" duel animation has its topmost row of 
 ```diff
 .data_ab5fd
 	db 28 ; size
--	db -72, -8, 0, (1 << OAM_X_FLIP)
-+	db -72, 0, 0, (1 << OAM_X_FLIP)
+-	db -72, -8, 0, OAM_XFLIP
++	db -72, 0, 0, OAM_XFLIP
 	db -16, 32, 27, $0
 	...
 	db -56, 10, 42, $0
@@ -678,10 +678,10 @@ The base of the lightning being cut-off is addressed below, though that specific
 ```diff
 .data_ab5fd
 -	db 28 ; size
--	db -72, -8, 0, (1 << OAM_X_FLIP)
+-	db -72, -8, 0, OAM_XFLIP
 +	db 29 ; size
-+	db -72, 0, 0, (1 << OAM_X_FLIP)
-+	db -72, -8, 1, (1 << OAM_X_FLIP)
++	db -72, 0, 0, OAM_XFLIP
++	db -72, -8, 1, OAM_XFLIP
 	db -16, 32, 27, $0
 	...
 	db -56, 10, 42, $0
@@ -696,16 +696,16 @@ The fire blasts from Dive Bomb's duel animation mistakenly reuse the same tile t
 .data_ac685
 	db 19 ; size
 	...
-	db -8, 8, 11, (1 << OAM_X_FLIP)
-	db -8, 16, 10, (1 << OAM_X_FLIP)
--	db 0, 24, 10, (1 << OAM_X_FLIP)
-+	db 0, 24, 12, (1 << OAM_X_FLIP)
-	db 0, 16, 13, (1 << OAM_X_FLIP)
-	db 0, 8, 14, (1 << OAM_X_FLIP)
-	db 8, 8, 17, (1 << OAM_X_FLIP)
-	db 8, 16, 16, (1 << OAM_X_FLIP)
-	db 8, 24, 15, (1 << OAM_X_FLIP)
-	db 16, 24, 18, (1 << OAM_X_FLIP)
+	db -8, 8, 11, OAM_XFLIP
+	db -8, 16, 10, OAM_XFLIP
+-	db 0, 24, 10, OAM_XFLIP
++	db 0, 24, 12, OAM_XFLIP
+	db 0, 16, 13, OAM_XFLIP
+	db 0, 8, 14, OAM_XFLIP
+	db 8, 8, 17, OAM_XFLIP
+	db 8, 16, 16, OAM_XFLIP
+	db 8, 24, 15, OAM_XFLIP
+	db 16, 24, 18, OAM_XFLIP
 
 .data_ac6d2
 	db 19 ; size
@@ -724,16 +724,16 @@ The fire blasts from Dive Bomb's duel animation mistakenly reuse the same tile t
 .data_ac71f
 	db 29 ; size
 	...
-	db -8, 8, 11, (1 << OAM_X_FLIP)
-	db -8, 16, 10, (1 << OAM_X_FLIP)
--	db 0, 24, 10, (1 << OAM_X_FLIP)
-+	db 0, 24, 12, (1 << OAM_X_FLIP)
-	db 0, 16, 13, (1 << OAM_X_FLIP)
-	db 0, 8, 14, (1 << OAM_X_FLIP)
-	db 8, 8, 17, (1 << OAM_X_FLIP)
-	db 8, 16, 16, (1 << OAM_X_FLIP)
-	db 8, 24, 15, (1 << OAM_X_FLIP)
-	db 16, 24, 18, (1 << OAM_X_FLIP)
+	db -8, 8, 11, OAM_XFLIP
+	db -8, 16, 10, OAM_XFLIP
+-	db 0, 24, 10, OAM_XFLIP
++	db 0, 24, 12, OAM_XFLIP
+	db 0, 16, 13, OAM_XFLIP
+	db 0, 8, 14, OAM_XFLIP
+	db 8, 8, 17, OAM_XFLIP
+	db 8, 16, 16, OAM_XFLIP
+	db 8, 24, 15, OAM_XFLIP
+	db 16, 24, 18, OAM_XFLIP
 ```
 
 The flames of one of the blasts being cut-off is addressed below, though that specific fix will cause a byte overflow, forcing one to rearrange `anim2.asm`.
@@ -743,17 +743,17 @@ The flames of one of the blasts being cut-off is addressed below, though that sp
 -	db 19 ; size
 +	db 20 ; size
 	...
-	db -8, 8, 11, (1 << OAM_X_FLIP)
-	db -8, 16, 10, (1 << OAM_X_FLIP)
--	db 0, 24, 10, (1 << OAM_X_FLIP)
-+	db 0, 24, 12, (1 << OAM_X_FLIP)
-	db 0, 16, 13, (1 << OAM_X_FLIP)
-	db 0, 8, 14, (1 << OAM_X_FLIP)
-	db 8, 8, 17, (1 << OAM_X_FLIP)
-	db 8, 16, 16, (1 << OAM_X_FLIP)
-	db 8, 24, 15, (1 << OAM_X_FLIP)
-+	db 16, 16, 19, (1 << OAM_X_FLIP)
-	db 16, 24, 18, (1 << OAM_X_FLIP)
+	db -8, 8, 11, OAM_XFLIP
+	db -8, 16, 10, OAM_XFLIP
+-	db 0, 24, 10, OAM_XFLIP
++	db 0, 24, 12, OAM_XFLIP
+	db 0, 16, 13, OAM_XFLIP
+	db 0, 8, 14, OAM_XFLIP
+	db 8, 8, 17, OAM_XFLIP
+	db 8, 16, 16, OAM_XFLIP
+	db 8, 24, 15, OAM_XFLIP
++	db 16, 16, 19, OAM_XFLIP
+	db 16, 24, 18, OAM_XFLIP
 
 .data_ac6d2
 -	db 19 ; size
@@ -774,16 +774,16 @@ The flames of one of the blasts being cut-off is addressed below, though that sp
 .data_ac71f
 	db 29 ; size
 	...
-	db -8, 8, 11, (1 << OAM_X_FLIP)
-	db -8, 16, 10, (1 << OAM_X_FLIP)
--	db 0, 24, 10, (1 << OAM_X_FLIP)
-+	db 0, 24, 12, (1 << OAM_X_FLIP)
-	db 0, 16, 13, (1 << OAM_X_FLIP)
-	db 0, 8, 14, (1 << OAM_X_FLIP)
-	db 8, 8, 17, (1 << OAM_X_FLIP)
-	db 8, 16, 16, (1 << OAM_X_FLIP)
-	db 8, 24, 15, (1 << OAM_X_FLIP)
-	db 16, 24, 18, (1 << OAM_X_FLIP)
+	db -8, 8, 11, OAM_XFLIP
+	db -8, 16, 10, OAM_XFLIP
+-	db 0, 24, 10, OAM_XFLIP
++	db 0, 24, 12, OAM_XFLIP
+	db 0, 16, 13, OAM_XFLIP
+	db 0, 8, 14, OAM_XFLIP
+	db 8, 8, 17, OAM_XFLIP
+	db 8, 16, 16, OAM_XFLIP
+	db 8, 24, 15, OAM_XFLIP
+	db 16, 24, 18, OAM_XFLIP
 ```
 
 ## Text

@@ -89,5 +89,5 @@ BankpopROM::
 ; switch ROM bank to a
 BankswitchROM::
 	ldh [hBankROM], a
-	ld [MBC3RomBank], a
+	ld [rROMB], a
 	ret

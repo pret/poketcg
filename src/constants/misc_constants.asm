@@ -1,25 +1,3 @@
-; buttons
-DEF A_BUTTON_F EQU 0
-DEF B_BUTTON_F EQU 1
-DEF SELECT_F   EQU 2
-DEF START_F    EQU 3
-DEF D_RIGHT_F  EQU 4
-DEF D_LEFT_F   EQU 5
-DEF D_UP_F     EQU 6
-DEF D_DOWN_F   EQU 7
-
-DEF A_BUTTON   EQU 1 << A_BUTTON_F ; $01
-DEF B_BUTTON   EQU 1 << B_BUTTON_F ; $02
-DEF SELECT     EQU 1 << SELECT_F   ; $04
-DEF START      EQU 1 << START_F    ; $08
-DEF D_RIGHT    EQU 1 << D_RIGHT_F  ; $10
-DEF D_LEFT     EQU 1 << D_LEFT_F   ; $20
-DEF D_UP       EQU 1 << D_UP_F     ; $40
-DEF D_DOWN     EQU 1 << D_DOWN_F   ; $80
-
-DEF BUTTONS    EQU A_BUTTON | B_BUTTON | SELECT | START  ; $0f
-DEF D_PAD      EQU D_RIGHT  | D_LEFT   | D_UP   | D_DOWN ; $f0
-
 ; console types (wConsole)
 DEF CONSOLE_DMG EQU $00
 DEF CONSOLE_SGB EQU $01
@@ -61,6 +39,18 @@ DEF CARDPOP_NAME_LIST_MAX_ELEMS EQU 16
 DEF CARDPOP_NAME_LIST_SIZE EQUS "CARDPOP_NAME_LIST_MAX_ELEMS * NAME_BUFFER_LENGTH"
 
 DEF NUM_CHALLENGE_MACHINE_OPPONENTS EQU 5
+
+; rJOYP constants to read IR signals or SNES input
+DEF P15              EQU %00100000
+DEF P14              EQU %00010000
+DEF P13              EQU %00001000
+DEF P12              EQU %00000100
+DEF P11              EQU %00000010
+DEF P10              EQU %00000001
+DEF SNES_JOYPAD1     EQU $3 ; lower two bits
+DEF SNES_JOYPAD2     EQU $2 ; lower two bits
+DEF SNES_JOYPAD3     EQU $1 ; lower two bits
+DEF SNES_JOYPAD4     EQU $0 ; lower two bits
 
 ; commands transmitted through IR to be
 ; executed by the other device
