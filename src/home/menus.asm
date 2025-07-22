@@ -83,7 +83,7 @@ HandleMenuInput::
 	ld a, [wNumMenuItems]
 	ld c, a
 	ld a, [wCurMenuItem]
-	bit D_UP_F, b
+	bit B_PAD_UP, b
 	jr z, .not_up
 	dec a
 	bit 7, a
@@ -92,7 +92,7 @@ HandleMenuInput::
 	dec a ; wrapping around, so load the bottommost item
 	jr .handle_up_or_down
 .not_up
-	bit D_DOWN_F, b
+	bit B_PAD_DOWN, b
 	jr z, .up_down_done
 	inc a
 	cp c
@@ -131,9 +131,9 @@ HandleMenuInput::
 	ret
 .check_A_or_B
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	jr z, RefreshMenuCursor_CheckPlaySFX
-	and A_BUTTON
+	and PAD_A
 	jr nz, .A_pressed_draw_cursor
 	; B button pressed
 	ld a, [wCurMenuItem]
@@ -223,7 +223,7 @@ SetMenuItem::
 	ret
 
 ; handle input for the 2-row 3-column duel menu.
-; only handles input not involving the B, START, or SELECT buttons, that is,
+; only handles input not involving the B, PAD_START, or PAD_SELECT buttons, that is,
 ; navigating through the menu or selecting an item with the A button.
 ; other input in handled by PrintDuelMenuAndHandleInput.handle_input
 HandleDuelMenuInput::
@@ -232,13 +232,13 @@ HandleDuelMenuInput::
 	jr z, .blink_cursor
 	ld b, a
 	ld hl, wCurMenuItem
-	and D_UP | D_DOWN
+	and PAD_UP | PAD_DOWN
 	jr z, .check_left
 	ld a, [hl]
 	xor 1 ; move to the other menu item in the same column
 	jr .dpad_pressed
 .check_left
-	bit D_LEFT_F, b
+	bit B_PAD_LEFT, b
 	jr z, .check_right
 	ld a, [hl]
 	sub 2
@@ -248,7 +248,7 @@ HandleDuelMenuInput::
 	add 4
 	jr .dpad_pressed
 .check_right
-	bit D_RIGHT_F, b
+	bit B_PAD_RIGHT, b
 	jr z, .dpad_not_pressed
 	ld a, [hl]
 	add 2
@@ -269,7 +269,7 @@ HandleDuelMenuInput::
 	jr .blink_cursor
 .dpad_not_pressed
 	ldh a, [hDPadHeld]
-	and A_BUTTON
+	and PAD_A
 	jp nz, HandleMenuInput.A_pressed
 .blink_cursor
 	; blink cursor every 16 frames
@@ -433,7 +433,7 @@ CardListMenuFunction::
 	dec a
 	ld c, a
 	ld a, [wCurMenuItem]
-	bit D_UP_F, b
+	bit B_PAD_UP, b
 	jr z, .not_up
 	cp c
 	jp nz, .continue
@@ -448,7 +448,7 @@ CardListMenuFunction::
 	call ReloadCardListItems
 	jp .continue
 .not_up
-	bit D_DOWN_F, b
+	bit B_PAD_DOWN, b
 	jr z, .not_down
 	or a
 	jr nz, .not_last_visible_item
@@ -479,7 +479,7 @@ CardListMenuFunction::
 	ld [wRefreshMenuCursorSFX], a
 	jp .continue
 .not_down
-	bit D_LEFT_F, b
+	bit B_PAD_LEFT, b
 	jr z, .not_left
 	ld a, [wListScrollOffset]
 	or a
@@ -508,7 +508,7 @@ CardListMenuFunction::
 	call ReloadCardListItems
 	jr .continue
 .not_left
-	bit D_RIGHT_F, b
+	bit B_PAD_RIGHT, b
 	jr z, .continue
 	ld a, [wNumMenuItems]
 	ld hl, wNumListItems
@@ -581,9 +581,9 @@ CardListMenuFunction::
 	jp hl ; execute the function at wListFunctionPointer
 .no_list_function
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	ret z
-	and B_BUTTON
+	and PAD_B
 	jr nz, .pressed_b
 	scf
 	ret
@@ -717,9 +717,9 @@ WaitForButtonAorB::
 	call DoFrame
 	call RefreshMenuCursor
 	ldh a, [hKeysPressed]
-	bit A_BUTTON_F, a
+	bit B_PAD_A, a
 	jr nz, .a_pressed
-	bit B_BUTTON_F, a
+	bit B_PAD_B, a
 	jr z, WaitForButtonAorB
 	call EraseCursor
 	scf
@@ -816,7 +816,7 @@ DrawNarrowTextBox_WaitForInput::
 	call DoFrame
 	call RefreshMenuCursor
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	jr z, .wait_A_or_B_loop
 	ret
 
@@ -852,7 +852,7 @@ WaitForWideTextBoxInput::
 	call DoFrame
 	call RefreshMenuCursor
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	jr z, .wait_A_or_B_loop
 	call EraseCursor
 	ret
@@ -920,10 +920,10 @@ HandleYesOrNoMenu::
 	call DoFrame
 	call RefreshMenuCursor
 	ldh a, [hKeysPressed]
-	bit A_BUTTON_F, a
+	bit B_PAD_A, a
 	jr nz, .a_pressed
 	ldh a, [hDPadHeld]
-	and D_RIGHT | D_LEFT
+	and PAD_RIGHT | PAD_LEFT
 	jr z, .wait_button_loop
 	; left or right pressed, so switch to the other menu item
 	ld a, SFX_CURSOR

@@ -9,7 +9,7 @@ DoAFrames::
 	ret
 
 ; updates background, sprites and other game variables, halts until vblank, and reads user input
-; if wDebugPauseAllowed is not 0, the game can be paused (and resumed) by pressing the SELECT button
+; if wDebugPauseAllowed is not 0, the game can be paused (and resumed) by pressing the PAD_SELECT button
 DoFrame::
 	push af
 	push hl
@@ -24,14 +24,14 @@ DoFrame::
 	or a
 	jr z, .done
 	ldh a, [hKeysPressed]
-	and SELECT
+	and PAD_SELECT
 	jr z, .done
 .game_paused_loop
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
 	ldh a, [hKeysPressed]
-	and SELECT
+	and PAD_SELECT
 	jr z, .game_paused_loop
 .done
 	pop bc
@@ -45,11 +45,11 @@ DoFrame::
 HandleDPadRepeat::
 	ldh a, [hKeysHeld]
 	ldh [hDPadHeld], a
-	and D_PAD
+	and PAD_CTRL_PAD
 	jr z, .done
 	ld hl, hDPadRepeat
 	ldh a, [hKeysPressed]
-	and D_PAD
+	and PAD_CTRL_PAD
 	jr z, .dpad_key_held
 	ld [hl], 24
 	ret
@@ -60,6 +60,6 @@ HandleDPadRepeat::
 	ret
 .done
 	ldh a, [hKeysPressed]
-	and BUTTONS
+	and PAD_BUTTONS
 	ldh [hDPadHeld], a
 	ret

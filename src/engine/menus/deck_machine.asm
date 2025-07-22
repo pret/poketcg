@@ -62,7 +62,7 @@ HandleDeckMissingCardsList:
 	call HandleLeftRightInCardList
 	jr c, .loop_input
 	ldh a, [hDPadHeld]
-	and START
+	and PAD_START
 	jr z, .loop_input
 
 .open_card_pge
@@ -263,7 +263,7 @@ GiftCenter_ReceiveCard:
 	call HandleLeftRightInCardList
 	jr c, .asm_afe2
 	ldh a, [hDPadHeld]
-	and START
+	and PAD_START
 	jr z, .asm_afe2
 .asm_aff5
 	ld a, $01
@@ -658,7 +658,7 @@ HandleDeckMachineSelection:
 	call .HandleListJumps
 	jr c, .start
 	ldh a, [hDPadHeld]
-	and START
+	and PAD_START
 	jr z, .start
 
 ; start btn
@@ -725,9 +725,9 @@ HandleDeckMachineSelection:
 	ld a, [wCardListVisibleOffset]
 	ld c, a
 	ldh a, [hDPadHeld]
-	cp D_RIGHT
+	cp PAD_RIGHT
 	jr z, .d_right
-	cp D_LEFT
+	cp PAD_LEFT
 	jr z, .d_left
 	or a
 	ret
@@ -1909,13 +1909,13 @@ HandleAutoDeckMenu:
 
 ; the following lines do nothing
 	ldh a, [hDPadHeld]
-	and D_UP | D_DOWN
+	and PAD_UP | PAD_DOWN
 	jr z, .asm_ba4e
 .asm_ba4e
 
 ; check whether to show deck confirmation list
 	ldh a, [hDPadHeld]
-	and START
+	and PAD_START
 	jr z, .wait_input
 
 	ld a, [wCardListVisibleOffset]

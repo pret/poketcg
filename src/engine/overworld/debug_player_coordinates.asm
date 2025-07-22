@@ -14,10 +14,10 @@ Func_1c003: ; unreferenced
 
 	ldh a, [hKeysHeld]
 	ld b, a
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	cp b
 	jr nz, JumpSetWindowOff
-	and B_BUTTON
+	and PAD_B
 	jr z, JumpSetWindowOff
 
 	ld bc, $20
@@ -32,14 +32,14 @@ Func_1c003: ; unreferenced
 	ldh [hWY], a
 
 	ldh a, [hKeysPressed]
-	and A_BUTTON
+	and PAD_A
 	jr z, .skip_load_scene
 	ld a, SCENE_COLOR_PALETTE
 	lb bc, 0, 33
 	call LoadScene
 .skip_load_scene
 	ldh a, [hKeysHeld]
-	and A_BUTTON
+	and PAD_A
 	jr z, .set_wd_on
 	ld a, $67
 	ldh [hWX], a

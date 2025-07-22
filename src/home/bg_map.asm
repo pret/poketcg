@@ -48,7 +48,7 @@ WriteDataBlockToBGMap0::
 	add hl, bc ; point to next structure
 	ret
 
-; writes a to [v*BGMap0 + BG_MAP_WIDTH * c + b]
+; writes a to [v*BGMap0 + TILEMAP_WIDTH * c + b]
 WriteByteToBGMap0::
 	push af
 	ld a, [wLCDC]
@@ -70,7 +70,7 @@ WriteByteToBGMap0::
 	pop af
 ;	fallthrough
 
-; writes a to [v*BGMap0 + BG_MAP_WIDTH * c + b] during hblank
+; writes a to [v*BGMap0 + TILEMAP_WIDTH * c + b] during hblank
 HblankWriteByteToBGMap0::
 	push hl
 	push de

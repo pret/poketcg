@@ -30,7 +30,7 @@ PrinterMenu_PokemonCards:
 	ld [wCardListNumCursorPositions], a
 .handle_input
 	ldh a, [hDPadHeld]
-	and D_DOWN
+	and PAD_DOWN
 	jr z, .asm_abca
 ; d_down
 	call ConfirmSelectionAndReturnCarry
@@ -75,7 +75,7 @@ PrinterMenu_PokemonCards:
 	call HandleDeckCardSelectionList
 	jr c, .asm_ac60
 	ldh a, [hDPadHeld]
-	and START
+	and PAD_START
 	jr z, .loop_frame_2
 ; start btn
 	ld a, $01

@@ -45,7 +45,7 @@ HandleTitleScreen:
 
 .check_keys
 	ldh a, [hKeysPressed]
-	and A_BUTTON | START
+	and PAD_A | PAD_START
 	jr z, .loop
 	ld a, SFX_CONFIRM
 	call PlaySFX

@@ -53,31 +53,31 @@ AnimFrameTable82::
 .data_b407b
 	db 2 ; size
 	db -32, -31, 1, $0
-	db -24, -31, 1, (1 << OAM_Y_FLIP)
+	db -24, -31, 1, OAM_YFLIP
 
 .data_b4084
 	db 6 ; size
 	db -32, -31, 1, $0
-	db -24, -31, 1, (1 << OAM_Y_FLIP)
+	db -24, -31, 1, OAM_YFLIP
 	db -40, -22, 2, $0
 	db -32, -20, 3, $0
-	db -16, -22, 2, (1 << OAM_Y_FLIP)
-	db -24, -20, 3, (1 << OAM_Y_FLIP)
+	db -16, -22, 2, OAM_YFLIP
+	db -24, -20, 3, OAM_YFLIP
 
 .data_b409d
 	db 12 ; size
 	db -32, -31, 1, $0
-	db -24, -31, 1, (1 << OAM_Y_FLIP)
+	db -24, -31, 1, OAM_YFLIP
 	db -40, -22, 2, $0
 	db -32, -20, 3, $0
 	db -48, -13, 4, $0
 	db -40, -9, 5, $0
 	db -32, -8, 6, $0
-	db -16, -22, 2, (1 << OAM_Y_FLIP)
-	db -24, -20, 3, (1 << OAM_Y_FLIP)
-	db -8, -13, 4, (1 << OAM_Y_FLIP)
-	db -16, -9, 5, (1 << OAM_Y_FLIP)
-	db -24, -8, 6, (1 << OAM_Y_FLIP)
+	db -16, -22, 2, OAM_YFLIP
+	db -24, -20, 3, OAM_YFLIP
+	db -8, -13, 4, OAM_YFLIP
+	db -16, -9, 5, OAM_YFLIP
+	db -24, -8, 6, OAM_YFLIP
 
 .data_b40ce
 	db 10 ; size
@@ -86,71 +86,71 @@ AnimFrameTable82::
 	db -48, -13, 4, $0
 	db -40, -9, 5, $0
 	db -32, -8, 6, $0
-	db -16, -22, 2, (1 << OAM_Y_FLIP)
-	db -24, -20, 3, (1 << OAM_Y_FLIP)
-	db -8, -13, 4, (1 << OAM_Y_FLIP)
-	db -16, -9, 5, (1 << OAM_Y_FLIP)
-	db -24, -8, 6, (1 << OAM_Y_FLIP)
+	db -16, -22, 2, OAM_YFLIP
+	db -24, -20, 3, OAM_YFLIP
+	db -8, -13, 4, OAM_YFLIP
+	db -16, -9, 5, OAM_YFLIP
+	db -24, -8, 6, OAM_YFLIP
 
 .data_b40f7
 	db 6 ; size
 	db -48, -13, 4, $0
 	db -40, -9, 5, $0
 	db -32, -8, 6, $0
-	db -8, -13, 4, (1 << OAM_Y_FLIP)
-	db -16, -9, 5, (1 << OAM_Y_FLIP)
-	db -24, -8, 6, (1 << OAM_Y_FLIP)
+	db -8, -13, 4, OAM_YFLIP
+	db -16, -9, 5, OAM_YFLIP
+	db -24, -8, 6, OAM_YFLIP
 
 .data_b4110
 	db 2 ; size
-	db -32, -9, 1, (1 << OAM_X_FLIP)
-	db -24, -9, 1, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
+	db -32, -9, 1, OAM_XFLIP
+	db -24, -9, 1, OAM_XFLIP | OAM_YFLIP
 
 .data_b4119
 	db 6 ; size
-	db -32, -9, 1, (1 << OAM_X_FLIP)
-	db -24, -9, 1, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -40, -18, 2, (1 << OAM_X_FLIP)
-	db -32, -20, 3, (1 << OAM_X_FLIP)
-	db -16, -18, 2, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -24, -20, 3, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
+	db -32, -9, 1, OAM_XFLIP
+	db -24, -9, 1, OAM_XFLIP | OAM_YFLIP
+	db -40, -18, 2, OAM_XFLIP
+	db -32, -20, 3, OAM_XFLIP
+	db -16, -18, 2, OAM_XFLIP | OAM_YFLIP
+	db -24, -20, 3, OAM_XFLIP | OAM_YFLIP
 
 .data_b4132
 	db 12 ; size
-	db -32, -9, 1, (1 << OAM_X_FLIP)
-	db -24, -9, 1, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -40, -18, 2, (1 << OAM_X_FLIP)
-	db -32, -20, 3, (1 << OAM_X_FLIP)
-	db -48, -27, 4, (1 << OAM_X_FLIP)
-	db -40, -31, 5, (1 << OAM_X_FLIP)
-	db -32, -32, 6, (1 << OAM_X_FLIP)
-	db -16, -18, 2, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -24, -20, 3, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -8, -27, 4, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -16, -31, 5, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -24, -32, 6, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
+	db -32, -9, 1, OAM_XFLIP
+	db -24, -9, 1, OAM_XFLIP | OAM_YFLIP
+	db -40, -18, 2, OAM_XFLIP
+	db -32, -20, 3, OAM_XFLIP
+	db -48, -27, 4, OAM_XFLIP
+	db -40, -31, 5, OAM_XFLIP
+	db -32, -32, 6, OAM_XFLIP
+	db -16, -18, 2, OAM_XFLIP | OAM_YFLIP
+	db -24, -20, 3, OAM_XFLIP | OAM_YFLIP
+	db -8, -27, 4, OAM_XFLIP | OAM_YFLIP
+	db -16, -31, 5, OAM_XFLIP | OAM_YFLIP
+	db -24, -32, 6, OAM_XFLIP | OAM_YFLIP
 
 .data_b4163
 	db 10 ; size
-	db -40, -18, 2, (1 << OAM_X_FLIP)
-	db -32, -20, 3, (1 << OAM_X_FLIP)
-	db -48, -27, 4, (1 << OAM_X_FLIP)
-	db -40, -31, 5, (1 << OAM_X_FLIP)
-	db -32, -32, 6, (1 << OAM_X_FLIP)
-	db -16, -18, 2, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -24, -20, 3, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -8, -27, 4, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -16, -31, 5, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -24, -32, 6, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
+	db -40, -18, 2, OAM_XFLIP
+	db -32, -20, 3, OAM_XFLIP
+	db -48, -27, 4, OAM_XFLIP
+	db -40, -31, 5, OAM_XFLIP
+	db -32, -32, 6, OAM_XFLIP
+	db -16, -18, 2, OAM_XFLIP | OAM_YFLIP
+	db -24, -20, 3, OAM_XFLIP | OAM_YFLIP
+	db -8, -27, 4, OAM_XFLIP | OAM_YFLIP
+	db -16, -31, 5, OAM_XFLIP | OAM_YFLIP
+	db -24, -32, 6, OAM_XFLIP | OAM_YFLIP
 
 .data_b418c
 	db 6 ; size
-	db -48, -27, 4, (1 << OAM_X_FLIP)
-	db -40, -31, 5, (1 << OAM_X_FLIP)
-	db -32, -32, 6, (1 << OAM_X_FLIP)
-	db -8, -27, 4, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -16, -31, 5, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -24, -32, 6, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
+	db -48, -27, 4, OAM_XFLIP
+	db -40, -31, 5, OAM_XFLIP
+	db -32, -32, 6, OAM_XFLIP
+	db -8, -27, 4, OAM_XFLIP | OAM_YFLIP
+	db -16, -31, 5, OAM_XFLIP | OAM_YFLIP
+	db -24, -32, 6, OAM_XFLIP | OAM_YFLIP
 
 .data_b41a5
 	db 1 ; size
@@ -370,15 +370,15 @@ AnimFrameTable82::
 	db -24, -14, 8, $0
 	db -24, -6, 9, $0
 	db -16, -14, 10, $0
-	db -24, 6, 8, (1 << OAM_X_FLIP)
-	db -24, -2, 9, (1 << OAM_X_FLIP)
-	db -16, 6, 10, (1 << OAM_X_FLIP)
-	db -32, -14, 8, (1 << OAM_Y_FLIP)
-	db -32, -6, 9, (1 << OAM_Y_FLIP)
-	db -40, -14, 10, (1 << OAM_Y_FLIP)
-	db -32, 6, 8, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -32, -2, 9, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -40, 6, 10, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
+	db -24, 6, 8, OAM_XFLIP
+	db -24, -2, 9, OAM_XFLIP
+	db -16, 6, 10, OAM_XFLIP
+	db -32, -14, 8, OAM_YFLIP
+	db -32, -6, 9, OAM_YFLIP
+	db -40, -14, 10, OAM_YFLIP
+	db -32, 6, 8, OAM_XFLIP | OAM_YFLIP
+	db -32, -2, 9, OAM_XFLIP | OAM_YFLIP
+	db -40, 6, 10, OAM_XFLIP | OAM_YFLIP
 
 AnimData181::
 	frame_table AnimFrameTable83
@@ -426,31 +426,31 @@ AnimFrameTable83::
 
 .data_b44a6
 	db 2 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -16, -76, 2, OAM_YFLIP
 
 .data_b44af
 	db 4 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 
 .data_b44c0
 	db 6 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 
 .data_b44d9
 	db 8 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -458,10 +458,10 @@ AnimFrameTable83::
 
 .data_b44fa
 	db 10 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -471,10 +471,10 @@ AnimFrameTable83::
 
 .data_b4523
 	db 12 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -486,10 +486,10 @@ AnimFrameTable83::
 
 .data_b4554
 	db 14 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -503,10 +503,10 @@ AnimFrameTable83::
 
 .data_b458d
 	db 16 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -522,10 +522,10 @@ AnimFrameTable83::
 
 .data_b45ce
 	db 18 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -543,10 +543,10 @@ AnimFrameTable83::
 
 .data_b4617
 	db 20 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -566,10 +566,10 @@ AnimFrameTable83::
 
 .data_b4668
 	db 22 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -591,10 +591,10 @@ AnimFrameTable83::
 
 .data_b46c1
 	db 24 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -618,10 +618,10 @@ AnimFrameTable83::
 
 .data_b4722
 	db 26 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -647,10 +647,10 @@ AnimFrameTable83::
 
 .data_b478b
 	db 28 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -678,10 +678,10 @@ AnimFrameTable83::
 
 .data_b47fc
 	db 30 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -711,10 +711,10 @@ AnimFrameTable83::
 
 .data_b4875
 	db 32 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -742,14 +742,14 @@ AnimFrameTable83::
 	db 32, 44, 1, $0
 	db 32, 52, 1, $0
 	db 32, 60, 1, $0
-	db 32, 68, 2, (1 << OAM_Y_FLIP)
+	db 32, 68, 2, OAM_YFLIP
 
 .data_b48f6
 	db 34 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -777,16 +777,16 @@ AnimFrameTable83::
 	db 32, 44, 1, $0
 	db 32, 52, 1, $0
 	db 32, 60, 1, $0
-	db 16, 68, 2, (1 << OAM_Y_FLIP)
-	db 24, 68, 2, (1 << OAM_Y_FLIP)
-	db 32, 68, 2, (1 << OAM_Y_FLIP)
+	db 16, 68, 2, OAM_YFLIP
+	db 24, 68, 2, OAM_YFLIP
+	db 32, 68, 2, OAM_YFLIP
 
 .data_b497f
 	db 36 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -814,26 +814,26 @@ AnimFrameTable83::
 	db 32, 44, 1, $0
 	db 32, 52, 1, $0
 	db 32, 60, 1, $0
-	db 16, 68, 2, (1 << OAM_Y_FLIP)
-	db 24, 68, 2, (1 << OAM_Y_FLIP)
-	db 32, 68, 2, (1 << OAM_Y_FLIP)
-	db 8, 60, 1, (1 << OAM_X_FLIP)
-	db 8, 68, 1, (1 << OAM_X_FLIP)
+	db 16, 68, 2, OAM_YFLIP
+	db 24, 68, 2, OAM_YFLIP
+	db 32, 68, 2, OAM_YFLIP
+	db 8, 60, 1, OAM_XFLIP
+	db 8, 68, 1, OAM_XFLIP
 
 .data_b4a10
 	db 12 ; size
-	db 0, -14, 3, %001 | (1 << OAM_OBP_NUM)
-	db 0, -6, 4, %001 | (1 << OAM_OBP_NUM)
-	db 8, -14, 5, %001 | (1 << OAM_OBP_NUM)
-	db 0, 6, 3, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db 0, -2, 4, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db 8, 6, 5, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db -8, -14, 3, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_Y_FLIP)
-	db -8, -6, 4, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_Y_FLIP)
-	db -16, -14, 5, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_Y_FLIP)
-	db -8, 6, 3, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -8, -2, 4, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -16, 6, 5, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
+	db 0, -14, 3, %001 | OAM_PAL1
+	db 0, -6, 4, %001 | OAM_PAL1
+	db 8, -14, 5, %001 | OAM_PAL1
+	db 0, 6, 3, %001 | OAM_PAL1 | OAM_XFLIP
+	db 0, -2, 4, %001 | OAM_PAL1 | OAM_XFLIP
+	db 8, 6, 5, %001 | OAM_PAL1 | OAM_XFLIP
+	db -8, -14, 3, %001 | OAM_PAL1 | OAM_YFLIP
+	db -8, -6, 4, %001 | OAM_PAL1 | OAM_YFLIP
+	db -16, -14, 5, %001 | OAM_PAL1 | OAM_YFLIP
+	db -8, 6, 3, %001 | OAM_PAL1 | OAM_XFLIP | OAM_YFLIP
+	db -8, -2, 4, %001 | OAM_PAL1 | OAM_XFLIP | OAM_YFLIP
+	db -16, 6, 5, %001 | OAM_PAL1 | OAM_XFLIP | OAM_YFLIP
 
 AnimData183::
 	frame_table AnimFrameTable84
@@ -881,31 +881,31 @@ AnimFrameTable84::
 
 .data_b4aba
 	db 2 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -16, -76, 2, OAM_YFLIP
 
 .data_b4ac3
 	db 4 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 
 .data_b4ad4
 	db 6 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 
 .data_b4aed
 	db 8 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -913,10 +913,10 @@ AnimFrameTable84::
 
 .data_b4b0e
 	db 10 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -926,10 +926,10 @@ AnimFrameTable84::
 
 .data_b4b37
 	db 12 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -941,10 +941,10 @@ AnimFrameTable84::
 
 .data_b4b68
 	db 14 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -958,10 +958,10 @@ AnimFrameTable84::
 
 .data_b4ba1
 	db 16 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -977,10 +977,10 @@ AnimFrameTable84::
 
 .data_b4be2
 	db 18 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -998,10 +998,10 @@ AnimFrameTable84::
 
 .data_b4c2b
 	db 20 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -1021,10 +1021,10 @@ AnimFrameTable84::
 
 .data_b4c7c
 	db 22 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -1046,10 +1046,10 @@ AnimFrameTable84::
 
 .data_b4cd5
 	db 24 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -1073,10 +1073,10 @@ AnimFrameTable84::
 
 .data_b4d36
 	db 26 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -1102,10 +1102,10 @@ AnimFrameTable84::
 
 .data_b4d9f
 	db 28 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -1133,10 +1133,10 @@ AnimFrameTable84::
 
 .data_b4e10
 	db 30 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -1166,10 +1166,10 @@ AnimFrameTable84::
 
 .data_b4e89
 	db 32 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -1197,14 +1197,14 @@ AnimFrameTable84::
 	db 32, 44, 1, $0
 	db 32, 52, 1, $0
 	db 32, 60, 1, $0
-	db 32, 68, 2, (1 << OAM_Y_FLIP)
+	db 32, 68, 2, OAM_YFLIP
 
 .data_b4f0a
 	db 34 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -1232,16 +1232,16 @@ AnimFrameTable84::
 	db 32, 44, 1, $0
 	db 32, 52, 1, $0
 	db 32, 60, 1, $0
-	db 16, 68, 2, (1 << OAM_Y_FLIP)
-	db 24, 68, 2, (1 << OAM_Y_FLIP)
-	db 32, 68, 2, (1 << OAM_Y_FLIP)
+	db 16, 68, 2, OAM_YFLIP
+	db 24, 68, 2, OAM_YFLIP
+	db 32, 68, 2, OAM_YFLIP
 
 .data_b4f93
 	db 36 ; size
-	db -16, -68, 1, (1 << OAM_X_FLIP)
-	db -24, -76, 2, (1 << OAM_Y_FLIP)
-	db -32, -76, 2, (1 << OAM_Y_FLIP)
-	db -16, -76, 2, (1 << OAM_Y_FLIP)
+	db -16, -68, 1, OAM_XFLIP
+	db -24, -76, 2, OAM_YFLIP
+	db -32, -76, 2, OAM_YFLIP
+	db -16, -76, 2, OAM_YFLIP
 	db -40, -76, 1, $0
 	db -40, -68, 1, $0
 	db -40, -60, 1, $0
@@ -1269,26 +1269,26 @@ AnimFrameTable84::
 	db 32, 44, 1, $0
 	db 32, 52, 1, $0
 	db 32, 60, 1, $0
-	db 16, 68, 2, (1 << OAM_Y_FLIP)
-	db 24, 68, 2, (1 << OAM_Y_FLIP)
-	db 32, 68, 2, (1 << OAM_Y_FLIP)
-	db 8, 60, 1, (1 << OAM_X_FLIP)
-	db 8, 68, 1, (1 << OAM_X_FLIP)
+	db 16, 68, 2, OAM_YFLIP
+	db 24, 68, 2, OAM_YFLIP
+	db 32, 68, 2, OAM_YFLIP
+	db 8, 60, 1, OAM_XFLIP
+	db 8, 68, 1, OAM_XFLIP
 
 .data_b5024
 	db 12 ; size
 	db 0, -14, 3, $0
 	db 0, -6, 4, $0
 	db 8, -14, 5, $0
-	db 0, 6, 3, (1 << OAM_X_FLIP)
-	db 0, -2, 4, (1 << OAM_X_FLIP)
-	db 8, 6, 5, (1 << OAM_X_FLIP)
-	db -8, -14, 3, (1 << OAM_Y_FLIP)
-	db -8, -6, 4, (1 << OAM_Y_FLIP)
-	db -16, -14, 5, (1 << OAM_Y_FLIP)
-	db -8, 6, 3, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -8, -2, 4, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -16, 6, 5, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
+	db 0, 6, 3, OAM_XFLIP
+	db 0, -2, 4, OAM_XFLIP
+	db 8, 6, 5, OAM_XFLIP
+	db -8, -14, 3, OAM_YFLIP
+	db -8, -6, 4, OAM_YFLIP
+	db -16, -14, 5, OAM_YFLIP
+	db -8, 6, 3, OAM_XFLIP | OAM_YFLIP
+	db -8, -2, 4, OAM_XFLIP | OAM_YFLIP
+	db -16, 6, 5, OAM_XFLIP | OAM_YFLIP
 
 AnimData185::
 	frame_table AnimFrameTable85
@@ -1316,47 +1316,47 @@ AnimFrameTable85::
 .data_b508e
 	db 12 ; size
 	db 0, -8, 0, $0
-	db 0, 0, 0, (1 << OAM_X_FLIP)
+	db 0, 0, 0, OAM_XFLIP
 	db 8, -8, 16, $0
-	db 8, 0, 16, (1 << OAM_X_FLIP)
+	db 8, 0, 16, OAM_XFLIP
 	db -16, -16, 14, $0
 	db -8, -16, 15, $0
-	db -16, 8, 14, (1 << OAM_X_FLIP)
-	db -8, 8, 15, (1 << OAM_X_FLIP)
+	db -16, 8, 14, OAM_XFLIP
+	db -8, 8, 15, OAM_XFLIP
 	db -16, -8, 12, $0
 	db -8, -8, 13, $0
-	db -16, 0, 12, (1 << OAM_X_FLIP)
-	db -8, 0, 13, (1 << OAM_X_FLIP)
+	db -16, 0, 12, OAM_XFLIP
+	db -8, 0, 13, OAM_XFLIP
 
 .data_b50bf
 	db 9 ; size
 	db -19, 11, 3, $0
 	db -8, -24, 0, $0
 	db 0, -24, 16, $0
-	db -8, -16, 0, (1 << OAM_X_FLIP)
-	db 0, -16, 16, (1 << OAM_X_FLIP)
+	db -8, -16, 0, OAM_XFLIP
+	db 0, -16, 16, OAM_XFLIP
 	db -8, 8, 0, $0
 	db 0, 8, 16, $0
-	db -8, 16, 0, (1 << OAM_X_FLIP)
-	db 0, 16, 16, (1 << OAM_X_FLIP)
+	db -8, 16, 0, OAM_XFLIP
+	db 0, 16, 16, OAM_XFLIP
 
 .data_b50e4
 	db 15 ; size
 	db 0, 16, 0, $0
-	db 0, 24, 0, (1 << OAM_X_FLIP)
+	db 0, 24, 0, OAM_XFLIP
 	db 8, 16, 16, $0
-	db 8, 24, 16, (1 << OAM_X_FLIP)
+	db 8, 24, 16, OAM_XFLIP
 	db -19, 11, 2, $0
 	db -16, -16, 1, $0
 	db -7, -16, 17, $0
-	db -16, 8, 1, (1 << OAM_X_FLIP)
-	db -7, 8, 17, (1 << OAM_X_FLIP)
+	db -16, 8, 1, OAM_XFLIP
+	db -7, 8, 17, OAM_XFLIP
 	db -16, -32, 0, $0
 	db -8, -32, 16, $0
-	db -16, -24, 0, (1 << OAM_X_FLIP)
-	db -8, -24, 16, (1 << OAM_X_FLIP)
+	db -16, -24, 0, OAM_XFLIP
+	db -8, -24, 16, OAM_XFLIP
 	db 0, -8, 19, $0
-	db 0, 0, 19, (1 << OAM_X_FLIP)
+	db 0, 0, 19, OAM_XFLIP
 
 .data_b5121
 	db 13 ; size
@@ -1367,19 +1367,19 @@ AnimFrameTable85::
 	db 24, -16, 3, $0
 	db -16, -24, 12, $0
 	db -8, -24, 13, $0
-	db -16, -16, 12, (1 << OAM_X_FLIP)
-	db -8, -16, 13, (1 << OAM_X_FLIP)
+	db -16, -16, 12, OAM_XFLIP
+	db -8, -16, 13, OAM_XFLIP
 	db 8, 8, 0, $0
 	db 16, 8, 16, $0
-	db 8, 16, 0, (1 << OAM_X_FLIP)
-	db 16, 16, 16, (1 << OAM_X_FLIP)
+	db 8, 16, 0, OAM_XFLIP
+	db 16, 16, 16, OAM_XFLIP
 
 .data_b5156
 	db 17 ; size
 	db 0, -8, 0, $0
-	db 0, 0, 0, (1 << OAM_X_FLIP)
+	db 0, 0, 0, OAM_XFLIP
 	db 8, -8, 16, $0
-	db 8, 0, 16, (1 << OAM_X_FLIP)
+	db 8, 0, 16, OAM_XFLIP
 	db 24, -16, 2, $0
 	db -24, 8, 8, $0
 	db -24, 16, 9, $0
@@ -1387,12 +1387,12 @@ AnimFrameTable85::
 	db -16, 16, 11, $0
 	db -16, -16, 14, $0
 	db -8, -16, 15, $0
-	db -16, 8, 14, (1 << OAM_X_FLIP)
-	db -8, 8, 15, (1 << OAM_X_FLIP)
+	db -16, 8, 14, OAM_XFLIP
+	db -8, 8, 15, OAM_XFLIP
 	db -16, -8, 12, $0
 	db -8, -8, 13, $0
-	db -16, 0, 12, (1 << OAM_X_FLIP)
-	db -8, 0, 13, (1 << OAM_X_FLIP)
+	db -16, 0, 12, OAM_XFLIP
+	db -8, 0, 13, OAM_XFLIP
 
 .data_b519b
 	db 13 ; size
@@ -1403,60 +1403,60 @@ AnimFrameTable85::
 	db -20, 12, 3, $0
 	db -8, -24, 0, $0
 	db 0, -24, 16, $0
-	db -8, -16, 0, (1 << OAM_X_FLIP)
-	db 0, -16, 16, (1 << OAM_X_FLIP)
+	db -8, -16, 0, OAM_XFLIP
+	db 0, -16, 16, OAM_XFLIP
 	db -8, 8, 0, $0
 	db 0, 8, 16, $0
-	db -8, 16, 0, (1 << OAM_X_FLIP)
-	db 0, 16, 16, (1 << OAM_X_FLIP)
+	db -8, 16, 0, OAM_XFLIP
+	db 0, 16, 16, OAM_XFLIP
 
 .data_b51d0
 	db 18 ; size
 	db 0, 16, 0, $0
-	db 0, 24, 0, (1 << OAM_X_FLIP)
+	db 0, 24, 0, OAM_XFLIP
 	db -16, -32, 0, $0
-	db -16, -24, 0, (1 << OAM_X_FLIP)
+	db -16, -24, 0, OAM_XFLIP
 	db -8, -32, 16, $0
-	db -8, -24, 16, (1 << OAM_X_FLIP)
+	db -8, -24, 16, OAM_XFLIP
 	db 8, 16, 16, $0
-	db 8, 24, 16, (1 << OAM_X_FLIP)
+	db 8, 24, 16, OAM_XFLIP
 	db 20, -20, 8, $0
 	db 20, -12, 9, $0
 	db 28, -20, 10, $0
 	db 28, -12, 11, $0
 	db -16, -16, 1, $0
 	db -7, -16, 17, $0
-	db -16, 8, 1, (1 << OAM_X_FLIP)
-	db -7, 8, 17, (1 << OAM_X_FLIP)
+	db -16, 8, 1, OAM_XFLIP
+	db -7, 8, 17, OAM_XFLIP
 	db 0, -8, 19, $0
-	db 0, 0, 19, (1 << OAM_X_FLIP)
+	db 0, 0, 19, OAM_XFLIP
 
 .data_b5219
 	db 9 ; size
 	db 24, -16, 3, $0
 	db -24, -24, 12, $0
 	db -16, -24, 13, $0
-	db -24, -16, 12, (1 << OAM_X_FLIP)
-	db -16, -16, 13, (1 << OAM_X_FLIP)
+	db -24, -16, 12, OAM_XFLIP
+	db -16, -16, 13, OAM_XFLIP
 	db 8, 8, 0, $0
 	db 16, 8, 16, $0
-	db 8, 16, 0, (1 << OAM_X_FLIP)
-	db 16, 16, 16, (1 << OAM_X_FLIP)
+	db 8, 16, 0, OAM_XFLIP
+	db 16, 16, 16, OAM_XFLIP
 
 .data_b523e
 	db 12 ; size
-	db 0, -14, 20, %001 | (1 << OAM_OBP_NUM)
-	db 0, -6, 21, %001 | (1 << OAM_OBP_NUM)
-	db 8, -14, 18, %001 | (1 << OAM_OBP_NUM)
-	db -8, -14, 20, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_Y_FLIP)
-	db -8, -6, 21, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_Y_FLIP)
-	db -16, -14, 18, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_Y_FLIP)
-	db -8, 6, 20, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -8, -2, 21, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -16, 6, 18, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db 0, 6, 20, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db 0, -2, 21, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db 8, 6, 18, %001 | (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
+	db 0, -14, 20, %001 | OAM_PAL1
+	db 0, -6, 21, %001 | OAM_PAL1
+	db 8, -14, 18, %001 | OAM_PAL1
+	db -8, -14, 20, %001 | OAM_PAL1 | OAM_YFLIP
+	db -8, -6, 21, %001 | OAM_PAL1 | OAM_YFLIP
+	db -16, -14, 18, %001 | OAM_PAL1 | OAM_YFLIP
+	db -8, 6, 20, %001 | OAM_PAL1 | OAM_XFLIP | OAM_YFLIP
+	db -8, -2, 21, %001 | OAM_PAL1 | OAM_XFLIP | OAM_YFLIP
+	db -16, 6, 18, %001 | OAM_PAL1 | OAM_XFLIP | OAM_YFLIP
+	db 0, 6, 20, %001 | OAM_PAL1 | OAM_XFLIP
+	db 0, -2, 21, %001 | OAM_PAL1 | OAM_XFLIP
+	db 8, 6, 18, %001 | OAM_PAL1 | OAM_XFLIP
 
 AnimData187::
 	frame_table AnimFrameTable86
@@ -1484,47 +1484,47 @@ AnimFrameTable86::
 .data_b52a8
 	db 12 ; size
 	db -8, -8, 0, $0
-	db -8, 0, 0, (1 << OAM_X_FLIP)
+	db -8, 0, 0, OAM_XFLIP
 	db 0, -8, 16, $0
-	db 0, 0, 16, (1 << OAM_X_FLIP)
+	db 0, 0, 16, OAM_XFLIP
 	db -16, -16, 14, $0
 	db -8, -16, 15, $0
-	db -16, 8, 14, (1 << OAM_X_FLIP)
-	db -8, 8, 15, (1 << OAM_X_FLIP)
+	db -16, 8, 14, OAM_XFLIP
+	db -8, 8, 15, OAM_XFLIP
 	db -24, -8, 12, $0
 	db -16, -8, 13, $0
-	db -24, 0, 12, (1 << OAM_X_FLIP)
-	db -16, 0, 13, (1 << OAM_X_FLIP)
+	db -24, 0, 12, OAM_XFLIP
+	db -16, 0, 13, OAM_XFLIP
 
 .data_b52d9
 	db 9 ; size
 	db -19, 11, 3, $0
 	db -8, -24, 0, $0
 	db 0, -24, 16, $0
-	db -8, -16, 0, (1 << OAM_X_FLIP)
-	db 0, -16, 16, (1 << OAM_X_FLIP)
+	db -8, -16, 0, OAM_XFLIP
+	db 0, -16, 16, OAM_XFLIP
 	db -8, 8, 0, $0
 	db 0, 8, 16, $0
-	db -8, 16, 0, (1 << OAM_X_FLIP)
-	db 0, 16, 16, (1 << OAM_X_FLIP)
+	db -8, 16, 0, OAM_XFLIP
+	db 0, 16, 16, OAM_XFLIP
 
 .data_b52fe
 	db 15 ; size
 	db 0, 16, 0, $0
-	db 0, 24, 0, (1 << OAM_X_FLIP)
+	db 0, 24, 0, OAM_XFLIP
 	db 8, 16, 16, $0
-	db 8, 24, 16, (1 << OAM_X_FLIP)
+	db 8, 24, 16, OAM_XFLIP
 	db -19, 11, 2, $0
 	db -16, -16, 1, $0
 	db -7, -16, 17, $0
-	db -16, 8, 1, (1 << OAM_X_FLIP)
-	db -7, 8, 17, (1 << OAM_X_FLIP)
+	db -16, 8, 1, OAM_XFLIP
+	db -7, 8, 17, OAM_XFLIP
 	db -16, -32, 0, $0
 	db -8, -32, 16, $0
-	db -16, -24, 0, (1 << OAM_X_FLIP)
-	db -8, -24, 16, (1 << OAM_X_FLIP)
+	db -16, -24, 0, OAM_XFLIP
+	db -8, -24, 16, OAM_XFLIP
 	db 0, -8, 19, $0
-	db 0, 0, 19, (1 << OAM_X_FLIP)
+	db 0, 0, 19, OAM_XFLIP
 
 .data_b533b
 	db 13 ; size
@@ -1535,19 +1535,19 @@ AnimFrameTable86::
 	db 24, -16, 3, $0
 	db -16, -24, 12, $0
 	db -8, -24, 13, $0
-	db -16, -16, 12, (1 << OAM_X_FLIP)
-	db -8, -16, 13, (1 << OAM_X_FLIP)
+	db -16, -16, 12, OAM_XFLIP
+	db -8, -16, 13, OAM_XFLIP
 	db 8, 8, 0, $0
 	db 16, 8, 16, $0
-	db 8, 16, 0, (1 << OAM_X_FLIP)
-	db 16, 16, 16, (1 << OAM_X_FLIP)
+	db 8, 16, 0, OAM_XFLIP
+	db 16, 16, 16, OAM_XFLIP
 
 .data_b5370
 	db 17 ; size
 	db 0, -8, 0, $0
-	db 0, 0, 0, (1 << OAM_X_FLIP)
+	db 0, 0, 0, OAM_XFLIP
 	db 8, -8, 16, $0
-	db 8, 0, 16, (1 << OAM_X_FLIP)
+	db 8, 0, 16, OAM_XFLIP
 	db 24, -16, 2, $0
 	db -24, 8, 8, $0
 	db -24, 16, 9, $0
@@ -1555,12 +1555,12 @@ AnimFrameTable86::
 	db -16, 16, 11, $0
 	db -16, -16, 14, $0
 	db -8, -16, 15, $0
-	db -16, 8, 14, (1 << OAM_X_FLIP)
-	db -8, 8, 15, (1 << OAM_X_FLIP)
+	db -16, 8, 14, OAM_XFLIP
+	db -8, 8, 15, OAM_XFLIP
 	db -16, -8, 12, $0
 	db -8, -8, 13, $0
-	db -16, 0, 12, (1 << OAM_X_FLIP)
-	db -8, 0, 13, (1 << OAM_X_FLIP)
+	db -16, 0, 12, OAM_XFLIP
+	db -8, 0, 13, OAM_XFLIP
 
 .data_b53b5
 	db 13 ; size
@@ -1571,60 +1571,60 @@ AnimFrameTable86::
 	db -20, 12, 3, $0
 	db -8, -24, 0, $0
 	db 0, -24, 16, $0
-	db -8, -16, 0, (1 << OAM_X_FLIP)
-	db 0, -16, 16, (1 << OAM_X_FLIP)
+	db -8, -16, 0, OAM_XFLIP
+	db 0, -16, 16, OAM_XFLIP
 	db -8, 8, 0, $0
 	db 0, 8, 16, $0
-	db -8, 16, 0, (1 << OAM_X_FLIP)
-	db 0, 16, 16, (1 << OAM_X_FLIP)
+	db -8, 16, 0, OAM_XFLIP
+	db 0, 16, 16, OAM_XFLIP
 
 .data_b53ea
 	db 18 ; size
 	db 0, 16, 0, $0
-	db 0, 24, 0, (1 << OAM_X_FLIP)
+	db 0, 24, 0, OAM_XFLIP
 	db -16, -32, 0, $0
-	db -16, -24, 0, (1 << OAM_X_FLIP)
+	db -16, -24, 0, OAM_XFLIP
 	db -8, -32, 16, $0
-	db -8, -24, 16, (1 << OAM_X_FLIP)
+	db -8, -24, 16, OAM_XFLIP
 	db 8, 16, 16, $0
-	db 8, 24, 16, (1 << OAM_X_FLIP)
+	db 8, 24, 16, OAM_XFLIP
 	db 20, -20, 8, $0
 	db 20, -12, 9, $0
 	db 28, -20, 10, $0
 	db 28, -12, 11, $0
 	db -16, -16, 1, $0
 	db -7, -16, 17, $0
-	db -16, 8, 1, (1 << OAM_X_FLIP)
-	db -7, 8, 17, (1 << OAM_X_FLIP)
+	db -16, 8, 1, OAM_XFLIP
+	db -7, 8, 17, OAM_XFLIP
 	db 0, -8, 19, $0
-	db 0, 0, 19, (1 << OAM_X_FLIP)
+	db 0, 0, 19, OAM_XFLIP
 
 .data_b5433
 	db 9 ; size
 	db 24, -16, 3, $0
 	db -24, -24, 12, $0
 	db -16, -24, 13, $0
-	db -24, -16, 12, (1 << OAM_X_FLIP)
-	db -16, -16, 13, (1 << OAM_X_FLIP)
+	db -24, -16, 12, OAM_XFLIP
+	db -16, -16, 13, OAM_XFLIP
 	db 8, 8, 0, $0
 	db 16, 8, 16, $0
-	db 8, 16, 0, (1 << OAM_X_FLIP)
-	db 16, 16, 16, (1 << OAM_X_FLIP)
+	db 8, 16, 0, OAM_XFLIP
+	db 16, 16, 16, OAM_XFLIP
 
 .data_b5458
 	db 12 ; size
-	db 0, -6, 21, (1 << OAM_OBP_NUM)
-	db 0, -14, 20, (1 << OAM_OBP_NUM)
-	db 8, -14, 18, (1 << OAM_OBP_NUM)
-	db -8, -6, 21, (1 << OAM_OBP_NUM) | (1 << OAM_Y_FLIP)
-	db -8, -14, 20, (1 << OAM_OBP_NUM) | (1 << OAM_Y_FLIP)
-	db -16, -14, 18, (1 << OAM_OBP_NUM) | (1 << OAM_Y_FLIP)
-	db -8, -2, 21, (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -8, 6, 20, (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db -16, 6, 18, (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-	db 0, -2, 21, (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db 0, 6, 20, (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
-	db 8, 6, 18, (1 << OAM_OBP_NUM) | (1 << OAM_X_FLIP)
+	db 0, -6, 21, OAM_PAL1
+	db 0, -14, 20, OAM_PAL1
+	db 8, -14, 18, OAM_PAL1
+	db -8, -6, 21, OAM_PAL1 | OAM_YFLIP
+	db -8, -14, 20, OAM_PAL1 | OAM_YFLIP
+	db -16, -14, 18, OAM_PAL1 | OAM_YFLIP
+	db -8, -2, 21, OAM_PAL1 | OAM_XFLIP | OAM_YFLIP
+	db -8, 6, 20, OAM_PAL1 | OAM_XFLIP | OAM_YFLIP
+	db -16, 6, 18, OAM_PAL1 | OAM_XFLIP | OAM_YFLIP
+	db 0, -2, 21, OAM_PAL1 | OAM_XFLIP
+	db 0, 6, 20, OAM_PAL1 | OAM_XFLIP
+	db 8, 6, 18, OAM_PAL1 | OAM_XFLIP
 
 AnimData191::
 	frame_table AnimFrameTable89

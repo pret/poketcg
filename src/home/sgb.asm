@@ -217,9 +217,9 @@ Func_0bcb::
 	push de
 .wait_vblank
 	ldh a, [rLY]
-	cp LY_VBLANK + 3
+	cp LY_VBLANK + 4
 	jr nz, .wait_vblank
-	ld a, LCDC_BGON | LCDC_OBJON | LCDC_WIN9C00
+	ld a, LCDC_BG_ON | LCDC_OBJ_ON | LCDC_WIN_9C00
 	ldh [rLCDC], a
 	ld a, %11100100
 	ldh [rBGP], a
@@ -247,7 +247,7 @@ Func_0bcb::
 	add hl, de
 	dec c
 	jr nz, .bgmap_outer_loop
-	ld a, LCDC_BGON | LCDC_OBJON | LCDC_WIN9C00 | LCDC_ON
+	ld a, LCDC_BG_ON | LCDC_OBJ_ON | LCDC_WIN_9C00 | LCDC_ON
 	ldh [rLCDC], a
 	pop hl
 	call SendSGB

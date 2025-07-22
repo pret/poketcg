@@ -760,7 +760,7 @@ HandlePlayerMoveMode:
 
 .not_moving
 	ldh a, [hKeysPressed]
-	and START
+	and PAD_START
 	call nz, OpenPauseMenu
 	ret
 
@@ -833,7 +833,7 @@ Func_c58b:
 
 HandlePlayerMoveModeInput:
 	ldh a, [hKeysHeld]
-	and D_PAD
+	and PAD_CTRL_PAD
 	jr z, .skip_moving
 	call UpdatePlayerDirectionFromDPad
 	call AttemptPlayerMovementFromDirection
@@ -842,7 +842,7 @@ HandlePlayerMoveModeInput:
 	jr nz, .done
 .skip_moving
 	ldh a, [hKeysPressed]
-	and A_BUTTON
+	and PAD_A
 	jr z, .done
 	call FindNPCOrObject
 	jr .done
@@ -963,7 +963,7 @@ Func_c66c:
 	push bc
 	ld c, $1
 	ldh a, [hKeysHeld]
-	bit B_BUTTON_F, a
+	bit B_PAD_B, a
 	jr z, .asm_c67e
 	ld a, [wd338]
 	cp $2

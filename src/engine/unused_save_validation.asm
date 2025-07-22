@@ -57,13 +57,13 @@ UnusedSaveDataValidation: ; unreferenced
 	call SetupText
 	ldtx hl, YourDataWasDestroyedSomehowText
 	bank1call DrawWholeScreenTextBox
-	ld a, SRAM_ENABLE
-	ld [MBC3SRamEnable], a
+	ld a, RAMG_SRAM_ENABLE
+	ld [rRAMG], a
 	xor a
 	ldh [hBankSRAM], a
-	ld [MBC3SRamBank], a
-	ld [MBC3RTC], a
-	ld [MBC3SRamEnable], a
+	ld [rRAMB], a
+	ld [rRTCREG], a
+	ld [rRAMG], a
 	jp Reset
 
 	ret
@@ -86,8 +86,8 @@ UnusedCalculateSaveDataValidationByte: ; unreferenced
 	ld a, c
 	or b
 	jr nz, .loop_xor
-	ld a, SRAM_ENABLE
-	ld [MBC3SRamEnable], a
+	ld a, RAMG_SRAM_ENABLE
+	ld [rRAMG], a
 	ld a, e
 	ld [sUnusedSaveDataValidationByte], a
 	pop bc

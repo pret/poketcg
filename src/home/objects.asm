@@ -5,7 +5,7 @@ SetManyObjectsAttributes::
 	ld a, [wOAMOffset]
 	ld c, a
 	ld b, HIGH(wOAM)
-	cp 40 * 4
+	cp OAM_SIZE
 	jr nc, .beyond_oam
 	pop hl
 	ld a, [hli] ; [hl] = how many obj?
@@ -26,7 +26,7 @@ SetManyObjectsAttributes::
 	ld [bc], a ; Attributes/Flags <- [hl + 4 + 4*i]
 	inc bc
 	ld a, c
-	cp 40 * 4
+	cp OAM_SIZE
 	jr nc, .beyond_oam
 	pop af
 	dec a
@@ -42,13 +42,13 @@ SetManyObjectsAttributes::
 	jr .done
 
 ; for the sprite at wOAM + [wOAMOffset] / 4, set its attributes from registers e, d, c, b
-; return carry if [wOAMOffset] > 40 * 4 (beyond the end of wOAM)
+; return carry if [wOAMOffset] > OAM_SIZE (beyond the end of wOAM)
 SetOneObjectAttributes::
 	push hl
 	ld a, [wOAMOffset]
 	ld l, a
 	ld h, HIGH(wOAM)
-	cp 40 * 4
+	cp OAM_SIZE
 	jr nc, .beyond_oam
 	ld [hl], e ; Y Position
 	inc hl
@@ -73,7 +73,7 @@ ZeroObjectPositions::
 	xor a
 	ld [wOAMOffset], a
 	ld hl, wOAM
-	ld c, 40
+	ld c, OAM_COUNT
 	xor a
 .loop
 	ld [hli], a

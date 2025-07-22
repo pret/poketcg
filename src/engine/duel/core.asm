@@ -313,26 +313,26 @@ PrintDuelMenuAndHandleInput:
 .handle_input
 	call DoFrame
 	ldh a, [hKeysHeld]
-	and B_BUTTON
+	and PAD_B
 	jr z, .b_not_held
 	ldh a, [hKeysPressed]
-	bit D_UP_F, a
+	bit B_PAD_UP, a
 	jr nz, DuelMenuShortcut_OpponentPlayArea
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr nz, DuelMenuShortcut_PlayerPlayArea
-	bit D_LEFT_F, a
+	bit B_PAD_LEFT, a
 	jr nz, DuelMenuShortcut_PlayerDiscardPile
-	bit D_RIGHT_F, a
+	bit B_PAD_RIGHT, a
 	jr nz, DuelMenuShortcut_OpponentDiscardPile
-	bit START_F, a
+	bit B_PAD_START, a
 	jp nz, DuelMenuShortcut_OpponentActivePokemon
 
 .b_not_held
 	ldh a, [hKeysPressed]
-	and START
+	and PAD_START
 	jp nz, DuelMenuShortcut_PlayerActivePokemon
 	ldh a, [hKeysPressed]
-	bit SELECT_F, a
+	bit B_PAD_SELECT, a
 	jp nz, DuelMenuShortcut_BothActivePokemon
 	ld a, [wDebugSkipDuelMenuInput]
 	or a
@@ -419,21 +419,21 @@ OpenTurnHolderHandScreen_Simple:
 	call CreateHandCardList
 	jr c, .no_cards_in_hand
 	call InitAndDrawCardListScreenLayout
-	ld a, START + A_BUTTON
+	ld a, PAD_START + PAD_A
 	ld [wNoItemSelectionMenuKeys], a
 	jp DisplayCardList
 .no_cards_in_hand
 	ldtx hl, NoCardsInHandText
 	jp DrawWideTextBox_WaitForInput
 
-; triggered by pressing B + START in the duel menu
+; triggered by pressing B + PAD_START in the duel menu
 DuelMenuShortcut_OpponentActivePokemon:
 	call SwapTurn
 	call OpenActivePokemonScreen
 	call SwapTurn
 	jp DuelMainInterface
 
-; triggered by pressing START in the duel menu
+; triggered by pressing PAD_START in the duel menu
 DuelMenuShortcut_PlayerActivePokemon:
 	call OpenActivePokemonScreen
 	jp DuelMainInterface
@@ -746,7 +746,7 @@ DuelMenu_Check:
 	call OpenDuelCheckMenu
 	jp DuelMainInterface
 
-; triggered by pressing SELECT in the duel menu
+; triggered by pressing PAD_SELECT in the duel menu
 DuelMenuShortcut_BothActivePokemon:
 	call FinishQueuedAnimations
 	call OpenVariousPlayAreaScreens_FromSelectPresses
@@ -768,7 +768,7 @@ OpenVariousPlayAreaScreens_FromSelectPresses:
 	ld [wPlayAreaSelectAction], a
 	call OpenPlayAreaScreenForViewing
 	ldh a, [hKeysPressed]
-	and B_BUTTON
+	and PAD_B
 	ret z
 	scf
 	ret
@@ -1011,7 +1011,7 @@ DuelMenu_Attack:
 .wait_for_input
 	call DoFrame
 	ldh a, [hKeysPressed]
-	and START
+	and PAD_START
 	jr nz, .display_selected_attack_info
 	call HandleMenuInput
 	jr nc, .wait_for_input
@@ -1099,11 +1099,11 @@ OpenAttackPage:
 	call DoFrame
 	; switch page (see SwitchAttackPage) if Right or Left pressed
 	ldh a, [hDPadHeld]
-	and D_RIGHT | D_LEFT
+	and PAD_RIGHT | PAD_LEFT
 	jr nz, .open_page
 	; return to Attack menu if A or B pressed
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	jr z, .loop
 	ret
 
@@ -2535,7 +2535,7 @@ DrawDuelHUD:
 	ld b, HP_BAR_LENGTH / 2 ; first row of the HP bar
 	call SafeCopyDataHLtoDE
 	pop de
-	ld hl, BG_MAP_WIDTH
+	ld hl, TILEMAP_WIDTH
 	add hl, de
 	ld e, l
 	ld d, h
@@ -3094,7 +3094,7 @@ OpenDiscardPileScreen:
 	jr c, .discard_pile_empty
 	call InitAndDrawCardListScreenLayout
 	call SetDiscardPileScreenTexts
-	ld a, START + A_BUTTON
+	ld a, PAD_START + PAD_A
 	ld [wNoItemSelectionMenuKeys], a
 	call DisplayCardList
 	or a
@@ -3154,7 +3154,7 @@ InitAndDrawCardListScreenLayout:
 	ld [hli], a
 	ld [hl], a
 	ld [wCardListItemSelectionMenuType], a
-	ld a, START
+	ld a, PAD_START
 	ld [wNoItemSelectionMenuKeys], a
 	ld hl, wCardListInfoBoxText
 	ldtx [hl], PleaseSelectHandText, & $ff
@@ -3229,14 +3229,14 @@ DisplayCardList:
 	ld [hl], d
 	ldh a, [hKeysPressed]
 	ld b, a
-	bit SELECT_F, b
+	bit B_PAD_SELECT, b
 	jr nz, .select_pressed
-	bit B_BUTTON_F, b
+	bit B_PAD_B, b
 	jr nz, .b_pressed
 	ld a, [wNoItemSelectionMenuKeys]
 	and b
 	jr nz, .open_card_page
-	; display the item selection menu (PLAY|CHECK or SELECT|CHECK) for the selected card
+	; display the item selection menu (PLAY|CHECK or PAD_SELECT|CHECK) for the selected card
 	; open the card page if CHECK is selected
 	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList_OnlyDeckIndex
@@ -3247,7 +3247,7 @@ DisplayCardList:
 	or a
 	ret
 .select_pressed
-	; sort cards by ID if SELECT is pressed and return to the first item
+	; sort cards by ID if PAD_SELECT is pressed and return to the first item
 	ld a, [wSortCardListByID]
 	or a
 	jr nz, .wait_button
@@ -3262,16 +3262,16 @@ DisplayCardList:
 	jr .reload_list
 .open_card_page
 	; open the card page directly, without an item selection menu
-	; in this mode, D_UP and D_DOWN can be used to open the card page
+	; in this mode, PAD_UP and PAD_DOWN can be used to open the card page
 	; of the card above and below the current card
 	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call OpenCardPage_FromCheckHandOrDiscardPile
 	ldh a, [hDPadHeld]
-	bit D_UP_F, a
+	bit B_PAD_UP, a
 	jr nz, .up_pressed
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr nz, .down_pressed
 	; if B pressed, exit card page and reload the card list
 	call DrawCardListScreenLayout
@@ -3306,7 +3306,7 @@ DisplayCardList:
 
 .UpdateListOnDPadInput:
 	ldh a, [hDPadHeld]
-	and D_PAD
+	and PAD_CTRL_PAD
 	ret z
 	ld a, $01
 	ldh [hffb0], a
@@ -3335,7 +3335,7 @@ PrintCardListHeaderAndInfoBoxTexts:
 	call PrintTextNoDelay
 	ret
 
-; display the SELECT|CHECK or PLAY|CHECK menu when a card of a list is selected
+; display the PAD_SELECT|CHECK or PLAY|CHECK menu when a card of a list is selected
 ; and handle input. return carry if b is pressed.
 ; input: wCardListItemSelectionMenuType
 CardListItemSelectionMenu:
@@ -3398,13 +3398,13 @@ CardListParameters:
 ; also return $ff unto hCurMenuItem if B is pressed.
 CardListFunction:
 	ldh a, [hKeysPressed]
-	bit B_BUTTON_F, a
+	bit B_PAD_B, a
 	jr nz, .exit
-	and A_BUTTON | SELECT | START
+	and PAD_A | PAD_SELECT | PAD_START
 	jr nz, .action_button
 	ldh a, [hKeysReleased]
-	and D_PAD
-	jr nz, .reload_card_image ; jump if the D_PAD key was released this frame
+	and PAD_CTRL_PAD
+	jr nz, .reload_card_image ; jump if the PAD_CTRL_PAD key was released this frame
 	ret
 .exit
 	ld a, $ff
@@ -3457,10 +3457,10 @@ PrintSortNumberInCardList:
 ; draw the card page of the card at wLoadedCard1 and listen for input
 ; in order to switch the page or to exit.
 ; triggered by checking a hand card or a discard pile card in the Check menu.
-; D_UP and D_DOWN exit the card page allowing the caller to load the card page
+; PAD_UP and PAD_DOWN exit the card page allowing the caller to load the card page
 ; of the card above or below in the list.
 OpenCardPage_FromCheckHandOrDiscardPile:
-	ld a, B_BUTTON | D_UP | D_DOWN
+	ld a, PAD_B | PAD_UP | PAD_DOWN
 	ld [wCardPageExitKeys], a
 	xor a ; CARDPAGETYPE_NOT_PLAY_AREA
 	jr OpenCardPage
@@ -3469,7 +3469,7 @@ OpenCardPage_FromCheckHandOrDiscardPile:
 ; in order to switch the page or to exit.
 ; triggered by checking an arena card or a bench card in the Check menu.
 OpenCardPage_FromCheckPlayArea:
-	ld a, B_BUTTON
+	ld a, PAD_B
 	ld [wCardPageExitKeys], a
 	ld a, CARDPAGETYPE_PLAY_AREA
 	jr OpenCardPage
@@ -3478,7 +3478,7 @@ OpenCardPage_FromCheckPlayArea:
 ; in order to switch the page or to exit.
 ; triggered by checking a card in the Hand menu.
 OpenCardPage_FromHand:
-	ld a, B_BUTTON
+	ld a, PAD_B
 	ld [wCardPageExitKeys], a
 	xor a ; CARDPAGETYPE_NOT_PLAY_AREA
 ;	fallthrough
@@ -3506,7 +3506,7 @@ OpenCardPage:
 	ld [wCardPageNumber], a
 .load_next
 	call DisplayFirstOrNextCardPage
-	jr c, .done ; done if trying to advance past the last page with START or A_BUTTON
+	jr c, .done ; done if trying to advance past the last page with PAD_START or PAD_A
 	call EnableLCD
 .input_loop
 	call DoFrame
@@ -3515,29 +3515,29 @@ OpenCardPage:
 	ld a, [wCardPageExitKeys]
 	and b
 	jr nz, .done
-	; START and A_BUTTON advance to the next valid card page, but close it
+	; PAD_START and PAD_A advance to the next valid card page, but close it
 	; after trying to advance from the last page
 	ldh a, [hKeysPressed]
-	and START | A_BUTTON
+	and PAD_START | PAD_A
 	jr nz, .load_next
-	; D_RIGHT and D_LEFT advance to the next and previous valid card page respectively.
-	; however, unlike START and A_BUTTON, D_RIGHT past the last page goes back to the start.
+	; PAD_RIGHT and PAD_LEFT advance to the next and previous valid card page respectively.
+	; however, unlike PAD_START and PAD_A, PAD_RIGHT past the last page goes back to the start.
 	ldh a, [hKeysPressed]
-	and D_RIGHT | D_LEFT
+	and PAD_RIGHT | PAD_LEFT
 	jr z, .input_loop
 	call DisplayCardPageOnLeftOrRightPressed
 	jr .input_loop
 .done
 	ret
 
-; display the previous valid card page of the card at wLoadedCard1 if bit D_LEFT_F
+; display the previous valid card page of the card at wLoadedCard1 if bit B_PAD_LEFT
 ; of a is set, and the first or next valid card page otherwise.
 ; DisplayFirstOrNextCardPage and DisplayPreviousCardPage only call DisplayCardPage
 ; when GoToFirstOrNextCardPage and GoToPreviousCardPage respectively return nc
 ; so the "call c, DisplayCardPage" instructions makes sure the card page switched
 ; to is always displayed.
 DisplayCardPageOnLeftOrRightPressed:
-	bit D_LEFT_F, a
+	bit B_PAD_LEFT, a
 	jr nz, .left
 ;.right
 	call DisplayFirstOrNextCardPage
@@ -3763,7 +3763,7 @@ GoToPreviousCardPage:
 ; check if the card page trying to switch to is valid for the card at wLoadedCard1
 ; return with the equivalent to one of these three actions:
    ; stay in card page trying to switch to (nc, nz)
-   ; change to card page returned in a if D_LEFT/D_RIGHT pressed, or exit if A_BUTTON/START pressed (c)
+   ; change to card page returned in a if PAD_LEFT/PAD_RIGHT pressed, or exit if PAD_A/PAD_START pressed (c)
    ; non-existent page, so skip to next/previous (nc, z)
 SwitchCardPage:
 	ld hl, CardPageSwitchPointerTable
@@ -3942,7 +3942,7 @@ SetBGP7OrSGB2ToCardPalette:
 .sgb
 	ld hl, wCardPalette
 	ld de, wTempSGBPacket + 1 ; PAL Packet color #0 (PAL23's SGB2)
-	ld b, CGB_PAL_SIZE
+	ld b, PAL_SIZE
 .copy_pal_loop
 	ld a, [hli]
 	ld [de], a
@@ -3981,13 +3981,13 @@ SetOBP1OrSGB3ToCardPalette:
 CopyCGBCardPalette:
 	add a
 	add a
-	add a ; a *= CGB_PAL_SIZE
+	add a ; a *= PAL_SIZE
 	ld e, a
 	ld d, $00
 	ld hl, wBackgroundPalettesCGB ; wObjectPalettesCGB - 8 palettes
 	add hl, de
 	ld de, wCardPalette
-	ld b, CGB_PAL_SIZE
+	ld b, PAL_SIZE
 .copy_pal_loop
 	ld a, [de]
 	inc de
@@ -4149,7 +4149,7 @@ SetDefaultConsolePalettes:
 	call .copy_de_to_hl
 	ld de, CGBDefaultPalettes
 	ld hl, wObjectPalettesCGB
-	ld c, CGB_PAL_SIZE
+	ld c, PAL_SIZE
 	call .copy_de_to_hl
 	call FlushAllPalettes
 	ret
@@ -4922,11 +4922,11 @@ _HasAlivePokemonInPlayArea:
 	ret
 
 OpenPlayAreaScreenForViewing:
-	ld a, START + A_BUTTON
+	ld a, PAD_START + PAD_A
 	jr DisplayPlayAreaScreen
 
 OpenPlayAreaScreenForSelection:
-	ld a, START
+	ld a, PAD_START
 ;	fallthrough
 
 DisplayPlayAreaScreen:
@@ -5038,9 +5038,9 @@ PlayAreaScreenMenuParameters_ActivePokemonExcluded:
 
 PlayAreaScreenMenuFunction:
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON | START
+	and PAD_A | PAD_B | PAD_START
 	ret z
-	bit B_BUTTON_F, a
+	bit B_PAD_B, a
 	jr z, .start_or_a
 	ld a, $ff
 	ldh [hCurMenuItem], a
@@ -5053,7 +5053,7 @@ SelectingBenchPokemonMenu:
 	or a
 	ret z ; menu not allowed
 	ldh a, [hKeysPressed]
-	and SELECT
+	and PAD_SELECT
 	ret z ; Select not pressed
 	ld a, [wPlayAreaSelectAction]
 	cp $02
@@ -5068,7 +5068,7 @@ SelectingBenchPokemonMenu:
 .loop_input
 	call DoFrame
 	ldh a, [hKeysPressed]
-	and A_BUTTON
+	and PAD_A
 	jr nz, .a_pressed
 	call .HandleInput
 	call RefreshMenuCursor
@@ -5076,7 +5076,7 @@ SelectingBenchPokemonMenu:
 	call HandleSpecialDuelMainSceneHotkeys
 	jr nc, .loop_input
 	ldh a, [hKeysPressed]
-	and SELECT
+	and PAD_SELECT
 	jr z, .duel_main_scene
 .back
 	call HasAlivePokemonInBench
@@ -5101,15 +5101,15 @@ SelectingBenchPokemonMenu:
 
 .HandleInput:
 	ldh a, [hDPadHeld]
-	bit B_BUTTON_F, a
+	bit B_PAD_B, a
 	ret nz
-	and D_RIGHT | D_LEFT
+	and PAD_RIGHT | PAD_LEFT
 	ret z
 
 	; right or left pressed
 	ld b, a
 	ld a, [wCurrentDuelMenuItem]
-	bit D_LEFT_F, b
+	bit B_PAD_LEFT, b
 	jr z, .right_pressed
 	dec a
 	bit 7, a
@@ -5635,7 +5635,7 @@ DisplayPlayAreaScreenToUsePkmnPower:
 	jr z, .asm_649b
 	ld [wSelectedDuelSubMenuItem], a
 	ldh a, [hKeysPressed]
-	and START
+	and PAD_START
 	jr nz, .asm_649d
 	ldh a, [hCurMenuItem]
 	add a
@@ -6215,7 +6215,7 @@ CheckSkipDelayAllowed:
 	or a
 	ret z
 	ldh a, [hKeysHeld]
-	and B_BUTTON
+	and PAD_B
 	ret z
 	scf
 	ret
@@ -6280,7 +6280,7 @@ HandleWaitingLinkOpponentMenu:
 	call .HandleInput
 	call RefreshMenuCursor
 	ldh a, [hKeysPressed]
-	bit A_BUTTON_F, a
+	bit B_PAD_A, a
 	jr nz, .a_pressed
 	ld a, $01
 	call HandleSpecialDuelMainSceneHotkeys
@@ -6301,9 +6301,9 @@ HandleWaitingLinkOpponentMenu:
 
 .HandleInput:
 	ldh a, [hDPadHeld]
-	bit B_BUTTON_F, a
+	bit B_PAD_B, a
 	ret nz
-	and D_LEFT | D_RIGHT
+	and PAD_LEFT | PAD_RIGHT
 	ret z
 	call EraseCursor
 	ld hl, wCurrentDuelMenuItem
@@ -6337,21 +6337,21 @@ HandleWaitingLinkOpponentMenu:
 HandleSpecialDuelMainSceneHotkeys:
 	ld [wDuelMainSceneSelectHotkeyAction], a
 	ldh a, [hKeysPressed]
-	bit START_F, a
+	bit B_PAD_START, a
 	jr nz, .start_pressed
-	bit SELECT_F, a
+	bit B_PAD_SELECT, a
 	jr nz, .select_pressed
 	ldh a, [hKeysHeld]
-	and B_BUTTON
+	and PAD_B
 	ret z ; exit if no B btn
 	ldh a, [hKeysPressed]
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr nz, .down_pressed
-	bit D_LEFT_F, a
+	bit B_PAD_LEFT, a
 	jr nz, .left_pressed
-	bit D_UP_F, a
+	bit B_PAD_UP, a
 	jr nz, .up_pressed
-	bit D_RIGHT_F, a
+	bit B_PAD_RIGHT, a
 	jr nz, .right_pressed
 	or a
 	ret
@@ -8143,15 +8143,15 @@ Func_7364:
 	ld b, a
 
 	; handle selection/cancellation buttons
-	and A_BUTTON | START
+	and PAD_A | PAD_START
 	jr nz, .select_opp
-	bit B_BUTTON_F, b
+	bit B_PAD_B, b
 	jr nz, .cancel
 
 ; handle D-pad inputs
 ; check right
 	ld a, [wOpponentDeckID]
-	bit D_RIGHT_F, b
+	bit B_PAD_RIGHT, b
 	jr z, .check_left
 	inc a ; next deck ID
 	cp NUM_DECK_IDS
@@ -8159,7 +8159,7 @@ Func_7364:
 	xor a ; wrap around to first deck ID
 
 .check_left
-	bit D_LEFT_F, b
+	bit B_PAD_LEFT, b
 	jr z, .check_up
 	or a
 	jr nz, .not_first_deck_id
@@ -8169,7 +8169,7 @@ Func_7364:
 	dec a ; previous deck ID
 
 .check_up
-	bit D_UP_F, b
+	bit B_PAD_UP, b
 	jr z, .check_down
 	add 10
 	cp NUM_DECK_IDS
@@ -8177,7 +8177,7 @@ Func_7364:
 	xor a ; wrap around to first deck ID
 
 .check_down
-	bit D_DOWN_F, b
+	bit B_PAD_DOWN, b
 	jr z, .got_deck_id
 	sub 10
 	jr nc, .got_deck_id
@@ -8386,19 +8386,19 @@ Func_74dc:
 	ld b, a
 	ld a, [wPrizeCardSelectionFrameCounter]
 ; left
-	bit D_LEFT_F, b
+	bit B_PAD_LEFT, b
 	jr z, .right
 	dec a ; previous card
 .right
-	bit D_RIGHT_F, b
+	bit B_PAD_RIGHT, b
 	jr z, .up
 	inc a ; next card
 .up
-	bit D_UP_F, b
+	bit B_PAD_UP, b
 	jr z, .down
 	add 10
 .down
-	bit D_DOWN_F, b
+	bit B_PAD_DOWN, b
 	jr z, .got_card_id
 	sub 10
 
@@ -8407,7 +8407,7 @@ Func_74dc:
 	lb bc, 5, 5
 	bank1call WriteTwoByteNumberInTxSymbolFormat
 	ldh a, [hKeysPressed]
-	and START
+	and PAD_START
 	jr z, .wait_input
 	ld a, [wPrizeCardSelectionFrameCounter]
 	ld e, a
@@ -8434,9 +8434,9 @@ DecideLinkDuelVariables:
 .input_loop
 	call DoFrame
 	ldh a, [hKeysPressed]
-	bit B_BUTTON_F, a
+	bit B_PAD_B, a
 	jr nz, .link_cancel
-	and START
+	and PAD_START
 	call Func_0cc5
 	jr nc, .input_loop
 	ld hl, wPlayerDuelVariables

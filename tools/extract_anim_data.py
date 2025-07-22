@@ -14,15 +14,15 @@ def getOAMFlagStr(flags):
     if (flags & 0b111 != 0):
         strings.append('%{:03b}'.format(flags & 0b111))
     if (flags & (1 << 3) != 0):
-        strings.append('(1 << OAM_TILE_BANK)')
+        strings.append('OAM_BANK1')
     if (flags & (1 << 4) != 0):
-        strings.append('(1 << OAM_OBP_NUM)')
+        strings.append('OAM_PAL1')
     if (flags & (1 << 5) != 0):
-        strings.append('(1 << OAM_X_FLIP)')
+        strings.append('OAM_XFLIP')
     if (flags & (1 << 6) != 0):
-        strings.append('(1 << OAM_Y_FLIP)')
+        strings.append('OAM_YFLIP')
     if (flags & (1 << 7) != 0):
-        strings.append('(1 << OAM_PRIORITY)')
+        strings.append('OAM_PRIO')
 
     return ' | '.join(s for s in strings)
 

@@ -201,8 +201,8 @@ Func_70136:
 	call SendSGB
 	call DisableLCD
 	ld a, [wLCDC]
-	and LCDC_BGENABLE | LCDC_WINSELECT
-	or LCDC_BGON
+	and LCDC_BG | LCDC_WIN_MAP
+	or LCDC_BG_ON
 	ld [wLCDC], a
 	ld a, %11100100
 	ldh [rBGP], a

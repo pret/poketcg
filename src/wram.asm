@@ -170,7 +170,7 @@ wc900:: ; c900
 SECTION "WRAM0 1", WRAM0
 
 wOAM:: ; ca00
-	ds $a0
+	ds OAM_SIZE
 
 ; 16-byte buffer to store text, usually a name or a number
 ; used by TX_RAM1 but not exclusively
@@ -496,12 +496,12 @@ wPlayAreaSelectAction:: ; cbd4
 wTempRetreatCostCardsPos:: ; cbd5
 	ds $1
 
-; in a card list, which keys (among START and A_BUTTON) do not open the item selection
+; in a card list, which keys (among PAD_START and PAD_A) do not open the item selection
 ; menu when a card is selected, directly "submitting" the selected card instead.
 wNoItemSelectionMenuKeys:: ; cbd6
 	ds $1
 
-; when viewing a card page, which keys (among B_BUTTON, D_UP, and D_DOWN) will exit the page,
+; when viewing a card page, which keys (among PAD_B, PAD_UP, and PAD_DOWN) will exit the page,
 ; either to go back to the previous menu or list, or to load the card page of the card above/below it
 wCardPageExitKeys:: ; cbd7
 	ds $1
@@ -1340,7 +1340,7 @@ wEffectFunctionsBank:: ; ce22
 
 ; LoadCardGfx loads the card's palette here
 wCardPalette:: ; ce23
-	ds CGB_PAL_SIZE
+	ds PAL_SIZE
 
 ; information about the text being currently processed, including font width,
 ; the rom bank, and the memory address of the next character to be printed.

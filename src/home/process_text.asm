@@ -116,7 +116,7 @@ ProcessSpecialTextCharacter::
 	xor a
 	ldh [hTextLineCurPos], a
 	ldh a, [hTextHorizontalAlign]
-	add BG_MAP_WIDTH
+	add TILEMAP_WIDTH
 	ld b, a
 	; get current line's starting BGMap0 address
 	ldh a, [hTextBGMap0Address]

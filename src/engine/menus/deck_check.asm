@@ -17,9 +17,9 @@ HandleCheckMenuInput:
 	ldh a, [hDPadHeld]
 	or a
 	jr z, .no_pad
-	bit D_LEFT_F, a
+	bit B_PAD_LEFT, a
 	jr nz, .horizontal
-	bit D_RIGHT_F, a
+	bit B_PAD_RIGHT, a
 	jr z, .check_vertical
 
 ; handle horizontal input
@@ -29,9 +29,9 @@ HandleCheckMenuInput:
 	ld d, a
 	jr .okay
 .check_vertical
-	bit D_UP_F, a
+	bit B_PAD_UP, a
 	jr nz, .vertical
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr z, .no_pad
 
 ; handle vertical input
@@ -58,9 +58,9 @@ HandleCheckMenuInput:
 	ld [wCheckMenuCursorBlinkCounter], a
 .no_pad
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	jr z, .no_input
-	and A_BUTTON
+	and PAD_A
 	jr nz, .a_press
 	ld a, $ff ; cancel
 	call PlaySFXConfirmOrCancel

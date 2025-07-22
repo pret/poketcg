@@ -139,7 +139,7 @@ PrintScrollableText::
 	jr nc, .apply_delay
 	; if text speed is 1, pressing b ignores it
 	ldh a, [hKeysHeld]
-	and B_BUTTON
+	and PAD_B
 	jr nz, .skip_delay
 .apply_delay
 	push bc
@@ -458,7 +458,7 @@ PrintText::
 	cp 3
 	jr nc, .apply_delay
 	; if text speed is 1, pressing b ignores it
-	bit B_BUTTON_F, b
+	bit B_PAD_B, b
 	jr nz, .skip_delay
 	jr .apply_delay
 .text_delay_loop
