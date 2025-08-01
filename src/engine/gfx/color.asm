@@ -155,7 +155,7 @@ FadeDMGPalettes:
 .CalculateMixPalette:
 	push bc
 	push de
-	ld e, 4 ; number of shades in a palette
+	ld e, PAL_COLORS
 	ld d, $00
 .loop_shades
 	call .GetMixShadeValue
