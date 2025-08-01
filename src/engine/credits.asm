@@ -97,7 +97,7 @@ Func_1d765:
 	ld a, [wd648]
 	or a
 	jr nz, .asm_1d785
-	ld a, $a7
+	ld a, 160 + WX_OFS
 	ldh [hWX], a
 	ld [hli], a
 	push hl
@@ -113,7 +113,7 @@ Func_1d765:
 	dec a
 	ld [de], a
 	inc de
-	ld a, $a7
+	ld a, 160 + WX_OFS
 	ldh [hWX], a
 	ld [hli], a
 	push hl
@@ -124,7 +124,7 @@ Func_1d765:
 	jr .asm_1d7a9
 
 .asm_1d79e
-	ld a, $07
+	ld a, 0 + WX_OFS
 	ldh [hWX], a
 	push hl
 	ld hl, wLCDC

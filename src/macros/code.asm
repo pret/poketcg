@@ -67,3 +67,9 @@ MACRO retbc
 	push bc
 	ret
 ENDM
+
+; loads into a register the GameBoy (DMG) palette given
+; by the arguments as SHADE_* constants
+MACRO ldgbpal
+	ld \1, (\2 << 0) | (\3 << 2) | (\4 << 4) | (\5 << 6)
+ENDM

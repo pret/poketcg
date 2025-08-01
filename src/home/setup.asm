@@ -54,7 +54,7 @@ DetectConsole::
 ; initialize the palettes (both monochrome and color)
 SetupPalettes::
 	ld hl, wBGP
-	ld a, %11100100
+	ldgbpal a, SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK
 	ldh [rBGP], a
 	ld [hli], a ; wBGP
 	ldh [rOBP0], a

@@ -1,5 +1,5 @@
 ; loads wConsolePaletteData depending on console
-; every entry in the list is $00
+; every entry in the list are pure white palettes
 LoadConsolePaletteData:
 	push hl
 	ld a, [wConsole]
@@ -16,9 +16,9 @@ LoadConsolePaletteData:
 	ret
 
 .PaletteDataTable:
-	db $00 ; CONSOLE_DMG
-	db $00 ; CONSOLE_SGB
-	db $00 ; CONSOLE_CGB
+	gbpal SHADE_WHITE, SHADE_WHITE, SHADE_WHITE, SHADE_WHITE
+	gbpal SHADE_WHITE, SHADE_WHITE, SHADE_WHITE, SHADE_WHITE
+	gbpal SHADE_WHITE, SHADE_WHITE, SHADE_WHITE, SHADE_WHITE
 
 FadeScreenToWhite:
 	ld a, [wLCDC]
@@ -116,7 +116,7 @@ FadeScreenToTempPals:
 	ld a, c
 	and %11
 	cp 0
-	call z, Func_10b85
+	call z, FadeDMGPalettes
 	call FadeBGPalIntoTemp3
 	call FadeOBPalIntoTemp
 	call FlushAllPalettes
@@ -131,35 +131,34 @@ FadeScreenToTempPals:
 	sub b
 	ret
 
-; does something with wBGP given wTempBGP
-; mixes them into a single value?
-Func_10b85:
+; mixes shades in wBGP with wTempBGP
+FadeDMGPalettes:
 	push bc
-	ld c, $03
+	ld c, 3 ; for BGP, OBP0 and OBP1
 	ld hl, wBGP
 	ld de, wTempBGP
-.asm_10b8e
+.loop_palettes
 	push bc
 	ld b, [hl]
 	ld a, [de]
 	ld c, a
-	call .Func_10b9e
+	call .CalculateMixPalette
 	ld [hl], a
 	pop bc
 	inc de
 	inc hl
 	dec c
-	jr nz, .asm_10b8e
+	jr nz, .loop_palettes
 	pop bc
 	ret
 
-.Func_10b9e
+.CalculateMixPalette:
 	push bc
 	push de
-	ld e, 4
+	ld e, 4 ; number of shades in a palette
 	ld d, $00
-.loop
-	call .Func_10bba
+.loop_shades
+	call .GetMixShadeValue
 	or d
 	rlca
 	rlca
@@ -169,17 +168,18 @@ Func_10b85:
 	rlc c
 	rlc c
 	dec e
-	jr nz, .loop
+	jr nz, .loop_shades
 	ld a, d
 	pop de
 	pop bc
 	ret
 
-; calculates ((b & %11) << 2) | (c & %11)
-; that is, %0000xxyy, where x and y are
-; the 2 lower bits of b and c respectively
-; and outputs the entry from a table given that value
-.Func_10bba
+; outputs the shade value resulting
+; from mixing shade b with shade c
+.GetMixShadeValue:
+	; calculates ((b & %11) << 2) | (c & %11)
+	; that is, %0000xxyy, where x and y are
+	; the 2 lower bits of b and c respectively
 	push hl
 	push bc
 	ld a, %11
@@ -192,30 +192,30 @@ Func_10b85:
 	or b
 	ld c, a
 	ld b, $00
-	ld hl, .data_10bd1
+	ld hl, .MixShadeValues
 	add hl, bc
 	ld a, [hl]
 	pop bc
 	pop hl
 	ret
 
-.data_10bd1
-	db %00 ; b = %00 | c = %00
-	db %01 ; b = %00 | c = %01
-	db %01 ; b = %00 | c = %10
-	db %01 ; b = %00 | c = %11
-	db %00 ; b = %01 | c = %00
-	db %01 ; b = %01 | c = %01
-	db %10 ; b = %01 | c = %10
-	db %10 ; b = %01 | c = %11
-	db %01 ; b = %10 | c = %00
-	db %01 ; b = %10 | c = %01
-	db %10 ; b = %10 | c = %10
-	db %11 ; b = %10 | c = %11
-	db %10 ; b = %11 | c = %00
-	db %10 ; b = %11 | c = %01
-	db %10 ; b = %11 | c = %10
-	db %11 ; b = %11 | c = %11
+.MixShadeValues:
+	db SHADE_WHITE ; b = SHADE_WHITE | c = SHADE_WHITE
+	db SHADE_LIGHT ; b = SHADE_WHITE | c = SHADE_LIGHT
+	db SHADE_LIGHT ; b = SHADE_WHITE | c = SHADE_DARK
+	db SHADE_LIGHT ; b = SHADE_WHITE | c = SHADE_BLACK
+	db SHADE_WHITE ; b = SHADE_LIGHT | c = SHADE_WHITE
+	db SHADE_LIGHT ; b = SHADE_LIGHT | c = SHADE_LIGHT
+	db SHADE_DARK  ; b = SHADE_LIGHT | c = SHADE_DARK
+	db SHADE_DARK  ; b = SHADE_LIGHT | c = SHADE_BLACK
+	db SHADE_LIGHT ; b = SHADE_DARK  | c = SHADE_WHITE
+	db SHADE_LIGHT ; b = SHADE_DARK  | c = SHADE_LIGHT
+	db SHADE_DARK  ; b = SHADE_DARK  | c = SHADE_DARK
+	db SHADE_BLACK ; b = SHADE_DARK  | c = SHADE_BLACK
+	db SHADE_DARK  ; b = SHADE_BLACK | c = SHADE_WHITE
+	db SHADE_DARK  ; b = SHADE_BLACK | c = SHADE_LIGHT
+	db SHADE_DARK  ; b = SHADE_BLACK | c = SHADE_DARK
+	db SHADE_BLACK ; b = SHADE_BLACK | c = SHADE_BLACK
 
 FadeOBPalIntoTemp:
 	push bc
@@ -523,7 +523,7 @@ Func_10d74:
 	and %11
 	ld c, a
 	cp $1
-	call z, Func_10b85
+	call z, FadeDMGPalettes
 	bit 0, c
 	call z, FadeBGPalIntoTemp1
 	bit 0, c

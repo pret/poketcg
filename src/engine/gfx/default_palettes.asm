@@ -19,7 +19,7 @@ SetDefaultPalettes:
 	push hl
 	push bc
 	push de
-	ld a, %11100100
+	ldgbpal a, SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK
 	ld [wBGP], a
 	ld [wOBP0], a
 	ld [wOBP1], a

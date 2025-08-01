@@ -46,7 +46,7 @@ DisableLCD::
 	ld a, [wLCDC]        ;
 	and LOW(~LCDC_ON)    ;
 	ld [wLCDC], a        ; turn LCD off
-	xor a
+	xor a                ; set all white palettes
 	ldh [rBGP], a
 	ldh [rOBP0], a
 	ldh [rOBP1], a

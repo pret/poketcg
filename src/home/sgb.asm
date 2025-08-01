@@ -221,7 +221,7 @@ Func_0bcb::
 	jr nz, .wait_vblank
 	ld a, LCDC_BG_ON | LCDC_OBJ_ON | LCDC_WIN_9C00
 	ldh [rLCDC], a
-	ld a, %11100100
+	ld a, BGP_SGB_TRANSFER
 	ldh [rBGP], a
 	ld de, v0Tiles1
 	ld bc, v0BGMap0 - v0Tiles1

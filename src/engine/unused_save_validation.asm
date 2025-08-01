@@ -47,7 +47,7 @@ UnusedSaveDataValidation: ; unreferenced
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	jr nz, .not_sgb
-	ld a, %11100100
+	ldgbpal a, SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK
 	ld [wOBP0], a
 	ld [wBGP], a
 	ld a, $01

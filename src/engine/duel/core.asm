@@ -3968,7 +3968,7 @@ SetSGB3ToCardPalette:
 	jr SetBGP7OrSGB2ToCardPalette.copy_pal_loop
 
 SetOBP1OrSGB3ToCardPalette:
-	ld a, %11100100
+	ldgbpal a, SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK
 	ld [wOBP0], a
 	ld a, [wConsole]
 	or a ; CONSOLE_DMG
@@ -4134,7 +4134,7 @@ SetDefaultConsolePalettes:
 	jr z, .sgb
 	cp CONSOLE_CGB
 	jr z, .cgb
-	ld a, %11100100
+	ldgbpal a, SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK
 	ld [wOBP0], a
 	ld [wBGP], a
 	ld a, $01 ; equivalent to FLUSH_ONE_PAL

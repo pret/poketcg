@@ -204,7 +204,7 @@ Func_70136:
 	and LCDC_BG | LCDC_WIN_MAP
 	or LCDC_BG_ON
 	ld [wLCDC], a
-	ld a, %11100100
+	ld a, BGP_SGB_TRANSFER
 	ldh [rBGP], a
 	call SetBGP
 
