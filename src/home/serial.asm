@@ -378,7 +378,7 @@ Func_0e8e::
 	and ~IE_SERIAL
 	ldh [rIF], a         ; clear serial interrupt flag
 	ldh a, [rIE]
-	or IE_SERIAL   ; enable serial interrupt
+	or IE_SERIAL         ; enable serial interrupt
 	ldh [rIE], a
 	ret
 

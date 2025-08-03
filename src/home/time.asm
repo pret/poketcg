@@ -74,7 +74,7 @@ SetupTimer::
 	ldh a, [rSPD]
 	and SPD_DOUBLE
 	jr z, .set_timer
-	ld b, $100 - 2 * 68 ; Value for CGB Double Speed
+	ld b, LOW(-68 * 2) ; Value for CGB Double Speed
 .set_timer
 	ld a, b
 	ldh [rTMA], a

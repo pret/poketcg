@@ -426,7 +426,7 @@ OpenTurnHolderHandScreen_Simple:
 	ldtx hl, NoCardsInHandText
 	jp DrawWideTextBox_WaitForInput
 
-; triggered by pressing B + PAD_START in the duel menu
+; triggered by pressing PAD_B + PAD_START in the duel menu
 DuelMenuShortcut_OpponentActivePokemon:
 	call SwapTurn
 	call OpenActivePokemonScreen
@@ -3236,7 +3236,7 @@ DisplayCardList:
 	ld a, [wNoItemSelectionMenuKeys]
 	and b
 	jr nz, .open_card_page
-	; display the item selection menu (PLAY|CHECK or PAD_SELECT|CHECK) for the selected card
+	; display the item selection menu (PLAY|CHECK or SELECT|CHECK) for the selected card
 	; open the card page if CHECK is selected
 	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList_OnlyDeckIndex
@@ -3335,7 +3335,7 @@ PrintCardListHeaderAndInfoBoxTexts:
 	call PrintTextNoDelay
 	ret
 
-; display the PAD_SELECT|CHECK or PLAY|CHECK menu when a card of a list is selected
+; display the SELECT|CHECK or PLAY|CHECK menu when a card of a list is selected
 ; and handle input. return carry if b is pressed.
 ; input: wCardListItemSelectionMenuType
 CardListItemSelectionMenu:

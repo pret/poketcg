@@ -34,7 +34,7 @@ DisableLCD::
 	ret z                ; assert that LCD is on
 	ldh a, [rIE]
 	ld [wIE], a
-	res B_IE_VBLANK, a    ;
+	res B_IE_VBLANK, a   ;
 	ldh [rIE], a         ; disable vblank interrupt
 .wait_vblank
 	ldh a, [rLY]         ;
