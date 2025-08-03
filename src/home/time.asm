@@ -71,16 +71,16 @@ SetupTimer::
 	ld b, -68 ; Value for Normal Speed
 	call CheckForCGB
 	jr c, .set_timer
-	ldh a, [rKEY1]
-	and $80
+	ldh a, [rSPD]
+	and SPD_DOUBLE
 	jr z, .set_timer
-	ld b, $100 - 2 * 68 ; Value for CGB Double Speed
+	ld b, LOW(-68 * 2) ; Value for CGB Double Speed
 .set_timer
 	ld a, b
 	ldh [rTMA], a
-	ld a, TAC_16384_HZ
+	ld a, TAC_16KHZ
 	ldh [rTAC], a
-	ld a, TAC_START | TAC_16384_HZ
+	ld a, TAC_START | TAC_16KHZ
 	ldh [rTAC], a
 	ret
 

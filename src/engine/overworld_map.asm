@@ -50,7 +50,7 @@ OverworldMap_Update:
 ; or finalize the selection if the A button is pressed
 OverworldMap_HandleKeyPress:
 	ldh a, [hKeysPressed]
-	and D_PAD
+	and PAD_CTRL_PAD
 	jr z, .no_d_pad
 	farcall GetDirectionFromDPad
 	ld [wPlayerDirection], a
@@ -58,7 +58,7 @@ OverworldMap_HandleKeyPress:
 	jr .done
 .no_d_pad
 	ldh a, [hKeysPressed]
-	and A_BUTTON
+	and PAD_A
 	jr z, .done
 	ld a, SFX_CONFIRM
 	call PlaySFX

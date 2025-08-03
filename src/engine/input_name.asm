@@ -104,7 +104,7 @@ InputPlayerName:
 	call DoFrame
 	call UpdateRNGSources
 	ldh a, [hDPadHeld]
-	and START
+	and PAD_START
 	jr z, .else
 	; the Start button was pressed.
 	ld a, $01
@@ -301,17 +301,17 @@ PlayerNamingScreen_CheckButtonState:
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	bit D_UP_F, b
+	bit B_PAD_UP, b
 	jr z, .asm_692c
 	; up
 	dec a
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr z, .asm_69a7
 	ld a, c
 	dec a
 	jr .asm_69a7
 .asm_692c
-	bit D_DOWN_F, b
+	bit B_PAD_DOWN, b
 	jr z, .asm_6937
 	; down
 	inc a
@@ -323,7 +323,7 @@ PlayerNamingScreen_CheckButtonState:
 	ld a, [wNamingScreenNumColumns]
 	ld c, a
 	ld a, h
-	bit D_LEFT_F, b
+	bit B_PAD_LEFT, b
 	jr z, .asm_6974
 	; left
 	ld d, a
@@ -360,13 +360,13 @@ PlayerNamingScreen_CheckButtonState:
 	jr .asm_69aa
 .asm_696b
 	dec a
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr z, .asm_69aa
 	ld a, c
 	dec a
 	jr .asm_69aa
 .asm_6974
-	bit D_RIGHT_F, b
+	bit B_PAD_RIGHT, b
 	jr z, .no_press
 	ld d, a
 	ld a, $06
@@ -441,9 +441,9 @@ PlayerNamingScreen_CheckButtonState:
 	ld [wMenuInputSFX], a
 .no_press
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	jr z, .asm_69ef
-	and A_BUTTON
+	and PAD_A
 	jr nz, .asm_69e5
 	; the B button was pressed.
 	ld a, -1
@@ -1027,7 +1027,7 @@ InputDeckName:
 	call UpdateRNGSources
 
 	ldh a, [hDPadHeld]
-	and START
+	and PAD_START
 	jr z, .else
 
 	; the Start button was pressed.
@@ -1243,17 +1243,17 @@ DeckNamingScreen_CheckButtonState:
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	bit D_UP_F, b
+	bit B_PAD_UP, b
 	jr z, .asm_6f1f
 	; up
 	dec a
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr z, .asm_6f4b
 	ld a, c
 	dec a
 	jr .asm_6f4b
 .asm_6f1f
-	bit D_DOWN_F, b
+	bit B_PAD_DOWN, b
 	jr z, .asm_6f2a
 	; down
 	inc a
@@ -1267,16 +1267,16 @@ DeckNamingScreen_CheckButtonState:
 	ld a, [wNamingScreenNumColumns]
 	ld c, a
 	ld a, h
-	bit D_LEFT_F, b
+	bit B_PAD_LEFT, b
 	jr z, .asm_6f40
 	dec a
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr z, .asm_6f4e
 	ld a, c
 	dec a
 	jr .asm_6f4e
 .asm_6f40
-	bit D_RIGHT_F, b
+	bit B_PAD_RIGHT, b
 	jr z, .asm_6f73
 	inc a
 	cp c
@@ -1311,9 +1311,9 @@ DeckNamingScreen_CheckButtonState:
 	ld [wMenuInputSFX], a
 .asm_6f73
 	ldh a, [hKeysPressed]
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	jr z, .asm_6f89
-	and A_BUTTON
+	and PAD_A
 	jr nz, .asm_6f7f
 	; B button was pressed
 	ld a, -1

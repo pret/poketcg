@@ -6,7 +6,7 @@ Func_1c865:
 ; pressing B makes it scroll faster
 Func_1c866: ; unreferenced
 	ldh a, [hKeysHeld]
-	and B_BUTTON
+	and PAD_B
 	call nz, .asm_1c86d ; executes following part twice
 .asm_1c86d
 	ldh a, [hSCX]
@@ -14,19 +14,19 @@ Func_1c866: ; unreferenced
 	ldh a, [hSCY]
 	ld c, a
 	ldh a, [hKeysHeld]
-	bit D_UP_F, a
+	bit B_PAD_UP, a
 	jr z, .check_d_down
 	inc c
 .check_d_down
-	bit D_DOWN_F, a
+	bit B_PAD_DOWN, a
 	jr z, .check_d_left
 	dec c
 .check_d_left
-	bit D_LEFT_F, a
+	bit B_PAD_LEFT, a
 	jr z, .check_d_right
 	inc b
 .check_d_right
-	bit D_RIGHT_F, a
+	bit B_PAD_RIGHT, a
 	jr z, .asm_1c889
 	dec b
 .asm_1c889

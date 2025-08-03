@@ -44,8 +44,10 @@ _LoadScene::
 	ld a, [hli]
 	ld [wSceneSGBRoutinePtr + 1], a
 	call LoadScene_LoadCompressedSGBPacket
-	ld a, %11100100
+
+	ldgbpal a, SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK
 	ld [wBGP], a
+
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ld a, [hli]

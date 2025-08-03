@@ -17,7 +17,7 @@ _PauseMenu_Status:
 	lb bc, 13, 6
 	call PrintPlayTime
 	call FlashWhiteScreen
-	ld a, A_BUTTON | B_BUTTON | START
+	ld a, PAD_A | PAD_B | PAD_START
 	call WaitUntilKeysArePressed
 	pop af
 	ld [wd291], a

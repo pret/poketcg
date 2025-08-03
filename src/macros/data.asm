@@ -100,3 +100,7 @@ ENDM
 MACRO cursor_transition
 	db \1, \2, \3, \4, \5, \6, \7
 ENDM
+
+MACRO gbpal
+	db (\1 << 0) | (\2 << 2) | (\3 << 4) | (\4 << 6)
+ENDM

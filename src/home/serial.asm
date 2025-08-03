@@ -375,17 +375,17 @@ Func_0e8e::
 	ld a, SC_START | SC_EXTERNAL
 	ldh [rSC], a         ; use external clock, set transfer start flag
 	ldh a, [rIF]
-	and ~(1 << INT_SERIAL)
+	and ~IE_SERIAL
 	ldh [rIF], a         ; clear serial interrupt flag
 	ldh a, [rIE]
-	or 1 << INT_SERIAL   ; enable serial interrupt
+	or IE_SERIAL         ; enable serial interrupt
 	ldh [rIE], a
 	ret
 
 ; disable serial interrupt, and clear rSB, rSC, and serial registers in WRAM
 ResetSerial::
 	ldh a, [rIE]
-	and ~(1 << INT_SERIAL)
+	and ~IE_SERIAL
 	ldh [rIE], a
 	xor a
 	ldh [rSB], a

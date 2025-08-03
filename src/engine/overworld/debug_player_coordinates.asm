@@ -14,10 +14,10 @@ Func_1c003: ; unreferenced
 
 	ldh a, [hKeysHeld]
 	ld b, a
-	and A_BUTTON | B_BUTTON
+	and PAD_A | PAD_B
 	cp b
 	jr nz, JumpSetWindowOff
-	and B_BUTTON
+	and PAD_B
 	jr z, JumpSetWindowOff
 
 	ld bc, $20
@@ -26,24 +26,24 @@ Func_1c003: ; unreferenced
 	ld bc, $320
 	ld a, [wPlayerYCoord]
 	bank1call WriteTwoByteNumberInTxSymbolFormat
-	ld a, $77
+	ld a, 112 + WX_OFS
 	ldh [hWX], a
-	ld a, $88
+	ld a, 136
 	ldh [hWY], a
 
 	ldh a, [hKeysPressed]
-	and A_BUTTON
+	and PAD_A
 	jr z, .skip_load_scene
 	ld a, SCENE_COLOR_PALETTE
 	lb bc, 0, 33
 	call LoadScene
 .skip_load_scene
 	ldh a, [hKeysHeld]
-	and A_BUTTON
+	and PAD_A
 	jr z, .set_wd_on
-	ld a, $67
+	ld a, 96 + WX_OFS
 	ldh [hWX], a
-	ld a, $68
+	ld a, 104
 	ldh [hWY], a
 .set_wd_on
 	call SetWindowOn

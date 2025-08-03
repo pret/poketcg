@@ -21,7 +21,7 @@ AttrBlkPacket_EmptyScreen::
 	ds 6 ; data set 2
 	ds 2 ; data set 3
 
-; returns v*BGMap0 + BG_MAP_WIDTH * c + b in de.
+; returns v*BGMap0 + TILEMAP_WIDTH * c + b in de.
 ; used to map coordinates at bc to a BGMap0 address.
 BCCoordToBGMap0Address::
 	ld l, c
