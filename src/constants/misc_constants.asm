@@ -5,7 +5,7 @@ DEF CONSOLE_CGB EQU $02
 
 ; wReentrancyFlag bits
 DEF IN_VBLANK EQU 0
-DEF IN_TIMER EQU 1
+DEF IN_TIMER  EQU 1
 
 ; wFlushPaletteFlags constants
 DEF FLUSH_ONE_PAL    EQU %10000000
@@ -40,17 +40,13 @@ DEF CARDPOP_NAME_LIST_SIZE EQUS "CARDPOP_NAME_LIST_MAX_ELEMS * NAME_BUFFER_LENGT
 
 DEF NUM_CHALLENGE_MACHINE_OPPONENTS EQU 5
 
-; rJOYP constants to read IR signals or SNES input
-DEF P15              EQU %00100000
-DEF P14              EQU %00010000
-DEF P13              EQU %00001000
-DEF P12              EQU %00000100
-DEF P11              EQU %00000010
-DEF P10              EQU %00000001
-DEF SNES_JOYPAD1     EQU $3 ; lower two bits
-DEF SNES_JOYPAD2     EQU $2 ; lower two bits
-DEF SNES_JOYPAD3     EQU $1 ; lower two bits
-DEF SNES_JOYPAD4     EQU $0 ; lower two bits
+; rJOYP constants to read SNES input
+DEF JOYP_SGB_MLT_REQ EQU %00000011
+
+; rJOYP constants to read IR signals
+DEF P14 EQU %00010000
+DEF P11 EQU %00000010
+DEF P10 EQU %00000001
 
 ; commands transmitted through IR to be
 ; executed by the other device

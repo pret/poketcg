@@ -145,7 +145,7 @@ Func_19705:
 	ld hl, rRP
 .loop
 	ldh a, [rJOYP]
-	bit 1, a
+	bit 1, a ; P11
 	jr z, ReturnZFlagUnsetAndCarryFlagSet
 	ld a, $aa ; request
 	call TransmitByteThroughIR
@@ -162,7 +162,7 @@ Func_1971e:
 	ld hl, rRP
 .asm_19721
 	ldh a, [rJOYP]
-	bit 1, a
+	bit 1, a ; P11
 	jr z, ReturnZFlagUnsetAndCarryFlagSet
 	call ReceiveByteThroughIR_ZeroIfUnsuccessful
 	cp $aa ; request

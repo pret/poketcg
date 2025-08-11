@@ -48,7 +48,7 @@ Reset::
 SaveButtonsHeld::
 	ld a, c
 	ldh [hKeysHeld], a
-	ld a, JOYP_GET_CTRL_PAD | JOYP_GET_BUTTONS
+	ld a, JOYP_GET_NONE
 	ldh [rJOYP], a
 	ret
 
