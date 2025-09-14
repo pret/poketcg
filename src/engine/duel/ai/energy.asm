@@ -480,7 +480,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	jr .asm_166c5
 
 .not_enough_energy
-	ld a, ATTACK_FLAG2_ADDRESS | FLAG_2_BIT_5_F
+	ld a, ATTACK_FLAG2_ADDRESS | IGNORE_THIS_ATTACK_F
 	call CheckLoadedAttackFlag
 	jr nc, .check_color_needed
 	ld a, 5
@@ -554,12 +554,12 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	ld [hl], b
 
 ; check for energy still needed for evolution to attack.
-; if FLAG_2_BIT_5 is not set, check what color is needed.
+; if IGNORE_THIS_ATTACK is not set, check what color is needed.
 ; if the energy card color needed is in hand, increase AI score.
 ; if a colorless card is needed, increase AI score.
 	call CheckEnergyNeededForAttack
 	jr nc, .done
-	ld a, ATTACK_FLAG2_ADDRESS | FLAG_2_BIT_5_F
+	ld a, ATTACK_FLAG2_ADDRESS | IGNORE_THIS_ATTACK_F
 	call CheckLoadedAttackFlag
 	jr c, .done
 	ld a, b

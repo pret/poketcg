@@ -364,7 +364,7 @@ CheckIfSelectedAttackIsUnusable:
 .bench
 	call CheckEnergyNeededForAttack
 	ret c ; can't be used
-	ld a, ATTACK_FLAG2_ADDRESS | FLAG_2_BIT_5_F
+	ld a, ATTACK_FLAG2_ADDRESS | IGNORE_THIS_ATTACK_F
 	call CheckLoadedAttackFlag
 	ret
 
