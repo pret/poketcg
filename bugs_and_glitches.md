@@ -36,6 +36,7 @@ Fixes are written in the `diff` format.
   - [Dive Bomb animation has incorrect frame data](#dive-bomb-animation-has-incorrect-frame-data)
 - [Text](#text)
   - [Both Ninetales cards misspell its name](#both-ninetales-cards-misspell-its-name)
+  - [Brittany's defeat dialogue has a typo](#brittanys-defeat-dialogue-has-a-typo)
   - [Challenge host uses wrong name for the first rival](#challenge-host-uses-wrong-name-for-the-first-rival)
 
 ## Game engine
@@ -798,6 +799,18 @@ When playing the challenge cup, player name is used instead of rival name before
 ```diff
 -	text "Presently, <RAMNAME> is still"
 +	text "Presently, <RAMTEXT> is still"
+```
+
+### Brittany's defeat dialogue has a typo
+
+After defeating Brittany in the Grass Club, her dialogue is gramatically incorrect.
+
+**Fix:** Edit `Text06e7` in [src/text/text8.asm](https://github.com/pret/poketcg/blob/master/src/text/text8.asm):
+```diff
+	text "Humph! Whenever I lose, I "
+-	line "get irritated me!"
++	line "get irritated!"
+	done
 ```
 
 ### Both Ninetales cards misspell its name
