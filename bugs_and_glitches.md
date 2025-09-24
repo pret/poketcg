@@ -35,6 +35,8 @@ Fixes are written in the `diff` format.
   - [Big Lightning animation has incorrect frame data](#big-lightning-animation-has-incorrect-frame-data)
   - [Dive Bomb animation has incorrect frame data](#dive-bomb-animation-has-incorrect-frame-data)
 - [Text](#text)
+  - [Missing acute accents] (#missing-acute-accents)
+  - [Doctor Mason misspells Exeggcute's name] (#doctor-mason-misspells-exeggcutes-name)
   - [Both Ninetales cards misspell its name](#both-ninetales-cards-misspell-its-name)
   - [Brittany's defeat dialogue has a typo](#brittanys-defeat-dialogue-has-a-typo)
   - [Challenge host uses wrong name for the first rival](#challenge-host-uses-wrong-name-for-the-first-rival)
@@ -788,6 +790,32 @@ The flames of one of the blasts being cut-off is addressed below, though that sp
 ```
 
 ## Text
+
+### Missing acute accents
+
+The following instances of "Poké" are missing the acute accent (thus being incorrectly rendered as "Poke").
+
+**Fix:** Edit `VoltorbDescription` in [src/text/text11.asm](https://github.com/pret/poketcg/blob/master/src/text/text11.asm):
+```diff
+-	line "Easily mistaken for a Poke Ball, it"
++	line "Easily mistaken for a Poké Ball, it"
+```
+
+**Fix:** Edit `ClefairysMetronomeDescription` in [src/text/text12.asm](https://github.com/pret/poketcg/blob/master/src/text/text12.asm):
+```diff
+-	line "Pokemon is, Clefairy's type is"
++	line "Pokémon is, Clefairy's type is"
+```
+
+### Doctor Mason misspells Exeggcute's name
+
+One of Doctor Mason's emails misspells Exeggcute's name as "Exeggute".
+
+**Fix:** Edit `Mail6Part1Text` in [src/text/text4.asm](https://github.com/pret/poketcg/blob/master/src/text/text4.asm):
+```diff
+-	line "Exeggute and Exeggutor at an"
++	line "Exeggcute and Exeggutor at an"
+```
 
 ### Challenge host uses wrong name for the first rival
 
