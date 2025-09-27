@@ -5567,8 +5567,8 @@ PrintPlayAreaCardAttachedEnergies:
 	call GetPlayAreaCardAttachedEnergies
 	ld hl, wDefaultText
 	push hl
-	ld c, NUM_TYPES
-	xor a
+	ld c, 8 ; maximum number of symbols that will be printed
+	xor a ; SYM_SPACE
 .empty_loop
 	ld [hli], a
 	dec c
@@ -5599,7 +5599,7 @@ PrintPlayAreaCardAttachedEnergies:
 	pop bc
 	call BCCoordToBGMap0Address
 	ld hl, wDefaultText
-	ld b, NUM_TYPES
+	ld b, 8
 	call SafeCopyDataHLtoDE
 	ret
 
