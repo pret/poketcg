@@ -35,16 +35,22 @@ Fixes are written in the `diff` format.
   - [Big Lightning animation has incorrect frame data](#big-lightning-animation-has-incorrect-frame-data)
   - [Dive Bomb animation has incorrect frame data](#dive-bomb-animation-has-incorrect-frame-data)
 - [Text](#text)
-  - [Misspelled "chosen" system text string] (#misspelled-chosen-system-text-string)
-  - [Doctor Mason misspells Exeggcute's name] (#doctor-mason-misspells-exeggcutes-name)
-  - [Clerk's Challenge Cup dialogue has an extra 'the'] (#clerks-challenge-cup-dialogue-has-an-extra-the)
-  - [Ronald's Challenge Cup dialogue has a typo] (#ronalds-challenge-cup-dialogue-has-a-typo)
+  - [Typos in unused strings](#typos-in-unused-strings)
+  - [Misspelled "chosen" system text string](#misspelled-chosen-system-text-string)
+  - [Missing space](#missing-space)
+  - [Misspelled status effect message](#misspelled-status-effect-message)
+  - [Promotional Flying Pikachu typo](#promotional-flying-pikachu-typo)
+  - [Legendary Zapdos card has a typo](#legendary-zapdos-card-has-a-typo)
+  - [Doctor Mason misspells Exeggcute's name](#doctor-mason-misspells-exeggcutes-name)
+  - [Clerk's Challenge Cup dialogue has an extra 'the'](#clerks-challenge-cup-dialogue-has-an-extra-the)
+  - [Ronald's Challenge Cup dialogue has a typo](#ronalds-challenge-cup-dialogue-has-a-typo)
   - [Challenge host uses wrong name for the first rival](#challenge-host-uses-wrong-name-for-the-first-rival)
-  - [Lightning Club dialogue has a typo] (#lightning-club-dialogue-has-a-typo)
+  - [Courtney's defeat dialogue has a typo](#courtneys-defeat-dialogue-has-a-typo) 
+  - [Lightning Club dialogue has a typo](#lightning-club-dialogue-has-a-typo)
   - [Brittany's defeat dialogue has a typo](#brittanys-defeat-dialogue-has-a-typo)
-  - [Ronald's Legendary Card dialogue has a typo] (#ronalds-legendary-card-dialogue-has-a-typo)
+  - [Ronald's Legendary Card dialogue has a typo](#ronalds-legendary-card-dialogue-has-a-typo)
   - [Both Ninetales cards misspell its name](#both-ninetales-cards-misspell-its-name)
-  - [Missing acute accents] (#missing-acute-accents)
+  - [Missing acute accents](#missing-acute-accents)
 
 ## Game engine
 
@@ -796,6 +802,23 @@ The flames of one of the blasts being cut-off is addressed below, though that sp
 
 ## Text
 
+### Typos in unused strings
+
+Two pieces of unused text contain typos.
+
+**Fix:** Edit `UnusedText0096` in [src/text/text1.asm](https://github.com/pret/poketcg/blob/master/src/text/text1.asm):
+```diff
+-   line "Payalysis"
++	line "Paralysis"
+```
+
+Edit `UnusedText00d5`, still in `text1.asm`:
+```diff
+-	text "A Transmission Error occured."
++	text "A Transmission Error occurred."
+	done
+```
+
 ### Misspelled "chosen" system text string
 
 The word "chosen" is misspelled as "choosen" in one piece of system text. Fixing it is a tad more involved than the rest.
@@ -821,6 +844,49 @@ Lastly, you will want to update every instance of "NoAttackMayBeChoosenText" in 
 ```diff
 -	ldtx hl, NoAttackMayBeChoosenText
 +	ldtx hl, NoAttackMayBeChosenText
+```
+
+### Missing space
+
+The description for Mewtwo's Energy Absorption move is missing a space between "Pile" and "to".
+
+**Fix:** Edit `Choose2EnergyCardsFromDiscardPileToAttachText` in [src/text/text2.asm](https://github.com/pret/poketcg/blob/master/src/text/text2.asm):
+```diff
+	text "Choose 2 Energy cards from the"
+-	line "Discard Pileto attach to a Pokémon."
++	line "Discard Pile to attach to a Pokémon."
+```
+
+### Misspelled status effect message
+
+The message reporting that Poison and Confusion had no effect misspells "effect".
+
+**Fix:** Edit `ThereWasNoEffectFromPoisonConfusionText` in [src/text/text2.asm](https://github.com/pret/poketcg/blob/master/src/text/text2.asm):
+```diff
+-	text "There was no effet"
++	text "There was no effect"
+	line "from Poison, Confusion."
+```
+
+### Promotional Flying Pikachu typo
+
+The message for receiving the promotional Flying Pikachu card ironically misspells "Promotional".
+
+**Fix:** Edit `ReceivedPromotionalFlyingPikachuText` in [src/text/text2.asm](https://github.com/pret/poketcg/blob/master/src/text/text2.asm):
+```diff
+-	text "<RAMNAME> received a Promotinal"
++	text "<RAMNAME> received a Promotional"
+	line "card Flyin' Pikachu!"
+```
+
+### Legendary Zapdos card has a typo
+
+The Legendary Zapdos card misspells "Legendary" in its description.
+
+**Fix:** Edit `LegendaryZapdosDescriptionText` in [src/text/text3.asm](https://github.com/pret/poketcg/blob/master/src/text/text3.asm):
+```diff
+-	line "Legandary Zapdos!"
++	line "Legendary Zapdos!"
 ```
 
 ### Doctor Mason misspells Exeggcute's name
@@ -868,9 +934,20 @@ When playing the challenge cup, player name is used instead of rival name before
 +	text "Presently, <RAMTEXT> is still"
 ```
 
+### Courtney's defeat dialogue has a typo
+
+After defeating Courtney at the Pokémon Dome Club, her dialogue is grammatically incorrect.
+
+**Fix:** Edit `Text0579` in [src/text/text6.asm](https://github.com/pret/poketcg/blob/master/src/text/text6.asm):
+```diff
+-	line "But that's no suprise, seeing "
++	line "But that's no surprise, seeing "
+	done
+```
+
 ### Lightning Club dialogue has a typo
 
-This trainer dialogue in the Lightning club is gramatically incorrect.
+Brandon's dialogue in the Lightning club is grammatically incorrect.
 
 **Fix:** Edit `Text0629` in [src/text/text7.asm](https://github.com/pret/poketcg/blob/master/src/text/text7.asm):
 ```diff
@@ -881,7 +958,7 @@ This trainer dialogue in the Lightning club is gramatically incorrect.
 
 ### Brittany's defeat dialogue has a typo
 
-After defeating Brittany in the Grass Club, her dialogue is gramatically incorrect.
+After defeating Brittany in the Grass Club, her dialogue is grammatically incorrect.
 
 **Fix:** Edit `Text06e7` in [src/text/text8.asm](https://github.com/pret/poketcg/blob/master/src/text/text8.asm):
 ```diff
