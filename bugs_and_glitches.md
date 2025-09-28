@@ -27,6 +27,9 @@ Fixes are written in the `diff` format.
   - [Sam's practice deck does wrong card ID check](#sams-practice-deck-does-wrong-card-id-check)
   - [AI does not use Shift properly](#ai-does-not-use-shift-properly)
   - [AI does not use Cowardice properly](#ai-does-not-use-cowardice-properly)
+  - [AI does not pay attention to Acid effect when retreating](#ai-does-not-pay-attention-to-acid-effect-when-retreating)
+  - [AI has flawed logic when considering MewLv8 as a target for switching](#ai-has-flawed-logic-when-considering-mewlv8-as-a-target-for-switching)
+  - [AI has flawed logic when considering the Earthquake attack](#ai-has-flawed-logic-when-considering-the-earthquake-attack)
   - [Phantom Venusaur will never be obtained through Card Pop!](#phantom-venusaur-will-never-be-obtained-through-card-pop)
 - [Graphics](#graphics)
   - [Water Club master room uses the wrong void color](#water-club-master-room-uses-the-wrong-void-color)
@@ -550,6 +553,132 @@ HandleAICowardice:
 +	and CAN_EVOLVE_THIS_TURN
 +	ret z ; return if was played this turn
 	...
+```
+
+### AI does not pay attention to Acid effect when retreating
+
+When retreating, the AI completely ignores whether or not its Active Pokémon was attacked with Victreebel's Acid attack during the previous turn. While addressing this oversight, you can also remove some of the extra Asleep/Paralyzed checks within the same function.
+
+**Fix:** Edit `AITryToRetreat` in [src/engine/duel/ai/retreat.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/retreat.asm):
+```diff
+; input:
+;	- a = Play Area location (PLAY_AREA_*) of card to retreat to.
+AITryToRetreat:
+-	push af
++	ld b, a
++	call CheckUnableToRetreatDueToEffect
++	ret c
++	bank1call CheckIfActiveCardParalyzedOrAsleep
++	ret c
++	push bc
+	ld a, [wAIPlayEnergyCardForRetreat]
+	or a
+	jr z, .check_id
+
+; AI is allowed to play an energy card
+; from the hand in order to provide
+; the necessary energy for retreat cost
+-
+-; check status
+-	ld a, DUELVARS_ARENA_CARD_STATUS
+-	call GetTurnDuelistVariable
+-	and CNF_SLP_PRZ
+-	cp ASLEEP
+-	jp z, .check_id
+-	cp PARALYZED
+-	jp z, .check_id
+-
+; if an energy card hasn't been played yet,
+; checks if the Pokémon needs just one more energy to retreat
+; if it does, check if there are any energy cards in hand
+	...
+	pop af
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+-	ld b, a
+-	and CNF_SLP_PRZ
+-	cp ASLEEP
+-	jp z, .set_carry
+-	cp PARALYZED
+-	jp z, .set_carry
+-	ld a, b
+	ldh [hTemp_ffa0], a
+	ld a, $ff
+	ldh [hTempRetreatCostCards], a
+	...
+```
+
+### AI has flawed logic when considering MewLv8 as a target for switching
+
+There is a mistake in the AI logic that affects whether or not Stephanie will choose a Benched MewLv8 to be her new Active Pokémon after retreating. It's supposed to increase MewLv8's score if the player's Active Pokémon isn't a Basic Pokémon, but it mistakenly looks up that Pokémon's deck index in the AI's deck.
+
+**Fix:** Edit `AIDecideBenchPokemonToSwitchTo` in [src/engine/duel/ai/retreat.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/retreat.asm):
+```diff
+AIDecideBenchPokemonToSwitchTo:
+	...
+	jr z, .raise_score
+	cp MEW_LV8
+	jr nz, .check_if_has_bench_utility
++	call Swap Turn
+	ld a, DUELVARS_ARENA_CARD
+-	call GetNonTurnDuelistVariable
++	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
++	call SwapTurn
+	ld a, [wLoadedCard2Stage]
+	or a
+	jr z, .check_if_has_bench_utility
+	...
+```
+
+### AI has flawed logic when considering the Earthquake attack
+
+There are some mistakes in the AI logic that affects whether or not Gene will decide to use Dugtrio's Earthquake attack.
+
+**Fix:** Edit `HandleSpecialAIAttacks` in [src/engine/duel/ai/special_attacks.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/special_attacks.asm):
+```diff
+HandleSpecialAIAttacks:
+	...
+.Earthquake:
+	ld a, DUELVARS_BENCH
+	call GetTurnDuelistVariable
+
+	lb de, 0, PLAY_AREA_BENCH_1 - 1
+.loop_earthquake
+	inc e
+	ld a, [hli]
+	cp $ff
+	jr z, .count_prizes
+	ld a, e
+	add DUELVARS_ARENA_CARD_HP
+-	; bug, GetTurnDuelistVariable clobbers hl
+-	; uncomment the following lines to preserve hl
+-	; push hl
++	push hl
+	call GetTurnDuelistVariable
+-	; pop hl
++	pop hl
+	cp 20
+	jr nc, .loop_earthquake
+	inc d
+	jr .loop_earthquake
+
+.count_prizes
+-	; bug, this is supposed to count the player's prize cards
+-	; not the opponent's, missing calls to SwapTurn
+	push de
+-	; call SwapTurn
++	call SwapTurn
+	call CountPrizes
+-	; call SwapTurn
++	call SwapTurn
+	pop de
+	cp d
+	jp c, .zero_score
+	jp z, .zero_score
+	ld a, $80
+	ret
 ```
 
 ### Phantom Venusaur will never be obtained through Card Pop!
