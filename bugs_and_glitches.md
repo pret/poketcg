@@ -35,8 +35,22 @@ Fixes are written in the `diff` format.
   - [Big Lightning animation has incorrect frame data](#big-lightning-animation-has-incorrect-frame-data)
   - [Dive Bomb animation has incorrect frame data](#dive-bomb-animation-has-incorrect-frame-data)
 - [Text](#text)
-  - [Both Ninetales cards misspell its name](#both-ninetales-cards-misspell-its-name)
+  - [Typos in unused strings](#typos-in-unused-strings)
+  - [Misspelled "chosen" system text string](#misspelled-chosen-system-text-string)
+  - [Missing space](#missing-space)
+  - [Misspelled status effect message](#misspelled-status-effect-message)
+  - [Promotional Flying Pikachu typo](#promotional-flying-pikachu-typo)
+  - [Legendary Zapdos card has a typo](#legendary-zapdos-card-has-a-typo)
+  - [Doctor Mason misspells Exeggcute's name](#doctor-mason-misspells-exeggcutes-name)
+  - [Clerk's Challenge Cup dialogue has an extra 'the'](#clerks-challenge-cup-dialogue-has-an-extra-the)
+  - [Ronald's Challenge Cup dialogue has a typo](#ronalds-challenge-cup-dialogue-has-a-typo)
   - [Challenge host uses wrong name for the first rival](#challenge-host-uses-wrong-name-for-the-first-rival)
+  - [Courtney's defeat dialogue has a typo](#courtneys-defeat-dialogue-has-a-typo) 
+  - [Lightning Club dialogue has a typo](#lightning-club-dialogue-has-a-typo)
+  - [Brittany's defeat dialogue has a typo](#brittanys-defeat-dialogue-has-a-typo)
+  - [Ronald's Legendary Card dialogue has a typo](#ronalds-legendary-card-dialogue-has-a-typo)
+  - [Both Ninetales cards misspell its name](#both-ninetales-cards-misspell-its-name)
+  - [Missing acute accents](#missing-acute-accents)
 
 ## Game engine
 
@@ -788,6 +802,126 @@ The flames of one of the blasts being cut-off is addressed below, though that sp
 
 ## Text
 
+### Typos in unused strings
+
+Two pieces of unused text contain typos.
+
+**Fix:** Edit `UnusedText0096` in [src/text/text1.asm](https://github.com/pret/poketcg/blob/master/src/text/text1.asm):
+```diff
+-   line "Payalysis"
++	line "Paralysis"
+```
+
+Edit `UnusedText00d5`, still in `text1.asm`:
+```diff
+-	text "A Transmission Error occured."
++	text "A Transmission Error occurred."
+	done
+```
+
+### Misspelled "chosen" system text string
+
+The word "chosen" is misspelled as "choosen" in one piece of system text. Fixing it is a tad more involved than the rest.
+
+**Fix:** Edit `NoAttackMayBeChoosenText` in [src/text/text1.asm](https://github.com/pret/poketcg/blob/master/src/text/text1.asm):
+```diff
+-NoAttackMayBeChoosenText:
+-	text "No Attacks may be choosen."
++NoAttackMayBeChosenText:
++	text "No Attacks may be chosen."
+    done
+```
+
+Next, correct the corresponding label name in [src/text/text_offsets.asm](https://github.com/pret/poketcg/blob/master/src/text/text_offsets.asm):
+```diff
+	textpointer ThereAreNoTrainerCardsInDiscardPileText            ; 0x00c4
+-	textpointer NoAttackMayBeChoosenText                           ; 0x00c5
++	textpointer NoAttackMayBeChosenText                            ; 0x00c5
+	textpointer YouDidNotReceiveAnAttackToMirrorMoveText           ; 0x00c6
+```
+
+Lastly, you will want to update every instance of "NoAttackMayBeChoosenText" in [src/engine/duel/effect_functions.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/effect_functions.asm) (there are four of them):
+```diff
+-	ldtx hl, NoAttackMayBeChoosenText
++	ldtx hl, NoAttackMayBeChosenText
+```
+
+### Missing space
+
+The description for Mewtwo's Energy Absorption move is missing a space between "Pile" and "to".
+
+**Fix:** Edit `Choose2EnergyCardsFromDiscardPileToAttachText` in [src/text/text2.asm](https://github.com/pret/poketcg/blob/master/src/text/text2.asm):
+```diff
+	text "Choose 2 Energy cards from the"
+-	line "Discard Pileto attach to a Pokémon."
++	line "Discard Pile to attach to a Pokémon."
+```
+
+### Misspelled status effect message
+
+The message reporting that Poison and Confusion had no effect misspells "effect".
+
+**Fix:** Edit `ThereWasNoEffectFromPoisonConfusionText` in [src/text/text2.asm](https://github.com/pret/poketcg/blob/master/src/text/text2.asm):
+```diff
+-	text "There was no effet"
++	text "There was no effect"
+	line "from Poison, Confusion."
+```
+
+### Promotional Flying Pikachu typo
+
+The message for receiving the promotional Flying Pikachu card ironically misspells "Promotional".
+
+**Fix:** Edit `ReceivedPromotionalFlyingPikachuText` in [src/text/text2.asm](https://github.com/pret/poketcg/blob/master/src/text/text2.asm):
+```diff
+-	text "<RAMNAME> received a Promotinal"
++	text "<RAMNAME> received a Promotional"
+	line "card Flyin' Pikachu!"
+```
+
+### Legendary Zapdos card has a typo
+
+The Legendary Zapdos card misspells "Legendary" in its description.
+
+**Fix:** Edit `LegendaryZapdosDescriptionText` in [src/text/text3.asm](https://github.com/pret/poketcg/blob/master/src/text/text3.asm):
+```diff
+-	line "Legandary Zapdos!"
++	line "Legendary Zapdos!"
+```
+
+### Doctor Mason misspells Exeggcute's name
+
+One of Doctor Mason's emails misspells Exeggcute's name as "Exeggute".
+
+**Fix:** Edit `Mail6Part1Text` in [src/text/text4.asm](https://github.com/pret/poketcg/blob/master/src/text/text4.asm):
+```diff
+-	line "Exeggute and Exeggutor at an"
++	line "Exeggcute and Exeggutor at an"
+```
+
+### Clerk's Challenge Cup dialogue has an extra 'the'
+
+The Clerk mistakenly repeats "the" twice when describing the Challenge Hall.
+
+**Fix:** Edit `Clerk9ChallengeCupOverText` in [src/text/text5.asm](https://github.com/pret/poketcg/blob/master/src/text/text5.asm):
+```diff
+-	line "Challenge Hall! This is where the"
++	line "Challenge Hall! This is where"
+    line "the Challenge Cup is held. The"
+	done
+```
+
+### Ronald's Challenge Cup dialogue has a typo
+
+Ronald was so angry that he atomized the "l" out of "pulverize".
+
+**Fix:** Edit `RonaldChallengeCup1LostActive2Text` in [src/text/text5.asm](https://github.com/pret/poketcg/blob/master/src/text/text5.asm):
+```diff
+-	line "Cup! Of course I'll puverize you!"
++	line "Cup! Of course I'll pulverize you!"
+	done
+```
+
 ### Challenge host uses wrong name for the first rival
 
 ([Video](https://www.youtube.com/watch?v=1igDbNxRfUw&t=17310s))
@@ -800,6 +934,50 @@ When playing the challenge cup, player name is used instead of rival name before
 +	text "Presently, <RAMTEXT> is still"
 ```
 
+### Courtney's defeat dialogue has a typo
+
+After defeating Courtney at the Pokémon Dome Club, her dialogue is grammatically incorrect.
+
+**Fix:** Edit `Text0579` in [src/text/text6.asm](https://github.com/pret/poketcg/blob/master/src/text/text6.asm):
+```diff
+-	line "But that's no suprise, seeing "
++	line "But that's no surprise, seeing "
+	done
+```
+
+### Lightning Club dialogue has a typo
+
+Brandon's dialogue in the Lightning club is grammatically incorrect.
+
+**Fix:** Edit `Text0629` in [src/text/text7.asm](https://github.com/pret/poketcg/blob/master/src/text/text7.asm):
+```diff
+-	line "to keep it 'em lit!"
++	line "to keep 'em lit!"
+	done
+```
+
+### Brittany's defeat dialogue has a typo
+
+After defeating Brittany in the Grass Club, her dialogue is grammatically incorrect.
+
+**Fix:** Edit `Text06e7` in [src/text/text8.asm](https://github.com/pret/poketcg/blob/master/src/text/text8.asm):
+```diff
+	text "Humph! Whenever I lose, I "
+-	line "get irritated me!"
++	line "get irritated!"
+	done
+```
+
+### Ronald's Legendary Card dialogue has a typo
+Ronald's spiel on the Legendary Pokémon Cards is missing a contraction.
+
+**Fix:** Edit `Text073f` in [src/text/text9.asm](https://github.com/pret/poketcg/blob/master/src/text/text9.asm):
+```diff
+-	line "And this time, I not gonna lose!"
++	line "And this time, I'm not gonna lose!"
+```
+
+
 ### Both Ninetales cards misspell its name
 The name string used for both NinetalesLv32 and NinetalesLv35 misspells the Pokémon's name as "Ninetails".
 
@@ -809,4 +987,20 @@ NinetalesName:
 -	text "Ninetails"
 +	text "Ninetales"
 	done
+```
+
+### Missing acute accents
+
+The following instances of "Poké" are missing the acute accent (thus being incorrectly rendered as "Poke").
+
+**Fix:** Edit `VoltorbDescription` in [src/text/text11.asm](https://github.com/pret/poketcg/blob/master/src/text/text11.asm):
+```diff
+-	line "Easily mistaken for a Poke Ball, it"
++	line "Easily mistaken for a Poké Ball, it"
+```
+
+**Fix:** Edit `ClefairysMetronomeDescription` in [src/text/text12.asm](https://github.com/pret/poketcg/blob/master/src/text/text12.asm):
+```diff
+-	line "Pokemon is, Clefairy's type is"
++	line "Pokémon is, Clefairy's type is"
 ```
