@@ -45,7 +45,7 @@ Fixes are written in the `diff` format.
   - [Clerk's Challenge Cup dialogue has an extra 'the'](#clerks-challenge-cup-dialogue-has-an-extra-the)
   - [Ronald's Challenge Cup dialogue has a typo](#ronalds-challenge-cup-dialogue-has-a-typo)
   - [Challenge host uses wrong name for the first rival](#challenge-host-uses-wrong-name-for-the-first-rival)
-  - [Courtney's defeat dialogue has a typo](#courtneys-defeat-dialogue-has-a-typo) 
+  - [Courtney's defeat dialogue has a typo](#courtneys-defeat-dialogue-has-a-typo)
   - [Lightning Club dialogue has a typo](#lightning-club-dialogue-has-a-typo)
   - [Brittany's defeat dialogue has a typo](#brittanys-defeat-dialogue-has-a-typo)
   - [Ronald's Legendary Card dialogue has a typo](#ronalds-legendary-card-dialogue-has-a-typo)
@@ -969,6 +969,7 @@ After defeating Brittany in the Grass Club, her dialogue is grammatically incorr
 ```
 
 ### Ronald's Legendary Card dialogue has a typo
+
 Ronald's spiel on the Legendary Pokémon Cards is missing a contraction.
 
 **Fix:** Edit `Text073f` in [src/text/text9.asm](https://github.com/pret/poketcg/blob/master/src/text/text9.asm):
@@ -977,8 +978,8 @@ Ronald's spiel on the Legendary Pokémon Cards is missing a contraction.
 +	line "And this time, I'm not gonna lose!"
 ```
 
-
 ### Both Ninetales cards misspell its name
+
 The name string used for both NinetalesLv32 and NinetalesLv35 misspells the Pokémon's name as "Ninetails".
 
 **Fix:** Edit `NinetalesName` in [src/text/text10.asm](https://github.com/pret/poketcg/blob/master/src/text/text10.asm):
