@@ -135,9 +135,9 @@ PrintScrollableText::
 	jr .go
 .nonzero_text_speed
 	ld a, [wTextSpeed]
-	cp 2
+	cp TEXT_SPEED_3
 	jr nc, .apply_delay
-	; if text speed is 1, pressing b ignores it
+	; if TEXT_SPEED_4, pressing B ignores the delay
 	ldh a, [hKeysHeld]
 	and PAD_B
 	jr nz, .skip_delay
@@ -455,9 +455,9 @@ PrintText::
 	ld b, a
 	ld a, [wTextSpeed]
 	inc a
-	cp 3
+	cp TEXT_SPEED_3 + 1
 	jr nc, .apply_delay
-	; if text speed is 1, pressing b ignores it
+	; if TEXT_SPEED_4, pressing B ignores the delay
 	bit B_PAD_B, b
 	jr nz, .skip_delay
 	jr .apply_delay
