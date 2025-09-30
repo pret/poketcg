@@ -116,7 +116,7 @@ InitSaveData:
 ; saved configuration options
 	ld a, 2
 	ld [sPrinterContrastLevel], a
-	ld a, $2
+	ld a, TEXT_SPEED_3
 	ld [sTextSpeed], a
 	ld [wTextSpeed], a
 
