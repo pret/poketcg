@@ -147,7 +147,7 @@ DuelAnimationSettings:
 ; text printing delay
 TextDelaySettings:
 	; slow to fast
-	db 6, 4, 2, 1, 0
+	db TEXT_SPEED_1, TEXT_SPEED_2, TEXT_SPEED_3, TEXT_SPEED_4, TEXT_SPEED_5
 
 UpdateConfigMenuCursor:
 	push af
