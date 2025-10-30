@@ -7857,7 +7857,7 @@
 0b:4124 DealDamageToAllBenchedPokemon.loop
 0b:4129 DealDamageToAllBenchedPokemon.skip_to_bench
 0b:412e PlayAttackAnimationOverAttackingPokemon
-0b:4140 ApplySubstatus1ToDefendingCard
+0b:4140 ApplySubstatus1ToAttackingCard
 0b:4149 ApplySubstatus2ToDefendingCard
 0b:415a ApplySubstatus2ToDefendingCard.no_damage_orEffect
 0b:4166 SetDefiniteDamage
