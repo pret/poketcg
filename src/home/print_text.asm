@@ -67,7 +67,7 @@ CountLinesOfTextFromID::
 	jr nc, .char_loop
 	cp TX_HALFWIDTH
 	jr c, .skip
-	cp "\n"
+	cp '\n'
 	jr nz, .char_loop
 	inc c
 	jr .char_loop
@@ -410,7 +410,7 @@ TwoByteNumberToText_CountLeadingZeros::
 	ld c, 4
 .digit_loop
 	ld a, [hl]
-	cp "0"
+	cp '0'
 	ret nz
 	inc hl
 	dec c

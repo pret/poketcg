@@ -77,8 +77,8 @@ WriteBCDNumberInTextFormat::
 ;  format to hl. numbers above 9 end up converted to half-width font tiles.
 WriteBCDDigitInTextFormat::
 	and $0f
-	add "0"
-	cp "9" + 1
+	add '0'
+	cp '9' + 1
 	jr c, .write_num
 	add $07
 .write_num
@@ -142,7 +142,7 @@ TwoByteNumberToText::
 	pop bc
 	ret
 .get_digit
-	ld a, "0" - 1
+	ld a, '0' - 1
 .subtract_loop
 	inc a
 	add hl, bc

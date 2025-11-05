@@ -109,20 +109,20 @@ _CopyCardNameAndLevel_HalfwidthText:
 	or a
 	jr z, .level_done
 	ld c, a
-	ld a, " "
+	ld a, ' '
 	ld [hli], a
 	dec b
-	ld a, "L"
+	ld a, 'L'
 	ld [hli], a
 	dec b
-	ld a, "v"
+	ld a, 'v'
 	ld [hli], a
 	dec b
 	ld a, c
 	cp 10
 	jr c, .got_level
 	push bc
-	ld b, "0" - 1
+	ld b, '0' - 1
 .first_digit_loop
 	inc b
 	sub 10
@@ -135,12 +135,12 @@ _CopyCardNameAndLevel_HalfwidthText:
 	dec b
 .got_level
 	ld a, c
-	add "0"
+	add '0'
 	ld [hli], a ; last (or only) digit
 	dec b
 .level_done
 	push hl
-	ld a, " "
+	ld a, ' '
 .fill_spaces_loop
 	ld [hli], a
 	dec b

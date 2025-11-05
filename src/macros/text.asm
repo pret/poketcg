@@ -73,7 +73,7 @@ MACRO ldfw
 	IF CHARSIZE(\2) > 1
 		ld \1, CHARVAL(\2, 0) << 8 + CHARVAL(\2, 1)
 	ELSE
-		ld \1, \2
+		ld \1, CHARVAL(\2)
 	ENDC
 	POPC
 ENDM

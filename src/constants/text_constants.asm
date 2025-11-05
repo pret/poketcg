@@ -27,7 +27,7 @@ DEF TX_HALFWIDTH  EQU $06 ; sets wFontWidth to HALF_WIDTH
 DEF TX_HALF2FULL  EQU $07 ; sets wFontWidth to FULL_WIDTH, and hJapaneseSyllabary to TX_KATAKANA
 
 DEF TX_RAM1       EQU $09 ; prints the player's name or, in a duel, the turn duelist's name
-DEF TX_LINE       EQU "\n" ; advances to a new line
+DEF TX_LINE       EQU '\n' ; advances to a new line
 DEF TX_RAM2       EQU $0b ; prints text from wTxRam2 or wTxRam2_b
 DEF TX_RAM3       EQU $0c ; prints a number from wTxRam3 or wTxRam3_b
 
