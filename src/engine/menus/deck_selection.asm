@@ -354,15 +354,15 @@ InputCurDeckName:
 	ld hl, wCurDeckName
 	ld [hl], $6
 	inc hl
-	ld [hl], "D"
+	ld [hl], 'D'
 	inc hl
-	ld [hl], "e"
+	ld [hl], 'e'
 	inc hl
-	ld [hl], "c"
+	ld [hl], 'c'
 	inc hl
-	ld [hl], "k"
+	ld [hl], 'k'
 	inc hl
-	ld [hl], " "
+	ld [hl], ' '
 	inc hl
 	ld de, wDefaultText + 2
 	ld a, [de]

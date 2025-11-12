@@ -4,7 +4,7 @@
 ; 2: player's y coordinate when entering the map
 ; 4: 00
 OverworldMapWarps:
-	table_width 4, OverworldMapWarps
+	table_width 4
 	db $00, $00, $00, $00
 	db MASON_LABORATORY,        $0e, $1a, $00
 	db ISHIHARAS_HOUSE,         $08, $14, $00

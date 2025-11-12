@@ -1,5 +1,5 @@
 ScenePointers:
-	table_width 2, ScenePointers
+	table_width 2
 	dw Scene_TitleScreen
 	dw Scene_ColosseumBooster
 	dw Scene_EvolutionBooster

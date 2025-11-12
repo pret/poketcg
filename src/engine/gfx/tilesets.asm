@@ -6,7 +6,7 @@ MACRO tileset
 ENDM
 
 Tilesets:
-	table_width 4, Tilesets
+	table_width 4
 	tileset OverworldMapTiles,             193 ; TILESET_OVERWORLD_MAP
 	tileset MasonLaboratoryTilesetGfx,     151 ; TILESET_MASON_LABORATORY
 	tileset IshiharaTilesetGfx,             77 ; TILESET_ISHIHARA

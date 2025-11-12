@@ -1,5 +1,5 @@
 OverworldMap_MapPositions:
-	table_width 2, OverworldMap_MapPositions
+	table_width 2
 	db $00, $00 ; unused
 	db $0c, $68 ; OWMAP_MASON_LABORATORY
 	db $04, $18 ; OWMAP_ISHIHARAS_HOUSE

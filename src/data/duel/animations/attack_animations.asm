@@ -1,5 +1,5 @@
 PointerTable_AttackAnimation:
-	table_width 2, PointerTable_AttackAnimation
+	table_width 2
 	dw NULL                                ; ATK_ANIM_NONE
 	dw AttackAnimation_Hit                 ; ATK_ANIM_HIT
 	dw AttackAnimation_BigHit              ; ATK_ANIM_BIG_HIT

@@ -1,6 +1,6 @@
 MapOWFramesetPointers:
 ; non-cgb, cgb
-	table_width 4, MapOWFramesetPointers
+	table_width 4
 	dw OverworldMapOWFrameset,    OverworldMapCGBOWFrameset    ; OVERWORLD_MAP
 	dw MasonLaboratoryOWFrameset, MasonLaboratoryOWFrameset    ; MASON_LABORATORY
 	dw DeckMachineRoomOWFrameset, DeckMachineRoomCGBOWFrameset ; DECK_MACHINE_ROOM

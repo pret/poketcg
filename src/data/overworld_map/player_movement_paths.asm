@@ -1,5 +1,5 @@
 OverworldMap_PlayerMovementPaths:
-	table_width 2, OverworldMap_PlayerMovementPaths
+	table_width 2
 	dw OverworldMap_MasonLaboratoryPaths
 	dw OverworldMap_IshiharasHousePaths
 	dw OverworldMap_FightingClubPaths
@@ -15,7 +15,7 @@ OverworldMap_PlayerMovementPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_MasonLaboratoryPaths:
-	table_width 2, OverworldMap_MasonLaboratoryPaths
+	table_width 2
 	dw OverworldMap_NoMovement
 	dw OverworldMap_MasonLaboratoryPathToIshiharasHouse
 	dw OverworldMap_StraightPath
@@ -31,7 +31,7 @@ OverworldMap_MasonLaboratoryPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_IshiharasHousePaths:
-	table_width 2, OverworldMap_IshiharasHousePaths
+	table_width 2
 	dw OverworldMap_IshiharasHousePathToMasonLaboratory
 	dw OverworldMap_NoMovement
 	dw OverworldMap_IshiharasHousePathToFightingClub
@@ -47,7 +47,7 @@ OverworldMap_IshiharasHousePaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_FightingClubPaths:
-	table_width 2, OverworldMap_FightingClubPaths
+	table_width 2
 	dw OverworldMap_StraightPath
 	dw OverworldMap_FightingClubPathToIshiharasHouse
 	dw OverworldMap_NoMovement
@@ -63,7 +63,7 @@ OverworldMap_FightingClubPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_RockClubPaths:
-	table_width 2, OverworldMap_RockClubPaths
+	table_width 2
 	dw OverworldMap_RockClubPathToMasonLaboratory
 	dw OverworldMap_RockClubPathToIshiharasHouse
 	dw OverworldMap_RockClubPathToFightingClub
@@ -79,7 +79,7 @@ OverworldMap_RockClubPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_WaterClubPaths:
-	table_width 2, OverworldMap_WaterClubPaths
+	table_width 2
 	dw OverworldMap_WaterClubPathToMasonLaboratory
 	dw OverworldMap_WaterClubPathToIshiharasHouse
 	dw OverworldMap_WaterClubPathToFightingClub
@@ -95,7 +95,7 @@ OverworldMap_WaterClubPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_LightningClubPaths:
-	table_width 2, OverworldMap_LightningClubPaths
+	table_width 2
 	dw OverworldMap_LightningClubPathToMasonLaboratory
 	dw OverworldMap_LightningClubPathToIshiharasHouse
 	dw OverworldMap_StraightPath
@@ -111,7 +111,7 @@ OverworldMap_LightningClubPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_GrassClubPaths:
-	table_width 2, OverworldMap_GrassClubPaths
+	table_width 2
 	dw OverworldMap_GrassClubPathToMasonLaboratory
 	dw OverworldMap_GrassClubPathToIshiharasHouse
 	dw OverworldMap_StraightPath
@@ -127,7 +127,7 @@ OverworldMap_GrassClubPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_PsychicClubPaths:
-	table_width 2, OverworldMap_PsychicClubPaths
+	table_width 2
 	dw OverworldMap_PsychicClubPathToMasonLaboratory
 	dw OverworldMap_PsychicClubPathToIshiharasHouse
 	dw OverworldMap_PsychicClubPathToFightingClub
@@ -143,7 +143,7 @@ OverworldMap_PsychicClubPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_ScienceClubPaths:
-	table_width 2, OverworldMap_ScienceClubPaths
+	table_width 2
 	dw OverworldMap_ScienceClubPathToMasonLaboratory
 	dw OverworldMap_ScienceClubPathToIshiharasHouse
 	dw OverworldMap_StraightPath
@@ -159,7 +159,7 @@ OverworldMap_ScienceClubPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_FireClubPaths:
-	table_width 2, OverworldMap_FireClubPaths
+	table_width 2
 	dw OverworldMap_FireClubPathToMasonLaboratory
 	dw OverworldMap_FireClubPathToIshiharasHouse
 	dw OverworldMap_FireClubPathToFightingClub
@@ -175,7 +175,7 @@ OverworldMap_FireClubPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_ChallengeHallPaths:
-	table_width 2, OverworldMap_ChallengeHallPaths
+	table_width 2
 	dw OverworldMap_ChallengeHallPathToMasonLaboratory
 	dw OverworldMap_ChallengeHallPathToIshiharasHouse
 	dw OverworldMap_ChallengeHallPathToFightingClub
@@ -191,7 +191,7 @@ OverworldMap_ChallengeHallPaths:
 	assert_table_length NUM_OWMAPS - 1
 
 OverworldMap_PokemonDomePaths:
-	table_width 2, OverworldMap_PokemonDomePaths
+	table_width 2
 	dw OverworldMap_PokemonDomePathToMasonLaboratory
 	dw OverworldMap_PokemonDomePathToIshiharasHouse
 	dw OverworldMap_StraightPath

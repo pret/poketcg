@@ -1,5 +1,5 @@
 DeckPointers::
-	table_width 2, DeckPointers
+	table_width 2
 	dw UnnamedDeck
 	dw UnnamedDeck2
 	dw SamsPracticeDeck

@@ -5,7 +5,7 @@ MACRO anim_data_pointer
 ENDM
 
 SpriteAnimations:
-	table_width 4, SpriteAnimations
+	table_width 4
 	anim_data_pointer AnimData0   ; SPRITE_ANIM_LIGHT_NPC_UP
 	anim_data_pointer AnimData1   ; SPRITE_ANIM_LIGHT_NPC_RIGHT
 	anim_data_pointer AnimData2   ; SPRITE_ANIM_LIGHT_NPC_DOWN

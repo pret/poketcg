@@ -231,7 +231,7 @@ PlayerMovementOffsetTable_Tiles::
 	db -2,  0 ; WEST
 
 OverworldMapNames::
-	table_width 2, OverworldMapNames
+	table_width 2
 	tx OverworldMapMasonLaboratoryText
 	tx OverworldMapMasonLaboratoryText
 	tx OverworldMapIshiharasHouseText

@@ -5,7 +5,7 @@ MACRO portrait
 ENDM
 
 PortraitGfxData:
-	table_width 4, PortraitGfxData
+	table_width 4
 	portrait TILESET_PLAYER,    PALETTE_119, SGBData_PlayerPortraitPals       ; INVALID_PIC
 	portrait TILESET_PLAYER,    PALETTE_119, SGBData_PlayerPortraitPals       ; PLAYER_PIC
 	portrait TILESET_RONALD,    PALETTE_121, SGBData_RonaldPortraitPals       ; RONALD_PIC

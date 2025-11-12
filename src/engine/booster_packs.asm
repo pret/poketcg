@@ -165,7 +165,7 @@ GetBoosterCardType:
 	ret
 
 CardTypeTable:
-	table_width 1, CardTypeTable
+	table_width 1
 	db BOOSTER_CARD_TYPE_FIRE      ; TYPE_PKMN_FIRE
 	db BOOSTER_CARD_TYPE_GRASS     ; TYPE_PKMN_GRASS
 	db BOOSTER_CARD_TYPE_LIGHTNING ; TYPE_PKMN_LIGHTNING
@@ -548,7 +548,7 @@ FindBoosterDataPointer:
 	ret
 
 BoosterDataJumptable:
-	table_width 2, BoosterDataJumptable
+	table_width 2
 	dw BoosterPack_ColosseumNeutral
 	dw BoosterPack_ColosseumGrass
 	dw BoosterPack_ColosseumFire

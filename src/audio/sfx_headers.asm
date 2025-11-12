@@ -2,7 +2,7 @@ NumberOfSFX:
 	db NUM_SFX
 
 SFXHeaderPointers:
-	table_width 2, SFXHeaderPointers
+	table_width 2
 	dw Sfx_Stop
 	dw Sfx_Cursor
 	dw Sfx_Confirm

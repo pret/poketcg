@@ -2,7 +2,7 @@
 ; convenience once the meaning of all fields is figured out.
 
 CardPointers::
-	table_width 2, CardPointers
+	table_width 2
 	dw NULL
 	dw GrassEnergyCard
 	dw FireEnergyCard

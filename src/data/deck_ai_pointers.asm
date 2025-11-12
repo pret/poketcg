@@ -1,5 +1,5 @@
 DeckAIPointerTable::
-	table_width 2, DeckAIPointerTable
+	table_width 2
 	dw AIActionTable_SamPractice         ; SAMS_PRACTICE_DECK
 	dw AIActionTable_GeneralDecks        ; PRACTICE_PLAYER_DECK
 	dw AIActionTable_GeneralDecks        ; SAMS_NORMAL_DECK

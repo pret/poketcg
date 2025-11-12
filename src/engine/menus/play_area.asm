@@ -212,7 +212,7 @@ OpenInPlayAreaScreen::
 	jp .start
 
 .PositionsJumpTable
-	table_width 2, OpenInPlayAreaScreen.PositionsJumpTable
+	table_width 2
 	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x00: INPLAYAREA_PLAYER_BENCH_1
 	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x01: INPLAYAREA_PLAYER_BENCH_2
 	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x02: INPLAYAREA_PLAYER_BENCH_3
@@ -334,7 +334,7 @@ ENDM
 ; with this table, the cursor moves into the proper location by the input.
 ; note that the unit of the position is not a 8x8 tile.
 OpenInPlayAreaScreen_TransitionTable1:
-	table_width 7, OpenInPlayAreaScreen_TransitionTable1
+	table_width 7
 	in_play_area_cursor_transition $18, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_2, PLAYER_BENCH_5
 	in_play_area_cursor_transition $30, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_3, PLAYER_BENCH_1
 	in_play_area_cursor_transition $48, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_4, PLAYER_BENCH_2
@@ -354,7 +354,7 @@ OpenInPlayAreaScreen_TransitionTable1:
 	assert_table_length NUM_INPLAYAREA_POSITIONS
 
 OpenInPlayAreaScreen_TransitionTable2:
-	table_width 7, OpenInPlayAreaScreen_TransitionTable2
+	table_width 7
 	in_play_area_cursor_transition $18, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_2, PLAYER_BENCH_5
 	in_play_area_cursor_transition $30, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_3, PLAYER_BENCH_1
 	in_play_area_cursor_transition $48, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_4, PLAYER_BENCH_2
