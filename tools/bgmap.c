@@ -42,7 +42,7 @@ int *readFileToBuffer(const char *inFilename, unsigned *fileSize)
 
 struct Dimensions getDimensions(const char *dimFilename)
 {
-    struct Dimensions dimensions;
+    struct Dimensions dimensions = {0};
     FILE *fd = fopen(dimFilename, "rb");
     if (fd != NULL)
     {

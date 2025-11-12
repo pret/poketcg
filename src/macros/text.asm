@@ -24,12 +24,12 @@ MACRO _textfw
 	REPT _NARG
 		FOR i, CHARLEN(\1)
 			REDEF char EQUS STRCHAR(\1, i)
-			get_charset "{char}"
+			get_charset #char
 			IF charset != 0 && charset != cur_set
 				DEF cur_set = charset
 				db charset
 			ENDC
-			db "{char}"
+			db #char
 		ENDR
 		SHIFT
 	ENDR
@@ -60,8 +60,8 @@ ENDM
 
 MACRO dwfw
 	PUSHC fullwidth
-	IF CHARSIZE(\1) > 1
-		dw CHARVAL(\1, 0) << 8 + CHARVAL(\1, 1)
+	IF CHARSIZE(\1) == 2
+		dw CHARVAL(\1, 0) << 8 | CHARVAL(\1, 1)
 	ELSE
 		dw \1
 	ENDC
@@ -70,8 +70,8 @@ ENDM
 
 MACRO ldfw
 	PUSHC fullwidth
-	IF CHARSIZE(\2) > 1
-		ld \1, CHARVAL(\2, 0) << 8 + CHARVAL(\2, 1)
+	IF CHARSIZE(\2) == 2
+		ld \1, CHARVAL(\2, 0) << 8 | CHARVAL(\2, 1)
 	ELSE
 		ld \1, CHARVAL(\2)
 	ENDC
