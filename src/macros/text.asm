@@ -1,8 +1,18 @@
-DEF text EQUS "db TX_HALFWIDTH, "
-DEF line EQUS "db TX_LINE, "
-DEF done EQUS "db TX_END"
+MACRO text
+	db TX_HALFWIDTH, \#
+ENDM
 
-DEF half2full EQUS "db TX_HALF2FULL"
+MACRO line
+	db TX_LINE, \#
+ENDM
+
+MACRO done
+	db TX_END
+ENDM
+
+MACRO half2full
+	db TX_HALF2FULL
+ENDM
 
 MACRO get_charset
 	PUSHC katakana
