@@ -1,5 +1,5 @@
 DeckIDDuelConfigurations:
-	table_width 10, DeckIDDuelConfigurations
+	table_width 10
 	db SAMS_PRACTICE_DECK_ID ; deck ID
 	db SAM_PIC ; NPC portrait
 	tx SamNPCName ; name text ID

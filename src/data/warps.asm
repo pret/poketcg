@@ -1,5 +1,5 @@
 WarpDataPointers:
-	table_width 2, WarpDataPointers
+	table_width 2
 	dw NULL
 	dw MasonLaboratoryWarpData
 	dw DeckMachineRoomWarpData

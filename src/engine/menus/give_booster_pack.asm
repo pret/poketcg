@@ -65,7 +65,7 @@ GiveBoosterPack:
 	ret
 
 BoosterTypes:
-	table_width 1, BoosterTypes
+	table_width 1
 	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_NEUTRAL
 	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_GRASS
 	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_FIRE

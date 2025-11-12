@@ -65,7 +65,7 @@ OpponentDeckNameLabel:
 	db $ff
 
 OpponentTitlesAndDeckNames:
-	table_width 4, OpponentTitlesAndDeckNames
+	table_width 4
 
 	tx TechText
 	tx SamsPracticeDeckName

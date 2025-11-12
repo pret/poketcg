@@ -1,13 +1,25 @@
 ; Macros to verify assumptions about the data or code
 
+MACRO? _redef_current_label
+	IF DEF(\1)
+		PURGE \1
+	ENDC
+	IF _NARG == 3 + (\3)
+		DEF \1 EQUS "\<_NARG>"
+	ELIF STRLEN(#__SCOPE__)
+		IF {{__SCOPE__}} - @ == 0
+			DEF \1 EQUS #{__SCOPE__}
+		ENDC
+	ENDC
+	IF !DEF(\1)
+		DEF \1 EQUS \2
+		{\1}:
+	ENDC
+ENDM
+
 MACRO? table_width
 	DEF CURRENT_TABLE_WIDTH = \1
-	IF _NARG == 2
-		REDEF CURRENT_TABLE_START EQUS "\2"
-	ELSE
-		REDEF CURRENT_TABLE_START EQUS "._table_width\@"
-	{CURRENT_TABLE_START}:
-	ENDC
+	_redef_current_label CURRENT_TABLE_START, "._table_width\@", 2, \#
 ENDM
 
 MACRO? assert_table_length

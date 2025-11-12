@@ -10,7 +10,7 @@ MACRO auto_deck
 ENDM
 
 AutoDeckMachineEntries:
-	table_width 6, AutoDeckMachineEntries
+	table_width 6
 
 ; Fighting Auto Deck Machine
 	auto_deck AllFightingPokemonCardList,   AllFightingPokemonText,   AllFightingPokemonDescriptionText

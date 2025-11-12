@@ -12,7 +12,7 @@
 ; e: load map/closed text box
 
 MapScripts::
-	table_width NUM_MAP_SCRIPTS * 2, MapScripts
+	table_width NUM_MAP_SCRIPTS * 2
 
 ; OVERWORLD_MAP
 	dw NULL

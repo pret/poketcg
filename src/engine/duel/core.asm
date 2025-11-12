@@ -6482,7 +6482,7 @@ DoLinkOpponentTurn:
 ; on a link duel, this is referenced by DoLinkOpponentTurn in a loop (on each opponent's HandleTurn)
 ; on a non-link duel (vs AI opponent), this is referenced by AIMakeDecision
 OppActionTable:
-	table_width 2, OppActionTable
+	table_width 2
 	dw DuelTransmissionError
 	dw OppAction_PlayBasicPokemonCard
 	dw OppAction_EvolvePokemonCard

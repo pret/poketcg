@@ -1,6 +1,6 @@
 ; data for each animation ID (see src/constants/sprite_constants.asm)
 Animations:
-	table_width 6, Animations
+	table_width 6
 	; DUEL_ANIM_NONE
 	db NONE ; sprite ID
 	db NONE ; palette ID

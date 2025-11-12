@@ -373,7 +373,7 @@ MACRO border_medal_tile
 ENDM
 
 .SGBBorderMedalTiles
-	table_width 4 * 9, FillSGBBorderMedalSlots.SGBBorderMedalTiles
+	table_width 4 * 9
 
 ; GRASS_MEDAL
 	border_medal_tile v0Tiles1 + $182, $3f, $10

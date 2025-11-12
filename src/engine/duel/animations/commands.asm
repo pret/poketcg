@@ -160,7 +160,7 @@ AnimationCommand_AnimScreen:
 	jp PlayAttackAnimationCommands_NextCommand
 
 AnimationCommandPointerTable:
-	table_width 2, AnimationCommandPointerTable
+	table_width 2
 	dw AnimationCommand_AnimEnd      ; ANIMCMD_END
 	dw AnimationCommand_AnimNormal   ; ANIMCMD_NORMAL
 	dw AnimationCommand_AnimPlayer   ; ANIMCMD_PLAYER_SIDE

@@ -2,7 +2,7 @@ NumberOfSongs1:
 	db $1f
 
 SongBanks1:
-	table_width 1, SongBanks1
+	table_width 1
 	db BANK(Music_Stop)
 	db BANK(Music_TitleScreen)
 	db BANK(Music_DuelTheme1)
@@ -37,7 +37,7 @@ SongBanks1:
 	assert_table_length NUM_SONGS
 
 SongHeaderPointers1:
-	table_width 2, SongHeaderPointers1
+	table_width 2
 	dw Music_Stop
 	dw Music_TitleScreen
 	dw Music_DuelTheme1

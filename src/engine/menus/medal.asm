@@ -50,7 +50,7 @@ ShowMedalReceivedScreen:
 	ret
 
 MasterMedalNames:
-	table_width 2, MasterMedalNames
+	table_width 2
 	tx GrassClubMapName
 	tx ScienceClubMapName
 	tx FireClubMapName

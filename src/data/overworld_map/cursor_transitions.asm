@@ -1,5 +1,5 @@
 OverworldMap_CursorTransitions:
-	table_width 4, OverworldMap_CursorTransitions
+	table_width 4
 
 	; unused
 	db OWMAP_SCIENCE_CLUB     ; NORTH

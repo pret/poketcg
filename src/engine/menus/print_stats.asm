@@ -64,7 +64,7 @@ LoadCollectedMedalTilemaps:
 
 MedalCoordsAndTilemaps:
 ; x, y, tilemap
-	table_width 3, MedalCoordsAndTilemaps
+	table_width 3
 	db  1, 10, TILEMAP_GRASS_MEDAL
 	db  6, 10, TILEMAP_SCIENCE_MEDAL
 	db 11, 10, TILEMAP_FIRE_MEDAL
