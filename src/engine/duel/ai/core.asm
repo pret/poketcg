@@ -554,11 +554,10 @@ Func_14323:
 	ret
 
 ; return carry depending on card index in a:
-;	- if energy card, return carry if no energy card has been played yet
-;	- if basic Pokémon card, return carry if there's space in bench
-;	- if evolution card, return carry if there's a Pokémon
-;	  in Play Area it can evolve
-;	- if trainer card, return carry if it can be used
+;	- if energy card, return carry if an energy card has been played already
+;	- if basic Pokémon card, return carry if there's no space in bench
+;	- if evolution card, return carry if there's no Pokémon in Play to evolve
+;	- if trainer card, return carry if it cannot be used
 ; input:
 ;	a = card index to check
 CheckIfCardCanBePlayed:
