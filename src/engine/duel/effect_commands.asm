@@ -524,8 +524,8 @@ ArticunoBlizzardEffectCommands:
 	db  $00
 
 TentacoolCowardiceEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, Cowardice_Check
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Cowardice_RemoveFromPlayAreaEffect
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, Cowardice_CheckUseAndBench
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Cowardice_ReturnToHandEffect
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Cowardice_PlayerSelectEffect
 	db  $00
 
@@ -818,18 +818,18 @@ MewtwoBarrierEffectCommands:
 	dbw EFFECTCMDTYPE_AI_SELECTION, Barrier_AISelectEffect
 	db  $00
 
-MewtwoAltLV60EnergyAbsorptionEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, MewtwoAltLV60EnergyAbsorption_CheckDiscardPile
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, MewtwoAltLV60EnergyAbsorption_AddToHandEffect
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, MewtwoAltLV60EnergyAbsorption_PlayerSelectEffect
-	dbw EFFECTCMDTYPE_AI_SELECTION, MewtwoAltLV60EnergyAbsorption_AISelectEffect
+MewtwoAltEnergyAbsorptionEffectCommands:
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, MewtwoAltEnergyAbsorption_CheckDiscardPile
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, MewtwoAltEnergyAbsorption_AddToHandEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, MewtwoAltEnergyAbsorption_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AI_SELECTION, MewtwoAltEnergyAbsorption_AISelectEffect
 	db  $00
 
-MewtwoLv60EnergyAbsorptionEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, MewtwoLv60EnergyAbsorption_CheckDiscardPile
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, MewtwoLv60EnergyAbsorption_AddToHandEffect
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, MewtwoLv60EnergyAbsorption_PlayerSelectEffect
-	dbw EFFECTCMDTYPE_AI_SELECTION, MewtwoLv60EnergyAbsorption_AISelectEffect
+MewtwoEnergyAbsorptionEffectCommands:
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, MewtwoEnergyAbsorption_CheckDiscardPile
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, MewtwoEnergyAbsorption_AddToHandEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, MewtwoEnergyAbsorption_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AI_SELECTION, MewtwoEnergyAbsorption_AISelectEffect
 	db  $00
 
 SlowbroStrangeBehaviorEffectCommands:

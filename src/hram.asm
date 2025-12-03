@@ -85,18 +85,19 @@ hTemp_ffa0:: ; ffa0
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
 hTempPlayAreaLocation_ffa1:: ; ffa1
-
-; parameter to be used by the AI's Pkmn Power effect
-hAIPkmnPowerEffectParam:: ; ffa1
 	ds $1
-
-UNION
 
 ; $ff-terminated list of cards to be discarded upon retreat
 hTempRetreatCostCards:: ; ffa2
 	ds $6
 
 NEXTU
+
+	ds $1
+
+; parameter to be used by the AI's Pkmn Power effect
+hAIPkmnPowerEffectParam:: ; ffa1
+	ds $1
 
 ; parameters chosen by AI in Energy Trans routine.
 ; the deck index (0-59) of the energy card to transfer
@@ -110,8 +111,6 @@ hPlayAreaEffectTarget:: ; ffa2
 
 hAIEnergyTransPlayAreaLocation:: ; ffa3
 	ds $1
-
-ENDU
 
 NEXTU
 

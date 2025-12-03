@@ -71,17 +71,17 @@ HandleDamageReductionExceptSubstatus2::
 
 	cp SUBSTATUS1_NO_DAMAGE_STIFFEN
 	jr z, .no_damage
-	cp SUBSTATUS1_NO_DAMAGE_10
+	cp SUBSTATUS1_NO_DAMAGE_WITHDRAW
 	jr z, .no_damage
-	cp SUBSTATUS1_NO_DAMAGE_11
+	cp SUBSTATUS1_NO_DAMAGE_HIDE_IN_SHELL
 	jr z, .no_damage
-	cp SUBSTATUS1_NO_DAMAGE_17
+	cp SUBSTATUS1_NO_DAMAGE_SCRUNCH
 	jr z, .no_damage
 	cp SUBSTATUS1_REDUCE_BY_10
 	jr z, .reduce_damage_by_10
 	cp SUBSTATUS1_REDUCE_BY_20
 	jr z, .reduce_damage_by_20
-	cp SUBSTATUS1_HARDEN
+	cp SUBSTATUS1_PREVENT_LESS_THAN_40
 	jr z, .prevent_less_than_40_damage
 	cp SUBSTATUS1_HALVE_DAMAGE
 	jr z, .halve_damage
@@ -627,7 +627,7 @@ CheckUnableToRetreatDueToEffect::
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	cp SUBSTATUS2_UNABLE_RETREAT
+	cp SUBSTATUS2_ACID
 	jr z, .cant_retreat
 	or a
 	ret

@@ -755,22 +755,22 @@ AIDecide_Defender2:
 	or a
 	ret
 
-AIPlay_Pluspower:
+AIPlay_PlusPower:
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_USED_PLUSPOWER
 	ld [wCurrentAIFlags], a
 	ld a, [wAITrainerCardParameter]
-	ld [wAIPluspowerAttack], a
+	ld [wAIPlusPowerAttack], a
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 
-; returns carry if using a Pluspower can KO defending Pokémon
+; returns carry if using a PlusPower can KO defending Pokémon
 ; if active card cannot KO without the boost.
 ; outputs in a the attack to use.
-AIDecide_Pluspower1:
+AIDecide_PlusPower1:
 ; this is mistakenly duplicated
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -811,7 +811,7 @@ AIDecide_Pluspower1:
 	jr c, .no_carry
 
 ; check both attacks and decide which one
-; can KO with Pluspower boost.
+; can KO with PlusPower boost.
 ; if neither can KO, return no carry.
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
@@ -826,14 +826,14 @@ AIDecide_Pluspower1:
 	or a
 	ret
 
-; first attack can KO with Pluspower.
+; first attack can KO with PlusPower.
 .kos_with_pluspower_1
 	call .check_mr_mime
 	jr nc, .no_carry
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	scf
 	ret
-; second attack can KO with Pluspower.
+; second attack can KO with PlusPower.
 .kos_with_pluspower_2
 	call .check_mr_mime
 	jr nc, .no_carry
@@ -842,7 +842,7 @@ AIDecide_Pluspower1:
 	ret
 
 ; return carry if attack is useable and KOs
-; defending Pokémon with Pluspower boost.
+; defending Pokémon with PlusPower boost.
 .check_ko_with_pluspower
 	farcall CheckIfSelectedAttackIsUnusable
 	jr c, .unusable
@@ -856,23 +856,23 @@ AIDecide_Pluspower1:
 	jr c, .no_carry
 	jr z, .no_carry
 	ld a, [hl]
-	add 10 ; add Pluspower boost
+	add 10 ; add PlusPower boost
 	ld c, a
 	ld a, b
 	sub c
 	ret c ; return carry if damage > HP left
 	ret nz ; does not KO
 	scf
-	ret ; KOs with Pluspower boost
+	ret ; KOs with PlusPower boost
 .unusable
 	or a
 	ret
 
-; returns carry if Pluspower boost does
+; returns carry if PlusPower boost does
 ; not exceed 30 damage when facing Mr. Mime.
 .check_mr_mime
 	ld a, [wDamage]
-	add 10 ; add Pluspower boost
+	add 10 ; add PlusPower boost
 	cp 30 ; no danger in preventing damage
 	ret c
 	call SwapTurn
@@ -888,11 +888,11 @@ AIDecide_Pluspower1:
 	ret
 
 ; returns carry 7/10 of the time
-; if selected attack is useable, can't KO without Pluspower boost
-; can damage Mr. Mime even with Pluspower boost
+; if selected attack is useable, can't KO without PlusPower boost
+; can damage Mr. Mime even with PlusPower boost
 ; and has a minimum damage > 0.
 ; outputs in a the attack to use.
-AIDecide_Pluspower2:
+AIDecide_PlusPower2:
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call .check_can_ko
@@ -907,11 +907,11 @@ AIDecide_Pluspower2:
 	or a
 	ret
 
-; returns carry if Pluspower boost does
+; returns carry if PlusPower boost does
 ; not exceed 30 damage when facing Mr. Mime.
 .check_mr_mime
 	ld a, [wDamage]
-	add 10 ; add Pluspower boost
+	add 10 ; add PlusPower boost
 	cp 30 ; no danger in preventing damage
 	ret c
 	call SwapTurn
