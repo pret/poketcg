@@ -80,13 +80,13 @@ DEF AI_ENERGY_FLAG_SKIP_ARENA_CARD EQU 1 << 7 ; whether to include Arena card in
 
 	const AI_TRAINER_CARD_PHASE_13 ; $d
 	; Defender
-	; Pluspower
+	; PlusPower
 	; Lass
 	; Pokémon Flute
 
 	const AI_TRAINER_CARD_PHASE_14 ; $e
 	; Defender
-	; Pluspower
+	; PlusPower
 
 	const AI_TRAINER_CARD_PHASE_15 ; $f
 	; Professor Oak

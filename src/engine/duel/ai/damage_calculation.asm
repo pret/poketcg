@@ -167,7 +167,7 @@ CalculateDamage_VersusDefendingPokemon:
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add CARD_LOCATION_ARENA
 	ld b, a
-	call ApplyAttachedPluspower
+	call ApplyAttachedPlusPower
 	call SwapTurn
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedDefender
@@ -404,7 +404,7 @@ CalculateDamage_FromDefendingPokemon:
 	; apply pluspower and defender boosts
 	call SwapTurn
 	ld b, CARD_LOCATION_ARENA
-	call ApplyAttachedPluspower
+	call ApplyAttachedPlusPower
 	call SwapTurn
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add CARD_LOCATION_ARENA

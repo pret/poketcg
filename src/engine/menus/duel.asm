@@ -2164,7 +2164,7 @@ GetFirstSetPrizeCard:
 	ret
 
 ; returns 1 shifted left by c bits
-.GetPrizeMask
+.GetPrizeMask:
 	push bc
 	ld a, c
 	ld b, $1

@@ -432,7 +432,7 @@ wNumPlayAreaItems:: ; cbc8
 ; such as PrintPlayAreaCardLocation, PrintPlayAreaCardInformation and PrintPlayAreaCardHeader
 wCurPlayAreaSlot:: ; cbc9
 
-; X position to display the attached energies, HP bar, and Pluspower/Defender icons
+; X position to display the attached energies, HP bar, and PlusPower/Defender icons
 ; obviously different for player and opponent side. used by DrawDuelHUD.
 wHUDEnergyAndHPBarsX:: ; cbc9
 	ds $1
@@ -441,7 +441,7 @@ wHUDEnergyAndHPBarsX:: ; cbc9
 ; such as PrintPlayAreaCardLocation, PrintPlayAreaCardInformation and PrintPlayAreaCardHeader
 wCurPlayAreaY:: ; cbca
 
-; Y position to display the attached energies, HP bar, and Pluspower/Defender icons
+; Y position to display the attached energies, HP bar, and PlusPower/Defender icons
 ; obviously different for player and opponent side. used by DrawDuelHUD.
 wHUDEnergyAndHPBarsY:: ; cbca
 
@@ -1150,8 +1150,8 @@ wAIPlayAreaCardToSwitch:: ; cdd5
 	ds $1
 
 ; the index of attack chosen by AI
-; to use with Pluspower.
-wAIPluspowerAttack:: ; cdd6
+; to use with PlusPower.
+wAIPlusPowerAttack:: ; cdd6
 	ds $1
 
 ; whether AI is allowed to play an energy card

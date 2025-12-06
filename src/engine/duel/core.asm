@@ -1268,7 +1268,7 @@ CheckIfEnoughEnergiesToAttack:
 	ld d, [hl] ; card's deck index (0 to 59)
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
-	call _CheckIfEnoughEnergiesToAttack
+	call CheckIfEnoughEnergiesForGivenAttack
 	pop bc
 	pop hl
 	ret
@@ -1276,10 +1276,10 @@ CheckIfEnoughEnergiesToAttack:
 ; check if a pokemon card has enough energy attached to it in order to use an attack
 ; input:
 ;   d = deck index of card (0 to 59)
-;   e = attack index (0 or 1)
+;   e = attack index (SECOND_ATTACK or FIRST_ATTACK_OR_PKMN_POWER)
 ;   wAttachedEnergies and wTotalAttachedEnergies
 ; returns: carry if not enough energy, nc if enough energy.
-_CheckIfEnoughEnergiesToAttack:
+CheckIfEnoughEnergiesForGivenAttack:
 	push de
 	ld a, d
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -2290,12 +2290,10 @@ PlayDeckShuffleAnimation:
 	ld e, DUEL_ANIM_OPP_SHUFFLE
 .load_anim
 ; play animation 3 times
+REPT 3
 	ld a, e
 	call PlayDuelAnimation
-	ld a, e
-	call PlayDuelAnimation
-	ld a, e
-	call PlayDuelAnimation
+ENDR
 
 .loop_anim
 	call DoFrame
@@ -2543,7 +2541,7 @@ DrawDuelHUD:
 	ld b, HP_BAR_LENGTH / 2 ; second row of the HP bar
 	call SafeCopyDataHLtoDE
 
-	; print number of attached Pluspower and Defender with respective icon, if any
+	; print number of attached PlusPower and Defender with respective icon, if any
 	ld hl, wHUDEnergyAndHPBarsX
 	ld a, [hli]
 	add 6
@@ -2557,7 +2555,7 @@ DrawDuelHUD:
 	ld a, SYM_PLUSPOWER
 	call WriteByteToBGMap0
 	inc b
-	ld a, [hl] ; number of attached Pluspower
+	ld a, [hl] ; number of attached PlusPower
 	add SYM_0
 	call WriteByteToBGMap0
 	dec b
@@ -3256,7 +3254,7 @@ DisplayCardList:
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hli], a
 	ld [hl], a
-	ld a, 1
+	ld a, TRUE
 	ld [wSortCardListByID], a
 	call EraseCursor
 	jr .reload_list
@@ -3423,7 +3421,7 @@ PrintSortNumberInCardList_SetPointer:
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ld a, 1
+	ld a, TRUE
 	ld [wSortCardListByID], a
 	ret
 
@@ -5474,7 +5472,7 @@ PrintPlayAreaCardHeader:
 	call CheckPrintDoublePoisoned
 
 .skip_status
-	; finally check whether to print the Pluspower and/or Defender symbols
+	; finally check whether to print the PlusPower and/or Defender symbols
 	ld a, [wCurPlayAreaSlot]
 	add DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER
 	call GetTurnDuelistVariable
@@ -6830,7 +6828,7 @@ HandleBetweenTurnsEvents:
 	call IsArenaPokemonAsleepOrPoisoned
 	call SwapTurn
 	jr c, .something_to_handle
-	call DiscardAttachedPluspowers
+	call DiscardAttachedPlusPowers
 	call SwapTurn
 	call DiscardAttachedDefenders
 	call SwapTurn
@@ -6877,7 +6875,7 @@ HandleBetweenTurnsEvents:
 	call WaitForWideTextBoxInput
 
 .discard_pluspower
-	call DiscardAttachedPluspowers
+	call DiscardAttachedPlusPowers
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -6898,7 +6896,7 @@ HandleBetweenTurnsEvents:
 	ret
 
 ; discard any PLUSPOWER attached to the turn holder's arena and/or bench Pokemon
-DiscardAttachedPluspowers:
+DiscardAttachedPlusPowers:
 	ld a, DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER
 	call GetTurnDuelistVariable
 	ld e, MAX_PLAY_AREA_POKEMON

@@ -52,11 +52,11 @@ AIProcessAndTryToUseAttack:
 ; AI will use it if wAIExecuteProcessedAttack is 0.
 ; in either case, return carry if an attack is chosen to be used.
 AIProcessAttacks:
-; if AI used Pluspower, load its attack index
+; if AI used PlusPower, load its attack index
 	ld a, [wPreviousAIFlags]
 	and AI_FLAG_USED_PLUSPOWER
 	jr z, .no_pluspower
-	ld a, [wAIPluspowerAttack]
+	ld a, [wAIPlusPowerAttack]
 	ld [wSelectedAttack], a
 	jr .attack_chosen
 

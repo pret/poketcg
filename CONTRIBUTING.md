@@ -139,7 +139,7 @@ CopyLine::
 ;   e = attack index (0 or 1)
 ;   wAttachedEnergies and wTotalAttachedEnergies
 ; returns: carry if not enough energy, nc if enough energy.
-_CheckIfEnoughEnergiesToAttack:
+CheckIfEnoughEnergiesForGivenAttack:
 ```
 
 ```asm
@@ -258,7 +258,7 @@ wTextHeader4:: ; ce3a
 ; such as PrintPlayAreaCardLocation, PrintPlayAreaCardInformation and PrintPlayAreaCardHeader
 wCurPlayAreaSlot:: ; cbc9
 
-; X position to display the attached energies, HP bar, and Pluspower/Defender icons
+; X position to display the attached energies, HP bar, and PlusPower/Defender icons
 ; obviously different for player and opponent side. used by DrawDuelHUD.
 wHUDEnergyAndHPBarsX:: ; cbc9
 	ds $1
