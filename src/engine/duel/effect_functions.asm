@@ -415,10 +415,12 @@ PrintDevolvedCardNameAndLevelText:
 	pop de
 	ret
 
+; input:
+; - a = PLAY_AREA_* constant of Bench Pokémon to switch to
 HandleSwitchDefendingPokemonEffect:
 	ld e, a
 	cp $ff
-	ret z
+	ret z ; none selected
 
 ; check Defending Pokemon's HP
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -433,7 +435,7 @@ HandleSwitchDefendingPokemonEffect:
 
 .switch
 	call HandleNoDamageOrEffect
-	ret c
+	ret c ; no effect
 
 ; attack was successful, switch Defending Pokemon
 	call SwapTurn
