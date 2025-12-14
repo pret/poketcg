@@ -5,6 +5,10 @@ DEF HP_BAR_LENGTH         EQU MAX_HP / 10
 
 DEF STARTING_HAND_SIZE EQU 7
 
+; coin result constants
+DEF TAILS EQU 0
+DEF HEADS EQU 1
+
 ; hWhoseTurn constants
 DEF PLAYER_TURN   EQUS "HIGH(wPlayerDuelVariables)"
 DEF OPPONENT_TURN EQUS "HIGH(wOpponentDuelVariables)"

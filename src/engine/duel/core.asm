@@ -7844,6 +7844,7 @@ _TossCoin::
 	ld a, [wDuelDisplayedScreen]
 	cp COIN_TOSS
 	jr z, .print_text
+
 	xor a
 	ld [wCoinTossNumTossed], a
 	call EmptyScreen
@@ -7858,7 +7859,7 @@ _TossCoin::
 	ld [wDuelDisplayedScreen], a
 	lb de, 0, 12
 	lb bc, 20, 6
-	ld hl, $0000
+	ld hl, NULL
 	call DrawLabeledTextBox
 	call EnableLCD
 	lb de, 1, 14
@@ -7885,11 +7886,11 @@ _TossCoin::
 	xor a
 	ld [wCoinTossNumHeads], a
 
-.print_coin_tally
+.toss_next_coin
 ; skip printing text if it's only one coin toss
 	ld a, [wCoinTossTotalNum]
 	cp 2
-	jr c, .asm_7223
+	jr c, .skip_print_coin_tally
 
 ; write "#coin/#total coins"
 	lb bc, 15, 11
@@ -7903,30 +7904,31 @@ _TossCoin::
 	ld a, [wCoinTossTotalNum]
 	call WriteTwoDigitNumberInTxSymbolFormat
 
-.asm_7223
+.skip_print_coin_tally
 	call ResetAnimationQueue
 	ld a, DUEL_ANIM_COIN_SPIN
 	call PlayDuelAnimation
 
 	ld a, [wCoinTossDuelistType]
 	or a
-	jr z, .asm_7236
-	call Func_7324
-	jr .asm_723c
-
-.asm_7236
+	jr z, .player_tossing ; DUELIST_TYPE_PLAYER
+; opponent tossing
+	call .WaitForOpponent
+	jr .generate_coin_result
+.player_tossing
+	; wait for input, and send byte when player is ready to toss
 	call WaitForWideTextBoxInput
-	call Func_72ff
+	call .SendSerialByte
 
-.asm_723c
+.generate_coin_result
 	call ResetAnimationQueue
-	ld d, DUEL_ANIM_COIN_TOSS2
-	ld e, $0 ; tails
+	ld d, DUEL_ANIM_COIN_TOSS_GOING_TAILS
+	ld e, TAILS
 	call UpdateRNGSources
 	rra
 	jr c, .got_result
-	ld d, DUEL_ANIM_COIN_TOSS1
-	ld e, $1 ; heads
+	ld d, DUEL_ANIM_COIN_TOSS_GOING_HEADS
+	ld e, HEADS
 
 .got_result
 ; already decided on coin toss result,
@@ -7936,11 +7938,13 @@ _TossCoin::
 	call PlayDuelAnimation
 	ld a, [wCoinTossDuelistType]
 	or a
-	jr z, .wait_anim
+	jr z, .wait_anim ; player tossing
+; opponent tossing
 	ld a, e
-	call Func_7310
-	ld e, a
+	call .GetOpponentCoinResult
+	ld e, a ; coin result from opponent
 	jr .done_toss_anim
+
 .wait_anim
 	push de
 	call DoFrame
@@ -7948,7 +7952,7 @@ _TossCoin::
 	pop de
 	jr c, .wait_anim
 	ld a, e
-	call Func_72ff
+	call .SendSerialByte
 
 .done_toss_anim
 	ld b, DUEL_ANIM_COIN_HEADS
@@ -7996,7 +8000,7 @@ _TossCoin::
 	ld e, 0
 	ld a, [wCoinTossNumTossed]
 ; calculate the offset to draw the circle/cross
-.asm_72a3
+.loop_get_offset
 	; if < 10, then the offset is simply calculated
 	; from wCoinTossNumTossed * 2...
 	cp 10
@@ -8005,7 +8009,7 @@ _TossCoin::
 	inc e
 	inc e
 	sub 10
-	jr .asm_72a3
+	jr .loop_get_offset
 
 .got_offset
 	add a
@@ -8021,29 +8025,39 @@ _TossCoin::
 
 	ld a, [wCoinTossDuelistType]
 	or a
-	jr z, .asm_72dc
+	jr z, .player_tossing_next_coin
+	; wait for input if we are finished, that is
+	; if wCoinTossNumTossed == wCoinTossTotalNum
 	ld a, [hl]
 	ld hl, wCoinTossTotalNum
 	cp [hl]
 	call z, WaitForWideTextBoxInput
-	call Func_7324
+
+	; delay/wait for link opp input
+	call .WaitForOpponent
+
+	; if we are "tossing until tails",
+	; (i.e. wCoinTossTotalNum == 0)
+	; and we got no heads, wait for input
 	ld a, [wCoinTossTotalNum]
 	ld hl, wCoinTossNumHeads
 	or [hl]
-	jr nz, .asm_72e2
+	jr nz, .check_if_finished
 	call z, WaitForWideTextBoxInput
-	jr .asm_72e2
+	jr .check_if_finished
 
-.asm_72dc
+.player_tossing_next_coin
 	call WaitForWideTextBoxInput
-	call Func_72ff
+	call .SendSerialByte
 
-.asm_72e2
+.check_if_finished
 	call FinishQueuedAnimations
+
+	; we're finished if wCoinTossNumTossed == wCoinTossTotalNum
 	ld a, [wCoinTossNumTossed]
 	ld hl, wCoinTossTotalNum
 	cp [hl]
-	jp c, .print_coin_tally
+	jp c, .toss_next_coin
 	call ExchangeRNG
 	call FinishQueuedAnimations
 	call ResetAnimationQueue
@@ -8055,58 +8069,71 @@ _TossCoin::
 	scf
 	ret
 
-Func_72ff:
+; input:
+; - a = byte to send through serial
+.SendSerialByte:
 	ldh [hff96], a
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
-	ret nz
+	ret nz ; not link duel
 	ldh a, [hff96]
 	call SerialSendByte
-	call Func_7344
+	call .CheckTransmissionError
 	ret
 
-Func_7310:
+; if opponent is AI, then wait for animation and
+; use the result generated beforehand (input register a)
+; if link opponent, then wait for serial byte which
+; gives the coin result
+; input:
+; - a = coin result to use for AI (HEADS or TAILS)
+; output:
+; - a = coin result (HEADS or TAILS)
+.GetOpponentCoinResult:
 	ldh [hff96], a
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
-	jr z, Func_7338
-.loop_anim
+	jr z, .wait_serial_byte_recv
+.wait_anim_ai
 	call DoFrame
 	call CheckAnyAnimationPlaying
-	jr c, .loop_anim
+	jr c, .wait_anim_ai
 	ldh a, [hff96]
 	ret
 
-Func_7324:
+; waits for opponent
+; AI delays for 30 frames
+; link opponent sends byte through serial when ready
+.WaitForOpponent:
 	ldh [hff96], a
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
-	jr z, Func_7338
+	jr z, .wait_serial_byte_recv
 
 ; delay coin flip for AI opponent
 	ld a, 30
-.asm_732f
+.ai_coin_toss_delay
 	call DoFrame
 	dec a
-	jr nz, .asm_732f
+	jr nz, .ai_coin_toss_delay
 	ldh a, [hff96]
 	ret
 
-Func_7338:
+.wait_serial_byte_recv
 	call DoFrame
 	call SerialRecvByte
-	jr c, Func_7338
-	call Func_7344
+	jr c, .wait_serial_byte_recv
+	call .CheckTransmissionError
 	ret
 
-Func_7344:
+.CheckTransmissionError:
 	push af
 	ld a, [wSerialFlags]
 	or a
-	jr nz, .asm_734d
+	jr nz, .transmission_error
 	pop af
 	ret
-.asm_734d
+.transmission_error
 	call FinishQueuedAnimations
 	call DuelTransmissionError
 	ret

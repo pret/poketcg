@@ -713,7 +713,7 @@ Animations:
 	db SFX_STOP ; sfx id
 	db NONE ; handler function
 
-	; DUEL_ANIM_COIN_TOSS1
+	; DUEL_ANIM_COIN_TOSS_GOING_HEADS
 	db SPRITE_DUEL_COIN ; sprite ID
 	db PALETTE_92 ; palette ID
 	db SPRITE_ANIM_168 ; anim ID
@@ -721,7 +721,7 @@ Animations:
 	db SFX_COIN_TOSS ; sfx id
 	db NONE ; handler function
 
-	; DUEL_ANIM_COIN_TOSS2
+	; DUEL_ANIM_COIN_TOSS_GOING_TAILS
 	db SPRITE_DUEL_COIN ; sprite ID
 	db PALETTE_92 ; palette ID
 	db SPRITE_ANIM_169 ; anim ID
