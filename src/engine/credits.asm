@@ -29,7 +29,7 @@ PlayCreditsSequence::
 	call DoFrameIfLCDEnabled
 	call DisableLCD
 	ld hl, wLCDC
-	set 1, [hl]
+	set B_LCDC_OBJS, [hl]
 	call ResetDoFrameFunction
 	ret
 
@@ -102,7 +102,7 @@ Func_1d765:
 	ld [hli], a
 	push hl
 	ld hl, wLCDC
-	set 1, [hl]
+	set B_LCDC_OBJS, [hl]
 	pop hl
 	jr .asm_1d7e2
 
@@ -118,7 +118,7 @@ Func_1d765:
 	ld [hli], a
 	push hl
 	ld hl, wLCDC
-	set 1, [hl]
+	set B_LCDC_OBJS, [hl]
 	pop hl
 	ld a, $07
 	jr .asm_1d7a9
@@ -128,7 +128,7 @@ Func_1d765:
 	ldh [hWX], a
 	push hl
 	ld hl, wLCDC
-	res 1, [hl]
+	res B_LCDC_OBJS, [hl]
 	pop hl
 .asm_1d7a9
 	ld [hli], a
