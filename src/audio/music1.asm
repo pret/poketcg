@@ -1286,14 +1286,14 @@ Music1_LoadWaveInstrument:
 	ld h, [hl]
 	ld l, a
 	ld b, d
-	ld de, $ff30
+	ld de, _AUD3WAVERAM
 .copy_wave_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	inc b
 	ld a, b
-	cp $10
+	cp AUD3WAVE_SIZE
 	jr nz, .copy_wave_loop
 	xor a
 	ld [wMusicWaveChange], a
