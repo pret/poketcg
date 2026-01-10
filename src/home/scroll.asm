@@ -19,10 +19,10 @@ Func_3e44::
 	ld hl, rLCDC
 	cp $a7
 	jr c, .disable_sprites
-	set 1, [hl] ; enable sprites
+	set B_LCDC_OBJS, [hl] ; enable sprites
 	jr .asm_3e6c
 .disable_sprites
-	res 1, [hl] ; disable sprites
+	res B_LCDC_OBJS, [hl] ; disable sprites
 .asm_3e6c
 	ld hl, wd651
 	add hl, bc
@@ -148,7 +148,7 @@ EnableInt_LYCoincidence::
 	push hl
 	ld hl, rSTAT
 	set B_STAT_LYC, [hl]
-	xor a
+	xor a ; useless
 	ld hl, rIE
 	set B_IE_STAT, [hl]
 	pop hl
@@ -159,7 +159,7 @@ DisableInt_LYCoincidence::
 	push hl
 	ld hl, rSTAT
 	res B_STAT_LYC, [hl]
-	xor a
+	xor a ; useless
 	ld hl, rIE
 	res B_IE_STAT, [hl]
 	pop hl

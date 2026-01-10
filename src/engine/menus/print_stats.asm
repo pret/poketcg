@@ -57,7 +57,7 @@ LoadCollectedMedalTilemaps:
 	ld [wd4ca], a
 	ld a, $01
 	ld [wd4cb], a
-	ld a, $76
+	ld a, PALETTE_118
 	farcall SetBGPAndLoadedPal
 .done
 	ret
