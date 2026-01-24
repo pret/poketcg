@@ -103,7 +103,7 @@ endif
 RGBFIXFLAGS += -cjsv -k 01 -l 0x33 -m MBC5+RAM+BATTERY -p 0xff -r 03 -t POKECARD -i AXQE
 
 $(rom): $(rom_obj) src/layout.link
-	$(RGBLINK) $(RGBLINKFLAGS) -p 0xff -m $(rom:.gbc=.map) -n $(rom:.gbc=.sym) -l src/layout.link -o $@ $(filter %.o,$^)
+	$(RGBLINK) $(RGBLINKFLAGS) -p 0xff -m $(rom:.gbc=.map) -n $(rom:.gbc=.sym) -l src/layout.link -w -o $@ $(filter %.o,$^)
 	$(RGBFIX) $(RGBFIXFLAGS) $@
 
 
