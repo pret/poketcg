@@ -182,3 +182,5 @@ hffb6:: ; ffb6
 
 hffb7:: ; ffb7
 	ds $1
+
+	ds $38

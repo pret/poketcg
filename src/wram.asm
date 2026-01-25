@@ -3,7 +3,7 @@ INCLUDE "constants.asm"
 
 INCLUDE "vram.asm"
 
-SECTION "WRAM0", WRAM0
+SECTION "WRAM", WRAM0
 
 UNION
 
@@ -48,7 +48,7 @@ ENDU
 
 	ds $100
 
-SECTION "WRAM0 Duels 1", WRAM0
+SECTION "WRAM Duels 1", WRAM0
 
 ; this union spans from c200 to c3ff
 UNION
@@ -153,7 +153,7 @@ wCardPopNameSearchResult:: ; c5f3
 
 	ds $c
 
-SECTION "WRAM0 Text Engine", WRAM0
+SECTION "WRAM Text Engine", WRAM0
 
 wc600:: ; c600
 	ds $100
@@ -167,7 +167,7 @@ wc800:: ; c800
 wc900:: ; c900
 	ds $100
 
-SECTION "WRAM0 1", WRAM0
+SECTION "WRAM 1", WRAM0
 
 wOAM:: ; ca00
 	ds OAM_SIZE
@@ -350,7 +350,7 @@ wObjectPalettesCGB:: ; cb30
 wListPointer:: ; cb72
 	ds $2
 
-SECTION "WRAM0 Serial Transfer", WRAM0
+SECTION "WRAM Serial Transfer", WRAM0
 
 wSerialOp:: ; cb74
 	ds $1
@@ -405,7 +405,7 @@ wSerialRecvBuf:: ; cba5
 
 wSerialEnd:: ; cbc5
 
-SECTION "WRAM0 Duels 2", WRAM0
+SECTION "WRAM Duels 2", WRAM0
 
 	ds $1
 
@@ -853,7 +853,7 @@ wNoEffectFromWhichStatus:: ; ccf1
 wSkipDelayAllowed:: ; ccf2
 	ds $1
 
-SECTION "WRAM0 2", WRAM0
+SECTION "WRAM 2", WRAM0
 
 ; on CGB, attributes of the text box borders. (values 0-7 seem to be used, which only affect palette)
 ; on SGB, colorize text box border with SGB1 if non-0
@@ -1903,7 +1903,6 @@ wNamingScreenBuffer:: ; cfe7
 wNamingScreenBufferLength:: ; cfff
 	ds $1
 
-SECTION "WRAM1", WRAMX
 wNamingScreenDestPointer:: ; d000
 	ds $2
 
@@ -2953,7 +2952,7 @@ wd698:: ; d698
 
 	ds $6e4
 
-SECTION "WRAM1 Audio", WRAMX
+SECTION "WRAM Audio", WRAM0
 
 ; bit 7 is set once the song has been started
 wCurSongID:: ; dd80
