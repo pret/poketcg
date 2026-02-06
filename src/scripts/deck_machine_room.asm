@@ -14,7 +14,7 @@ DeckMachineRoomCloseTextBox:
 	ld a, MAP_EVENT_FIGHTING_DECK_MACHINE
 .asm_d8af
 	push af
-	farcall Func_80b89
+	farcall ApplyOWMapEventChangeIfEventSet
 	pop af
 	inc a
 	cp MAP_EVENT_FIRE_DECK_MACHINE + 1

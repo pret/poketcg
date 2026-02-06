@@ -74,10 +74,10 @@ PlayIntroSequence:
 
 LoadTitleScreenSprites:
 	xor a
-	ld [wd4ca], a
-	ld [wd4cb], a
+	ld [wWhichOBP], a ; OBP0
+	ld [wWhichOBPalIndex], a ; palette index 0
 	ld a, PALETTE_30
-	farcall LoadPaletteData
+	farcall LoadOBPalette
 
 	ld bc, 0
 	ld de, wTitleScreenSprites
