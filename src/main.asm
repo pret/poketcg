@@ -171,9 +171,8 @@ INCLUDE "data/cards.asm"
 SECTION "SGB", ROMX
 INCLUDE "engine/sgb.asm"
 
-SECTION "Bank 20", ROMX
+SECTION "Load Gfx", ROMX
 INCLUDE "engine/overworld/load_overworld.asm"
-INCLUDE "engine/gfx/load_tilemap.asm"
 INCLUDE "engine/gfx/load_gfx.asm"
 INCLUDE "engine/overworld/animation.asm"
 INCLUDE "engine/overworld/map_events.asm"
