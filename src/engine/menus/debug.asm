@@ -1,10 +1,10 @@
 DebugLookAtSprite:
-	farcall Func_80cd7
+	farcall _DebugLookAtSprite
 	scf
 	ret
 
 DebugVEffect:
-	farcall Func_80cd6
+	farcall _DebugVEffect
 	scf
 	ret
 

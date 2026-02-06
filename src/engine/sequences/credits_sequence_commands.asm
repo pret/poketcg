@@ -283,11 +283,12 @@ LoadOWMapForCreditsSequence:
 	farcall Func_c9c7
 	farcall SafelyCopyBGMapFromSRAMToVRAM
 	farcall DoMapOWFrame
+
 	xor a
-	ld [wd4ca], a
-	ld [wd4cb], a
+	ld [wWhichOBP], a ; OBP0
+	ld [wWhichOBPalIndex], a ; palette index 0
 	ld a, PALETTE_29
-	farcall LoadPaletteData
+	farcall LoadOBPalette
 	ret
 
 CreditsSequenceCmd_LoadOWMap:

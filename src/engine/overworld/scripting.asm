@@ -1565,7 +1565,7 @@ LegendaryCardEvents:
 
 ScriptCommand_ReplaceMapBlocks:
 	ld a, c
-	farcall Func_80ba4
+	farcall SetOWMapEvent
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_ChooseDeckToDuelAgainstMultichoice:

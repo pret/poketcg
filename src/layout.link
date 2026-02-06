@@ -114,7 +114,7 @@ ROMX $1d
 ROMX $1e
 	"Gfx 2"
 ROMX $20
-	"Bank 20"
+	"Load Gfx"
 	"Gfx"
 ROMX $21
 	"Gfx 3"

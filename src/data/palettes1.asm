@@ -1,9 +1,9 @@
-; palette data are read by LoadPaletteData, expected to be structured as so:
+; palette data are read by LoadOBPalette, expected to be structured as so:
 ; the first byte has possible values of 0, 1 or 2
 ; - if 0, nothing is done;
-; - if 1, then the next byte is written to OBP0 (or to OBP1 if wd4ca == $1);
+; - if 1, then the next byte is written to OBP0 (or to OBP1 if wWhichOBP == $1);
 ; - if 2, then the next 2 bytes are written to OBP0 and OBP1 respectively
-;   (or only the first written to OBP1 if wd4ca == $1, skipping the second byte)
+;   (or only the first written to OBP1 if wWhichOBP == $1, skipping the second byte)
 ; next there is a byte declaring the size of the palette data
 ; indicating the number of palettes
 

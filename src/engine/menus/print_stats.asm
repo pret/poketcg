@@ -54,11 +54,11 @@ LoadCollectedMedalTilemaps:
 	ld [wd4cb], a
 	farcall LoadTilesetGfx
 	xor a
-	ld [wd4ca], a
-	ld a, $01
-	ld [wd4cb], a
+	ld [wWhichOBP], a ; not used
+	ld a, 1 ; palette index
+	ld [wWhichBGPalIndex], a
 	ld a, PALETTE_118
-	farcall SetBGPAndLoadedPal
+	farcall LoadBGPalette
 .done
 	ret
 

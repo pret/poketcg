@@ -2280,8 +2280,8 @@ wNumLoadedFramesetSubgroups:: ; d322
 
 ; holds the current state of each event
 ; each corresponding to a MAP_EVENT_* constant
-; if $0, doors are closed / deck machines are deactivated
-; if $1, doors are open / deck machines are activated
+; if FALSE, doors are closed / deck machines are deactivated
+; if TRUE, doors are open / deck machines are activated
 wOWMapEvents:: ; d323
 	ds NUM_MAP_EVENTS
 
@@ -2658,8 +2658,20 @@ wGeneralSaveDataByteCount:: ; d4c8
 ; stores tile offset in VRAM
 wVRAMTileOffset:: ; d4ca
 
+; for LoadOBPalette
+; which object palette to load to (DMG)
+wWhichOBP:: ; d4ca
+
 wd4ca:: ; d4ca
 	ds $1
+
+; for LoadOBPalette
+; which object palette index to load to (CGB)
+wWhichOBPalIndex:: ; d4cb
+
+; for LoadBGPalette
+; which background palette index to load to (CGB)
+wWhichBGPalIndex:: ; d4cb
 
 ; bottom bit stores which VRAM bank to draw certain gfx
 ; $0 = VRAM0, $1 = VRAM1

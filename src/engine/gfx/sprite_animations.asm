@@ -294,7 +294,7 @@ LoadSpriteAnimPointers:
 	add hl, bc
 	ld [hli], a
 	push hl
-	ld l, 6 ; SpriteAnimations
+	ld l, GFXTABLE_SPRITE_ANIMATIONS
 	farcall GetMapDataPointer
 	farcall LoadGraphicsPointerFromHL
 	pop hl ; hl is animation bank
@@ -572,7 +572,7 @@ Func_12c4f:
 	ld a, d
 	ld [wVRAMTileOffset], a
 	pop af
-	farcall Func_8025b
+	farcall LoadSpriteGfx
 	ret
 
 Func_12c5e:

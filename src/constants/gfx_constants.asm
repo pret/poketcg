@@ -26,3 +26,12 @@ DEF ICON_TILE_FIGHTING        EQU $f0
 DEF ICON_TILE_PSYCHIC         EQU $f4
 DEF ICON_TILE_COLORLESS       EQU $f8
 DEF ICON_TILE_ENERGY          EQU $fc
+
+; graphics table constants
+; (see src/engine/gfx/gfx_table_pointers.asm)
+RSRESET
+DEF GFXTABLE_TILEMAPS          RW ; $0
+DEF GFXTABLE_TILESETS          RW ; $2
+DEF GFXTABLE_SPRITES           RW ; $4
+DEF GFXTABLE_SPRITE_ANIMATIONS RW ; $6
+DEF GFXTABLE_PALETTES          RW ; $8
