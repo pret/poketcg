@@ -308,7 +308,7 @@ AIDecide_PokemonTrader_PowerGenerator:
 
 ### AI Full Heal has flawed logic for sleep
 
-The AI has the following checks when it is deciding whether to play Full Heal and its Active card is asleep in in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
+The AI has the following checks when it is deciding whether to play Full Heal and its Active card is asleep in [src/engine/duel/ai/trainer_cards.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/trainer_cards.asm):
 
 ```
 .asleep
@@ -620,7 +620,7 @@ AIDecideBenchPokemonToSwitchTo:
 	jr z, .raise_score
 	cp MEW_LV8
 	jr nz, .check_if_has_bench_utility
-+	call Swap Turn
++	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 -	call GetNonTurnDuelistVariable
 +	call GetTurnDuelistVariable

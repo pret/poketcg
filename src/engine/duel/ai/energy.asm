@@ -916,7 +916,7 @@ AITryToPlayEnergyCard:
 	jr .play_energy_card
 
 ; otherwise, look for any card and play it.
-; if it's a boss deck, only play double colorless in this situation.
+; if it's a boss deck, don't play double colorless in this situation.
 .look_for_any_energy
 	ld hl, wDuelTempList
 	call CountCardsInDuelTempList
