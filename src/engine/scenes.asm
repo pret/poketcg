@@ -77,9 +77,9 @@ _LoadScene::
 	pop bc ; base x,y
 	call LoadScene_LoadSGBPacket
 	ld a, [hli]
-	ld [wd4ca], a ; tile offset
+	ld [wVRAMTileOffset], a ; tile offset
 	ld a, [hli]
-	ld [wd4cb], a ; vram0 or vram1
+	ld [wWhichVRAMBank], a ; vram0 or vram1
 	farcall LoadTilesetGfx
 .next_sprite
 	ld a, [hli]
@@ -272,9 +272,9 @@ _DrawPortrait::
 	push hl
 	ld [wCurTileset], a
 	ld a, d
-	ld [wd4ca], a
+	ld [wVRAMTileOffset], a
 	xor a
-	ld [wd4cb], a
+	ld [wWhichVRAMBank], a ; VRAM0
 	farcall LoadTilesetGfx
 	pop hl
 	xor a
@@ -326,8 +326,8 @@ SetBoosterLogoOAM:
 	push de
 	push bc
 	xor a
-	ld [wd4cb], a
-	ld [wd4ca], a
+	ld [wWhichVRAMBank], a ; VRAM0
+	ld [wVRAMTileOffset], a
 	ld a, SPRITE_BOOSTER_PACK_OAM
 	farcall LoadSpriteGfx
 	pop bc

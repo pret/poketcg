@@ -49,9 +49,9 @@ LoadCollectedMedalTilemaps:
 	jr nz, .loop_medals
 
 	ld a, $80
-	ld [wd4ca], a
+	ld [wVRAMTileOffset], a
 	xor a
-	ld [wd4cb], a
+	ld [wWhichVRAMBank], a ; VRAM0
 	farcall LoadTilesetGfx
 	xor a
 	ld [wWhichOBP], a ; not used

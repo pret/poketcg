@@ -352,9 +352,9 @@ Func_80238: ; unreferenced
 	ld a, TILE_SIZE
 	ld [wCurSpriteTileSize], a
 	xor a
-	ld [wd4cb], a
+	ld [wWhichVRAMBank], a ; VRAM0
 	ld a, $80
-	ld [wd4ca], a
+	ld [wVRAMTileOffset], a
 	call LoadGfxDataFromTempPointerToVRAMBank_Tiles0ToTiles2
 	pop hl
 	ret
@@ -380,7 +380,7 @@ LoadSpriteGfx:
 	ret
 
 ; loads graphics data pointed by wTempPointer in wTempPointerBank
-; to the VRAM bank according to wd4cb, in address pointed by wVRAMPointer
+; to the VRAM bank according to wWhichVRAMBank, in address pointed by wVRAMPointer
 LoadGfxDataFromTempPointerToVRAMBank:
 	call GetTileOffsetPointerAndSwitchVRAM
 	jr LoadGfxDataFromTempPointer
@@ -418,7 +418,7 @@ LoadGfxDataFromTempPointer:
 
 ; convert wVRAMTileOffset to address in VRAM
 ; and stores it in wVRAMPointer
-; switches VRAM according to wd4cb
+; switches VRAM according to wWhichVRAMBank
 GetTileOffsetPointerAndSwitchVRAM:
 ; address of the tile offset is wVRAMTileOffset * $10 + $8000
 	ld a, [wVRAMTileOffset]
@@ -431,16 +431,16 @@ GetTileOffsetPointerAndSwitchVRAM:
 	add HIGH(v0Tiles0) ; $80
 	ld [wVRAMPointer + 1], a
 
-; if bottom bit in wd4cb is not set = VRAM0
-; if bottom bit in wd4cb is set     = VRAM1
-	ld a, [wd4cb]
+; if bottom bit in wWhichVRAMBank is not set = VRAM0
+; if bottom bit in wWhichVRAMBank is set     = VRAM1
+	ld a, [wWhichVRAMBank]
 	and $1
 	call BankswitchVRAM
 	ret
 
 ; converts wVRAMTileOffset to address in VRAM
 ; and stores it in wVRAMPointer
-; switches VRAM according to wd4cb
+; switches VRAM according to wWhichVRAMBank
 ; then changes wVRAMPointer such that
 ; addresses to Tiles0 is changed to Tiles2
 GetTileOffsetPointerAndSwitchVRAM_Tiles0ToTiles2:
@@ -493,20 +493,20 @@ LoadTilesetGfx:
 ; used to sequentially copy gfx data in the order
 ; v0Tiles1 -> v0Tiles2 -> v1Tiles1 -> v1Tiles2
 
-	lb bc, $0, LOW(v0Tiles2 / TILE_SIZE) ; $00
+	lb bc, BANK("VRAM0"), LOW(v0Tiles2 / TILE_SIZE) ; $00
 	call .CopyGfxData
 	jr z, .done
-	lb bc, $0, LOW(v0Tiles1 / TILE_SIZE) ; $80
+	lb bc, BANK("VRAM0"), LOW(v0Tiles1 / TILE_SIZE) ; $80
 	call .CopyGfxData
 	jr z, .done
 	; VRAM1 only used in CGB console
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .done
-	lb bc, $1, LOW(v1Tiles2 / TILE_SIZE) ; $00
+	lb bc, BANK("VRAM1"), LOW(v1Tiles2 / TILE_SIZE) ; $00
 	call .CopyGfxData
 	jr z, .done
-	lb bc, $1, LOW(v1Tiles1 / TILE_SIZE) ; $80
+	lb bc, BANK("VRAM1"), LOW(v1Tiles1 / TILE_SIZE) ; $80
 	call .CopyGfxData
 
 .done
@@ -519,14 +519,14 @@ LoadTilesetGfx:
 ; c must match with wVRAMTileOffset
 ; if c = $00, copies it to Tiles2
 ; if c = $80, copies it to Tiles1
-; b must match with VRAM bank in wd4cb
+; b must match with VRAM bank in wWhichVRAMBank
 ; prepares next call to this routine if data wasn't fully copied
 ; so that it copies to the right VRAM section
 .CopyGfxData
 	push hl
 	push bc
 	push de
-	ld a, [wd4cb]
+	ld a, [wWhichVRAMBank]
 	cp b
 	jr nz, .skip
 	ld a, [wVRAMTileOffset]
@@ -535,7 +535,7 @@ LoadTilesetGfx:
 	bit 7, a
 	jr nz, .skip
 
-; (wd4cb == b) and
+; (wWhichVRAMBank == b) and
 ; bit 7 in c is same as bit 7 in wVRAMTileOffset
 	ld a, c
 	add $80
@@ -573,7 +573,7 @@ LoadTilesetGfx:
 	push hl
 	ldh a, [hBankVRAM]
 	push af
-	ld a, [wd4cb]
+	ld a, [wWhichVRAMBank]
 	and $01
 	call BankswitchVRAM
 	call CopyGfxDataFromTempBank
@@ -605,9 +605,9 @@ LoadTilesetGfx:
 	pop af
 	; if it overflows
 	; (which means a tile group after Tiles2)
-	; then set wd4cb for VRAM1
-	ld a, [hl] ; wd4cb
-	adc $00
+	; then set wWhichVRAMBank for VRAM1
+	ld a, [hl] ; wWhichVRAMBank
+	adc 0
 	ld [hl], a
 
 .skip

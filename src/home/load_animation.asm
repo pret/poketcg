@@ -139,14 +139,14 @@ DrawSpriteAnimationFrame::
 
 ; Loads a pointer to the current animation frame into SPRITE_ANIM_FRAME_DATA_POINTER using
 ; the current frame's offset
-; [wd4ca] - current frame offset
+; [wWhichAnimationFrame] - current frame in the animation
 ; wTempPointer* - Pointer to current Animation
 GetAnimationFramePointer::
 	ldh a, [hBankROM]
 	push af
 	push hl
 	push hl
-	ld a, [wd4ca]
+	ld a, [wWhichAnimationFrame]
 	cp $ff
 	jr nz, .useLoadedOffset
 	ld de, SpriteNullAnimationPointer
@@ -162,7 +162,7 @@ GetAnimationFramePointer::
 	ld a, [hli]
 
 	push af
-	ld a, [wd4ca]
+	ld a, [wWhichAnimationFrame]
 	rlca
 	ld e, [hl]
 	add e

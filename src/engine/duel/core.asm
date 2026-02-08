@@ -7647,9 +7647,9 @@ InitVariablesToBeginDuel:
 	xor a
 	ld [wDuelFinished], a
 	ld [wDuelTurns], a
-	ld [wcce7], a
+	ld [wUnused_cce7], a
 	ld a, $ff
-	ld [wcc0f], a
+	ld [wUnused_cc0f], a
 	ld [wPlayerAttackingCardIndex], a
 	ld [wPlayerAttackingAttackIndex], a
 	call EnableSRAM
@@ -7811,11 +7811,11 @@ ClearNonTurnTemporaryDuelvars::
 	ret
 
 ; same as ClearNonTurnTemporaryDuelvars, except the non-turn holder's arena
-; Pokemon status condition is copied to wccc5
+; Pokemon status condition is copied to wUnused_DefendingPkmnStatus
 ClearNonTurnTemporaryDuelvars_CopyStatus::
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
-	ld [wccc5], a
+	ld [wUnused_DefendingPkmnStatus], a
 	call ClearNonTurnTemporaryDuelvars
 	ret
 

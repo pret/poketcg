@@ -265,14 +265,15 @@ SerialSendByte::
 	push de
 	push bc
 	push af
-.asm_e0e
+.loop_wait
 	ld a, [wcb80]
 	ld e, a
 	ld a, [wSerialSendBufIndex]
 	dec a
 	and $1f
 	cp e
-	jr z, .asm_e0e
+	jr z, .loop_wait
+	; wSerialSendBufIndex != wcb80
 	ld d, $0
 	ld a, e
 	inc a
@@ -452,9 +453,12 @@ SerialRecvBytes::
 	scf
 	ret
 
-Func_0ef1::
-	ld de, wcb79
-	ld hl, sp+$fe
+; saves address of sp-2 to wSerialReturnSP
+; and saves return address of current routine to wSerialReturnAddress
+; unreferenced
+UnreferencedSaveSerialReturnAddress:
+	ld de, wSerialReturnSP
+	ld hl, sp+-2
 	ld a, l
 	ld [de], a
 	inc de
@@ -464,26 +468,29 @@ Func_0ef1::
 	pop hl
 	push hl
 	ld a, l
-	ld [de], a
+	ld [de], a ; wSerialReturnAddress
 	inc de
 	ld a, h
 	ld [de], a
 	or a
 	ret
 
-Func_0f05::
+; if wSerialReturnAddress is non-NULL, then set sp to address in wSerialReturnSP
+; and jump to address in wSerialReturnAddress
+; unreferenced
+UnreferencedGoToSerialReturnAddress:
 	push hl
-	ld hl, wcb7b
+	ld hl, wSerialReturnAddress
 	ld a, [hli]
 	or [hl]
 	pop hl
 	ret z
-	ld hl, wcb79
+	ld hl, wSerialReturnSP
 	ld a, [hli]
 	ld h, a
 	ld l, a
 	ld sp, hl
-	ld hl, wcb7b
+	ld hl, wSerialReturnAddress
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a

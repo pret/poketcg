@@ -38,7 +38,7 @@ LoadMapTilesAndPals:
 	ld a, LOW(v0Tiles1 / TILE_SIZE)
 	ld [wVRAMTileOffset], a
 	xor a ; VRAM0
-	ld [wd4cb], a
+	ld [wWhichVRAMBank], a
 	call LoadTilesetGfx
 
 	xor a
