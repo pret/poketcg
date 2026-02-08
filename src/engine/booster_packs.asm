@@ -186,7 +186,7 @@ CardTypeTable:
 	assert_table_length NUM_CARD_TYPES
 
 ; calculate the chance of each type (BOOSTER_CARD_TYPE_*) for the next card
-; return a = [wd4ca]: sum of all chances
+; return a = [wTempBoosterChances]: sum of all chances
 CalculateTypeChances:
 	ld c, NUM_BOOSTER_CARD_TYPES
 	xor a
@@ -195,7 +195,7 @@ CalculateTypeChances:
 	ld [hli], a
 	dec c
 	jr nz, .delete_temp_type_chance_table_loop
-	ld [wd4ca], a
+	ld [wTempBoosterChances], a
 	ld bc, $00
 .check_if_type_is_valid
 	push bc
@@ -212,31 +212,31 @@ CalculateTypeChances:
 	ld hl, wBoosterTempTypeChancesTable
 	add hl, bc
 	ld [hl], a
-	ld a, [wd4ca]
+	ld a, [wTempBoosterChances]
 	add [hl]
-	ld [wd4ca], a
+	ld [wTempBoosterChances], a
 .amount_of_type_or_chance_zero
 	pop bc
 	inc c
 	ld a, c
 	cp NUM_BOOSTER_CARD_TYPES
 	jr c, .check_if_type_is_valid
-	ld a, [wd4ca]
+	ld a, [wTempBoosterChances]
 	ret
 
 ; input: a = random number (between 0 and the sum of all chances)
 ; store the randomly generated booster card type in [wBoosterJustDrawnCardType]
 DetermineBoosterCardType:
-	ld [wd4ca], a
+	ld [wTempBoosterChances], a
 	ld c, $00
 	ld hl, wBoosterTempTypeChancesTable
 .loop_through_card_types
 	ld a, [hl]
 	or a
 	jr z, .skip_no_chance_type
-	ld a, [wd4ca]
+	ld a, [wTempBoosterChances]
 	sub [hl]
-	ld [wd4ca], a
+	ld [wTempBoosterChances], a
 	jr c, .found_card_type
 .skip_no_chance_type
 	inc hl
@@ -261,7 +261,7 @@ DetermineBoosterCard:
 	add hl, bc
 	ld a, [hl]
 	call Random
-	ld [wd4ca], a
+	ld [wTempBoosterChances], a
 	ld hl, wBoosterViableCardList
 .find_matching_card_loop
 	ld a, [hli]
@@ -271,11 +271,11 @@ DetermineBoosterCard:
 	ld a, [wBoosterJustDrawnCardType]
 	cp [hl]
 	jr nz, .card_incorrect_type
-	ld a, [wd4ca]
+	ld a, [wTempBoosterChances]
 	or a
 	jr z, .got_valid_card
 	dec a
-	ld [wd4ca], a
+	ld [wTempBoosterChances], a
 .card_incorrect_type
 	inc hl
 	jr .find_matching_card_loop

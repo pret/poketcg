@@ -586,14 +586,14 @@ SendSGBPortraitPalettes:
 	push hl
 	ld hl, SGBData_PlayerPortraitPals
 	call DecompressSGBPalette
-	ld hl, wLoadedPalData
+	ld hl, wDecompressionBuffer
 	ld de, wTempSGBPacket + $1
 	ld bc, $8
 	call CopyDataHLtoDE
 
 	pop hl
 	call DecompressSGBPalette
-	ld hl, wLoadedPalData + 2
+	ld hl, wDecompressionBuffer + 2
 	ld de, wTempSGBPacket + $9
 	ld bc, $6
 	call CopyDataHLtoDE

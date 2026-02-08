@@ -443,7 +443,7 @@ HandleSwitchDefendingPokemonEffect:
 	call SwapTurn
 
 	xor a
-	ld [wccc5], a
+	ld [wUnused_DefendingPkmnStatus], a
 	ld [wDuelDisplayedScreen], a
 	inc a
 	ld [wDefendingWasForcedToSwitch], a
@@ -466,7 +466,7 @@ HandleNoDamageOrEffect:
 ;	de = HP amount to recover
 ApplyAndAnimateHPRecovery:
 	push de
-	ld hl, wccbd
+	ld hl, wUnused_HPRecoverAmount
 	ld [hl], e
 	inc hl
 	ld [hl], d

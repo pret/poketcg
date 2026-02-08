@@ -13,7 +13,7 @@ PokemonDomeEntranceLoadMap:
 
 PokemonDomeEntranceCloseTextBox:
 	ld a, MAP_EVENT_POKEMON_DOME_DOOR
-	farcall Func_80b89
+	farcall ApplyOWMapEventChangeIfEventSet
 	ret
 
 Script_f631:

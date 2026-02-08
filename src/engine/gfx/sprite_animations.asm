@@ -294,7 +294,7 @@ LoadSpriteAnimPointers:
 	add hl, bc
 	ld [hli], a
 	push hl
-	ld l, 6 ; SpriteAnimations
+	ld l, GFXTABLE_SPRITE_ANIMATIONS
 	farcall GetMapDataPointer
 	farcall LoadGraphicsPointerFromHL
 	pop hl ; hl is animation bank
@@ -342,11 +342,11 @@ HandleAnimationFrame:
 	adc 0
 	ld [hl], a
 
-	ld de, wLoadedPalData
+	ld de, wLoadedFrameData
 	ld bc, SPRITE_FRAME_OFFSET_SIZE
 	call CopyBankedDataToDE
 	pop hl ; beginning of current sprite_anim_buffer
-	ld de, wLoadedPalData
+	ld de, wLoadedFrameData
 	ld a, [de]
 	call GetAnimFramePointerFromOffset
 	inc de
@@ -384,11 +384,11 @@ HandleAnimationFrame:
 	ret
 
 ; Calls GetAnimationFramePointer after setting up wTempPointerBank
-; and wVRAMTileOffset
+; and wWhichAnimationFrame
 ; a - frame offset from Animation Data
 ; hl - beginning of Sprite Anim Buffer
 GetAnimFramePointerFromOffset:
-	ld [wVRAMTileOffset], a
+	ld [wWhichAnimationFrame], a
 	push hl
 	push bc
 	push de
@@ -568,11 +568,11 @@ Func_12c05:
 Func_12c4f:
 	push af
 	xor a
-	ld [wd4cb], a
+	ld [wWhichVRAMBank], a ; VRAM0
 	ld a, d
 	ld [wVRAMTileOffset], a
 	pop af
-	farcall Func_8025b
+	farcall LoadSpriteGfx
 	ret
 
 Func_12c5e:

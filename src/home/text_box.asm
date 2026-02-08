@@ -77,7 +77,7 @@ DrawLabeledTextBox::
 	push bc
 	push hl
 	; top left tile of the box
-	ld hl, wc000
+	ld hl, wLabeledTextBoxTopBorder
 	ld a, TX_SYMBOL
 	ld [hli], a
 	ld a, SYM_BOX_TOP_L
@@ -90,7 +90,7 @@ DrawLabeledTextBox::
 	ld d, h
 	pop hl
 	call CopyText
-	ld hl, wc000 + 3
+	ld hl, wLabeledTextBoxTopBorder + 3
 	call GetTextLengthInTiles
 	ld l, e
 	ld h, d
@@ -125,7 +125,7 @@ DrawLabeledTextBox::
 	push de
 	push bc
 	call InitTextPrinting
-	ld hl, wc000
+	ld hl, wLabeledTextBoxTopBorder
 	call ProcessText
 	pop bc
 	pop de

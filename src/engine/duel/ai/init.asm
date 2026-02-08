@@ -20,7 +20,7 @@ InitAITurnVars:
 	xor a
 	ld [wPreviousAIFlags], a
 	ld [wAITriedAttack], a
-	ld [wcddc], a
+	ld [wUnused_cddc], a
 	ld [wAIRetreatedThisTurn], a
 
 ; checks if the Player used an attack last turn
