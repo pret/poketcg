@@ -30,6 +30,7 @@ Fixes are written in the `diff` format.
   - [AI does not pay attention to Acid effect when retreating](#ai-does-not-pay-attention-to-acid-effect-when-retreating)
   - [AI has flawed logic when considering MewLv8 as a target for switching](#ai-has-flawed-logic-when-considering-mewlv8-as-a-target-for-switching)
   - [AI has flawed logic when considering the Earthquake attack](#ai-has-flawed-logic-when-considering-the-earthquake-attack)
+  - [AI has flawed logic when considering evolutions](#ai-has-flawed-logic-when-considering-evolutions)
   - [Phantom Venusaur will never be obtained through Card Pop!](#phantom-venusaur-will-never-be-obtained-through-card-pop)
 - [Graphics](#graphics)
   - [Water Club master room uses the wrong void color](#water-club-master-room-uses-the-wrong-void-color)
@@ -679,6 +680,82 @@ HandleSpecialAIAttacks:
 	jp z, .zero_score
 	ld a, $80
 	ret
+```
+
+### AI has flawed logic when considering evolutions
+
+When considering evolving a Pokémon, the AI checks if, after evolving, it would be knocked out by the player's card. However, the difference in HP isn't taken into account, so the AI might not consider cases where evolving would actually avoid a KO by the player. We'll fix this by temporarily storing the HP difference between pre-evolution and evolution, and then temporarily adding it to the card's HP when running damage calculations.
+
+**Fix:** Edit `AIDecideEvolution` in [src/engine/duel/ai/hand_pokemon.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/hand_pokemon.asm):
+```diff
+AIDecideEvolution:
+	...
+	call CheckIfCanEvolveInto
+	pop bc
+	push bc
+	jp c, .done_bench_pokemon
+
+; store this Play Area location in wTempAI
+; and initialize the AI score
+	ld a, b
+	ld [wTempAI], a
+	ldh [hTempPlayAreaLocation_ff9d], a
++
++	; store HP difference between cards
++	ld a, [wLoadedCard1HP] ; evolution card
++	ld hl, wLoadedCard2HP ; pre-evolution card
++	sub [hl]
++	ld [wEvolutionHPDifference], a
++
+	ld a, $80
+	ld [wAIScore], a
+	call AIDecideSpecialEvolutions
+	...
+```
+
+Then add further down:
+```diff
+AIDecideEvolution:
+	...
+	ld a, [wTempAI]
+	or a
+	jr nz, .check_mr_mime
++	; temporarily change HP
++	ld a, DUELVARS_ARENA_CARD_HP
++	call GetTurnDuelistVariable
++	push af
++	push hl
++	ld b, a
++	ld a, [wEvolutionHPDifference]
++	add b
++	ld [hl], a
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call CheckIfDefendingPokemonCanKnockOut
++	pop hl
++	pop bc
++	ld [hl], b
+	jr nc, .check_mr_mime
+	ld a, 5
+	call AIDiscourage
+	...
+```
+
+We'll need to define this `wEvolutionHPDifference` variable in [src/wram.asm](https://github.com/pret/poketcg/blob/master/src/wram.asm):
+```diff
+ wCurCardCanKO:: ; cdf4
+        ds $1
+ 
+-       ds $4
++       ds $3
++
++; stores HP difference between a pre-evolution
++; and its evolution, for AI damage calculations
++wEvolutionHPDifference:: ; cdf8
++       ds $1
+ 
+ wSamePokemonCardID:: ; cdf9
+        ds $1
 ```
 
 ### Phantom Venusaur will never be obtained through Card Pop!
