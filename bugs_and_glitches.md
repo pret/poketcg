@@ -764,8 +764,7 @@ We'll need to define this `wEvolutionHPDifference` variable in [src/wram.asm](ht
 
 Some card data has AI flags to slightly nudge the AI when it scores a particular evolution card or retreating to a particular Pokémon. But these checks are wrong since they don't consider that this data might have the `HAS_EVOLUTION` flag set.
 
-**Fix:** Edit [src/engine/duel/ai/hand_pokemon.asm](src/engine/duel/ai/hand_pokemon.asm):
-
+**Fix:** Edit [src/engine/duel/ai/hand_pokemon.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/hand_pokemon.asm):
 ```diff
 AIDecideEvolution:
 	...
@@ -783,8 +782,7 @@ AIDecideEvolution:
 	...
 ```
 
-And edit [src/engine/duel/ai/retreat.asm](src/engine/duel/ai/retreat.asm):
-
+And edit [src/engine/duel/ai/retreat.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/ai/retreat.asm):
 ```diff
 AIDecideBenchPokemonToSwitchTo:
 	...
@@ -804,8 +802,7 @@ AIDecideBenchPokemonToSwitchTo:
 
 Electabuzz's Light Screen and Kabuto's Kabuto Armor both have the effect of halving any damage received. However, in the extremely rare case that damage is over 255, this halving doesn't work.
 
-**Fix:** Edit [src/home/substatus.asm](src/home/substatus.asm):
-
+**Fix:** Edit [src/home/substatus.asm](https://github.com/pret/poketcg/blob/master/src/home/substatus.asm):
 ```diff
 HandleDamageReductionExceptSubstatus2::
 	...
