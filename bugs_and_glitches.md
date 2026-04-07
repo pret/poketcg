@@ -12,6 +12,7 @@ Fixes are written in the `diff` format.
 
 ## Contents
 - [Game engine](#game-engine)
+  - [Pressing Down+A in Play Area screen ends a duel](#pressing-downa-in-play-area-screen-ends-a-duel)
   - [AI wrongfully adds score twice for attaching energy to Arena card](#ai-wrongfully-adds-score-twice-for-attaching-energy-to-arena-card)
   - [Cards in AI decks that are not supposed to be placed as Prize cards are ignored](#cards-in-ai-decks-that-are-not-supposed-to-be-placed-as-prize-cards-are-ignored)
   - [AI score modifiers for retreating are never used](#ai-score-modifiers-for-retreating-are-never-used)
@@ -59,6 +60,34 @@ Fixes are written in the `diff` format.
   - [Missing acute accents](#missing-acute-accents)
 
 ## Game engine
+
+### Pressing Down+A in Play Area screen ends a duel
+
+The infamous "Duel Escape" glitch allows the player to exit any duel currently being played, and retains the same duel result as the last result the player obtained (winning the duel by default if no duel has been played up to that point). The reason for this happening are technical (you can read more about it in [this Pastebin](https://pastebin.com/QnYGzNey) by entrpntr), but it basically boils down to the game jumping to an out-of-bounds address in a table because it doesn't expect a D-pad input and an A press on the same frame when viewing the Play Area screen.
+
+The following is a possible fix to this bug, which makes the game ignore the A press altogether when this situation occurs.
+
+**Fix:** Edit `OpenInPlayAreaScreen_HandleInput` in [src/engine/menus/play_area.asm](https://github.com/pret/poketcg/blob/master/src/engine/menus/play_area.asm):
+```diff
+OpenInPlayAreaScreen_HandleInput:
+	...
+
+.dpad_processed
+	ld a, SFX_CURSOR
+	ld [wMenuInputSFX], a
+	xor a
+	ld [wCheckMenuCursorBlinkCounter], a
++	jr .no_a_or_b_btn
++
+.check_button
+-	; bug, it's not guaranteed that [wInPlayAreaCurPosition]
+-	; is in a valid Play Area item here
+-	; in fact, pressing Down+A under some circumstances
+-	; allows the "Duel Escape" glitch to occur
+	ldh a, [hKeysPressed]
+	and PAD_A | PAD_B
+	jr z, .no_a_or_b_btn
+```
 
 ### AI wrongfully adds score twice for attaching energy to Arena card
 

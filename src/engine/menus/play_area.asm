@@ -437,11 +437,11 @@ OpenInPlayAreaScreen_HandleInput:
 	cp INPLAYAREA_PLAYER_ACTIVE
 	jr c, .player_area
 	cp INPLAYAREA_OPP_BENCH_1
-	jr c, .next
+	jr c, .dpad_processed
 	cp INPLAYAREA_PLAYER_PLAY_AREA
 	jr c, .opponent_area
 
-	jr .next
+	jr .dpad_processed
 
 .player_area
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -453,13 +453,13 @@ OpenInPlayAreaScreen_HandleInput:
 	; then move to player's play area.
 	ld a, INPLAYAREA_PLAYER_PLAY_AREA
 	ld [wInPlayAreaCurPosition], a
-	jr .next
+	jr .dpad_processed
 
 .bench_pokemon_exists
 	ld b, a
 	ld a, [wInPlayAreaCurPosition]
 	cp b
-	jr c, .next
+	jr c, .dpad_processed
 
 	; handle index overflow
 	ldh a, [hDPadHeld]
@@ -468,13 +468,13 @@ OpenInPlayAreaScreen_HandleInput:
 
 	xor a
 	ld [wInPlayAreaCurPosition], a
-	jr .next
+	jr .dpad_processed
 
 .on_left
 	ld a, b
 	dec a
 	ld [wInPlayAreaCurPosition], a
-	jr .next
+	jr .dpad_processed
 
 .opponent_area
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -484,14 +484,14 @@ OpenInPlayAreaScreen_HandleInput:
 
 	ld a, INPLAYAREA_OPP_PLAY_AREA
 	ld [wInPlayAreaCurPosition], a
-	jr .next
+	jr .dpad_processed
 
 .bench_pokemon_exists_2
 	ld b, a
 	ld a, [wInPlayAreaCurPosition]
 	sub INPLAYAREA_OPP_BENCH_1
 	cp b
-	jr c, .next
+	jr c, .dpad_processed
 
 	ldh a, [hDPadHeld]
 	bit B_PAD_LEFT, a
@@ -499,21 +499,25 @@ OpenInPlayAreaScreen_HandleInput:
 
 	ld a, INPLAYAREA_OPP_BENCH_1
 	ld [wInPlayAreaCurPosition], a
-	jr .next
+	jr .dpad_processed
 
 .on_right
 	ld a, b
 	add INPLAYAREA_OPP_DISCARD_PILE
 	ld [wInPlayAreaCurPosition], a
-.next
+.dpad_processed
 	ld a, SFX_CURSOR
 	ld [wMenuInputSFX], a
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
 .check_button
+	; bug, it's not guaranteed that [wInPlayAreaCurPosition]
+	; is in a valid Play Area item here
+	; in fact, pressing Down+A under some circumstances
+	; allows the "Duel Escape" glitch to occur
 	ldh a, [hKeysPressed]
 	and PAD_A | PAD_B
-	jr z, .return
+	jr z, .no_a_or_b_btn
 
 	and PAD_A
 	jr nz, .a_button
@@ -532,7 +536,7 @@ OpenInPlayAreaScreen_HandleInput:
 	scf
 	ret
 
-.return
+.no_a_or_b_btn
 	ld a, [wMenuInputSFX]
 	or a
 	jr z, .skip_sfx
