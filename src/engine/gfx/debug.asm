@@ -75,13 +75,13 @@ _DebugLookAtSprite:
 	xor a
 	ld [wWhichOBP], a ; not used
 	ld [wWhichBGPalIndex], a ; palette index 0
-	ld a, PALETTE_0
+	ld a, PALETTE_DEFAULT_CGB
 	farcall LoadBGPalette
 
 	xor a
 	ld [wWhichOBP], a ; OBP0
 	ld [wWhichOBPalIndex], a ; palette index 0
-	ld a, PALETTE_29
+	ld a, PALETTE_OVERWORLD_OAM
 	farcall LoadOBPalette
 
 	ld a, SOUTH

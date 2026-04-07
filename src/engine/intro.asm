@@ -76,7 +76,7 @@ LoadTitleScreenSprites:
 	xor a
 	ld [wWhichOBP], a ; OBP0
 	ld [wWhichOBPalIndex], a ; palette index 0
-	ld a, PALETTE_30
+	ld a, PALETTE_TITLE_SCREEN_ORBS
 	farcall LoadOBPalette
 
 	ld bc, 0

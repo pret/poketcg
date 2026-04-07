@@ -13,7 +13,7 @@ ShowMedalReceivedScreen:
 	call InitMenuScreen
 	ld a, -6
 	ld [wMedalScreenYOffset], a
-	call LoadCollectedMedalTilemaps
+	call DrawCollectedMedals
 	pop bc
 	ld a, c
 	add a

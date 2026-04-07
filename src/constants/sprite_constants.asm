@@ -140,7 +140,7 @@ DEF SPRITE_FRAME_OFFSET_SIZE EQU 4
 	const SPRITE_DUEL_DRAIN         ; $5e
 	const SPRITE_DUEL_SMALL_GLOW    ; $5f
 	const SPRITE_DUEL_BALL          ; $60
-	const SPRITE_DUEL_CAT_POW       ; $61
+	const SPRITE_DUEL_CAT_PAW       ; $61
 	const SPRITE_DUEL_WAVE          ; $62
 	const SPRITE_DUEL_CARD          ; $63
 	const SPRITE_DUEL_COIN          ; $64

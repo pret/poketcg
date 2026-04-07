@@ -499,7 +499,7 @@ Func_1cb5e:
 	ld [wDamageCharAnimDelay], a
 	ld [wWhichOBP], a ; OBP0
 	ld [wWhichOBPalIndex], a ; palette index 0
-	ld a, PALETTE_37
+	ld a, PALETTE_DAMAGE
 	farcall LoadOBPalette
 
 	call DrawDamageAnimationNumbers

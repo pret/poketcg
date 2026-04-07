@@ -700,7 +700,7 @@ Func_c4b9:
 	xor a
 	ld [wWhichOBP], a ; OBP0
 	ld [wWhichOBPalIndex], a ; palette index 0
-	ld a, PALETTE_29
+	ld a, PALETTE_OVERWORLD_OAM
 	farcall LoadOBPalette
 
 	ld b, SPRITE_ANIM_LIGHT_NPC_UP
