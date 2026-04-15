@@ -4,7 +4,7 @@ _PauseMenu_Status:
 	call InitMenuScreen
 	xor a
 	ld [wMedalScreenYOffset], a
-	call LoadCollectedMedalTilemaps
+	call DrawCollectedMedals
 	lb de,  0,  0
 	lb bc, 20,  8
 	call DrawRegularTextBox

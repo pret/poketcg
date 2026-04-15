@@ -17,7 +17,7 @@ LoadMapHeader:
 	ld a, [hli]
 	ld c, a ; CGB tilemap variant
 	ld a, [hli]
-	ld [wCurMapInitialPalette], a ; always 0?
+	ld [wCurMapInitialPalette], a ; always PALETTE_DEFAULT_CGB
 	ld a, [hli]
 	ld [wCurMapSGBPals], a
 	ld a, [hli]

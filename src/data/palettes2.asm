@@ -1,4 +1,4 @@
-Palette100::
+JapaneseTitleScreenCgbPal::
 	db 0
 	db 8
 
@@ -42,7 +42,7 @@ Palette100::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette102::
+EvolutionBoosterPal::
 	db 0
 	db 7
 
@@ -81,7 +81,7 @@ Palette102::
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette103::
+MysteryBoosterPal::
 	db 0
 	db 7
 
@@ -120,7 +120,7 @@ Palette103::
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette104::
+LaboratoryBoosterPal::
 	db 0
 	db 7
 
@@ -159,7 +159,7 @@ Palette104::
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette105::
+CharizardIntroPal::
 	db 0
 	db 7
 
@@ -198,7 +198,7 @@ Palette105::
 	rgb  4,  7, 15
 	rgb 31, 24,  0
 
-Palette106::
+ScytherIntroPal::
 	db 0
 	db 7
 
@@ -237,7 +237,7 @@ Palette106::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette107::
+AerodactylIntroPal::
 	db 0
 	db 7
 
@@ -276,7 +276,7 @@ Palette107::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette111::
+GBLinkBGPal::
 	db 1
 	gbpal SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -322,7 +322,7 @@ Palette111::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette112::
+GBPrinterBGPal::
 	db 1
 	gbpal SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -368,7 +368,7 @@ Palette112::
 	rgb  3,  3,  8
 	rgb 25, 14,  0
 
-Palette113::
+CardPopBGPal::
 	db 1
 	gbpal SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -414,7 +414,7 @@ Palette113::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette114::
+GBLinkOAMPal::
 	db 2
 	gbpal SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP0
 	gbpal SHADE_BLACK, SHADE_WHITE, SHADE_WHITE, SHADE_WHITE ; OBP1
@@ -441,7 +441,7 @@ Palette114::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette115::
+GBPrinterOAMPal::
 	db 2
 	gbpal SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP0
 	gbpal SHADE_BLACK, SHADE_WHITE, SHADE_WHITE, SHADE_WHITE ; OBP1
@@ -468,7 +468,7 @@ Palette115::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette116::
+CardPopOAMPal::
 	db 2
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 	gbpal SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP1
@@ -495,7 +495,7 @@ Palette116::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette118::
+MedalsPal::
 	db 0
 	db 6
 
@@ -529,7 +529,7 @@ Palette118::
 	rgb 19,  0, 25
 	rgb  0,  0,  0
 
-Palette120::
+LinkOppPicPal::
 	db 0
 	db 1
 
@@ -538,7 +538,7 @@ Palette120::
 	rgb  0, 12,  0
 	rgb  0,  1,  0
 
-Palette121::
+RonaldPicPal::
 	db 0
 	db 1
 
@@ -547,7 +547,7 @@ Palette121::
 	rgb  4,  8, 28
 	rgb  0,  0, 12
 
-Palette122::
+SamPicPal::
 	db 0
 	db 1
 
@@ -556,7 +556,7 @@ Palette122::
 	rgb  4, 12,  8
 	rgb  0,  4,  0
 
-Palette123::
+ImakuniPicPal::
 	db 0
 	db 1
 
@@ -565,7 +565,7 @@ Palette123::
 	rgb 20,  8,  0
 	rgb  4,  0,  0
 
-Palette124::
+NikkiPicPal::
 	db 0
 	db 1
 
@@ -574,7 +574,7 @@ Palette124::
 	rgb  8, 12,  0
 	rgb  5,  0,  0
 
-Palette125::
+RickPicPal::
 	db 0
 	db 1
 
@@ -583,7 +583,7 @@ Palette125::
 	rgb  8, 12,  0
 	rgb  5,  0,  0
 
-Palette126::
+KenPicPal::
 	db 0
 	db 1
 
@@ -592,7 +592,7 @@ Palette126::
 	rgb 28,  4,  0
 	rgb  5,  0,  0
 
-Palette127::
+AmyPicPal::
 	db 0
 	db 1
 
@@ -601,7 +601,7 @@ Palette127::
 	rgb  5,  5, 29
 	rgb  5,  0,  0
 
-Palette128::
+IsaacPicPal::
 	db 0
 	db 1
 
@@ -610,7 +610,7 @@ Palette128::
 	rgb 14, 11,  0
 	rgb  3,  1,  1
 
-Palette129::
+MitchPicPal::
 	db 0
 	db 1
 
@@ -619,7 +619,7 @@ Palette129::
 	rgb 28, 10,  0
 	rgb  4,  1,  0
 
-Palette130::
+GenePicPal::
 	db 0
 	db 1
 
@@ -628,7 +628,7 @@ Palette130::
 	rgb 18,  8,  0
 	rgb  4,  0,  0
 
-Palette131::
+MurrayPicPal::
 	db 0
 	db 1
 
@@ -637,7 +637,7 @@ Palette131::
 	rgb 10,  0, 18
 	rgb  5,  0,  0
 
-Palette132::
+CourtneyPicPal::
 	db 0
 	db 1
 
@@ -646,7 +646,7 @@ Palette132::
 	rgb 28,  4,  0
 	rgb  5,  0,  0
 
-Palette133::
+StevePicPal::
 	db 0
 	db 1
 
@@ -655,7 +655,7 @@ Palette133::
 	rgb 28, 12,  0
 	rgb  2,  2,  0
 
-Palette134::
+JackPicPal::
 	db 0
 	db 1
 
@@ -664,7 +664,7 @@ Palette134::
 	rgb  5,  5, 29
 	rgb  0,  0,  2
 
-Palette135::
+RodPicPal::
 	db 0
 	db 1
 
@@ -673,7 +673,7 @@ Palette135::
 	rgb  0, 17, 10
 	rgb  0,  3,  0
 
-Palette136::
+JosephPicPal::
 	db 0
 	db 1
 
@@ -682,7 +682,7 @@ Palette136::
 	rgb  0, 12,  0
 	rgb  0,  1,  0
 
-Palette137::
+DavidPicPal::
 	db 0
 	db 1
 
@@ -691,7 +691,7 @@ Palette137::
 	rgb  0, 12,  0
 	rgb  0,  1,  0
 
-Palette138::
+ErikPicPal::
 	db 0
 	db 1
 
@@ -700,7 +700,7 @@ Palette138::
 	rgb  0, 12,  0
 	rgb  0,  1,  0
 
-Palette139::
+JohnPicPal::
 	db 0
 	db 1
 
@@ -709,7 +709,7 @@ Palette139::
 	rgb 28,  4,  0
 	rgb  4,  0,  0
 
-Palette140::
+AdamPicPal::
 	db 0
 	db 1
 
@@ -718,7 +718,7 @@ Palette140::
 	rgb 28,  4,  0
 	rgb  4,  0,  0
 
-Palette141::
+JonathanPicPal::
 	db 0
 	db 1
 
@@ -727,7 +727,7 @@ Palette141::
 	rgb 28,  4,  0
 	rgb  4,  0,  0
 
-Palette142::
+JoshuaPicPal::
 	db 0
 	db 1
 
@@ -736,7 +736,7 @@ Palette142::
 	rgb  8,  8, 20
 	rgb  0,  0,  4
 
-Palette143::
+NicholasPicPal::
 	db 0
 	db 1
 
@@ -745,7 +745,7 @@ Palette143::
 	rgb  8,  8,  4
 	rgb  2,  1,  1
 
-Palette144::
+BrandonPicPal::
 	db 0
 	db 1
 
@@ -754,7 +754,7 @@ Palette144::
 	rgb  8,  8,  4
 	rgb  2,  1,  1
 
-Palette145::
+MatthewPicPal::
 	db 0
 	db 1
 
@@ -763,7 +763,7 @@ Palette145::
 	rgb 24,  8,  4
 	rgb  2,  0,  0
 
-Palette146::
+RyanPicPal::
 	db 0
 	db 1
 
@@ -772,7 +772,7 @@ Palette146::
 	rgb 24,  8,  4
 	rgb  2,  0,  0
 
-Palette147::
+AndrewPicPal::
 	db 0
 	db 1
 
@@ -781,7 +781,7 @@ Palette147::
 	rgb 24,  8,  4
 	rgb  2,  0,  0
 
-Palette148::
+ChrisPicPal::
 	db 0
 	db 1
 
@@ -790,7 +790,7 @@ Palette148::
 	rgb 12,  4,  8
 	rgb  2,  0,  0
 
-Palette149::
+MichaelPicPal::
 	db 0
 	db 1
 
@@ -799,7 +799,7 @@ Palette149::
 	rgb 12,  4,  8
 	rgb  2,  0,  0
 
-Palette150::
+DanielPicPal::
 	db 0
 	db 1
 
@@ -808,7 +808,7 @@ Palette150::
 	rgb 16,  8, 12
 	rgb  2,  1,  1
 
-Palette151::
+RobertPicPal::
 	db 0
 	db 1
 
@@ -817,7 +817,7 @@ Palette151::
 	rgb 16,  8, 12
 	rgb  2,  1,  1
 
-Palette152::
+BrittanyPicPal::
 	db 0
 	db 1
 
@@ -826,7 +826,7 @@ Palette152::
 	rgb  8, 16,  4
 	rgb  0,  2,  0
 
-Palette153::
+KristinPicPal::
 	db 0
 	db 1
 
@@ -835,7 +835,7 @@ Palette153::
 	rgb  8, 16,  4
 	rgb  0,  2,  0
 
-Palette154::
+HeatherPicPal::
 	db 0
 	db 1
 
@@ -844,7 +844,7 @@ Palette154::
 	rgb  8, 16,  4
 	rgb  0,  2,  0
 
-Palette155::
+SaraPicPal::
 	db 0
 	db 1
 
@@ -853,7 +853,7 @@ Palette155::
 	rgb  8,  8, 20
 	rgb  0,  0,  2
 
-Palette156::
+AmandaPicPal::
 	db 0
 	db 1
 
@@ -862,7 +862,7 @@ Palette156::
 	rgb  8,  8, 20
 	rgb  0,  0,  2
 
-Palette157::
+JenniferPicPal::
 	db 0
 	db 1
 
@@ -871,7 +871,7 @@ Palette157::
 	rgb  8,  8,  4
 	rgb  2,  1,  1
 
-Palette158::
+JessicaPicPal::
 	db 0
 	db 1
 
@@ -880,7 +880,7 @@ Palette158::
 	rgb 12,  4,  8
 	rgb  1,  0,  0
 
-Palette159::
+StephaniePicPal::
 	db 0
 	db 1
 
@@ -889,7 +889,7 @@ Palette159::
 	rgb 16,  8, 12
 	rgb  2,  1,  1
 
-Palette160::
+AaronPicPal::
 	db 0
 	db 1
 

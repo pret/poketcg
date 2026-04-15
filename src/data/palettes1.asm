@@ -7,7 +7,7 @@
 ; next there is a byte declaring the size of the palette data
 ; indicating the number of palettes
 
-Palette0::
+DefaultCgbPal::
 	db 1
 	gbpal SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -53,7 +53,7 @@ Palette0::
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette1::
+OverworldMapPal::
 	db 0
 	db 8
 
@@ -97,7 +97,7 @@ Palette1::
 	rgb  9,  3, 31
 	rgb  1,  0,  5
 
-Palette2::
+MasonLaboratoryPal::
 	db 0
 	db 8
 
@@ -141,7 +141,7 @@ Palette2::
 	rgb  4, 21,  1
 	rgb  1, 10,  0
 
-Palette3::
+IshiharasHousePal::
 	db 0
 	db 8
 
@@ -185,7 +185,7 @@ Palette3::
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette4::
+FightingClubEntrancePal::
 	db 0
 	db 8
 
@@ -229,7 +229,7 @@ Palette4::
 	rgb 24, 13,  0
 	rgb  5,  3,  0
 
-Palette5::
+RockClubEntrancePal::
 	db 0
 	db 8
 
@@ -273,7 +273,7 @@ Palette5::
 	rgb 24, 13,  0
 	rgb  5,  3,  0
 
-Palette6::
+WaterClubEntrancePal::
 	db 0
 	db 8
 
@@ -317,7 +317,7 @@ Palette6::
 	rgb 24, 13,  0
 	rgb  5,  3,  0
 
-Palette7::
+LightningClubEntrancePal::
 	db 0
 	db 8
 
@@ -361,7 +361,7 @@ Palette7::
 	rgb 24, 13,  0
 	rgb  5,  3,  0
 
-Palette8::
+GrassClubEntrancePal::
 	db 0
 	db 8
 
@@ -405,7 +405,7 @@ Palette8::
 	rgb 24, 13,  0
 	rgb  5,  3,  0
 
-Palette9::
+PsychicClubEntrancePal::
 	db 0
 	db 8
 
@@ -449,7 +449,7 @@ Palette9::
 	rgb 24, 13,  0
 	rgb  5,  3,  0
 
-Palette10::
+ScienceClubEntrancePal::
 	db 0
 	db 8
 
@@ -493,7 +493,7 @@ Palette10::
 	rgb 24, 13,  0
 	rgb  5,  3,  0
 
-Palette11::
+FireClubEntrancePal::
 	db 0
 	db 8
 
@@ -537,7 +537,7 @@ Palette11::
 	rgb 24, 13,  0
 	rgb  5,  3,  0
 
-Palette12::
+ClubLobbyPal::
 	db 0
 	db 8
 
@@ -581,7 +581,7 @@ Palette12::
 	rgb 28, 12,  0
 	rgb  0,  0,  6
 
-Palette13::
+FightingClubPal::
 	db 0
 	db 8
 
@@ -625,7 +625,7 @@ Palette13::
 	rgb  5, 31, 25
 	rgb  0,  0,  6
 
-Palette14::
+RockClubPal::
 	db 0
 	db 8
 
@@ -669,7 +669,7 @@ Palette14::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette15::
+WaterClubPal::
 	db 0
 	db 8
 
@@ -713,7 +713,7 @@ Palette15::
 	rgb  4, 21,  1
 	rgb  1, 10,  0
 
-Palette16::
+LightningClubPal::
 	db 0
 	db 8
 
@@ -757,7 +757,7 @@ Palette16::
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette17::
+GrassClubPal::
 	db 0
 	db 8
 
@@ -801,7 +801,7 @@ Palette17::
 	rgb 20, 10,  0
 	rgb 11,  2,  0
 
-Palette18::
+PsychicClubPal::
 	db 0
 	db 8
 
@@ -845,7 +845,7 @@ Palette18::
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette19::
+ScienceClubPal::
 	db 0
 	db 8
 
@@ -889,7 +889,7 @@ Palette19::
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette20::
+FireClubPal::
 	db 0
 	db 8
 
@@ -933,7 +933,7 @@ Palette20::
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette21::
+ChallengeHallPal::
 	db 0
 	db 8
 
@@ -977,7 +977,7 @@ Palette21::
 	rgb 22,  8,  0
 	rgb  5,  3,  0
 
-Palette22::
+PokemonDomeEntrancePal::
 	db 0
 	db 8
 
@@ -1021,7 +1021,7 @@ Palette22::
 	rgb  6,  4,  0
 	rgb  2,  0,  0
 
-Palette23::
+PokemonDomePal::
 	db 0
 	db 8
 
@@ -1065,7 +1065,7 @@ Palette23::
 	rgb  6,  4,  0
 	rgb  2,  0,  0
 
-Palette24::
+HallOfHonorPal::
 	db 0
 	db 8
 
@@ -1109,7 +1109,7 @@ Palette24::
 	rgb  6,  4,  0
 	rgb  4,  2,  1
 
-Palette25::
+TitleScreenPal::
 	db 0
 	db 8
 
@@ -1153,7 +1153,7 @@ Palette25::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette26::
+CopyrightPal::
 	db 0
 	db 8
 
@@ -1197,7 +1197,7 @@ Palette26::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette27::
+NintendoPal::
 	db 0
 	db 8
 
@@ -1241,7 +1241,7 @@ Palette27::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette28::
+CompaniesPal::
 	db 0
 	db 8
 
@@ -1285,7 +1285,7 @@ Palette28::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette29::
+OverworldOAMPal::
 	db 2
 	gbpal SHADE_BLACK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 	gbpal SHADE_BLACK, SHADE_WHITE, SHADE_DARK, SHADE_BLACK ; OBP1
@@ -1332,7 +1332,7 @@ Palette29::
 	rgb  9,  9, 27
 	rgb  0,  0,  0
 
-Palette30::
+TitleScreenOrbsPal::
 	db 2
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 	gbpal SHADE_BLACK, SHADE_BLACK, SHADE_BLACK, SHADE_BLACK ; OBP1
@@ -1379,7 +1379,7 @@ Palette30::
 	rgb 31, 13,  0
 	rgb 31, 31,  0
 
-Palette32::
+ParalysisPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1390,7 +1390,7 @@ Palette32::
 	rgb 28, 20, 12
 	rgb  0,  0,  0
 
-Palette33::
+SleepPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1401,7 +1401,7 @@ Palette33::
 	rgb 28, 20, 12
 	rgb  0,  0,  0
 
-Palette34::
+StarPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1412,7 +1412,7 @@ Palette34::
 	rgb 31, 13,  0
 	rgb 11,  4,  0
 
-Palette35::
+PoisonPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1423,7 +1423,7 @@ Palette35::
 	rgb  8,  8, 24
 	rgb  0,  0, 10
 
-Palette36::
+HitPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1434,7 +1434,7 @@ Palette36::
 	rgb 31,  6,  7
 	rgb  0,  0,  0
 
-Palette37::
+DamagePal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1445,7 +1445,7 @@ Palette37::
 	rgb 15, 15, 15
 	rgb  0,  0,  0
 
-Palette38::
+ThunderPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_WHITE, SHADE_BLACK ; OBP0
 
@@ -1456,7 +1456,7 @@ Palette38::
 	rgb 31, 26,  0
 	rgb  0,  0,  0
 
-Palette39::
+LightningPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_WHITE, SHADE_BLACK ; OBP0
 
@@ -1467,7 +1467,7 @@ Palette39::
 	rgb 31, 26,  0
 	rgb  0,  0,  0
 
-Palette40::
+SparkPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1478,7 +1478,7 @@ Palette40::
 	rgb 31, 31,  0
 	rgb  0,  0,  0
 
-Palette41::
+BigLightningPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_WHITE, SHADE_BLACK ; OBP0
 
@@ -1489,7 +1489,7 @@ Palette41::
 	rgb 31, 26,  0
 	rgb  0,  0,  0
 
-Palette42::
+FlamePal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1500,7 +1500,7 @@ Palette42::
 	rgb 31, 17,  8
 	rgb 12,  0,  0
 
-Palette43::
+FireSpinPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1511,7 +1511,7 @@ Palette43::
 	rgb 31, 17,  8
 	rgb 12,  0,  0
 
-Palette44::
+FireBirdPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1522,7 +1522,7 @@ Palette44::
 	rgb 31, 17,  8
 	rgb 12,  0,  0
 
-Palette45::
+WaterDropPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -1533,7 +1533,7 @@ Palette45::
 	rgb  6, 14, 31
 	rgb 14,  0, 31
 
-Palette46::
+WaterGunPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1544,7 +1544,7 @@ Palette46::
 	rgb  0, 15, 31
 	rgb  0,  0, 21
 
-Palette47::
+WhirlpoolPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_DARK ; OBP0
 
@@ -1555,7 +1555,7 @@ Palette47::
 	rgb  0, 15, 31
 	rgb  0,  0,  9
 
-Palette48::
+HydroPumpPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1566,7 +1566,7 @@ Palette48::
 	rgb  0, 15, 31
 	rgb  0,  0, 21
 
-Palette49::
+SnowPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1577,7 +1577,7 @@ Palette49::
 	rgb  0, 15, 31
 	rgb  0, 15, 31
 
-Palette50::
+PsychicPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -1588,7 +1588,7 @@ Palette50::
 	rgb  5, 13, 27
 	rgb  0,  1,  8
 
-Palette51::
+LeerPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1599,7 +1599,7 @@ Palette51::
 	rgb 31,  0,  8
 	rgb  7,  0,  3
 
-Palette52::
+BeamPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1610,7 +1610,7 @@ Palette52::
 	rgb 28, 12, 12
 	rgb 12,  4,  4
 
-Palette53::
+HyperBeamPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1621,7 +1621,7 @@ Palette53::
 	rgb 28, 20, 12
 	rgb  0,  0,  0
 
-Palette54::
+RockThrowPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1632,7 +1632,7 @@ Palette54::
 	rgb 21, 13,  0
 	rgb  0,  0,  0
 
-Palette55::
+PunchPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -1643,7 +1643,7 @@ Palette55::
 	rgb 28,  0,  0
 	rgb  8,  0,  0
 
-Palette56::
+StretchKickPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1654,7 +1654,7 @@ Palette56::
 	rgb 28, 20, 12
 	rgb  0,  0,  0
 
-Palette57::
+SlashPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1665,7 +1665,7 @@ Palette57::
 	rgb 18, 19,  4
 	rgb  6,  7,  0
 
-Palette58::
+WhipPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -1676,7 +1676,7 @@ Palette58::
 	rgb 31, 13,  0
 	rgb  6,  7,  0
 
-Palette59::
+SonicboomPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1687,7 +1687,7 @@ Palette59::
 	rgb 18, 19,  4
 	rgb  6,  7,  0
 
-Palette60::
+DrillPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1698,7 +1698,7 @@ Palette60::
 	rgb 20, 20, 20
 	rgb  6,  7,  0
 
-Palette61::
+PotPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1709,7 +1709,7 @@ Palette61::
 	rgb 31, 20,  0
 	rgb  7,  1,  0
 
-Palette62::
+BonePal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1720,7 +1720,7 @@ Palette62::
 	rgb 20, 20, 16
 	rgb  6,  7,  0
 
-Palette63::
+PlanetPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1731,7 +1731,7 @@ Palette63::
 	rgb 26, 31, 18
 	rgb  6,  7,  0
 
-Palette64::
+NeedlesPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -1742,7 +1742,7 @@ Palette64::
 	rgb 16, 14, 22
 	rgb  0,  0, 13
 
-Palette65::
+WhiteGasPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1753,7 +1753,7 @@ Palette65::
 	rgb 25, 25, 25
 	rgb  1,  1,  1
 
-Palette66::
+PowderPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1764,7 +1764,7 @@ Palette66::
 	rgb 31, 31, 24
 	rgb 10,  9,  0
 
-Palette67::
+GooPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1775,7 +1775,7 @@ Palette67::
 	rgb 19, 23, 13
 	rgb  6,  7,  0
 
-Palette68::
+BubblePal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1786,7 +1786,7 @@ Palette68::
 	rgb 13, 16, 28
 	rgb  6,  7,  0
 
-Palette69::
+StringPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1797,7 +1797,7 @@ Palette69::
 	rgb 13, 16, 28
 	rgb  6,  7,  0
 
-Palette70::
+HeartPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1808,7 +1808,7 @@ Palette70::
 	rgb 31, 16, 27
 	rgb 14,  0,  5
 
-Palette71::
+LurePal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1819,7 +1819,7 @@ Palette71::
 	rgb 27, 16, 23
 	rgb  0,  0,  2
 
-Palette72::
+SkullPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -1830,7 +1830,7 @@ Palette72::
 	rgb 11, 10, 10
 	rgb  0,  0,  2
 
-Palette73::
+SmallStarPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1841,7 +1841,7 @@ Palette73::
 	rgb 31, 28, 18
 	rgb 13, 10,  0
 
-Palette74::
+NotePal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1852,7 +1852,7 @@ Palette74::
 	rgb 31, 31, 30
 	rgb  5,  2,  0
 
-Palette75::
+SoundPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1863,7 +1863,7 @@ Palette75::
 	rgb 26, 26,  4
 	rgb 16,  3,  0
 
-Palette76::
+PetalPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1874,7 +1874,7 @@ Palette76::
 	rgb 31, 22, 29
 	rgb 19,  8, 12
 
-Palette77::
+ProtectPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1885,7 +1885,7 @@ Palette77::
 	rgb 26, 26,  4
 	rgb  6,  7,  0
 
-Palette78::
+BarrierPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1896,7 +1896,7 @@ Palette78::
 	rgb 13, 23, 30
 	rgb  1, 11,  8
 
-Palette79::
+SpeedPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -1907,7 +1907,7 @@ Palette79::
 	rgb  8,  8, 12
 	rgb  0,  0,  5
 
-Palette80::
+WhirlwindPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1918,7 +1918,7 @@ Palette80::
 	rgb 18, 20, 31
 	rgb  8,  4, 10
 
-Palette81::
+CryPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_WHITE, SHADE_BLACK ; OBP0
 
@@ -1929,7 +1929,7 @@ Palette81::
 	rgb 18, 26, 30
 	rgb  0,  0,  3
 
-Palette82::
+QuestionMarkPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1940,7 +1940,7 @@ Palette82::
 	rgb 31,  4,  4
 	rgb 12,  2,  0
 
-Palette83::
+ExplosionPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1951,7 +1951,7 @@ Palette83::
 	rgb 23, 21, 22
 	rgb  3,  3,  3
 
-Palette84::
+HealPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1962,7 +1962,7 @@ Palette84::
 	rgb 26, 26,  4
 	rgb  6,  7,  0
 
-Palette85::
+DrainPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -1973,7 +1973,7 @@ Palette85::
 	rgb 17,  5,  5
 	rgb  6,  7,  0
 
-Palette86::
+DarkGasPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -1984,7 +1984,7 @@ Palette86::
 	rgb 14, 13, 13
 	rgb  3,  3,  3
 
-Palette87::
+SmallGlowPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -1995,7 +1995,7 @@ Palette87::
 	rgb 31, 24,  6
 	rgb 11,  3,  0
 
-Palette88::
+BallPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -2006,7 +2006,7 @@ Palette88::
 	rgb 20, 20, 16
 	rgb  6,  7,  0
 
-Palette89::
+CatPawPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -2017,7 +2017,7 @@ Palette89::
 	rgb 31, 17,  0
 	rgb  9,  3,  0
 
-Palette90::
+WavePal::
 	db 1
 	gbpal SHADE_DARK, SHADE_WHITE, SHADE_LIGHT, SHADE_BLACK ; OBP0
 
@@ -2028,7 +2028,7 @@ Palette90::
 	rgb 20, 20, 16
 	rgb  6,  7,  0
 
-Palette91::
+DuelCardPal::
 	db 1
 	gbpal SHADE_DARK, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -2039,7 +2039,7 @@ Palette91::
 	rgb 12, 12, 20
 	rgb  0,  0,  0
 
-Palette92::
+CoinPal::
 	db 1
 	gbpal SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP0
 
@@ -2050,7 +2050,7 @@ Palette92::
 	rgb 23, 10,  0
 	rgb  0,  0,  0
 
-Palette93::
+DuelResultPal::
 	db 1
 	gbpal SHADE_LIGHT, SHADE_DARK, SHADE_WHITE, SHADE_BLACK ; OBP0
 
@@ -2061,7 +2061,7 @@ Palette93::
 	rgb 31, 31,  0
 	rgb  0,  0,  0
 
-Palette94::
+TestBlackRedPal::
 	db 0
 	db 8
 
@@ -2105,7 +2105,7 @@ Palette94::
 	rgb 30,  0,  0
 	rgb 31,  0,  0
 
-Palette95::
+TestWhiteRedPal::
 	db 0
 	db 8
 
@@ -2149,7 +2149,7 @@ Palette95::
 	rgb 31,  1,  1
 	rgb 31,  0,  0
 
-Palette96::
+TestBlackGreenPal::
 	db 0
 	db 8
 
@@ -2193,7 +2193,7 @@ Palette96::
 	rgb  0, 30,  0
 	rgb  0, 31,  0
 
-Palette97::
+TestWhiteGreenPal::
 	db 0
 	db 8
 
@@ -2237,7 +2237,7 @@ Palette97::
 	rgb  1, 31,  1
 	rgb  0, 31,  0
 
-Palette98::
+TestColorWheelPal::
 	db 0
 	db 8
 
@@ -2281,7 +2281,7 @@ Palette98::
 	rgb 31,  0,  6
 	rgb  0,  0,  0
 
-Palette99::
+ColorTestPal::
 	db 0
 	db 8
 
@@ -2325,7 +2325,7 @@ Palette99::
 	rgb  0,  0,  0
 	rgb  0, 31,  0
 
-Palette101::
+ColosseumBoosterPal::
 	db 0
 	db 7
 
@@ -2364,7 +2364,7 @@ Palette101::
 	rgb 28, 12,  0
 	rgb 28, 28,  0
 
-Palette108::
+DefaultDmgPal::
 	db 1
 	gbpal SHADE_WHITE, SHADE_LIGHT, SHADE_DARK, SHADE_BLACK ; OBP0
 

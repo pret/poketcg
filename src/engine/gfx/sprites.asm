@@ -104,7 +104,7 @@ Sprites:
 	gfx_pointer DuelDrainGfx,        $02 ; SPRITE_DUEL_DRAIN
 	gfx_pointer DuelSmallGlowGfx,    $03 ; SPRITE_DUEL_SMALL_GLOW
 	gfx_pointer DuelBallGfx,         $08 ; SPRITE_DUEL_BALL
-	gfx_pointer DuelCatPawGfx,       $0f ; SPRITE_DUEL_CAT_POW
+	gfx_pointer DuelCatPawGfx,       $0f ; SPRITE_DUEL_CAT_PAW
 	gfx_pointer DuelWaveGfx,         $03 ; SPRITE_DUEL_WAVE
 	gfx_pointer DuelCardGfx,         $05 ; SPRITE_DUEL_CARD
 	gfx_pointer DuelCoinGfx,         $17 ; SPRITE_DUEL_COIN

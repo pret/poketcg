@@ -1,4 +1,4 @@
-LoadCollectedMedalTilemaps:
+DrawCollectedMedals:
 	xor a
 	ld [wd291], a
 	lb de,  0,  8
@@ -53,11 +53,13 @@ LoadCollectedMedalTilemaps:
 	xor a
 	ld [wWhichVRAMBank], a ; VRAM0
 	farcall LoadTilesetGfx
+
+	; load medal palettes
 	xor a
 	ld [wWhichOBP], a ; not used
 	ld a, 1 ; palette index
 	ld [wWhichBGPalIndex], a
-	ld a, PALETTE_118
+	ld a, PALETTE_MEDALS
 	farcall LoadBGPalette
 .done
 	ret

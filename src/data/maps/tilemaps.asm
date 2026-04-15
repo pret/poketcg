@@ -326,5 +326,5 @@ AnimData1::
 	frame_data 4, 16, 0, 0
 	frame_data 0, 0, 0, 0
 
-Palette110::
+ColorPalettePal::
 	db $00, $00

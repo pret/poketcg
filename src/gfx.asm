@@ -552,7 +552,7 @@ AnimData2::
 	frame_data 6, 16, 0, 0
 	frame_data 0, 0, 0, 0
 
-Palette109::
+JapaneseTitleScreenDmgPal::
 	db 1, %11100100
 	db 0
 
@@ -1074,7 +1074,7 @@ DuelSmallStarGfx::
 	dw $4
 	INCBIN "gfx/duel/anims/small_star.2bpp"
 
-Palette117::
+BoosterOAMPal::
 	db 0
 	db 1
 
@@ -1372,7 +1372,7 @@ SECTION "Anims 2", ROMX
 SECTION "Anims 3", ROMX
 	INCLUDE "data/duel/animations/anims3.asm"
 
-Palette31::
+GlowPal::
 	db 1, %11010010
 	db 1
 
@@ -1381,7 +1381,7 @@ Palette31::
 	rgb 31, 24,  6
 	rgb 11,  3,  0
 
-Palette119::
+PlayerPicPal::
 	db 0
 	db 1
 
