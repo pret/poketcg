@@ -5764,10 +5764,10 @@
 06:4437 OpenInPlayAreaScreen_HandleInput.opponent_area
 06:4446 OpenInPlayAreaScreen_HandleInput.bench_pokemon_exists_2
 06:445c OpenInPlayAreaScreen_HandleInput.on_right
-06:4462 OpenInPlayAreaScreen_HandleInput.next
+06:4462 OpenInPlayAreaScreen_HandleInput.dpad_processed
 06:446b OpenInPlayAreaScreen_HandleInput.check_button
 06:447d OpenInPlayAreaScreen_HandleInput.a_button
-06:448b OpenInPlayAreaScreen_HandleInput.return
+06:448b OpenInPlayAreaScreen_HandleInput.no_a_or_b_btn
 06:4494 OpenInPlayAreaScreen_HandleInput.skip_sfx
 06:44a0 OpenInPlayAreaScreen_HandleInput.draw_cursor
 06:44bf ZeroObjectPositionsAndToggleOAMCopy_Bank6
