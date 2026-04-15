@@ -1811,7 +1811,6 @@ wCurDeckCards:: ; cf17
 
 wCurDeckCardsEnd::
 
-
 ; list of all the different cards in a deck configuration
 wUniqueDeckCardList:: ; cf68
 

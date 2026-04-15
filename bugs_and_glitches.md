@@ -955,7 +955,6 @@ Characters that are assigned the green NPC palette have incorrect profile frame 
 
 ...
 
-
 .data_a94ae
 	db 4 ; size
 	db 0, 0, 13, %011 | OAM_PAL1 | OAM_XFLIP

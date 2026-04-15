@@ -1175,7 +1175,6 @@ IsCardInAnyDeck:
 	or a
 	ret
 
-
 ; zeroes a bytes starting from hl.
 ; this function is identical to 'ClearMemory_Bank5',
 ; 'ClearMemory_Bank6' and 'ClearMemory_Bank8'.

@@ -241,7 +241,6 @@ AnimationCoordinatesIndex:
 	db $09, $0a, $0b, $0c, $0d, $0e ; player
 	db $09, $0a, $0b, $0c, $0d, $0e ; opponent
 
-
 AnimationCoordinates:
 ; x coord, y coord, animation flags
 	db  88, 88, SPRITE_ANIM_FLAG_3
