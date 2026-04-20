@@ -303,7 +303,10 @@ PrintDuelMenuAndHandleInput:
 	ld hl, DuelMenuData
 	call PlaceTextItems
 .menu_items_printed
+	; bug, saving here can be problematic since in specific circumstances the duel may be over,
+	; and reloading it from here will lead to an invalid duel state
 	call SaveDuelData
+
 	ld a, [wDuelFinished]
 	or a
 	ret nz
