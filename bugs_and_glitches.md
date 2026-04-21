@@ -13,6 +13,7 @@ Fixes are written in the `diff` format.
 ## Contents
 - [Game engine](#game-engine)
   - [Pressing Down+A in Play Area screen ends a duel](#pressing-downa-in-play-area-screen-ends-a-duel)
+  - [Duel may be saved in an invalid state](#duel-may-be-saved-in-an-invalid-state)
   - [AI wrongfully adds score twice for attaching energy to Arena card](#ai-wrongfully-adds-score-twice-for-attaching-energy-to-arena-card)
   - [Cards in AI decks that are not supposed to be placed as Prize cards are ignored](#cards-in-ai-decks-that-are-not-supposed-to-be-placed-as-prize-cards-are-ignored)
   - [AI score modifiers for retreating are never used](#ai-score-modifiers-for-retreating-are-never-used)
@@ -63,7 +64,7 @@ Fixes are written in the `diff` format.
 
 ### Pressing Down+A in Play Area screen ends a duel
 
-The infamous "Duel Escape" glitch allows the player to exit any duel currently being played, and retains the same duel result as the last result the player obtained (winning the duel by default if no duel has been played up to that point). The reason for this happening are technical (you can read more about it in [this Pastebin](https://pastebin.com/QnYGzNey) by entrpntr), but it basically boils down to the game jumping to an out-of-bounds address in a table because it doesn't expect a D-pad input and an A press on the same frame when viewing the Play Area screen.
+The infamous "Duel Escape" glitch allows the player to exit any duel currently being played, and retains the same duel result as the last result the player obtained (winning the duel by default if no duel has been played up to that point). The reason for this happening is technical (you can read more about it in [this Pastebin](https://pastebin.com/QnYGzNey) by entrpntr), but it basically boils down to the game jumping to an out-of-bounds address in a table because it doesn't expect a D-pad input and an A press on the same frame when viewing the Play Area screen.
 
 The following is a possible fix to this bug, which makes the game ignore the A press altogether when this situation occurs.
 
@@ -87,6 +88,31 @@ OpenInPlayAreaScreen_HandleInput:
 	ldh a, [hKeysPressed]
 	and PAD_A | PAD_B
 	jr z, .no_a_or_b_btn
+```
+
+### Duel may be saved in an invalid state
+
+Under specific circumstances, the player may end the duel in the middle of a turn before attacking (e.g. using Zapdos' Peal of Thunder and KO'ing the opponent's last Pokémon). However, when redrawing the main duel interface the game always saves the current game state, even if the duel is finished. This makes it so that if a reset is done at this point, the duel is resumed with an invalid state and all manner of [glitched mishaps occur](https://glitchcity.wiki/wiki/Zapdos_LV68_glitch).
+
+**Fix:** Edit `PrintDuelMenuAndHandleInput` in [src/engine/duel/core.asm](https://github.com/pret/poketcg/blob/master/src/engine/duel/core.asm):
+```diff
+PrintDuelMenuAndHandleInput:
+	call DrawWideTextBox
+	ld hl, DuelMenuData
+	call PlaceTextItems
+.menu_items_printed
+-	; bug, saving here can be problematic since in specific circumstances the duel may be over,
+-	; and reloading it from here will lead to an invalid duel state
+-	call SaveDuelData
+
+	ld a, [wDuelFinished]
+	or a
+	ret nz
++
++	call SaveDuelData
++
+	ld a, [wCurrentDuelMenuItem]
+	call SetMenuItem
 ```
 
 ### AI wrongfully adds score twice for attaching energy to Arena card
