@@ -175,13 +175,13 @@ _RequestToPrintCard:
 	call WriteByteToBGMap0
 	ld a, [wLoadedCard1Level]
 	lb bc, 12, 66
-	bank1call WriteTwoDigitNumberInTxSymbolFormat
+	bank1call WriteTwoDigitNumberInTxSymbol_PadSpace
 	ld a, SYM_HP
 	lb bc, 15, 66
 	call WriteByteToBGMap0
 	ld a, [wLoadedCard1HP]
 	inc b
-	bank1call WriteTwoByteNumberInTxSymbolFormat
+	bank1call WriteOneByteNumberInTxSymbol_PadSpace
 .skip_pokemon_data
 	ret
 
@@ -242,7 +242,7 @@ DrawBottomCardInfoInSRAMGfxBuffer0:
 	call WriteByteToBGMap0
 	inc b
 	ld a, [wLoadedCard1PokedexNumber]
-	bank1call WriteTwoByteNumberInTxSymbolFormat
+	bank1call WriteOneByteNumberInTxSymbol_PadSpace
 	ret
 
 .not_pkmn_card
@@ -670,7 +670,7 @@ LoadCardInfoForPrinter:
 	call WriteByteToBGMap0
 	inc b
 	ld a, [wPrinterCardCount]
-	bank1call WriteTwoDigitNumberInTxSymbolFormat
+	bank1call WriteTwoDigitNumberInTxSymbol_PadSpace
 	pop hl
 	ret
 
@@ -857,7 +857,7 @@ _PrintCardList:
 	ld d, 14
 	call InitTextPrinting
 	pop hl
-	call TwoByteNumberToTxSymbol_TrimLeadingZeros
+	call TwoByteNumberToTxSymbol_PadSpace
 	ld hl, wStringBuffer
 	call ProcessText
 	call AddToPrinterGfxBuffer

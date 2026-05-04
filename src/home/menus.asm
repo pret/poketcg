@@ -412,7 +412,7 @@ Func_2827::
 
 ; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
 ; if the first digit is a 0, delete it and shift the number one tile to the left
-OneByteNumberToTxSymbol_TrimLeadingZerosAndAlign::
+OneByteNumberToTxSymbol_TrimLeadingZeroAndAlign::
 	call OneByteNumberToTxSymbol
 	ld a, [hli]
 	cp SYM_0
@@ -557,7 +557,7 @@ CardListMenuFunction::
 	ld c, a
 	ldh a, [hCurMenuItem]
 	inc a
-	call OneByteNumberToTxSymbol_TrimLeadingZeros
+	call OneByteNumberToTxSymbol_PadSpace
 	ld b, 13
 	ld a, 2
 	call CopyDataToBGMap0
@@ -565,7 +565,7 @@ CardListMenuFunction::
 	ld a, SYM_SLASH
 	call WriteByteToBGMap0
 	ld a, [wNumListItems]
-	call OneByteNumberToTxSymbol_TrimLeadingZeros
+	call OneByteNumberToTxSymbol_PadSpace
 	ld b, 16
 	ld a, 2
 	call CopyDataToBGMap0
@@ -595,7 +595,7 @@ CardListMenuFunction::
 
 ; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
 ; replace leading zeros with SYM_SPACE
-OneByteNumberToTxSymbol_TrimLeadingZeros::
+OneByteNumberToTxSymbol_PadSpace::
 	call OneByteNumberToTxSymbol
 	ld a, [hl]
 	cp SYM_0

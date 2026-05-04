@@ -99,9 +99,9 @@ InitSaveData:
 
 	ld hl, sCurrentDuel
 	xor a
-	ld [hli], a
+	ld [hli], a ; sCurrentDuelValid
 	ld [hli], a ; sCurrentDuelChecksum
-	ld [hl], a
+	ld [hl], a  ; sCurrentDuelChecksum
 
 ; clears Card Pop! names
 	ld hl, sCardPopNameList

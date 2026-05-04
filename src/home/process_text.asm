@@ -550,9 +550,9 @@ CopyTextData::
 	or a
 	ret
 
-; convert the number at hl to TX_SYMBOL text format and write it to wStringBuffer
+; convert number in hl to TX_SYMBOL format and write it to wStringBuffer
 ; replace leading zeros with SYM_SPACE
-TwoByteNumberToTxSymbol_TrimLeadingZeros::
+TwoByteNumberToTxSymbol_PadSpace::
 	push de
 	push bc
 	ld de, wStringBuffer

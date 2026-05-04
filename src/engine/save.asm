@@ -19,7 +19,7 @@ InvalidateSaveData:
 	call BankswitchSRAM
 	call DisableSRAM
 	call EnableSRAM
-	bank1call DiscardSavedDuelData
+	bank1call ClearSavedDuel
 	call DisableSRAM
 	pop hl
 	ret
@@ -359,7 +359,7 @@ LoadBackupSaveData:
 	push hl
 	push de
 	call EnableSRAM
-	bank1call DiscardSavedDuelData
+	bank1call ClearSavedDuel
 	call DisableSRAM
 	call LoadBackupGeneralSaveData
 	call LoadBackupCardAndDeckSaveData

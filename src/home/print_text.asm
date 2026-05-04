@@ -394,15 +394,15 @@ GetTextOffsetFromTextID::
 	ret
 
 ; if [wFontWidth] == HALF_WIDTH:
-;   convert the number at hl to text (ascii) format and write it to wStringBuffer
+;   convert number in hl to text (ascii) format and write it to wStringBuffer
 ;   return c = 4 - leading_zeros
 ; if [wFontWidth] == FULL_WIDTH:
-;   convert the number at hl to TX_SYMBOL text format and write it to wStringBuffer
+;   convert number in hl to TX_SYMBOL format and write it to wStringBuffer
 ;   replace leading zeros with SYM_SPACE
 TwoByteNumberToText_CountLeadingZeros::
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
-	jp z, TwoByteNumberToTxSymbol_TrimLeadingZeros
+	jp z, TwoByteNumberToTxSymbol_PadSpace
 	ld de, wStringBuffer
 	push de
 	call TwoByteNumberToText

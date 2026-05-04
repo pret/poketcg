@@ -307,6 +307,23 @@ sChallengeMachineEnd:: ; ba69
 sCardPopNameList:: ; bb00
 	ds CARDPOP_NAME_LIST_SIZE
 
+; saved data of the current duel, including 4-byte header
+; see SaveDuelDataToDE
+sCurrentDuel:: ; bc00
+
+; set to TRUE when saving duel data
+sCurrentDuelValid:: ; bc00
+	ds $1
+
+sCurrentDuelChecksum:: ; bc01
+	ds $2
+
+sCurrentDuelType:: ; bc03
+	ds $1
+
+sCurrentDuelData:: ; bc04
+	ds SAVE_DUEL_DATA_SIZE
+
 SECTION "SRAM1", SRAM
 
 UNION
@@ -368,13 +385,22 @@ sAlbumProgress:: ; b8fe
 
 	ds $300
 
-; saved data of the current duel, including a two-byte checksum
-; see SaveDuelDataToDE
-sCurrentDuel:: ; bc00
-	ds $1
-sCurrentDuelChecksum:: ; bc01
-	ds $2
-sCurrentDuelData:: ; bc04
-	ds $33b
+; see sCurrentDuel
+sBackupCurrentDuel:: ; bc00
+	ds SAVE_DUEL_SIZE
 
 SECTION "SRAM3", SRAM
+
+; temp buffers for duel snapshot data
+; see SaveDuelStateToSRAM
+sDuelBuffer0:: ; a000
+	ds $400
+
+sDuelBuffer1:: ; a400
+	ds $400
+
+sDuelBuffer2:: ; a800
+	ds $400
+
+sDuelBuffer3:: ; ac00
+	ds $400
