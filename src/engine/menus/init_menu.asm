@@ -19,7 +19,7 @@ InitMenuScreen:
 .skip_clear_scroll
 	call SetDefaultPalettes
 	call ZeroObjectPositions
-	ld a, $1
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	ret
 

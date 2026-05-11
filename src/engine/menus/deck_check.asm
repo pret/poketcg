@@ -62,14 +62,14 @@ HandleCheckMenuInput:
 	jr z, .no_input
 	and PAD_A
 	jr nz, .a_press
-	ld a, $ff ; cancel
+	ld a, MENU_CANCEL
 	call PlaySFXConfirmOrCancel
 	scf
 	ret
 
 .a_press
 	call DisplayCheckMenuCursor
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	scf
 	ret
@@ -84,11 +84,11 @@ HandleCheckMenuInput:
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and %00001111
-	ret nz  ; only update cursor if blink's lower nibble is 0
+	and CURSOR_BLINK_PERIOD_MASK
+	ret nz
 
 	ld a, SYM_CURSOR_R ; cursor byte
-	bit 4, [hl] ; only draw cursor if blink counter's fourth bit is not set
+	bit B_CURSOR_BLINK_PERIOD, [hl]
 	jr z, DrawCheckMenuCursor
 
 ; draws in the cursor position
@@ -124,19 +124,20 @@ DisplayCheckMenuCursor:
 	ld a, SYM_CURSOR_R
 	jr DrawCheckMenuCursor
 
-; plays sound depending on value in a
+; play cancel sound if a = MENU_CANCEL (-1), confirm sound otherwise
+; preserves all registers
 ; input:
-; a  = $ff: play cancel sound
-; a != $ff: play confirm sound
+; a = MENU_CANCEL (usually following B press) or MENU_CONFIRM (usually following A press)
 PlaySFXConfirmOrCancel:
 	push af
 	inc a
-	jr z, .asm_9103
+	jr z, .cancel_sfx
+; confirm
 	ld a, SFX_CONFIRM
-	jr .asm_9105
-.asm_9103
+	jr .play_sfx
+.cancel_sfx
 	ld a, SFX_CANCEL
-.asm_9105
+.play_sfx
 	call PlaySFX
 	pop af
 	ret

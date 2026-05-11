@@ -1,3 +1,12 @@
+; for menu items, PlaySFXConfirmOrCancel, etc.
+DEF MENU_CANCEL  EQU -1
+DEF MENU_CONFIRM EQU  1 ; != -1, but uses 1 most of the time
+
+; cursor blink
+DEF CURSOR_BLINK_PERIOD      EQU 16 ; every 16 frames
+DEF CURSOR_BLINK_PERIOD_MASK EQU CURSOR_BLINK_PERIOD - 1 ; $0f
+DEF B_CURSOR_BLINK_PERIOD    EQU 4  ; log2(CURSOR_BLINK_PERIOD)
+
 ; filter types for CardTypeFilters
 ; used to categorise the different cards
 ; i.e. in the deck building screen

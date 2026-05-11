@@ -13,7 +13,7 @@ _OpenDuelCheckMenu::
 	call DoFrame
 	call HandleCheckMenuInput
 	jr nc, .loop
-	cp $ff
+	cp MENU_CANCEL
 	ret z ; B pressed
 
 ; A was pressed
@@ -80,7 +80,7 @@ DuelCheckMenu_YourPlayArea:
 	jr nc, .loop
 
 	call DrawYourOrOppPlayArea_EraseArrows
-	cp $ff
+	cp MENU_CANCEL
 	ret z
 
 	ld a, [wCheckMenuCursorYPosition]
@@ -214,7 +214,7 @@ DuelCheckMenu_OppPlayArea:
 	call HandleCheckMenuInput_YourOrOppPlayArea
 	jr nc, .loop
 	call DrawYourOrOppPlayArea_EraseArrows
-	cp $ff
+	cp MENU_CANCEL
 	ret z ; B was pressed
 
 ; A was pressed
@@ -402,7 +402,7 @@ _DrawYourOrOppPlayAreaScreen::
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
 
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 
 	call DoFrame
@@ -507,7 +507,7 @@ DrawInPlayAreaScreen:
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
 
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call EmptyScreen
@@ -566,7 +566,7 @@ _DrawPlayersPrizeAndBenchCards::
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call EmptyScreen
@@ -1305,14 +1305,14 @@ HandleCheckMenuInput_YourOrOppPlayArea:
 	jr nz, .a_pressed
 
 ; B pressed
-	ld a, $ff ; cancel
+	ld a, MENU_CANCEL
 	call PlaySFXConfirmOrCancel
 	scf
 	ret
 
 .a_pressed
 	call DisplayCheckMenuCursor_YourOrOppPlayArea
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	scf
 	ret
@@ -1327,11 +1327,11 @@ HandleCheckMenuInput_YourOrOppPlayArea:
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and %00001111
-	ret nz ; only update cursor if blink's lower nibble is 0
+	and CURSOR_BLINK_PERIOD_MASK
+	ret nz
 
 	ld a, SYM_CURSOR_R ; cursor byte
-	bit 4, [hl] ; only draw cursor if blink counter's fourth bit is not set
+	bit B_CURSOR_BLINK_PERIOD, [hl]
 	jr z, DrawCheckMenuCursor_YourOrOppPlayArea
 ; fallthrough
 
@@ -1409,7 +1409,7 @@ _HandlePeekSelection::
 	call DoFrame
 	call HandleMenuInput
 	jr nc, .loop_input_1
-	cp -1
+	cp MENU_CANCEL
 	jr z, .loop_input_1 ; can't use B btn
 
 	call EraseCursor
@@ -1447,7 +1447,7 @@ _HandlePeekSelection::
 	ld [hl], d
 
 .loop_input_2
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call YourOrOppPlayAreaScreen_HandleInput
@@ -1545,7 +1545,7 @@ ENDR
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call Set_OBJ_8x16
 	bank1call OpenCardPage_FromHand
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	pop af
 
@@ -1676,7 +1676,7 @@ _DrawAIPeekScreen::
 .got_cursor_position
 	call YourOrOppPlayAreaScreen_HandleInput.draw_cursor
 
-	ld a, $1
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	ld a, [wIsSwapTurnPending]
 	or a
@@ -1839,14 +1839,14 @@ YourOrOppPlayAreaScreen_HandleInput:
 	and PAD_A
 	jr nz, .a_button
 
-	ld a, -1 ; cancel
+	ld a, MENU_CANCEL
 	call PlaySFXConfirmOrCancel
 	scf
 	ret
 
 .a_button
 	call .draw_cursor
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	ld a, [wYourOrOppPlayAreaCurPosition]
 	scf
@@ -1861,9 +1861,10 @@ YourOrOppPlayAreaScreen_HandleInput:
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and (1 << 4) - 1
+	and CURSOR_BLINK_PERIOD_MASK
 	ret nz
-	bit 4, [hl]
+
+	bit B_CURSOR_BLINK_PERIOD, [hl]
 	jr nz, ZeroObjectPositionsWithCopyToggleOn
 
 .draw_cursor
@@ -1892,7 +1893,7 @@ YourOrOppPlayAreaScreen_HandleInput:
 ZeroObjectPositionsWithCopyToggleOn:
 	call ZeroObjectPositions
 
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
@@ -1943,7 +1944,7 @@ _SelectPrizeCards::
 	inc hl
 	ld [hl], d
 .loop_handle_input
-	ld a, $1
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call YourOrOppPlayAreaScreen_HandleInput

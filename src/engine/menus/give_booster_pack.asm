@@ -53,7 +53,7 @@ GiveBoosterPack:
 	call DisableLCD
 	call SetDefaultPalettes
 	call ZeroObjectPositions
-	ld a, $1
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
 	ld [wTextBoxFrameType], a

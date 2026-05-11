@@ -25,7 +25,7 @@ OpenInPlayAreaScreen::
 	ld a, [wInPlayAreaCurPosition]
 	call .print_associated_text
 .on_frame
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 
@@ -523,14 +523,14 @@ OpenInPlayAreaScreen_HandleInput:
 	jr nz, .a_button
 
 	; pressed b button
-	ld a, -1
+	ld a, MENU_CANCEL
 	farcall PlaySFXConfirmOrCancel
 	scf
 	ret
 
 .a_button
 	call .draw_cursor
-	ld a, $01
+	ld a, MENU_CONFIRM
 	farcall PlaySFXConfirmOrCancel
 	ld a, [wInPlayAreaCurPosition]
 	scf
@@ -545,10 +545,10 @@ OpenInPlayAreaScreen_HandleInput:
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and $10 - 1
+	and CURSOR_BLINK_PERIOD_MASK
 	ret nz
 
-	bit 4, [hl] ; = and $10
+	bit B_CURSOR_BLINK_PERIOD, [hl]
 	jr nz, ZeroObjectPositionsAndToggleOAMCopy_Bank6
 
 .draw_cursor
@@ -575,6 +575,6 @@ OpenInPlayAreaScreen_HandleInput:
 
 ZeroObjectPositionsAndToggleOAMCopy_Bank6:
 	call ZeroObjectPositions
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	ret

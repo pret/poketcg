@@ -49,7 +49,7 @@ Func_18661: ; unreferenced
 	jr nz, .a_button
 
 ; b button
-	ld a, -1
+	ld a, MENU_CANCEL
 	; bug, the following routine is in another bank,
 	; should use PlaySFXConfirmOrCancel_Bank6 instead
 	call PlaySFXConfirmOrCancel
@@ -59,7 +59,7 @@ Func_18661: ; unreferenced
 ; a button
 .a_button
 	call .draw_cursor
-	ld a, 1
+	ld a, MENU_CONFIRM
 	; bug, the following routine is in another bank,
 	; should use PlaySFXConfirmOrCancel_Bank6 instead
 	call PlaySFXConfirmOrCancel
@@ -75,10 +75,11 @@ Func_18661: ; unreferenced
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and %00001111
+	and CURSOR_BLINK_PERIOD_MASK
 	ret nz
+
 	ld a, SYM_CURSOR_R
-	bit B_PAD_RIGHT, [hl]
+	bit B_CURSOR_BLINK_PERIOD, [hl]
 	jr z, .draw_tile
 .draw_blank_cursor
 	ld a, SYM_SPACE

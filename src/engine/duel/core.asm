@@ -959,7 +959,7 @@ HandleEnergyDiscardMenuInput:
 	call DoFrame
 	call HandleCardListInput
 	jr nc, .wait_input
-	cp $ff ; B pressed?
+	cp MENU_CANCEL ; B pressed?
 	jr z, .return_carry
 	call GetCardInDuelTempList_OnlyDeckIndex
 	or a
@@ -1018,7 +1018,7 @@ DuelMenu_Attack:
 	jr nz, .display_selected_attack_info
 	call HandleMenuInput
 	jr nc, .wait_for_input
-	cp -1 ; was B pressed?
+	cp MENU_CANCEL ; was B pressed?
 	jp z, PrintDuelMenuAndHandleInput
 	ld [wSelectedDuelSubMenuItem], a
 	call CheckIfEnoughEnergiesToAttack
@@ -3363,7 +3363,7 @@ CardListItemSelectionMenu:
 	call DoFrame
 	call HandleMenuInput
 	jr nc, .wait_a_or_b
-	cp -1
+	cp MENU_CANCEL
 	jr z, .b_pressed
 	; A pressed
 	or a
@@ -3408,7 +3408,7 @@ CardListFunction:
 	jr nz, .reload_card_image ; jump if the PAD_CTRL_PAD key was released this frame
 	ret
 .exit
-	ld a, $ff
+	ld a, MENU_CANCEL
 	ldh [hCurMenuItem], a
 .action_button
 	scf
@@ -3873,7 +3873,7 @@ CardPageSwitch_TrainerEnd:
 
 ZeroObjectPositionsAndToggleOAMCopy:
 	call ZeroObjectPositions
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
@@ -3907,7 +3907,7 @@ PlaceCardImageOAM:
 	ld d, a
 	dec c
 	jr nz, .next_column
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
@@ -4998,7 +4998,7 @@ DisplayPlayAreaScreen:
 	add c
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ldh a, [hCurMenuItem]
-	cp $ff
+	cp MENU_CANCEL
 	jr z, .asm_60b5
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD_HP
@@ -5043,7 +5043,7 @@ PlayAreaScreenMenuFunction:
 	ret z
 	bit B_PAD_B, a
 	jr z, .start_or_a
-	ld a, $ff
+	ld a, MENU_CANCEL
 	ldh [hCurMenuItem], a
 .start_or_a
 	scf
@@ -5632,7 +5632,7 @@ DisplayPlayAreaScreenToUsePkmnPower:
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld [wHUDEnergyAndHPBarsX], a
 	jr nc, .asm_6447
-	cp $ff
+	cp MENU_CANCEL
 	jr z, .asm_649b
 	ld [wSelectedDuelSubMenuItem], a
 	ldh a, [hKeysPressed]

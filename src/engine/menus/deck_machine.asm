@@ -66,7 +66,7 @@ HandleDeckMissingCardsList:
 	jr z, .loop_input
 
 .open_card_pge
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	ld a, [wCardListCursorPos]
 	ld [wced7], a
@@ -83,7 +83,7 @@ HandleDeckMissingCardsList:
 
 .selection_made
 	ld a, [hffb3]
-	cp $ff
+	cp MENU_CANCEL
 	ret z
 	jr .open_card_pge
 
@@ -169,7 +169,7 @@ GiftCenter_SendCard:
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
 	call EmptyScreen
-	ld a, $1
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
 	bank1call SetDefaultConsolePalettes
@@ -266,7 +266,7 @@ GiftCenter_ReceiveCard:
 	and PAD_START
 	jr z, .asm_afe2
 .asm_aff5
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
@@ -299,7 +299,7 @@ GiftCenter_ReceiveCard:
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
 	ld a, [hffb3]
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .asm_aff5
 	ld hl, wNameBuffer
 	ld de, wDefaultText
@@ -528,7 +528,7 @@ HandleDeckSaveMachineMenu:
 	call InitDeckMachineDrawingParams
 	call HandleDeckMachineSelection
 	jr c, .wait_input
-	cp $ff
+	cp MENU_CANCEL
 	ret z ; operation cancelled
 	; get the index of selected deck
 	ld b, a
@@ -544,7 +544,7 @@ HandleDeckSaveMachineMenu:
 	call DoFrame
 	call HandleCheckMenuInput
 	jp nc, .wait_input_submenu
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .submenu_option_selected
 	; return from submenu
 	ld a, [wTempDeckMachineCursorPos]
@@ -696,7 +696,7 @@ HandleDeckMachineSelection:
 
 ; show deck confirmation screen with deck cards
 ; and return carry set
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	call OpenDeckConfirmationMenu
 	ld a, [wTempCardListVisibleOffset]
@@ -795,7 +795,7 @@ ClearScreenAndDrawDeckMachineScreen:
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
 	call EmptyScreen
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
@@ -1152,7 +1152,7 @@ SaveDeckInDeckSaveMachine:
 	call HandleMenuInput
 	jp nc, .wait_submenu_input ; can be jr
 	ldh a, [hCurMenuItem]
-	cp $ff
+	cp MENU_CANCEL
 	ret z ; operation cancelled
 	ld [wCurDeck], a
 	call CheckIfCurDeckIsValid
@@ -1453,7 +1453,7 @@ HandleDismantleDeckToMakeSpace:
 	call HandleMenuInput
 	jp nc, .loop_input ; can be jr
 	ldh a, [hCurMenuItem]
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .selected_deck
 	; operation was cancelled
 	call SafelySwitchToTempSRAMBank
@@ -1836,7 +1836,7 @@ PrinterMenu_DeckConfiguration:
 .loop_input
 	call HandleDeckMachineSelection
 	jr c, .start_selection
-	cp $ff
+	cp MENU_CANCEL
 	ret z
 
 	ld b, a
@@ -1948,7 +1948,7 @@ HandleAutoDeckMenu:
 	jr z, .wait_input ; invalid deck
 
 	; show confirmation list
-	ld a, $1
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	call SafelySwitchToSRAM1
 	call OpenDeckConfirmationMenu
@@ -1966,7 +1966,7 @@ HandleAutoDeckMenu:
 	ld a, [wCurMenuItem]
 	ld [wTempDeckMachineCursorPos], a
 	ldh a, [hCurMenuItem]
-	cp $ff
+	cp MENU_CANCEL
 	jp z, .exit ; operation cancelled
 	ld [wSelectedDeckMachineEntry], a
 	call ResetCheckMenuCursorPositionAndBlink
@@ -1979,7 +1979,7 @@ HandleAutoDeckMenu:
 	call DoFrame
 	call HandleCheckMenuInput_YourOrOppPlayArea
 	jp nc, .wait_submenu_input
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .submenu_option_selected
 	ld a, [wTempDeckMachineCursorPos]
 	jp .please_select_deck
@@ -2055,7 +2055,7 @@ HandleAutoDeckMenu:
 	jp z, .wait_input ; invalid deck
 
 	; show confirmation list
-	ld a, $1
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	call SafelySwitchToSRAM1
 	xor a
@@ -2102,7 +2102,7 @@ HandleAutoDeckMenu:
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
 	call EmptyScreen
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
@@ -2175,7 +2175,7 @@ GiftCenter_SendDeck:
 .asm_bc32
 	call HandleDeckMachineSelection
 	jr c, .asm_bc1a
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .asm_bc3f
 	ld a, $01
 	or a
@@ -2235,7 +2235,7 @@ GiftCenter_ReceiveDeck:
 	call InitDeckMachineDrawingParams
 	call HandleDeckMachineSelection
 	jr c, .asm_bc90
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .asm_bcb5
 	ld a, $01
 	or a
