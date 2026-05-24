@@ -39,7 +39,7 @@ PrinterMenu_PokemonCards:
 	call HandleCardSelectionInput
 	jr nc, .loop_frame_1
 	ld a, [hffb3]
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .asm_abd7
 	ret
 
@@ -78,7 +78,7 @@ PrinterMenu_PokemonCards:
 	and PAD_START
 	jr z, .loop_frame_2
 ; start btn
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	ld a, [wCardListNumCursorPositions]
 	ld [wTempCardListNumCursorPositions], a
@@ -118,7 +118,7 @@ PrinterMenu_PokemonCards:
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
 	ld a, [hffb3]
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .asm_ac92
 
 	ld hl, FiltersCardSelectionParams
@@ -250,7 +250,7 @@ HandlePrinterMenu:
 	call HandleMenuInput
 	jr nc, .loop_input
 	ldh a, [hCurMenuItem]
-	cp $ff
+	cp MENU_CANCEL
 	call z, PrinterMenu_QuitPrint
 	ld [wSelectedPrinterMenuItem], a
 	ld hl, PrinterMenuFunctionTable
@@ -292,7 +292,7 @@ PrinterMenu_PrintQuality:
 	call HandleCardSelectionInput
 	jr nc, .loop_frame
 	ld a, [hffb3]
-	cp $ff
+	cp MENU_CANCEL
 	jr z, .asm_ade2
 	call EnableSRAM
 	ld [sPrinterContrastLevel], a

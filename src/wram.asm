@@ -265,6 +265,7 @@ wPlayTimeCounterEnable:: ; cac4
 wPlayTimeCounter:: ; cac5
 	ds $5
 
+wRNGVars::
 wRNG1:: ; caca
 	ds $1
 
@@ -538,6 +539,7 @@ wEnergyDiscardPlayAreaLocation:: ; cbe0
 wOpponentTurnEnded:: ; cbe1
 	ds $1
 
+wOppRNGVars::
 wOppRNG1:: ; cbe2
 	ds $1
 
@@ -621,6 +623,8 @@ wPokemonLengthPrintOffset:: ; cc03
 ; see ATTACKPAGE_* constants
 wAttackPageNumber:: ; cc04
 	ds $1
+
+wDuelStates:: ; cc05
 
 ; the value of hWhoseTurn gets loaded here at the beginning of each duelist's turn.
 ; more reliable than hWhoseTurn, as hWhoseTurn may change temporarily in order to handle status
@@ -710,6 +714,8 @@ wNPCDuelDeckID:: ; cc19
 ; song played during a duel
 wDuelTheme:: ; cc1a
 	ds $1
+
+wDuelStatesEnd::
 
 ; holds the energies attached to a given pokemon card. 1 byte for each of the
 ; 8 energy types (includes the unused one that shares byte with the colorless energy)
@@ -1613,8 +1619,16 @@ wce98:: ; ce98
 wPrinterContrastLevel:: ; ce99
 	ds $1
 
+UNION
+
+wPrinterStartCardID:: ; ce9a
+	ds $1
+
+NEXTU
 wPrizeCardSelectionFrameCounter:: ; ce9a
 	ds $1
+
+ENDU
 
 ; related to printer serial stuff
 wPrinterNumberLineFeeds:: ; ce9b

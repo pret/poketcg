@@ -1,27 +1,27 @@
 ; save duel state to SRAM
 ; called between each two-player turn, just after player draws card (ROM bank 1 loaded)
 SaveDuelStateToSRAM::
-	ld a, $2
+	ld a, BANK(sBackupCurrentDuel)
 	call BankswitchSRAM
-	; save duel data to sCurrentDuel
+; save duel data to sBackupCurrentDuel
 	call SaveDuelData
-	xor a
+	xor a ; BANK("SRAM0")
 	call BankswitchSRAM
+; get hl = sDuelBufferN for N = [s0a008] & $3
 	call EnableSRAM
 	ld hl, s0a008
 	ld a, [hl]
 	inc [hl]
 	call DisableSRAM
-	; select hl = SRAM3:(a000 + $400 * [s0a008] & $3)
-	; save wDuelTurns, non-turn holder's arena card ID, turn holder's arena card ID
 	and $3
-	add HIGH($a000) / 4
-	ld l, $0
+	add HIGH(sDuelBuffer0) / 4
+	ld l, 0
 	ld h, a
 	add hl, hl
 	add hl, hl
-	ld a, $3
+	ld a, BANK(sDuelBuffer0)
 	call BankswitchSRAM
+; save wDuelTurns, non-turn holder's arena card ID, turn holder's arena card ID
 	push hl
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -44,9 +44,9 @@ SaveDuelStateToSRAM::
 	ld [hli], a
 	ld a, [wTempTurnDuelistCardID]
 	ld [hli], a
-	; save duel data to SRAM3:(a000 + $400 * [s0a008] & $3) + $0010
 	pop hl
-	ld de, $0010
+; save duel data to sDuelBufferN + $10
+	ld de, $10
 	add hl, de
 	ld e, l
 	ld d, h
@@ -428,10 +428,9 @@ CreateDeckCardList::
 	scf
 	ret
 
-; fill wDuelTempList with the turn holder's energy cards
-; in the arena or in a bench slot (their 0-59 deck indexes).
-; if a == 0: search in CARD_LOCATION_ARENA
-; if a != 0: search in CARD_LOCATION_BENCH_[A]
+; fill wDuelTempList with the turn holder's energy cards (their 0-59 deck indexes)
+; at PLAY_AREA_* location in a (then converted to CARD_LOCATION_*)
+; and return count in a and b
 ; return carry if no energy cards were found
 CreateArenaOrBenchEnergyCardList::
 	or CARD_LOCATION_PLAY_AREA

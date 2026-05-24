@@ -603,7 +603,7 @@ HandleCardAlbumCardPage:
 	jp .handle_input
 
 .exit
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
@@ -637,7 +637,7 @@ CardAlbum:
 	call HandleMenuInput
 	jp nc, .loop_input_1 ; can be jr
 	ldh a, [hCurMenuItem]
-	cp $ff
+	cp MENU_CANCEL
 	ret z
 
 	; ignore input if this Card Set is unavailable
@@ -666,7 +666,7 @@ CardAlbum:
 	ldh a, [hKeysPressed]
 	and PAD_B
 	jr z, .loop_input_2
-	ld a, $ff
+	ld a, MENU_CANCEL
 	call PlaySFXConfirmOrCancel
 	ldh a, [hCurMenuItem]
 	jp .booster_pack_menu
@@ -701,7 +701,7 @@ CardAlbum:
 	and PAD_START
 	jr z, .loop_input_3
 .open_card_page
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	ld a, [wCardListNumCursorPositions]
 	ld [wTempCardListNumCursorPositions], a
@@ -743,7 +743,7 @@ CardAlbum:
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
 	ld a, [hffb3]
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .open_card_page
 	ldh a, [hCurMenuItem]
 	jp .booster_pack_menu
@@ -788,7 +788,7 @@ CardAlbum:
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
 	call EmptyScreen
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call LoadCursorTile
 	call LoadSymbolsFont
@@ -893,7 +893,7 @@ CardAlbum:
 	ld [hffb4], a
 	call Set_OBJ_8x8
 	call ZeroObjectPositions
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 
 	call LoadCursorTile

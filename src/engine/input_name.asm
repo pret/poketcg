@@ -44,12 +44,11 @@ ClearMemory_Bank6:
 	pop af
 	ret
 
-; plays a sound effect depending on the value in a.
-; this function is identical to 'PlaySFXConfirmOrCancel' in Bank $2.
+; identical to 'PlaySFXConfirmOrCancel' in Bank $2
+; play cancel sound if a = MENU_CANCEL (-1), confirm sound otherwise
 ; preserves all registers
 ; input:
-;	a == -1:  play SFX_CANCEL  (usually following a B press)
-;	a != -1:  play SFX_CONFIRM (usually following an A press)
+; a = MENU_CANCEL (usually following B press) or MENU_CONFIRM (usually following A press)
 PlaySFXConfirmOrCancel_Bank6:
 	push af
 	inc a
@@ -78,7 +77,7 @@ InputPlayerName:
 	ld [wTileMapFill], a
 	call EmptyScreen
 	call ZeroObjectPositions
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
 	lb de, $38, $bf
@@ -90,16 +89,16 @@ InputPlayerName:
 	xor a
 	ld [wNamingScreenCursorX], a
 	ld [wNamingScreenCursorY], a
-	ld a, $09
+	ld a, 9
 	ld [wNamingScreenNumColumns], a
-	ld a, $06
+	ld a, 6
 	ld [wNamingScreenKeyboardHeight], a
-	ld a, $0f
+	ld a, SYM_CURSOR_R
 	ld [wVisibleCursorTile], a
-	ld a, $00
+	ld a, SYM_SPACE
 	ld [wInvisibleCursorTile], a
 .loop
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call UpdateRNGSources
@@ -107,7 +106,7 @@ InputPlayerName:
 	and PAD_START
 	jr z, .else
 	; the Start button was pressed.
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel_Bank6
 	call PlayerNamingScreen_DrawInvisibleCursor
 	ld a, 6
@@ -120,7 +119,7 @@ InputPlayerName:
 .else
 	call PlayerNamingScreen_CheckButtonState
 	jr nc, .loop ; if not pressed, go back to the loop.
-	cp -1
+	cp MENU_CANCEL
 	jr z, .on_b_button
 	; on A button
 	call PlayerNamingScreen_ProcessInput
@@ -446,7 +445,7 @@ PlayerNamingScreen_CheckButtonState:
 	and PAD_A
 	jr nz, .asm_69e5
 	; the B button was pressed.
-	ld a, -1
+	ld a, MENU_CANCEL
 .asm_69e5
 	call PlaySFXConfirmOrCancel_Bank6
 	push af
@@ -463,10 +462,11 @@ PlayerNamingScreen_CheckButtonState:
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and $0f
+	and CURSOR_BLINK_PERIOD_MASK
 	ret nz
+
 	ld a, [wVisibleCursorTile]
-	bit 4, [hl]
+	bit B_CURSOR_BLINK_PERIOD, [hl]
 	jr z, PlayerNamingScreen_DrawCursor
 ;	fallthrough
 
@@ -995,7 +995,7 @@ InputDeckName:
 	call EmptyScreen
 	call ZeroObjectPositions
 
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
 
@@ -1011,16 +1011,16 @@ InputDeckName:
 	ld [wNamingScreenCursorX], a
 	ld [wNamingScreenCursorY], a
 
-	ld a, $09
+	ld a, 9
 	ld [wNamingScreenNumColumns], a
-	ld a, $07
+	ld a, 7
 	ld [wNamingScreenKeyboardHeight], a
-	ld a, $0f
+	ld a, SYM_CURSOR_R
 	ld [wVisibleCursorTile], a
-	ld a, $00
+	ld a, SYM_SPACE
 	ld [wInvisibleCursorTile], a
 .loop
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 
@@ -1031,7 +1031,7 @@ InputDeckName:
 	jr z, .else
 
 	; the Start button was pressed.
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel_Bank6
 	call DeckNamingScreen_DrawInvisibleCursor
 
@@ -1045,7 +1045,7 @@ InputDeckName:
 	call DeckNamingScreen_CheckButtonState
 	jr nc, .loop ; if not pressed, go back to the loop.
 
-	cp -1
+	cp MENU_CANCEL
 	jr z, .on_b_button
 
 	; on A button
@@ -1316,7 +1316,7 @@ DeckNamingScreen_CheckButtonState:
 	and PAD_A
 	jr nz, .asm_6f7f
 	; B button was pressed
-	ld a, -1
+	ld a, MENU_CANCEL
 .asm_6f7f
 	call PlaySFXConfirmOrCancel_Bank6
 	push af
@@ -1333,10 +1333,11 @@ DeckNamingScreen_CheckButtonState:
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and $0f
+	and CURSOR_BLINK_PERIOD_MASK
 	ret nz
+
 	ld a, [wVisibleCursorTile]
-	bit 4, [hl]
+	bit B_CURSOR_BLINK_PERIOD, [hl]
 	jr z, DeckNamingScreen_DrawCursor
 ;	fallthrough
 

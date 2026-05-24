@@ -182,7 +182,7 @@ _DebugLookAtSprite:
 	call ProcessTextFromID
 	ld bc, FlushAllPalettes
 	ld a, [wLoadedNPCTempIndex]
-	farcall WriteTwoByteNumberInTxSymbolFormat
+	farcall WriteOneByteNumberInTxSymbol_PadSpace
 	ret
 
 .DrawNPCSprite

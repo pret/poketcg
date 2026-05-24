@@ -551,14 +551,14 @@ ExchangeRNG::
 	or a ; cp DUELIST_TYPE_PLAYER
 	jr z, .player_turn
 ; link opponent's turn
-	ld hl, wOppRNG1
-	ld de, wRNG1
+	ld hl, wOppRNGVars
+	ld de, wRNGVars
 	jr .exchange
 .player_turn
-	ld hl, wRNG1
-	ld de, wOppRNG1
+	ld hl, wRNGVars
+	ld de, wOppRNGVars
 .exchange
-	ld c, 3 ; wRNG1, wRNG2, and wRNGCounter
+	ld c, RNGVARS_SIZE
 	call SerialExchangeBytes
 	jp c, DuelTransmissionError
 	ret

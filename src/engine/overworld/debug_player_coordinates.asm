@@ -22,10 +22,10 @@ Func_1c003: ; unreferenced
 
 	ld bc, $20
 	ld a, [wPlayerXCoord]
-	bank1call WriteTwoByteNumberInTxSymbolFormat
+	bank1call WriteOneByteNumberInTxSymbol_PadSpace
 	ld bc, $320
 	ld a, [wPlayerYCoord]
-	bank1call WriteTwoByteNumberInTxSymbolFormat
+	bank1call WriteOneByteNumberInTxSymbol_PadSpace
 	ld a, 112 + WX_OFS
 	ldh [hWX], a
 	ld a, 136

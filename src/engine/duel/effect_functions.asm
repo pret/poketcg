@@ -828,7 +828,7 @@ HandleDefendingPokemonAttackSelection:
 	jr nz, .open_atk_page
 	call HandleMenuInput
 	jr nc, .loop_input
-	cp -1
+	cp MENU_CANCEL
 	jr z, .loop_input
 
 ; an attack was selected
@@ -1208,7 +1208,7 @@ HandleColorChangeScreen:
 	call DoFrame
 	call HandleMenuInput
 	jr nc, .loop_input
-	cp -1 ; b pressed?
+	cp MENU_CANCEL ; b pressed?
 	jr z, .set_carry
 	ld e, a
 	ld d, $00
@@ -2231,7 +2231,7 @@ EnergyTrans_TransferEffect:
 	call DoFrame
 	call HandleMenuInput
 	jr nc, .loop_input_take
-	cp -1 ; b press?
+	cp MENU_CANCEL ; b press?
 	ret z
 
 ; a press
@@ -2261,7 +2261,7 @@ EnergyTrans_TransferEffect:
 	call DoFrame
 	call HandleMenuInput
 	jr nc, .loop_input_put
-	cp -1 ; b press?
+	cp MENU_CANCEL ; b press?
 	jr z, .remove_symbol
 
 ; a press
@@ -4222,14 +4222,14 @@ Firegiver_AddToHandEffect:
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetTurnDuelistVariable
 	inc a
-	bank1call WriteTwoDigitNumberInTxSymbolFormat
+	bank1call WriteTwoDigitNumberInTxSymbol_PadSpace
 ; update and print number of cards in deck
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	ld a, DECK_SIZE - 1
 	sub [hl]
 	ld c, e
-	bank1call WriteTwoDigitNumberInTxSymbolFormat
+	bank1call WriteTwoDigitNumberInTxSymbol_PadSpace
 	pop bc
 	pop hl
 
@@ -4420,7 +4420,7 @@ Curse_PlayerSelectEffect:
 	call DoFrame
 	call HandleMenuInput
 	jr nc, .loop_input_first
-	cp $ff
+	cp MENU_CANCEL
 	jr z, .cancel
 	ldh [hCurSelectionItem], a
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -4457,7 +4457,7 @@ Curse_PlayerSelectEffect:
 	call HandleMenuInput
 	jr nc, .loop_input_second
 	ldh [hPlayAreaEffectTarget], a
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .a_press ; was a pressed?
 
 ; b press
@@ -5058,7 +5058,7 @@ DamageSwap_SelectAndSwapEffect:
 	call DoFrame
 	call HandleMenuInput
 	jr nc, .loop_input_first
-	cp $ff
+	cp MENU_CANCEL
 	ret z ; quit when B button is pressed
 
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -5094,7 +5094,7 @@ DamageSwap_SelectAndSwapEffect:
 	jr nc, .loop_input_second
 	; if B is pressed, return damage counter
 	; to card that it was taken from
-	cp $ff
+	cp MENU_CANCEL
 	jr z, .update_ui
 
 ; try to give the card selected the damage counter
@@ -5568,7 +5568,7 @@ StrangeBehavior_SelectAndSwapEffect:
 	call DoFrame
 	call HandleMenuInput
 	jr nc, .loop_input
-	cp -1
+	cp MENU_CANCEL
 	ret z ; return when B button is pressed
 
 	ldh [hCurSelectionItem], a
@@ -6842,7 +6842,7 @@ Gigashock_PlayerSelectEffect:
 	call DoFrame
 	call HandleMenuInput
 	jr nc, .loop_input
-	cp -1
+	cp MENU_CANCEL
 	jr z, .try_cancel
 
 	ld [wCurGigashockItem], a

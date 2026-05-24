@@ -404,7 +404,7 @@ HandleDeckBuildScreen:
 	ldh a, [hDPadHeld]
 	and PAD_START
 	jr z, .no_start_btn_1
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	call ConfirmDeckConfiguration
 	ld a, [wCurCardTypeFilter]
@@ -436,7 +436,7 @@ HandleDeckBuildScreen:
 	call HandleCardSelectionInput
 	jr nc, .wait_input
 	ld a, [hffb3]
-	cp $ff ; operation cancelled?
+	cp MENU_CANCEL ; operation cancelled?
 	jp z, OpenDeckConfigurationMenu
 
 ; input was made to jump to the card list
@@ -472,7 +472,7 @@ HandleDeckBuildScreen:
 	ldh a, [hDPadHeld]
 	and PAD_START
 	jr z, .no_start_btn_2
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 
 	; temporarily store current cursor position
@@ -491,7 +491,7 @@ HandleDeckBuildScreen:
 	jr .loop_input
 
 .open_card_page
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	ld a, [wCardListNumCursorPositions]
 	ld [wTempCardListNumCursorPositions], a
@@ -527,7 +527,7 @@ HandleDeckBuildScreen:
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
 	ld a, [hffb3]
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .open_card_page
 	; cancelled
 	ld hl, FiltersCardSelectionParams
@@ -565,13 +565,13 @@ HandleDeckConfigurationMenu:
 	call PlaceTextItems
 
 .do_frame
-	ld a, $1
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call YourOrOppPlayAreaScreen_HandleInput
 	jr nc, .do_frame
 	ld [wced6], a
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .asm_94b5
 .draw_icons
 	call DrawCardTypeIconsAndPrintCardCounts
@@ -584,7 +584,7 @@ HandleDeckConfigurationMenu:
 .asm_94b5
 	push af
 	call YourOrOppPlayAreaScreen_HandleInput.draw_cursor
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	pop af
 	ld hl, .func_table
@@ -1724,7 +1724,7 @@ HandleCardSelectionInput:
 	and PAD_A
 	jr nz, ConfirmSelectionAndReturnCarry
 	; b button
-	ld a, $ff
+	ld a, MENU_CANCEL
 	ld [hffb3], a
 	call PlaySFXConfirmOrCancel
 	scf
@@ -1733,7 +1733,7 @@ HandleCardSelectionInput:
 ; outputs cursor position in e and selection in a
 ConfirmSelectionAndReturnCarry:
 	call DrawHorizontalListCursor_Visible
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	ld a, [wCardListCursorPos]
 	ld e, a
@@ -1750,10 +1750,11 @@ HandleCardSelectionCursorBlink:
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and $0f
+	and CURSOR_BLINK_PERIOD_MASK
 	ret nz
+
 	ld a, [wVisibleCursorTile]
-	bit 4, [hl]
+	bit B_CURSOR_BLINK_PERIOD, [hl]
 	jr z, DrawHorizontalListCursor
 
 DrawHorizontalListCursor_Invisible:
@@ -1902,7 +1903,7 @@ HandleDeckCardSelectionList:
 
 .select_card
 	call DrawListCursor_Visible
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	ld a, [wCardListCursorPos]
 	ld e, a
@@ -1916,7 +1917,7 @@ HandleDeckCardSelectionList:
 	jr z, .check_sfx
 	and PAD_A
 	jr nz, .select_card
-	ld a, $ff
+	ld a, MENU_CANCEL
 	ld [hffb3], a
 	call PlaySFXConfirmOrCancel
 	scf
@@ -1931,10 +1932,10 @@ HandleDeckCardSelectionList:
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and $0f
+	and CURSOR_BLINK_PERIOD_MASK
 	ret nz
 	ld a, [wVisibleCursorTile]
-	bit 4, [hl]
+	bit B_CURSOR_BLINK_PERIOD, [hl]
 	jr z, DrawListCursor
 ;	fallthrough
 
@@ -2081,7 +2082,7 @@ OpenCardPageFromCardList:
 	jp .handle_input
 
 .exit
-	ld a, $1
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
@@ -2098,10 +2099,10 @@ Func_9ced: ; unreferenced
 	inc hl
 	ld d, [hl]
 	call LoadCardDataToBuffer1_FromCardID
-	ld de, $389f
+	lb de, $38, $9f
 	call SetupText
 	bank1call OpenCardPage_FromHand
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
@@ -2405,7 +2406,7 @@ HandleDeckConfirmationMenu:
 	jr z, .loop_input
 
 .selected_card
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	ld a, [wCardListCursorPos]
 	ld [wced7], a
@@ -2422,7 +2423,7 @@ HandleDeckConfirmationMenu:
 
 .selection_made
 	ld a, [hffb3]
-	cp $ff
+	cp MENU_CANCEL
 	ret z ; operation cancelled
 	jr .selected_card
 
@@ -2543,7 +2544,7 @@ ShowDeckInfoHeaderAndWaitForBButton:
 	ldh a, [hKeysPressed]
 	and PAD_B
 	jr z, .wait_input
-	ld a, $ff
+	ld a, MENU_CANCEL
 	call PlaySFXConfirmOrCancel
 	ret
 
@@ -3027,13 +3028,13 @@ HandleSendDeckConfigurationMenu:
 	ld a, $ff
 	ld [wDuelInitialPrizesUpperBitsSet], a
 .loop_input
-	ld a, $01
+	ld a, TRUE
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call YourOrOppPlayAreaScreen_HandleInput
 	jr nc, .loop_input
 	ld [wced6], a
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .asm_a23b
 	call DrawCardTypeIconsAndPrintCardCounts
 	ld a, [wTempCardListCursorPos]
@@ -3132,7 +3133,7 @@ HandlePlayersCardsScreen:
 	call HandleCardSelectionInput
 	jr nc, .wait_input
 	ld a, [hffb3]
-	cp $ff ; operation cancelled
+	cp MENU_CANCEL ; operation cancelled
 	jr nz, .jump_to_list
 	ret
 
@@ -3172,7 +3173,7 @@ HandlePlayersCardsScreen:
 	; start btn pressed
 
 .open_card_page
-	ld a, $01
+	ld a, MENU_CONFIRM
 	call PlaySFXConfirmOrCancel
 	ld a, [wCardListNumCursorPositions]
 	ld [wTempCardListNumCursorPositions], a
@@ -3209,7 +3210,7 @@ HandlePlayersCardsScreen:
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
 	ld a, [hffb3]
-	cp $ff
+	cp MENU_CANCEL
 	jr nz, .open_card_page
 	ld hl, FiltersCardSelectionParams
 	call InitCardSelectionParams
