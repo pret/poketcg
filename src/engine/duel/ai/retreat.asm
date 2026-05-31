@@ -815,9 +815,9 @@ AITryToRetreat:
 	call CreateEnergyCardListFromHand
 	jr c, .check_id
 	ld a, [wDuelTempList]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TO_PLAY_AREA], a
 	ld a, OPPACTION_PLAY_ENERGY
 	bank1call AIMakeDecision
 
@@ -832,9 +832,9 @@ AITryToRetreat:
 	jp z, .mysterious_fossil_or_clefairy_doll
 
 ; if card is Asleep or Paralyzed, set carry and exit
-; else, load the status in hTemp_ffa0
+; else, load the status in hDuelActionArgs[0]
 	pop af
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_BENCH], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	ld b, a
@@ -844,9 +844,9 @@ AITryToRetreat:
 	cp PARALYZED
 	jp z, .set_carry
 	ld a, b
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_STATUS], a
 	ld a, $ff
-	ldh [hTempRetreatCostCards], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_COST_LIST], a
 
 ; check energy required to retreat
 ; if the cost is 0, retreat right away
@@ -869,7 +869,7 @@ AITryToRetreat:
 	cp c
 	jr nz, .choose_energy_discard
 
-	ld hl, hTempRetreatCostCards
+	ld hl, hDuelActionArgs + RETREAT_ARGS_COST_LIST
 	ld de, wDuelTempList
 .loop_1
 	ld a, [de]
@@ -897,7 +897,7 @@ AITryToRetreat:
 ; first, look for and discard double colorless energy
 ; if retreat cost is >= 2
 	ld hl, wDuelTempList
-	ld de, hTempRetreatCostCards
+	ld de, hDuelActionArgs + RETREAT_ARGS_COST_LIST
 .loop_2
 	ld a, c
 	cp 2
@@ -997,13 +997,13 @@ AITryToRetreat:
 .has_bench
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af
-	ldh [hAIPkmnPowerEffectParam], a
+	ldh [hDuelActionArgs + PKMNPOWER_TARGET_ARGS_TO_PLAY_AREA], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	ld a, OPPACTION_DUEL_MAIN_SCENE

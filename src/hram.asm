@@ -1,3 +1,6 @@
+INCLUDE "macros.asm"
+INCLUDE "constants.asm"
+
 SECTION "HRAM", HRAM
 
 hBankROM:: ; ff80
@@ -69,58 +72,20 @@ hTempCardID_ff9b:: ; ff9b
 hTempPlayAreaLocation_ff9d:: ; ff9d
 	ds $1
 
+; $ff-terminated 10-byte buffer for current in-duel action
+hDuelAction:: ; ff9e
+
 ; index for AIActionTable
 hOppActionTableIndex:: ; ff9e
 	ds $1
 
 ; deck index of a card (0-59)
-hTempCardIndex_ff9f:: ; ff9f
+hDuelActionCardIndex:: ; ff9f
 	ds $1
 
-UNION
-
-; multipurpose temp storage (card's deck index, selected attack index, status condition...)
-hTemp_ffa0:: ; ffa0
-	ds $1
-
-; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
-hTempPlayAreaLocation_ffa1:: ; ffa1
-	ds $1
-
-; $ff-terminated list of cards to be discarded upon retreat
-hTempRetreatCostCards:: ; ffa2
-	ds $6
-
-NEXTU
-
-	ds $1
-
-; parameter to be used by the AI's Pkmn Power effect
-hAIPkmnPowerEffectParam:: ; ffa1
-	ds $1
-
-; parameters chosen by AI in Energy Trans routine.
-; the deck index (0-59) of the energy card to transfer
-; and the Play Area location (PLAY_AREA_*) of card to receive that energy card.
-hAIEnergyTransEnergyCard:: ; ffa2
-
-; PLAY_AREA_*  of target selected for some Pkmn Powers,
-; (e.g. Curse, Damage Swap) and for trainer card effect.
-hPlayAreaEffectTarget:: ; ffa2
-	ds $1
-
-hAIEnergyTransPlayAreaLocation:: ; ffa3
-	ds $1
-
-NEXTU
-
-; list of various items, such as
-; cards selected for various effects,
-; Play Area locations, etc.
-hTempList:: ; ffa0
-	ds $8
-
-ENDU
+; $ff-terminated list of arguments of current in-duel action
+hDuelActionArgs:: ; ffa0
+	ds DUEL_ACTION_ARGS_SIZE + 1
 
 ; hffa8 through hffb0 belong to the text engine
 hffa8:: ; ffa8
