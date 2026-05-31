@@ -132,7 +132,7 @@ AIPerformScriptedTurn:
 .turn_2
 	ld a, RATTATA
 	call LookForCardIDInHandList_Bank5
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_PLAY_BASIC_PKMN
 	bank1call AIMakeDecision
 	ld d, RATTATA
@@ -144,10 +144,10 @@ AIPerformScriptedTurn:
 	ld a, RATTATA
 	ld b, PLAY_AREA_ARENA
 	call LookForCardIDInPlayArea_Bank5
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TO_PLAY_AREA], a
 	ld a, RATICATE
 	call LookForCardIDInHandList_Bank5
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_EVOLVE_PKMN
 	bank1call AIMakeDecision
 	ld d, RATICATE
@@ -164,7 +164,7 @@ AIPerformScriptedTurn:
 .turn_5
 	ld a, MACHOP
 	call LookForCardIDInHandList_Bank5
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_PLAY_BASIC_PKMN
 	bank1call AIMakeDecision
 	ld d, MACHOP

@@ -86,7 +86,7 @@ AIDecidePlayPokemonCard:
 	cp 180
 	jr c, .skip
 	ld a, [wTempAIPokemonCard]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	call CheckIfCardCanBePlayed
 	jr c, .skip
 	ld a, OPPACTION_PLAY_BASIC_PKMN
@@ -366,9 +366,9 @@ AIDecideEvolution:
 	cp 133
 	jr c, .done_bench_pokemon
 	ld a, [wTempAI]
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TO_PLAY_AREA], a
 	ld a, [wTempAIPokemonCard]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_EVOLVE_PKMN
 	bank1call AIMakeDecision
 	pop bc

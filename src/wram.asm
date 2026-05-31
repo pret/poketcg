@@ -497,7 +497,7 @@ wPlayAreaScreenLoaded:: ; cbd3
 wPlayAreaSelectAction:: ; cbd4
 	ds $1
 
-; low byte of the address of the next slot in the hTempRetreatCostCards array to be used
+; low byte of the address of the next slot in the hDuelActionArgs[2-] array to be used
 wTempRetreatCostCardsPos:: ; cbd5
 	ds $1
 
@@ -1318,28 +1318,10 @@ wAITrainerLogicCard:: ; ce17
 wAITrainerCardPhase:: ; ce18
 	ds $1
 
-; parameters output by AI Trainer card logic routines
+; $ff-terminated args output by AI Trainer card logic routines
 ; (e.g. what Pokemon in Play Area to use card on, etc)
-wAITrainerCardParameter:: ; ce19
-	ds $1
-
-wce1a:: ; ce1a
-	ds $1
-
-wce1b:: ; ce1b
-	ds $1
-
-wce1c:: ; ce1c
-	ds $1
-
-wce1d:: ; ce1d
-	ds $1
-
-wce1e:: ; ce1e
-	ds $1
-
-wce1f:: ; ce1f
-	ds $1
+wAITrainerCardArgs:: ; ce19
+	ds 6 + 1
 
 ; used to store previous/current flags of AI actions
 ; see AI_FLAG_* constants

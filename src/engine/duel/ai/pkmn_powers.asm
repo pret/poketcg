@@ -57,7 +57,7 @@ HandleAIEnergyTrans:
 	ld a, DUELVARS_ARENA_CARD
 	add b
 	call GetTurnDuelistVariable
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp VENUSAUR_LV67
@@ -73,14 +73,14 @@ HandleAIEnergyTrans:
 ; use Energy Trans Pkmn Power
 .use_pkmn_power
 	ld a, b
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 
 	xor a ; PLAY_AREA_ARENA
-	ldh [hAIEnergyTransPlayAreaLocation], a
+	ldh [hDuelActionArgs + ENERGYTRANS_ARGS_TO_PLAY_AREA], a
 	ld a, [wAINumberOfEnergyTransCards]
 	ld d, a
 
@@ -96,7 +96,7 @@ HandleAIEnergyTrans:
 	jr c, .next_card
 
 	and %00001111
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + ENERGYTRANS_ARGS_FROM_PLAY_AREA], a
 
 	ld a, e
 	push de
@@ -108,7 +108,7 @@ HandleAIEnergyTrans:
 
 	; store the deck index of energy card
 	ld a, e
-	ldh [hAIEnergyTransEnergyCard], a
+	ldh [hDuelActionArgs + ENERGYTRANS_ARGS_ENERGY_INDEX], a
 
 	push de
 	ld d, 30
@@ -299,7 +299,7 @@ AIEnergyTransTransferEnergyToBench:
 	ld a, DUELVARS_ARENA_CARD
 	add b
 	call GetTurnDuelistVariable
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld [wAIVenusaurLv67DeckIndex], a
 	call GetCardIDFromDeckIndex
 	ld a, e
@@ -316,7 +316,7 @@ AIEnergyTransTransferEnergyToBench:
 ; use Energy Trans Pkmn Power
 .use_pkmn_power
 	ld a, b
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 	ld [wAIVenusaurLv67PlayAreaLocation], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
@@ -325,10 +325,10 @@ AIEnergyTransTransferEnergyToBench:
 
 ; loop for each energy cards that are going to be transferred.
 .loop_energy
-	xor a
-	ldh [hTempPlayAreaLocation_ffa1], a
+	xor a ; PLAY_AREA_ARENA
+	ldh [hDuelActionArgs + ENERGYTRANS_ARGS_FROM_PLAY_AREA], a
 	ld a, [wAIVenusaurLv67PlayAreaLocation]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 
 	; returns when Arena card has no Grass energy cards attached.
 	ld e, PLAY_AREA_ARENA
@@ -357,7 +357,7 @@ AIEnergyTransTransferEnergyToBench:
 
 	; store the deck index of energy card
 	ld a, e
-	ldh [hAIEnergyTransEnergyCard], a
+	ldh [hDuelActionArgs + ENERGYTRANS_ARGS_ENERGY_INDEX], a
 	jr .transfer
 
 .next_card
@@ -372,7 +372,7 @@ AIEnergyTransTransferEnergyToBench:
 	farcall AIProcessButDontPlayEnergy_SkipEvolutionAndArena
 	jr nc, .done_transfer
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	ldh [hAIEnergyTransPlayAreaLocation], a
+	ldh [hDuelActionArgs + ENERGYTRANS_ARGS_TO_PLAY_AREA], a
 
 	ld d, 30
 .small_delay_loop
@@ -381,7 +381,7 @@ AIEnergyTransTransferEnergyToBench:
 	jr nz, .small_delay_loop
 
 	ld a, [wAIVenusaurLv67DeckIndex]
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld d, a
 	ld e, FIRST_ATTACK_OR_PKMN_POWER
 	call CopyAttackDataAndDamage_FromDeckIndex
@@ -512,16 +512,16 @@ HandleAIPkmnPowers:
 ;	c = Play Area location (PLAY_AREA_*) of Vileplume.
 HandleAIHeal:
 	ld a, c
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 	call .CheckHealTarget
 	ret nc ; return if no target to heal
 	push af
 	ld a, [wce08]
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af
-	ldh [hPlayAreaEffectTarget], a
+	ldh [hDuelActionArgs + PKMNPOWER_COIN_ARGS_TO_PLAY_AREA], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	ld a, OPPACTION_DUEL_MAIN_SCENE
@@ -620,7 +620,7 @@ HandleAIShift:
 	or a
 	ret nz ; return if Venomoth is not Arena card
 
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 	call GetArenaCardColor
 	call TranslateColorToWR
 	ld b, a
@@ -644,7 +644,7 @@ HandleAIShift:
 
 .found
 	ld a, [wce08]
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 
@@ -661,7 +661,7 @@ HandleAIShift:
 ; use Pkmn Power effect
 .done
 	ld a, b
-	ldh [hAIPkmnPowerEffectParam], a
+	ldh [hDuelActionArgs + VENOMOTH_SHIFT_ARGS_TARGET_COLOR], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	ld a, OPPACTION_DUEL_MAIN_SCENE
@@ -698,7 +698,7 @@ HandleAIShift:
 ;	c = Play Area location (PLAY_AREA_*) of Mankey.
 HandleAIPeek:
 	ld a, c
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 	ld a, 50
 	call Random
 	cp 3
@@ -765,11 +765,11 @@ HandleAIPeek:
 .use_peek
 	push af
 	ld a, [wce08]
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af
-	ldh [hAIPkmnPowerEffectParam], a
+	ldh [hDuelActionArgs + MANKEY_PEEK_ARGS_TARGET], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	ld a, OPPACTION_DUEL_MAIN_SCENE
@@ -784,14 +784,14 @@ HandleAIStrangeBehavior:
 	or a
 	ret z ; return if Slowbro is Arena card
 
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 	ld e, PLAY_AREA_ARENA
 	call GetCardDamageAndMaxHP
 	or a
 	ret z ; return if Arena card has no damage counters
 
 	ld [wce06], a
-	ldh a, [hTemp_ffa0]
+	ldh a, [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA]
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	sub 10
@@ -807,11 +807,11 @@ HandleAIStrangeBehavior:
 .use_strange_behavior
 	push af
 	ld a, [wce08]
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	xor a
-	ldh [hAIPkmnPowerEffectParam], a
+	ldh [hDuelActionArgs + PKMNPOWER_TARGET_ARGS_TO_PLAY_AREA], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	pop af
@@ -847,7 +847,7 @@ HandleAIStrangeBehavior:
 ;	c = Play Area location (PLAY_AREA_*) of Gengar.
 HandleAICurse:
 	ld a, c
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 
 ; loop Player's Play Area and checks their damage.
 ; finds the card with lowest remaining HP and
@@ -891,7 +891,7 @@ HandleAICurse:
 ; card in Play Area with lowest HP remaining was found.
 ; look for another card to take damage counter from.
 	ld a, h
-	ldh [hTempRetreatCostCards], a
+	ldh [hDuelActionArgs + PKMNPOWER_MOVE_ARGS_TO_PLAY_AREA], a
 	ld b, a
 	ld a, 10
 	cp c
@@ -933,10 +933,10 @@ HandleAICurse:
 
 .use_curse
 	ld a, e
-	ldh [hAIPkmnPowerEffectParam], a
+	ldh [hDuelActionArgs + PKMNPOWER_MOVE_ARGS_FROM_PLAY_AREA], a
 	call SwapTurn
 	ld a, [wce08]
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
@@ -998,14 +998,14 @@ HandleAICowardice:
 ;	c = Play Area location (PLAY_AREA_*) of Tentacool.
 .CheckWhetherToUseCowardice:
 	ld a, c
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 	ld e, a
 	call GetCardDamageAndMaxHP
 .asm_22678
 	or a
 	ret z ; return if has no damage counters
 
-	ldh a, [hTemp_ffa0]
+	ldh a, [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA]
 	or a
 	jr nz, .is_benched
 
@@ -1020,11 +1020,11 @@ HandleAICowardice:
 .use_cowardice
 	push af
 	ld a, [wce08]
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af
-	ldh [hAIPkmnPowerEffectParam], a
+	ldh [hDuelActionArgs + PKMNPOWER_TARGET_ARGS_TO_PLAY_AREA], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	ld a, OPPACTION_DUEL_MAIN_SCENE
@@ -1089,9 +1089,9 @@ HandleAIDamageSwap:
 	ld a, [wce08]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld a, [wce08]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
@@ -1110,9 +1110,9 @@ HandleAIDamageSwap:
 	call .CheckForDamageSwapTargetInBench
 	jr c, .no_more_target
 
-	ldh [hTempRetreatCostCards], a
+	ldh [hDuelActionArgs + PKMNPOWER_MOVE_ARGS_TO_PLAY_AREA], a
 	xor a ; PLAY_AREA_ARENA
-	ldh [hAIPkmnPowerEffectParam], a
+	ldh [hDuelActionArgs + PKMNPOWER_MOVE_ARGS_FROM_PLAY_AREA], a
 	ld a, OPPACTION_6B15
 	bank1call AIMakeDecision
 	pop de
