@@ -604,7 +604,7 @@ HandleAICowardice:
 	...
 .CheckWhetherToUseCowardice:
 	ld a, c
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	ld e, a
 +	add DUELVARS_ARENA_CARD_FLAGS
 +	call GetTurnDuelistVariable

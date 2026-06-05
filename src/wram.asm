@@ -1321,7 +1321,7 @@ wAITrainerCardPhase:: ; ce18
 ; $ff-terminated args output by AI Trainer card logic routines
 ; (e.g. what Pokemon in Play Area to use card on, etc)
 wAITrainerCardArgs:: ; ce19
-	ds 6 + 1
+	ds AI_TRAINER_ARGS_SIZE + 1
 
 ; used to store previous/current flags of AI actions
 ; see AI_FLAG_* constants

@@ -73,7 +73,7 @@ HandleAIEnergyTrans:
 ; use Energy Trans Pkmn Power
 .use_pkmn_power
 	ld a, b
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
@@ -316,7 +316,7 @@ AIEnergyTransTransferEnergyToBench:
 ; use Energy Trans Pkmn Power
 .use_pkmn_power
 	ld a, b
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	ld [wAIVenusaurLv67PlayAreaLocation], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
@@ -328,7 +328,7 @@ AIEnergyTransTransferEnergyToBench:
 	xor a ; PLAY_AREA_ARENA
 	ldh [hDuelActionArgs + ENERGYTRANS_ARGS_FROM_PLAY_AREA], a
 	ld a, [wAIVenusaurLv67PlayAreaLocation]
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 
 	; returns when Arena card has no Grass energy cards attached.
 	ld e, PLAY_AREA_ARENA
@@ -512,7 +512,7 @@ HandleAIPkmnPowers:
 ;	c = Play Area location (PLAY_AREA_*) of Vileplume.
 HandleAIHeal:
 	ld a, c
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	call .CheckHealTarget
 	ret nc ; return if no target to heal
 	push af
@@ -620,7 +620,7 @@ HandleAIShift:
 	or a
 	ret nz ; return if Venomoth is not Arena card
 
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	call GetArenaCardColor
 	call TranslateColorToWR
 	ld b, a
@@ -698,7 +698,7 @@ HandleAIShift:
 ;	c = Play Area location (PLAY_AREA_*) of Mankey.
 HandleAIPeek:
 	ld a, c
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	ld a, 50
 	call Random
 	cp 3
@@ -784,14 +784,14 @@ HandleAIStrangeBehavior:
 	or a
 	ret z ; return if Slowbro is Arena card
 
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	ld e, PLAY_AREA_ARENA
 	call GetCardDamageAndMaxHP
 	or a
 	ret z ; return if Arena card has no damage counters
 
 	ld [wce06], a
-	ldh a, [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA]
+	ldh a, [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA]
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	sub 10
@@ -847,7 +847,7 @@ HandleAIStrangeBehavior:
 ;	c = Play Area location (PLAY_AREA_*) of Gengar.
 HandleAICurse:
 	ld a, c
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 
 ; loop Player's Play Area and checks their damage.
 ; finds the card with lowest remaining HP and
@@ -998,14 +998,14 @@ HandleAICowardice:
 ;	c = Play Area location (PLAY_AREA_*) of Tentacool.
 .CheckWhetherToUseCowardice:
 	ld a, c
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	ld e, a
 	call GetCardDamageAndMaxHP
 .asm_22678
 	or a
 	ret z ; return if has no damage counters
 
-	ldh a, [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA]
+	ldh a, [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA]
 	or a
 	jr nz, .is_benched
 
@@ -1091,7 +1091,7 @@ HandleAIDamageSwap:
 	call GetTurnDuelistVariable
 	ldh [hDuelActionCardIndex], a
 	ld a, [wce08]
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT

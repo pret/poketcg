@@ -1672,7 +1672,7 @@ SendAttackDataToLinkOpponent::
 	ld a, [wSentAttackDataToLinkOpponent]
 	or a
 	ret nz
-	ldh a, [hDuelActionArgs + 0]
+	ldh a, [hDuelActionArgs + DECLARE_ATTACK_ARGS_ATTACK_INDEX]
 	push af
 	ldh a, [hDuelActionCardIndex]
 	push af
@@ -1681,14 +1681,14 @@ SendAttackDataToLinkOpponent::
 	ld a, [wPlayerAttackingCardIndex]
 	ldh [hDuelActionCardIndex], a
 	ld a, [wPlayerAttackingAttackIndex]
-	ldh [hDuelActionArgs + 0], a
+	ldh [hDuelActionArgs + DECLARE_ATTACK_ARGS_ATTACK_INDEX], a
 	ld a, OPPACTION_BEGIN_ATTACK
 	call SetOppAction_SerialSendDuelData
 	call ExchangeRNG
 	pop af
 	ldh [hDuelActionCardIndex], a
 	pop af
-	ldh [hDuelActionArgs + 0], a
+	ldh [hDuelActionArgs + DECLARE_ATTACK_ARGS_ATTACK_INDEX], a
 	ret
 
 ApplyTransparencyIfApplicable::

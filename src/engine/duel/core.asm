@@ -1708,14 +1708,14 @@ HandleDuelSetup:
 	call SwapTurn
 	call PlayShuffleAndDrawCardsAnimation_BothDuelists
 	call ShuffleDeckAndDrawSevenCards
-	ldh [hDuelActionArgs + 0], a
+	ldh [hDuelActionArgs + DUELSETUP_ARGS_HAS_BASIC_PKMN], a
 	call SwapTurn
 	call ShuffleDeckAndDrawSevenCards
 	call SwapTurn
 	ld c, a
 
 ; check if any Basic Pokémon cards were drawn
-	ldh a, [hDuelActionArgs + 0]
+	ldh a, [hDuelActionArgs + DUELSETUP_ARGS_HAS_BASIC_PKMN]
 	ld b, a
 	and c
 	jr nz, .hand_cards_ok
@@ -1843,7 +1843,7 @@ HandleDuelSetup:
 ; of the Play Area (player & opp)
 .PlacePrizes
 	ld hl, .PrizeCardCoordinates
-	ld e, DECK_SIZE - 7 - 1 ; deck size - cards drawn - 1
+	ld e, DECK_SIZE - STARTING_HAND_SIZE - 1
 	ld a, [wDuelInitialPrizes]
 	ld d, a
 
@@ -2005,7 +2005,8 @@ ChooseInitialArenaAndBenchPokemon:
 	ret
 
 ; the turn duelist shuffles the deck unless it's a practice duel, then draws 7 cards
-; returns $00 in a and carry if no basic Pokemon cards are drawn, and $01 in a otherwise
+; returns TRUE if any basic Pokemon is drawn,
+; FALSE and carry otherwise
 ShuffleDeckAndDrawSevenCards:
 	call InitializeDuelVariables
 	ld a, [wDuelType]
@@ -2014,7 +2015,7 @@ ShuffleDeckAndDrawSevenCards:
 	call ShuffleDeck
 	call ShuffleDeck
 .deck_ready
-	ld b, 7
+	ld b, STARTING_HAND_SIZE
 .draw_loop
 	call DrawCardFromDeck
 	call AddCardToHand
@@ -2022,8 +2023,8 @@ ShuffleDeckAndDrawSevenCards:
 	jr nz, .draw_loop
 	ld a, DUELVARS_HAND
 	call GetTurnDuelistVariable
-	ld b, $00
-	ld c, 7
+	ld b, FALSE
+	ld c, STARTING_HAND_SIZE
 .cards_loop
 	ld a, [hli]
 	push hl
@@ -2064,16 +2065,16 @@ IsLoadedCard1BasicPokemon:
 	jr nz, .energy_trainer_nonbasic
 
 ; basic
-	ld a, $01
+	ld a, TRUE
 	ret ; z
 
 .energy_trainer_nonbasic
-	xor a
+	xor a ; FALSE
 	scf
 	ret
 
 .basic ; MYSTERIOUS_FOSSIL or CLEFAIRY_DOLL
-	ld a, $01
+	ld a, TRUE
 	or a
 	ret ; nz
 
@@ -3587,7 +3588,7 @@ TurnDuelistTakePrizes:
 	call DrawWideTextBox_WaitForInput
 	ld a, [wNumberPrizeCardsToTake]
 	call SelectPrizeCards
-	ld hl, hDuelActionArgs + 0
+	ld hl, hDuelActionArgs + SELECTPRIZE_ARGS_BITFIELD
 	ld d, [hl]
 	inc hl
 	ld e, [hl]
@@ -5645,7 +5646,7 @@ DisplayPlayAreaScreenToUsePkmnPower:
 	ld hl, wDuelTempList + 1
 	add hl, de
 	ld a, [hld]
-	cp $04
+	cp POKEMON_POWER
 	jr nz, .wait_input
 	ld a, [hl]
 	ldh [hTempCardIndex_ff98], a
@@ -5664,7 +5665,7 @@ DisplayPlayAreaScreenToUsePkmnPower:
 	call YesOrNoMenuWithText
 	jp c, .start
 	ldh a, [hTempCardIndex_ff98]
-	ldh [hDuelActionArgs + 0], a
+	ldh [hDuelActionArgs + DECLARE_PKMNPOWER_ARGS_CARD_INDEX], a
 	or a
 	ret
 .cancel
@@ -5689,12 +5690,12 @@ DisplayPlayAreaScreenToUsePkmnPower:
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld c, a
-	ld b, 0
+	ld b, PLAY_AREA_ARENA
 .loop_play_area_pkmn
 	push hl
 	push bc
 	ld a, b
-	ld [wHUDEnergyAndHPBarsX], a
+	ld [wCurPlayAreaSlot], a
 	ld a, b
 	add a
 	add b
@@ -6625,7 +6626,7 @@ OppAction_ExecuteTrainerCardEffectCommands:
 OppAction_BeginUseAttack:
 	ldh a, [hDuelActionCardIndex]
 	ld d, a
-	ldh a, [hDuelActionArgs + 0]
+	ldh a, [hDuelActionArgs + DECLARE_ATTACK_ARGS_ATTACK_INDEX]
 	ld e, a
 	call CopyAttackDataAndDamage_FromDeckIndex
 	call UpdateArenaCardIDsAndClearTwoTurnDuelVars
@@ -6704,7 +6705,7 @@ OppAction_UsePokemonPower:
 	ld d, a
 	ld e, FIRST_ATTACK_OR_PKMN_POWER
 	call CopyAttackDataAndDamage_FromDeckIndex
-	ldh a, [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA]
+	ldh a, [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA]
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call DisplayUsePokemonPowerScreen
 	ldh a, [hDuelActionCardIndex]
@@ -7440,7 +7441,7 @@ ReplaceKnockedOutPokemon:
 	cp DUELIST_TYPE_LINK_OPP
 	jr z, .link_opponent
 	call AIDoAction_KOSwitch
-	ldh a, [hDuelActionArgs + 0]
+	ldh a, [hDuelActionArgs + NEWARENAPKMN_ARGS_FROM_PLAY_AREA]
 	ldh [hTempPlayAreaLocation_ff9d], a
 	jr .replace_pokemon
 
@@ -7573,7 +7574,7 @@ PrintThereWasNoEffectFromStatusText::
 ; input:
 ;	hTempPlayAreaLocation_ff9d = play area location to check;
 ; output:
-;	a = card index in hTempPlayAreaLocation_ff9d;
+;	a = e = card index in hTempPlayAreaLocation_ff9d;
 ;	d = card index of card one stage below;
 ;	carry set if card is a basic card.
 GetCardOneStageBelow:

@@ -999,7 +999,7 @@ AITryToRetreat:
 	call GetTurnDuelistVariable
 	ldh [hDuelActionCardIndex], a
 	xor a ; PLAY_AREA_ARENA
-	ldh [hDuelActionArgs + PKMNPOWER_ARGS_PLAY_AREA], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af

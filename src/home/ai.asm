@@ -62,7 +62,7 @@ AIDoAction_ForcedSwitch::
 AIDoAction_KOSwitch::
 	ld a, AIACTION_KO_SWITCH
 	call AIDoAction
-	ldh [hDuelActionArgs + 0], a
+	ldh [hDuelActionArgs + NEWARENAPKMN_ARGS_FROM_PLAY_AREA], a
 	ret
 
 AIDoAction_TakePrize::

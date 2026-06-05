@@ -153,7 +153,7 @@ _AIProcessHandTrainerCards:
 AIPlay_Potion:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
+	ld a, [wAITrainerCardArgs + POTION_ARGS_TO_PLAY_AREA]
 	ldh [hDuelActionArgs + POTION_ARGS_TO_PLAY_AREA], a
 	ld e, a
 	call GetCardDamageAndMaxHP
@@ -340,11 +340,11 @@ AIDecide_Potion_Phase10:
 AIPlay_SuperPotion:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
+	ld a, [wAITrainerCardArgs + AI_SUPERPOTION_ARGS_TO_PLAY_AREA]
 	ldh [hDuelActionArgs + SUPERPOTION_ARGS_TO_PLAY_AREA], a
 	call AIPickEnergyCardToDiscard
 	ldh [hDuelActionArgs + SUPERPOTION_ARGS_DISCARD_ENERGY_INDEX], a
-	ld a, [wAITrainerCardArgs + 0]
+	ld a, [wAITrainerCardArgs + AI_SUPERPOTION_ARGS_TO_PLAY_AREA]
 	ld e, a
 	call GetCardDamageAndMaxHP
 	cp 40
@@ -591,7 +591,7 @@ AIPlay_Defender:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
 	xor a ; PLAY_AREA_ARENA
-	ldh [hDuelActionArgs + 0], a
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -759,7 +759,7 @@ AIPlay_PlusPower:
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_USED_PLUSPOWER
 	ld [wCurrentAIFlags], a
-	ld a, [wAITrainerCardArgs + 0]
+	ld a, [wAITrainerCardArgs + AI_PLUSPOWER_ARGS_ATTACK_INDEX]
 	ld [wAIPlusPowerAttack], a
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
@@ -967,8 +967,8 @@ AIPlay_Switch:
 	ld [wCurrentAIFlags], a
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	xor a
@@ -1030,8 +1030,8 @@ AIPlay_GustOfWind:
 	ld [wCurrentAIFlags], a
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -1428,10 +1428,10 @@ AIDecide_Bill:
 AIPlay_EnergyRemoval:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 1], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_ENERGY_INDEX]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_TARGET_ARGS_ENERGY_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -1489,7 +1489,7 @@ AIDecide_EnergyRemoval:
 	ld a, e
 	push af
 	call PickAttachedEnergyCardToRemove
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_ENERGY_INDEX], a
 	pop af
 	call SwapTurn
 	scf
@@ -1641,18 +1641,18 @@ AIDecide_EnergyRemoval:
 AIPlay_SuperEnergyRemoval:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 1], a
-	ld a, [wAITrainerCardArgs + 2]
-	ldh [hDuelActionArgs + 2], a
-	ld a, [wAITrainerCardArgs + 3]
-	ldh [hDuelActionArgs + 3], a
-	ld a, [wAITrainerCardArgs + 4]
-	ldh [hDuelActionArgs + 4], a
+	ld a, [wAITrainerCardArgs + SUPERENERGYREMOVAL_ARGS_OWN_PKMN_PLAY_AREA]
+	ldh [hDuelActionArgs + SUPERENERGYREMOVAL_ARGS_OWN_PKMN_PLAY_AREA], a
+	ld a, [wAITrainerCardArgs + SUPERENERGYREMOVAL_ARGS_OWN_ENERGY_INDEX]
+	ldh [hDuelActionArgs + SUPERENERGYREMOVAL_ARGS_OWN_ENERGY_INDEX], a
+	ld a, [wAITrainerCardArgs + SUPERENERGYREMOVAL_ARGS_OPP_PKMN_PLAY_AREA]
+	ldh [hDuelActionArgs + SUPERENERGYREMOVAL_ARGS_OPP_PKMN_PLAY_AREA], a
+	ld a, [wAITrainerCardArgs + SUPERENERGYREMOVAL_ARGS_OPP_ENERGY1_INDEX]
+	ldh [hDuelActionArgs + SUPERENERGYREMOVAL_ARGS_OPP_ENERGY1_INDEX], a
+	ld a, [wAITrainerCardArgs + SUPERENERGYREMOVAL_ARGS_OPP_ENERGY2_INDEX]
+	ldh [hDuelActionArgs + SUPERENERGYREMOVAL_ARGS_OPP_ENERGY2_INDEX], a
 	ld a, $ff
-	ldh [hDuelActionArgs + 5], a
+	ldh [hDuelActionArgs + SUPERENERGYREMOVAL_ARGS_TERMINATOR], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -1756,16 +1756,16 @@ AIDecide_SuperEnergyRemoval:
 ; store the picked energy card to remove in wAITrainerCardArgs[1]
 ; and set carry
 .pick_energy
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + SUPERENERGYREMOVAL_ARGS_OPP_PKMN_PLAY_AREA], a
 	call PickTwoAttachedEnergyCards
-	ld [wAITrainerCardArgs + 3], a
+	ld [wAITrainerCardArgs + SUPERENERGYREMOVAL_ARGS_OPP_ENERGY1_INDEX], a
 	ld a, b
-	ld [wAITrainerCardArgs + 4], a
+	ld [wAITrainerCardArgs + SUPERENERGYREMOVAL_ARGS_OPP_ENERGY2_INDEX], a
 	call SwapTurn
 	ld a, [wce0f]
 	push af
 	call AIPickEnergyCardToDiscard
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + SUPERENERGYREMOVAL_ARGS_OWN_ENERGY_INDEX], a
 	pop af
 	scf
 	ret
@@ -1927,10 +1927,10 @@ AIDecide_SuperEnergyRemoval:
 AIPlay_PokemonBreeder:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 1], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 0], a
+	ld a, [wAITrainerCardArgs + AI_POKEMONBREEDER_ARGS_TO_PLAY_AREA]
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TO_PLAY_AREA], a
+	ld a, [wAITrainerCardArgs + AI_POKEMONBREEDER_ARGS_EVO_CARD_INDEX]
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -2075,7 +2075,7 @@ AIDecide_PokemonBreeder:
 	ld hl, wce0f
 	add hl, de
 	ld a, [hl]
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + AI_POKEMONBREEDER_ARGS_EVO_CARD_INDEX], a
 	ld a, [wce07]
 	scf
 	ret
@@ -2184,7 +2184,7 @@ AIDecide_PokemonBreeder:
 	ld hl, wce0f
 	add hl, de
 	ld a, [hl]
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + AI_POKEMONBREEDER_ARGS_EVO_CARD_INDEX], a
 	ld a, [wce07]
 	scf
 	ret
@@ -2604,16 +2604,16 @@ AIPlay_EnergyRetrieval:
 	ld [wCurrentAIFlags], a
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 1], a
-	ld a, [wAITrainerCardArgs + 2]
-	ldh [hDuelActionArgs + 2], a
+	ld a, [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_DISCARD_CARD_INDEX]
+	ldh [hDuelActionArgs + ENERGYRETRIEVAL_ARGS_DISCARD_CARD_INDEX], a
+	ld a, [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY1_INDEX]
+	ldh [hDuelActionArgs + ENERGYRETRIEVAL_ARGS_ENERGY1_INDEX], a
+	ld a, [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY2_INDEX]
+	ldh [hDuelActionArgs + ENERGYRETRIEVAL_ARGS_ENERGY2_INDEX], a
 	cp $ff
 	jr z, .asm_20e68
 	ld a, $ff
-	ldh [hDuelActionArgs + 3], a
+	ldh [hDuelActionArgs + ENERGYRETRIEVAL_ARGS_TERMINATOR], a
 .asm_20e68
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -2655,9 +2655,9 @@ AIDecide_EnergyRetrieval:
 
 ; some basic energy cards were found in Discard Pile
 	ld a, $ff
-	ld [wAITrainerCardArgs + 1], a
-	ld [wAITrainerCardArgs + 2], a
-	ld [wAITrainerCardArgs + 3], a
+	ld [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY1_INDEX], a
+	ld [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY2_INDEX], a
+	ld [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_TERMINATOR], a
 
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -2697,7 +2697,7 @@ AIDecide_EnergyRetrieval:
 	pop hl
 	jr nc, .loop_energy_cards_1
 
-	ld a, [wAITrainerCardArgs + 1]
+	ld a, [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY1_INDEX]
 	cp $ff
 	jr nz, .second_energy_1
 
@@ -2706,12 +2706,12 @@ AIDecide_EnergyRetrieval:
 
 ; first energy card found
 	ld a, b
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY1_INDEX], a
 	call RemoveCardFromList
 	jr .next_play_area
 .second_energy_1
 	ld a, b
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY2_INDEX], a
 	jr .set_carry
 
 .next_play_area
@@ -2728,22 +2728,22 @@ AIDecide_EnergyRetrieval:
 	cp $ff
 	jr z, .check_chosen
 	ld b, a
-	ld a, [wAITrainerCardArgs + 1]
+	ld a, [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY1_INDEX]
 	cp $ff
 	jr nz, .second_energy_2
 	ld a, b
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY1_INDEX], a
 	call RemoveCardFromList
 	jr .loop_energy_cards_2
 
 .second_energy_2
 	ld a, b
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY2_INDEX], a
 	jr .set_carry
 
 ; will set carry if at least one has been chosen
 .check_chosen
-	ld a, [wAITrainerCardArgs + 1]
+	ld a, [wAITrainerCardArgs + ENERGYRETRIEVAL_ARGS_ENERGY1_INDEX]
 	cp $ff
 	jr nz, .set_carry
 .no_carry
@@ -2859,27 +2859,27 @@ AIPlay_SuperEnergyRetrieval:
 	ld [wCurrentAIFlags], a
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 1], a
-	ld a, [wAITrainerCardArgs + 2]
-	ldh [hDuelActionArgs + 2], a
-	ld a, [wAITrainerCardArgs + 3]
-	ldh [hDuelActionArgs + 3], a
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_DISCARD_CARD1_INDEX]
+	ldh [hDuelActionArgs + SUPERENERGYRETRIEVAL_ARGS_DISCARD_CARD1_INDEX], a
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_DISCARD_CARD2_INDEX]
+	ldh [hDuelActionArgs + SUPERENERGYRETRIEVAL_ARGS_DISCARD_CARD2_INDEX], a
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY1_INDEX]
+	ldh [hDuelActionArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY1_INDEX], a
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY2_INDEX]
+	ldh [hDuelActionArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY2_INDEX], a
 	cp $ff
-	jr z, .asm_20fbb
-	ld a, [wAITrainerCardArgs + 4]
-	ldh [hDuelActionArgs + 4], a
+	jr z, .execute
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY3_INDEX]
+	ldh [hDuelActionArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY3_INDEX], a
 	cp $ff
-	jr z, .asm_20fbb
-	ld a, [wAITrainerCardArgs + 5]
-	ldh [hDuelActionArgs + 5], a
+	jr z, .execute
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY4_INDEX]
+	ldh [hDuelActionArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY4_INDEX], a
 	cp $ff
-	jr z, .asm_20fbb
+	jr z, .execute
 	ld a, $ff
-	ldh [hDuelActionArgs + 6], a
-.asm_20fbb
+	ldh [hDuelActionArgs + SUPERENERGYRETRIEVAL_ARGS_TERMINATOR], a
+.execute
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -2925,11 +2925,11 @@ AIDecide_SuperEnergyRetrieval:
 
 ; some basic energy cards were found in Discard Pile
 	ld a, $ff
-	ld [wAITrainerCardArgs + 2], a
-	ld [wAITrainerCardArgs + 3], a
-	ld [wAITrainerCardArgs + 4], a
-	ld [wAITrainerCardArgs + 5], a
-	ld [wAITrainerCardArgs + 6], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY1_INDEX], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY2_INDEX], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY3_INDEX], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY4_INDEX], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_TERMINATOR], a
 
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -2970,35 +2970,35 @@ AIDecide_SuperEnergyRetrieval:
 	jr nc, .loop_energy_cards_1
 
 ; first energy
-	ld a, [wAITrainerCardArgs + 2]
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY1_INDEX]
 	cp $ff
 	jr nz, .second_energy_1
 	ld a, b
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY1_INDEX], a
 	call RemoveCardFromList
 	jr .next_play_area
 
 .second_energy_1
-	ld a, [wAITrainerCardArgs + 3]
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY2_INDEX]
 	cp $ff
 	jr nz, .third_energy_1
 	ld a, b
-	ld [wAITrainerCardArgs + 3], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY2_INDEX], a
 	call RemoveCardFromList
 	jr .next_play_area
 
 .third_energy_1
-	ld a, [wAITrainerCardArgs + 4]
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY3_INDEX]
 	cp $ff
 	jr nz, .fourth_energy_1
 	ld a, b
-	ld [wAITrainerCardArgs + 4], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY3_INDEX], a
 	call RemoveCardFromList
 	jr .next_play_area
 
 .fourth_energy_1
 	ld a, b
-	ld [wAITrainerCardArgs + 5], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY4_INDEX], a
 	jr .set_carry
 
 .next_play_area
@@ -3015,42 +3015,42 @@ AIDecide_SuperEnergyRetrieval:
 	cp $ff
 	jr z, .check_chosen
 	ld b, a
-	ld a, [wAITrainerCardArgs + 2]
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY1_INDEX]
 	cp $ff
 	jr nz, .second_energy_2
 	ld a, b
 
 ; first energy
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY1_INDEX], a
 	call RemoveCardFromList
 	jr .loop_energy_cards_2
 
 .second_energy_2
-	ld a, [wAITrainerCardArgs + 3]
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY2_INDEX]
 	cp $ff
 	jr nz, .third_energy_2
 	ld a, b
-	ld [wAITrainerCardArgs + 3], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY2_INDEX], a
 	call RemoveCardFromList
 	jr .loop_energy_cards_2
 
 .third_energy_2
-	ld a, [wAITrainerCardArgs + 4]
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY3_INDEX]
 	cp $ff
 	jr nz, .fourth_energy
 	ld a, b
-	ld [wAITrainerCardArgs + 4], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY3_INDEX], a
 	call RemoveCardFromList
 	jr .loop_energy_cards_2
 
 .fourth_energy
 	ld a, b
-	ld [wAITrainerCardArgs + 5], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY4_INDEX], a
 	jr .set_carry
 
 ; will set carry if at least one has been chosen
 .check_chosen
-	ld a, [wAITrainerCardArgs + 2]
+	ld a, [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_ENERGY1_INDEX]
 	cp $ff
 	jr nz, .set_carry
 
@@ -3059,7 +3059,7 @@ AIDecide_SuperEnergyRetrieval:
 	ret
 .set_carry
 	ld a, [wce08]
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + SUPERENERGYRETRIEVAL_ARGS_DISCARD_CARD2_INDEX], a
 	ld a, [wce06]
 	scf
 	ret
@@ -3220,8 +3220,8 @@ AIDecide_ImposterProfessorOak:
 AIPlay_EnergySearch:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -3463,18 +3463,18 @@ AIDecide_EnergySearch:
 AIPlay_Pokedex:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 0], a
-	ld a, [wAITrainerCardArgs + 2]
-	ldh [hDuelActionArgs + 1], a
-	ld a, [wAITrainerCardArgs + 3]
-	ldh [hDuelActionArgs + 2], a
-	ld a, [wAITrainerCardArgs + 4]
-	ldh [hDuelActionArgs + 3], a
-	ld a, [wAITrainerCardArgs + 5]
-	ldh [hDuelActionArgs + 4], a
+	ld a, [wAITrainerCardArgs + AI_POKEDEX_ARGS_CARD1_INDEX]
+	ldh [hDuelActionArgs + POKEDEX_ARGS_CARD1_INDEX], a
+	ld a, [wAITrainerCardArgs + AI_POKEDEX_ARGS_CARD2_INDEX]
+	ldh [hDuelActionArgs + POKEDEX_ARGS_CARD2_INDEX], a
+	ld a, [wAITrainerCardArgs + AI_POKEDEX_ARGS_CARD3_INDEX]
+	ldh [hDuelActionArgs + POKEDEX_ARGS_CARD3_INDEX], a
+	ld a, [wAITrainerCardArgs + AI_POKEDEX_ARGS_CARD4_INDEX]
+	ldh [hDuelActionArgs + POKEDEX_ARGS_CARD4_INDEX], a
+	ld a, [wAITrainerCardArgs + AI_POKEDEX_ARGS_CARD5_INDEX]
+	ldh [hDuelActionArgs + POKEDEX_ARGS_CARD5_INDEX], a
 	ld a, $ff
-	ldh [hDuelActionArgs + 5], a
+	ldh [hDuelActionArgs + POKEDEX_ARGS_TERMINATOR], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -3549,7 +3549,7 @@ PickPokedexCards_Unreferenced:
 	ld a, $ff
 	ld [wce08 + 5], a
 
-	ld de, wAITrainerCardArgs + 1
+	ld de, wAITrainerCardArgs + AI_POKEDEX_ARGS_CARD1_INDEX
 
 ; find Pokemon
 	ld hl, wce08
@@ -3679,7 +3679,7 @@ PickPokedexCards:
 	ld a, $ff
 	ld [wce08 + 5], a
 
-	ld de, wAITrainerCardArgs + 1
+	ld de, wAITrainerCardArgs + AI_POKEDEX_ARGS_CARD1_INDEX
 
 ; find energy
 	ld hl, wce08
@@ -3870,8 +3870,8 @@ AIDecide_FullHeal:
 AIPlay_MrFuji:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -3942,10 +3942,10 @@ AIDecide_MrFuji:
 AIPlay_ScoopUp:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 1], a
+	ld a, [wAITrainerCardArgs + SCOOPUP_ARGS_TO_PLAY_AREA]
+	ldh [hDuelActionArgs + SCOOPUP_ARGS_TO_PLAY_AREA], a
+	ld a, [wAITrainerCardArgs + SCOOPUP_ARGS_FROM_BENCH_TO_ARENA]
+	ldh [hDuelActionArgs + SCOOPUP_ARGS_FROM_BENCH_TO_ARENA], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -4034,7 +4034,7 @@ AIDecide_ScoopUp:
 .decide_switch
 	farcall AIDecideBenchPokemonToSwitchTo
 	jr c, .no_carry
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + SCOOPUP_ARGS_FROM_BENCH_TO_ARENA], a
 	xor a
 	scf
 	ret
@@ -4118,7 +4118,7 @@ AIDecide_ScoopUp:
 ; because there's no need to switch.
 	push af
 	ld a, $ff
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + SCOOPUP_ARGS_FROM_BENCH_TO_ARENA], a
 	pop af
 	scf
 	ret
@@ -4152,10 +4152,10 @@ AIPlay_Maintenance:
 	ld [wCurrentAIFlags], a
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 0], a
-	ld a, [wAITrainerCardArgs + 2]
-	ldh [hDuelActionArgs + 1], a
+	ld a, [wAITrainerCardArgs + AI_MAINTENANCE_ARGS_RETURN_CARD1_INDEX]
+	ldh [hDuelActionArgs + MAINTENANCE_ARGS_RETURN_CARD1_INDEX], a
+	ld a, [wAITrainerCardArgs + AI_MAINTENANCE_ARGS_RETURN_CARD2_INDEX]
+	ldh [hDuelActionArgs + MAINTENANCE_ARGS_RETURN_CARD2_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -4185,7 +4185,7 @@ AIDecide_Maintenance:
 
 ; store the first duplicate card and remove it from the list.
 ; run duplicate check again.
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + AI_MAINTENANCE_ARGS_RETURN_CARD1_INDEX], a
 	ld hl, wDuelTempList
 	call FindAndRemoveCardFromList
 ; if duplicates are not found, return no carry.
@@ -4193,7 +4193,7 @@ AIDecide_Maintenance:
 	jp c, .no_carry
 
 ; store the second duplicate card and return carry.
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + AI_MAINTENANCE_ARGS_RETURN_CARD2_INDEX], a
 	scf
 	ret
 
@@ -4226,7 +4226,7 @@ AIDecide_Maintenance:
 	ld a, [wAITrainerCardToPlay]
 	ld b, a
 	ld c, 2
-	ld de, wAITrainerCardArgs + 1
+	ld de, wAITrainerCardArgs + AI_MAINTENANCE_ARGS_RETURN_CARD1_INDEX
 
 .loop
 	ld a, [hli]
@@ -4248,14 +4248,14 @@ AIPlay_Recycle:
 	ldh [hDuelActionCardIndex], a
 	ldtx de, TrainerCardSuccessCheckText
 	bank1call TossCoin
-	jr nc, .asm_216ae
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
-	jr .asm_216b2
-.asm_216ae
+	jr nc, .tails
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX], a
+	jr .execute
+.tails
 	ld a, $ff
-	ldh [hDuelActionArgs + 0], a
-.asm_216b2
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX], a
+.execute
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -4428,12 +4428,12 @@ AIPlay_ItemFinder:
 	ld [wCurrentAIFlags], a
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 0], a
-	ld a, [wAITrainerCardArgs + 2]
-	ldh [hDuelActionArgs + 1], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 2], a
+	ld a, [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX]
+	ldh [hDuelActionArgs + ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX], a
+	ld a, [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX]
+	ldh [hDuelActionArgs + ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX], a
+	ld a, [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_TARGET_CARD_INDEX]
+	ldh [hDuelActionArgs + ITEMFINDER_OR_COMPUTERSEARCH_ARGS_TARGET_CARD_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -4495,7 +4495,7 @@ AIDecide_ItemFinder:
 
 ; store the duplicate found in wAITrainerCardArgs[1] and
 ; remove it from the hand list.
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX], a
 	ld hl, wDuelTempList
 	call FindAndRemoveCardFromList
 ; find duplicates again, if not found, return no carry.
@@ -4504,7 +4504,7 @@ AIDecide_ItemFinder:
 
 ; store the duplicate found in wAITrainerCardArgs[2].
 ; output the card to be recovered from the Discard Pile.
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX], a
 	ld a, [wce06]
 	scf
 	ret
@@ -4539,7 +4539,7 @@ AIPlay_Gambler:
 	ld [wCurrentAIFlags], a
 	ld a, [wOpponentDeckID]
 	cp IMAKUNI_DECK_ID
-	jr z, .asm_2186a
+	jr z, .imakuni
 	ld hl, wRNG1
 	ld a, [hli]
 	ld [wce06], a
@@ -4563,7 +4563,8 @@ AIPlay_Gambler:
 	ld a, [wce0f]
 	ld [hl], a
 	ret
-.asm_2186a
+
+.imakuni
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
@@ -4608,8 +4609,8 @@ AIDecide_Gambler:
 AIPlay_Revive:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -4655,8 +4656,8 @@ AIDecide_Revive:
 AIPlay_PokemonFlute:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -4800,15 +4801,15 @@ AIPlay_Pokeball:
 	ldh [hDuelActionCardIndex], a
 	ldtx de, TrainerCardSuccessCheckText
 	bank1call TossCoin
-	ldh [hDuelActionArgs + 0], a
-	jr nc, .asm_219bc
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 1], a
-	jr .asm_219c0
-.asm_219bc
+	ldh [hDuelActionArgs + POKEBALL_ARGS_COIN_RESULT], a
+	jr nc, .tails
+	ld a, [wAITrainerCardArgs + AI_POKEBALL_ARGS_SEARCH_CARD_INDEX]
+	ldh [hDuelActionArgs + POKEBALL_ARGS_SEARCH_CARD_INDEX], a
+	jr .execute
+.tails
 	ld a, $ff
-	ldh [hDuelActionArgs + 1], a
-.asm_219c0
+	ldh [hDuelActionArgs + POKEBALL_ARGS_SEARCH_CARD_INDEX], a
+.execute
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -5020,12 +5021,12 @@ AIPlay_ComputerSearch:
 	ld [wCurrentAIFlags], a
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 2], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 0], a
-	ld a, [wAITrainerCardArgs + 2]
-	ldh [hDuelActionArgs + 1], a
+	ld a, [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_TARGET_CARD_INDEX]
+	ldh [hDuelActionArgs + ITEMFINDER_OR_COMPUTERSEARCH_ARGS_TARGET_CARD_INDEX], a
+	ld a, [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX]
+	ldh [hDuelActionArgs + ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX], a
+	ld a, [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX]
+	ldh [hDuelActionArgs + ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -5074,12 +5075,12 @@ AIDecide_ComputerSearch_RockCrusher:
 .find_discard_cards_1
 	ld [wce06], a
 	ld a, $ff
-	ld [wAITrainerCardArgs + 1], a
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX], a
 
 	call CreateHandCardList
 	ld hl, wDuelTempList
-	ld de, wAITrainerCardArgs + 1
+	ld de, wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX
 .loop_hand_1
 	ld a, [hli]
 	cp $ff
@@ -5121,7 +5122,7 @@ AIDecide_ComputerSearch_RockCrusher:
 ; check if two cards were found
 ; if so, output in a the deck index
 ; of Professor Oak card found in deck and set carry.
-	ld a, [wAITrainerCardArgs + 2]
+	ld a, [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX]
 	cp $ff
 	jr z, .no_carry
 	ld a, [wce06]
@@ -5193,10 +5194,10 @@ AIDecide_ComputerSearch_RockCrusher:
 
 .find_discard_cards_2
 	ld a, $ff
-	ld [wAITrainerCardArgs + 1], a
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX], a
 
-	ld bc, wAITrainerCardArgs + 1
+	ld bc, wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX
 	ld d, $00 ; start considering Trainer cards only
 
 ; stores wAITrainerCardToPlay in e so that
@@ -5222,7 +5223,7 @@ AIDecide_ComputerSearch_RockCrusher:
 ; jump back into the loop.
 	ld [bc], a
 	inc bc
-	ld a, [wAITrainerCardArgs + 2]
+	ld a, [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX]
 	cp $ff
 	jr z, .loop_hand_2
 
@@ -5296,10 +5297,10 @@ AIDecide_ComputerSearch_WondersOfScience:
 	ld e, a
 	call RemoveFromListDifferentCardOfGivenType
 	jr nc, .no_carry
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX], a
 	call RemoveFromListDifferentCardOfGivenType
 	jr nc, .no_carry
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX], a
 	ld a, [wce06]
 	scf
 	ret
@@ -5361,10 +5362,10 @@ AIDecide_ComputerSearch_FireCharge:
 	ld e, a
 	call RemoveFromListDifferentCardOfGivenType
 	jr nc, .no_carry
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX], a
 	call RemoveFromListDifferentCardOfGivenType
 	jr nc, .no_carry
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX], a
 	ld a, [wce06]
 	scf
 	ret
@@ -5421,10 +5422,10 @@ AIDecide_ComputerSearch_Anger:
 	ld e, a
 	call RemoveFromListDifferentCardOfGivenType
 	jr nc, .no_carry
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD1_INDEX], a
 	call RemoveFromListDifferentCardOfGivenType
 	jr nc, .no_carry
-	ld [wAITrainerCardArgs + 2], a
+	ld [wAITrainerCardArgs + AI_ITEMFINDER_OR_COMPUTERSEARCH_ARGS_DISCARD_CARD2_INDEX], a
 	ld a, [wce06]
 	scf
 	ret
@@ -5432,10 +5433,10 @@ AIDecide_ComputerSearch_Anger:
 AIPlay_PokemonTrader:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + 0]
-	ldh [hDuelActionArgs + 0], a
-	ld a, [wAITrainerCardArgs + 1]
-	ldh [hDuelActionArgs + 1], a
+	ld a, [wAITrainerCardArgs + POKEMONTRADER_ARGS_HAND_CARD_INDEX]
+	ldh [hDuelActionArgs + POKEMONTRADER_ARGS_HAND_CARD_INDEX], a
+	ld a, [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX]
+	ldh [hDuelActionArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -5475,7 +5476,7 @@ AIDecide_PokemonTrader_LegendaryMoltres:
 	call LookForCardIDToTradeWithDifferentHandCard
 	jr nc, .no_carry
 ; success
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	ld a, e
 	scf
 	ret
@@ -5503,7 +5504,7 @@ AIDecide_PokemonTrader_LegendaryArticuno:
 	ld a, CARD_LOCATION_DECK
 	call LookForCardIDInLocation_Bank8
 	jr nc, .dewgong
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	jr .check_hand
 
 .dewgong
@@ -5514,7 +5515,7 @@ AIDecide_PokemonTrader_LegendaryArticuno:
 	ld a, CARD_LOCATION_DECK
 	call LookForCardIDInLocation_Bank8
 	jr nc, .no_carry
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 
 ; a Seel or Dewgong was found in deck,
 ; check hand for card to trade for
@@ -5528,7 +5529,7 @@ AIDecide_PokemonTrader_LegendaryArticuno:
 	ld a, ARTICUNO_LV37
 	call CheckIfHasCardIDInHand
 	jr c, .set_carry
-	; doesn't have any of the cards in hand
+	; none found
 
 .no_carry
 	or a
@@ -5607,7 +5608,7 @@ AIDecide_PokemonTrader_LegendaryDragonite:
 ; card was found as target in deck,
 ; look for card in hand to trade with
 .choose_hand
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	ld a, DRAGONAIR
 	call CheckIfHasCardIDInHand
 	jr c, .set_carry
@@ -5626,7 +5627,7 @@ AIDecide_PokemonTrader_LegendaryDragonite:
 	ld a, DRATINI
 	call CheckIfHasCardIDInHand
 	jr c, .set_carry
-	; non found
+	; none found
 
 .no_carry
 	or a
@@ -5686,7 +5687,7 @@ AIDecide_PokemonTrader_LegendaryRonald:
 ; card was found as target in deck,
 ; look for card in hand to trade with
 .choose_hand
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	ld a, ZAPDOS_LV68
 	call LookForCardIDInHandList_Bank8
 	jr c, .set_carry
@@ -5740,7 +5741,7 @@ AIDecide_PokemonTrader_BlisteringPokemon:
 ; a card in deck was found to look for,
 ; check if there are duplicates in hand to trade with.
 .find_duplicates
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	call FindDuplicatePokemonCards
 	jr c, .set_carry
 .no_carry
@@ -5801,7 +5802,7 @@ AIDecide_PokemonTrader_SoundOfTheWaves:
 ; card was found as target in deck,
 ; look for card in hand to trade with
 .choose_hand
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	ld a, SEEL
 	call CheckIfHasCardIDInHand
 	jr c, .set_carry
@@ -5901,7 +5902,7 @@ AIDecide_PokemonTrader_PowerGenerator:
 ; a card in deck was found to look for,
 ; check if there are duplicates in hand to trade with.
 .find_duplicates
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	call FindDuplicatePokemonCards
 	jr c, .set_carry
 	or a
@@ -5969,7 +5970,7 @@ AIDecide_PokemonTrader_FlowerGarden:
 ; a card in deck was found to look for,
 ; check if there are duplicates in hand to trade with.
 .find_duplicates
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	call FindDuplicatePokemonCards
 	jr c, .found
 .no_carry
@@ -5988,7 +5989,7 @@ AIDecide_PokemonTrader_StrangePower:
 	call LookForCardIDToTradeWithDifferentHandCard
 	jr nc, .no_carry
 ; found
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	ld a, e
 	scf
 	ret
@@ -6047,7 +6048,7 @@ AIDecide_PokemonTrader_Flamethrower:
 ; a card in deck was found to look for,
 ; check if there are duplicates in hand to trade with.
 .find_duplicates
-	ld [wAITrainerCardArgs + 1], a
+	ld [wAITrainerCardArgs + POKEMONTRADER_ARGS_DECK_CARD_INDEX], a
 	call FindDuplicatePokemonCards
 	jr c, .set_carry
 .no_carry
