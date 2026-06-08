@@ -291,3 +291,14 @@ DEF PRIZES_6    EQU $06
 	const SEARCHEFFECT_BASIC_FIGHTING ; $2
 	const SEARCHEFFECT_BASIC_ENERGY   ; $3
 	const SEARCHEFFECT_POKEMON        ; $4
+
+; phantom mew's mystery attack random effect constants
+	const_def
+	const MYSTERYATTACK_EFFECT_10D_PRZ    ; $0
+	const MYSTERYATTACK_EFFECT_10D_PSN    ; $1
+	const MYSTERYATTACK_EFFECT_10D_SLP    ; $2
+	const MYSTERYATTACK_EFFECT_10D_CNF    ; $3
+	const MYSTERYATTACK_EFFECT_10D_10HEAL ; $4
+	const MYSTERYATTACK_EFFECT_10D        ; $5
+	const MYSTERYATTACK_EFFECT_20D        ; $6
+	const MYSTERYATTACK_EFFECT_NULL       ; $7

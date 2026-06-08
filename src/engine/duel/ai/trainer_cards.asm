@@ -1430,8 +1430,8 @@ AIPlay_EnergyRemoval:
 	ldh [hDuelActionCardIndex], a
 	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA]
 	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA], a
-	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_ENERGY_INDEX]
-	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_TARGET_ARGS_ENERGY_INDEX], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_ATTACHED_CARD_INDEX]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_TARGET_ARGS_ATTACHED_CARD_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -1489,7 +1489,7 @@ AIDecide_EnergyRemoval:
 	ld a, e
 	push af
 	call PickAttachedEnergyCardToRemove
-	ld [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_ENERGY_INDEX], a
+	ld [wAITrainerCardArgs + ATTACK_OR_TRAINER_TARGET_ARGS_ATTACHED_CARD_INDEX], a
 	pop af
 	call SwapTurn
 	scf
@@ -3220,8 +3220,8 @@ AIDecide_ImposterProfessorOak:
 AIPlay_EnergySearch:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX]
-	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -4249,12 +4249,12 @@ AIPlay_Recycle:
 	ldtx de, TrainerCardSuccessCheckText
 	bank1call TossCoin
 	jr nc, .tails
-	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX]
-	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX], a
 	jr .execute
 .tails
 	ld a, $ff
-	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX], a
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX], a
 .execute
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -4609,8 +4609,8 @@ AIDecide_Gambler:
 AIPlay_Revive:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX]
-	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
@@ -4656,8 +4656,8 @@ AIDecide_Revive:
 AIPlay_PokemonFlute:
 	ld a, [wAITrainerCardToPlay]
 	ldh [hDuelActionCardIndex], a
-	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX]
-	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CARD_SEARCH_ARGS_CARD_INDEX], a
+	ld a, [wAITrainerCardArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX]
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret

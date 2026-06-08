@@ -2078,7 +2078,7 @@ AISelectSpecialAttackParameters:
 	jp nz, .no_carry  ; can be jr
 
 	ld a, $ff
-	ldh [hDuelActionArgs + ENERGYABSORPTION_ARGS_ENERGY2_INDEX], a
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD2_INDEX], a
 	ldh [hDuelActionArgs + ENERGYABSORPTION_ARGS_TERMINATOR], a
 
 ; search discard pile for 1 psychic energy card first
@@ -2086,7 +2086,7 @@ AISelectSpecialAttackParameters:
 	ld e, PSYCHIC_ENERGY
 	ld a, CARD_LOCATION_DISCARD_PILE
 	call LookForCardIDInLocation_Bank5
-	ldh [hDuelActionArgs + ENERGYABSORPTION_ARGS_ENERGY1_INDEX], a
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX], a
 	farcall CreateEnergyCardListFromDiscardPile_AllEnergy
 
 ; then another energy card, of any type
@@ -2096,12 +2096,12 @@ AISelectSpecialAttackParameters:
 	cp $ff
 	jr z, .set_carry_2
 	ld b, a
-	ldh a, [hDuelActionArgs + ENERGYABSORPTION_ARGS_ENERGY1_INDEX]
+	ldh a, [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX]
 	cp b
 	jr z, .loop_energy_cards ; same card, keep looking
 ; found, store its index in args[1]
 	ld a, b
-	ldh [hDuelActionArgs + ENERGYABSORPTION_ARGS_ENERGY2_INDEX], a
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD2_INDEX], a
 
 .set_carry_2
 	scf
