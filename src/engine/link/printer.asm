@@ -274,14 +274,14 @@ Func_1a011:
 	call SendPrinterInstructionPacket_1Sheet_3LineFeeds
 	ret
 
-; calls setup text and sets wTilePatternSelector
+; calls setup text and sets wTextTileBaseAddressHi to SRAM
 Func_1a025:
 	lb de, $40, $bf
 	call SetupText
-	ld a, $a4
-	ld [wTilePatternSelector], a
+	ld a, HIGH(sGfxBuffer1)
+	ld [wTextTileBaseAddressHi], a
 	xor a
-	ld [wTilePatternSelectorCorrection], a
+	ld [wTextTileIndexSignednessAdjust], a
 	ret
 
 ; switches to CGB normal speed, resets serial

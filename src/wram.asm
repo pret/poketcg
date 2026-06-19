@@ -888,15 +888,18 @@ wcd04:: ; cd04
 wCurTextTile:: ; cd05
 	ds $1
 
-; VRAM tile patterns selector for text tiles
-; if wTilePatternSelector == $80 and wTilePatternSelectorCorrection == $00 -> select tiles at $8000-$8FFF
-; if wTilePatternSelector == $88 and wTilePatternSelectorCorrection == $80 -> select tiles at $8800-$97FF
-wTilePatternSelector:: ; cd06
+; text tile location
+; must use the same mode as wTextTileIndexSignednessAdjust
+; HIGH(v*Tiles1)    = default (LCDC_BLOCK21)
+; HIGH(sGfxBuffer1) = printer
+wTextTileBaseAddressHi:: ; cd06
 	ds $1
 
-; complements wTilePatternSelector by correcting the VRAM tile order when $8800-$97FF is selected
-; a value of $80 in wTilePatternSelectorCorrection reflects tiles $00-$7f being located after tiles $80-$ff
-wTilePatternSelectorCorrection:: ; cd07
+; VRAM tile index converter (xor) for LCDC_BLOCK21 signed addressing
+; must use the same mode as wTextTileBaseAddressHi
+; $80 (signed)   = default (LCDC_BLOCK21)
+; $00 (unsigned) = printer, as if LCDC_BLOCK01
+wTextTileIndexSignednessAdjust:: ; cd07
 	ds $1
 
 ; if 0 (DOUBLE_SPACED), text lines are separated by a blank line

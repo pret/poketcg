@@ -146,10 +146,10 @@ SetupText::
 	xor a
 	ldh [hffb0], a
 	ldh [hffa9], a
-	ld a, $88
-	ld [wTilePatternSelector], a
+	ld a, HIGH(v0Tiles1)
+	ld [wTextTileBaseAddressHi], a
 	ld a, $80
-	ld [wTilePatternSelectorCorrection], a
+	ld [wTextTileIndexSignednessAdjust], a
 	ld hl, wc600
 .clear_loop
 	xor a
@@ -287,15 +287,15 @@ Func_2325::
 	cp [hl]
 	jr nz, .asm_2345
 	ldh a, [hffa9]
-	ld h, $c8
+	ld h, HIGH(wc800)
 .asm_2337
 	ld l, a
 	ld a, [hl]
 	or a
 	jr nz, .asm_2337
-	ld h, $c9
+	ld h, HIGH(wc900)
 	ld c, [hl]
-	ld b, $c8
+	ld b, HIGH(wc800)
 	xor a
 	ld [bc], a
 	jr .asm_234a
@@ -308,13 +308,13 @@ Func_2325::
 .asm_234a
 	ldh a, [hffa9]
 	ld c, a
-	ld b, $c9
+	ld b, HIGH(wc900)
 	ld a, l
 	ldh [hffa9], a
 	ld [bc], a
-	ld h, $c8
+	ld h, HIGH(wc800)
 	ld [hl], c
-	ld h, $c6
+	ld h, HIGH(wc600)
 	ld [hl], e
 	inc h ; $c7
 	ld [hl], d
@@ -348,7 +348,7 @@ Func_235e::
 	ldh a, [hffa9]
 	ld l, a              ; l ← [hffa9]; index to to linked-list head
 .asm_237d
-	ld h, $c6                                     ;
+	ld h, HIGH(wc600)                             ;
 	ld a, [hl]           ; a ← key1[l]            ;
 	or a                                          ;
 	ret z                ; if NULL, return a = 0  ;
@@ -359,7 +359,7 @@ Func_235e::
 	cp d                 ;   key2[l] == d:        ;
 	jr z, .asm_238f      ;   break                ;
 .asm_238a
-	ld h, $c8            ;                        ;
+	ld h, HIGH(wc800)    ;                        ;
 	ld l, [hl]           ; l ← next[l]            ;
 	jr .asm_237d
 .asm_238f
@@ -367,20 +367,20 @@ Func_235e::
 	cp l
 	jr z, .asm_23af      ; assert at least one iteration
 	ld c, a
-	ld b, $c9
+	ld b, HIGH(wc900)
 	ld a, l
 	ld [bc], a           ; prev[i0] ← i
 	ldh [hffa9], a       ; [hffa9] ← i  (update linked-list head)
-	ld h, $c9
+	ld h, HIGH(wc900)
 	ld b, [hl]
 	ld [hl], $0          ; prev[i] ← 0
-	ld h, $c8
+	ld h, HIGH(wc800)
 	ld a, c
 	ld c, [hl]
 	ld [hl], a           ; next[i] ← i0
 	ld l, b
 	ld [hl], c           ; next[prev[i]] ← next[i]
-	ld h, $c9
+	ld h, HIGH(wc900)
 	inc c
 	dec c
 	jr z, .asm_23af      ; if next[i] != NULL:
@@ -396,9 +396,9 @@ CaseHalfWidthLetter::
 	or a
 	ret z
 	ld a, e
-	cp $60
+	cp 'a' - 1
 	ret c
-	cp $7b
+	cp 'z' + 1
 	ret nc
 	sub 'a' - 'A'
 	ld e, a
@@ -674,7 +674,7 @@ CreateHalfWidthFontTile::
 ; the ascii value of the character to copy is provided in a.
 ; assumes BANK(HalfWidthFont) is already loaded.
 CopyHalfWidthCharacterToDE::
-	sub $20 ; HalfWidthFont begins at ascii $20
+	sub ' ' ; HalfWidthFont begins at ascii $20
 	ld l, a
 	ld h, $0
 	add hl, hl
@@ -702,12 +702,11 @@ CreateFullWidthFontTile_ConvertToTileDataAddress::
 	pop bc
 ;	fallthrough
 
-; given a tile number in b, return its v*Tiles address in hl, and return c = TILE_SIZE
-; wTilePatternSelector and wTilePatternSelectorCorrection are used to select the source:
-; - if wTilePatternSelector == $80 and wTilePatternSelectorCorrection == $00 -> $8000-$8FFF
-; - if wTilePatternSelector == $88 and wTilePatternSelectorCorrection == $80 -> $8800-$97FF
+; given a tile number in b, return its tile address in hl, and return c = TILE_SIZE
+; default: VRAM, LCDC_BLOCK21
+; printer: SRAM, as if LCDC_BLOCK01
 ConvertTileNumberToTileDataAddress::
-	ld hl, wTilePatternSelectorCorrection
+	ld hl, wTextTileIndexSignednessAdjust
 	ld a, b
 	xor [hl]
 	ld h, $0
@@ -716,7 +715,7 @@ ConvertTileNumberToTileDataAddress::
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld a, [wTilePatternSelector]
+	ld a, [wTextTileBaseAddressHi]
 	ld b, a
 	ld c, $0
 	add hl, bc
