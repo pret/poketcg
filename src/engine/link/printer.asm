@@ -712,7 +712,7 @@ _PrintCardList:
 	ld a, TX_HALF2FULL
 	call ProcessSpecialTextCharacter
 	ldfw de, "★"
-	call Func_22ca
+	call GenerateAndPlaceTextTile
 .asm_1a2c2
 	ld a, $ff
 	ld [wCurPrinterCardType], a

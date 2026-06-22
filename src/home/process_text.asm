@@ -32,7 +32,7 @@ ProcessText::
 	jr nc, .not_tx_fullwidth
 	inc hl
 .not_tx_fullwidth
-	call Func_22ca
+	call GenerateAndPlaceTextTile
 	xor a
 	call ProcessSpecialTextCharacter
 .next_char
@@ -160,13 +160,13 @@ SetupText::
 
 ; wFontWidth <- FULL_WIDTH
 ; hTextLineCurPos <- 0
-; wHalfWidthPrintState <- 0
+; wPendingHalfWidthChar <- 0
 ; hJapaneseSyllabary <- TX_KATAKANA
 InitTextFormat::
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ldh [hTextLineCurPos], a
-	ld [wHalfWidthPrintState], a
+	ld [wPendingHalfWidthChar], a
 	ld a, TX_KATAKANA
 	ldh [hJapaneseSyllabary], a
 	ret
@@ -199,23 +199,23 @@ InitTextPrinting::
 	ldh [hTextBGMap0Address + 1], a
 	call InitTextFormat
 	xor a
-	ld [wHalfWidthPrintState], a
+	ld [wPendingHalfWidthChar], a
 	pop hl
 	ret
 
 ; requests a text tile to be generated and prints it in the screen
 ; different modes depending on hffb0:
-   ; hffb0 == $0: generate and place text tile
-   ; hffb0 == $2 (bit 1 set): only generate text tile?
-   ; hffb0 == $1 (bit 0 set): not even generate it, but just update text buffers?
-Func_22ca::
+;   hffb0 == $0: generate and place text tile
+;   hffb0 == $2 (bit 1 set): only generate text tile?
+;   hffb0 == $1 (bit 0 set): not even generate it, but just update text buffers?
+GenerateAndPlaceTextTile::
 	push hl
 	push de
 	push bc
 	ldh a, [hffb0]
 	and $1
 	jr nz, .asm_22ed
-	call Func_2325
+	call AllocateOrPromoteTextTileCacheEntry
 	jr c, .tile_already_exists
 	or a
 	jr nz, .done
@@ -232,7 +232,7 @@ Func_22ca::
 	pop hl
 	ret
 .asm_22ed
-	call Func_235e
+	call PromoteTextTileCacheEntry
 	jr .done
 
 ; writes a to wCurTextTile and to the tile pointed to by hTextBGMap0Address,
@@ -264,21 +264,21 @@ TerminateHalfWidthText::
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
 	ret z
-	ld a, [wHalfWidthPrintState]
+	ld a, [wPendingHalfWidthChar]
 	or a
 	ret z ; return if the last printed character was the second of a pair
 	push hl
 	push de
 	push bc
 	ld e, ' '
-	call Func_22ca
+	call GenerateAndPlaceTextTile
 	pop bc
 	pop de
 	pop hl
 	ret
 
-Func_2325::
-	call Func_235e
+AllocateOrPromoteTextTileCacheEntry::
+	call PromoteTextTileCacheEntry
 	ret c
 	or a
 	ret nz
@@ -316,7 +316,7 @@ Func_2325::
 	ld [hl], c
 	ld h, HIGH(wc600)
 	ld [hl], e
-	inc h ; $c7
+	inc h ; HIGH(wc700)
 	ld [hl], d
 	ld b, l
 	xor a
@@ -324,27 +324,27 @@ Func_2325::
 
 ; search linked-list for text characters e/d (registers), if found hoist
 ; the result to head of list and return it. carry flag denotes success.
-Func_235e::
+PromoteTextTileCacheEntry::
 	ld a, [wFontWidth]
 	or a
 	jr z, .print
 	call CaseHalfWidthLetter
-	; if [wHalfWidthPrintState] != 0, load it to d and print the pair of chars
-	; zero wHalfWidthPrintState for next iteration
-	ld a, [wHalfWidthPrintState]
+	; if [wPendingHalfWidthChar] != 0, load it to d and print the pair of chars
+	; zero wPendingHalfWidthChar for next iteration
+	ld a, [wPendingHalfWidthChar]
 	ld d, a
 	or a
 	jr nz, .print
-	; if [wHalfWidthPrintState] == 0, don't print text in this iteration
-	; load the next value of register d into wHalfWidthPrintState
+	; if [wPendingHalfWidthChar] == 0, don't print text in this iteration
+	; load the next value of register d into wPendingHalfWidthChar
 	ld a, e
-	ld [wHalfWidthPrintState], a
+	ld [wPendingHalfWidthChar], a
 	ld a, $1
 	or a
 	ret ; nz
 .print
 	xor a
-	ld [wHalfWidthPrintState], a
+	ld [wPendingHalfWidthChar], a
 	ldh a, [hffa9]
 	ld l, a              ; l ← [hffa9]; index to to linked-list head
 .asm_237d
@@ -354,7 +354,7 @@ Func_235e::
 	ret z                ; if NULL, return a = 0  ;
 	cp e                                          ; loop for e/d key in
 	jr nz, .asm_238a     ;                        ; linked list
-	inc h ; $c7          ;                        ;
+	inc h ; HIGH(wc700)  ;                        ;
 	ld a, [hl]           ; if key1[l] == e and    ;
 	cp d                 ;   key2[l] == d:        ;
 	jr z, .asm_238f      ;   break                ;
@@ -674,7 +674,7 @@ CreateHalfWidthFontTile::
 ; the ascii value of the character to copy is provided in a.
 ; assumes BANK(HalfWidthFont) is already loaded.
 CopyHalfWidthCharacterToDE::
-	sub ' ' ; HalfWidthFont begins at ascii $20
+	sub HALFWIDTH_CHAR_START
 	ld l, a
 	ld h, $0
 	add hl, hl
@@ -752,7 +752,7 @@ ClassifyTextCharacterPair::
 	ld a, e
 	cp TX_CTRL_END
 	jr c, .continue_check
-	cp $60
+	cp FULLWIDTH0_CHAR_START
 	jr nc, .not_katakana
 	ldh a, [hJapaneseSyllabary]
 	cp TX_KATAKANA

@@ -917,11 +917,10 @@ wCurTextLine:: ; cd09
 wFontWidth:: ; cd0a
 	ds $1
 
-; when printing half-width text, this variable alternates between 0 and the value
-; of the first character. 0 signals that no text should be printed in the current
-; iteration of Func_235e, while non-0 means to print the character pair
-; made of [wHalfWidthPrintState] (first char) and register e (second char).
-wHalfWidthPrintState:: ; cd0b
+; tracks the pending char code for printing a pair of half-width chars
+; 0 if none
+; updated during each iteration of PromoteTextTileCacheEntry
+wPendingHalfWidthChar:: ; cd0b
 	ds $1
 
 ; used by CopyTextData

@@ -967,7 +967,7 @@ PrintDeckMachineEntry:
 
 .cannot_build_at_all
 	ldfw de, "×" ; cannot build even by dismantling
-	call Func_22ca
+	call GenerateAndPlaceTextTile
 	pop bc
 	pop de
 
@@ -999,7 +999,7 @@ PrintDeckMachineEntry:
 	ret
 
 .asm_b4c2
-	call Func_22ca
+	call GenerateAndPlaceTextTile
 	pop de
 	ld d, 13
 	inc e
