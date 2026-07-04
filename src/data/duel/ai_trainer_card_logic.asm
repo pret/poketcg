@@ -1,4 +1,4 @@
-MACRO ai_trainer_card_logic
+MACRO? ai_trainer_card_logic
 	db \1 ; AI_TRAINER_CARD_PHASE_* constant
 	db \2 ; ID of trainer card
 	dw \3 ; function for AI decision to play card
@@ -8,12 +8,12 @@ ENDM
 AITrainerCardLogic:
 	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_07, POTION,                 AIDecide_Potion_Phase07,                 AIPlay_Potion
 	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_10, POTION,                 AIDecide_Potion_Phase10,                 AIPlay_Potion
-	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_08, SUPER_POTION,           AIDecide_SuperPotion1,                   AIPlay_SuperPotion
-	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_11, SUPER_POTION,           AIDecide_SuperPotion2,                   AIPlay_SuperPotion
-	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_13, DEFENDER,               AIDecide_Defender1,                      AIPlay_Defender
-	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_14, DEFENDER,               AIDecide_Defender2,                      AIPlay_Defender
-	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_13, PLUSPOWER,              AIDecide_PlusPower1,                     AIPlay_PlusPower
-	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_14, PLUSPOWER,              AIDecide_PlusPower2,                     AIPlay_PlusPower
+	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_08, SUPER_POTION,           AIDecide_SuperPotion_Phase08,            AIPlay_SuperPotion
+	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_11, SUPER_POTION,           AIDecide_SuperPotion_Phase11,            AIPlay_SuperPotion
+	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_13, DEFENDER,               AIDecide_Defender_Phase13,               AIPlay_Defender
+	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_14, DEFENDER,               AIDecide_Defender_Phase14,               AIPlay_Defender
+	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_13, PLUSPOWER,              AIDecide_PlusPower_Phase13,              AIPlay_PlusPower
+	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_14, PLUSPOWER,              AIDecide_PlusPower_Phase14,              AIPlay_PlusPower
 	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_09, SWITCH,                 AIDecide_Switch,                         AIPlay_Switch
 	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_07, GUST_OF_WIND,           AIDecide_GustOfWind,                     AIPlay_GustOfWind
 	ai_trainer_card_logic AI_TRAINER_CARD_PHASE_10, GUST_OF_WIND,           AIDecide_GustOfWind,                     AIPlay_GustOfWind
