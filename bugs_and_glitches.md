@@ -371,7 +371,8 @@ The AI has the following checks when it is deciding whether to play Full Heal an
 ```
 .asleep
 ; set carry if any of the following
-; cards are in the Play Area.
+; cards are in own Play Area.
+; bug, should be checking player's Play Area instead
 	ld a, GASTLY_LV8
 	ld b, PLAY_AREA_ARENA
 	call LookForCardIDInPlayArea_Bank8
@@ -394,7 +395,8 @@ AIDecide_FullHeal:
 	...
 .asleep
 ; set carry if any of the following
-; cards are in the Play Area.
+-; cards are in the Play Area.
++; cards are in the player's Play Area.
 	ld a, GASTLY_LV8
 -	ld b, PLAY_AREA_ARENA
 -	call LookForCardIDInPlayArea_Bank8
