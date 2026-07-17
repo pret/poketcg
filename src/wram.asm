@@ -881,7 +881,7 @@ wTextBoxFrameType:: ; ccf3
 wTextTileBuffer:: ; ccf4
 	ds TILE_SIZE
 
-wcd04:: ; cd04
+wNextTextTileCacheIndex:: ; cd04
 	ds $1
 
 ; used by PlaceNextTextTile
@@ -919,7 +919,7 @@ wFontWidth:: ; cd0a
 
 ; tracks the pending char code for printing a pair of half-width chars
 ; 0 if none
-; updated during each iteration of PromoteTextTileCacheEntry
+; updated during each iteration of MoveTextTileCacheEntryToFront
 wPendingHalfWidthChar:: ; cd0b
 	ds $1
 

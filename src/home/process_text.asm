@@ -135,17 +135,17 @@ ProcessSpecialTextCharacter::
 
 ; calls InitTextFormat, selects tiles at $8800-$97FF for text, and clears the wc600.
 ; selects the first and last tile to be reserved for constructing text tiles in VRAM
-; based on the values given in d and e respectively.
+; by setting (next index, max index) = (d-1, e).
 SetupText::
 	ld a, d
 	dec a
-	ld [wcd04], a
+	ld [wNextTextTileCacheIndex], a
 	ld a, e
-	ldh [hffa8], a
+	ldh [hMaxTextTileCacheIndex], a
 	call InitTextFormat
 	xor a
 	ldh [hffb0], a
-	ldh [hffa9], a
+	ldh [hTextTileCacheHead], a
 	ld a, HIGH(v0Tiles1)
 	ld [wTextTileBaseAddressHi], a
 	ld a, $80
@@ -215,7 +215,7 @@ GenerateAndPlaceTextTile::
 	ldh a, [hffb0]
 	and $1
 	jr nz, .asm_22ed
-	call AllocateOrPromoteTextTileCacheEntry
+	call FindOrInsertTextTileCacheEntry
 	jr c, .tile_already_exists
 	or a
 	jr nz, .done
@@ -224,7 +224,7 @@ GenerateAndPlaceTextTile::
 	ldh a, [hffb0]
 	and $2
 	jr nz, .done
-	ldh a, [hffa9]
+	ldh a, [hTextTileCacheHead]
 	call PlaceNextTextTile
 .done
 	pop bc
@@ -232,7 +232,7 @@ GenerateAndPlaceTextTile::
 	pop hl
 	ret
 .asm_22ed
-	call PromoteTextTileCacheEntry
+	call MoveTextTileCacheEntryToFront
 	jr .done
 
 ; writes a to wCurTextTile and to the tile pointed to by hTextBGMap0Address,
@@ -277,16 +277,16 @@ TerminateHalfWidthText::
 	pop hl
 	ret
 
-AllocateOrPromoteTextTileCacheEntry::
-	call PromoteTextTileCacheEntry
+FindOrInsertTextTileCacheEntry::
+	call MoveTextTileCacheEntryToFront
 	ret c
 	or a
 	ret nz
-	ldh a, [hffa8]
-	ld hl, wcd04
+	ldh a, [hMaxTextTileCacheIndex]
+	ld hl, wNextTextTileCacheIndex
 	cp [hl]
 	jr nz, .asm_2345
-	ldh a, [hffa9]
+	ldh a, [hTextTileCacheHead]
 	ld h, HIGH(wc800)
 .asm_2337
 	ld l, a
@@ -306,11 +306,11 @@ AllocateOrPromoteTextTileCacheEntry::
 .asm_2349
 	ld l, [hl]
 .asm_234a
-	ldh a, [hffa9]
+	ldh a, [hTextTileCacheHead]
 	ld c, a
 	ld b, HIGH(wc900)
 	ld a, l
-	ldh [hffa9], a
+	ldh [hTextTileCacheHead], a
 	ld [bc], a
 	ld h, HIGH(wc800)
 	ld [hl], c
@@ -324,7 +324,7 @@ AllocateOrPromoteTextTileCacheEntry::
 
 ; search linked-list for text characters e/d (registers), if found hoist
 ; the result to head of list and return it. carry flag denotes success.
-PromoteTextTileCacheEntry::
+MoveTextTileCacheEntryToFront::
 	ld a, [wFontWidth]
 	or a
 	jr z, .print
@@ -345,32 +345,32 @@ PromoteTextTileCacheEntry::
 .print
 	xor a
 	ld [wPendingHalfWidthChar], a
-	ldh a, [hffa9]
-	ld l, a              ; l ← [hffa9]; index to to linked-list head
-.asm_237d
+	ldh a, [hTextTileCacheHead]
+	ld l, a              ; l ← [hTextTileCacheHead]; index to linked-list head
+.loop
 	ld h, HIGH(wc600)                             ;
 	ld a, [hl]           ; a ← key1[l]            ;
 	or a                                          ;
 	ret z                ; if NULL, return a = 0  ;
 	cp e                                          ; loop for e/d key in
-	jr nz, .asm_238a     ;                        ; linked list
+	jr nz, .next         ;                        ; linked list
 	inc h ; HIGH(wc700)  ;                        ;
 	ld a, [hl]           ; if key1[l] == e and    ;
 	cp d                 ;   key2[l] == d:        ;
-	jr z, .asm_238f      ;   break                ;
-.asm_238a
+	jr z, .update        ;   break                ;
+.next
 	ld h, HIGH(wc800)    ;                        ;
 	ld l, [hl]           ; l ← next[l]            ;
-	jr .asm_237d
-.asm_238f
-	ldh a, [hffa9]
+	jr .loop
+.update
+	ldh a, [hTextTileCacheHead]
 	cp l
-	jr z, .asm_23af      ; assert at least one iteration
+	jr z, .success       ; assert at least one iteration
 	ld c, a
 	ld b, HIGH(wc900)
 	ld a, l
 	ld [bc], a           ; prev[i0] ← i
-	ldh [hffa9], a       ; [hffa9] ← i  (update linked-list head)
+	ldh [hTextTileCacheHead], a ; [hTextTileCacheHead] ← i  (update linked-list head)
 	ld h, HIGH(wc900)
 	ld b, [hl]
 	ld [hl], $0          ; prev[i] ← 0
@@ -383,10 +383,10 @@ PromoteTextTileCacheEntry::
 	ld h, HIGH(wc900)
 	inc c
 	dec c
-	jr z, .asm_23af      ; if next[i] != NULL:
+	jr z, .success       ; if next[i] != NULL:
 	ld l, c              ;   l ← next[i]
 	ld [hl], b           ;   prev[next[i]] ← prev[i]
-.asm_23af
+.success
 	scf                  ; set carry to indicate success
 	ret                  ; (return new linked-list head in a)
 
@@ -711,10 +711,9 @@ ConvertTileNumberToTileDataAddress::
 	xor [hl]
 	ld h, $0
 	ld l, a
+REPT 4 ; *= TILE_SIZE
 	add hl, hl
-	add hl, hl
-	add hl, hl
-	add hl, hl
+ENDR
 	ld a, [wTextTileBaseAddressHi]
 	ld b, a
 	ld c, $0

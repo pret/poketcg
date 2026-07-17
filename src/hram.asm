@@ -88,10 +88,10 @@ hDuelActionArgs:: ; ffa0
 	ds DUEL_ACTION_ARGS_SIZE + 1
 
 ; hffa8 through hffb0 belong to the text engine
-hffa8:: ; ffa8
+hMaxTextTileCacheIndex:: ; ffa8
 	ds $1
 
-hffa9:: ; ffa9
+hTextTileCacheHead:: ; ffa9
 	ds $1
 
 ; Address within v*BGMap0 where text is currently being written to
