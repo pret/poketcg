@@ -557,7 +557,7 @@ AIDecidePlayLegendaryBirds:
 
 	call CheckIfActiveCardCanKnockOut
 	jr c, .subtract
-	call CheckIfActivePokemonCanUseAnyNonResidualAttack
+	call CanArenaCardUseNonResidualAttack
 	jr nc, .subtract
 	call AIDecideWhetherToRetreat
 	jr c, .subtract

@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v7
 
       - name: Checkout rgbds
-        uses: actions/checkout@master
+        uses: actions/checkout@v7
         with:
           path: rgbds
           ref: v1.0.0
@@ -48,7 +48,7 @@ jobs:
           fi
       - name: Checkout symbols
         if: ${{ github.event_name == 'push' && github.repository_owner == 'pret' }}
-        uses: actions/checkout@master
+        uses: actions/checkout@v7
         with:
           path: symbols
           ref: symbols
@@ -59,7 +59,7 @@ jobs:
           cp -v *.sym symbols/
       - name: Update symbols
         if: ${{ github.event_name == 'push' && github.repository_owner == 'pret' }}
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v10
         with:
           branch: symbols
           cwd: "./symbols"
