@@ -32,7 +32,7 @@ ProcessText::
 	jr nc, .not_tx_fullwidth
 	inc hl
 .not_tx_fullwidth
-	call GenerateAndPlaceTextTile
+	call ProcessTextTile
 	xor a
 	call ProcessSpecialTextCharacter
 .next_char
@@ -208,7 +208,7 @@ InitTextPrinting::
 ;   hffb0 == $0: generate and place text tile
 ;   hffb0 == $2 (bit 1 set): only generate text tile?
 ;   hffb0 == $1 (bit 0 set): not even generate it, but just update text buffers?
-GenerateAndPlaceTextTile::
+ProcessTextTile::
 	push hl
 	push de
 	push bc
@@ -271,7 +271,7 @@ TerminateHalfWidthText::
 	push de
 	push bc
 	ld e, ' '
-	call GenerateAndPlaceTextTile
+	call ProcessTextTile
 	pop bc
 	pop de
 	pop hl
