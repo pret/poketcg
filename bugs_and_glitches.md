@@ -297,7 +297,7 @@ AIDecide_Pokedex:
 
 ; picks order of the cards in deck from the effects of Pokedex.
 ; prioritizes Pokemon cards, then Trainer cards, then energy cards.
-; stores the resulting order in wce1a.
+; stores the resulting order in wAITrainerCardArgs[1].
 -PickPokedexCards_Unreferenced:
 -; unreferenced
 	xor a
@@ -484,9 +484,9 @@ AIDecideEvolution:
 	cp 133
 	jr c, .done_bench_pokemon
 	ld a, [wTempAI]
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TO_PLAY_AREA], a
 	ld a, [wTempAIPokemonCard]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_EVOLVE_PKMN
 	bank1call AIMakeDecision
 +
@@ -606,7 +606,7 @@ HandleAICowardice:
 	...
 .CheckWhetherToUseCowardice:
 	ld a, c
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA], a
 	ld e, a
 +	add DUELVARS_ARENA_CARD_FLAGS
 +	call GetTurnDuelistVariable
@@ -653,7 +653,7 @@ AITryToRetreat:
 ; if it does, check if there are any energy cards in hand
 	...
 	pop af
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_BENCH], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 -	ld b, a
@@ -663,9 +663,9 @@ AITryToRetreat:
 -	cp PARALYZED
 -	jp z, .set_carry
 -	ld a, b
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_STATUS], a
 	ld a, $ff
-	ldh [hTempRetreatCostCards], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_COST_LIST], a
 	...
 ```
 
@@ -802,19 +802,19 @@ AIDecideEvolution:
 
 We'll need to define this `wEvolutionHPDifference` variable in [src/wram.asm](https://github.com/pret/poketcg/blob/master/src/wram.asm):
 ```diff
- wCurCardCanKO:: ; cdf4
-        ds $1
- 
--       ds $4
-+       ds $3
+	wCurCardCanKO:: ; cdf4
+		ds $1
+
+-		ds $4
++		ds $3
 +
-+; stores HP difference between a pre-evolution
-+; and its evolution, for AI damage calculations
-+wEvolutionHPDifference:: ; cdf8
-+       ds $1
- 
- wSamePokemonCardID:: ; cdf9
-        ds $1
++	; stores HP difference between a pre-evolution
++	; and its evolution, for AI damage calculations
++	wEvolutionHPDifference:: ; cdf8
++		ds $1
+
+	wSamePokemonCardID:: ; cdf9
+		ds $1
 ```
 
 ### AI might disregard AI info flags
@@ -1136,7 +1136,7 @@ Two pieces of unused text contain typos.
 
 **Fix:** Edit `UnusedText0096` in [src/text/text1.asm](https://github.com/pret/poketcg/blob/master/src/text/text1.asm):
 ```diff
--   line "Payalysis"
+-	line "Payalysis"
 +	line "Paralysis"
 ```
 
@@ -1153,11 +1153,11 @@ The word "chosen" is misspelled as "choosen" in one piece of system text. Fixing
 
 **Fix:** Edit `NoAttackMayBeChoosenText` in [src/text/text1.asm](https://github.com/pret/poketcg/blob/master/src/text/text1.asm):
 ```diff
--NoAttackMayBeChoosenText:
--	text "No Attacks may be choosen."
-+NoAttackMayBeChosenText:
-+	text "No Attacks may be chosen."
-    done
+-	NoAttackMayBeChoosenText:
+-		text "No Attacks may be choosen."
++	NoAttackMayBeChosenText:
++		text "No Attacks may be chosen."
+		done
 ```
 
 Next, correct the corresponding label name in [src/text/text_offsets.asm](https://github.com/pret/poketcg/blob/master/src/text/text_offsets.asm):
@@ -1235,7 +1235,7 @@ The Clerk mistakenly repeats "the" twice when describing the Challenge Hall.
 ```diff
 -	line "Challenge Hall! This is where the"
 +	line "Challenge Hall! This is where"
-    line "the Challenge Cup is held. The"
+	line "the Challenge Cup is held. The"
 	done
 ```
 

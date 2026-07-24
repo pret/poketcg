@@ -132,11 +132,11 @@ LoadDefendingPokemonColorWRAndPrizeCards:
 ; handles AI choosing parameters for certain attacks as well.
 AITryUseAttack:
 	ld a, [wSelectedAttack]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + DECLARE_ATTACK_ARGS_ATTACK_INDEX], a
 	ld e, a
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld d, a
 	call CopyAttackDataAndDamage_FromDeckIndex
 	ld a, OPPACTION_BEGIN_ATTACK
@@ -561,7 +561,7 @@ Func_14323:
 ; input:
 ;	a = card index to check
 CheckIfCardCanBePlayed:
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY
@@ -596,7 +596,7 @@ CheckIfCardCanBePlayed:
 .loop
 	push bc
 	ld e, b
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	ld d, a
 	call CheckIfCanEvolveInto
 	pop bc
@@ -795,9 +795,9 @@ AIAttachEnergyInHandToCardInPlayArea:
 	ld e, a
 	ld a, d
 	call LookForCardIDInPlayArea_Bank5
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TO_PLAY_AREA], a
 	ld a, e
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_PLAY_ENERGY
 	bank1call AIMakeDecision
 	ret
@@ -2019,7 +2019,7 @@ CountNumberOfSetUpBenchPokemon:
 ; if any of these attacks were chosen to be used.
 ; returns carry if selection was successful,
 ; and no carry if unable to make one.
-; outputs in hTempPlayAreaLocation_ffa1 the chosen parameter.
+; outputs chosen parameter(s) in hDuelActionArgs.
 AISelectSpecialAttackParameters:
 	ld a, [wSelectedAttack]
 	push af
@@ -2052,16 +2052,16 @@ AISelectSpecialAttackParameters:
 
 .DevolutionBeam
 ; in case selected attack is Devolution Beam
-; store in hTempPlayAreaLocation_ffa1
-; the location of card to select to devolve
+; store in args[0, 1]
+; [whose play area, play area location] of card to devolve
 	ld a, [wSelectedAttack]
 	or a
 	jp z, .no_carry ; can be jr
 
-	ld a, $01 ; always target the Player's play area
-	ldh [hTemp_ffa0], a
+	ld a, NON_TURN_DUELIST_PLAY_AREA ; always target the Player's play area
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_ANY_TARGET_ARGS_WHOSE_PLAY_AREA], a
 	call LookForCardThatIsKnockedOutOnDevolution
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_ANY_TARGET_ARGS_TO_PLAY_AREA], a
 
 .set_carry_1
 	scf
@@ -2069,41 +2069,38 @@ AISelectSpecialAttackParameters:
 
 .EnergyAbsorption
 ; in case selected attack is Energy Absorption
-; make list from energy cards in Discard Pile
+; store in args[0, 1]
+; the deck index of [psychic, any] energy to absorb from discard pile,
+; considering the attack-cost difference between Energy Absorption and Psyburn
 	ld a, [wSelectedAttack]
 	or a
 	jp nz, .no_carry  ; can be jr
 
 	ld a, $ff
-	ldh [hTempPlayAreaLocation_ffa1], a
-	ldh [hTempRetreatCostCards], a
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD2_INDEX], a
+	ldh [hDuelActionArgs + ENERGYABSORPTION_ARGS_TERMINATOR], a
 
-; search for Psychic energy cards in Discard Pile
+; search discard pile for 1 psychic energy card first
+; and store its index in args[0]
 	ld e, PSYCHIC_ENERGY
 	ld a, CARD_LOCATION_DISCARD_PILE
 	call LookForCardIDInLocation_Bank5
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX], a
 	farcall CreateEnergyCardListFromDiscardPile_AllEnergy
 
-; find any energy card different from
-; the one found by LookForCardIDInLocation_Bank5.
-; since using this attack requires a Psychic energy card,
-; and another one is in hTemp_ffa0,
-; then any other energy card would account
-; for the Energy Cost of Psyburn.
+; then another energy card, of any type
 	ld hl, wDuelTempList
 .loop_energy_cards
 	ld a, [hli]
 	cp $ff
 	jr z, .set_carry_2
 	ld b, a
-	ldh a, [hTemp_ffa0]
+	ldh a, [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD1_INDEX]
 	cp b
 	jr z, .loop_energy_cards ; same card, keep looking
-
-; store the deck index of energy card found
+; found, store its index in args[1]
 	ld a, b
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_CHOOSE_CARDS_ARGS_CARD2_INDEX], a
 
 .set_carry_2
 	scf
@@ -2117,7 +2114,7 @@ AISelectSpecialAttackParameters:
 	jp nz, .no_carry  ; can be jr
 	call AIDecideBenchPokemonToSwitchTo
 	jr c, .no_carry
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + ATTACK_OR_TRAINER_TARGET_ARGS_TO_PLAY_AREA], a
 	scf
 	ret
 
@@ -2134,7 +2131,7 @@ AISelectSpecialAttackParameters:
 
 ; if none were found in Deck, return carry...
 	call LookForCardIDInLocation_Bank5
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	jp nc, .no_carry  ; can be jr
 
 ; ...else find a suitable Play Area Pokemon to
@@ -2142,7 +2139,7 @@ AISelectSpecialAttackParameters:
 	call AIProcessButDontPlayEnergy_SkipEvolution
 	jp nc, .no_carry  ; can be jr
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TO_PLAY_AREA], a
 	scf
 	ret
 

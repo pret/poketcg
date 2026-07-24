@@ -497,7 +497,7 @@ wPlayAreaScreenLoaded:: ; cbd3
 wPlayAreaSelectAction:: ; cbd4
 	ds $1
 
-; low byte of the address of the next slot in the hTempRetreatCostCards array to be used
+; low byte of the address of the next slot in the hDuelActionArgs[2-] array to be used
 wTempRetreatCostCardsPos:: ; cbd5
 	ds $1
 
@@ -881,22 +881,25 @@ wTextBoxFrameType:: ; ccf3
 wTextTileBuffer:: ; ccf4
 	ds TILE_SIZE
 
-wcd04:: ; cd04
+wNextTextTileCacheIndex:: ; cd04
 	ds $1
 
 ; used by PlaceNextTextTile
 wCurTextTile:: ; cd05
 	ds $1
 
-; VRAM tile patterns selector for text tiles
-; if wTilePatternSelector == $80 and wTilePatternSelectorCorrection == $00 -> select tiles at $8000-$8FFF
-; if wTilePatternSelector == $88 and wTilePatternSelectorCorrection == $80 -> select tiles at $8800-$97FF
-wTilePatternSelector:: ; cd06
+; text tile location
+; must use the same mode as wTextTileIndexSignednessAdjust
+; HIGH(v*Tiles1)    = default (LCDC_BLOCK21)
+; HIGH(sGfxBuffer1) = printer
+wTextTileBaseAddressHi:: ; cd06
 	ds $1
 
-; complements wTilePatternSelector by correcting the VRAM tile order when $8800-$97FF is selected
-; a value of $80 in wTilePatternSelectorCorrection reflects tiles $00-$7f being located after tiles $80-$ff
-wTilePatternSelectorCorrection:: ; cd07
+; VRAM tile index converter (xor) for LCDC_BLOCK21 signed addressing
+; must use the same mode as wTextTileBaseAddressHi
+; $80 (signed)   = default (LCDC_BLOCK21)
+; $00 (unsigned) = printer, as if LCDC_BLOCK01
+wTextTileIndexSignednessAdjust:: ; cd07
 	ds $1
 
 ; if 0 (DOUBLE_SPACED), text lines are separated by a blank line
@@ -914,11 +917,10 @@ wCurTextLine:: ; cd09
 wFontWidth:: ; cd0a
 	ds $1
 
-; when printing half-width text, this variable alternates between 0 and the value
-; of the first character. 0 signals that no text should be printed in the current
-; iteration of Func_235e, while non-0 means to print the character pair
-; made of [wHalfWidthPrintState] (first char) and register e (second char).
-wHalfWidthPrintState:: ; cd0b
+; tracks the pending char code for printing a pair of half-width chars
+; 0 if none
+; updated during each iteration of MoveTextTileCacheEntryToFront
+wPendingHalfWidthChar:: ; cd0b
 	ds $1
 
 ; used by CopyTextData
@@ -1318,28 +1320,10 @@ wAITrainerLogicCard:: ; ce17
 wAITrainerCardPhase:: ; ce18
 	ds $1
 
-; parameters output by AI Trainer card logic routines
+; $ff-terminated args output by AI Trainer card logic routines
 ; (e.g. what Pokemon in Play Area to use card on, etc)
-wAITrainerCardParameter:: ; ce19
-	ds $1
-
-wce1a:: ; ce1a
-	ds $1
-
-wce1b:: ; ce1b
-	ds $1
-
-wce1c:: ; ce1c
-	ds $1
-
-wce1d:: ; ce1d
-	ds $1
-
-wce1e:: ; ce1e
-	ds $1
-
-wce1f:: ; ce1f
-	ds $1
+wAITrainerCardArgs:: ; ce19
+	ds AI_TRAINER_ARGS_SIZE + 1
 
 ; used to store previous/current flags of AI actions
 ; see AI_FLAG_* constants

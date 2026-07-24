@@ -1345,7 +1345,7 @@ ProcessPlayedPokemonCard::
 	call CopyAttackDataAndDamage_FromDeckIndex
 	call UpdateArenaCardIDsAndClearTwoTurnDuelVars
 	ldh a, [hTempCardIndex_ff98]
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	call GetCardIDFromDeckIndex
 	ld a, e
 	ld [wTempTurnDuelistCardID], a
@@ -1384,7 +1384,7 @@ ProcessPlayedPokemonCard::
 	call CheckMatchingCommand
 	ret c ; return if command not found
 	bank1call DrawDuelMainScene
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld de, wLoadedCard1Name
 	ld hl, wTxRam2
@@ -1408,7 +1408,7 @@ ProcessPlayedPokemonCard::
 	ret
 
 ; copies, given a card identified by register a (card ID):
-; - e into wSelectedAttack and d into hTempCardIndex_ff9f
+; - e into wSelectedAttack and d into hDuelActionCardIndex
 ; - Attack1 (if e == 0) or Attack2 (if e == 1) data into wLoadedAttack
 ; - Also from that attack, its Damage field into wDamage
 ; finally, clears wNoDamageOrEffect and wDealtDamage
@@ -1418,7 +1418,7 @@ CopyAttackDataAndDamage_FromCardID::
 	ld a, e
 	ld [wSelectedAttack], a
 	ld a, d
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	pop af
 	ld e, a
 	ld d, $00
@@ -1427,7 +1427,7 @@ CopyAttackDataAndDamage_FromCardID::
 	jr CopyAttackDataAndDamage
 
 ; copies, given a card identified by register d (0-59 deck index):
-; - e into wSelectedAttack and d into hTempCardIndex_ff9f
+; - e into wSelectedAttack and d into hDuelActionCardIndex
 ; - Attack1 (if e == 0) or Attack2 (if e == 1) data into wLoadedAttack
 ; - Also from that attack, its Damage field into wDamage
 ; finally, clears wNoDamageOrEffect and wDealtDamage
@@ -1435,7 +1435,7 @@ CopyAttackDataAndDamage_FromDeckIndex::
 	ld a, e
 	ld [wSelectedAttack], a
 	ld a, d
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 ;	fallthrough
 
@@ -1466,14 +1466,14 @@ CopyAttackDataAndDamage::
 	ld [hl], a
 	ret
 
-; inits hTempCardIndex_ff9f and wTempTurnDuelistCardID to the turn holder's arena card,
+; inits hDuelActionCardIndex and wTempTurnDuelistCardID to the turn holder's arena card,
 ; wTempNonTurnDuelistCardID to the non-turn holder's arena card, and zeroes other temp
 ; variables that only last between each two-player turn.
 ; this is called when a Pokemon card is played or when an attack is used
 UpdateArenaCardIDsAndClearTwoTurnDuelVars::
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	call GetCardIDFromDeckIndex
 	ld a, e
 	ld [wTempTurnDuelistCardID], a
@@ -1499,7 +1499,7 @@ UpdateArenaCardIDsAndClearTwoTurnDuelVars::
 UseAttackOrPokemonPower::
 	ld a, [wSelectedAttack]
 	ld [wPlayerAttackingAttackIndex], a
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	ld [wPlayerAttackingCardIndex], a
 	ld a, [wTempCardID_ccc2]
 	ld [wPlayerAttackingCardID], a
@@ -1672,23 +1672,23 @@ SendAttackDataToLinkOpponent::
 	ld a, [wSentAttackDataToLinkOpponent]
 	or a
 	ret nz
-	ldh a, [hTemp_ffa0]
+	ldh a, [hDuelActionArgs + DECLARE_ATTACK_ARGS_ATTACK_INDEX]
 	push af
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	push af
 	ld a, TRUE
 	ld [wSentAttackDataToLinkOpponent], a
 	ld a, [wPlayerAttackingCardIndex]
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	ld a, [wPlayerAttackingAttackIndex]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + DECLARE_ATTACK_ARGS_ATTACK_INDEX], a
 	ld a, OPPACTION_BEGIN_ATTACK
 	call SetOppAction_SerialSendDuelData
 	call ExchangeRNG
 	pop af
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	pop af
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + DECLARE_ATTACK_ARGS_ATTACK_INDEX], a
 	ret
 
 ApplyTransparencyIfApplicable::
@@ -1756,7 +1756,7 @@ PlayTrainerCard::
 	ldh a, [hWhoseTurn]
 	ld h, a
 	ldh a, [hTempCardIndex_ff98]
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	call LoadNonPokemonCardEffectCommands
 	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
@@ -1781,17 +1781,17 @@ PlayTrainerCard::
 	call SetOppAction_SerialSendDuelData
 	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	call MoveHandCardToDiscardPile
 	call ExchangeRNG
 .done
 	or a
 	ret
 
-; loads the effect commands of a (trainer or energy) card with deck index (0-59) at hTempCardIndex_ff9f
+; loads the effect commands of a (trainer or energy) card with deck index (0-59) at hDuelActionCardIndex
 ; into wLoadedAttackEffectCommands. in practice, only used for trainer cards
 LoadNonPokemonCardEffectCommands::
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld hl, wLoadedCard1EffectCommands
 	ld de, wLoadedAttackEffectCommands
