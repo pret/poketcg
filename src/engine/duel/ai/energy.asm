@@ -885,7 +885,7 @@ AITryToPlayEnergyCard:
 ; look for basic energy card needed in hand and play it.
 	ld a, e
 	call LookForCardIDInHand
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	jr nc, .play_energy_card
 
 ; in this case Pokémon just needs colorless (any basic energy card).
@@ -908,7 +908,7 @@ AITryToPlayEnergyCard:
 	ld a, [hli]
 	cp $ff
 	jr z, .look_for_any_energy
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp DOUBLE_COLORLESS_ENERGY
@@ -935,12 +935,12 @@ AITryToPlayEnergyCard:
 	jr z, .loop_2
 	ld a, b
 .load_card
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 
-; plays energy card loaded in hTemp_ffa0 and sets carry flag.
+; plays energy card loaded in hDuelActionArgs[0] and sets carry flag.
 .play_energy_card
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TO_PLAY_AREA], a
 	ld a, OPPACTION_PLAY_ENERGY
 	bank1call AIMakeDecision
 	scf
@@ -967,7 +967,7 @@ AITryToPlayEnergyCard:
 ; return carry if there's a double colorless in hand to attach
 ; and it's one of the card IDs from these decks.
 ; output:
-;	[hTemp_ffa0] = card index of double colorless in hand;
+;	hDuelActionArgs[0] = card index of double colorless in hand;
 ;	carry set if can play energy card.
 CheckSpecificDecksToAttachDoubleColorless:
 	push bc
@@ -1031,7 +1031,7 @@ CheckSpecificDecksToAttachDoubleColorless:
 	ld a, DOUBLE_COLORLESS_ENERGY
 	call LookForCardIDInHand
 	jr c, .no_carry
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	pop hl
 	pop de
 	pop bc
