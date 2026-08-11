@@ -1,0 +1,270 @@
+;Format Sample
+;[xxxx]			;User-defined Name (Max:31 chars)
+;Mode = 1		;1:Fixcode; 2:Fixvalue; 3:Mask; 4:Palette; 5:Double Frame Buffer
+;Type = 0		;Normal: 0:Begin 1:End; Mode2: Value Type
+;Address = x1F8000	;ROM Address
+;Fixcode = 0		;Mode1: Fixed Rom Code; Mode2: Fixed Value
+;DelayFrame = 0		;Delay Frame
+;FadeFrame = 0		;Fade Frame 0:Off
+;DarkEnable0 = 0	;0:Off, 1:On (for Normal Mode)
+;ReduceEnable0 = 0	;0:Off, 1:On (for Normal Mode)
+;MotionBEnable0 = 0	;0:Off, 1:Black Fade, 2:White Fade, 3:Frame Blend (for Normal Mode)
+;Dark0 = 10		;0~10 (for Normal Mode)
+;ReduceColorR0 = 0	;0~31 (for Normal Mode)
+;ReduceColorG0 = 0	;0~31 (for Normal Mode)
+;ReduceColorB0 = 0	;0~31 (for Normal Mode)
+;MotionBlur0 = 31	;0~31 (for Normal Mode)
+;DarkEnable1 = 0	;0:Off, 1:On (for Green Mode)
+;ReduceEnable1 = 0	;0:Off, 1:On (for Green Mode)
+;MotionBEnable1 = 0	;0:Off, 1:Black Fade, 2:White Fade, 3:Frame Blend (for Green Mode)
+;Dark1 = 10		;0~10 (for Green Mode)
+;ReduceColorR1 = 0	;0~31 (for Green Mode)
+;ReduceColorG1 = 0	;0~31 (for Green Mode)
+;ReduceColorB1 = 0	;0~31 (for Green Mode)
+;MotionBlur1 = 31	;0~31 (for Green Mode)
+;PaletteX = c31,31,31	;X:0~15, cR,G,B (0~31)
+
+
+;ROM:7D143                 ld      a, $E
+;ROM:7D145                 ld      [byte_CFD1], a
+;0000c276h: 34 03 00 00                                    
+;
+;[NCLBTS 849]        
+;Mode = 1
+;Address = 0xc718
+;Fixcode = a2: c9 00 
+;
+
+
+
+;addr >=0xcdce && addr <=0xcdcf Mem Write: pc32 = 0x2bfc addr = 0xcdce value = 0x9f   
+;addr >=0xcdce && addr <=0xcdcf Mem Write: pc32 = 0x2bfe addr = 0xcdcf value = 0x41
+
+;00002ce5h: 80 22 71 23 70 C9 CD D7 2C 21                
+
+[menu 848@Skip_Doctor_Mason_mail_Card_Pop_text]                          
+Mode = 6                              
+Type = 0                              
+Index = 2                             
+Address = {hex @}             
+MemAddress = {hex~ wTextHeader1Address}              
+Fixcode = {dws_ Mail1Part1Text.EndSkip}                      
+ConditionType = 0                     
+ConditionValueA = {dws_ wTextHeader1Address       wTextHeader1Address+1     v0BGMap0+0x181 v0BGMap0+0x182 v0BGMap0+0x183}     
+ConditionValueB = {dws_ ==                        ==                        ==             ==             ==            }     
+ConditionValueC = {dws_ <Mail1Part1Text.StartSkip >Mail1Part1Text.StartSkip 0x55           0x38           0x39          }                            
+            
+            
+            
+            
+            
+            
+;ROM:2C83                 call    loc_2BF0
+;ROM:2C86                 or      a       
+;ROM:2C87                 ret             
+;
+;00002d77h: B7 C9 FA 48 CE B7 28 06 3D                     
+
+
+[menu 900b@Unknown_skip_Card_Pop_text_1]                                                        
+Mode = 6                                                          
+Type = 0                                                          
+Index = 2                                                         
+Address = {hex @}                                             
+MemAddress = {hex~ wPlayAreaAIScore+15}                                               
+Fixcode = {dws_ Mail1Part1Text.EndSkip}                                               
+ConditionType = 0                                                 
+ConditionValueA = {dws_ wTextHeader1Address       wTextHeader1Address+1     wPlayerXCoordPixels wPlayerYCoordPixels wPlayerDirection wPlayerDirection}        
+ConditionValueB = {dws_ ==                        ==                        ==                  ==                  >=               <=              }        
+ConditionValueC = {dws_ <Mail1Part1Text.StartSkip >Mail1Part1Text.StartSkip 224                 32                  NORTH            WEST            }       
+
+
+;00002d77h: B7 C9 FA 48 CE B7                               ; ·ÉúHÎ·
+[menu 901@Unknown_skip_Card_Pop_text_2]                                                     
+Mode = 6                                                       
+Type = 0                                                       
+Index = 2                                                      
+Address = {hex @}                                              
+MemAddress = {hex~ wPlayAreaAIScore+15}                                            
+Fixcode = {dws_ Mail1Part1Text.EndSkip}                                            
+ConditionType = 0                                              
+ConditionValueA = {dws_ wTextHeader1Address       wTextHeader1Address+1     wPlayerXCoordPixels wPlayerYCoordPixels wPlayerDirection wPlayerDirection}     
+ConditionValueB = {dws_ ==                        ==                        ==                  ==                  >=               <=              }      
+ConditionValueC = {dws_ <Mail1Part1Text.StartSkip >Mail1Part1Text.StartSkip 16                  80                  NORTH            WEST            }   
+  
+;ROM:C5B9                 ld      a, [byte_FF91]
+;ROM:C5BB                 and     1             
+;ROM:C5BD                 jr      z, locret_C5C4
+;ROM:C5BF                 call    loc_4718      
+;ROM:C5C2                 jr      locret_C5C4   
+;0000c5bfh: F0 91 E6 01 28 05 CD                            ; ð‘?(.?
+
+;ROM:C718                 ld      a, $FF        
+;ROM:C71A                 ld      [byte_D35A], a
+;ROM:C71D                 call    loc_464D      
+;ROM:C720                 call    loc_37F7      
+;ROM:C723                 and     $40 ; '@'     
+ 
+[menu 849@Disable_Lightning_Club_Card_Pop_bookcase]                                            
+Mode = 6                                              
+Type = 0                                              
+Index = 2                                             
+Address = {HeX~ @+47}                                   
+MemAddress = {hex~ hKeysPressed}                                   
+Fixcode = {db_ NO_INPUT}                                      
+ConditionType = 0                                     
+ConditionValueA = {dws_ wPlayerXCoordPixels wPlayerYCoordPixels wPlayerDirection wPlayerDirection hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed wOverworldMapSelection hKeysPressed} 
+ConditionValueB = {dws_ ==                  ==                  >=               <=               !=           !=           !=           !=           !=           !=           ==                     !=          }  
+ConditionValueC = {dws_ 192                 32                  NORTH            WEST             PAD_DOWN     PAD_LEFT     PAD_UP       PAD_RIGHT    PAD_B        NO_INPUT     OWMAP_LIGHTNING_CLUB   PAD_START   }             
+
+;0000c5b0h: 28 0D CD CB 45 CD                               ; (.ÍËE?
+[menu 850@Disable_Ishiharas_house_Phantom_Card_bookcase]                                                                         
+Mode = 6                                                                           
+Type = 0                                                                           
+Index = 2                                                                          
+Address = {HEx~ @+32}                                                                  
+MemAddress = {hex~ hKeysPressed}                                                                
+Fixcode = {db_ NO_INPUT}                                                                   
+ConditionType = 0                                                                  
+ConditionValueA = {dws_ wPlayerXCoordPixels wPlayerYCoordPixels wPlayerDirection wPlayerDirection hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed}       
+ConditionValueB = {dws_ ==                  ==                  >=               <=               !=           !=           !=           !=           !=           !=           !=          }      
+ConditionValueC = {dws_ 48                  112                 NORTH            WEST             PAD_DOWN     PAD_LEFT     PAD_UP       PAD_RIGHT    PAD_B        NO_INPUT     PAD_START   }  
+
+
+;addr >=0xccb0 && addr <=0xccbf Mem Write: pc32 = 0x2526 addr = 0xccb7 value = 0x0   
+;ROM:056E                 ld      a, [byte_FF91]
+;ROM:0570                 and     $F            
+;ROM:0572                 ld      [byte_FF8F], a
+;ROM:0574                 ret                   
+;
+; 0xff91    99999999 Mem Write: pc32 = 0x4f0 addr = 0xff91 value = 0x0
+; 0xcd40   0000000000000 Mem Write: pc32 = 0x24f4 addr = 0xcd40 value = 0x0
+;
+;
+;ROM:2551                 ld      a, [byte_FF91]
+;ROM:2553                 and     3             
+;ROM:2555                 jr      z, loc_2579   
+;ROM:2557                 and     1             
+;ROM:2559                 jr      nz, loc_2543  
+;ROM:255B                 ld      a, [byte_CCB7]  
+
+;0000264bh: AF EA 99 CD F0 8F B7 28 31 47                   ; ¯ê™Íð?1G
+[menu 851 a@Unknown_disable_menu_2]                                                                       
+Mode = 6                                                                        
+Type = 0                                                                        
+Index = 2                                                                       
+Address = {hex @}                                                            
+MemAddress = {hex~ hKeysPressed}                                                           
+Fixcode = {db_ NO_INPUT}                                                                
+ConditionType = 0                                                               
+ConditionValueA = {dws_ wCurMenuItem hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed v0BGMap0+0x42 v0BGMap0+0x43 v0BGMap0+0x40 v0Tiles2+0x300 v0Tiles2+0x302 v0Tiles2+0x304} 
+ConditionValueB = {dws_ ==           !=           !=           !=           !=           !=           ==            ==            ==            ==             ==             ==            }
+ConditionValueC = {dws_ 0            PAD_DOWN     PAD_UP       PAD_RIGHT    PAD_B        NO_INPUT     0x30          0x31          0x1e          0x00           0x64           0x8a          }              
+
+[menu 900 a@Unknown_disable_menu_1]                                                                                       
+Mode = 6                                                                                           
+Type = 0                                                                                           
+Index = 2                                                                                          
+Address = {hex @}                                                                                
+MemAddress = {hex~ hKeysPressed}                                                                                
+Fixcode = {db_ NO_INPUT}                                                                                   
+ConditionType = 0                                                                                  
+ConditionValueA = {dws_ hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed v0BGMap0+0x42 v0BGMap0+0x43 v0BGMap0+0x40 v0Tiles2+0x300 v0Tiles2+0x302 v0Tiles2+0x304}     
+ConditionValueB = {dws_ !=           !=           !=           !=           !=           ==            ==            ==            ==             ==             ==            }     
+ConditionValueC = {dws_ PAD_DOWN     PAD_UP       PAD_A        PAD_B        NO_INPUT     0x30          0x31          0x1e          0x00           0x64           0x8a          }     
+
+;remove the information in the window
+;00002ce8h: 23 70 C9 CD                                     ; #pÉÍ
+[menu 851 a@Skip_Start_menu_Card_Pop_text]                               
+Mode = 6                                 
+Type = 0                                 
+Index = 2                                
+Address = {hex @}                       
+MemAddress = {hex~ wTextHeader1Address}                      
+Fixcode = {dws_ WhenYouCardPopWithFriendText.EndSkip}                       
+ConditionType = 0                        
+ConditionValueA = {dws_ wTextHeader1Address                     wTextHeader1Address+1                   v0BGMap0+0x42 v0BGMap0+0x43 v0BGMap0+0x40}        
+ConditionValueB = {dws_ ==                                      ==                                      ==            ==            ==           }        
+ConditionValueC = {dws_ <WhenYouCardPopWithFriendText.StartSkip >WhenYouCardPopWithFriendText.StartSkip 0x30          0x31          0x1e         }  
+
+
+
+;ROM:2A33                 call    loc_2582      
+;ROM:2A36                 ld      a, [byte_FF91]
+;ROM:2A38                 bit     0, a          
+;ROM:2A3A                 jr      nz, loc_2A61  
+;0000c5aeh: E6 F0 28 0D CD CB 45                            ; æð(.ÍËE
+[menu 851 b@Disable_Gift_Center_clerk]                                                                               
+Mode = 6                                                                                
+Type = 0                                                                                
+Index = 2                                                                               
+Address = {HEx~ @+30}                                                                      
+MemAddress = {hex~ hKeysPressed}                                                                     
+Fixcode = {db_ NO_INPUT}                                                                        
+ConditionType = 0                                                                       
+ConditionValueA = {dws_ wPlayerXCoordPixels wPlayerYCoordPixels wPlayerDirection wPlayerDirection hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed wCurMap        wCurMap         wCurMap       wCurMap      wCurMap     }      
+ConditionValueB = {dws_ ==                  ==                  >=               <=               !=           !=           !=           !=           !=           !=           !=           !=             !=              !=            !=           !=          }         
+ConditionValueC = {dws_ 80                  64                  NORTH            WEST             PAD_DOWN     PAD_LEFT     PAD_UP       PAD_RIGHT    PAD_B        NO_INPUT     PAD_START    LIGHTNING_CLUB ISHIHARAS_HOUSE FIGHTING_CLUB PSYCHIC_CLUB SCIENCE_CLUB}      
+
+[menu 851 c@Disable_Battle_Center_clerk]                                                                           
+Mode = 6                                                                               
+Type = 0                                                                               
+Index = 2                                                                              
+Address = {HEx~ @+28}                                                                       
+MemAddress = {hex~ hKeysPressed}                                                                    
+Fixcode = {db_ NO_INPUT}                                                                       
+ConditionType = 0                                                                      
+ConditionValueA = {dws_ wPlayerXCoordPixels wPlayerYCoordPixels wPlayerDirection wPlayerDirection wPlayerDirection hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed wCurMap        wCurMap         wCurMap       wCurMap      wCurMap     }     
+ConditionValueB = {dws_ ==                  ==                  >=               <=               !=               !=           !=           !=           !=           !=           !=           !=           !=             !=              !=            !=           !=          }     
+ConditionValueC = {dws_ 48                  64                  NORTH            WEST             SOUTH            PAD_DOWN     PAD_LEFT     PAD_UP       PAD_RIGHT    PAD_B        NO_INPUT     PAD_START    LIGHTNING_CLUB ISHIHARAS_HOUSE FIGHTING_CLUB PSYCHIC_CLUB SCIENCE_CLUB}         
+
+
+;0000c51ch: CB 47 CC AC                            ; ËgÀËGÌ¬
+[menu 904@Unknown_disable_menu_3]                 
+Mode = 6                     
+Type = 0                     
+Index = 2                    
+Address = {HEx~ @+12}          
+MemAddress = {hex~ hKeysPressed}          
+Fixcode = {db_ NO_INPUT}             
+ConditionType = 0            
+ConditionValueA = {dws_ hKeysPressed}                                                                                    
+ConditionValueB = {dws_ ==          }
+ConditionValueC = {dws_ PAD_UP_A    }
+
+
+;0000268fh: 28 18 3A 6E 67                                 
+[menu 900b@Disable_PC_Print_menu]                                                                                                          
+Mode = 6                                                                                                              
+Type = 0                                                                                                              
+Index = 2                                                                                                             
+Address = {hex @}                                                                                                      
+MemAddress = {hex~ hKeysPressed}                                                                                                   
+Fixcode = {db_ NO_INPUT}                                                                                                      
+ConditionType = 0                                                                                             
+ConditionValueA = {dws_ wCurMenuItem wCurTextLine wTilePatternSelector wTilePatternSelectorCorrection wLineSeparation 0xffd8 hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed v0Tiles0}   
+ConditionValueB = {dws_ ==           ==           ==                   ==                             ==              ==     !=           !=           !=           !=           !=           !=           !=      }    
+ConditionValueC = {dws_ 3            8            0x88                 0x80                           DOUBLE_SPACED   0x00   PAD_DOWN     PAD_UP       PAD_RIGHT    PAD_B        NO_INPUT     PAD_START    0xe0    }   
+
+
+
+
+;000e1b40h: FF 57 5F 03 1F 00 00 00  
+;000e1c7dh: 00 00 00                                        ; ...         
+[fixcode b2purple@Lighten_Jynx_purple_color]                            
+Mode = 1                                      
+Address = {hex @+6}                        
+Fixcode = {patch_ +6}  
+
+;00000486h: E2 F2 BE 20                                     ; 
+[NCLBTS 920@Unknown_CopyCGBPalettes]                
+Mode = 6                    
+Type = 0                    
+Index = 2                   
+Address = {hex @}            
+MemAddress = {hex~ rSTAT}         
+Fixcode = {db_ 0x00}            
+ConditionType = 0           
+ConditionValueA = {dws_ 0x1234} 
+ConditionValueB = {dws_ ==    } 
+ConditionValueC = {dws_ 0x05  } 

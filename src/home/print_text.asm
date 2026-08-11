@@ -187,8 +187,10 @@ WriteToTextHeader::
 	ldh a, [hBankROM]
 	ld [hli], a
 	ld [hl], c
+	vc_hook Skip_Start_menu_Card_Pop_text
 	inc hl
 	ld [hl], b
+	vc_hook Skip_Doctor_Mason_mail_Card_Pop_text
 	ret
 
 ; same as WriteToTextHeader, except it then increases wWhichTextHeader to
@@ -291,7 +293,9 @@ ProcessTextHeader::
 	call ProcessSpecialTextCharacter
 .processed_char
 	call WriteToTextHeader
+	vc_hook Unknown_skip_Card_Pop_text_1
 	or a
+	vc_hook Unknown_skip_Card_Pop_text_2
 	ret
 .tx_end
 	ld a, [wWhichTextHeader]

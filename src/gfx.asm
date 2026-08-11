@@ -2053,7 +2053,14 @@ MrMimeCardGfx::
 
 JynxCardGfx::
 	INCBIN "gfx/cards/jynx.2bpp"
+	vc_patch Lighten_Jynx_purple_color
+IF DEF(_VC)
+	INCBIN "gfx/cards/jynx.pal", 0, 6
+	rgb 19, 10, 18
+ELSE
 	INCBIN "gfx/cards/jynx.pal"
+ENDC
+	vc_patch_end
 
 MewtwoLv53CardGfx::
 	INCBIN "gfx/cards/mewtwo1.2bpp"

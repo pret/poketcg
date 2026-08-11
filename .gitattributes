@@ -22,6 +22,9 @@
 *.lz.match binary diff=hex
 *.dimensions binary diff=hex
 
+# Declare files that will always have CRLF line endings on checkout.
+*.patch.template text eol=crlf linguist-language=INI
+
 # these are generated but just in case
 *.2bpp binary diff=hex
 *.1bpp binary diff=hex

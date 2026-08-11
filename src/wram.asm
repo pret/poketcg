@@ -112,6 +112,7 @@ wNameBuffer:: ; c500
 ; this holds an $ff-terminated list of card deck indexes (e.g. cards in hand or in bench)
 ; or (less often) the attack list of a Pokemon card
 wDuelTempList:: ; c510
+	vc_hook Unknown_disable_menu_3
 	ds $80
 
 UNION
@@ -119,6 +120,10 @@ UNION
 ; this is kept updated with some default text that is used
 ; when the text printing functions are called with text id $0000
 wDefaultText:: ; c590
+	vc_hook Disable_Lightning_Club_Card_Pop_bookcase
+	vc_hook Disable_Ishiharas_house_Phantom_Card_bookcase
+	vc_hook Disable_Gift_Center_clerk
+	vc_hook Disable_Battle_Center_clerk
 	ds $3c
 
 NEXTU

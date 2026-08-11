@@ -1,4 +1,6 @@
 rom := poketcg.gbc
+patch := poketcg.patch
+patch_rom := poketcg_vc.gbc
 
 rom_obj := \
 	src/main.o \
@@ -8,6 +10,8 @@ rom_obj := \
 	src/audio.o \
 	src/wram.o \
 	src/hram.o
+
+patch_obj := $(rom_obj:.o=_vc.o)
 
 
 ### Build tools
@@ -36,10 +40,11 @@ RGBGFXFLAGS  ?= -Weverything
 .SECONDEXPANSION:
 .PRECIOUS:
 .SECONDARY:
-.PHONY: all tcg clean tidy compare tools
+.PHONY: all tcg patch clean tidy compare tools
 
-all: $(rom) compare
-tcg: $(rom) compare
+all: compare
+tcg: $(rom)
+patch: $(patch)
 
 clean: tidy
 	find src/gfx \
@@ -57,11 +62,17 @@ tidy:
 	$(RM) $(rom) \
 	      $(rom:.gbc=.sym) \
 	      $(rom:.gbc=.map) \
+	      $(patch) \
+	      $(patch:.patch=_vc.gbc) \
+	      $(patch:.patch=_vc.sym) \
+	      $(patch:.patch=_vc.map) \
+	      $(patch:%.patch=src/vc/%.constants.sym) \
 	      $(rom_obj) \
+	      $(patch_obj) \
 	      src/rgbdscheck.o
 	$(MAKE) clean -C tools/
 
-compare: $(rom)
+compare: $(rom) $(patch)
 	@$(SHA1) -c rom.sha1
 
 tools:
@@ -73,6 +84,9 @@ RGBASMFLAGS += -I src/
 ifeq ($(DEBUG),1)
 RGBASMFLAGS += -E
 endif
+
+$(rom_obj):   RGBASMFLAGS +=
+$(patch_obj): RGBASMFLAGS += -D _VC
 
 src/rgbdscheck.o: src/rgbdscheck.asm
 	$(RGBASM) -o $@ $<
@@ -93,6 +107,7 @@ endef
 
 # Dependencies for objects
 $(foreach obj, $(rom_obj), $(eval $(call DEP,$(obj),$(obj:.o=.asm))))
+$(foreach obj, $(patch_obj), $(eval $(call DEP,$(obj),$(obj:_vc.o=.asm))))
 
 endif
 
@@ -105,6 +120,13 @@ RGBFIXFLAGS += -cjsv -k 01 -l 0x33 -m MBC5+RAM+BATTERY -p 0xff -r 03 -t POKECARD
 $(rom): $(rom_obj) src/layout.link
 	$(RGBLINK) $(RGBLINKFLAGS) -p 0xff -m $(rom:.gbc=.map) -n $(rom:.gbc=.sym) -l src/layout.link -w -o $@ $(filter %.o,$^)
 	$(RGBFIX) $(RGBFIXFLAGS) $@
+
+$(patch_rom): $(patch_obj) src/layout.link
+	$(RGBLINK) $(RGBLINKFLAGS) -p 0xff -m $(patch_rom:.gbc=.map) -n $(patch_rom:.gbc=.sym) -l src/layout.link -w -o $@ $(filter %.o,$^)
+	$(RGBFIX) $(RGBFIXFLAGS) $@
+
+$(patch): $(patch_rom) $(rom) src/vc/poketcg.patch.template
+	tools/make_patch $(patch_rom:.gbc=.sym) $^ $@
 
 
 ### Misc file-specific graphics rules

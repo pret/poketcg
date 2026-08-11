@@ -27,3 +27,7 @@ INCLUDE "constants/tileset_constants.asm"
 INCLUDE "constants/animation_constants.asm"
 INCLUDE "constants/attack_animation_constants.asm"
 INCLUDE "constants/charmaps.asm"
+
+IF DEF(_VC)
+INCLUDE "vc/poketcg.constants.asm"
+ENDC
