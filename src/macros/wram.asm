@@ -42,8 +42,8 @@ ENDM
 MACRO text_header
 \1DefaultFont:: ds 1
 \1FontWidth::   ds 1
-\1Address::     ds 2
 \1RomBank::     ds 1
+\1Address::     ds 2
 ENDM
 
 MACRO sprite_anim_struct
