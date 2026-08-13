@@ -6,6 +6,7 @@
 
 # roms
 *.gbc
+*.patch
 
 # rgbds extras
 *.map

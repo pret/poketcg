@@ -114,6 +114,7 @@ CopyCGBPalettes::
 	and STAT_BUSY ; wait until hblank or vblank
 	jr nz, .wait
 	ld a, [hl]
+	vc_hook Unknown_CopyCGBPalettes
 	ld [$ff00+c], a
 	ld a, [$ff00+c]
 	cp [hl]

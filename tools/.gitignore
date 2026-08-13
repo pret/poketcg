@@ -1,6 +1,7 @@
-scan_includes
-gfx
-compressor
 bgmap
+compressor
+gfx
+make_patch
+scan_includes
 
 *.exe

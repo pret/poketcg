@@ -5,6 +5,7 @@ This is a disassembly of Pokémon TCG.
 It builds the following ROM:
 
 - Pokémon Trading Card Game (U) [C][!].gbc `sha1: 0f8670a583255cff3e5b7ca71b5d7454d928fc48`
+- DMGAXQE0.I78.patch `sha1: 3efeae633fde122e2651502aecbb2614131d1327`
 
 To assemble, first install [RGBDS](https://github.com/gbdev/rgbds/releases) and put it in your path.  
 Then run `make` in your shell.

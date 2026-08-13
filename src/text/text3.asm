@@ -1287,8 +1287,15 @@ CardPopContinueDiaryNewGameContinueDuelText:
 	done
 
 WhenYouCardPopWithFriendText:
-	text "When you CARD POP! with a friend,"
+	text ""
+IF DEF(_VC)
+.StartSkip:
+ENDC
+	db   "When you CARD POP! with a friend,"
 	line "you will each receive a new card!"
+IF DEF(_VC)
+.EndSkip:
+ENDC
 	done
 
 ContinueFromDiarySummaryText:
@@ -1985,7 +1992,11 @@ Mail1Part1Text:
 	line "Pack! By doing so, you will be able "
 	line "to collect the same cards, making it"
 	line "easier for you to build your Deck."
-	line "Another method for collecting "
+	line ""
+IF DEF(_VC)
+.StartSkip:
+ENDC
+	db   "Another method for collecting "
 	line "cards is to use CARD POP!"
 	line "When you and a friend use CARD POP!,"
 	line "you will each receive a new card!"
@@ -1996,7 +2007,11 @@ Mail1Part1Text:
 	line "Trading Card Game for Game Boy,"
 	line "and CARD POP! with them to"
 	line "get new cards!"
-	line "Oh, here's something for you..."
+	line ""
+IF DEF(_VC)
+.EndSkip:
+ENDC
+	db   "Oh, here's something for you..."
 	done
 
 Mail1Part2Text:

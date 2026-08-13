@@ -74,7 +74,9 @@ InitializeMenuParameters::
 ; returns a = 0 if A was pressed, a = -1 if B was pressed
 ; note: return values still subject to those of the function at [wMenuUpdateFunc] if any
 HandleMenuInput::
+	vc_hook Unknown_disable_menu_1
 	xor a
+	vc_hook Unknown_disable_menu_2
 	ld [wRefreshMenuCursorSFX], a
 	ldh a, [hDPadHeld]
 	or a
@@ -113,6 +115,7 @@ HandleMenuInput::
 	ld hl, wMenuUpdateFunc ; call the function if non-0 (periodically)
 	ld a, [hli]
 	or [hl]
+	vc_hook Disable_PC_Print_menu
 	jr z, .check_A_or_B
 	ld a, [hld]
 	ld l, [hl]
