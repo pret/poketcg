@@ -1454,7 +1454,7 @@ _HandlePeekSelection::
 	jr c, .selection_cancelled
 	jr .loop_input_2
 .selection_cancelled
-	cp -1
+	cp MENU_CANCEL
 	jr nz, .selection_made
 	call ZeroObjectPositionsWithCopyToggleOn
 	jr .check_swap
@@ -1902,7 +1902,7 @@ _SelectPrizeCards::
 	xor a
 	call GetFirstSetPrizeCard
 	ld [wYourOrOppPlayAreaCurPosition], a
-	ld de, hTempPlayAreaLocation_ffa1
+	ld de, hDuelActionArgs + SELECTPRIZE_ARGS_SELECTED_CARD_INDICES
 	ld hl, wSelectedPrizeCardListPtr
 	ld [hl], e
 	inc hl
@@ -1920,7 +1920,7 @@ _SelectPrizeCards::
 .done_selection
 	ld a, DUELVARS_PRIZES
 	call GetTurnDuelistVariable
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + SELECTPRIZE_ARGS_BITFIELD], a
 	ld a, [wSelectedPrizeCardListPtr + 0]
 	ld l, a
 	ld a, [wSelectedPrizeCardListPtr + 1]
@@ -1949,7 +1949,7 @@ _SelectPrizeCards::
 	call DoFrame
 	call YourOrOppPlayAreaScreen_HandleInput
 	jr nc, .loop_handle_input
-	cp $ff
+	cp MENU_CANCEL
 	jr z, .loop_handle_input
 
 	call ZeroObjectPositionsWithCopyToggleOn

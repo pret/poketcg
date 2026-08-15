@@ -23,3 +23,24 @@ MACRO? event_def
 	db \1
 	db \2
 ENDM
+
+MACRO? rsunion
+	IF DEF(rsunion_level)
+		DEF rsunion_level += 1
+	ELSE
+		DEF rsunion_level = 1
+	ENDC
+	DEF _rsunion{d:rsunion_level}_start = _RS
+ENDM
+
+MACRO? rsnextu
+	RSSET _rsunion{d:rsunion_level}_start
+ENDM
+
+MACRO? endrsunion
+	PURGE _rsunion{d:rsunion_level}_start
+	DEF rsunion_level -= 1
+	IF !rsunion_level
+		PURGE rsunion_level
+	ENDC
+ENDM
