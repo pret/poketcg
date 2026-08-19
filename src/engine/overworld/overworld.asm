@@ -293,32 +293,35 @@ Func_c241:
 	push de
 	lb de, $30, $7f
 	call SetupText
-	call Func_c258
+	call .Func_c258
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_c251:
-	ldh a, [hffb0]
+; unreferenced
+.Func_c251:
+	ldh a, [hTextTileProcessFlag]
 	push af
-	ld a, $1
-	jr Func_c258.asm_c25d
+	ld a, TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
+	jr .Func_c25d
 
-Func_c258:
-	ldh a, [hffb0]
+.Func_c258:
+	ldh a, [hTextTileProcessFlag]
 	push af
-	ld a, $2
-.asm_c25d
-	ldh [hffb0], a
+	ld a, TEXT_TILE_PROCESS_SKIP_PRINTING
+; fallthrough
+
+.Func_c25d:
+	ldh [hTextTileProcessFlag], a
 	push hl
-	call Func_c268
+	call .Func_c268
 	pop hl
 	pop af
-	ldh [hffb0], a
+	ldh [hTextTileProcessFlag], a
 	ret
 
-Func_c268:
+.Func_c268:
 	ld hl, PauseMenuTextList
 .loop
 	push hl
