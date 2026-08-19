@@ -33,12 +33,12 @@ DEF TX_RAM3       EQU $0c ; prints a number from wTxRam3 or wTxRam3_b
 
 ; usage: TX_FULLWIDTH*, char1, char2, ...
 ; sources:
-   ; gfx/fonts/full_width/0_1_hiragana.1bpp (characters below $60)
-   ; gfx/fonts/full_width/0_2_digits_kanji1.1bpp (characters above or equal to $60)
+;   gfx/fonts/full_width/0_1_hiragana.1bpp (characters below $60)
+;   gfx/fonts/full_width/0_2_digits_kanji1.1bpp (characters above or equal to $60)
 DEF TX_HIRAGANA EQU $0e ; sets hJapaneseSyllabary to TX_HIRAGANA
 ; sources:
-   ; gfx/fonts/full_width/0_0_katakana.1bpp (characters below $60)
-   ; gfx/fonts/full_width/0_2_digits_kanji1.1bpp (characters above or equal to $60)
+;   gfx/fonts/full_width/0_0_katakana.1bpp (characters below $60)
+;   gfx/fonts/full_width/0_2_digits_kanji1.1bpp (characters above or equal to $60)
 DEF TX_KATAKANA EQU $0f ; sets hJapaneseSyllabary to TX_KATAKANA
 
 ; db char1, char2, ... defaults to the value at hJapaneseSyllabary, unless
@@ -54,3 +54,11 @@ DEF HALF_WIDTH EQU $1 ; non-0
 ; wLineSeparation constants
 DEF DOUBLE_SPACED EQU 0
 DEF SINGLE_SPACED EQU 1 ; non-0
+
+; hTextTileProcessFlag flags
+	const_def
+	const TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE_F ; 0
+	const TEXT_TILE_PROCESS_SKIP_PRINTING_F     ; 1
+
+DEF TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE EQU 1 << TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE_F ; $1
+DEF TEXT_TILE_PROCESS_SKIP_PRINTING     EQU 1 << TEXT_TILE_PROCESS_SKIP_PRINTING_F     ; $2

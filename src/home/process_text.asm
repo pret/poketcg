@@ -32,7 +32,7 @@ ProcessText::
 	jr nc, .not_tx_fullwidth
 	inc hl
 .not_tx_fullwidth
-	call Func_22ca
+	call ProcessTextTile
 	xor a
 	call ProcessSpecialTextCharacter
 .next_char
@@ -88,7 +88,7 @@ ProcessSpecialTextCharacter::
 	call TerminateHalfWidthText
 	pop af
 	ld [wFontWidth], a
-	ldh a, [hffb0]
+	ldh a, [hTextTileProcessFlag]
 	or a
 	jr nz, .skip_placing_tile
 	ld a, [hl]
@@ -135,21 +135,21 @@ ProcessSpecialTextCharacter::
 
 ; calls InitTextFormat, selects tiles at $8800-$97FF for text, and clears the wc600.
 ; selects the first and last tile to be reserved for constructing text tiles in VRAM
-; based on the values given in d and e respectively.
+; by setting (next index, max index) = (d-1, e).
 SetupText::
 	ld a, d
 	dec a
-	ld [wcd04], a
+	ld [wNextTextTileCacheIndex], a
 	ld a, e
-	ldh [hffa8], a
+	ldh [hMaxTextTileCacheIndex], a
 	call InitTextFormat
 	xor a
-	ldh [hffb0], a
-	ldh [hffa9], a
-	ld a, $88
-	ld [wTilePatternSelector], a
-	ld a, $80
-	ld [wTilePatternSelectorCorrection], a
+	ldh [hTextTileProcessFlag], a
+	ldh [hTextTileCacheHead], a
+	ld a, HIGH(v0Tiles1)
+	ld [wTextTileBaseAddressHi], a
+	ld a, NUM_SIGNED
+	ld [wTextTileIndexSignednessState], a
 	ld hl, wc600
 .clear_loop
 	xor a
@@ -160,13 +160,13 @@ SetupText::
 
 ; wFontWidth <- FULL_WIDTH
 ; hTextLineCurPos <- 0
-; wHalfWidthPrintState <- 0
+; wPendingHalfWidthChar <- 0
 ; hJapaneseSyllabary <- TX_KATAKANA
 InitTextFormat::
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ldh [hTextLineCurPos], a
-	ld [wHalfWidthPrintState], a
+	ld [wPendingHalfWidthChar], a
 	ld a, TX_KATAKANA
 	ldh [hJapaneseSyllabary], a
 	ret
@@ -199,40 +199,39 @@ InitTextPrinting::
 	ldh [hTextBGMap0Address + 1], a
 	call InitTextFormat
 	xor a
-	ld [wHalfWidthPrintState], a
+	ld [wPendingHalfWidthChar], a
 	pop hl
 	ret
 
 ; requests a text tile to be generated and prints it in the screen
-; different modes depending on hffb0:
-   ; hffb0 == $0: generate and place text tile
-   ; hffb0 == $2 (bit 1 set): only generate text tile?
-   ; hffb0 == $1 (bit 0 set): not even generate it, but just update text buffers?
-Func_22ca::
+; input:
+;   de = fullwidth char or halfwidth chars
+;   hTextTileProcessFlag = TEXT_TILE_PROCESS_* flag
+ProcessTextTile::
 	push hl
 	push de
 	push bc
-	ldh a, [hffb0]
-	and $1
-	jr nz, .asm_22ed
-	call Func_2325
+	ldh a, [hTextTileProcessFlag]
+	and TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
+	jr nz, .update
+	call FindOrInsertTextTileCacheEntry
 	jr c, .tile_already_exists
 	or a
 	jr nz, .done
 	call GenerateTextTile
 .tile_already_exists
-	ldh a, [hffb0]
-	and $2
+	ldh a, [hTextTileProcessFlag]
+	and TEXT_TILE_PROCESS_SKIP_PRINTING
 	jr nz, .done
-	ldh a, [hffa9]
+	ldh a, [hTextTileCacheHead]
 	call PlaceNextTextTile
 .done
 	pop bc
 	pop de
 	pop hl
 	ret
-.asm_22ed
-	call Func_235e
+.update
+	call MoveTextTileCacheEntryToFront
 	jr .done
 
 ; writes a to wCurTextTile and to the tile pointed to by hTextBGMap0Address,
@@ -264,38 +263,38 @@ TerminateHalfWidthText::
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
 	ret z
-	ld a, [wHalfWidthPrintState]
+	ld a, [wPendingHalfWidthChar]
 	or a
 	ret z ; return if the last printed character was the second of a pair
 	push hl
 	push de
 	push bc
 	ld e, ' '
-	call Func_22ca
+	call ProcessTextTile
 	pop bc
 	pop de
 	pop hl
 	ret
 
-Func_2325::
-	call Func_235e
+FindOrInsertTextTileCacheEntry::
+	call MoveTextTileCacheEntryToFront
 	ret c
 	or a
 	ret nz
-	ldh a, [hffa8]
-	ld hl, wcd04
+	ldh a, [hMaxTextTileCacheIndex]
+	ld hl, wNextTextTileCacheIndex
 	cp [hl]
 	jr nz, .asm_2345
-	ldh a, [hffa9]
-	ld h, $c8
-.asm_2337
+	ldh a, [hTextTileCacheHead]
+	ld h, HIGH(wc800)
+.loop
 	ld l, a
 	ld a, [hl]
 	or a
-	jr nz, .asm_2337
-	ld h, $c9
+	jr nz, .loop
+	ld h, HIGH(wc900)
 	ld c, [hl]
-	ld b, $c8
+	ld b, HIGH(wc800)
 	xor a
 	ld [bc], a
 	jr .asm_234a
@@ -306,17 +305,17 @@ Func_2325::
 .asm_2349
 	ld l, [hl]
 .asm_234a
-	ldh a, [hffa9]
+	ldh a, [hTextTileCacheHead]
 	ld c, a
-	ld b, $c9
+	ld b, HIGH(wc900)
 	ld a, l
-	ldh [hffa9], a
+	ldh [hTextTileCacheHead], a
 	ld [bc], a
-	ld h, $c8
+	ld h, HIGH(wc800)
 	ld [hl], c
-	ld h, $c6
+	ld h, HIGH(wc600)
 	ld [hl], e
-	inc h ; $c7
+	inc h ; HIGH(wc700)
 	ld [hl], d
 	ld b, l
 	xor a
@@ -324,69 +323,69 @@ Func_2325::
 
 ; search linked-list for text characters e/d (registers), if found hoist
 ; the result to head of list and return it. carry flag denotes success.
-Func_235e::
+MoveTextTileCacheEntryToFront::
 	ld a, [wFontWidth]
 	or a
 	jr z, .print
 	call CaseHalfWidthLetter
-	; if [wHalfWidthPrintState] != 0, load it to d and print the pair of chars
-	; zero wHalfWidthPrintState for next iteration
-	ld a, [wHalfWidthPrintState]
+	; if [wPendingHalfWidthChar] != 0, load it to d and print the pair of chars
+	; zero wPendingHalfWidthChar for next iteration
+	ld a, [wPendingHalfWidthChar]
 	ld d, a
 	or a
 	jr nz, .print
-	; if [wHalfWidthPrintState] == 0, don't print text in this iteration
-	; load the next value of register d into wHalfWidthPrintState
+	; if [wPendingHalfWidthChar] == 0, don't print text in this iteration
+	; load the next value of register d into wPendingHalfWidthChar
 	ld a, e
-	ld [wHalfWidthPrintState], a
+	ld [wPendingHalfWidthChar], a
 	ld a, $1
 	or a
 	ret ; nz
 .print
 	xor a
-	ld [wHalfWidthPrintState], a
-	ldh a, [hffa9]
-	ld l, a              ; l ← [hffa9]; index to to linked-list head
-.asm_237d
-	ld h, $c6                                     ;
+	ld [wPendingHalfWidthChar], a
+	ldh a, [hTextTileCacheHead]
+	ld l, a              ; l ← [hTextTileCacheHead] ; index to linked-list head
+.loop
+	ld h, HIGH(wc600)    ;
 	ld a, [hl]           ; a ← key1[l]            ;
 	or a                                          ;
 	ret z                ; if NULL, return a = 0  ;
 	cp e                                          ; loop for e/d key in
-	jr nz, .asm_238a     ;                        ; linked list
-	inc h ; $c7          ;                        ;
+	jr nz, .next         ;                        ; linked list
+	inc h ; HIGH(wc700)  ;                        ;
 	ld a, [hl]           ; if key1[l] == e and    ;
 	cp d                 ;   key2[l] == d:        ;
-	jr z, .asm_238f      ;   break                ;
-.asm_238a
-	ld h, $c8            ;                        ;
+	jr z, .update        ;   break                ;
+.next
+	ld h, HIGH(wc800)    ;                        ;
 	ld l, [hl]           ; l ← next[l]            ;
-	jr .asm_237d
-.asm_238f
-	ldh a, [hffa9]
+	jr .loop
+.update
+	ldh a, [hTextTileCacheHead]
 	cp l
-	jr z, .asm_23af      ; assert at least one iteration
+	jr z, .success       ; assert at least one iteration
 	ld c, a
-	ld b, $c9
+	ld b, HIGH(wc900)
 	ld a, l
 	ld [bc], a           ; prev[i0] ← i
-	ldh [hffa9], a       ; [hffa9] ← i  (update linked-list head)
-	ld h, $c9
+	ldh [hTextTileCacheHead], a ; [hTextTileCacheHead] ← i ; update linked-list head
+	ld h, HIGH(wc900)
 	ld b, [hl]
 	ld [hl], $0          ; prev[i] ← 0
-	ld h, $c8
+	ld h, HIGH(wc800)
 	ld a, c
 	ld c, [hl]
 	ld [hl], a           ; next[i] ← i0
 	ld l, b
 	ld [hl], c           ; next[prev[i]] ← next[i]
-	ld h, $c9
+	ld h, HIGH(wc900)
 	inc c
 	dec c
-	jr z, .asm_23af      ; if next[i] != NULL:
+	jr z, .success       ; if next[i] != NULL:
 	ld l, c              ;   l ← next[i]
 	ld [hl], b           ;   prev[next[i]] ← prev[i]
-.asm_23af
+.success
 	scf                  ; set carry to indicate success
 	ret                  ; (return new linked-list head in a)
 
@@ -396,9 +395,9 @@ CaseHalfWidthLetter::
 	or a
 	ret z
 	ld a, e
-	cp $60
+	cp 'a' - 1
 	ret c
-	cp $7b
+	cp 'z' + 1
 	ret nc
 	sub 'a' - 'A'
 	ld e, a
@@ -674,12 +673,12 @@ CreateHalfWidthFontTile::
 ; the ascii value of the character to copy is provided in a.
 ; assumes BANK(HalfWidthFont) is already loaded.
 CopyHalfWidthCharacterToDE::
-	sub $20 ; HalfWidthFont begins at ascii $20
+	sub HALFWIDTH_CHAR_START
 	ld l, a
 	ld h, $0
+REPT 3 ; *TILE_SIZE_1BPP
 	add hl, hl
-	add hl, hl
-	add hl, hl
+ENDR
 	ld bc, HalfWidthFont
 	add hl, bc
 	ld b, TILE_SIZE_1BPP
@@ -702,21 +701,19 @@ CreateFullWidthFontTile_ConvertToTileDataAddress::
 	pop bc
 ;	fallthrough
 
-; given a tile number in b, return its v*Tiles address in hl, and return c = TILE_SIZE
-; wTilePatternSelector and wTilePatternSelectorCorrection are used to select the source:
-; - if wTilePatternSelector == $80 and wTilePatternSelectorCorrection == $00 -> $8000-$8FFF
-; - if wTilePatternSelector == $88 and wTilePatternSelectorCorrection == $80 -> $8800-$97FF
+; for b = tile number, return hl = its tile address, and c = TILE_SIZE
+; default: VRAM, LCDC_BLOCK21
+; printer: SRAM, as if LCDC_BLOCK01
 ConvertTileNumberToTileDataAddress::
-	ld hl, wTilePatternSelectorCorrection
+	ld hl, wTextTileIndexSignednessState
 	ld a, b
 	xor [hl]
 	ld h, $0
 	ld l, a
+REPT 4 ; *TILE_SIZE
 	add hl, hl
-	add hl, hl
-	add hl, hl
-	add hl, hl
-	ld a, [wTilePatternSelector]
+ENDR
+	ld a, [wTextTileBaseAddressHi]
 	ld b, a
 	ld c, $0
 	add hl, bc
@@ -753,7 +750,7 @@ ClassifyTextCharacterPair::
 	ld a, e
 	cp TX_CTRL_END
 	jr c, .continue_check
-	cp $60
+	cp FULLWIDTH_CHAR_START
 	jr nc, .not_katakana
 	ldh a, [hJapaneseSyllabary]
 	cp TX_KATAKANA
