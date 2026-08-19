@@ -750,7 +750,7 @@ ClassifyTextCharacterPair::
 	ld a, e
 	cp TX_CTRL_END
 	jr c, .continue_check
-	cp FULLWIDTH_CHAR_START
+	cp FULLWIDTH0_CHAR_START
 	jr nc, .not_katakana
 	ldh a, [hJapaneseSyllabary]
 	cp TX_KATAKANA
