@@ -899,7 +899,7 @@ DisplayEnergyDiscardScreen:
 	ld [wEnergyDiscardPlayAreaLocation], a
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
-	call LoadDuelFaceDownCardTiles
+	call LoadDuelCheckPokemonScreenTiles_OnlyPokemonStages
 	ld a, [wEnergyDiscardPlayAreaLocation]
 	ld hl, wCurPlayAreaSlot
 	ld [hli], a
@@ -5939,7 +5939,7 @@ DisplayOpponentUsedAttackScreen:
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
-	call LoadDuelFaceDownCardTiles
+	call LoadDuelCheckPokemonScreenTiles_OnlyPokemonStages
 	ld a, [wTempCardID_ccc2]
 	ld e, a
 	ld d, $00

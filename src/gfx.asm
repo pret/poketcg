@@ -19,6 +19,7 @@ INCBIN "gfx/fonts/half_width.1bpp"
 
 SymbolsFont::
 INCBIN "gfx/fonts/symbols.2bpp"
+SymbolsFontEnd::
 
 DuelGraphics::
 
@@ -26,17 +27,44 @@ DuelCardHeaderGraphics::
 INCBIN "gfx/duel/card_headers.2bpp"
 
 DuelDmgSgbSymbolGraphics::
-INCBIN "gfx/duel/dmg_sgb_symbols.2bpp"
+
+DuelDmgSgbCardSymbolGraphics::
+INCBIN "gfx/duel/dmg_sgb_card_symbols.2bpp"
+DuelDmgSgbCheckPokemonScreenGraphics::
+INCBIN "gfx/duel/dmg_sgb_check_pokemon_screen_stages.2bpp"
+INCBIN "gfx/duel/dmg_sgb_check_pokemon_screen_locations.2bpp"
+DuelDmgSgbPlayAreaScreenGraphics::
+INCBIN "gfx/duel/dmg_sgb_play_area_screen.2bpp"
+INCBIN "gfx/duel/dmg_sgb_play_area_screen_29.2bpp"
 
 DuelCgbSymbolGraphics::
-INCBIN "gfx/duel/cgb_symbols.2bpp", $0, $808
+
+DuelCgbCardSymbolGraphics::
+INCBIN "gfx/duel/cgb_card_symbols.2bpp"
+DuelCgbCheckPokemonScreenGraphics::
+INCBIN "gfx/duel/cgb_check_pokemon_screen_stages.2bpp"
+INCBIN "gfx/duel/cgb_check_pokemon_screen_locations.2bpp"
+DuelCgbPlayAreaScreenGraphics::
+INCBIN "gfx/duel/cgb_play_area_screen.2bpp"
+INCBIN "gfx/duel/cgb_play_area_screen_29.2bpp", 0, (4 tiles - 8)
 
 SECTION "Gfx 2", ROMX
 
-INCBIN "gfx/duel/cgb_symbols.2bpp", $808, $8
+INCBIN "gfx/duel/cgb_play_area_screen_29.2bpp", (4 tiles - 8), 8
 
 DuelOtherGraphics::
-INCBIN "gfx/duel/other.2bpp"
+
+DuelSetupScreenGraphics::
+INCBIN "gfx/duel/setup_arena_card.2bpp"
+INCBIN "gfx/duel/setup_prize_card.2bpp"
+DuelCoinTossResultSymbolGraphics::
+INCBIN "gfx/duel/coin_toss_result_symbols.2bpp"
+CardOrDuelMenuBorderGraphics::
+INCBIN "gfx/duel/borders.2bpp"
+RealCardSetSymbolGraphics::
+INCBIN "gfx/duel/real_card_set_symbols.2bpp"
+DuelDrawCardsScreenGraphics::
+INCBIN "gfx/duel/draw_cards_screen.2bpp"
 
 DuelBoxMessages::
 INCBIN "gfx/duel/box_messages.2bpp"
