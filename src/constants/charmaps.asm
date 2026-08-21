@@ -474,6 +474,7 @@ ENDM
 	txsymbol "CROSS"      ; $2d
 	txsymbol "SLASH"      ; $2e
 	txsymbol "CURSOR_D"   ; $2f
+DEF NUM_PRINTER_SYM_CHARS EQU const_value ; $30
 	txsymbol "PRIZE"      ; $30
 
 SETCHARMAP main

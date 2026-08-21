@@ -410,7 +410,7 @@ _DrawYourOrOppPlayAreaScreen::
 	call Set_OBJ_8x8
 	call LoadCursorTile
 	call LoadSymbolsFont
-	call LoadDeckAndDiscardPileIcons
+	call LoadDuelPlayAreaScreenTiles
 
 	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	cp PLAYER_TURN
@@ -517,7 +517,7 @@ DrawInPlayAreaScreen:
 	call Set_OBJ_8x8
 	call LoadCursorTile
 	call LoadSymbolsFont
-	call LoadDeckAndDiscardPileIcons
+	call LoadDuelPlayAreaScreenTiles
 
 	lb de, $80, $9f
 	call SetupText
@@ -571,7 +571,7 @@ _DrawPlayersPrizeAndBenchCards::
 	call DoFrame
 	call EmptyScreen
 	call LoadSymbolsFont
-	call LoadDeckAndDiscardPileIcons
+	call LoadDuelPlayAreaScreenTiles
 
 ; player cards
 	ld a, PLAYER_TURN
