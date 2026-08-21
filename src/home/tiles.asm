@@ -257,10 +257,10 @@ LoadCardOrDuelMenuBorderTiles::
 	ld b, NUM_CARD_OR_DUEL_MENU_BORDER_TILES
 	jr CopyFontsOrDuelGraphicsTiles
 
-; loads the graphics of a card type header, used to display a picture of a card after drawing it
-; or placing it in the arena. register e determines which header (TRAINER, ENERGY, PoKéMoN)
+; loads the graphics of HEADER_* in a
+; to display a picture of a card after drawing it or placing it in the arena
 LoadCardTypeHeaderTiles::
-	ld d, a
+	ld d, a ; * CARD_HEADER_TILE_SIZE tiles
 	ld e, 0
 	ld hl, DuelCardHeaderGraphics - $4000
 	add hl, de
@@ -312,9 +312,10 @@ LoadDuelCheckPokemonScreenTiles::
 	ld de, v0Tiles1 + $50 tiles
 	jr CopyFontsOrDuelGraphicsTiles
 
-; load the tiles for the "Placing the prizes..." screen
+; load the tiles for the face-down arena cards and prize cards
+; for the "Placing the prizes..." screen,
+; plus the ones for the play area screen
 LoadPlacingThePrizesScreenTiles::
-	; load the Pokeball field tiles
 	ld hl, DuelSetupScreenGraphics
 	ld de, v0Tiles1 + $20 tiles
 	ld b, NUM_SETUP_ICON_TILES
