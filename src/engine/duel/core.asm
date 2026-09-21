@@ -231,7 +231,7 @@ SetupDuel:
 
 ; handle the turn of the duelist identified by hWhoseTurn.
 ; if player's turn, display the animation of the player drawing the card at
-; hTempCardIndex_ff98, and save the duel state to SRAM.
+; hTempCardIndex, and save the duel state to SRAM.
 HandleTurn:
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
@@ -250,7 +250,7 @@ HandleTurn:
 	ret
 
 .deck_not_empty
-	ldh [hTempCardIndex_ff98], a
+	ldh [hTempCardIndex], a
 	call AddCardToHand
 	ld a, [wDuelistType]
 	cp DUELIST_TYPE_PLAYER
@@ -480,7 +480,7 @@ DuelMenu_Retreat:
 	call GetTurnDuelistVariable
 	and CNF_SLP_PRZ
 	cp CONFUSED
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_STATUS], a
 	jr nz, .not_confused
 	ld a, [wConfusionRetreatCheckWasUnsuccessful]
 	or a
@@ -495,7 +495,7 @@ DuelMenu_Retreat:
 	jr c, .done
 	ld [wBenchSelectedPokemon], a
 	ld a, [wBenchSelectedPokemon] ; unnecessary
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_BENCH], a
 	ld a, OPPACTION_ATTEMPT_RETREAT
 	call SetOppAction_SerialSendDuelData
 	call AttemptRetreat
@@ -523,7 +523,7 @@ DuelMenu_Retreat:
 	call DrawWideTextBox_WaitForInput
 	call OpenPlayAreaScreenForSelection
 	ld [wBenchSelectedPokemon], a
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_BENCH], a
 	push af
 	call ReturnRetreatCostCardsToArena
 	pop af
@@ -566,7 +566,7 @@ OpenPlayerHandScreen:
 	call nz, SortHandCardsByID
 	pop af
 	jp c, DuelMainInterface
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
 	ld c, a
@@ -582,7 +582,7 @@ OpenPlayerHandScreen:
 	jr c, ReloadCardListScreen ; jump if card not played
 	jp DuelMainInterface
 
-; play the energy card with deck index at hTempCardIndex_ff98
+; play the energy card with deck index at hTempCardIndex
 ; c contains the type of energy card being played
 PlayEnergyCard:
 	ld a, c
@@ -602,11 +602,11 @@ PlayEnergyCard:
 	ld a, TRUE
 	ld [wAlreadyPlayedEnergy], a
 .play_energy
-	ldh a, [hTempPlayAreaLocation_ff9d]
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh a, [hTempPlayAreaLocation]
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TARGET_PLAY_AREA_LOCATION], a
 	ld e, a
-	ldh a, [hTempCardIndex_ff98]
-	ldh [hTemp_ffa0], a
+	ldh a, [hTempCardIndex]
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	call PutHandCardInPlayArea
 	call PrintPlayAreaCardList_EnableLCD
 	ld a, OPPACTION_PLAY_ENERGY
@@ -641,7 +641,7 @@ ReloadCardListScreen:
 
 ; place a basic Pokemon card on the arena or bench, or place an stage 1 or 2
 ; Pokemon card over a Pokemon card already in play to evolve it.
-; the card to use is loaded in wLoadedCard1 and its deck index is at hTempCardIndex_ff98.
+; the card to use is loaded in wLoadedCard1 and its deck index is at hTempCardIndex.
 ; return nc if the card was played, carry if it wasn't.
 PlayPokemonCard:
 	ld a, [wLoadedCard1Stage]
@@ -651,16 +651,16 @@ PlayPokemonCard:
 	call GetTurnDuelistVariable
 	cp MAX_PLAY_AREA_POKEMON
 	jr nc, .no_space
-	ldh a, [hTempCardIndex_ff98]
-	ldh [hTemp_ffa0], a
+	ldh a, [hTempCardIndex]
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	call PutHandPokemonCardInPlayArea
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	add DUELVARS_ARENA_CARD_STAGE
 	call GetTurnDuelistVariable
 	ld [hl], BASIC
 	ld a, OPPACTION_PLAY_BASIC_PKMN
 	call SetOppAction_SerialSendDuelData
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, 20
 	call CopyCardNameAndLevel
@@ -683,7 +683,7 @@ PlayPokemonCard:
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld c, a
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	ld d, a
 	ld e, PLAY_AREA_ARENA
 	push de
@@ -723,10 +723,10 @@ PlayPokemonCard:
 .try_evolve_loop
 	call OpenPlayAreaScreenForSelection
 	jr c, .done
-	ldh a, [hTempCardIndex_ff98]
-	ldh [hTemp_ffa0], a
-	ldh a, [hTempPlayAreaLocation_ff9d]
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh a, [hTempCardIndex]
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
+	ldh a, [hTempPlayAreaLocation]
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TARGET_PLAY_AREA_LOCATION], a
 	call EvolvePokemonCardIfPossible
 	jr c, .try_evolve_loop ; jump if evolution wasn't successful somehow
 	ld a, OPPACTION_EVOLVE_PKMN
@@ -817,7 +817,7 @@ CheckIfEnoughEnergiesToRetreat:
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call GetPlayAreaCardRetreatCost
 	ld [wEnergyCardsRequiredToRetreat], a
 	ld c, a
@@ -836,7 +836,7 @@ CheckIfEnoughEnergiesToRetreat:
 ; energy cards have been selected or if the player declines to retreat.
 DisplayRetreatScreen:
 	ld a, $ff
-	ldh [hTempRetreatCostCards], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_COST_LIST], a
 	ld a, [wEnergyCardsRequiredToRetreat]
 	or a
 	ret z ; return if no energy cards are required at all
@@ -844,7 +844,7 @@ DisplayRetreatScreen:
 	ld [wNumRetreatEnergiesSelected], a
 	call CreateArenaOrBenchEnergyCardList
 	call SortCardsInDuelTempListByID
-	ld a, LOW(hTempRetreatCostCards)
+	ld a, LOW(hDuelActionArgs + RETREAT_ARGS_COST_LIST)
 	ld [wTempRetreatCostCardsPos], a
 	xor a ; PLAY_AREA_ARENA
 	call DisplayEnergyDiscardScreen
@@ -855,13 +855,13 @@ DisplayRetreatScreen:
 	ld [wEnergyDiscardMenuNumerator], a
 	call HandleEnergyDiscardMenuInput
 	ret c
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call LoadCardDataToBuffer2_FromDeckIndex
-	; append selected energy card to hTempRetreatCostCards
+	; append selected energy card to hDuelActionArgs[2-]
 	ld hl, wTempRetreatCostCardsPos
 	ld c, [hl]
 	inc [hl]
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	ld [$ff00+c], a
 	; accumulate selected energy card
 	ld c, 1
@@ -878,12 +878,12 @@ DisplayRetreatScreen:
 	cp [hl]
 	jr nc, .enough
 	; not enough energies selected yet
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call RemoveCardFromDuelTempList
 	call DisplayEnergyDiscardMenu
 	jr .select_energies_loop
 .enough
-	; terminate hTempRetreatCostCards array with $ff
+	; terminate hDuelActionArgs[2-] array with $ff
 	ld a, [wTempRetreatCostCardsPos]
 	ld c, a
 	ld a, $ff
@@ -1169,7 +1169,7 @@ SwitchAttackPage:
 	ld [hl], a
 	ret
 
-; given the card at hTempCardIndex_ff98, for each non-empty, non-Pokemon Power attack slot,
+; given the card at hTempCardIndex, for each non-empty, non-Pokemon Power attack slot,
 ; prints its information at lines 13 (first attack, if any), and 15 (second attack, if any)
 ; also, copies zero, one, or both of the following to wDuelTempList, $ff terminated:
 ;   if pokemon's first attack slot isn't empty or a Pokemon Power: <card_index>, 0
@@ -1179,7 +1179,7 @@ PrintAndLoadAttacksToDuelTempList:
 	call DrawWideTextBox
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ldh [hTempCardIndex_ff98], a
+	ldh [hTempCardIndex], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld c, 0
 	ld b, 13
@@ -1189,7 +1189,7 @@ PrintAndLoadAttacksToDuelTempList:
 	ld de, wLoadedCard1Atk1Name
 	call .CheckAttackSlotEmptyOrPokemonPower
 	jr c, .check_second_atk_slot
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	ld [hli], a
 	xor a
 	ld [hli], a
@@ -1208,7 +1208,7 @@ PrintAndLoadAttacksToDuelTempList:
 	ld de, wLoadedCard1Atk2Name
 	call .CheckAttackSlotEmptyOrPokemonPower
 	jr c, .done
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	ld [hli], a
 	ld a, $01
 	ld [hli], a
@@ -1665,10 +1665,10 @@ PrintDuelResultStats:
 	call InitTextPrinting_ProcessTextFromID
 	ret
 
-; display the animation of the player drawing the card at hTempCardIndex_ff98
+; display the animation of the player drawing the card at hTempCardIndex
 DisplayPlayerDrawCardScreen:
 	ldtx hl, YouDrewText
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 ;	fallthrough
 
 ; display card detail when a card is drawn or played
@@ -1708,14 +1708,14 @@ HandleDuelSetup:
 	call SwapTurn
 	call PlayShuffleAndDrawCardsAnimation_BothDuelists
 	call ShuffleDeckAndDrawSevenCards
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + DUELSETUP_ARGS_HAS_BASIC_PKMN], a
 	call SwapTurn
 	call ShuffleDeckAndDrawSevenCards
 	call SwapTurn
 	ld c, a
 
 ; check if any Basic Pokémon cards were drawn
-	ldh a, [hTemp_ffa0]
+	ldh a, [hDuelActionArgs + DUELSETUP_ARGS_HAS_BASIC_PKMN]
 	ld b, a
 	and c
 	jr nz, .hand_cards_ok
@@ -1952,14 +1952,14 @@ ChooseInitialArenaAndBenchPokemon:
 	ldtx hl, PleaseChooseAnActivePokemonText
 	call DisplayPlaceInitialPokemonCardsScreen
 	jr c, .choose_arena_loop
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, PRACTICEDUEL_PLAY_GOLDEEN
 	call DoPracticeDuelAction
 	jr c, .choose_arena_loop
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call PutHandPokemonCardInPlayArea
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	ldtx hl, PlacedInTheArenaText
 	call DisplayCardDetailScreen
 	jr .choose_bench
@@ -1983,9 +1983,9 @@ ChooseInitialArenaAndBenchPokemon:
 	call GetTurnDuelistVariable
 	cp MAX_PLAY_AREA_POKEMON
 	jr nc, .no_space
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call PutHandPokemonCardInPlayArea
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	ldtx hl, PlacedOnTheBenchText
 	call DisplayCardDetailScreen
 	ld a, PRACTICEDUEL_DONE_PUTTING_ON_BENCH
@@ -2735,7 +2735,7 @@ PracticeDuel_PlayStaryuFromBench:
 	jp PrintPracticeDuelInstructions
 
 PracticeDuel_ReplaceKnockedOutPokemon:
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	cp PLAY_AREA_BENCH_1
 	ret z
 	; if player selected Drowzee instead (which is at PLAY_AREA_BENCH_2)
@@ -3063,7 +3063,7 @@ DisplayPlaceInitialPokemonCardsScreen:
 	scf
 	jr .done
 .card_selected
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call IsLoadedCard1BasicPokemon
 	jr nc, .done
@@ -3201,7 +3201,7 @@ DrawCardListScreenLayout:
    ; - wSelectedDuelSubMenuItem (initial item) and wSelectedDuelSubMenuScrollOffset
    ;   (initial page scroll offset). Usually both 0 to begin with the first card.
 ; returns carry if B is pressed to exit the card list screen.
-; otherwise returns the selected card at hTempCardIndex_ff98 and at a.
+; otherwise returns the selected card at hTempCardIndex and at a.
 DisplayCardList:
 	call DrawNarrowTextBox
 	call PrintCardListHeaderAndInfoBoxTexts
@@ -3244,7 +3244,7 @@ DisplayCardList:
 	call CardListItemSelectionMenu
 	; jump back if B pressed to exit the item selection menu
 	jr c, DisplayCardList
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	or a
 	ret
 .select_pressed
@@ -3347,7 +3347,7 @@ CardListItemSelectionMenu:
 	ld a, [wCardListItemSelectionMenuType]
 	cp PLAY_CHECK
 	jr nz, .got_text
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ldtx hl, PlayCheck2Text ; identical to PlayCheck1Text
 	ld a, [wLoadedCard1Type]
@@ -3369,7 +3369,7 @@ CardListItemSelectionMenu:
 	or a
 	ret z
 	; CHECK option selected: open the card page
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call OpenCardPage_FromHand
 	call DrawCardListScreenLayout
@@ -3587,7 +3587,7 @@ TurnDuelistTakePrizes:
 	call DrawWideTextBox_WaitForInput
 	ld a, [wNumberPrizeCardsToTake]
 	call SelectPrizeCards
-	ld hl, hTemp_ffa0
+	ld hl, hDuelActionArgs + SELECTPRIZE_ARGS_BITFIELD
 	ld d, [hl]
 	inc hl
 	ld e, [hl]
@@ -4932,7 +4932,7 @@ OpenPlayAreaScreenForSelection:
 
 DisplayPlayAreaScreen:
 	ld [wNoItemSelectionMenuKeys], a
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	push af
 	ld a, [wPlayAreaScreenLoaded]
 	or a
@@ -4966,7 +4966,7 @@ DisplayPlayAreaScreen:
 	cp $02
 	jp z, .asm_60ac
 	pop af
-	ldh [hTempCardIndex_ff98], a
+	ldh [hTempCardIndex], a
 	ld a, [wPlayAreaSelectAction] ; useless
 	jr OpenPlayAreaScreenForSelection
 .asm_6061
@@ -4996,11 +4996,11 @@ DisplayPlayAreaScreen:
 	ld c, a
 	ldh a, [hCurMenuItem]
 	add c
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	ldh a, [hCurMenuItem]
 	cp MENU_CANCEL
 	jr z, .asm_60b5
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	or a
@@ -5008,15 +5008,15 @@ DisplayPlayAreaScreen:
 	jr .skip_ahead
 .asm_60ac
 	pop af
-	ldh [hTempCardIndex_ff98], a
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTempCardIndex], a
+	ldh a, [hTempPlayAreaLocation]
 	ldh [hCurMenuItem], a
 	or a
 	ret
 .asm_60b5
 	pop af
-	ldh [hTempCardIndex_ff98], a
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTempCardIndex], a
+	ldh a, [hTempPlayAreaLocation]
 	ldh [hCurMenuItem], a
 	scf
 	ret
@@ -5141,7 +5141,7 @@ SelectingBenchPokemonMenu:
 
 ; unreferenced
 Func_616e:
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
@@ -5154,7 +5154,7 @@ Func_616e:
 
 InitAndPrintPlayAreaCardInformationAndLocation:
 	ld hl, wCurPlayAreaSlot
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld [hli], a
 	ld c, a
 	add a
@@ -5629,7 +5629,7 @@ DisplayPlayAreaScreenToUsePkmnPower:
 .asm_6447
 	call DoFrame
 	call HandleMenuInput
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	ld [wHUDEnergyAndHPBarsX], a
 	jr nc, .asm_6447
 	cp MENU_CANCEL
@@ -5648,7 +5648,7 @@ DisplayPlayAreaScreenToUsePkmnPower:
 	cp $04
 	jr nz, .asm_6447
 	ld a, [hl]
-	ldh [hTempCardIndex_ff98], a
+	ldh [hTempCardIndex], a
 	ld d, a
 	ld e, FIRST_ATTACK_OR_PKMN_POWER
 	call CopyAttackDataAndDamage_FromDeckIndex
@@ -5663,8 +5663,8 @@ DisplayPlayAreaScreenToUsePkmnPower:
 	ldtx hl, UseThisPokemonPowerText
 	call YesOrNoMenuWithText
 	jp c, .asm_6435
-	ldh a, [hTempCardIndex_ff98]
-	ldh [hTemp_ffa0], a
+	ldh a, [hTempCardIndex]
+	ldh [hDuelActionArgs + DECLARE_PKMNPOWER_ARGS_CARD_INDEX], a
 	or a
 	ret
 .asm_649b
@@ -5733,9 +5733,9 @@ DisplayPlayAreaScreenToUsePkmnPower:
 ; display the screen that prompts the player to use the selected card's
 ; Pokemon Power. Includes the card's information above, and the Pokemon Power's
 ; description below.
-; input: hTempPlayAreaLocation_ff9d
+; input: hTempPlayAreaLocation
 DisplayUsePokemonPowerScreen::
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld [wCurPlayAreaSlot], a
 	xor a
 	ld [wCurPlayAreaY], a
@@ -5772,9 +5772,9 @@ PrintAttackOrCardDescription:
 	call SetOneLineSeparation
 	ret
 
-; moves the cards loaded by deck index at hTempRetreatCostCards to the discard pile
+; moves the cards loaded by deck index at hDuelActionArgs[2-] to the discard pile
 DiscardRetreatCostCards:
-	ld hl, hTempRetreatCostCards
+	ld hl, hDuelActionArgs + RETREAT_ARGS_COST_LIST
 .discard_loop
 	ld a, [hli]
 	cp $ff
@@ -5782,11 +5782,11 @@ DiscardRetreatCostCards:
 	call PutCardInDiscardPile
 	jr .discard_loop
 
-; moves the discard pile cards that were loaded to hTempRetreatCostCards back to the active Pokemon.
+; moves the discard pile cards that were loaded to hDuelActionArgs[2-] back to the active Pokemon.
 ; this exists because they will be discarded again during the call to AttemptRetreat, so
 ; it prevents the energy cards from being discarded twice.
 ReturnRetreatCostCardsToArena:
-	ld hl, hTempRetreatCostCards
+	ld hl, hDuelActionArgs + RETREAT_ARGS_COST_LIST
 .loop
 	ld a, [hli]
 	cp $ff
@@ -5804,7 +5804,7 @@ ReturnRetreatCostCardsToArena:
 ; if successful, the retreated card is replaced with a bench Pokemon card
 AttemptRetreat:
 	call DiscardRetreatCostCards
-	ldh a, [hTemp_ffa0]
+	ldh a, [hDuelActionArgs + RETREAT_ARGS_STATUS]
 	and CNF_SLP_PRZ
 	cp CONFUSED
 	jr nz, .success
@@ -5816,7 +5816,7 @@ AttemptRetreat:
 	scf
 	ret
 .success
-	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldh a, [hDuelActionArgs + RETREAT_ARGS_BENCH]
 	ld e, a
 	call SwapArenaWithBenchPokemon
 	xor a ; FALSE
@@ -5960,9 +5960,9 @@ DisplayOpponentUsedAttackScreen:
 	ret
 
 ; display card detail when a trainer card is used, and print "Used xxx"
-; hTempCardIndex_ff9f contains the card's deck index
+; hDuelActionCardIndex contains the card's deck index
 DisplayUsedTrainerCardDetailScreen::
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	ldtx hl, UsedText
 	call DisplayCardDetailScreen
 	ret
@@ -6416,27 +6416,27 @@ ResetDoFrameFunction_Bank1:
 	ld [hl], a
 	ret
 
-; print the AttachedEnergyToPokemonText, given the energy card to attach in hTempCardIndex_ff98,
-; and the PLAY_AREA_* of the turn holder's Pokemon to attach the energy to in hTempPlayAreaLocation_ff9d
+; print the AttachedEnergyToPokemonText, given the energy card to attach in hTempCardIndex,
+; and the PLAY_AREA_* of the turn holder's Pokemon to attach the energy to in hTempPlayAreaLocation
 PrintAttachedEnergyToPokemon:
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardNameToTxRam2_b
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call LoadCardNameToTxRam2
 	ldtx hl, AttachedEnergyToPokemonText
 	call DrawWideTextBox_WaitForInput
 	ret
 
 ; print the PokemonEvolvedIntoPokemonText, given the Pokemon card to evolve in wPreEvolutionPokemonCard,
-; and the evolved Pokemon card in hTempCardIndex_ff98. also play a sound effect.
+; and the evolved Pokemon card in hTempCardIndex. also play a sound effect.
 PrintPokemonEvolvedIntoPokemon:
 	ld a, SFX_POKEMON_EVOLUTION
 	call PlaySFX
 	ld a, [wPreEvolutionPokemonCard]
 	call LoadCardNameToTxRam2
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call LoadCardNameToTxRam2_b
 	ldtx hl, PokemonEvolvedIntoPokemonText
 	call DrawWideTextBox_WaitForInput
@@ -6527,13 +6527,13 @@ OppAction_FinishTurnWithoutAttacking:
 
 ; attach an energy card from hand to the arena or a benched Pokemon
 OppAction_PlayEnergyCard:
-	ldh a, [hTempPlayAreaLocation_ffa1]
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh a, [hDuelActionArgs + PLAYCARD_ARGS_TARGET_PLAY_AREA_LOCATION]
+	ldh [hTempPlayAreaLocation], a
 	ld e, a
-	ldh a, [hTemp_ffa0]
-	ldh [hTempCardIndex_ff98], a
+	ldh a, [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX]
+	ldh [hTempCardIndex], a
 	call PutHandCardInPlayArea
-	ldh a, [hTemp_ffa0]
+	ldh a, [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call DrawLargePictureOfCard
 	call PrintAttachedEnergyToPokemon
@@ -6544,10 +6544,10 @@ OppAction_PlayEnergyCard:
 
 ; evolve a Pokemon card in the arena or in the bench
 OppAction_EvolvePokemonCard:
-	ldh a, [hTempPlayAreaLocation_ffa1]
-	ldh [hTempPlayAreaLocation_ff9d], a
-	ldh a, [hTemp_ffa0]
-	ldh [hTempCardIndex_ff98], a
+	ldh a, [hDuelActionArgs + PLAYCARD_ARGS_TARGET_PLAY_AREA_LOCATION]
+	ldh [hTempPlayAreaLocation], a
+	ldh a, [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX]
+	ldh [hTempCardIndex], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call DrawLargePictureOfCard
 	call EvolvePokemonCardIfPossible
@@ -6558,14 +6558,14 @@ OppAction_EvolvePokemonCard:
 
 ; place a basic Pokemon card from hand in the bench
 OppAction_PlayBasicPokemonCard:
-	ldh a, [hTemp_ffa0]
-	ldh [hTempCardIndex_ff98], a
+	ldh a, [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX]
+	ldh [hTempCardIndex], a
 	call PutHandPokemonCardInPlayArea
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	add DUELVARS_ARENA_CARD_STAGE
 	call GetTurnDuelistVariable
 	ld [hl], BASIC
-	ldh a, [hTemp_ffa0]
+	ldh a, [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX]
 	ldtx hl, PlacedOnTheBenchText
 	call DisplayCardDetailScreen
 	call ProcessPlayedPokemonCard
@@ -6614,7 +6614,7 @@ OppAction_ExecuteTrainerCardEffectCommands:
 	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	call DrawDuelMainScene
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	call MoveHandCardToDiscardPile
 	call ExchangeRNG
 	call DrawDuelMainScene
@@ -6623,9 +6623,9 @@ OppAction_ExecuteTrainerCardEffectCommands:
 ; begin the execution of an attack and handle the attack being
 ; possibly unsuccessful due to Sand Attack or Smokescreen
 OppAction_BeginUseAttack:
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	ld d, a
-	ldh a, [hTemp_ffa0]
+	ldh a, [hDuelActionArgs + DECLARE_ATTACK_ARGS_ATTACK_INDEX]
 	ld e, a
 	call CopyAttackDataAndDamage_FromDeckIndex
 	call UpdateArenaCardIDsAndClearTwoTurnDuelVars
@@ -6695,19 +6695,19 @@ OppAction_ForceSwitchActive:
 	call OpenPlayAreaScreenForSelection
 	jr c, .force_selection
 	call SwapTurn
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	call SerialSendByte
 	ret
 
 OppAction_UsePokemonPower:
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	ld d, a
 	ld e, FIRST_ATTACK_OR_PKMN_POWER
 	call CopyAttackDataAndDamage_FromDeckIndex
-	ldh a, [hTemp_ffa0]
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh a, [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA_LOCATION]
+	ldh [hTempPlayAreaLocation], a
 	call DisplayUsePokemonPowerScreen
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	call LoadCardNameToTxRam2
 	ld hl, wLoadedAttackName
 	ld a, [hli]
@@ -6752,7 +6752,7 @@ OppAction_TossCoinATimes:
 OppAction_6b30:
 	ldh a, [hWhoseTurn]
 	push af
-	ldh a, [hTemp_ffa0]
+	ldh a, [hDuelActionArgs + 0]
 	ldh [hWhoseTurn], a
 	call PlayDeckShuffleAnimation
 	pop af
@@ -6776,7 +6776,7 @@ OppAction_UseMetronomeAttack:
 	call SwapTurn
 	call CopyAttackDataAndDamage_FromDeckIndex
 	call SwapTurn
-	ldh a, [hTempCardIndex_ff9f]
+	ldh a, [hDuelActionCardIndex]
 	ld [wPlayerAttackingCardIndex], a
 	ld a, [wSelectedAttack]
 	ld [wPlayerAttackingAttackIndex], a
@@ -7414,16 +7414,16 @@ ReplaceKnockedOutPokemon:
 .select_pokemon
 	call OpenPlayAreaScreenForSelection
 	jr c, .select_pokemon
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	call SerialSend8Bytes
 
-; replace the arena Pokemon with the one at location [hTempPlayAreaLocation_ff9d]
+; replace the arena Pokemon with the one at location [hTempPlayAreaLocation]
 .replace_pokemon
 	call FinishQueuedAnimations
 	ld a, PRACTICEDUEL_REPLACE_KNOCKED_OUT_POKEMON
 	call DoPracticeDuelAction
 	jr c, .select_pokemon
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld d, a
 	ld e, PLAY_AREA_ARENA
 	call SwapPlayAreaPokemon
@@ -7440,8 +7440,8 @@ ReplaceKnockedOutPokemon:
 	cp DUELIST_TYPE_LINK_OPP
 	jr z, .link_opponent
 	call AIDoAction_KOSwitch
-	ldh a, [hTemp_ffa0]
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh a, [hDuelActionArgs + NEWARENAPKMN_ARGS_FROM_PLAY_AREA_LOCATION]
+	ldh [hTempPlayAreaLocation], a
 	jr .replace_pokemon
 
 ; wait for link opponent to replace the knocked out Pokemon with one from bench
@@ -7450,7 +7450,7 @@ ReplaceKnockedOutPokemon:
 	ldtx hl, DuelistIsSelectingPokemonToPlaceInArenaText
 	call DrawWideTextBox_PrintText
 	call SerialRecv8Bytes
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	jr .replace_pokemon
 
 Func_6fa5:
@@ -7565,19 +7565,19 @@ PrintThereWasNoEffectFromStatusText::
 	ldtx hl, ThereWasNoEffectFromToxicText
 	ret
 
-; returns carry if card at hTempPlayAreaLocation_ff9d
+; returns carry if card at hTempPlayAreaLocation
 ; is a basic card.
 ; otherwise, lists the card indices of all stages in
 ; that card location, and returns the card one
 ; stage below.
 ; input:
-;	hTempPlayAreaLocation_ff9d = play area location to check;
+;	hTempPlayAreaLocation = play area location to check;
 ; output:
-;	a = card index in hTempPlayAreaLocation_ff9d;
+;	a = card index in hTempPlayAreaLocation;
 ;	d = card index of card one stage below;
 ;	carry set if card is a basic card.
 GetCardOneStageBelow:
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
@@ -7594,9 +7594,9 @@ GetCardOneStageBelow:
 	ld [hli], a
 	ld [hl], a
 
-; loads deck indices of the stages present in hTempPlayAreaLocation_ff9d.
+; loads deck indices of the stages present in hTempPlayAreaLocation.
 ; the three stages are loaded consecutively in wAllStagesIndices.
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or CARD_LOCATION_PLAY_AREA
 	ld c, a
 	ld a, DUELVARS_CARD_LOCATIONS
@@ -7625,9 +7625,9 @@ GetCardOneStageBelow:
 	cp DECK_SIZE
 	jr c, .loop
 
-; if card at hTempPlayAreaLocation_ff9d is a stage 1, load d with basic card.
+; if card at hTempPlayAreaLocation is a stage 1, load d with basic card.
 ; otherwise if stage 2, load d with the stage 1 card.
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD_STAGE
 	call GetTurnDuelistVariable
 	ld hl, wAllStagesIndices ; pointing to basic
@@ -7639,7 +7639,7 @@ GetCardOneStageBelow:
 	inc hl ; pointing to stage 1
 .done
 	ld d, [hl]
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld e, a

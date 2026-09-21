@@ -46,7 +46,7 @@ AIDecidePlayPokemonCard:
 ; if defending Pokémon can KO active card, increase AI score
 .check_defending_can_ko
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_energy_cards
 	ld a, 20
@@ -86,7 +86,7 @@ AIDecidePlayPokemonCard:
 	cp 180
 	jr c, .skip
 	ld a, [wTempAIPokemonCard]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	call CheckIfCardCanBePlayed
 	jr c, .skip
 	ld a, OPPACTION_PLAY_BASIC_PKMN
@@ -152,7 +152,7 @@ AIDecideEvolution:
 ; and initialize the AI score
 	ld a, b
 	ld [wTempAI], a
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	ld a, $80
 	ld [wAIScore], a
 	call AIDecideSpecialEvolutions
@@ -187,7 +187,7 @@ AIDecideEvolution:
 ; if it can't, decrease AI score and if an energy card that is needed
 ; can be played from the hand, raise AI score.
 .check_evolution_attacks
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	push af
@@ -249,7 +249,7 @@ AIDecideEvolution:
 	or a
 	jr nz, .check_mr_mime
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_mr_mime
 	ld a, 5
@@ -274,7 +274,7 @@ AIDecideEvolution:
 	or a
 	jr nz, .check_2nd_stage_hand
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .check_status
 	ld a, 5
@@ -366,9 +366,9 @@ AIDecideEvolution:
 	cp 133
 	jr c, .done_bench_pokemon
 	ld a, [wTempAI]
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TARGET_PLAY_AREA_LOCATION], a
 	ld a, [wTempAIPokemonCard]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_EVOLVE_PKMN
 	bank1call AIMakeDecision
 	pop bc
@@ -413,7 +413,7 @@ AIDecideSpecialEvolutions:
 ; check if number of energy cards attached to Charmeleon are at least 3
 ; and if adding the energy cards in hand makes at least 6 energy cards
 .charmeleon
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld e, a
 	call CountNumberOfEnergyCardsAttached
 	cp 3
@@ -435,7 +435,7 @@ AIDecideSpecialEvolutions:
 ; check if Magikarp is not the active card
 ; and has at least 2 energy cards attached
 .magikarp
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a ; active card
 	ret z
 	ld e, a
@@ -454,7 +454,7 @@ AIDecideSpecialEvolutions:
 
 ; check if Grimer is not active card
 .grimer
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a ; active card
 	ret z
 	ld a, 10
@@ -468,7 +468,7 @@ AIDecideSpecialEvolutions:
 	ret
 
 .dragonair
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a ; active card
 	jr z, .is_active
 

@@ -120,7 +120,7 @@ AIProcessAttacks:
 ; load this attack's damage output against
 ; the current Defending Pokemon.
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	ld a, [wSelectedAttack]
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
@@ -169,7 +169,7 @@ AIProcessAttacks:
 	ret
 
 ; determines the AI score of attack index in a
-; of card in Play Area location hTempPlayAreaLocation_ff9d.
+; of card in Play Area location hTempPlayAreaLocation.
 GetAIScoreOfAttack:
 ; initialize AI score.
 	ld [wSelectedAttack], a
@@ -177,7 +177,7 @@ GetAIScoreOfAttack:
 	ld [wAIScore], a
 
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call CheckIfSelectedAttackIsUnusable
 	jr nc, .usable
 
