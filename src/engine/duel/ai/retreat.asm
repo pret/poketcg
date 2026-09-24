@@ -871,12 +871,12 @@ AITryToRetreat:
 
 	ld hl, hDuelActionArgs + RETREAT_ARGS_COST_LIST
 	ld de, wDuelTempList
-.loop_1
+.loop_select_all_cards
 	ld a, [de]
 	inc de
 	ld [hli], a
 	cp $ff
-	jr nz, .loop_1
+	jr nz, .loop_select_all_cards
 	jp .retreat
 
 ; if cost > 0 and number of energy cards attached > cost
@@ -898,60 +898,60 @@ AITryToRetreat:
 ; if retreat cost is >= 2
 	ld hl, wDuelTempList
 	ld de, hDuelActionArgs + RETREAT_ARGS_COST_LIST
-.loop_2
+.loop_select_dce
 	ld a, c
 	cp 2
-	jr c, .energy_not_same_color
+	jr c, .check_non_useful_energy
 	ld a, [hli]
 	cp $ff
-	jr z, .energy_not_same_color
+	jr z, .check_non_useful_energy
 	ld [de], a
 	push de
 	call GetCardIDFromDeckIndex
 	ld a, e
 	pop de
 	cp DOUBLE_COLORLESS_ENERGY
-	jr nz, .loop_2
+	jr nz, .loop_select_dce
 	ld a, [de]
 	call RemoveCardFromDuelTempList
 	dec hl
 	inc de
 	dec c
 	dec c
-	jr nz, .loop_2
+	jr nz, .loop_select_dce
 	jr .end_retreat_list
 
-; second, shuffle attached cards and discard energy cards
+; next, shuffle attached cards and discard energy cards
 ; that are not of the same type as the Pokémon
 ; the exception for this are cards that are needed for
 ; some attacks but are not of the same color as the Pokémon
 ; (i.e. Psyduck's Headache attack)
 ; and energy cards attached to Eevee corresponding to a
 ; color of any of its evolutions (water, fire, lightning)
-.energy_not_same_color
+.check_non_useful_energy
 	ld hl, wDuelTempList
 	call CountCardsInDuelTempList
 	call ShuffleCards
-.loop_3
+.loop_select_non_useful_energy
 	ld a, [hli]
 	cp $ff
-	jr z, .any_energy
+	jr z, .discard_rest
 	ld [de], a
 	call CheckIfEnergyIsUseful
-	jr c, .loop_3
+	jr c, .loop_select_non_useful_energy
 	ld a, [de]
 	call RemoveCardFromDuelTempList
 	dec hl
 	inc de
 	dec c
-	jr nz, .loop_3
+	jr nz, .loop_select_non_useful_energy
 	jr .end_retreat_list
 
-; third, discard any card until
+; lastly, discard any card until
 ; cost requirement is met
-.any_energy
+.discard_rest
 	ld hl, wDuelTempList
-.loop_4
+.loop_select_rest
 	ld a, [hli]
 	cp $ff
 	jr z, .set_carry
@@ -962,12 +962,12 @@ AITryToRetreat:
 	ld a, e
 	pop de
 	cp DOUBLE_COLORLESS_ENERGY
-	jr nz, .not_double_colorless
+	jr nz, .not_dce
 	dec c
 	jr z, .end_retreat_list
-.not_double_colorless
+.not_dce
 	dec c
-	jr nz, .loop_4
+	jr nz, .loop_select_rest
 
 .end_retreat_list
 	ld a, $ff

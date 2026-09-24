@@ -34,7 +34,7 @@ MACRO? rsunion
 ENDM
 
 MACRO? rsnextu
-	rsset _rsunion{d:rsunion_level}_start
+	RSSET _rsunion{d:rsunion_level}_start
 ENDM
 
 MACRO? endrsunion

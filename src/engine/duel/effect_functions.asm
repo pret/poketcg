@@ -5172,10 +5172,9 @@ DevolutionBeam_CheckPlayArea:
 	ldtx hl, ThereAreNoStage1PokemonText
 	ret
 
-; returns carry of Player cancelled selection.
-; otherwise, output in hDuelActionArgs[0] which Play Area
-; was selected ($0 = own Play Area, $1 = opp. Play Area)
-; and in hDuelActionArgs[1] selected card.
+; returns carry if Player cancels selection.
+; otherwise, output in hDuelActionArgs[0-1]
+; {whose play area, selected play area location}.
 DevolutionBeam_PlayerSelectEffect:
 	ldtx hl, ProcedureForDevolutionBeamText
 	bank1call DrawWholeScreenTextBox
@@ -5197,7 +5196,7 @@ DevolutionBeam_PlayerSelectEffect:
 	call HandleEvolvedCardSelection
 	jr c, .start
 
-	xor a
+	xor a ; TURN_DUELIST_PLAY_AREA
 .store_selection
 	ld hl, hDuelActionArgs
 	ld [hli], a ; store which Duelist Play Area selected
@@ -5211,7 +5210,7 @@ DevolutionBeam_PlayerSelectEffect:
 	call HandleEvolvedCardSelection
 	call SwapTurn
 	jr c, .start
-	ld a, $01
+	ld a, NON_TURN_DUELIST_PLAY_AREA
 	jr .store_selection
 
 .set_carry
