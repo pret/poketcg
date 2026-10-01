@@ -102,13 +102,13 @@ OpenInPlayAreaScreen::
 	ldtx hl, EmptyLineText
 	call ProcessTextFromID
 
-	ld hl, hffb0
-	ld [hl], $01
+	ld hl, hTextTileProcessFlag
+	ld [hl], TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
 	ldtx hl, HandText_2
 	call ProcessTextFromID
 
-	ld hl, hffb0
-	ld [hl], $00
+	ld hl, hTextTileProcessFlag
+	ld [hl], NONE
 	lb de, 1, 17
 	call InitTextPrinting
 	pop af

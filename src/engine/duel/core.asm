@@ -2884,8 +2884,8 @@ PrintPracticeDuelNumberedInstruction:
 
 ; print a single instruction bullet for the current turn
 PrintNextPracticeDuelInstruction:
-	ld a, $01
-	ldh [hffb0], a
+	ld a, TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
+	ldh [hTextTileProcessFlag], a
 	push hl
 	call PrintPracticeDuelInstructionsTextBoxLabel
 	ld hl, wPracticeDuelTextPointer
@@ -2906,7 +2906,7 @@ PrintNextPracticeDuelInstruction:
 .done
 	pop hl
 	xor a
-	ldh [hffb0], a
+	ldh [hTextTileProcessFlag], a
 	ret
 
 PracticeDuelTurnVerificationPointerTable:
@@ -3309,11 +3309,11 @@ DisplayCardList:
 	ldh a, [hDPadHeld]
 	and PAD_CTRL_PAD
 	ret z
-	ld a, $01
-	ldh [hffb0], a
+	ld a, TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
+	ldh [hTextTileProcessFlag], a
 	call PrintCardListHeaderAndInfoBoxTexts
 	xor a
-	ldh [hffb0], a
+	ldh [hTextTileProcessFlag], a
 	ret
 
 ; prints the text ID at wCardListHeaderText at 1,1

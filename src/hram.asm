@@ -123,10 +123,10 @@ hTempList:: ; ffa0
 ENDU
 
 ; hffa8 through hffb0 belong to the text engine
-hffa8:: ; ffa8
+hMaxTextTileCacheIndex:: ; ffa8
 	ds $1
 
-hffa9:: ; ffa9
+hTextTileCacheHead:: ; ffa9
 	ds $1
 
 ; Address within v*BGMap0 where text is currently being written to
@@ -156,7 +156,8 @@ hTextLineLength:: ; ffae
 hJapaneseSyllabary:: ; ffaf
 	ds $1
 
-hffb0:: ; ffb0
+; ProcessTextTile flags
+hTextTileProcessFlag:: ; ffb0
 	ds $1
 
 ; unlike wCurMenuItem, this accounts for the scroll offset (wListScrollOffset)

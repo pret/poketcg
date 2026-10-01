@@ -2354,11 +2354,11 @@ RemoveCardFromDeck:
 	ret
 
 UpdateConfirmationCardScreen:
-	ld hl, hffb0
-	ld [hl], $01
+	ld hl, hTextTileProcessFlag
+	ld [hl], TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
 	call PrintCurDeckNumberAndName
-	ld hl, hffb0
-	ld [hl], $00
+	ld hl, hTextTileProcessFlag
+	ld [hl], NONE
 	jp PrintConfirmationCardList
 
 HandleDeckConfirmationMenu:
@@ -3114,11 +3114,11 @@ HandlePlayersCardsScreen:
 	ld [hl], $00
 	call PrintFilteredCardSelectionList
 
-	ld hl, hffb0
-	ld [hl], $01
+	ld hl, hTextTileProcessFlag
+	ld [hl], TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
 	call PrintPlayersCardsText
-	ld hl, hffb0
-	ld [hl], $00
+	ld hl, hTextTileProcessFlag
+	ld [hl], NONE
 
 	ld a, NUM_FILTERS
 	ld [wCardListNumCursorPositions], a
@@ -3216,11 +3216,11 @@ HandlePlayersCardsScreen:
 	call InitCardSelectionParams
 	ld a, [wCurCardTypeFilter]
 	ld [wTempCardTypeFilter], a
-	ld hl, hffb0
-	ld [hl], $01
+	ld hl, hTextTileProcessFlag
+	ld [hl], TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
 	call PrintPlayersCardsText
-	ld hl, hffb0
-	ld [hl], $00
+	ld hl, hTextTileProcessFlag
+	ld [hl], NONE
 	jp .wait_input
 
 Data_a396:

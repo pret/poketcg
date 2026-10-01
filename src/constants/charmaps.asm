@@ -5,6 +5,7 @@
 
 ; ascii half-width font
 	charmap "\n", $0a
+DEF HALFWIDTH_CHAR_START EQU $20
 	charmap " ", $20
 	charmap "!", $21
 	charmap "”", $22
@@ -293,6 +294,7 @@ ENDM
 	fwcharmap TX_HIRAGANA, "っ", $5f
 
 ; TX_KATAKANA, TX_HIRAGANA, and TX_FULLWIDTH0
+DEF FULLWIDTH0_CHAR_START EQU $60
 	fwcharmap TX_FULLWIDTH0, "0", $60
 	fwcharmap TX_FULLWIDTH0, "1", $61
 	fwcharmap TX_FULLWIDTH0, "2", $62
