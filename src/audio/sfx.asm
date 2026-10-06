@@ -403,7 +403,7 @@ SFX_wave:
 	ld a, AUD3ENA_OFF
 	ldh [rAUD3ENA], a
 	ld b, d
-	ld de, _AUD3WAVERAM
+	ld de, AUD3WAVERAM
 .asm_fc215
 	ld a, [hli]
 	ld [de], a

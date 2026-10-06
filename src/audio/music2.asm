@@ -1286,7 +1286,7 @@ Music2_LoadWaveInstrument:
 	ld h, [hl]
 	ld l, a
 	ld b, d
-	ld de, _AUD3WAVERAM
+	ld de, AUD3WAVERAM
 .copy_wave_loop
 	ld a, [hli]
 	ld [de], a
