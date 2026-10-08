@@ -139,8 +139,8 @@ src/gfx/booster_packs/mystery2.2bpp: RGBGFXFLAGS += -x 10
 src/gfx/cards/%.2bpp: RGBGFXFLAGS += --columns --colors embedded --auto-palette
 
 src/gfx/duel/anims/result.2bpp: RGBGFXFLAGS += -x 10
-src/gfx/duel/dmg_sgb_symbols.2bpp: RGBGFXFLAGS += -x 7
-src/gfx/duel/other.2bpp: RGBGFXFLAGS += -x 7
+src/gfx/duel/dmg_sgb_play_area_screen.2bpp: RGBGFXFLAGS += -x 1
+src/gfx/duel/cgb_play_area_screen.2bpp: RGBGFXFLAGS += -x 1
 
 src/gfx/fonts/full_width/4.1bpp: RGBGFXFLAGS += -x 3
 

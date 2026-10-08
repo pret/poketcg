@@ -135,7 +135,7 @@ _RequestToPrintCard:
 ; or otherwise just the card's name and type symbol
 .DrawTopCardInfoInSRAMGfxBuffer0:
 	call Func_1a025
-	call Func_212f
+	call LoadPrinterCardDataTiles
 
 	; draw empty text box frame
 	ld hl, sGfxBuffer0
@@ -525,7 +525,7 @@ _PrintDeckConfiguration:
 	call ShowPrinterTransmitting
 	call PrepareForPrinterCommunications
 	call Func_1a025
-	call Func_212f
+	call LoadPrinterCardDataTiles
 	lb de, 0, 64
 	lb bc, 20, 4
 	call DrawRegularTextBoxDMG
@@ -693,7 +693,7 @@ _PrintCardList:
 	call CopyPlayerName
 	call PrepareForPrinterCommunications
 	call Func_1a025
-	call Func_212f
+	call LoadPrinterCardDataTiles
 
 	lb de, 0, 64
 	lb bc, 20, 4
@@ -918,40 +918,31 @@ _PrintCardList:
 	ret
 
 .IconTextList
-	; Fire
-	db $e0 ; icon tile
+	db ICON_TILE_FIRE
 	tx FirePokemonText
 
-	; Grass
-	db $e4 ; icon tile
+	db ICON_TILE_GRASS
 	tx GrassPokemonText
 
-	; Lightning
-	db $e8 ; icon tile
+	db ICON_TILE_LIGHTNING
 	tx LightningPokemonText
 
-	; Water
-	db $ec ; icon tile
+	db ICON_TILE_WATER
 	tx WaterPokemonText
 
-	; Fighting
-	db $f0 ; icon tile
+	db ICON_TILE_FIGHTING
 	tx FightingPokemonText
 
-	; Psychic
-	db $f4 ; icon tile
+	db ICON_TILE_PSYCHIC
 	tx PsychicPokemonText
 
-	; Colorless
-	db $f8 ; icon tile
+	db ICON_TILE_COLORLESS
 	tx ColorlessPokemonText
 
-	; Energy
-	db $fc ; icon tile
+	db ICON_TILE_ENERGY
 	tx EnergyCardText
 
-	; Trainer
-	db $dc ; icon tile
+	db ICON_TILE_TRAINER
 	tx TrainerCardText
 
 ShowPrinterTransmitting:
