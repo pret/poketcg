@@ -146,9 +146,9 @@ FindBasicEnergyCardsInLocation:
 ;	a = deck index of attached energy card chosen
 AIPickEnergyCardToDiscard:
 ; load Pokémon's attached energy cards.
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call CreateArenaOrBenchEnergyCardList
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld e, a
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
@@ -156,7 +156,7 @@ AIPickEnergyCardToDiscard:
 	jr z, .no_energy
 
 ; load card's ID and type.
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld b, a
 	ld a, DUELVARS_ARENA_CARD
 	add b
@@ -204,9 +204,9 @@ AIPickEnergyCardToDiscard:
 ;   a = deck index of attached energy card
 PickAttachedEnergyCardToRemove:
 ; construct energy list and check if there are any energy cards attached
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call CreateArenaOrBenchEnergyCardList
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld e, a
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
@@ -214,7 +214,7 @@ PickAttachedEnergyCardToRemove:
 	jr z, .no_energy
 
 ; load card data and store its type
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld b, a
 	ld a, DUELVARS_ARENA_CARD
 	add b
@@ -280,19 +280,19 @@ PickAttachedEnergyCardToRemove:
 ; input:
 ;   a = Play Area location to check
 ; output:
-;   [wTempAI] = deck index of attached energy card
-;   [wCurCardCanAttack] = deck index of attached energy card
+;   a = [wTempAI] = deck index of attached energy card
+;   b = [wCurCardCanAttack] = deck index of attached energy card
 PickTwoAttachedEnergyCards:
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call CreateArenaOrBenchEnergyCardList
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld e, a
 	farcall CountNumberOfEnergyCardsAttached
 	cp 2
 	jp c, .not_enough
 
 ; load card data and store its type
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld b, a
 	ld a, DUELVARS_ARENA_CARD
 	add b
@@ -552,14 +552,14 @@ LookForCardIDInHandList_Bank8:
 	cp $ff
 	ret z
 
-	ldh [hTempCardIndex_ff98], a
+	ldh [hTempCardIndex], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld b, a
 	ld a, [wTempCardIDToLook]
 	cp b
 	jr nz, .loop
 
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	scf
 	ret
 
@@ -742,7 +742,7 @@ RemoveFromListDifferentCardOfGivenType:
 	jr z, .loop_list
 
 ; get this card's type
-	ldh [hTempCardIndex_ff98], a
+	ldh [hTempCardIndex], a
 	push de
 	call GetCardIDFromDeckIndex
 	call GetCardType
@@ -782,7 +782,7 @@ RemoveFromListDifferentCardOfGivenType:
 	jr nz, .loop_remove
 
 ; success
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	pop bc
 	pop de
 	pop hl
@@ -870,7 +870,7 @@ CheckIfHasCardIDInHand:
 	ld a, [hli]
 	cp $ff
 	ret z
-	ldh [hTempCardIndex_ff98], a
+	ldh [hTempCardIndex], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld b, a
 	ld a, [wTempCardIDToLook]
@@ -883,7 +883,7 @@ CheckIfHasCardIDInHand:
 	jr nz, .loop_hand
 
 .set_carry
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	scf
 	ret
 

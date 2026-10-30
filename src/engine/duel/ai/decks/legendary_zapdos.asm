@@ -130,7 +130,7 @@ AIDoTurn_LegendaryZapdos:
 	or a
 	jr nz, .attach_normally
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call AITryToPlayEnergyCard
 	jr c, .skip_energy_attach
 

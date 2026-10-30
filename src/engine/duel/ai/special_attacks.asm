@@ -3,9 +3,9 @@
 ; to either return a positive score (value above $80)
 ; or a negative score (value below $80).
 ; input:
-;	hTempPlayAreaLocation_ff9d = location of card with attack.
+;	hTempPlayAreaLocation = location of card with attack.
 HandleSpecialAIAttacks:
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
@@ -421,7 +421,7 @@ CheckWhetherToSwitchToFirstAttack:
 ; check if it can KO, in case it can't
 ; then the AI keeps second attack as selection.
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	; a = FIRST_ATTACK_OR_PKMN_POWER
 	call EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP

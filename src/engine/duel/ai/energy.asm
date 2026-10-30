@@ -20,7 +20,7 @@ Func_16488:
 ; have AI choose an energy card to play, but do not play it.
 ; does not consider whether the cards have evolutions to be played.
 ; return carry if an energy card is chosen to use in any Play Area card,
-; and if so, return its Play Area location in hTempPlayAreaLocation_ff9d.
+; and if so, return its Play Area location in hTempPlayAreaLocation.
 AIProcessButDontPlayEnergy_SkipEvolution:
 	ld a, AI_ENERGY_FLAG_DONT_PLAY | AI_ENERGY_FLAG_SKIP_EVOLUTION
 	ld [wAIEnergyAttachLogicFlags], a
@@ -44,7 +44,7 @@ AIProcessButDontPlayEnergy_SkipEvolution:
 ; have AI choose an energy card to play, but do not play it.
 ; does not consider whether the cards have evolutions to be played.
 ; return carry if an energy card is chosen to use in any Bench card,
-; and if so, return its Play Area location in hTempPlayAreaLocation_ff9d.
+; and if so, return its Play Area location in hTempPlayAreaLocation.
 AIProcessButDontPlayEnergy_SkipEvolutionAndArena:
 	ld a, AI_ENERGY_FLAG_DONT_PLAY | AI_ENERGY_FLAG_SKIP_EVOLUTION | AI_ENERGY_FLAG_SKIP_ARENA_CARD
 	ld [wAIEnergyAttachLogicFlags], a
@@ -127,7 +127,7 @@ AIProcessEnergyCards:
 .loop_play_area
 	push bc
 	ld a, b
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	ld a, $80
 	ld [wAIScore], a
 	ld a, $ff
@@ -140,7 +140,7 @@ AIProcessEnergyCards:
 ; and if there's an evolution in hand or deck
 ; and if so, add to AI score
 	call CreateHandCardList
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld [wCurCardCanAttack], a
@@ -177,7 +177,7 @@ AIProcessEnergyCards:
 	call AIEncourage
 
 .check_if_active
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr nz, .bench
 
@@ -264,7 +264,7 @@ AIProcessEnergyCards:
 	ld l, a
 
 	push hl
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
@@ -281,7 +281,7 @@ AIProcessEnergyCards:
 	ld a, [hli]
 	ld d, a
 	push de
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld e, a
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
@@ -323,7 +323,7 @@ AIProcessEnergyCards:
 	call HandleAIEnergyScoringForRepeatedBenchPokemon
 
 	; applies wPlayAreaEnergyAIScore
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld c, a
 	ld b, $00
 	ld hl, wPlayAreaEnergyAIScore
@@ -354,7 +354,7 @@ AIProcessEnergyCards:
 
 ; store bench score for this card.
 .store_score
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld c, a
 	ld b, $00
 	ld hl, wPlayAreaAIScore
@@ -460,7 +460,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 .attaching_kos_player
 	ld a, 20
 	call AIEncourage
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr nz, .check_evolution
 	ld a, 10
@@ -516,7 +516,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	call AIEncourage
 
 ; if the attack KOs player and this is the active card, add to AI score.
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr nz, .check_evolution
 	ld a, [wSelectedAttack]
@@ -534,7 +534,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 ; this is possibly a bug.
 ; this is an identical check as above to test whether this card is active.
 ; in case it is active, the score gets added 10 more points,
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr nz, .check_evolution
 	ld a, 10
@@ -547,7 +547,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 
 ; temporarily replace this card with evolution in hand.
 	ld b, a
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	push af
@@ -580,14 +580,14 @@ DetermineAIScoreOfAttackEnergyRequirement:
 
 ; recover the original card in the Play Area location.
 .done
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	pop af
 	ld [hl], a
 	ret
 
-; returns in hTempPlayAreaLocation_ff9d the Play Area location
+; returns in hTempPlayAreaLocation the Play Area location
 ; of the card with the highest Play Area AI score, unless
 ; the highest score is below $85.
 ; if it succeeds in return a card location, set carry.
@@ -624,7 +624,7 @@ FindPlayAreaCardWithHighestAIScore:
 	cp $85
 	jr c, .not_enough_score
 	ld a, d
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	scf
 	ret
 .not_enough_score
@@ -657,7 +657,7 @@ FindPlayAreaCardWithHighestAIScore:
 
 ; in this case, there is no minimum threshold AI score.
 	ld a, d
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	scf
 	ret
 .no_carry
@@ -665,11 +665,11 @@ FindPlayAreaCardWithHighestAIScore:
 	ret
 
 ; returns carry if there's an evolution card
-; that can evolve card in hTempPlayAreaLocation_ff9d,
+; that can evolve card in hTempPlayAreaLocation,
 ; and that card needs energy to use wSelectedAttack.
 CheckIfEvolutionNeedsEnergyForAttack:
 	call CreateHandCardList
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call CheckCardEvolutionInHandOrDeck
@@ -679,14 +679,14 @@ CheckIfEvolutionNeedsEnergyForAttack:
 
 .has_evolution
 	ld b, a
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	push af
 	ld [hl], b
 	call CheckEnergyNeededForAttack
 	jr c, .not_enough_energy
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	pop af
@@ -695,7 +695,7 @@ CheckIfEvolutionNeedsEnergyForAttack:
 	ret
 
 .not_enough_energy
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	pop af
@@ -714,7 +714,7 @@ CheckIfEvolutionNeedsEnergyForAttack:
 ;	carry set if not ZapdosLv64's Thunderbolt attack.
 GetEnergyCardForDiscardOrEnergyBoostAttack:
 ; load card ID and check selected attack index.
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
@@ -885,7 +885,7 @@ AITryToPlayEnergyCard:
 ; look for basic energy card needed in hand and play it.
 	ld a, e
 	call LookForCardIDInHand
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	jr nc, .play_energy_card
 
 ; in this case Pokémon just needs colorless (any basic energy card).
@@ -893,7 +893,7 @@ AITryToPlayEnergyCard:
 ; if it does (and also doesn't additionally need a color energy),
 ; look for double colorless card in hand and play it if found.
 .colorless_energy
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr nz, .look_for_any_energy
 	ld a, c
@@ -908,7 +908,7 @@ AITryToPlayEnergyCard:
 	ld a, [hli]
 	cp $ff
 	jr z, .look_for_any_energy
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp DOUBLE_COLORLESS_ENERGY
@@ -935,12 +935,12 @@ AITryToPlayEnergyCard:
 	jr z, .loop_2
 	ld a, b
 .load_card
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 
-; plays energy card loaded in hTemp_ffa0 and sets carry flag.
+; plays energy card loaded in hDuelActionArgs[0] and sets carry flag.
 .play_energy_card
-	ldh a, [hTempPlayAreaLocation_ff9d]
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh a, [hTempPlayAreaLocation]
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TARGET_PLAY_AREA_LOCATION], a
 	ld a, OPPACTION_PLAY_ENERGY
 	bank1call AIMakeDecision
 	scf
@@ -967,7 +967,7 @@ AITryToPlayEnergyCard:
 ; return carry if there's a double colorless in hand to attach
 ; and it's one of the card IDs from these decks.
 ; output:
-;	[hTemp_ffa0] = card index of double colorless in hand;
+;	hDuelActionArgs[0] = card index of double colorless in hand;
 ;	carry set if can play energy card.
 CheckSpecificDecksToAttachDoubleColorless:
 	push bc
@@ -1019,7 +1019,7 @@ CheckSpecificDecksToAttachDoubleColorless:
 ; check if card has any colorless energy cards attached,
 ; and if there are any, return no carry.
 .check_colorless_attached
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld e, a
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wAttachedEnergies + COLORLESS]
@@ -1031,7 +1031,7 @@ CheckSpecificDecksToAttachDoubleColorless:
 	ld a, DOUBLE_COLORLESS_ENERGY
 	call LookForCardIDInHand
 	jr c, .no_carry
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	pop hl
 	pop de
 	pop bc
@@ -1039,7 +1039,7 @@ CheckSpecificDecksToAttachDoubleColorless:
 	ret
 
 .get_id:
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex

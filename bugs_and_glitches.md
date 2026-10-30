@@ -125,7 +125,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 	...
 -; if the attack KOs player and this is the active card, add to AI score.
 +; if the attack KOs player add to AI score.
--	ldh a, [hTempPlayAreaLocation_ff9d]
+-	ldh a, [hTempPlayAreaLocation]
 -	or a
 -	jr nz, .check_evolution
 	ld a, [wSelectedAttack]
@@ -143,7 +143,7 @@ DetermineAIScoreOfAttackEnergyRequirement:
 -; this is possibly a bug.
 -; this is an identical check as above to test whether this card is active.
 +; add 10 more in case it's the Arena card
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr nz, .check_evolution
 	ld a, 10
@@ -297,7 +297,7 @@ AIDecide_Pokedex:
 
 ; picks order of the cards in deck from the effects of Pokedex.
 ; prioritizes Pokemon cards, then Trainer cards, then energy cards.
-; stores the resulting order in wce1a.
+; stores the resulting order in wAITrainerCardArgs[1-].
 -PickPokedexCards_Unreferenced:
 -; unreferenced
 	xor a
@@ -484,9 +484,9 @@ AIDecideEvolution:
 	cp 133
 	jr c, .done_bench_pokemon
 	ld a, [wTempAI]
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TARGET_PLAY_AREA_LOCATION], a
 	ld a, [wTempAIPokemonCard]
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	ld a, OPPACTION_EVOLVE_PKMN
 	bank1call AIMakeDecision
 +
@@ -606,7 +606,7 @@ HandleAICowardice:
 	...
 .CheckWhetherToUseCowardice:
 	ld a, c
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA_LOCATION], a
 	ld e, a
 +	add DUELVARS_ARENA_CARD_FLAGS
 +	call GetTurnDuelistVariable
@@ -653,7 +653,7 @@ AITryToRetreat:
 ; if it does, check if there are any energy cards in hand
 	...
 	pop af
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_BENCH], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 -	ld b, a
@@ -663,9 +663,9 @@ AITryToRetreat:
 -	cp PARALYZED
 -	jp z, .set_carry
 -	ld a, b
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_STATUS], a
 	ld a, $ff
-	ldh [hTempRetreatCostCards], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_COST_LIST], a
 	...
 ```
 
@@ -758,7 +758,7 @@ AIDecideEvolution:
 ; and initialize the AI score
 	ld a, b
 	ld [wTempAI], a
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 +
 +	; store HP difference between cards
 +	ld a, [wLoadedCard1HP] ; evolution card
@@ -789,7 +789,7 @@ AIDecideEvolution:
 +	add b
 +	ld [hl], a
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call CheckIfDefendingPokemonCanKnockOut
 +	pop hl
 +	pop bc
@@ -804,7 +804,7 @@ We'll need to define this `wEvolutionHPDifference` variable in [src/wram.asm](ht
 ```diff
  wCurCardCanKO:: ; cdf4
         ds $1
- 
+
 -       ds $4
 +       ds $3
 +
@@ -812,7 +812,7 @@ We'll need to define this `wEvolutionHPDifference` variable in [src/wram.asm](ht
 +; and its evolution, for AI damage calculations
 +wEvolutionHPDifference:: ; cdf8
 +       ds $1
- 
+
  wSamePokemonCardID:: ; cdf9
         ds $1
 ```
