@@ -8,7 +8,7 @@ MACRO card_data_struct
 \1EffectCommands:: ; ds 2
 \1HP::            ds 1
 \1Stage::         ds 1
-\1NonPokemonDescription:: ; ds 2
+\1NonPokemonDescription:: ; ds 4
 \1PreEvoName::    ds 2
 \1Atk1::         atk_data_struct \1Atk1
 \1Atk2::         atk_data_struct \1Atk2
