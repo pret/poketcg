@@ -160,9 +160,8 @@ void scan_file(const char *filename, bool top_level) {
 					if (is_include) {
 						scan_file(include_filepath, false);
 					}
-					if (scratch_path) {
-						free(scratch_path);
-					}
+
+					free(scratch_path);
 				} else {
 					fprintf(stderr, "%s: no file path after INC%s\n", filename, is_include ? "LUDE" : "BIN");
 					// Continue to process a comment
