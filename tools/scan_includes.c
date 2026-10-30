@@ -1,197 +1,191 @@
-#define _DEFAULT_SOURCE
+#define PROGRAM_NAME "scan_includes"
+#define USAGE_OPTS "[-h|--help] [-s|--strict] [-I|--include path] filename.asm"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <getopt.h>
-#include <limits.h>
+#include "common.h"
 
-void usage(void) {
-	printf("Usage: scan_includes [-h] [-s] [-I path] filename\n"
-	       "-h, --help\n"
-	       "    Print usage and exit\n"
-	       "-s, --strict\n"
-	       "    Fail if a file cannot be read\n"
-	       "-I, --include\n"
-	       "    Add an include path\n");
-}
+#include <ctype.h>
 
 struct Options {
-	bool help;
 	bool strict;
 	char **include_paths;
 	int include_paths_len;
 };
 
-struct Options Options = {0};
+struct Options options = {0};
 
-void *xmalloc(const size_t size)
-{
-	void *ptr = malloc(size);
-	if (!ptr) {
-		perror("malloc");
-		exit(1);
-	}
-	return ptr;
+void add_include_path(const char *path) {
+	size_t arg_len = strlen(path);
+	bool has_trailing_separator = path[arg_len - 1] == '/';
+	char *include_path = xmalloc(arg_len + (has_trailing_separator ? 1 : 2));
+	sprintf(include_path, "%s%s", path, has_trailing_separator ? "" : "/");
+	options.include_paths = xrealloc(options.include_paths, sizeof(options.include_paths[0]) * ++options.include_paths_len);
+	options.include_paths[options.include_paths_len - 1] = include_path;
 }
 
-void options_add_file(char *fname)
-{
-	char *filename = xmalloc(strlen(fname) + 1);
-	strcpy(filename, fname);
-	if (!(Options.include_paths = realloc(Options.include_paths,
-			sizeof(Options.include_paths[0]) * ++Options.include_paths_len))) {
-		perror("realloc");
-		exit(1);
-	}
-	Options.include_paths[Options.include_paths_len - 1] = filename;
-}
-
-void scan_file(char *filename) {
-	FILE *f = fopen(filename, "r");
-
-	if (!f) {
-		if (Options.strict) {
-			fprintf(stderr, "Could not open file: '%s'\n", filename);
-			exit(1);
-		} else {
-			return;
-		}
-	}
-
-	fseek(f, 0, SEEK_END);
-	long size = ftell(f);
-	rewind(f);
-
-	char *buffer = xmalloc(size + 1);
-	char *orig = buffer;
-	size = fread(buffer, 1, size, f);
-	buffer[size] = '\0';
-	fclose(f);
-
-	for (; buffer && (buffer - orig < size); buffer++) {
-		bool is_include = false;
-		bool is_incbin = false;
-		switch (*buffer) {
-			case ';':
-				buffer = strchr(buffer, '\n');
-				if (!buffer) {
-					fprintf(stderr, "%s: no newline at end of file\n", filename);
-					break;
-				}
-				break;
-
-			case '"':
-				buffer++;
-				buffer = strchr(buffer, '"');
-				if (!buffer) {
-					fprintf(stderr, "%s: unterminated string\n", filename);
-					break;
-				}
-				buffer++;
-				break;
-
-			case 'i':
-			case 'I':
-				if ((strncmp(buffer, "INCBIN", 6) == 0) || (strncmp(buffer, "incbin", 6) == 0)) {
-					is_incbin = true;
-				} else if ((strncmp(buffer, "INCLUDE", 7) == 0) || (strncmp(buffer, "include", 7) == 0)) {
-					is_include = true;
-				}
-				if (is_incbin || is_include) {
-					buffer = strchr(buffer, '"');
-					if (!buffer) {
-						break;
-					}
-					buffer++;
-					int length = strcspn(buffer, "\"");
-					char *include = xmalloc(length + 1);
-					strncpy(include, buffer, length);
-					include[length] = '\0';
-
-					f = fopen(include, "r");
-					char *path = NULL;
-					if (!f) {
-						for (char **include_path = Options.include_paths;
-								include_path < Options.include_paths + Options.include_paths_len;
-								include_path++) {
-							size_t len = strlen(*include_path) + strlen(include) + 1;
-							path = xmalloc(len);
-							snprintf(path, len, "%s%s", *include_path, include);
-							f = fopen(path, "r");
-							if (f) break;
-							free(path);
-							path = NULL;
-						}
-						if (!path && is_incbin && Options.include_paths_len == 1) {
-							char **include_path = Options.include_paths;
-							size_t len = strlen(*include_path) + strlen(include) + 1;
-							path = xmalloc(len);
-							snprintf(path, len, "%s%s", *include_path, include);
-						}
-					}
-					if (f) fclose(f);
-
-					if (path) {
-						free(include);
-						include = path;
-					}
-					printf("%s ", include);
-					if (is_include) {
-						scan_file(include);
-					}
-					free(include);
-					buffer = strchr(buffer, '"');
-				}
-				break;
-
-		}
-		if (!buffer) {
-			break;
-		}
-
-	}
-
-	free(orig);
-}
-
-int main(int argc, char* argv[]) {
-	int i = 0;
+void parse_args(int argc, char *argv[]) {
 	struct option long_options[] = {
 		{"strict", no_argument, 0, 's'},
 		{"help", no_argument, 0, 'h'},
 		{"include", required_argument, 0, 'I'},
 		{0}
 	};
-	int opt = -1;
-	while ((opt = getopt_long(argc, argv, "shI:", long_options, &i)) != -1) {
+	for (int opt; (opt = getopt_long(argc, argv, "shI:", long_options)) != -1;) {
 		switch (opt) {
 		case 's':
-			Options.strict = true;
+			options.strict = true;
 			break;
 		case 'h':
-			Options.help = true;
+			usage_exit(0);
 			break;
 		case 'I':
-			options_add_file(optarg);
+			add_include_path(optarg);
 			break;
 		default:
-			usage();
-			exit(1);
+			usage_exit(1);
+		}
+	}
+}
+
+char *check_include_paths_for_file(const char *filepath, bool is_incbin) {
+	char *scratch_path = NULL;
+	for (char **include_path = options.include_paths; include_path < options.include_paths + options.include_paths_len; include_path++) {
+		size_t len = strlen(*include_path) + strlen(filepath) + 1;
+		scratch_path = xmalloc(len);
+		snprintf(scratch_path, len, "%s%s", *include_path, filepath);
+		FILE *f = fopen(scratch_path, "r");
+
+		// If the file exists, use this include path
+		if (f) {
+			fclose(f);
+			break;
+		}
+
+		// If the INCBIN doesn't exist and there is exactly 1 include path, assume it will get created there
+		if (is_incbin && options.include_paths_len == 1) {
+			break;
+		}
+
+		free(scratch_path);
+		scratch_path = NULL;
+	}
+	return scratch_path;
+}
+
+void scan_file(const char *filename, bool top_level) {
+	long size = 0;
+	char *contents = NULL;
+	if (top_level && !strcmp(filename, "-")) {
+		contents = (char *)read_stdin(&size);
+		contents = xrealloc(contents, size + 1);
+		contents[size] = '\0';
+	} else {
+		errno = 0;
+		FILE *f = fopen(filename, "rb");
+		if (!f) {
+			if (options.strict) {
+				error_exit("Could not open file \"%s\": %s\n", filename, strerror(errno));
+			} else {
+				return;
+			}
+		}
+
+		size = xfsize(filename, f);
+		contents = xmalloc(size + 1);
+		xfread((uint8_t *)contents, size, filename, f);
+		xfclose(f);
+		contents[size] = '\0';
+	}
+
+	for (char *ptr = contents; ptr && ptr < contents + size; ptr++) {
+		ptr = strpbrk(ptr, ";\"Ii");
+		if (!ptr) {
+			break;
+		}
+		switch (*ptr) {
+		case ';':
+			// Skip comments until the end of the line
+			ptr += strcspn(ptr + 1, "\r\n");
+			if (*ptr) {
+				ptr++;
+			}
+			break;
+
+		case '"':
+			// Skip string literal until the closing quote
+			ptr += strcspn(ptr + 1, "\"");
+			if (*ptr) {
+				ptr++;
+			}
+			break;
+
+		case 'I':
+		case 'i':
+			/* empty statement between the label and the variable declaration */;
+			// Check that an INCLUDE/INCBIN starts as its own token
+			char before = ptr > contents ? *(ptr - 1) : '\n';
+			if (!isspace((unsigned)before) && before != ':') {
+				break;
+			}
+			bool is_incbin = !strncmp(ptr, "INCBIN", 6) || !strncmp(ptr, "incbin", 6);
+			bool is_include = !strncmp(ptr, "INCLUDE", 7) || !strncmp(ptr, "include", 7);
+			if (is_incbin || is_include) {
+				// Check that an INCLUDE/INCBIN ends as its own token
+				ptr += is_include ? 7 : 6;
+				if (!isspace((unsigned)*ptr) && *ptr != '"') {
+					break;
+				}
+				ptr += strspn(ptr, " \t");
+				if (*ptr == '"') {
+					ptr++;
+					char *include_filepath = ptr;
+					size_t length = strcspn(ptr, "\"");
+					ptr += length + 1;
+					include_filepath[length] = '\0';
+
+					// Check if the file exists, and if not then check options.include_paths for the file
+					FILE *f = fopen(include_filepath, "r");
+					char *scratch_path = NULL;
+					if (!f) {
+						scratch_path = check_include_paths_for_file(include_filepath, is_incbin);
+					} else {
+						fclose(f);
+					}
+
+					if (scratch_path) {
+						include_filepath = scratch_path;
+					}
+
+					// Print the file path and recursively scan INCLUDEs
+					printf("%s ", include_filepath);
+					if (is_include) {
+						scan_file(include_filepath, false);
+					}
+
+					free(scratch_path);
+				} else {
+					fprintf(stderr, "%s: no file path after INC%s\n", filename, is_include ? "LUDE" : "BIN");
+					// Continue to process a comment
+					if (*ptr == ';') {
+						ptr--;
+					}
+				}
+			}
 			break;
 		}
 	}
+
+	free(contents);
+}
+
+int main(int argc, char *argv[]) {
+	parse_args(argc, argv);
+
 	argc -= optind;
 	argv += optind;
-	if (Options.help) {
-		usage();
-		return 0;
-	}
 	if (argc < 1) {
-		usage();
-		exit(1);
+		usage_exit(1);
 	}
-	scan_file(argv[0]);
+
+	scan_file(argv[0], true);
 	return 0;
 }
