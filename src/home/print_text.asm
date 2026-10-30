@@ -288,7 +288,7 @@ ProcessTextHeader::
 	jr nc, .not_tx_fullwidth
 	inc hl
 .not_tx_fullwidth
-	call Func_22ca
+	call ProcessTextTile
 	xor a
 	call ProcessSpecialTextCharacter
 .processed_char

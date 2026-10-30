@@ -1,10 +1,10 @@
 ; prints $ff-terminated list of text to text box
 ; given 2 bytes for text alignment and 2 bytes for text ID
 PrintLabels:
-	ldh a, [hffb0]
+	ldh a, [hTextTileProcessFlag]
 	push af
-	ld a, $02
-	ldh [hffb0], a
+	ld a, TEXT_TILE_PROCESS_SKIP_PRINTING
+	ldh [hTextTileProcessFlag], a
 
 	push hl
 .loop_text_print_1
@@ -25,7 +25,7 @@ PrintLabels:
 .next
 	pop hl
 	pop af
-	ldh [hffb0], a
+	ldh [hTextTileProcessFlag], a
 .loop_text_print_2
 	ld d, [hl]
 	inc hl

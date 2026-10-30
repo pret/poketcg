@@ -406,11 +406,11 @@ ReloadCardListItems::
 
 ; reload a list of cards, except don't print their names
 Func_2827::
-	ld a, $01
-	ldh [hffb0], a
+	ld a, TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
+	ldh [hTextTileProcessFlag], a
 	call ReloadCardListItems
 	xor a
-	ldh [hffb0], a
+	ldh [hTextTileProcessFlag], a
 	ret
 
 ; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
