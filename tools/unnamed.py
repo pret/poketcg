@@ -49,8 +49,8 @@ if args.rootdir:
 	for line in subprocess.Popen(['make', '-C', args.rootdir, '-s', '-p', 'DEBUG=1'],
 			stdout=subprocess.PIPE).stdout.read().decode().split('\n'):
 		for name in ['rom_obj', 'patch_obj']:
-			if line.startswith(f'rom_obj :='):
-				objects.extend(line[len(f'rom_obj :='):].strip().split())
+			if line.startswith(f'{name} :='):
+				objects.extend(line[len(f'{name} :='):].strip().split())
 	if not objects:
 		print('Error: Object files not found!', file=sys.stderr)
 		sys.exit(1)
