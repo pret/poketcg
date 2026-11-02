@@ -266,3 +266,7 @@ DEF AI_INFO_UNK_08        EQU $8
 
 DEF HAS_EVOLUTION_F       EQU 4
 DEF HAS_EVOLUTION         EQU 1 << HAS_EVOLUTION_F
+
+; the retreat-cost buffer can handle at most 5 energy
+; see src/constants/duel_action_constants.asm
+DEF MAX_RETREAT_COSTS EQU 5

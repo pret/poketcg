@@ -56,13 +56,13 @@ AIDoAction_StartDuel::
 AIDoAction_ForcedSwitch::
 	ld a, AIACTION_FORCED_SWITCH
 	call AIDoAction
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	ret
 
 AIDoAction_KOSwitch::
 	ld a, AIACTION_KO_SWITCH
 	call AIDoAction
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + NEWARENAPKMN_ARGS_FROM_PLAY_AREA_LOCATION], a
 	ret
 
 AIDoAction_TakePrize::

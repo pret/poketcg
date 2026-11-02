@@ -723,15 +723,15 @@ IsRainDanceActive::
 	ccf
 	ret
 
-; return carry if card at [hTempCardIndex_ff98] is a water energy card AND
-; if card at [hTempPlayAreaLocation_ff9d] is a water Pokemon card.
+; return carry if card at [hTempCardIndex] is a water energy card AND
+; if card at [hTempPlayAreaLocation] is a water Pokemon card.
 CheckRainDanceScenario::
-	ldh a, [hTempCardIndex_ff98]
+	ldh a, [hTempCardIndex]
 	call GetCardIDFromDeckIndex
 	call GetCardType
 	cp TYPE_ENERGY_WATER
 	jr nz, .no_carry
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	call GetPlayAreaCardColor
 	cp TYPE_PKMN_WATER
 	jr nz, .no_carry

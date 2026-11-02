@@ -37,7 +37,7 @@ AIDecideWhetherToRetreat:
 
 .skip_status_check
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .active_cant_ko_1
 	call CheckIfSelectedAttackIsUnusable
@@ -236,7 +236,7 @@ AIDecideWhetherToRetreat:
 	cp $ff
 	jr z, .check_defending_id
 	ld a, c
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	push hl
 	push bc
 	call CheckIfAnyAttackKnocksOutDefendingCard
@@ -267,7 +267,7 @@ AIDecideWhetherToRetreat:
 	jr c, .check_defending_id
 
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .active_cant_ko_2
 	call CheckIfSelectedAttackIsUnusable
@@ -329,7 +329,7 @@ AIDecideWhetherToRetreat:
 ; these conditions
 .check_retreat_cost
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call GetPlayAreaCardRetreatCost
 	cp 2
 	jr c, .one_or_none
@@ -375,7 +375,7 @@ AIDecideWhetherToRetreat:
 	cp CLEFAIRY_DOLL
 	jr z, .loop_ko_2
 	ld a, e
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	push de
 	push hl
 	call CheckIfDefendingPokemonCanKnockOut
@@ -422,7 +422,7 @@ AIDecideWhetherToRetreat:
 	cp $ff
 	jr z, .no_carry
 	ld a, e
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	push de
 	call CheckIfDefendingPokemonCanKnockOut
 	pop de
@@ -461,12 +461,12 @@ SetAIRetreatFlags:
 	ret
 
 ; calculates AI score for bench Pokémon
-; returns in a and [hTempPlayAreaLocation_ff9d] the
+; returns in a and [hTempPlayAreaLocation] the
 ; Play Area location of best card to switch to.
 ; returns carry if no Bench Pokemon.
 AIDecideBenchPokemonToSwitchTo:
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp 2
@@ -487,7 +487,7 @@ AIDecideBenchPokemonToSwitchTo:
 .loop_play_area
 	push bc
 	ld a, c
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	ld a, 50
 	ld [wAIScore], a
 
@@ -549,7 +549,7 @@ AIDecideBenchPokemonToSwitchTo:
 
 ; if no energies attached to card, lower AI score
 .check_attached_energy
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld e, a
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
@@ -583,7 +583,7 @@ AIDecideBenchPokemonToSwitchTo:
 
 ; if defending card is weak to this card, raise AI score
 .check_defending_weak
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -658,7 +658,7 @@ AIDecideBenchPokemonToSwitchTo:
 
 ; if this card's HP is 0, make AI score 0
 .check_hp
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	or a
@@ -677,7 +677,7 @@ AIDecideBenchPokemonToSwitchTo:
 ; raise AI score if
 ;	- is a Mr Mime OR
 ;	- is a MewLv8 and defending card is not basic stage
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -748,7 +748,7 @@ AIDecideBenchPokemonToSwitchTo:
 	jr .loop_ids
 
 .store_score
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	ld c, a
 	ld b, $00
 	ld hl, wPlayAreaAIScore
@@ -802,7 +802,7 @@ AITryToRetreat:
 	call CountNumberOfEnergyCardsAttached
 	push af
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call GetPlayAreaCardRetreatCost
 	pop bc
 	cp b
@@ -814,10 +814,10 @@ AITryToRetreat:
 	jr nz, .check_id
 	call CreateEnergyCardListFromHand
 	jr c, .check_id
-	ld a, [wDuelTempList]
-	ldh [hTemp_ffa0], a
+	ld a, [wDuelTempList + 0]
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_CARD_INDEX], a
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + PLAYCARD_ARGS_TARGET_PLAY_AREA_LOCATION], a
 	ld a, OPPACTION_PLAY_ENERGY
 	bank1call AIMakeDecision
 
@@ -832,9 +832,9 @@ AITryToRetreat:
 	jp z, .mysterious_fossil_or_clefairy_doll
 
 ; if card is Asleep or Paralyzed, set carry and exit
-; else, load the status in hTemp_ffa0
+; else, load the status in hDuelActionArgs[0]
 	pop af
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_BENCH], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	ld b, a
@@ -844,14 +844,14 @@ AITryToRetreat:
 	cp PARALYZED
 	jp z, .set_carry
 	ld a, b
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_STATUS], a
 	ld a, $ff
-	ldh [hTempRetreatCostCards], a
+	ldh [hDuelActionArgs + RETREAT_ARGS_COST_LIST], a
 
 ; check energy required to retreat
 ; if the cost is 0, retreat right away
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call GetPlayAreaCardRetreatCost
 	ld [wTempCardRetreatCost], a
 	or a
@@ -869,14 +869,14 @@ AITryToRetreat:
 	cp c
 	jr nz, .choose_energy_discard
 
-	ld hl, hTempRetreatCostCards
+	ld hl, hDuelActionArgs + RETREAT_ARGS_COST_LIST
 	ld de, wDuelTempList
-.loop_1
+.loop_select_all_cards
 	ld a, [de]
 	inc de
 	ld [hli], a
 	cp $ff
-	jr nz, .loop_1
+	jr nz, .loop_select_all_cards
 	jp .retreat
 
 ; if cost > 0 and number of energy cards attached > cost
@@ -897,61 +897,61 @@ AITryToRetreat:
 ; first, look for and discard double colorless energy
 ; if retreat cost is >= 2
 	ld hl, wDuelTempList
-	ld de, hTempRetreatCostCards
-.loop_2
+	ld de, hDuelActionArgs + RETREAT_ARGS_COST_LIST
+.loop_select_dce
 	ld a, c
 	cp 2
-	jr c, .energy_not_same_color
+	jr c, .check_non_useful_energy
 	ld a, [hli]
 	cp $ff
-	jr z, .energy_not_same_color
+	jr z, .check_non_useful_energy
 	ld [de], a
 	push de
 	call GetCardIDFromDeckIndex
 	ld a, e
 	pop de
 	cp DOUBLE_COLORLESS_ENERGY
-	jr nz, .loop_2
+	jr nz, .loop_select_dce
 	ld a, [de]
 	call RemoveCardFromDuelTempList
 	dec hl
 	inc de
 	dec c
 	dec c
-	jr nz, .loop_2
+	jr nz, .loop_select_dce
 	jr .end_retreat_list
 
-; second, shuffle attached cards and discard energy cards
+; next, shuffle attached cards and discard energy cards
 ; that are not of the same type as the Pokémon
 ; the exception for this are cards that are needed for
 ; some attacks but are not of the same color as the Pokémon
 ; (i.e. Psyduck's Headache attack)
 ; and energy cards attached to Eevee corresponding to a
 ; color of any of its evolutions (water, fire, lightning)
-.energy_not_same_color
+.check_non_useful_energy
 	ld hl, wDuelTempList
 	call CountCardsInDuelTempList
 	call ShuffleCards
-.loop_3
+.loop_select_non_useful_energy
 	ld a, [hli]
 	cp $ff
-	jr z, .any_energy
+	jr z, .discard_rest
 	ld [de], a
 	call CheckIfEnergyIsUseful
-	jr c, .loop_3
+	jr c, .loop_select_non_useful_energy
 	ld a, [de]
 	call RemoveCardFromDuelTempList
 	dec hl
 	inc de
 	dec c
-	jr nz, .loop_3
+	jr nz, .loop_select_non_useful_energy
 	jr .end_retreat_list
 
-; third, discard any card until
+; lastly, discard any card until
 ; cost requirement is met
-.any_energy
+.discard_rest
 	ld hl, wDuelTempList
-.loop_4
+.loop_select_rest
 	ld a, [hli]
 	cp $ff
 	jr z, .set_carry
@@ -962,12 +962,12 @@ AITryToRetreat:
 	ld a, e
 	pop de
 	cp DOUBLE_COLORLESS_ENERGY
-	jr nz, .not_double_colorless
+	jr nz, .not_dce
 	dec c
 	jr z, .end_retreat_list
-.not_double_colorless
+.not_dce
 	dec c
-	jr nz, .loop_4
+	jr nz, .loop_select_rest
 
 .end_retreat_list
 	ld a, $ff
@@ -997,13 +997,13 @@ AITryToRetreat:
 .has_bench
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ldh [hTempCardIndex_ff9f], a
+	ldh [hDuelActionCardIndex], a
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTemp_ffa0], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_USER_PLAY_AREA_LOCATION], a
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af
-	ldh [hAIPkmnPowerEffectParam], a
+	ldh [hDuelActionArgs + PKMNPOWER_ARGS_TARGET_PLAY_AREA_LOCATION], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	ld a, OPPACTION_DUEL_MAIN_SCENE

@@ -112,7 +112,7 @@ MACRO duel_vars
 \1CardLocations::                ds DECK_SIZE
 
 ; deck indexes of the up to 6 cards placed as prizes
-\1PrizeCards::                   ds $6
+\1PrizeCards::                   ds MAX_PRIZE_CARDS
 
 ; deck indexes of the cards that are in the duelist's hand
 \1Hand::                         ds DECK_SIZE

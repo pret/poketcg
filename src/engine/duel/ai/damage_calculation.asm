@@ -2,11 +2,11 @@
 ; done to the defending Pokémon by a given card and attack
 ; input:
 ;	a = attack index to take into account
-;	[hTempPlayAreaLocation_ff9d] = location of attacking card to consider
+;	[hTempPlayAreaLocation] = location of attacking card to consider
 EstimateDamage_VersusDefendingCard:
 	ld [wSelectedAttack], a
 	ld e, a
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld d, a
@@ -46,7 +46,7 @@ EstimateDamage_VersusDefendingCard:
 
 .calculation
 ; if temp. location is active, damage calculation can be done directly...
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr z, CalculateDamage_VersusDefendingPokemon
 
@@ -84,14 +84,14 @@ EstimateDamage_VersusDefendingCard:
 	ret
 
 ; calculates the damage that will be dealt to the player's active card
-; using the card that is located in hTempPlayAreaLocation_ff9d
+; using the card that is located in hTempPlayAreaLocation
 ; taking into account weakness/resistance/pluspowers/defenders/etc
 ; and outputs the result capped at a max of $ff
 ; input:
 ;	[wAIMinDamage] = base damage
 ;	[wAIMaxDamage] = base damage
 ;	[wDamage]      = base damage
-;	[hTempPlayAreaLocation_ff9d] = turn holder's card location as the attacker
+;	[hTempPlayAreaLocation] = turn holder's card location as the attacker
 CalculateDamage_VersusDefendingPokemon:
 	ld hl, wAIMinDamage
 	call .Calculate
@@ -104,7 +104,7 @@ CalculateDamage_VersusDefendingPokemon:
 	push hl
 
 	; load this card's data
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
@@ -128,7 +128,7 @@ CalculateDamage_VersusDefendingPokemon:
 	ld de, 0
 	jr .done
 .vulnerable
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	call z, HandleDoubleDamageSubstatus
 	; skips the weak/res checks if unaffected.
@@ -137,7 +137,7 @@ CalculateDamage_VersusDefendingPokemon:
 	jr nz, .not_resistant
 
 ; handle weakness
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	call GetPlayAreaCardColor
 	call TranslateColorToWR
 	ld b, a
@@ -164,7 +164,7 @@ CalculateDamage_VersusDefendingPokemon:
 
 .not_resistant
 	; apply pluspower and defender boosts
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add CARD_LOCATION_ARENA
 	ld b, a
 	call ApplyAttachedPlusPower
@@ -208,11 +208,11 @@ CalculateDamage_VersusDefendingPokemon:
 	ret
 
 ; stores in wDamage, wAIMinDamage and wAIMaxDamage the calculated damage
-; done to the Pokémon at hTempPlayAreaLocation_ff9d
+; done to the Pokémon at hTempPlayAreaLocation
 ; by the defending Pokémon, using the attack index at a
 ; input:
 ;	a = attack index
-;	[hTempPlayAreaLocation_ff9d] = location of card to calculate
+;	[hTempPlayAreaLocation] = location of card to calculate
 ;	                               damage as the receiver
 EstimateDamage_FromDefendingPokemon:
 	call SwapTurn
@@ -247,14 +247,14 @@ EstimateDamage_FromDefendingPokemon:
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
 	call SwapTurn
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	push af
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	ld a, EFFECTCMDTYPE_AI
 	call TryExecuteEffectCommandFunction
 	pop af
-	ldh [hTempPlayAreaLocation_ff9d], a
+	ldh [hTempPlayAreaLocation], a
 	call SwapTurn
 	ld a, [wAIMinDamage]
 	ld hl, wAIMaxDamage
@@ -266,7 +266,7 @@ EstimateDamage_FromDefendingPokemon:
 
 .calculation
 ; if temp. location is active, damage calculation can be done directly...
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr z, CalculateDamage_FromDefendingPokemon
 
@@ -304,7 +304,7 @@ EstimateDamage_FromDefendingPokemon:
 
 ; similar to CalculateDamage_VersusDefendingPokemon but reversed,
 ; calculating damage of the defending Pokémon versus
-; the card located in hTempPlayAreaLocation_ff9d
+; the card located in hTempPlayAreaLocation
 ; taking into account weakness/resistance/pluspowers/defenders/etc
 ; and poison damage for two turns
 ; and outputs the result capped at a max of $ff
@@ -312,7 +312,7 @@ EstimateDamage_FromDefendingPokemon:
 ;	[wAIMinDamage] = base damage
 ;	[wAIMaxDamage] = base damage
 ;	[wDamage]      = base damage
-;	[hTempPlayAreaLocation_ff9d] = location of card to calculate
+;	[hTempPlayAreaLocation] = location of card to calculate
 ;								 damage as the receiver
 CalculateDamage_FromDefendingPokemon:
 	ld hl, wAIMinDamage
@@ -337,7 +337,7 @@ CalculateDamage_FromDefendingPokemon:
 	call SwapTurn
 
 	; load opponent's card data
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
@@ -355,7 +355,7 @@ CalculateDamage_FromDefendingPokemon:
 	call TranslateColorToWR
 	ld b, a
 	call SwapTurn
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr nz, .bench_weak
 	ld a, DUELVARS_ARENA_CARD_CHANGED_WEAKNESS
@@ -364,7 +364,7 @@ CalculateDamage_FromDefendingPokemon:
 	jr nz, .unchanged_weak
 
 .bench_weak
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
@@ -378,7 +378,7 @@ CalculateDamage_FromDefendingPokemon:
 
 .not_weak
 ; handle resistance
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr nz, .bench_res
 	ld a, DUELVARS_ARENA_CARD_CHANGED_RESISTANCE
@@ -387,7 +387,7 @@ CalculateDamage_FromDefendingPokemon:
 	jr nz, .unchanged_res
 
 .bench_res
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
@@ -406,11 +406,11 @@ CalculateDamage_FromDefendingPokemon:
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedPlusPower
 	call SwapTurn
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	add CARD_LOCATION_ARENA
 	ld b, a
 	call ApplyAttachedDefender
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	call z, HandleDamageReduction
 	bit 7, d
@@ -418,7 +418,7 @@ CalculateDamage_FromDefendingPokemon:
 	ld de, $0
 
 .no_underflow
-	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh a, [hTempPlayAreaLocation]
 	or a
 	jr nz, .done
 	ld a, DUELVARS_ARENA_CARD_STATUS
