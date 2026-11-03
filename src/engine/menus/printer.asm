@@ -21,11 +21,11 @@ PrinterMenu_PokemonCards:
 	ld hl, wCardListVisibleOffset
 	ld [hl], $00
 	call PrintFilteredCardSelectionList
-	ld hl, hffb0
-	ld [hl], $01
+	ld hl, hTextTileProcessFlag
+	ld [hl], TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
 	call PrintPlayersCardsText
-	ld hl, hffb0
-	ld [hl], $00
+	ld hl, hTextTileProcessFlag
+	ld [hl], NONE
 	ld a, NUM_FILTERS
 	ld [wCardListNumCursorPositions], a
 .handle_input
@@ -125,11 +125,11 @@ PrinterMenu_PokemonCards:
 	call InitCardSelectionParams
 	ld a, [wCurCardTypeFilter]
 	ld [wTempCardTypeFilter], a
-	ld hl, hffb0
-	ld [hl], $01
+	ld hl, hTextTileProcessFlag
+	ld [hl], TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
 	call PrintPlayersCardsText
-	ld hl, hffb0
-	ld [hl], $00
+	ld hl, hTextTileProcessFlag
+	ld [hl], NONE
 	jp .loop_frame_1
 
 .asm_ac92

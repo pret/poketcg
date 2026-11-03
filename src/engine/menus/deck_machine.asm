@@ -98,8 +98,8 @@ HandleDeckMissingCardsList:
 	dw NULL ; wCardListHandlerFunction
 
 .CardListUpdateFunction
-	ld hl, hffb0
-	ld [hl], $01
+	ld hl, hTextTileProcessFlag
+	ld [hl], TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
 	call .PrintDeckIndexAndName
 	lb de, 1, 14
 	call InitTextPrinting
@@ -108,8 +108,8 @@ HandleDeckMissingCardsList:
 	ld h, [hl]
 	ld l, a
 	call ProcessTextFromID
-	ld hl, hffb0
-	ld [hl], $00
+	ld hl, hTextTileProcessFlag
+	ld [hl], NONE
 	jp PrintConfirmationCardList
 
 .PrintTitleAndList
@@ -318,8 +318,8 @@ Data_b04a:
 	dw NULL ; wCardListHandlerFunction
 
 ShowReceivedCardsList:
-	ld hl, hffb0
-	ld [hl], $01
+	ld hl, hTextTileProcessFlag
+	ld [hl], TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
 	lb de, 1, 1
 	call InitTextPrinting
 	ldtx hl, CardReceivedText
@@ -334,8 +334,8 @@ ShowReceivedCardsList:
 	call InitTextPrinting
 	ldtx hl, ReceivedTheseCardsFromText
 	call PrintTextNoDelay
-	ld hl, hffb0
-	ld [hl], $00
+	ld hl, hTextTileProcessFlag
+	ld [hl], NONE
 	jp PrintCardSelectionList
 
 Func_b088:
@@ -875,8 +875,8 @@ UpdateDeckMachineScrollArrowsAndEntries:
 
 DrawDeckMachineScreen:
 	call DrawListScrollArrows
-	ld hl, hffb0
-	ld [hl], $01
+	ld hl, hTextTileProcessFlag
+	ld [hl], TEXT_TILE_PROCESS_ONLY_UPDATE_CACHE
 	call SetDeckMachineTitleText
 	lb de, 1, 14
 	call InitTextPrinting
@@ -885,8 +885,8 @@ DrawDeckMachineScreen:
 	ld h, [hl]
 	ld l, a
 	call ProcessTextFromID
-	ld hl, hffb0
-	ld [hl], $00
+	ld hl, hTextTileProcessFlag
+	ld [hl], NONE
 	jr PrintVisibleDeckMachineEntries
 
 ; prints the deck name of the deck corresponding
@@ -967,7 +967,7 @@ PrintDeckMachineEntry:
 
 .cannot_build_at_all
 	ldfw de, "×" ; cannot build even by dismantling
-	call Func_22ca
+	call ProcessTextTile
 	pop bc
 	pop de
 
@@ -999,7 +999,7 @@ PrintDeckMachineEntry:
 	ret
 
 .asm_b4c2
-	call Func_22ca
+	call ProcessTextTile
 	pop de
 	ld d, 13
 	inc e

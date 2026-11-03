@@ -242,9 +242,9 @@ Address = {hex @}
 MemAddress = {hex~ hKeysPressed}                                                                                                   
 Fixcode = {db_ NO_INPUT}                                                                                                      
 ConditionType = 0                                                                                             
-ConditionValueA = {dws_ wCurMenuItem wCurTextLine wTilePatternSelector wTilePatternSelectorCorrection wLineSeparation 0xffd8 hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed v0Tiles0}   
-ConditionValueB = {dws_ ==           ==           ==                   ==                             ==              ==     !=           !=           !=           !=           !=           !=           !=      }    
-ConditionValueC = {dws_ 3            8            0x88                 0x80                           DOUBLE_SPACED   0x00   PAD_DOWN     PAD_UP       PAD_RIGHT    PAD_B        NO_INPUT     PAD_START    0xe0    }   
+ConditionValueA = {dws_ wCurMenuItem wCurTextLine wTextTileBaseAddressHi wTextTileIndexSignednessState wLineSeparation 0xffd8 hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed hKeysPressed v0Tiles0}   
+ConditionValueB = {dws_ ==           ==           ==                     ==                            ==              ==     !=           !=           !=           !=           !=           !=           !=      }    
+ConditionValueC = {dws_ 3            8            >v0Tiles1              NUM_SIGNED                    DOUBLE_SPACED   0x00   PAD_DOWN     PAD_UP       PAD_RIGHT    PAD_B        NO_INPUT     PAD_START    0xe0    }   
 
 
 
