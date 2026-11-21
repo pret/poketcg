@@ -887,7 +887,22 @@ HandleDamageReductionExceptSubstatus2::
 
 The routine used by Card Pop! to generate what card the player will receive is flawed, preventing one from ever receiving the Venusaur Phantom Card.
 
-**Fix:** TODO
+Each name hash stores the sum of the name's bytes in `e` and their XOR in `d`. Addition and XOR always give the same lowest bit, so after the two hashes are subtracted, bit 0 of `d` always equals bit 0 of `e`. The Phantom branch is only taken when `e` is 5 (odd), so bit 0 of `d` is always 1 and the game always picks MewLv15. Bit 1 of `d` isn't tied to `e` in this way, so testing it gives each Phantom card roughly a 50% chance.
+
+**Fix:** Edit `DecideCardToReceiveFromCardPop` in [src/engine/link/card_pop.asm](https://github.com/pret/poketcg/blob/master/src/engine/link/card_pop.asm):
+```diff
+.venusaur1_or_mew2
+	...
+	ld a, MUSIC_MEDAL
+	ld [wCardPopCardObtainSong], a
+	ld e, VENUSAUR_LV64
+	ld a, d
+-	and $1 ; get lower bit
++	and $2 ; get second-lowest bit (the lowest bit is always set)
+	jr z, .got_card_id
+	ld e, MEW_LV15
+	jr .got_card_id
+```
 
 ## Graphics
 
